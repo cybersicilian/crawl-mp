@@ -310,6 +310,14 @@ static void _fill_doll_equipment_default(dolls_data& result)
     }
 }
 
+void fill_player_equipment_doll(dolls_data &result)
+{
+    for (int part = 0; part < TILEP_PART_MAX; ++part)
+        result.parts[part] = TILEP_SHOW_EQUIP;
+    tilep_race_default(you.species, you.experience_level, &result);
+    fill_doll_equipment(result);
+}
+
 void fill_doll_equipment(dolls_data &result)
 {
     tileidx_t ch;
@@ -335,6 +343,7 @@ void fill_doll_equipment(dolls_data &result)
         case SP_FELID:        ch = TILEP_TRAN_STATUE_FELID;         break;
         case SP_OCTOPODE:     ch = TILEP_TRAN_STATUE_OCTOPODE;      break;
         case SP_DJINNI:       ch = TILEP_TRAN_STATUE_DJINN;         break;
+        case SP_HYDRA:        ch = TILEP_TRAN_STATUE_HYDRA + min(you.heads(), 9) - 1; break;
         default:              ch = TILEP_TRAN_STATUE_HUMANOID;      break;
         }
         result.parts[TILEP_PART_BASE]    = ch;
@@ -365,7 +374,11 @@ void fill_doll_equipment(dolls_data &result)
         case SP_PALE_DRACONIAN:    ch = TILEP_TRAN_DRAGON_PALE;     break;
         case SP_PURPLE_DRACONIAN:  ch = TILEP_TRAN_DRAGON_PURPLE;   break;
         case SP_WHITE_DRACONIAN:   ch = TILEP_TRAN_DRAGON_WHITE;    break;
-        case SP_RED_DRACONIAN:     ch = TILEP_TRAN_DRAGON_RED;      break;
+        case SP_RED_DRACONIAN:
+#if TAG_MAJOR_VERSION == 34
+        case SP_MOTTLED_DRACONIAN:
+#endif
+                                   ch = TILEP_TRAN_DRAGON_RED;      break;
         default:                   ch = TILEP_TRAN_DRAGON;          break;
         }
         result.parts[TILEP_PART_BASE] = ch;
@@ -879,7 +892,7 @@ void fill_doll_equipment(dolls_data &result)
             result.parts[TILEP_PART_CLOAK] = tilep_equ_cloak(*cloak);
 
             // Gets an additional tile on the head
-            if (is_unrandom_artefact(*cloak, UNRAND_FISTICLOAK))
+            if (has_unrand_effect(*cloak, UNRAND_FISTICLOAK))
                 result.parts[TILEP_PART_HELM] = TILEP_HELM_FUNGAL_FISTICLOAK_FRONT;
         }
         else

@@ -1,0 +1,24 @@
+{
+  "reservationId": "78594e17-307e-4eda-899e-a584bb4d6ac7",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "78594e17-307e-4eda-899e-a584bb4d6ac7",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS Burrows population and loot tuning native build",
+      "requestedAt": 1793149838.6113951,
+      "supervisorPid": 41988,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "c925d7e8e86884fd2cf7dd309078d67a724c86516bf37fb4f4b04350e6255c50",
+      "startedAt": 1793149838.612028,
+      "workerPid": 41989,
+      "processGroup": 41989,
+      "exitCode": 0,
+      "finishedAt": 1793149866.614576,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "c925d7e8e86884fd2cf7dd309078d67a724c86516bf37fb4f4b04350e6255c50"
+  }
+}

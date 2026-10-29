@@ -1,0 +1,9 @@
+{
+  "reservationId": "08354351-11f2-4c5c-8564-fb1f527b476d",
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/public-attempt-1/public-after-result.json",
+  "browserClosed": true,
+  "nativeGameStarted": false,
+  "failure": "Cold AMD client exports appear before its dependencies finish loading; fixture checked the transport too early."
+}

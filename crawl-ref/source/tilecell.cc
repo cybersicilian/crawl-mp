@@ -42,6 +42,7 @@ void packed_cell::clear()
     mangrove_water = false;
     orb_glow         = 0;
     blood_rotation   = 0;
+    ritual_blood     = 0;
     old_blood        = false;
     travel_trail     = 0;
     quad_glow        = 0;
@@ -66,6 +67,7 @@ bool packed_cell::operator ==(const packed_cell &other) const
     if (orb_glow != other.orb_glow) return false;
     if (blood_rotation != other.blood_rotation) return false;
     if (old_blood != other.old_blood) return false;
+    if (ritual_blood != other.ritual_blood) return false;
     if (travel_trail != other.travel_trail) return false;
     if (quad_glow != other.quad_glow) return false;
     if (disjunct != other.disjunct) return false;

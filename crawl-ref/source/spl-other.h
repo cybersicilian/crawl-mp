@@ -19,6 +19,7 @@ spret cast_death_channel(int pow, god_type god, bool fail);
 spret cast_animate_dead(int pow, bool fail);
 
 vector<coord_def> find_sigil_locations(bool tracer);
+bool automatic_binding_sigil_at(const coord_def& pos);
 spret cast_sigil_of_binding(int pow, bool fail, bool tracer);
 void trigger_binding_sigil(actor& actor);
 
@@ -67,3 +68,7 @@ spret cast_dragon_veins(bool fail);
 spret cast_ice_thorns(const actor& agent, const coord_def& pos, int pow, bool fail);
 
 bool has_adjacent_enemy(const coord_def& pos, const actor& viewer);
+
+bool corpse_in_los();
+spret cast_fulsome_distillation(int pow, bool check_range, bool fail);
+

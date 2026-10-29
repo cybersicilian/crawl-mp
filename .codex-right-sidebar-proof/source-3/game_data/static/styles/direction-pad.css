@@ -1,0 +1,53 @@
+/* A compact, readable compass anchored inside the native dungeon viewport. */
+#normal #direction_pad {
+    position: absolute;
+    z-index: 12;
+    box-sizing: border-box;
+    width: 166px;
+    padding: 6px;
+    border: 1px solid #8d7a4b80;
+    border-radius: 5px;
+    background: #151b20ed;
+    box-shadow: 0 2px 12px #0008;
+    color: #dfcca0;
+    font: 11px/1.2 var(--tt-font-ui, sans-serif);
+    user-select: none;
+}
+#normal #direction_pad[hidden] { display: none; }
+.direction-pad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+#normal .direction-pad-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 48px;
+    height: 46px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 2px;
+    gap: 1px;
+    border: 1px solid #8d7a4b80;
+    border-radius: 3px;
+    background: #252d32;
+    box-shadow: none;
+    color: #f0dcae;
+    text-shadow: none;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+.direction-pad-arrow { font: 22px/22px sans-serif; }
+.direction-pad-keys { color: #eee1c5; font: 11px/13px var(--tt-font-ui, sans-serif); white-space: nowrap; }
+#normal .direction-pad-keys kbd { padding: 0; border: 0; background: none; box-shadow: none; color: inherit; font: inherit; }
+#normal .direction-pad-button:hover:not(:disabled) { background: #414536; border-color: #e0c68a; }
+#normal .direction-pad-button:active:not(:disabled) { background: #5a5038; }
+#normal .direction-pad-button.is-activated:not(:disabled) {
+    background: #e0c68a;
+    border-color: #ffe3a2;
+    box-shadow: inset 0 0 0 1px #ffe3a2;
+    color: #151b20;
+}
+#normal .direction-pad-button.is-activated .direction-pad-keys { color: inherit; }
+#normal .direction-pad-button:focus-visible { outline: 2px solid #ffe3a2; outline-offset: 1px; }
+#normal .direction-pad-button:disabled { opacity: .45; cursor: default; }

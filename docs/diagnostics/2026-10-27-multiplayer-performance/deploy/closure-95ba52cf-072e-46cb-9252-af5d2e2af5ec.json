@@ -1,0 +1,11 @@
+{
+  "reservationId": "95ba52cf-072e-46cb-9252-af5d2e2af5ec",
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/deploy/attempt-2/result.json",
+  "browserClosed": true,
+  "testGameSaved": true,
+  "supervisedProcessGroupGone": true,
+  "checkPassed": false,
+  "serverAutoSaveEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/deploy/test-game-status.json"
+}

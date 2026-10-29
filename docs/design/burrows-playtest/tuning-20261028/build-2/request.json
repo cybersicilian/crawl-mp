@@ -1,0 +1,52 @@
+{
+  "label": "DCSS threat-aligned brute XP and reduced population build",
+  "cwd": "/private/tmp/dcss-burrows-encounters-20261028",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "command": [
+    "make",
+    "-j2",
+    "-o",
+    ".contrib-libs",
+    "WEBTILES=y",
+    "NO_OPTIMIZE=y",
+    "STDFLAG=-std=c++17",
+    "PYTHON=/usr/local/bin/python3",
+    "TEST_OBJECTS=catch2-tests/test_burrows.o catch2-tests/test_branch_population.o catch2-tests/test_honey.o catch2-tests/test_ng-init-branches.o catch2-tests/test_player_fixture.o",
+    "crawl",
+    "catch2-tests-executable"
+  ],
+  "inputs": {
+    "/private/tmp/dcss-burrows-encounters-20261028/branch-population.h": "a8677d5bb5b3fd230b07a8335979457aff57e25bc4a8c7eed8b81b6d7ed241ea",
+    "/private/tmp/dcss-burrows-encounters-20261028/dungeon.cc": "0253dafe8ecf57ac81622b1272929bd7944d7ec73249961dad32af207aa2cdcc",
+    "/private/tmp/dcss-burrows-encounters-20261028/dungeon-feature-type.h": "f64014e9099d7238f8601ed639976e7fe9991bbc5bde5f880eead2c91e88b2d6",
+    "/private/tmp/dcss-burrows-encounters-20261028/feature-data.h": "2183388af72cb4d3a436f8a0b0134571158bad241ee89b4a5caff1aa32a662a8",
+    "/private/tmp/dcss-burrows-encounters-20261028/tag-version.h": "edfbf9ea9983f9fce049e4dacdd361693ee4e995c827333fbf619890c065b028",
+    "/private/tmp/dcss-burrows-encounters-20261028/terrain.h": "ab0c220fab5fafa1a11e1576e9e5d214db0e248be220753c4326166ec6407743",
+    "/private/tmp/dcss-burrows-encounters-20261028/terrain.cc": "b0c89aea160a2d320c6cd2cb8c1219c1fc531e5436880f15d8078ba647216e46",
+    "/private/tmp/dcss-burrows-encounters-20261028/player.cc": "3583c181c77a2081897801810c965b6d1c73eb26df0567d0b753f38333daaf5c",
+    "/private/tmp/dcss-burrows-encounters-20261028/monster.cc": "988f42b5bddfd4b47125156fbacf8dbd86d9b60f9a2230cae14738633dd5dd99",
+    "/private/tmp/dcss-burrows-encounters-20261028/tilepick.cc": "022026f58dc04d2ca905e2f9963c36c1a864c9b9be42434868b057db8e627701",
+    "/private/tmp/dcss-burrows-encounters-20261028/rltiles/dc-floor.txt": "2ad4f87c785a45bd4a7c3f38720dae3654864a38d812c58dd64fee7103734d7e",
+    "/private/tmp/dcss-burrows-encounters-20261028/dat/descript/features.txt": "a44c29d0455324a84bdeef7f8e0d543b34cdfe84164321122bad6d1bd9676b17",
+    "/private/tmp/dcss-burrows-encounters-20261028/dat/dlua/layout/hive.lua": "785a180ba7d0361e9775f6fd93bbcddeb2388dcc14cd70eff51244dd4f409d2a",
+    "/private/tmp/dcss-burrows-encounters-20261028/catch2-tests/test_honey.cc": "83fe70ef32f6be28ebfda57720d75ffcf137b766b7b90149c116679d7222933b",
+    "/private/tmp/dcss-burrows-encounters-20261028/catch2-tests/test_branch_population.cc": "e9934e1faf480eccadc7097231a5c5acf6e6e33261dea998a4baa4344e6f17e2",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/phase.py": "03845b06b803978aedeaff6d880c68f6669e78845d6677ea3543590b048d0db6",
+    "/private/tmp/dcss-burrows-encounters-20261028/Makefile": "8246e001f440f799f2944e80ae5a047746ad98f49a7b17c45652deb3bb7df906",
+    "/private/tmp/dcss-burrows-encounters-20261028/Makefile.obj": "e8d63c308f90d87f09a57b31b236d18cf288491da483cd30ef9780b1fe1f4691",
+    "/private/tmp/dcss-burrows-encounters-20261028/.cflags": "15ede59e9060bed2a90d1f9677bffac9fa404a98eae88361bf14e0e232d2d5c6",
+    "/private/tmp/dcss-burrows-encounters-20261028/mon-pick-data.h": "a164c1986058b99d17297ae829ad8c8185bb096ec5e82c48b6f264f8546dd84f",
+    "/private/tmp/dcss-burrows-encounters-20261028/travel.cc": "18db4bea4e91ddf388b0ba0e02fb689f6d5d500af6d40db8b0dcbf61579674d8",
+    "/private/tmp/dcss-burrows-encounters-20261028/throw.cc": "dd407a149f22e1cf0c53ed0354e1f11d50cf53b814e49405616c5a834251daea",
+    "/private/tmp/dcss-burrows-encounters-20261028/branch-data.h": "95fef1e259e651cd1e73f8328b67f9ffc575ad81cf78b852789fd4dea3327412",
+    "/private/tmp/dcss-burrows-encounters-20261028/catch2-tests/test_burrows.cc": "65659fe495fa47cc65da34703b68d439e7a725a3b6a03983d3d30ce7c8009274",
+    "/private/tmp/dcss-burrows-encounters-20261028/dat/dlua/layout/wormlands.lua": "65c839a93ed6b467a52d8ef8eafa27a567bed261abdb252fb812863a42cfd85e",
+    "/private/tmp/dcss-burrows-encounters-20261028/dat/mons/burrowing-beast.yaml": "c09b374260801ea9332908a49163a7f9e0aa91460a97eceacc6aec93f718dc71",
+    "/private/tmp/dcss-burrows-encounters-20261028/dat/mons/crag-boar.yaml": "af33f79083ca12c6233898d2bfca7af3719e4ebeb712c048bf9647a2babe753c"
+  },
+  "resources": {
+    "compileJobs": 2,
+    "phases": "one incremental native build",
+    "existingSavesUsed": false
+  }
+}

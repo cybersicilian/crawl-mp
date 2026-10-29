@@ -1,0 +1,82 @@
+[
+  {
+    "source": "UNUSED/weapons/spiked_flail1.png",
+    "active": "item/weapon/spiked_flail1.png",
+    "sha256": "5a48f53fa75d29d61691c72ee9a7baa04c670b743c937c2db9d7f34df572d330"
+  },
+  {
+    "source": "UNUSED/weapons/spiked_flail2.png",
+    "active": "item/weapon/spiked_flail2.png",
+    "sha256": "e0e79d9d4cd7a447bfb9b3e6e07a08acb05a54f08274d228fdc8be9619c64c65"
+  },
+  {
+    "source": "UNUSED/weapons/spiked_flail3.png",
+    "active": "item/weapon/spiked_flail3.png",
+    "sha256": "3743cef68d41c436d691266a752256ff248832ec745fa26c37467182986cdbd2"
+  },
+  {
+    "source": "UNUSED/weapons/cutlass1.png",
+    "active": "item/weapon/cutlass1.png",
+    "sha256": "1a781a3c8aed2f5b31f801771759f42ab92168e313c942b4d99e493ec76c2563"
+  },
+  {
+    "source": "UNUSED/weapons/cutlass2.png",
+    "active": "item/weapon/cutlass2.png",
+    "sha256": "3dafc26d9369628341d4c74e3452a4a65970c32a4635956c628ad9a31439c3af"
+  },
+  {
+    "source": "UNUSED/weapons/cutlass3.png",
+    "active": "item/weapon/cutlass3.png",
+    "sha256": "61dc75b3f56ec323246ce81b4776b37ce42a6f82b75705b7a9706442286c285f"
+  },
+  {
+    "source": "UNUSED/weapons/fustibalus3.png",
+    "active": "item/weapon/ranged/fustibalus3.png",
+    "sha256": "8c18050b59fc18c1f0054e1a905bfa44868bc419cc5f64c55f101dc20139c9f4"
+  },
+  {
+    "source": "UNUSED/weapons/fustibalus2.png",
+    "active": "item/weapon/ranged/fustibalus2.png",
+    "sha256": "034a464e1a56fa73d24a93804f4430722aebfb93126252af63c275bb044d28e7"
+  },
+  {
+    "source": "UNUSED/weapons/fustibalus1.png",
+    "active": "item/weapon/ranged/fustibalus1.png",
+    "sha256": "2acb4cb9f7b0a6eb33d143c690b90e97e94b4f718c6d59612d1be99df48ce170"
+  },
+  {
+    "source": "UNUSED/armour/centaur_barding_metal.png",
+    "active": "item/armour/centaur_barding.png",
+    "sha256": "550b867824379e6c17bb6e9078473ac8f2b71ac6cac3f97d8a91811334e1391c"
+  },
+  {
+    "source": "UNUSED/armour/centaur_barding_blue.png",
+    "active": "item/armour/centaur_barding_magic.png",
+    "sha256": "967802479f37363810bc03fef8e279a7ebe1846a6b8b2d183cefea7c25aec113"
+  },
+  {
+    "source": "UNUSED/worn/flail_spike2.png",
+    "active": "player/hand1/spiked_flail.png",
+    "sha256": "0cdb168bf7e99f72d72eddf9aa0f13c53ebd46a810d2a5cc6b504b51677e41cb"
+  },
+  {
+    "source": "UNUSED/worn/fustibalus.png",
+    "active": "player/hand1/fustibalus.png",
+    "sha256": "d7cdb4f498713a806f6cd5a8133be5ad3cc7860a699c20ef734ae3334b1cbd62"
+  },
+  {
+    "source": "UNUSED/worn/armour/centaur_barding_metal.png",
+    "active": "player/barding/centaur_barding.png",
+    "sha256": "8216b6e18265e85d0e1b733e0c64bd1249ef9d55b1443c23528cfbdac4cc4c5a"
+  },
+  {
+    "source": "UNUSED/worn/armour/centaur_barding_blue.png",
+    "active": "player/barding/centaur_barding_magic.png",
+    "sha256": "5a646af75e9cfafd3a3792ae73457ffe374c538ba2c702f206eeea55f348516f"
+  },
+  {
+    "source": "UNUSED/worn/armour/centaur_barding_magenta.png",
+    "active": "player/barding/centaur_barding_randart.png",
+    "sha256": "38aa7af9ad3ae309c7e393caa36ffa29ecf937abfd3a5d65bf58cc6eae69d847"
+  }
+]

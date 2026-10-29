@@ -1,0 +1,8 @@
+{
+  "reservationId": "66af3b2a-a649-4442-ae0d-d62512814db7",
+  "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/staged-attempt1/staged-browser-result.json",
+  "test_game_saved": true,
+  "graphics_restored": true
+}

@@ -1,0 +1,19 @@
+name: "shale drake"
+glyph: {char: "k", colour: brown}
+flags: [warm_blood]
+exp: 600
+genus: drake
+will: 40
+attacks:
+ - {type: bite, damage: 22}
+hd: 9
+hp_10x: 550
+ac: 8
+ev: 6
+spells: shale_drake
+has_corpse: true
+shout: hiss
+intelligence: animal
+size: large
+shape: quadruped
+tile: shale_drake

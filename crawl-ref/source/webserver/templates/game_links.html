@@ -15,7 +15,7 @@ Play now:
             {% set rcs.add(games[id]["rcfile_path"]) %}
             <a href="javascript:"
                class="edit_rc_link"
-               data-game_id="{{ id }}">(edit rc)</a>
+               data-game_id="{{ id }}">(Game settings)</a>
         {% else %}
             {% if "separator" in games[id] %}
               {% raw games[id]["separator"] %}
@@ -40,7 +40,7 @@ Play now:
     {% set rcs.add(games[id]["rcfile_path"]) %}
     <a href="javascript:"
        class="edit_rc_link"
-       data-game_id="{{ id }}">(edit rc)</a>
+       data-game_id="{{ id }}">(Game settings)</a>
     {% else %}
     {% if "separator" in games[id] %}
     {% raw games[id]["separator"] %}

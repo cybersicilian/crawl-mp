@@ -1,0 +1,18 @@
+{
+  "files": {
+    "docs/diagnostics/2026-10-27-multiplayer-performance/deploy/public-smoke.cjs": "7024c9eb2aa34f3fe3612f7b885bd3497460d832e3d9e11f3534c676332b5cd1",
+    "docs/diagnostics/2026-10-27-multiplayer-performance/deploy/run_public.py": "d806fba790fb3f7455c4254eecbaaaca20b7e81befe39fc5013c744f73d84110",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1"
+  },
+  "expected_release": "/opt/dcss/releases/multiplayer-performance-01a17ea4",
+  "target": "https://dcss.iancaltabiano.com",
+  "resources": {
+    "browser_instances": 1,
+    "human_test_accounts": 2,
+    "native_actions": 4,
+    "sequential": true,
+    "timeout_seconds": 240
+  },
+  "fixture_revision": 2,
+  "fixture_change": "Wait for DOM and usable controls instead of the complete page load event; registration and gameplay assertions remain unchanged."
+}

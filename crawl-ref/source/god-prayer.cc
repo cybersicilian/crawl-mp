@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "eldritch.h"
 
 #include "god-prayer.h"
 
@@ -209,6 +210,14 @@ static bool _pray_ecumenical_altar()
 void try_god_conversion(god_type god)
 {
     ASSERT(god != GOD_NO_GOD);
+
+    if (you.species == SP_ELDRITCH)
+    {
+        you.turn_is_over = eldritch::profane() == spret::success;
+        if (you.turn_is_over)
+            you.time_taken = BASELINE_DELAY;
+        return;
+    }
 
     if (you.has_mutation(MUT_FORLORN))
     {

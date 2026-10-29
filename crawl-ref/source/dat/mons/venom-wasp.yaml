@@ -1,0 +1,21 @@
+name: "venom wasp"
+glyph: {char: "y", colour: green}
+flags: [flies, no_skeleton]
+resists: {poison: -1}
+exp: 500
+genus: hornet
+will: 40
+attacks:
+ - {type: sting, flavour: poison, damage: 10}
+hd: 8
+hp_10x: 400
+ac: 4
+ev: 14
+spells: naga
+speed: 15
+has_corpse: true
+shout: buzz
+intelligence: animal
+size: small
+shape: insect_winged
+tile: venom_wasp

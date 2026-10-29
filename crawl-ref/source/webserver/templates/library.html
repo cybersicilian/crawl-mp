@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ entity.get('name', label) if entity else label }} · Pebble Broth Chronicle</title>
+  <link rel="stylesheet" href="/static/tabletop/tokens.css">
+  <link rel="stylesheet" href="/static/fonts/fonts.css">
+  <link rel="stylesheet" href="/static/tabletop/typography.css">
+  <link rel="stylesheet" href="/static/tabletop/properties.css">
+  <link rel="stylesheet" href="/static/tabletop/library.css">
+  <link rel="stylesheet" href="/static/styles/account-actions.css">
+  <script src="/static/scripts/contrib/require.js"></script>
+  <script>
+    require.config({baseUrl: '/static/scripts', paths: {jquery: '/static/scripts/contrib/jquery'}});
+    require(['item-display']);
+  </script>
+  <link rel="stylesheet" href="/static/tabletop/outgame-archive.css">
+  <link rel="stylesheet" href="/static/tabletop/layout-rhythm.css">
+  <script src="/static/scripts/collection-filter.js" defer></script>
+  <script src="/static/scripts/archive-navigation.js" defer></script>
+  <link rel="stylesheet" href="/static/tabletop/art-direction.css">
+  <link rel="stylesheet" href="/static/tabletop/site-resources.css?v=20261023-stats">
+  <link rel="stylesheet" href="/static/tabletop/archive-layout.css?v=20261023-stats">
+</head>
+<body class="library-page">
+<a class="archive-skip" href="#archive_content">Skip to content</a>
+<main>
+  {% set outgame_section = "chronicle" %}
+  {% include "outgame-navigation.html" %}
+  <article class="library-book">
+  <header class="library-page-header">
+    <p class="library-eyebrow">Pebble Broth Chronicle · {{ label }}</p>
+    <h1 {% if kind == 'randarts' and entity %}class="library-property-title"{% end %}>{{ entity.get('name', 'Unknown') if entity else label }}</h1>
+    {% if entity %}
+      {% if kind == 'games' %}
+        {% set state = entity.get('state', {}) %}
+        <p class="library-intro">{{ entity['status'].capitalize() }} · {{ state.get('place', 'Awaiting character creation') }} · Turn {{ state.get('turns', 0) }}</p>
+      {% elif entity.get('type') == 'account' %}
+        <p class="library-intro">An adventurer's recorded pots, expeditions, and tasting notes.</p>
+      {% elif kind == 'players' %}
+        <p class="library-intro">XL {{ entity.get('xl', 1) }} {{ entity.get('species', '') }} {{ entity.get('job', '') }} · {{ entity.get('place', '') }}</p>
+      {% else %}
+        <p class="library-intro">An identified artefact, recorded where its story began.</p>
+      {% end %}
+    {% else %}
+      {% set introductions = {'games': 'Return to a recorded pot, inspect its heroes, and revisit its dungeon tasting notes.', 'players': 'Meet the cooks, delvers, and rivals whose runs have been recorded in the ledger.', 'randarts': 'Browse identified artefacts fished from the depths across recorded expeditions.'} %}
+      <p class="library-intro">{{ introductions[kind] }}</p>
+    {% end %}
+  </header>
+  <div class="library-content" id="archive_content" tabindex="-1">
+    <div class="library-breadcrumb">
+      {% if entity %}<a href="/{{ kind }}">All {{ label.lower() }}</a>{% end %}
+      {% if entity and entity.get('game_id') %}<a href="/games/{{ entity['game_id'] }}">Return to expedition</a>{% end %}
+      <a href="/?view=chronicle#lobby">Return to Chronicle</a>
+      <a href="/stats{% if kind == 'players' and entity %}/players/{{ url_escape(entity['name'], plus=False) }}{% end %}">{{ 'Gameplay statistics' if entity else 'Server dashboard' }}</a>
+    </div>
+  {% if entity %}
+    {% if kind == 'games' %}
+      <p>Hosted by <a href="/players/{{ entity['owner_id'] }}">{{ entity['owner'] }}</a></p>
+      <div class="library-actions">
+      {% if entity['loadable'] %}
+        <a class="library-action library-action-primary" href="/#expedition-{{ entity['id'] }}">Resume game as host</a>
+      {% end %}
+      {% if entity['status'] == 'active' %}
+        <a class="library-action" href="/#watch-{{ url_escape(entity['owner']) }}">Watch expedition</a>
+      {% end %}
+      </div>
+      <dl>
+        <dt>Created</dt><dd><time datetime="{{ entity['created_at'] }}">{{ entity['created_at'].replace('T', ' · ').replace('+00:00', ' UTC') }}</time></dd>
+        <dt>Last saved</dt><dd>{% if entity.get('saved_at') %}<time datetime="{{ entity['saved_at'] }}">{{ entity['saved_at'].replace('T', ' · ').replace('+00:00', ' UTC') }}</time>{% else %}No manual save yet{% end %}</dd>
+        <dt>Seed</dt><dd>{{ state.get('seed', 'Unknown') }}</dd>
+        <dt>Mode</dt><dd>{{ 'Co-operative' if entity['mode'] == 'coop' else entity['mode'] }}</dd>
+      </dl>
+      <h2>Heroes</h2>
+      <ul class="library-records">
+      {% for hero in state.get('players', []) %}
+        <li><a class="library-record-title" href="/players/{{ hero['id'] }}">{{ hero['name'] }}</a>
+          <span class="library-record-meta">XL {{ hero['xl'] }} {{ hero['species'] }} {{ hero['job'] }} · {{ hero['hp'] }}/{{ hero['hp_max'] }} HP · {{ hero['place'] }}</span></li>
+      {% end %}
+      {% if not state.get('players') %}<li class="library-empty">No heroes have been recorded for this expedition yet.</li>{% end %}
+      </ul>
+      <h2 id="randarts">Discovered randarts</h2>
+      <ul class="library-records">
+      {% for item in entity.get('randarts', []) %}
+        <li><a class="library-record-title library-property-title" href="/randarts/{{ item['id'] }}">{{ item['name'] }}</a></li>
+      {% end %}
+      {% if not entity.get('randarts') %}<li class="library-empty">No identified randarts have been recorded for this expedition yet.</li>{% end %}
+      </ul>
+    {% elif entity.get('type') == 'account' %}
+      <h2>Expeditions</h2>
+      <ul class="library-records">
+      {% for game in entity.get('games', []) %}
+        <li><a class="library-record-title" href="/games/{{ game['id'] }}">{{ game['name'] }}</a><span class="library-record-meta">{{ game['status'].capitalize() }}</span></li>
+      {% end %}
+      {% if not entity.get('games') %}<li class="library-empty">No expeditions have been recorded for this adventurer yet.</li>{% end %}
+      </ul>
+    {% elif kind == 'players' %}
+      <h2>Hero record</h2>
+      <dl>
+        <dt>Health</dt><dd>{{ entity.get('hp', 0) }} / {{ entity.get('hp_max', 0) }} HP</dd>
+        <dt>Magic</dt><dd>{{ entity.get('mp', 0) }} / {{ entity.get('mp_max', 0) }} MP</dd>
+        <dt>Location</dt><dd>{{ entity.get('place', 'Unknown') }}</dd>
+      </dl>
+      <a class="library-action" href="/games/{{ entity['game_id'] }}">View expedition and party</a>
+    {% else %}
+      <p>Found by <a href="/players/{{ entity['finder_id'] }}">{{ entity.get('finder_name', 'Unknown') }}</a> at {{ entity.get('place', 'Unknown') }}</p>
+      {% if entity.get('description') %}<pre class="library-description">{{ entity['description'] }}</pre>{% end %}
+    {% end %}
+    <details class="library-record-reference">
+      <summary>Record reference</summary>
+      <code class="library-id" aria-label="Record identifier">{{ entity['id'] }}</code>
+    </details>
+    <p class="library-note">This record shows the latest known state. Reload this page to refresh it.</p>
+  {% else %}
+    <section class="archive-summary" aria-label="Collection summary">
+      <div><span>Recorded {{ label.lower() }}</span><strong>{{ '{:,}'.format(len(entries)) }}</strong></div>
+      {% if kind == 'games' %}
+      <div><span>Active expeditions</span><strong>{{ sum(1 for entry in entries if entry.get('status') == 'active') }}</strong></div>
+      <div><span>Saved expeditions</span><strong>{{ sum(1 for entry in entries if entry.get('status') == 'saved') }}</strong></div>
+      {% elif kind == 'players' %}
+      <div><span>Adventurer accounts</span><strong>{{ sum(1 for entry in entries if entry.get('type') == 'account') }}</strong></div>
+      <div><span>Recorded heroes</span><strong>{{ sum(1 for entry in entries if entry.get('type') != 'account') }}</strong></div>
+      {% else %}<div class="archive-summary-copy"><span>Every discovery has a story</span><p>Open an artefact to inspect its properties, finder and expedition.</p></div>{% end %}
+    </section>
+    {% if entries %}
+    <label class="archive-search" for="archive_search">Find {{ label.lower() }}
+      <input id="archive_search" type="search" placeholder="Search names, hosts, or status…" data-collection-filter="archive_records" data-collection-empty="archive_no_matches" data-collection-storage="archive-search:{{ kind }}" aria-describedby="archive_count">
+    </label>
+    {% if kind in ('games', 'players') %}
+    <label class="archive-facet" data-collection-tools hidden>Show
+      <select data-collection-facet="archive_records" aria-label="Filter {{ label.lower() }}">
+        <option value="">All {{ label.lower() }}</option>
+        {% if kind == 'games' %}<option value="active">Active</option><option value="saved">Saved</option><option value="finished">Finished</option><option value="starting">Starting</option>
+        {% else %}<option value="account">Adventurer accounts</option><option value="hero">Heroes</option>{% end %}
+      </select>
+    </label>
+    {% end %}
+    {% end %}
+    <p class="library-record-count" id="archive_count" role="status">{{ len(entries) }} {{ 'record' if len(entries) == 1 else 'records' }}</p>
+    <p id="archive_no_matches" hidden>No matching records. Try another name or clear your search.</p>
+    <ul class="library-records" id="archive_records">
+    {% for entry in entries %}
+      {% set group = entry.get('status', '') if kind == 'games' else 'account' if entry.get('type') == 'account' else 'hero' %}
+      <li class="archive-record-row" data-collection-entry data-collection-group="{{ group if group in ('active', 'saved', 'starting', 'account', 'hero') else 'finished' }}"><a class="library-record-title{% if kind == 'randarts' %} library-property-title{% end %}" href="/{{ kind }}/{{ entry['id'] }}">{{ entry.get('name', 'Unknown') }} <span aria-hidden="true">→</span></a>
+        {% if entry.get('status') %}<span class="library-record-meta">{{ entry['status'].capitalize() }} · Hosted by {{ entry.get('owner', 'Unknown') }}</span>{% end %}
+        {% if kind == 'players' %}<span class="library-record-meta">{{ 'Adventurer' if entry.get('type') == 'account' else 'Hero' }}</span>{% end %}
+        {% if kind == 'games' %}<span class="archive-record-detail">{{ entry.get('state', {}).get('place') or 'Awaiting character creation' }} · {{ '{:,}'.format(entry.get('state', {}).get('turns') or 0) }} turns</span><time class="archive-record-date" datetime="{{ entry.get('updated_at', '') }}">Updated {{ entry.get('updated_at', '')[:10] }}</time>{% end %}
+        {% if entry.get('game_id') and kind != 'games' %}<a class="archive-record-detail" href="/games/{{ entry['game_id'] }}">View expedition</a>{% end %}
+      </li>
+    {% end %}
+    {% if not entries %}<li class="library-empty"><strong>A story waiting to be written</strong>Start an expedition to begin your chronicle.</li>{% end %}
+    </ul>
+  {% end %}
+  </div>
+  </article>
+  {% include "site-resources.html" %}
+  <footer class="library-footer"><span>Pebble Broth · Dungeon Crawl Stone Soup</span><a href="/?view=play#lobby">Back to Play</a></footer>
+</main>
+</body>
+</html>

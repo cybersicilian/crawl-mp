@@ -1,0 +1,109 @@
+/* A results-first data workspace, using the archive's existing palette. */
+.stats-page main { max-width: 1540px; margin-top: 0; }
+.stats-page .stats-header { min-height: 0; padding: 22px 28px; background: #f4eddd; border-bottom: 1px solid var(--book-rule); }
+.stats-page .stats-header h1 { font-size: 34px; margin-bottom: 6px; }
+.stats-page .stats-header .library-eyebrow { margin-bottom: 7px; }
+.stats-build-label { margin: 10px 0 0; color: var(--book-muted); font-size: 11px; }
+.stats-build-label a { margin-left: 12px; }
+.stats-page .stats-lookup { padding: 12px 28px; background: #eee4cf; }
+.stats-page .stats-global-search { max-width: none; }
+.stats-page .stats-global-search > label { font-size: 10px; margin-bottom: 4px; }
+.stats-page .stats-global-search > p { display: none; }
+.stats-page .stats-lookup-controls input { min-height: 40px; }
+.stats-page .stats-sidebar { padding: 18px 10px; background: #eee5d1; }
+.stats-page .stats-workspace { grid-template-columns: 202px minmax(0, 1fr); }
+.stats-page .stats-sections a { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; padding: 7px 9px; }
+.stats-sections a > span { font: 10px/1.7 var(--tt-font-mono); opacity: .8; }
+.stats-page .stats-nav-group + .stats-nav-group { margin-top: 17px; }
+.stats-mobile-section { display: none; }
+.stats-page .stats-filters { padding: 12px 24px; gap: 8px 12px; background: #faf5e9; }
+.stats-page .stats-filter-heading { font-size: 12px; }
+.stats-page .stats-field label { letter-spacing: .025em; font-size: 10px; }
+.stats-page .stats-field input, .stats-page .stats-field select { min-height: 36px; font-size: 13px; }
+.stats-page .stats-field small { max-width: 245px; }
+.stats-advanced { align-self: flex-start; margin-top: 16px; min-width: 0; }
+.stats-advanced summary { cursor: pointer; padding: 8px 6px; color: #713b36; font-size: 12px; }
+.stats-advanced[open] { flex-basis: 100%; margin-top: 0; }
+.stats-advanced-fields { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 8px 0; }
+.stats-page .stats-filter-actions { margin-left: auto; }
+.stats-page .stats-filter-actions a { font-size: 11px; }
+.stats-page .stats-filter-status { font-size: 11px; }
+.stats-page .stats-content { padding: 20px 24px 28px; }
+.stats-page .stats-toc { padding: 9px 11px; margin-bottom: 20px; background: #eee5d166; }
+.stats-page .stats-toc > strong { font-size: 9px; }
+.stats-page .stats-toc a { font-size: 11px; padding: 3px 7px; }
+.stats-page .stats-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 16px; }
+.stats-page .stats-metrics > div { padding: 12px 14px; background: #fffbf2; }
+.stats-page .stats-metrics span { font-size: 11px; }
+.stats-page .stats-metrics strong { font: 600 25px/1.5 var(--tt-font-ui); overflow-wrap: anywhere; }
+.stats-dashboard .stats-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stats-highlights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stats-highlights a { display: grid; gap: 4px; padding: 13px 15px; border: 1px solid var(--book-rule); border-left: 3px solid #943824; border-radius: 4px; text-decoration: none; background: #efe4cd66; }
+.stats-highlights span, .stats-highlights small { color: var(--book-muted); font-size: 11px; }
+.stats-highlights strong { font: 600 18px/1.4 var(--tt-font-title); }
+.stats-page .stats-fact-columns { gap: 18px; }
+.stats-page .stats-facts[aria-labelledby="facts_gameplay"] { order: -1; }
+.stats-page .stats-facts { min-width: 0; padding: 15px; background: #eee4cf66; border: 1px solid var(--book-rule); border-radius: 4px; margin-bottom: 18px; }
+.stats-page .stats-facts h2 { margin-top: 0; font-size: 20px; }
+.stats-page .stats-facts dl { margin-bottom: 0; font-size: 13px; }
+.stats-page .stats-facts .stats-metrics { grid-template-columns: 1fr; border: 0; background: none; margin: 0; gap: 0; }
+.stats-page .stats-facts .stats-metrics > div { flex-direction: row; align-items: center; justify-content: space-between; gap: 14px; padding: 7px 0; background: none; border-bottom: 1px solid var(--book-rule); }
+.stats-page .stats-facts .stats-metrics strong { font-size: 21px; }
+.stats-collection .stats-facts .stats-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.stats-collection .stats-facts .stats-metrics > div { flex-direction: column; align-items: flex-start; gap: 2px; border: 0; padding: 0; }
+.stats-record-note { margin: 0 0 22px; font-size: 12px; color: var(--book-muted); }
+.stats-page .stats-section-head { margin-top: 24px; }
+.stats-page .stats-section-head h2 { font-size: 23px; }
+.stats-page .stats-table-wrap { max-height: 65vh; border-radius: 5px; }
+.stats-page .stats-table { font-size: 13px; }
+.stats-page .stats-table tbody th { position: sticky; left: 0; z-index: 1; background: #fffbef; min-width: 145px; max-width: 245px; }
+.stats-page .stats-table tbody tr:nth-child(even) th { background: #f7eed9; }
+.stats-page .stats-table tbody tr:hover th { background: #f1e3c2; }
+.stats-page .stats-table thead th:first-child { left: 0; z-index: 3; }
+.stats-page .stats-sort { min-height: 42px; font-size: 10px; letter-spacing: .03em; }
+.stats-page .stats-hint { line-height: 1.6; margin-top: 0; }
+.stats-table-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding: 8px 12px; margin-bottom: 12px; background: #ede3cd; border-radius: 4px; color: #5d4630; font-size: 12px; }
+.stats-table-tools label { display: flex; align-items: center; gap: 8px; }
+.stats-table-tools select, .stats-mobile-section select { min-height: 38px; max-width: 100%; border: 1px solid #ad9263; border-radius: 4px; background: #fffbef; color: #29251e; padding: 5px 8px; font: 13px var(--tt-font-ui); }
+.stats-table-tools input { width: 17px; height: 17px; accent-color: #943824; }
+.stats-table-tools :focus-visible, .stats-mobile-section select:focus-visible { outline: 2px solid #943824; outline-offset: 3px; }
+.stats-page .stats-directory { padding-top: 16px; border-top: 1px solid var(--book-rule); }
+.stats-page .stats-directory-heading h2 { margin-top: 10px; }
+.stats-page .stats-grid-wrap { max-height: 65vh; margin-bottom: 30px; }
+.stats-page .stats-grid thead th { z-index: 2; }
+.stats-page .stats-source { font-size: 12px; }
+@media (min-width: 981px) {
+    .stats-page .stats-sections { top: 16px; max-height: calc(100dvh - 32px); overflow-y: auto; }
+}
+@media (max-width: 980px) {
+    .stats-page .stats-workspace { grid-template-columns: minmax(0, 1fr); }
+    .stats-page .stats-sidebar { padding: 10px 22px; }
+    .stats-enhanced .stats-mobile-section { display: flex; gap: 10px; align-items: center; justify-content: space-between; font-size: 11px; color: #66573f; }
+    .stats-enhanced .stats-sections { display: none; }
+    .stats-mobile-section select { flex: 1; max-width: 340px; min-width: 0; }
+}
+@media (max-width: 650px) {
+    .stats-page main { padding: 0 10px; }
+    .stats-page .library-navigation { padding-block: 12px; min-height: 0; }
+    .stats-page .stats-header { padding: 20px 16px; }
+    .stats-page .stats-header h1 { font-size: 28px; }
+    .stats-page .stats-header .library-intro { font-size: 13px; }
+    .stats-page .stats-lookup { padding: 12px 16px; }
+    .stats-page .stats-sidebar { padding: 10px 16px; }
+    .stats-enhanced .stats-mobile-section { display: grid; gap: 5px; }
+    .stats-mobile-section select { width: 100%; max-width: none; }
+    .stats-page .stats-filters { padding: 12px 16px; }
+    .stats-page .stats-field { flex-basis: 125px; }
+    .stats-page .stats-advanced { margin-top: 0; }
+    .stats-page .stats-content { padding: 16px; }
+    .stats-page .stats-filter-heading span { margin-top: 4px; font-size: 11px; }
+    .stats-page .stats-metrics, .stats-dashboard .stats-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stats-page .stats-metrics strong { font-size: 23px; }
+    .stats-highlights { grid-template-columns: 1fr; }
+    .stats-page .stats-fact-columns { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .stats-page .stats-table tbody th { min-width: 125px; max-width: 160px; }
+    .stats-page .stats-table th, .stats-page .stats-table td { padding: 8px; }
+    .stats-page .stats-table .stats-sort { padding: 5px 8px; }
+    .stats-page .stats-table thead th { padding: 0; }
+    .stats-page .stats-toc { padding: 8px; }
+}

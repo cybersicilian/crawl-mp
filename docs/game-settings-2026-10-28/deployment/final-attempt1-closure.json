@@ -1,0 +1,7 @@
+{
+  "reservationId": "75e7a35f-c996-41dd-8b8c-65da41e3e83c",
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "Local browser fixture exited after resize assertion and awaited browser.close plus fixture exit. Public write phase was not started. Supervised group and worker/supervisor are gone.",
+  "exitCode": 1
+}

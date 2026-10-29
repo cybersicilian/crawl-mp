@@ -1219,7 +1219,7 @@ static const mutation_def mut_data[] =
   TILEG_MUT_MANA_LINK,
 },
 
-// Jiyva only mutations. (MUT_GELATINOUS_BODY is also used by Op)
+// Jiyva only mutations. (MUT_GELATINOUS_BODY is also used by Op and Oz)
 { MUT_GELATINOUS_BODY, 0, 3, mutflag::good | mutflag::jiyva | mutflag::substance,
   "gelatinous body",
 
@@ -1946,6 +1946,15 @@ static const mutation_def mut_data[] =
   TILEG_MUT_NO_HEXES_MAGIC,
 },
 
+{ MUT_NO_AURAMANCY_MAGIC, 0, 1, mutflag::bad,
+  "no auramancy magic",
+
+  {"You cannot study or cast Auramancy magic.", "", ""},
+  {"You can no longer study or cast Auramancy magic.", "", ""},
+  {"You can once more study and cast Auramancy magic.", "", ""},
+  TILEG_MUT_NO_HEXES_MAGIC,
+},
+
 { MUT_NO_ICE_MAGIC, 0, 1, mutflag::bad,
   "no ice magic",
 
@@ -2629,6 +2638,51 @@ static const mutation_def mut_data[] =
   {"", "", ""},
 
   TILEG_MUT_MARK_OF_THE_FANATIC,
+},
+
+{ MUT_ARMOURED_SHELL, 0, 1, mutflag::good | mutflag::anatomy,
+  "heavy shell",
+
+  {"Your heavy shell grows stronger with experience and makes movement "
+   "30% slower.", "", ""},
+  {"A heavy armoured shell grows over your back.", "", ""},
+  {"Your armoured shell disappears.", "", ""},
+  TILEG_MUT_RUGGED_BROWN_SCALES,
+},
+
+{ MUT_RETALIATORY_BITE, 0, 1, mutflag::good | mutflag::anatomy,
+  "snapping retaliation",
+
+  {"You may reflexively bite foes who hit you in melee.", "", ""},
+  {"Your jaws twitch with snapping reflexes.", "", ""},
+  {"Your snapping reflexes fade.", "", ""},
+  TILEG_MUT_FANGS,
+},
+
+{ MUT_AMORPHOUS_BODY, 0, 1, mutflag::good | mutflag::anatomy | mutflag::substance,
+  "amorphous body",
+
+  {"You slip through nets, webs and bolas, resist constriction, and take less "
+   "damage from Shatter.", "", ""},
+  {"Your body loses its fixed shape.", "", ""},
+  {"Your body regains its fixed shape.", "", ""},
+  TILEG_MUT_GELATINOUS_BODY,
+},
+
+{ MUT_SOFT_EQUIPMENT, 0, 1, mutflag::bad | mutflag::anatomy,
+  "soft equipment only",
+  {"You can wear hats and scarves, but no fitted armour.", "", ""},
+  {"Only soft headgear and scarves can rest on your body.", "", ""},
+  {"Your body can support fitted armour again.", "", ""},
+  TILEG_MUT_GELATINOUS_BODY,
+},
+
+{ MUT_ACIDIC_TOUCH, 0, 1, mutflag::good | mutflag::anatomy | mutflag::substance,
+  "acidic touch",
+  {"Your unarmed attacks splash your foes with corrosive acid.", "", ""},
+  {"Your touch grows acidic.", "", ""},
+  {"Your touch loses its acidity.", "", ""},
+  TILEG_MUT_GELATINOUS_BODY,
 },
 
 // Dummy entry for removed mutations.

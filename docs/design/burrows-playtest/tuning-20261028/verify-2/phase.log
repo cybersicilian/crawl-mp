@@ -1,0 +1,17 @@
+{"runId": "d2fdc6d0-e26b-436b-a3a4-df19da517f37", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final encounter contracts and 300 floor progression survey", "requestId": "db8452321919b4b8673475ee5efc231f28a34aa170b5e6873b1c7d53ab93429e", "status": "reserved", "reservedAt": 1793197674.035489}
+ 
+{"runId": "d2fdc6d0-e26b-436b-a3a4-df19da517f37", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final encounter contracts and 300 floor progression survey", "requestedAt": 1793197674.188819, "supervisorPid": 47336, "status": "running", "reservation": true, "requestId": "db8452321919b4b8673475ee5efc231f28a34aa170b5e6873b1c7d53ab93429e", "startedAt": 1793197674.19047, "workerPid": 47380, "processGroup": 47380}
+| Floor | Before XP | Tuned XP | Peer target | Difference | Items |
+|---|---:|---:|---:|---:|---:|
+| Bur:1 | 19,972 | 19,990 | 19,259 | +4% | 17.9 |
+| Bur:2 | 19,648 | 21,952 | 22,590 | -3% | 15.5 |
+| Bur:3 | 23,045 | 17,722 | 20,394 | -13% | 15.2 |
+| Bur:4 | 33,246 | 35,379 | 43,703 | -19% | 22.8 |
+| Hive:1 | 18,505 | 18,714 | 20,394 | -8% | 23.7 |
+| Hive:2 | 37,757 | 33,093 | 43,703 | -24% | 24.5 |
+| Worm:1 | 16,971 | 16,190 | 16,202 | -0% | 17.3 |
+| Worm:2 | 26,698 | 26,202 | 25,819 | +1% | 17.6 |
+| Worm:3 | 42,744 | 32,163 | 35,437 | -9% | 21.2 |
+| Worm:4 | 43,323 | 41,398 | 45,054 | -8% | 24.2 |
+Per-floor mean parity: 10 / 10
+{"runId": "d2fdc6d0-e26b-436b-a3a4-df19da517f37", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final encounter contracts and 300 floor progression survey", "requestedAt": 1793197674.188819, "supervisorPid": 47336, "status": "released", "reservation": true, "requestId": "db8452321919b4b8673475ee5efc231f28a34aa170b5e6873b1c7d53ab93429e", "startedAt": 1793197674.19047, "workerPid": 47380, "processGroup": 47380, "exitCode": 0, "finishedAt": 1793197781.238065, "supervisedProcessGroupGone": true, "releasedAt": 1793197781.328618, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-2/closure.json", "releaseEvidenceSha256": "a53728af2d2633fc38d92793600db0157a11f69249f77c22766ad311820212ad"}

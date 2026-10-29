@@ -21,9 +21,11 @@ aptitudes:
   dodging: -1
   spellcasting: -1
   hexes: -1
+  shapeshifting: -1
   invocations: 1
   # Mottled Draconian specific
-  fire_magic: 1
+  fire_magic: 2
+  alchemy: 1
 str: 10
 int: 8
 dex: 6
@@ -31,9 +33,12 @@ levelup_stat_frequency: 4
 mutations:
   1:
     MUT_COLD_BLOODED: 1
+    MUT_ARMOURED_TAIL: 1
+  7:
+    MUT_HEAT_RESISTANCE: 1
 fake_mutations:
-  - long: You can spit globs of burning liquid.
-    short: breathe sticky flame splash
-  - long: You can ignite nearby creatures when you spit burning liquid.
+  - long: You can breathe blasts of explosive embers and sticky napalm.
+    short: sticky combustion breath
+  - long: You are immune to sticky liquid fire.
 
 orc_name: Mottled Orconian

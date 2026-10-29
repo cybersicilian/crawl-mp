@@ -466,3 +466,16 @@ Metal odds and ends rain from above
 An unseen figure is covered in metallic shards
 
 Metallic debris explodes from thin air
+
+%%%%
+auramancy miscast player
+
+The threads of your aura draw strength from your limbs
+%%%%
+auramancy miscast monster
+
+@The_monster@ staggers as a discordant aura drains away its strength
+%%%%
+auramancy miscast unseen
+
+An unseen figure falters in a shimmer of discordant light

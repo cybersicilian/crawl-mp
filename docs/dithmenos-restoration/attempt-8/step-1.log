@@ -1,0 +1,72 @@
+cat: util/release_ver: No such file or directory
+fatal: not a git repository (or any of the parent directories): .git
+util/art-data.pl
+    PYTHON config.h
+    Generating art-data.h
+    Generating art-enum.h
+    Generating dc-unrand.txt
+    Generating tiledef-unrand.cc
+    PYTHON species-data.h
+    GEN job-groups.h
+    PYTHON form-data.h
+    PYTHON rltilesstatus-icon-sizes.h
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    GEN species-groups.h
+    GEN job-type.h
+    CXX equipment-memory-items.o
+    CXX god-dithmenos.o
+In file included from god-dithmenos.cc:1:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from equipment-memory-items.ccIn file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+:1:
+In file included from ./AppHdr.h:22:
+In file included from   204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+1 warning generated.
+    CXX target-dithmenos.o
+In file included from target-dithmenos.cc:1:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+1 warning generated.
+    CXX god-companions.o
+In file included from god-companions.cc:6:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+target-dithmenos.cc:42:46: error: use of undeclared identifier 'opc_solid_see'
+   42 |     else if (!find_ray(agent->pos(), a, ray, opc_solid_see))
+      |                                              ^~~~~~~~~~~~~
+target-dithmenos.cc:89:41: error: use of undeclared identifier 'opc_solid_see'
+   89 |     if (!find_ray(agent->pos(), a, ray, opc_solid_see))
+      |                                         ^~~~~~~~~~~~~
+target-dithmenos.cc:171:12: error: use of undeclared identifier 'mons_is_firewood'; did you mean 'mons_is_removed'?
+  171 |         || mons_is_firewood(*victim->as_monster())
+      |            ^~~~~~~~~~~~~~~~
+      |            mons_is_removed
+./mon-util.h:418:6: note: 'mons_is_removed' declared here
+  418 | bool mons_is_removed(monster_type mc);
+      |      ^
+target-dithmenos.cc:171:29: error: no viable conversion from 'const monster' to 'monster_type'
+  171 |         || mons_is_firewood(*victim->as_monster())
+      |                             ^~~~~~~~~~~~~~~~~~~~~
+./mon-util.h:418:35: note: passing argument to parameter 'mc' here
+  418 | bool mons_is_removed(monster_type mc);
+      |                                   ^
+1 warning and 4 errors generated.
+make: *** [target-dithmenos.o] Error 1
+make: *** Waiting for unfinished jobs....
+1 warning generated.

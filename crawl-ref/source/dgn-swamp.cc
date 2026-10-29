@@ -12,16 +12,20 @@ static void _swamp_slushy_patches(int depth_multiplier)
     const int yinterval = 4;
     const int xinterval = 4;
     const int fuzz = 9;
+    const int bx = dgn_builder_x();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
     const coord_def grdc(GXM / 2, GYM / 2);
-    for (int y = margin; y < GYM - margin - 1; y += yinterval)
+    for (int y = tl.y + margin; y < br.y - margin; y += yinterval)
     {
-        for (int x = margin; x < GXM - margin - 1; x += xinterval)
+        for (int x = tl.x + margin; x < br.x - margin; x += xinterval)
         {
             const coord_def p(x, y);
             const coord_def c(dgn_random_point_from(p, fuzz, margin));
             const coord_def center_delta(grdc - c);
-            const int depth = 1600 - center_delta.abs();
-            const int depth_offset = depth * 10 / 1600;
+            const int max_dist_sq = (bx / 2) * (bx / 2);
+            const int depth = max_dist_sq - center_delta.abs();
+            const int depth_offset = depth * 10 / max_dist_sq;
             const int n_points = random_range(5, 25 - depth_multiplier / 2);
             const int radius = random_range(2, 6);
             dgn_island_centred_at(c, n_points, radius,
@@ -42,13 +46,15 @@ static dungeon_feature_type _swamp_feature_for_height(int height)
 
 static void _swamp_apply_features(int margin)
 {
-    for (rectangle_iterator ri(0); ri; ++ri)
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+    for (rectangle_iterator ri(tl, br); ri; ++ri)
     {
         const coord_def c(*ri);
         if (!map_masked(c, MMT_VAULT))
         {
-            if (c.x < margin || c.y < margin || c.x >= GXM - margin
-                || c.y >= GYM - margin)
+            if (c.x < tl.x + margin || c.y < tl.y + margin
+                || c.x > br.x - margin || c.y > br.y - margin)
             {
                 env.grid(c) = DNGN_MANGROVE;
             }

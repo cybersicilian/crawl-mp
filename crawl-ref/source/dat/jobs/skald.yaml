@@ -1,0 +1,35 @@
+TAG_MAJOR_VERSION: 34
+enum: JOB_SKALD
+name: "Skald"
+short_name: Sk
+category: Warrior-mage
+category_priority: 65
+str: 4
+int: 5
+dex: 3
+spells:
+  - SPELL_SONG_OF_SLAYING
+  - SPELL_SHROUD_OF_GOLUBRIA
+  - SPELL_AURA_OF_ZEAL
+  - SPELL_REGENERATION
+  - SPELL_JINXBITE
+  - SPELL_BALLAD_OF_THE_VANGUARD
+equipment:
+  - "leather armour"
+  - "scroll of butterflies"
+weapon_choice: plain
+recommended_species:
+  - high elf
+  - merfolk
+  - gnoll
+  - tengu
+  - barachi
+  - mayflytaur
+skills:
+  fighting: 2
+  dodging: 2
+  spellcasting: 2
+  hexes: 2
+  translocations: 1
+  weapon: 2
+create_enum: false

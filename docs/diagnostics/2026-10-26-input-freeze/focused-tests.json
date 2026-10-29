@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "tests": 87,
+  "modules": [
+    "activity_pump_test",
+    "multiplayer_test",
+    "gameplay_protocol_test",
+    "ai_party_test",
+    "connection_test"
+  ],
+  "new_regressions_fail_on_original": 3,
+  "sandbox_socket_failure_resolved_by_host_execution": true
+}

@@ -6,6 +6,8 @@
 #pragma once
 
 #include <vector>
+#include "evocation.h"
+#include "spl-cast.h"
 
 using std::vector;
 
@@ -19,12 +21,13 @@ void wind_blast(actor* agent, int pow, coord_def target);
 
 string cannot_evoke_item_reason(const item_def *item=nullptr,
                                 bool temp=true, bool ident=true,
-                                bool *god_forbids=nullptr);
+                                bool *god_forbids=nullptr, bool allow_empty=false);
 bool item_currently_evokable(const item_def *item);
 bool item_ever_evokable(const item_def &item);
 bool evoke_item(item_def &item, dist *target=nullptr);
+spret evoke_device(item_def& item, dist* target, const evocation& activation = {});
 int wand_mp_cost();
-int wand_power(spell_type spell);
+int wand_power(spell_type spell, int skill_bonus = 0);
 void zap_wand(int slot = -1, dist *target=nullptr);
 
 int tremorstone_count(int pow);

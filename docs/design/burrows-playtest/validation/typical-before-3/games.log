@@ -1,0 +1,13 @@
+{"runId": "21d71335-0523-44ea-962d-1993d4e60412", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS complete native route builds typical-before-3", "requestId": "6202b8301e3a85e0c2684febdd80d7e1b407b960daf5a644d19a291976d5035f", "status": "reserved", "reservedAt": 1793153113.125291}
+ 
+{"runId": "21d71335-0523-44ea-962d-1993d4e60412", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS complete native route builds typical-before-3", "requestedAt": 1793153113.185914, "supervisorPid": 90532, "status": "running", "reservation": true, "requestId": "6202b8301e3a85e0c2684febdd80d7e1b407b960daf5a644d19a291976d5035f", "startedAt": 1793153113.186683, "workerPid": 90533, "processGroup": 90533}
+START melee 2026102701
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/run_routes.py", line 133, in <module>
+    main()
+    ~~~~^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/run_routes.py", line 89, in main
+    if select.select([master],[],[],0.1)[0]:
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+{"runId": "21d71335-0523-44ea-962d-1993d4e60412", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS complete native route builds typical-before-3", "requestedAt": 1793153113.185914, "supervisorPid": 90532, "status": "released", "reservation": true, "requestId": "6202b8301e3a85e0c2684febdd80d7e1b407b960daf5a644d19a291976d5035f", "startedAt": 1793153113.186683, "workerPid": 90533, "processGroup": 90533, "directExitCode": -2, "exitCode": -2, "finishedAt": 1793153434.540677, "supervisedProcessGroupGone": true, "releasedAt": 1793153434.968531, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/typical-before-3/closure.json", "releaseEvidenceSha256": "0a262aedd3236116c0f485c03e73b3ced96da64d0443ba39314069c9532b7c1f"}

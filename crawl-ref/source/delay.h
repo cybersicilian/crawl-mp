@@ -195,6 +195,18 @@ public:
         return false;
     }
 
+    // Non-relocating tasks can yield to another co-op hero after each native
+    // action. Macros and relocation retain their existing input contracts.
+    virtual bool is_cooperative() const
+    {
+        return !is_macro() && !is_relocation();
+    }
+
+    virtual const char* cooperative_activity_name() const
+    {
+        return "working";
+    }
+
     /**
      * @return true if this delay can act as a parent to other delays, i.e. if
      * other delays can be spawned while this delay is running. If is_parent
@@ -346,6 +358,7 @@ public:
 class PasswallDelay : public Delay
 {
     coord_def dest;
+    bool automatic;
     void start() override;
 
     void tick() override
@@ -353,12 +366,13 @@ class PasswallDelay : public Delay
         mprf(MSGCH_MULTITURN_ACTION, "You continue meditating on the rock.");
     }
 
-    void finish() override;
+    void finish() override { complete_passage(); }
 public:
-    PasswallDelay(int dur, coord_def pos) :
-                  Delay(dur), dest{pos}
+    PasswallDelay(int dur, coord_def pos, bool is_automatic = false) :
+                  Delay(dur), dest{pos}, automatic{is_automatic}
     { }
 
+    void complete_passage();
     bool try_interrupt(bool /*force*/) override;
 
     bool is_relocation() const override
@@ -618,6 +632,11 @@ public:
     {
         // If a Lua macro wanted Crawl to process a key normally, early exit.
         return;
+    }
+
+    bool is_cooperative() const override
+    {
+        return false;
     }
 
     const char* name() const override

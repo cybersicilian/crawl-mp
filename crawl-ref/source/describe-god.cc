@@ -242,6 +242,14 @@ static const char *divine_title[][8] =
     // Ignis -- fire/candles theme
     {"Extinguished",          "Last Ember",             "Glowing Coal",              "Thurifer",
         "Hearthfire",     "Furnace",               "Raging Flame",              "Inferno"},
+
+    // Vorr
+    {"Bloodless", "Witness", "Vein Opener", "Spiller",
+        "Crimson Vessel", "Ritekeeper", "Red Wake", "Keeper of the Open Vein"},
+
+    // Vellum
+    {"Unravelled", "Apprentice", "Unbinder", "Threadkeeper",
+        "Weaver", "Artificer", "Master Enchanter", "Maker of Masterworks"},
 };
 COMPILE_CHECK(ARRAYSZ(divine_title) == NUM_GODS);
 
@@ -459,7 +467,7 @@ static inline void _add_par(formatted_string &desc, const string &str)
  */
 static string _describe_god_wrath_causes(god_type which_god)
 {
-    if (which_god == GOD_RU)
+    if (which_god == GOD_RU || which_god == GOD_VELLUM)
         return ""; // no wrath
     vector<god_type> evil_gods;
     vector<god_type> chaotic_gods;
@@ -874,6 +882,14 @@ static formatted_string _describe_god_powers(god_type which_god)
             desc.textcolour(DARKGREY);
             desc.cprintf("You can memorise some of Vehumet's spells.\n");
         }
+        break;
+
+    case GOD_DITHMENOS:
+        have_any = true;
+        desc.textcolour(have_passive(passive_t::umbra) && you_worship(which_god)
+                        ? god_colour(which_god) : DARKGREY);
+        desc.cprintf("You radiate an aura of darkness, enhancing your stealth "
+                     "and reducing the accuracy of your foes.\n");
         break;
 
     case GOD_YREDELEMNUL:

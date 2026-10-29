@@ -501,11 +501,15 @@ unsigned int item_value(item_def item, bool ident)
             case POT_HEAL_WOUNDS:
             case POT_AMBROSIA:
             case POT_MUTATION:
+            case POT_SOUL_AMBROSIA:
+            case POT_TRANSFUSION:
                 valued += 80;
                 break;
 
             case POT_BERSERK_RAGE:
             case POT_ENLIGHTENMENT:
+            case POT_EMPATHY:
+            case POT_CONCORD:
                 valued += 50;
                 break;
 
@@ -521,7 +525,15 @@ unsigned int item_value(item_def item, bool ident)
                 break;
 
             case POT_MOONSHINE:
+            case POT_POISON:
+            case POT_STRONG_POISON:
+            case POT_SLOWING:
+            case POT_DECAY:
                 valued += 10;
+                break;
+
+            case POT_WATER:
+                valued += 1;
                 break;
 
             CASE_REMOVED_POTIONS(item.sub_type)
@@ -540,18 +552,25 @@ unsigned int item_value(item_def item, bool ident)
                 valued += 520;
                 break;
 
+            case SCR_SOUL_RECALL:
+                valued += 120;
+                break;
+
             case SCR_SUMMONING:
             case SCR_TORMENT:
             case SCR_SILENCE:
             case SCR_BRAND_WEAPON:
             case SCR_BLINKING:
             case SCR_BUTTERFLIES:
+            case SCR_SHARED_VIGOUR:
                 valued += 95;
                 break;
 
             case SCR_ENCHANT_ARMOUR:
             case SCR_ENCHANT_WEAPON:
             case SCR_REVELATION:
+            case SCR_RALLYING:
+            case SCR_PHASE_SWAP:
                 valued += 75;
                 break;
 
@@ -637,12 +656,14 @@ unsigned int item_value(item_def item, bool ident)
                 case AMU_WILDSHAPE:
                 case AMU_CHEMISTRY:
                 case AMU_DISSIPATION:
+                case AMU_VANGUARD:
                     valued += 300;
                     break;
 
                 case RING_PROTECTION_FROM_COLD:
                 case RING_PROTECTION_FROM_FIRE:
                 case RING_WILLPOWER:
+                case RING_CAMARADERIE:
                     valued += 250;
                     break;
 
@@ -842,6 +863,11 @@ bool is_worthless_consumable(const item_def &item)
         switch (item.sub_type)
         {
         case POT_MOONSHINE:
+        case POT_POISON:
+        case POT_STRONG_POISON:
+        case POT_SLOWING:
+        case POT_DECAY:
+        case POT_WATER:
             return true;
         default:
             return false;

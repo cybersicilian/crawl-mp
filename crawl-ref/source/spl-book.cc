@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
 
 #include "options.h"
 #include "spl-book.h"
@@ -17,6 +18,7 @@
 #include <unordered_set>
 
 #include "artefact.h"
+#include "automaton.h"
 #include "colour.h"
 #include "command.h"
 #include "database.h"
@@ -40,6 +42,7 @@
 #include "state.h"
 #include "stringutil.h"
 #include "tilepick.h"
+#include "tileweb.h"
 #include "transform.h"
 #include "unicode.h"
 
@@ -129,17 +132,25 @@ vector<spell_type> spells_in_book(const item_def &book)
 {
     ASSERT(book.base_type == OBJ_BOOKS);
 
+    const auto available = [](vector<spell_type> spells)
+    {
+        erase_if(spells, [](spell_type spell)
+        {
+            return !coop_content::spell_available(spell);
+        });
+        return spells;
+    };
     vector<spell_type> ret;
 
     if (book.sub_type == BOOK_PARCHMENT && book.plus > 0)
     {
         ret.emplace_back(static_cast<spell_type>(book.plus));
-        return ret;
+        return available(ret);
     }
 
     const CrawlHashTable &props = book.props;
     if (!props.exists(SPELL_LIST_KEY))
-        return spellbook_template(static_cast<book_type>(book.sub_type));
+        return available(spellbook_template(static_cast<book_type>(book.sub_type)));
 
     const CrawlVector &spells = props[SPELL_LIST_KEY].get_vector();
 
@@ -151,7 +162,7 @@ vector<spell_type> spells_in_book(const item_def &book)
         if (spell != SPELL_NO_SPELL)
             ret.emplace_back(static_cast<spell_type>(spell));
 
-    return ret;
+    return available(ret);
 }
 
 vector<spell_type> spellbook_template(book_type book)
@@ -239,6 +250,7 @@ bool is_player_book_spell(spell_type which_spell)
 // A spell doesn't need to be here if it just the beam type that is used.
 static unordered_set<int> _player_nonbook_spells =
 {
+    SPELL_AUTOMATON_LASER,
     // items
     SPELL_THUNDERBOLT,
     SPELL_PHANTOM_MIRROR, // this isn't cast directly, but the player code at
@@ -317,6 +329,33 @@ static bool _spell_available_to_memorize(spell_type which_spell)
     spell_set available_spells;
     _list_available_spells(available_spells);
     return available_spells.count(which_spell) > 0;
+}
+
+spell_library_summary get_spell_library_summary()
+{
+    spell_set available_spells;
+    _list_available_spells(available_spells);
+    spell_library_summary summary;
+    const bool can_learn = can_learn_spell(true)
+        && you.spell_no < MAX_KNOWN_SPELLS;
+    const int levels = player_spell_levels();
+    for (const spell_type spell : available_spells)
+    {
+        // Match the library menu: known spells live in the casting list.
+        if (you.has_spell(spell))
+            continue;
+        ++summary.total;
+        if (you.species == SP_AUTOMATON && !automaton::has_automatic_trigger(spell))
+            ++summary.without_automatic_trigger;
+        if (can_learn && !already_learning_spell(spell)
+            && you_can_memorise(spell)
+            && spell_difficulty(spell) <= you.experience_level
+            && spell_levels_required(spell) <= levels)
+        {
+            ++summary.memorisable;
+        }
+    }
+    return summary;
 }
 
 bool player_has_available_spells()
@@ -438,7 +477,7 @@ bool library_add_spells(vector<spell_type> spells, bool quiet)
     vector<spell_type> new_spells;
     for (spell_type st : spells)
     {
-        if (!you.spell_library[st])
+        if (coop_content::spell_available(st) && !you.spell_library[st])
         {
             you.spell_library.set(st, true);
             if (you_can_memorise(st))
@@ -536,13 +575,108 @@ vector<spell_type> get_sorted_spell_list(bool silent, bool memorise_only)
     return result;
 }
 
+#ifdef USE_TILE_WEB
+class SpellLibraryEntry : public MenuEntry
+{
+public:
+    using MenuEntry::MenuEntry;
+    spell_type spell;
+    string primary_label;
+    bool primary_enabled, hidden, no_trigger;
+
+    void webtiles_write_metadata() const override
+    {
+        ::tiles.json_write_int("entry_id", spell);
+        ::tiles.json_write_string("action_name", string(spell_title(spell))
+                                  + (no_trigger ? ", no automatic trigger" : ""));
+        ::tiles.json_open_array("entry_actions");
+        if (!hidden)
+            write_action("primary", primary_label, primary_enabled);
+        write_action("describe", "Describe", true);
+        write_action(hidden ? "show" : "hide", hidden ? "Show" : "Hide", true);
+        ::tiles.json_close_array();
+    }
+
+private:
+    static void write_action(const string& id, const string& label, bool enabled)
+    {
+        ::tiles.json_open_object();
+        ::tiles.json_write_string("id", id);
+        ::tiles.json_write_string("label", label);
+        ::tiles.json_write_bool("enabled", enabled);
+        ::tiles.json_close_object();
+    }
+};
+#endif
+
 class SpellLibraryMenu : public Menu
 {
 public:
     enum class action { cast, memorise, imbue, describe, hide, unhide };
     action current_action, default_action;
 
+#ifdef USE_TILE_WEB
+    int webtiles_action(const string& command, int entry) override
+    {
+        if (command == "available" || command == "hidden")
+        {
+            current_action = command == "hidden" ? action::unhide : default_action;
+            update_title();
+            // Control messages do not return through the native key loop,
+            // which normally publishes a changed title and its metadata.
+            webtiles_update_title();
+            update_entries();
+            update_more();
+            return 0;
+        }
+        // Resolve a stable spell ID against the current list. A delayed click
+        // must never select whichever spell inherited an old row index.
+        for (int index = 0; index < static_cast<int>(items.size()); ++index)
+        {
+            const spell_type spell = *static_cast<spell_type*>(items[index]->data);
+            if (entry != spell)
+                continue;
+            if (command == "describe")
+            {
+                // Descriptions remain available even when the primary action
+                // has no hotkey, so do not use the selectable-hover gate.
+                describe_spell(spell, nullptr);
+                return 0;
+            }
+            const bool hidden = you.current_hidden_spells()->get(spell);
+            if ((command == "hide" && !hidden) || (command == "show" && hidden))
+            {
+                you.current_hidden_spells()->set(spell, !hidden);
+                update_entries();
+                update_more();
+                return 0;
+            }
+            if (command == "primary" && !primary_unavailable(spell))
+            {
+                current_action = default_action;
+                set_hovered(index);
+                return CK_MOUSE_B1;
+            }
+            return 0;
+        }
+        return 0;
+    }
+#endif
+
 protected:
+#ifdef USE_TILE_WEB
+    void webtiles_write_title() const override
+    {
+        Menu::webtiles_write_title();
+        tiles.json_write_string("action_title", "Spell library");
+        tiles.json_write_string("menu_actions_label", "Spell visibility");
+        tiles.json_open_array("menu_actions");
+        write_action("available", "Available spells", current_action != action::unhide);
+        write_action("hidden", "Hidden spells", current_action == action::unhide);
+        tiles.json_close_array();
+    }
+
+#endif
     virtual formatted_string calc_title() override
     {
         return formatted_string::parse_string(
@@ -561,6 +695,23 @@ private:
     string spell_levels_str;
     string search_text;
     int hidden_count;
+
+    bool primary_unavailable(spell_type spell) const
+    {
+        return default_action == action::memorise && !you_can_memorise(spell)
+            || default_action == action::cast && spell_is_useless(spell, true, true);
+    }
+
+#ifdef USE_TILE_WEB
+    static void write_action(const string& id, const string& label, bool active)
+    {
+        tiles.json_open_object();
+        tiles.json_write_string("id", id);
+        tiles.json_write_string("label", label);
+        tiles.json_write_bool("active", active);
+        tiles.json_close_object();
+    }
+#endif
 
     // void update_more()
     string get_keyhelp(bool) const override
@@ -605,6 +756,9 @@ private:
 
         desc << "\n";
 
+#ifdef USE_TILE_WEB
+        desc << "Choose an action beside a spell.";
+#else
         const string act = default_action == action::memorise ? "Memorise"
                            : default_action == action::imbue ? "Imbue" : "Cast";
         // line 2
@@ -620,6 +774,7 @@ private:
                  : current_action == action::hide
                             ? act + "|Describe|<w>Hide</w>|Show"
                  : act + "|Describe|Hide|<w>Show</w>");
+#endif
         desc << "   " << menu_keyhelp_cmd(CMD_MENU_SEARCH) << " search"
                 "   [<w>?</w>] help"; // XX hardcoded for this menu
 
@@ -631,6 +786,10 @@ private:
 
     bool cycle_mode(bool forward) override
     {
+#ifdef USE_TILE_WEB
+        // Web controls choose actions directly; Tab is reserved for focus.
+        return true;
+#endif
         bool entries_changed = false;
         // completely replace superclass mode implementation
         if (forward)
@@ -807,7 +966,10 @@ private:
             desc << "<" << colour_to_str(colour) << ">";
 
             desc << left;
-            desc << chop_string(spell.name, 32);
+            const bool no_trigger = default_action == action::memorise
+                && you.species == SP_AUTOMATON
+                && !automaton::has_automatic_trigger(spell.spell);
+            desc << chop_string((no_trigger ? "[No trigger] " : "") + spell.name, 32);
             desc << spell.school;
 
             int so_far = strwidth(desc.str()) - (colour_to_str(colour).length()+2);
@@ -839,9 +1001,20 @@ private:
 
             desc << spell.difficulty;
 
+#ifdef USE_TILE_WEB
+            auto* me = new SpellLibraryEntry(desc.str(), MEL_ITEM, 1,
+                    unavailable ? 0 : char(hotkey));
+            me->spell = spell.spell;
+            me->primary_label = default_action == action::memorise ? "Memorise"
+                              : default_action == action::imbue ? "Imbue" : "Cast";
+            me->primary_enabled = !primary_unavailable(spell.spell);
+            me->hidden = spell_hidden;
+            me->no_trigger = no_trigger;
+#else
             MenuEntry* me = new MenuEntry(desc.str(), MEL_ITEM, 1,
                     // don't add a hotkey if you can't memorise/cast it
                     unavailable ? 0 : char(hotkey));
+#endif
             // But do increment hotkeys anyway, to keep the hotkeys consistent.
             ++hotkey;
 
@@ -1102,7 +1275,11 @@ bool learn_spell(spell_type specspell, bool wizard, bool interactive)
         }
     }
 
-    string mem_spell_warning_string = "";
+    const string mem_spell_warning_string =
+        !wizard && you.species == SP_AUTOMATON
+                && !automaton::has_automatic_trigger(specspell)
+            ? "This spell has no automatic engraving trigger."
+            : "";
 
     if (interactive)
     {

@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "oozle-memory-effects.h"
+#include "oozle-memory.h"
 
 #include "player.h"
 
@@ -11,6 +13,9 @@
 
 #include "act-iter.h"
 #include "areas.h"
+#include "automaton.h"
+#include "hermit-crab.h"
+#include "protean.h"
 #include "art-enum.h"
 #include "artefact.h" // is_unrandom_artefact (woodcutter)
 #include "coordit.h"
@@ -22,6 +27,7 @@
 #include "god-conduct.h"
 #include "god-item.h"
 #include "god-passive.h" // passive_t::no_haste
+#include "god-vorr.h"
 #include "hints.h"
 #include "item-name.h"
 #include "item-prop.h"
@@ -159,7 +165,9 @@ bool player::is_habitable_feat(dungeon_feature_type actual_grid) const
 
 size_type player::body_size(size_part_type psize, bool base) const
 {
-    const auto charsize = species::size(species, psize);
+    const auto charsize = species == SP_HERMIT_CRAB ? hermit_crab::shell_size(*this)
+                          : species == SP_PROTEAN ? protean::size_for_hp(hp_max)
+                          : species::size(species, psize);
     if (base)
         return charsize;
     else
@@ -173,6 +181,8 @@ vorpal_damage_type player::damage_type(const item_def* wp) const
 {
     if (wp)
         return get_vorpal_type(*wp);
+    if (oozle::inherited_cleaving(nullptr))
+        return DVORP_CHOPPING;
     if (has_usable_claws())
         return DVORP_CLAWING;
     if (has_usable_tentacles())
@@ -191,12 +201,18 @@ brand_type player::damage_brand(const item_def* wpn) const
 
     if (wpn)
     {
-        if (is_range_weapon(*wpn))
-            return SPWPN_NORMAL;
-        return get_weapon_brand(*wpn);
+        const brand_type native = is_range_weapon(*wpn) ? SPWPN_NORMAL : get_weapon_brand(*wpn);
+        const int inherited = native == SPWPN_NORMAL ? oozle::body_property(ARTP_BRAND) : 0;
+        return inherited ? static_cast<brand_type>(inherited) : native;
     }
 
-    // unarmed
+    // Forms retain their own native brands; anatomy mutations are suppressed
+    // automatically in forms which replace the player's body.
+    if (has_mutation(MUT_ACIDIC_TOUCH))
+    {
+        const int inherited = oozle::unarmed_property(ARTP_BRAND);
+        return inherited ? static_cast<brand_type>(inherited) : SPWPN_ACID;
+    }
     return get_form()->get_uc_brand();
 }
 
@@ -278,17 +294,25 @@ random_var player::attack_delay_with(const item_def *weap, bool melee_only,
                                   10 * weapon_min_delay_skill(*weap));
 
         attk_delay = random_var(property(*weap, PWPN_SPEED));
-        if (is_unrandom_artefact(*weap, UNRAND_WOODCUTTERS_AXE))
-            return attk_delay;
+        if (oozle::has_equipment_effect(you, weap, UNRAND_WOODCUTTERS_AXE))
+            return random_var(10);
 
         attk_delay -= div_rand_round(random_var(wpn_sklev), DELAY_SCALE);
         // we should really use weapon_adjust_delay here,
         // but we'd need to support random_var
-        const brand_type brand = get_weapon_brand(*weap);
+        const brand_type brand = oozle::effective_brand(you, weap);
         if (brand == SPWPN_SPEED)
             attk_delay = div_rand_round(attk_delay * 2, 3);
         else if (brand == SPWPN_HEAVY)
             attk_delay = div_rand_round(attk_delay * 3, 2);
+    }
+
+    if (!weap && you.has_mutation(MUT_ACIDIC_TOUCH))
+    {
+        const auto inherited = oozle::effective_brand(you, nullptr);
+        if (inherited == SPWPN_SPEED) attk_delay = div_rand_round(attk_delay * 2, 3);
+        else if (inherited == SPWPN_HEAVY) attk_delay = div_rand_round(attk_delay * 3, 2);
+        if (oozle::absorbed_unrand(you, UNRAND_WOODCUTTERS_AXE)) attk_delay = random_var(10);
     }
 
     // At the moment it never gets this low anyway.
@@ -315,6 +339,10 @@ random_var player::attack_delay_with(const item_def *weap, bool melee_only,
         attk_delay = div_rand_round(attk_delay, 2);
     }
 
+    const int blood_bonus = include_temp ? vorr::speed_bonus() : 0;
+    if (blood_bonus && (!weap || is_melee_weapon(*weap) || is_range_weapon(*weap)))
+        attk_delay = div_rand_round(attk_delay * 100, 100 + blood_bonus);
+
     return rv::max(div_rand_round(attk_delay * player_speed(), BASELINE_DELAY),
                    random_var(1));
 }
@@ -328,6 +356,12 @@ item_def *player::weapon(int /* which_attack */) const
 // Give hands required to wield weapon.
 hands_reqd_type player::hands_reqd(const item_def &item, bool base) const
 {
+    if (species == SP_ENT && (item.base_type == OBJ_WEAPONS
+                              || item.base_type == OBJ_STAVES)
+        && !(item.base_type == OBJ_WEAPONS && is_giant_club_type(item.sub_type)))
+    {
+        return HANDS_ONE;
+    }
     if (you.has_mutation(MUT_QUADRUMANOUS)
         && !is_weapon_too_large(item, SIZE_MEDIUM))
     {
@@ -509,6 +543,12 @@ static string _foot_name_singular(bool *can_plural)
         return "underbelly";
     }
 
+    if (you.species == SP_OOZLE)
+    {
+        *can_plural = false;
+        return "puddle";
+    }
+
     if (you.has_mutation(MUT_PAWS))
         return "paw";
 
@@ -585,6 +625,8 @@ string player::unarmed_attack_name(string default_name) const
     }
     else if (has_usable_tentacles(true))
         default_name = "Tentacles";
+    else if (species == SP_OOZLE)
+        default_name = "Pseudopods";
 
     return get_form()->get_uc_attack_name(default_name);
 }
@@ -686,6 +728,9 @@ bool player::go_berserk(bool intentional, bool potion)
         dur *= 2;
 
     you.increase_duration(DUR_BERSERK, dur);
+
+    if (automaton::overheat_from_berserk(you))
+        mpr("Your body is overheating!");
 
     // Apply Berserk's +50% Current/Max HP.
     calc_hp(true);

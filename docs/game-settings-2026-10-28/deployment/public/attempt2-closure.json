@@ -1,0 +1,7 @@
+{
+  "reservationId": "7de05062-f740-4a4f-a1eb-bdfa3c3a370c",
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "Browser exited after global page-width assertion; finally restored QA preferences and awaited browser.close. Supervised group gone, worker and supervisor absent.",
+  "exitCode": 1
+}

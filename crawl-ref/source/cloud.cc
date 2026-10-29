@@ -6,6 +6,7 @@
 **/
 
 #include "AppHdr.h"
+#include "party.h"
 
 #include "cloud.h"
 
@@ -447,9 +448,9 @@ static void _los_cloud_changed(const coord_def& p, const cloud_type t, const clo
 
 cloud_struct::cloud_struct(coord_def p, cloud_type c, int d, int spread,
                            kill_category kc, killer_type kt, mid_t src,
-                           int excl)
+                           int excl, bool protected_nonhostiles)
     : pos(p), type(c), decay(d), spread_rate(spread), whose(kc), killer(kt),
-      source(src), excl_rad(excl)
+      source(src), excl_rad(excl), protected_nonhostiles(protected_nonhostiles)
 {
     ASSERT(_killer_whose_match(whose, killer));
 
@@ -554,7 +555,7 @@ static void _cloud_interacts_with_terrain(const cloud_struct &cloud)
             const cloud_type old = cloud_type_at(p);
             env.cloud[p] = cloud_struct(p, CLOUD_STEAM, 2 + random2(5),
                                         11, cloud.whose, cloud.killer,
-                                        cloud.source, -1);
+                                        cloud.source, -1, cloud.protects_nonhostiles());
             _los_cloud_changed(p, env.cloud[p].type, old);
         }
     }
@@ -573,7 +574,8 @@ static int _cloud_dissipation_rate(const cloud_struct &cloud)
 
     // Player-created non-opaque clouds vanish instantly when outside LOS.
     // (Opaque clouds don't to prevent cloud suicide.)
-    if ((cloud.source == MID_PLAYER || cloud.source == MID_YOU_FAULTLESS)
+    if (!party::multiplayer_enabled()
+        && (cloud.source == MID_PLAYER || cloud.source == MID_YOU_FAULTLESS)
         && !you.see_cell_no_trans(cloud.pos)
         && !is_opaque_cloud(cloud.type))
     {
@@ -675,6 +677,11 @@ void manage_clouds()
     for (auto ptr : cloud_ptrs)
     {
         cloud_struct& cloud = *ptr;
+        if (party::is_enabled()
+            && !party::cloud_in_active_region(cloud.pos, party::active_slot()))
+        {
+            continue;
+        }
 
 #ifdef ASSERTS
         if (cell_is_solid(cloud.pos))
@@ -812,7 +819,7 @@ bool cloud_could_place(const coord_def& loc, cloud_type ctype, const actor *agen
 */
 bool place_cloud(cloud_type cl_type, const coord_def& ctarget, int cl_range,
                  const actor *orig_agent, int spread_rate, int excl_rad,
-                 bool do_conducts)
+                 bool do_conducts, bool protected_nonhostiles)
 {
     if (!in_bounds(ctarget) || cell_is_solid(ctarget))
         return false;
@@ -854,7 +861,7 @@ bool place_cloud(cloud_type cl_type, const coord_def& ctarget, int cl_range,
 
         whose = KC_YOU;
         killer = KILL_YOU_MISSILE;
-        source = MID_PLAYER;
+        source = agent->mid;
     }
     else if (agent && agent->is_monster())
     {
@@ -882,7 +889,7 @@ bool place_cloud(cloud_type cl_type, const coord_def& ctarget, int cl_range,
     const cloud_type old = cloud ? cloud->type : CLOUD_NONE;
     env.cloud[ctarget] = cloud_struct(ctarget, cl_type, cl_range * 10,
             _actual_spread_rate(cl_type, spread_rate), whose, killer, source,
-            excl_rad);
+            excl_rad, protected_nonhostiles);
     _los_cloud_changed(ctarget, env.cloud[ctarget].type, old);
 
     return true;
@@ -1590,11 +1597,30 @@ static void _actor_apply_cloud(actor *act, cloud_struct &cloud)
 
 // Applies damage and side effects for an actor in a cloud and returns
 // the damage dealt.
+bool cloud_dissipates_for(const cloud_struct& cloud, const actor& act)
+{
+    if (!cloud.protects_nonhostiles())
+        return false;
+    // The caster must survive the same turn on which the cloud is kindled.
+    if (cloud.type == CLOUD_BLASTMOTES && cloud.source == act.mid
+        && act.props.exists(BLASTMOTE_IMMUNE_KEY))
+        return false;
+    if (act.is_player())
+        return true;
+    const monster* mon = act.as_monster();
+    return mon && (party::is_proxy_monster(*mon) || mon->wont_attack() || mon->neutral());
+}
+
 void actor_apply_cloud(actor *act)
 {
     cloud_struct* cl = cloud_at(act->pos());
     if (!cl)
         return;
+    if (cloud_dissipates_for(*cl, *act))
+    {
+        delete_cloud(act->pos());
+        return;
+    }
     cloud_struct &cloud = *cl;
 
     if (cloud.type == CLOUD_STORM)
@@ -2392,3 +2418,41 @@ bool get_vortex_phase(const coord_def& loc)
         return ((int)floor(dir * 2 + dist * 0.33 - (you.frame_no % 54) / 2.7)) & 1;
     }
 }
+
+cloud_type beam2cloud(beam_type flavour)
+{
+    switch (flavour)
+    {
+    default:
+        return CLOUD_NONE;
+    case BEAM_MEPHITIC:
+        return CLOUD_MEPHITIC;
+    case BEAM_POTION_POISON:
+        return CLOUD_POISON;
+    case BEAM_POTION_MIASMA:
+        return CLOUD_MIASMA;
+    case BEAM_POTION_STEAM:
+        return CLOUD_STEAM;
+    case BEAM_POTION_FIRE:
+        return CLOUD_FIRE;
+    case BEAM_POTION_COLD:
+        return CLOUD_COLD;
+    case BEAM_POTION_BLACK_SMOKE:
+        return CLOUD_BLACK_SMOKE;
+    case BEAM_POTION_GREY_SMOKE:
+        return CLOUD_GREY_SMOKE;
+    case BEAM_POTION_MUTAGENIC:
+        return CLOUD_MUTAGENIC;
+    case BEAM_POTION_BLUE_SMOKE:
+        return CLOUD_BLUE_SMOKE;
+    case BEAM_POTION_PURPLE_SMOKE:
+        return CLOUD_PURPLE_SMOKE;
+    case BEAM_POTION_RAIN:
+        return CLOUD_RAIN;
+    case BEAM_POTION_RANDOM:
+        return random_choose(CLOUD_FIRE, CLOUD_COLD, CLOUD_POISON,
+                             CLOUD_MEPHITIC, CLOUD_STEAM, CLOUD_MIASMA,
+                             CLOUD_BLACK_SMOKE, CLOUD_PURPLE_SMOKE);
+    }
+}
+

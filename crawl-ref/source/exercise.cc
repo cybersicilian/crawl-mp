@@ -13,6 +13,7 @@
 #include "ability.h"
 #include "fight.h"
 #include "item-prop.h"
+#include "oozle-memory.h"
 #include "skills.h"
 #include "spl-util.h"
 #include "transform.h" // get_form
@@ -166,6 +167,12 @@ static void _maybe_practice_shapeshifting()
 {
     if (coinflip())
         return; // train shapeshifting less than UC/weapon skills
+    // Absorption gives this skill a use even without a talisman or a form.
+    if (oozle::has_memory())
+    {
+        exercise(SK_SHAPESHIFTING, 1);
+        return;
+    }
     if (you.form == transformation::none || you.form != you.default_form)
         return;
     const int to_max = get_form()->max_skill - you.skill(SK_SHAPESHIFTING);

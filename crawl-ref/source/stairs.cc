@@ -1,4 +1,7 @@
 #include "AppHdr.h"
+#include "chain-devil.h"
+#include "eldritch.h"
+#include "bloodcraft.h"
 
 #include "stairs.h"
 
@@ -25,6 +28,7 @@
 #include "god-abil.h"
 #include "god-companions.h"
 #include "god-passive.h" // passive_t::slow_abyss
+#include "game-modifiers.h"
 #include "hints.h"
 #include "hiscores.h"
 #include "item-name.h"
@@ -41,6 +45,7 @@
 #include "notes.h"
 #include "orb-type.h"
 #include "output.h"
+#include "party.h"
 #include "player-stats.h"
 #include "prompt.h"
 #include "religion.h"
@@ -263,6 +268,9 @@ static void _complete_zig()
 
 void leaving_level_now(dungeon_feature_type stair_used)
 {
+    chains::release(you);
+    eldritch::leave_floor();
+    bloodcraft::clear_curses();
     if (stair_used == DNGN_EXIT_ZIGGURAT)
     {
         if (you.depth == 27)
@@ -461,6 +469,12 @@ static void _rune_effect(dungeon_feature_type ftype)
 
 static void _maybe_use_runes(dungeon_feature_type ftype)
 {
+    if (game_modifiers::rune_locks_disabled(you))
+    {
+        if (ftype == DNGN_EXIT_VAULTS && vaults_is_locked())
+            unlock_vaults();
+        return;
+    }
     switch (ftype)
     {
     case DNGN_ENTER_ZOT:
@@ -678,12 +692,23 @@ static level_id _travel_destination(const dungeon_feature_type how,
         destroy_trap(you.pos());
     }
 
+    // Markers might be deleted when removing portals.
+    const string dst = env.markers.property_at(you.pos(), MAT_ANY, "dst");
+    if (!shaft && !forced && party::is_enabled() && !party::multiplayer_enabled())
+    {
+        const level_id check_dest = stair_destination(how, dst, false);
+        if (check_dest.is_valid() && check_dest.branch != you.where_are_you
+            && !party::all_living_players_nearby(you.pos(), LOS_RADIUS))
+        {
+            mprf(MSGCH_WARN, "You must gather your party nearby before entering %s!",
+                 branches[check_dest.branch].longname);
+            return dest;
+        }
+    }
+
     // Maybe perform the entry sequence (we check that they have enough runes
     // in main.cc: _can_take_stairs())
     _maybe_use_runes(how);
-
-    // Markers might be deleted when removing portals.
-    const string dst = env.markers.property_at(you.pos(), MAT_ANY, "dst");
 
     if (shaft)
         return shaft_dest;
@@ -772,6 +797,15 @@ void floor_transition(dungeon_feature_type how,
                       bool update_travel_cache)
 {
     const level_id old_level = level_id::current();
+
+    if (party::is_enabled() && !party::multiplayer_enabled() && !forced && whither.is_valid()
+        && whither.branch != old_level.branch
+        && !party::all_living_players_nearby(you.pos(), LOS_RADIUS))
+    {
+        mprf(MSGCH_WARN, "You must gather your party nearby before entering %s!",
+             branches[whither.branch].longname);
+        return;
+    }
 
     // Clean up fake blood.
     heal_flayed_effect(&you, true, true);
@@ -1021,7 +1055,8 @@ void floor_transition(dungeon_feature_type how,
         }
         print_gem_warnings(gem_for_branch(branch), 0);
 
-        if (how == DNGN_ENTER_VAULTS && !runes_in_pack())
+        if (how == DNGN_ENTER_VAULTS && !runes_in_pack()
+            && !game_modifiers::rune_locks_disabled(you))
         {
             lock_vaults();
             mpr("The door slams shut behind you.");
@@ -1089,6 +1124,9 @@ void floor_transition(dungeon_feature_type how,
         mpr("Beware, you cannot shaft yourself on this level.");
     }
 
+    if (party::is_enabled())
+        party::remove_all_proxies();
+
     const bool newlevel = load_level(how, LOAD_ENTER_LEVEL, old_level);
 
     if (newlevel)
@@ -1100,6 +1138,29 @@ void floor_transition(dungeon_feature_type how,
         // scary hack!
         if (crawl_state.game_is_descent() && !env.properties.exists(DESCENT_STAIRS_KEY))
             load_level(how, LOAD_RESTART_GAME, old_level);
+    }
+
+    if (party::is_enabled())
+    {
+        if (whither.branch != old_level.branch && !forced && !party::multiplayer_enabled())
+        {
+            for (int slot = 0; slot < party::player_count(); ++slot)
+            {
+                if (slot == party::active_slot())
+                    continue;
+                player &member = party::get_player(slot);
+                member.where_are_you = you.where_are_you;
+                member.depth = you.depth;
+                member.level_stack = you.level_stack;
+            }
+            party::revive_downed_players(true, 35);
+            party::place_party_around_active();
+        }
+        else if (!forced && !party::multiplayer_enabled())
+        {
+            party::revive_downed_players(true, 35);
+        }
+        party::sync_all_proxies();
     }
 
     // This should maybe go in load_level?
@@ -1235,6 +1296,10 @@ level_id branch_exit_destination(dungeon_feature_type feat,
 level_id stair_destination(dungeon_feature_type feat, const string &dst,
                            bool for_real)
 {
+    const level_id connection =
+        branch_connection_destination(feat, level_id::current());
+    if (connection.is_valid())
+        return connection;
 #if TAG_MAJOR_VERSION == 34
     if (feat == DNGN_ESCAPE_HATCH_UP && player_in_branch(BRANCH_LABYRINTH))
         feat = DNGN_EXIT_LABYRINTH;
@@ -1328,9 +1393,6 @@ level_id stair_destination(dungeon_feature_type feat, const string &dst,
 
     case DNGN_EXIT_ABYSS:
 #if TAG_MAJOR_VERSION == 34
-        if (you.char_class == JOB_ABYSSAL_KNIGHT && you.level_stack.empty())
-            return level_id(BRANCH_DUNGEON, 1);
-
         // For a short while after 1e4f93a, it was possible to become eternally
         // stuck in the Abyss via Duel. Attempt to fix up any such cases.
         while (!you.level_stack.empty() && you.level_stack.back().id.branch == BRANCH_ABYSS)

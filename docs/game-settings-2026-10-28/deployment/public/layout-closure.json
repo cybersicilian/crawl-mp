@@ -1,0 +1,6 @@
+{
+  "reservationId": "0efa06e3-213d-4649-a7a3-e678b9c502d8",
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "Read-only browser diagnostic exited 0; browser.close awaited, supervised group gone and owned PIDs absent."
+}

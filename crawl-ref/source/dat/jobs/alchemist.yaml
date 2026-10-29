@@ -7,13 +7,17 @@ int: 7
 dex: 5
 spells:
   - SPELL_POISONOUS_VAPOURS
+  - SPELL_FULSOME_DISTILLATION
+  - SPELL_EVAPORATE
   - SPELL_MERCURY_ARROW
   - SPELL_MEPHITIC_CLOUD
+  - SPELL_AURA_OF_VITALITY
   - SPELL_OLGREBS_TOXIC_RADIANCE
   - SPELL_STICKY_FLAME
 equipment:
   - "robe"
   - "potion of magic"
+  - "potion of poison q:2"
 recommended_species:
   - deep elf
   - spriggan

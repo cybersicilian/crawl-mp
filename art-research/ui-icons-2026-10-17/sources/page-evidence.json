@@ -1,0 +1,32 @@
+[
+  {
+    "fileInEvidenceZip": "fugue-page.html",
+    "url": "https://p.yusukekamiyamane.com/?lang=en",
+    "retrievedOn": "2026-10-17",
+    "sha256": "3f49198790f7f87b15dbddce9ea613e75df5dc05217fd2dd234c72ee42152b34"
+  },
+  {
+    "fileInEvidenceZip": "kyrise-page.html",
+    "url": "https://kyrise.itch.io/kyrises-free-16x16-rpg-icon-pack",
+    "retrievedOn": "2026-10-17",
+    "sha256": "aa6106ce45fd2ed550a9f2e4f7b3c8c561527a3dd2be5221ad77d0d233880ad0"
+  },
+  {
+    "fileInEvidenceZip": "shade-page.html",
+    "url": "https://merchant-shade.itch.io/16x16-mixed-rpg-icons",
+    "retrievedOn": "2026-10-17",
+    "sha256": "450d27905120023b3b354a269ec88cf20df4316512adf527060de51669ba57ad"
+  },
+  {
+    "fileInEvidenceZip": "kenney-page.html",
+    "url": "https://kenney.nl/assets/roguelike-rpg-pack",
+    "retrievedOn": "2026-10-17",
+    "sha256": "4678b767989b810e85864392625eefeda3f44ba04d59e67baa83a8de040563fa"
+  },
+  {
+    "fileInEvidenceZip": "shikashi-page.html",
+    "url": "https://shikashipx.itch.io/shikashis-600-icon-pack",
+    "retrievedOn": "2026-10-17",
+    "sha256": "c769118cdaa69d3adc15e3f4ffac5fd73f0bf6731c3c209d7a032a84cfcbe601"
+  }
+]

@@ -103,6 +103,13 @@ public:
     void clear();
     void clear_listeners_at(const coord_def &pos);
     bool has_listeners_at(const coord_def &pos) const;
+    bool has_global_listeners(dgn_event_type type) const
+    {
+        for (const auto& entry : listeners)
+            if (entry.eventmask & type)
+                return true;
+        return false;
+    }
     bool is_registered_listener(const dgn_event_listener *listener) const;
     void move_listeners(const coord_def &from, const coord_def &to);
 

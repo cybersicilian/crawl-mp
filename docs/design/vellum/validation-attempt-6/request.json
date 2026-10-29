@@ -1,0 +1,60 @@
+{
+  "cacheManifest": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/cache.json",
+  "cacheSha256": "52a5148df6338bef14700c6dd88e498d858a8db04c9a71baf9b34d1e7dd421ea",
+  "commands": [
+    [
+      "make",
+      "-k",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "crawl",
+      "catch2-tests-executable"
+    ],
+    [
+      "./crawl",
+      "--builddb",
+      "--reset-cache"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum-balance]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[pakellas],[oozle],[equipment-memory],[party-session],[save-compatibility],[cooperative-delay]",
+      "--reporter",
+      "console"
+    ]
+  ],
+  "createdAt": 1792632362.651652,
+  "gateScript": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/host_heavy.py",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "notClaimed": [
+    "campaign balance",
+    "browser gameplay",
+    "deployment"
+  ],
+  "owner": "codex/01a160b4-b4fc-79b3-98dd-cf71c2f05445",
+  "project": "/Users/iancaltabiano/Documents/Projects/dcss",
+  "resourceBinding": {
+    "makeJobs": 2,
+    "phases": "sequential"
+  },
+  "reuseSnapshot": "/private/tmp/dcss-vellum-baae6b032ea87023",
+  "runnerSha256": "079eda692797ae9fd8ed89bc02b729106efa054f1f04de791e3f4fca09a96f9d",
+  "scope": "isolated native build, Vellum contracts, matched god loadouts, adjacent regressions",
+  "sourceManifest": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/source.json",
+  "sourceSha256": "91ddae45e801646d1eb9debfda8477cf01871fa1637cdd942909e17863536d49",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy"
+}

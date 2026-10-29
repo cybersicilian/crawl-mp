@@ -1,0 +1,464 @@
+[
+  {
+    "name": "bur_entry_root_mouth",
+    "place": "Lair:5",
+    "title": "Entry Root Mouth",
+    "role": "entrance"
+  },
+  {
+    "name": "bur_entry_cairn",
+    "place": "Lair:5",
+    "title": "Entry Cairn",
+    "role": "entrance"
+  },
+  {
+    "name": "bur_animal_den",
+    "place": "Bur:1",
+    "title": "Animal Den",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_troll_shelter",
+    "place": "Bur:2",
+    "title": "Troll Shelter",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_winding_tunnel",
+    "place": "Bur:1",
+    "title": "Winding Tunnel",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_mineral_cavern",
+    "place": "Bur:2",
+    "title": "Mineral Cavern",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_old_hoard",
+    "place": "Bur:2",
+    "title": "Old Hoard",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_abandoned_tunnels",
+    "place": "Bur:1",
+    "title": "Abandoned Tunnels",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_side_den",
+    "place": "Bur:1",
+    "title": "Side Den",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_split_passage",
+    "place": "Bur:2",
+    "title": "Split Passage",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_bent_gallery",
+    "place": "Bur:1",
+    "title": "Bent Gallery",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_paired_dens",
+    "place": "Bur:1",
+    "title": "Paired Dens",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_shale_cut",
+    "place": "Bur:2",
+    "title": "Shale Cut",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_root_pocket",
+    "place": "Bur:1",
+    "title": "Root Pocket",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_bone_cache",
+    "place": "Bur:2",
+    "title": "Bone Cache",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_troll_store",
+    "place": "Bur:2",
+    "title": "Troll Store",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_beetle_burrow",
+    "place": "Bur:2",
+    "title": "Beetle Burrow",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_old_crossing",
+    "place": "Bur:1",
+    "title": "Old Crossing",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_end_worldworm",
+    "place": "Bur:4",
+    "title": "Worldworm",
+    "role": "ending"
+  },
+  {
+    "name": "bur_end_troll_cairn",
+    "place": "Bur:4",
+    "title": "Troll Cairn",
+    "role": "ending"
+  },
+  {
+    "name": "bur_end_old_warren",
+    "place": "Bur:4",
+    "title": "Old Warren",
+    "role": "ending"
+  },
+  {
+    "name": "worm_entry_fault",
+    "place": "Bur:4",
+    "title": "Entry Fault",
+    "role": "entrance"
+  },
+  {
+    "name": "hive_entry_comb",
+    "place": "Bur:2",
+    "title": "Entry Comb",
+    "role": "entrance"
+  },
+  {
+    "name": "worm_mineral_seam",
+    "place": "Worm:1",
+    "title": "Mineral Seam",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_cross_gallery",
+    "place": "Worm:2",
+    "title": "Cross Gallery",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_troll_cache",
+    "place": "Worm:3",
+    "title": "Troll Cache",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_coiled_hoard",
+    "place": "Worm:2",
+    "title": "Coiled Hoard",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_end_troll_mine",
+    "place": "Worm:4",
+    "title": "Troll Mine",
+    "role": "ending"
+  },
+  {
+    "name": "worm_end_dragon_cavern",
+    "place": "Worm:4",
+    "title": "Dragon Cavern",
+    "role": "ending"
+  },
+  {
+    "name": "hive_outer_cells",
+    "place": "Hive:1",
+    "title": "Outer Cells",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_queen_cell",
+    "place": "Hive:1",
+    "title": "Queen Cell",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_flight_lane",
+    "place": "Hive:1",
+    "title": "Flight Lane",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_meliai_cache",
+    "place": "Hive:2",
+    "title": "Meliai Cache",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_end_inner_combs",
+    "place": "Hive:2",
+    "title": "Inner Combs",
+    "role": "ending"
+  },
+  {
+    "name": "worm_shed_coils",
+    "place": "Worm:1",
+    "title": "Shed Coils",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_double_mouth",
+    "place": "Worm:2",
+    "title": "Double Mouth",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_shale_shelf",
+    "place": "Worm:3",
+    "title": "Shale Shelf",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_blind_bend",
+    "place": "Worm:1",
+    "title": "Blind Bend",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_troll_cut",
+    "place": "Worm:3",
+    "title": "Troll Cut",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_seeping_vein",
+    "place": "Worm:2",
+    "title": "Seeping Vein",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_end_coiled_galleries",
+    "place": "Worm:4",
+    "title": "Coiled Galleries",
+    "role": "ending"
+  },
+  {
+    "name": "hive_torn_comb",
+    "place": "Hive:1",
+    "title": "Torn Comb",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_wax_island",
+    "place": "Hive:1",
+    "title": "Wax Island",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_split_brood",
+    "place": "Hive:1",
+    "title": "Split Brood",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_wasp_roost",
+    "place": "Hive:2",
+    "title": "Wasp Roost",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_abandoned_cells",
+    "place": "Hive:1",
+    "title": "Abandoned Cells",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_meliai_shelter",
+    "place": "Hive:2",
+    "title": "Meliai Shelter",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_end_hollow_heart",
+    "place": "Hive:2",
+    "title": "Hollow Heart",
+    "role": "ending"
+  },
+  {
+    "name": "worm_delvers_cache",
+    "place": "Worm:2",
+    "title": "Delvers Cache",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_buried_armoury",
+    "place": "Worm:3",
+    "title": "Buried Armoury",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_corroded_gallery",
+    "place": "Worm:2",
+    "title": "Corroded Gallery",
+    "role": "ordinary"
+  },
+  {
+    "name": "uniq_old_coil",
+    "place": "Worm:2",
+    "title": "Old Coil",
+    "role": "unique"
+  },
+  {
+    "name": "hive_amber_store",
+    "place": "Hive:1",
+    "title": "Amber Store",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_raided_satchel",
+    "place": "Hive:2",
+    "title": "Raided Satchel",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_guard_line",
+    "place": "Hive:1",
+    "title": "Guard Line",
+    "role": "ordinary"
+  },
+  {
+    "name": "uniq_vespara",
+    "place": "Hive:1",
+    "title": "Vespara",
+    "role": "unique"
+  },
+  {
+    "name": "bur_claw_through",
+    "place": "Bur:1",
+    "title": "Claw Through",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_drake_overlook",
+    "place": "Bur:2",
+    "title": "Drake Overlook",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_delver_workshop",
+    "place": "Bur:3",
+    "title": "Delver Workshop",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_flooded_roots",
+    "place": "Bur:1",
+    "title": "Flooded Roots",
+    "role": "ordinary"
+  },
+  {
+    "name": "bur_end_split_delve",
+    "place": "Bur:4",
+    "title": "Split Delve",
+    "role": "ending"
+  },
+  {
+    "name": "worm_mushroom_grove",
+    "place": "Worm:1",
+    "title": "Mushroom Grove",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_deathcap_hollow",
+    "place": "Worm:2",
+    "title": "Deathcap Hollow",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_fungal_nursery",
+    "place": "Worm:1",
+    "title": "Fungal Nursery",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_spore_gallery",
+    "place": "Worm:2",
+    "title": "Spore Gallery",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_rotten_pack",
+    "place": "Worm:2",
+    "title": "Rotten Pack",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_capstone_ring",
+    "place": "Worm:3",
+    "title": "Capstone Ring",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_rootbound_pool",
+    "place": "Worm:1",
+    "title": "Rootbound Pool",
+    "role": "ordinary"
+  },
+  {
+    "name": "worm_end_fungal_heart",
+    "place": "Worm:4",
+    "title": "Fungal Heart",
+    "role": "ending"
+  },
+  {
+    "name": "hive_beetle_gate",
+    "place": "Hive:1",
+    "title": "Beetle Gate",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_queen_gallery",
+    "place": "Hive:1",
+    "title": "Queen Gallery",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_spark_crossing",
+    "place": "Hive:2",
+    "title": "Spark Crossing",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_pollen_pockets",
+    "place": "Hive:1",
+    "title": "Pollen Pockets",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_lost_apothecary",
+    "place": "Hive:1",
+    "title": "Lost Apothecary",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_winged_hunt",
+    "place": "Hive:2",
+    "title": "Winged Hunt",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_amber_jewels",
+    "place": "Hive:2",
+    "title": "Amber Jewels",
+    "role": "ordinary"
+  },
+  {
+    "name": "hive_end_amber_brood",
+    "place": "Hive:2",
+    "title": "Amber Brood",
+    "role": "ending"
+  }
+]

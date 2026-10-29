@@ -8,6 +8,7 @@
 
 use strict;
 use warnings;
+use File::Basename qw(dirname);
 
 my ($target, $template, $modfile, $skillfile) = @ARGV;
 die "Usage: $0 <target> <template> species-data.h aptitudes.h\n"
@@ -17,6 +18,7 @@ die "Usage: $0 <target> <template> species-data.h aptitudes.h\n"
 my %ABBR_SKILL;
 my %SKILL_ABBR;
 my %SPECIES_SKILLS;
+my %SPECIES_ENUM;
 my @SPECIES;
 my %SEEN_SPECIES;
 
@@ -221,12 +223,35 @@ sub fix_underscores
 sub load_aptitudes
 {
     my $skillfile = shift;
+    my $tagfile = dirname($skillfile) . '/tag-version.h';
+    open my $taginf, '<', $tagfile or die "Can't read $tagfile: $!\n";
+    my ($version) = map { /^#define TAG_MAJOR_VERSION (\d+)/ ? $1 : () } <$taginf>;
+    close $taginf;
+    die "Missing TAG_MAJOR_VERSION in $tagfile\n" unless defined $version;
     open my $inf, '<', $skillfile or die "Can't read $skillfile: $!\n";
     my $seen_skill_start;
     my $species;
+    my @active = (1);
 
     while (<$inf>)
     {
+        if (/^#if TAG_MAJOR_VERSION (==|!=) (\d+)/)
+        {
+            my $matches = $version == $2;
+            push @active, $active[-1] && ($1 eq '==' ? $matches : !$matches);
+            next;
+        }
+        if (/^#if\b/)
+        {
+            push @active, $active[-1];
+            next;
+        }
+        if (/^#endif\b/)
+        {
+            pop @active;
+            next;
+        }
+        next unless $active[-1];
         last if /\*{40,}/;
         if (!$seen_skill_start)
         {
@@ -236,7 +261,9 @@ sub load_aptitudes
         {
             if (/{\s*SP_(\w+)\s*,\s*SK_(\w+)\s*,\s*(-?\d+|UNUSABLE_SKILL)\s*}/)
             {
+                my $enum = $1;
                 $species = propercase_string(fix_underscores($1));
+                $SPECIES_ENUM{$species} = $enum;
                 if (!$SEEN_SPECIES{$species})
                 {
                     $SEEN_SPECIES{$species} = 1;
@@ -272,9 +299,8 @@ sub load_mods
 
     foreach (@SPECIES)
     {
-        my $sp = $_;
-        $sp =~ s/Base //;
-        my ($xp, $hp, $mp, $wl) = $file =~ /$sp.*\n.*\n *(-?\d), (-?\d), (-?\d), (\d),/;
+        my $enum = $SPECIES_ENUM{$_};
+        my ($xp, $hp, $mp, $wl) = $file =~ /\{\s*SP_\Q$enum\E,\s*\n[^\n]*\n[^\n]*\n[^\n]*\n\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(\d+),/;
 
         $SPECIES_SKILLS{$_}{"Experience"} = $xp;
         $SPECIES_SKILLS{$_}{"Hit Points"} = $hp;

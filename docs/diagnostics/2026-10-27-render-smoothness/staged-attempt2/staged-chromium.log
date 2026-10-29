@@ -1,0 +1,7 @@
+{"passed":false,"phase":"staged","engine":"chromium","checks":[],"errors":[],"test_game_saved":true}
+page.waitForFunction: Timeout 30000ms exceeded.
+    at connectGuest (/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs:61:17)
+    at async /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs:114:9 {
+  log: [],
+  name: 'TimeoutError'
+}

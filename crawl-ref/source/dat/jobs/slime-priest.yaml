@@ -1,0 +1,22 @@
+enum: JOB_SLIME_PRIEST
+name: Slime Priest
+short_name: Sp
+category: Warrior
+category_priority: 65
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "ring mail plus:1"
+weapon_choice: plain
+recommended_species:
+  - troll
+  - octopode
+  - minotaur
+  - demonspawn
+skills:
+  fighting: 3
+  armour: 1
+  dodging: 1
+  weapon: 3
+create_enum: false

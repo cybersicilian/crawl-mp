@@ -1,0 +1,11 @@
+AssertionError [ERR_ASSERTION]: Modal focus stays inside the reference
+    at /Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/common-hotkeys.cjs:66:9
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:472:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

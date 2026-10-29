@@ -1,0 +1,7 @@
+{
+  "passed": false,
+  "checks": [],
+  "errors": [],
+  "error": "page.goto: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://dcss.iancaltabiano.com/\", waiting until \"load\"\u001b[22m\n\n    at clientAs (/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/multiplayer-native-client.cjs:35:16)\n    at async /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/deploy/public-smoke.cjs:43:26",
+  "test_game_saved": true
+}

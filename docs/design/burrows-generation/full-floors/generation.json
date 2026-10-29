@@ -1,0 +1,593 @@
+{
+  "nativeBinarySha256": "656e330d468694404f5a8f1e2ed27cb72234899a7ec64e2fb7e953bc81510a77",
+  "floors": [
+    {
+      "id": "bur-1",
+      "title": "Bur:1",
+      "branch": "Bur",
+      "seed": 2026102401,
+      "monsters": 24,
+      "mushrooms": 0,
+      "itemStacks": 15,
+      "monsterRoster": {
+        "burrowing beast": 10,
+        "crag boar": 9,
+        "shale drake": 2,
+        "komodo dragon": 3
+      },
+      "lootClasses": {
+        "potion": 1,
+        "gold": 5,
+        "scroll": 4,
+        "weapon": 2,
+        "armour": 2,
+        "book": 1
+      },
+      "walkableCells": 1083,
+      "bounds": [
+        20,
+        23,
+        89,
+        79
+      ],
+      "vaults": [
+        {
+          "height": 14,
+          "name": "bur_old_crossing",
+          "width": 19,
+          "x": 69,
+          "y": 24
+        },
+        {
+          "height": 9,
+          "name": "bur_bent_gallery",
+          "width": 19,
+          "x": 22,
+          "y": 25
+        }
+      ]
+    },
+    {
+      "id": "bur-2",
+      "title": "Bur:2",
+      "branch": "Bur",
+      "seed": 2026102402,
+      "monsters": 14,
+      "mushrooms": 0,
+      "itemStacks": 23,
+      "monsterRoster": {
+        "crag boar": 3,
+        "burrowing beast": 7,
+        "deep troll delver": 1,
+        "killer bee": 1,
+        "boulder beetle": 2
+      },
+      "lootClasses": {
+        "wand": 2,
+        "armour": 2,
+        "gold": 4,
+        "potion": 5,
+        "book": 5,
+        "jewellery": 1,
+        "talisman": 1,
+        "weapon": 2,
+        "missile": 1
+      },
+      "walkableCells": 1307,
+      "bounds": [
+        32,
+        20,
+        85,
+        81
+      ],
+      "vaults": [
+        {
+          "height": 5,
+          "name": "hive_entry_comb",
+          "width": 11,
+          "x": 55,
+          "y": 27
+        },
+        {
+          "height": 20,
+          "name": "bur_paired_dens",
+          "width": 11,
+          "x": 51,
+          "y": 53
+        },
+        {
+          "height": 17,
+          "name": "bur_beetle_burrow",
+          "width": 9,
+          "x": 69,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "bur-4",
+      "title": "Bur:4",
+      "branch": "Bur",
+      "seed": 2026102403,
+      "monsters": 40,
+      "mushrooms": 0,
+      "itemStacks": 28,
+      "monsterRoster": {
+        "crag boar": 11,
+        "burrowing beast": 8,
+        "boulder beetle": 4,
+        "death yak": 2,
+        "catoblepas": 1,
+        "shale drake": 10,
+        "deep troll delver": 4
+      },
+      "lootClasses": {
+        "book": 5,
+        "scroll": 6,
+        "gem": 1,
+        "gold": 6,
+        "armour": 3,
+        "missile": 2,
+        "weapon": 2,
+        "wand": 1,
+        "potion": 2
+      },
+      "walkableCells": 1473,
+      "bounds": [
+        24,
+        1,
+        101,
+        83
+      ],
+      "vaults": [
+        {
+          "height": 29,
+          "name": "bur_end_old_warren",
+          "width": 45,
+          "x": 46,
+          "y": 19
+        },
+        {
+          "height": 9,
+          "name": "bur_troll_store",
+          "width": 13,
+          "x": 28,
+          "y": 68
+        }
+      ]
+    },
+    {
+      "id": "hive-1",
+      "title": "Hive:1",
+      "branch": "Hive",
+      "seed": 2026102421,
+      "monsters": 41,
+      "mushrooms": 0,
+      "itemStacks": 17,
+      "monsterRoster": {
+        "killer bee": 27,
+        "hornet": 2,
+        "meliai": 6,
+        "queen bee": 2,
+        "venom wasp": 3,
+        "wax beetle": 1
+      },
+      "lootClasses": {
+        "gold": 6,
+        "weapon": 2,
+        "wand": 1,
+        "potion": 3,
+        "scroll": 3,
+        "armour": 2
+      },
+      "walkableCells": 1863,
+      "bounds": [
+        26,
+        21,
+        95,
+        84
+      ],
+      "vaults": [
+        {
+          "height": 15,
+          "name": "hive_guard_line",
+          "width": 9,
+          "x": 67,
+          "y": 53
+        },
+        {
+          "height": 6,
+          "name": "hive_flight_lane",
+          "width": 19,
+          "x": 58,
+          "y": 21
+        },
+        {
+          "height": 9,
+          "name": "hive_abandoned_cells",
+          "width": 13,
+          "x": 46,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "hive-2a",
+      "title": "Hive:2",
+      "branch": "Hive",
+      "seed": 2026102422,
+      "monsters": 29,
+      "mushrooms": 0,
+      "itemStacks": 6,
+      "monsterRoster": {
+        "killer bee": 13,
+        "wax beetle": 4,
+        "venom wasp": 3,
+        "queen bee": 4,
+        "spark wasp": 5
+      },
+      "lootClasses": {
+        "gold": 3,
+        "book": 2,
+        "jewellery": 1
+      },
+      "walkableCells": 1913,
+      "bounds": [
+        22,
+        23,
+        95,
+        82
+      ],
+      "vaults": [
+        {
+          "height": 70,
+          "name": "hive_end_amber_brood",
+          "width": 80,
+          "x": 20,
+          "y": 17
+        }
+      ]
+    },
+    {
+      "id": "hive-2b",
+      "title": "Hive:2",
+      "branch": "Hive",
+      "seed": 2026102423,
+      "monsters": 25,
+      "mushrooms": 0,
+      "itemStacks": 6,
+      "monsterRoster": {
+        "hornet": 3,
+        "meliai": 7,
+        "spark wasp": 2,
+        "queen bee": 5,
+        "killer bee": 5,
+        "wax beetle": 2,
+        "venom wasp": 1
+      },
+      "lootClasses": {
+        "book": 2,
+        "wand": 1,
+        "gold": 3
+      },
+      "walkableCells": 1970,
+      "bounds": [
+        25,
+        20,
+        96,
+        84
+      ],
+      "vaults": [
+        {
+          "height": 70,
+          "name": "hive_end_hollow_heart",
+          "width": 80,
+          "x": 20,
+          "y": 17
+        }
+      ]
+    },
+    {
+      "id": "worm-1",
+      "title": "Worm:1",
+      "branch": "Worm",
+      "seed": 2026102431,
+      "monsters": 21,
+      "mushrooms": 5,
+      "itemStacks": 9,
+      "monsterRoster": {
+        "gallery worm": 8,
+        "deep troll delver": 1,
+        "wandering mushroom": 4,
+        "lindwurm": 2,
+        "coil worm": 3,
+        "earth elemental": 1,
+        "deathcap": 1,
+        "deep troll": 1
+      },
+      "lootClasses": {
+        "gold": 4,
+        "scroll": 2,
+        "book": 1,
+        "weapon": 1,
+        "potion": 1
+      },
+      "walkableCells": 1684,
+      "bounds": [
+        26,
+        23,
+        94,
+        80
+      ],
+      "vaults": [
+        {
+          "height": 17,
+          "name": "worm_rootbound_pool",
+          "width": 10,
+          "x": 40,
+          "y": 27
+        }
+      ]
+    },
+    {
+      "id": "worm-2",
+      "title": "Worm:2",
+      "branch": "Worm",
+      "seed": 2026102490,
+      "monsters": 26,
+      "mushrooms": 5,
+      "itemStacks": 24,
+      "monsterRoster": {
+        "gallery worm": 7,
+        "wandering mushroom": 3,
+        "coil worm": 7,
+        "deep troll": 2,
+        "deathcap": 2,
+        "caustic worm": 3,
+        "deep troll delver": 1,
+        "great orb of eyes": 1
+      },
+      "lootClasses": {
+        "scroll": 6,
+        "weapon": 3,
+        "armour": 3,
+        "book": 2,
+        "gold": 5,
+        "potion": 3,
+        "missile": 1,
+        "wand": 1
+      },
+      "walkableCells": 1653,
+      "bounds": [
+        31,
+        17,
+        90,
+        87
+      ],
+      "vaults": [
+        {
+          "height": 17,
+          "name": "worm_rotten_pack",
+          "width": 10,
+          "x": 78,
+          "y": 50
+        }
+      ]
+    },
+    {
+      "id": "worm-4",
+      "title": "Worm:4",
+      "branch": "Worm",
+      "seed": 2026102539,
+      "monsters": 27,
+      "mushrooms": 4,
+      "itemStacks": 6,
+      "monsterRoster": {
+        "deep troll earth mage": 3,
+        "deep troll shaman": 1,
+        "deep troll": 5,
+        "iron troll": 6,
+        "wandering mushroom": 2,
+        "coil worm": 4,
+        "gallery worm": 3,
+        "caustic worm": 1,
+        "deathcap": 2
+      },
+      "lootClasses": {
+        "weapon": 2,
+        "wand": 1,
+        "gold": 3
+      },
+      "walkableCells": 1570,
+      "bounds": [
+        25,
+        25,
+        95,
+        81
+      ],
+      "vaults": [
+        {
+          "height": 70,
+          "name": "worm_end_fungal_heart",
+          "width": 80,
+          "x": 20,
+          "y": 17
+        }
+      ]
+    }
+  ],
+  "fragmentSha256": "0e80a56144a214da3471074bcbf37bc0eda689c12b152ccb305fe4ba4686f813",
+  "fragmentBytes": 512000,
+  "packedTiles": 220,
+  "method": "Complete native generated floors, offline classic atlases and native vault ownership.",
+  "limitations": [
+    "fully revealed",
+    "generic item class icons",
+    "no client lighting or live combat",
+    "independent floor samples reset unique/vault history"
+  ],
+  "candidateTrials": [
+    {
+      "id": "worm-1-seed-2026102430",
+      "place": "Worm:1",
+      "seed": 2026102430,
+      "selected": false,
+      "vaults": "layout_wormlands"
+    },
+    {
+      "id": "worm-1-seed-2026102431",
+      "place": "Worm:1",
+      "seed": 2026102431,
+      "selected": true,
+      "vaults": "layout_wormlands and worm_rootbound_pool"
+    },
+    {
+      "id": "worm-2-seed-2026102480",
+      "place": "Worm:2",
+      "seed": 2026102480,
+      "selected": false,
+      "vaults": "layout_wormlands, worm_corroded_gallery and worm_fungal_nursery"
+    },
+    {
+      "id": "worm-2-seed-2026102481",
+      "place": "Worm:2",
+      "seed": 2026102481,
+      "selected": false,
+      "vaults": "layout_wormlands"
+    },
+    {
+      "id": "worm-2-seed-2026102482",
+      "place": "Worm:2",
+      "seed": 2026102482,
+      "selected": false,
+      "vaults": "layout_wormlands and worm_fungal_nursery"
+    },
+    {
+      "id": "worm-2-seed-2026102483",
+      "place": "Worm:2",
+      "seed": 2026102483,
+      "selected": false,
+      "vaults": "layout_wormlands, worm_shed_coils and worm_blind_bend"
+    },
+    {
+      "id": "worm-2-seed-2026102484",
+      "place": "Worm:2",
+      "seed": 2026102484,
+      "selected": false,
+      "vaults": "layout_wormlands and worm_cross_gallery"
+    },
+    {
+      "id": "worm-2-seed-2026102485",
+      "place": "Worm:2",
+      "seed": 2026102485,
+      "selected": false,
+      "vaults": "layout_wormlands and worm_blind_bend"
+    },
+    {
+      "id": "worm-2-seed-2026102486",
+      "place": "Worm:2",
+      "seed": 2026102486,
+      "selected": false,
+      "vaults": "layout_wormlands and worm_corroded_gallery"
+    },
+    {
+      "id": "worm-2-seed-2026102487",
+      "place": "Worm:2",
+      "seed": 2026102487,
+      "selected": false,
+      "vaults": "layout_wormlands, worm_shed_coils and worm_shale_shelf"
+    },
+    {
+      "id": "worm-2-seed-2026102488",
+      "place": "Worm:2",
+      "seed": 2026102488,
+      "selected": false,
+      "vaults": "layout_wormlands"
+    },
+    {
+      "id": "worm-2-seed-2026102489",
+      "place": "Worm:2",
+      "seed": 2026102489,
+      "selected": false,
+      "vaults": "layout_wormlands"
+    },
+    {
+      "id": "worm-2-seed-2026102490",
+      "place": "Worm:2",
+      "seed": 2026102490,
+      "selected": true,
+      "vaults": "layout_wormlands and worm_rotten_pack"
+    },
+    {
+      "id": "worm-4-seed-2026102530",
+      "place": "Worm:4",
+      "seed": 2026102530,
+      "selected": false,
+      "vaults": "worm_end_troll_mine"
+    },
+    {
+      "id": "worm-4-seed-2026102531",
+      "place": "Worm:4",
+      "seed": 2026102531,
+      "selected": false,
+      "vaults": "worm_end_troll_mine"
+    },
+    {
+      "id": "worm-4-seed-2026102532",
+      "place": "Worm:4",
+      "seed": 2026102532,
+      "selected": false,
+      "vaults": "worm_end_coiled_galleries"
+    },
+    {
+      "id": "worm-4-seed-2026102533",
+      "place": "Worm:4",
+      "seed": 2026102533,
+      "selected": false,
+      "vaults": "worm_end_coiled_galleries"
+    },
+    {
+      "id": "worm-4-seed-2026102534",
+      "place": "Worm:4",
+      "seed": 2026102534,
+      "selected": false,
+      "vaults": "worm_end_troll_mine"
+    },
+    {
+      "id": "worm-4-seed-2026102535",
+      "place": "Worm:4",
+      "seed": 2026102535,
+      "selected": false,
+      "vaults": "worm_end_dragon_cavern"
+    },
+    {
+      "id": "worm-4-seed-2026102536",
+      "place": "Worm:4",
+      "seed": 2026102536,
+      "selected": false,
+      "vaults": "worm_end_coiled_galleries"
+    },
+    {
+      "id": "worm-4-seed-2026102537",
+      "place": "Worm:4",
+      "seed": 2026102537,
+      "selected": false,
+      "vaults": "worm_end_coiled_galleries"
+    },
+    {
+      "id": "worm-4-seed-2026102538",
+      "place": "Worm:4",
+      "seed": 2026102538,
+      "selected": false,
+      "vaults": "worm_end_dragon_cavern"
+    },
+    {
+      "id": "worm-4-seed-2026102539",
+      "place": "Worm:4",
+      "seed": 2026102539,
+      "selected": true,
+      "vaults": "worm_end_fungal_heart"
+    }
+  ],
+  "selection": "Wormlands seeds selected for fungal-vault coverage; all trials retained; no vaults forced."
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "family": "Shikashi 600+",
+    "source": "User-supplied purchased archive",
+    "archiveFilename": "Shikashi's 600+ Icon Pack.zip",
+    "archiveSha256": "3acd156891d4a57e03add12589fb715b81f33219b2864c7fb1b6c7b7243f5332",
+    "creator": "Matt Firth (shikashipx)",
+    "page": "https://shikashipx.itch.io/shikashis-600-icon-pack",
+    "nativeSheet": "16x16.png",
+    "sheetSize": [
+      432,
+      608
+    ],
+    "listedPrice": "GBP 2.00",
+    "obtained": true,
+    "license": "Custom project use with attribution; raw redistribution grant not verified",
+    "verifiedOn": "2026-10-17"
+  },
+  {
+    "family": "Raven Fantasy",
+    "creator": "Clockwork Raven (Caio)",
+    "page": "https://clockworkraven.itch.io/raven-fantasy-icons",
+    "archiveFilename": "Free - Raven Fantasy Icons.zip",
+    "archiveSha256": "3656dc0db6c4a3f9ddf38a24fb12c00988379b0dfe24e44cc3b2a36ae0539e13",
+    "obtained": true,
+    "nativeFilesInspected": 2192,
+    "listedPrice": "Free personal-use evaluation; premium USD 35.00; collection listed USD 35.50",
+    "premiumObtained": false,
+    "license": "Clockwork Raven User Asset License Agreement v1.2, restricted project license",
+    "licenseUrl": "https://drive.google.com/file/d/126AltXMSr2suWyDWGpm4i7G90Zth3qtz/view",
+    "licenseSha256": "eb4a41c8c16bf9cc06d8bab4cc4ea232914e5a2c929d8d983167995be7633120",
+    "verifiedOn": "2026-10-17"
+  }
+]

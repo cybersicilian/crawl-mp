@@ -1,0 +1,26 @@
+{
+  "files": {
+    "docs/diagnostics/2026-10-27-webkit-controls/catchup-browser.cjs": "65a30bc20761a4ae8f3dd2f98acd9839342034f318c906044338f963dabfe8cc",
+    "docs/diagnostics/2026-10-27-webkit-controls/native-candidate.cjs": "852373fc9403444263e5291ce0f736147ae13692dceb73f194e0fa9fbfde6dc2",
+    "docs/diagnostics/2026-10-27-webkit-controls/validate.py": "99e3dcff9434d2da61f48eb7e1e93b4f856e16ee47517d43d634dfba140c8295",
+    "docs/diagnostics/2026-10-27-webkit-controls/production-baseline.json": "0163bdcb0b5d8867bbc339b6e4cd8d940bf299c2ec46b6ea590aade5c30576f8",
+    "crawl-ref/source/webserver/static/scripts/client-transport.js": "33e84f71823934dcaf31c8b2cb51eb7659ef092234fabf693657473c1e1ee828",
+    "crawl-ref/source/webserver/static/scripts/client-connection.js": "dcb5bc5379200697cf485eaba6176946ae1306dbd8d80e20282348d254f0f006",
+    "crawl-ref/source/webserver/static/scripts/comm.js": "92b18da655dd8484df446940a6d90ae7cf8060e24e8a02fad3e70a7a7679f5d7",
+    "crawl-ref/source/webserver/static/scripts/socket-lifecycle.js": "bde71060188ec008eb3f8c05182672b6825693c7e1b2ecf1eb8f1dac8c29f86d",
+    "crawl-ref/source/webserver/tests/client-transport.cjs": "c90bb7ed1953c95ad94bbe9e6f0815b55d1d2770839e45b31542a58cc064a425",
+    "crawl-ref/source/webserver/tests/client-connection.cjs": "4ba58db0c01285c3922daa9f6603a6489a5e20cf5bebe22c6c70aeb3bd2cd8a3",
+    "crawl-ref/source/webserver/tests/comm.cjs": "6d723055b05c32f70a4ab94e07ec8572a094680ffae60eb920874de0529dd70f",
+    "crawl-ref/source/webserver/tests/socket-lifecycle.cjs": "96bb4b82704f998547bf1624b52f6bad1022ede3e22342f88aefee168170f11d",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1"
+  },
+  "resources": {
+    "browsers": 2,
+    "simultaneous_browsers": 1,
+    "native_inventory_open_close_cycles": 4,
+    "new_accounts": 0,
+    "maximum_seconds": 300
+  },
+  "campaign": "e813e777-feac-4221-9b97-4c875be376a9",
+  "production_source_mutated": false
+}

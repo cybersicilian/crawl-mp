@@ -1,0 +1,31 @@
+/* Chronicle collections: distinct identity, state and progression at a glance. */
+.library-page:not(.stats-page) main { max-width: 1240px; }
+.library-page:not(.stats-page) .library-page-header { min-height: 0; padding: 26px 30px; background: #f3ebd9; border-bottom: 1px solid var(--book-rule); }
+.library-page:not(.stats-page) .library-page-header h1 { font-size: 34px; margin-bottom: 8px; }
+.archive-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--book-rule); border: 1px solid var(--book-rule); border-radius: 5px; overflow: hidden; margin: 8px 0 24px; }
+.archive-summary > div { display: grid; align-content: start; gap: 6px; padding: 16px; background: #fffaf0; }
+.archive-summary span { color: var(--book-muted); font-size: 12px; }
+.archive-summary strong { color: var(--book-burgundy); font: 600 28px/1.4 var(--tt-font-ui); font-variant-numeric: tabular-nums; }
+.archive-summary .archive-summary-copy { grid-column: span 2; }
+.archive-summary-copy p { margin: 0; font-size: 14px; }
+.archive-facet { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: var(--book-muted); font-size: 12px; }
+.archive-facet select { min-height: 40px; padding: 6px 12px; background: #fffaf0; border: 1px solid #bca98a; border-radius: 4px; color: var(--book-ink); font: 13px var(--tt-font-ui); }
+.archive-facet select:focus-visible { outline: 2px solid var(--book-burgundy); outline-offset: 3px; }
+.library-page .library-records { display: block; padding: 0; border: 1px solid var(--book-rule); border-radius: 5px; overflow: hidden; }
+.library-page .archive-record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 22px; padding: 16px 18px; margin: 0; border: 0; border-radius: 0; background: #fffaf0; box-shadow: none; }
+.library-page .archive-record-row + .archive-record-row { border-top: 1px solid var(--book-rule); }
+.library-page .archive-record-row:nth-child(even) { background: #f4ecd9; }
+.library-page .archive-record-row .library-record-title { font-size: 18px; line-height: 1.5; }
+.archive-record-row .library-record-title > span { font-size: 13px; margin-left: 8px; }
+.library-page .archive-record-row .library-record-meta { font-size: 12px; text-align: right; margin: 0; align-self: center; }
+.archive-record-detail, .archive-record-date { font-size: 12px; color: var(--book-muted); }
+.archive-record-date { text-align: right; }
+@media (max-width: 600px) {
+    .library-page:not(.stats-page) main { padding: 0 12px; }
+    .library-page:not(.stats-page) .library-page-header { padding: 22px; }
+    .archive-summary > div { padding: 12px; }
+    .archive-summary strong { font-size: 23px; }
+    .archive-summary span { font-size: 11px; }
+    .library-page .archive-record-row { grid-template-columns: minmax(0, 1fr); gap: 5px; padding: 14px; }
+    .library-page .archive-record-row .library-record-meta, .archive-record-date { text-align: left; }
+}

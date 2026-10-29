@@ -21,6 +21,7 @@
 #include "acquire.h"
 #include "artefact.h"
 #include "branch.h"
+#include "branch-population.h"
 #include "chardump.h"
 #include "cloud.h"
 #include "coordit.h"
@@ -58,6 +59,7 @@
 #include "mon-poly.h"
 #include "nearby-danger.h"
 #include "notes.h"
+#include "party.h"
 #include "place.h"
 #include "randbook.h"
 #include "random.h"
@@ -225,20 +227,56 @@ set<string> &get_uniq_map_names()
 }
 
 // TODO: datify into branch data
+int dgn_default_builder_x()
+{
+    switch (party::player_count())
+    {
+        case 1:  return 80;
+        case 2:  return 94;
+        case 3:  return 106;
+        default: return GXM;
+    }
+}
+
+int dgn_default_builder_y()
+{
+    switch (party::player_count())
+    {
+        case 1:  return 70;
+        case 2:  return 82;
+        case 3:  return 92;
+        default: return GYM;
+    }
+}
+
 int dgn_builder_x()
 {
+    const int bx = dgn_default_builder_x();
     if (is_hell_subbranch(you.where_are_you) && !at_branch_bottom())
-        return GXM / 2;
+        return (bx * 2 / 3) & ~1;
     else
-        return GXM;
+        return bx;
 }
 
 int dgn_builder_y()
 {
+    const int by = dgn_default_builder_y();
     if (is_hell_subbranch(you.where_are_you) && !at_branch_bottom())
-        return GYM / 2;
+        return (by * 2 / 3) & ~1;
     else
-        return GYM;
+        return by;
+}
+
+coord_def dgn_builder_tl()
+{
+    return coord_def((GXM - dgn_builder_x()) / 2,
+                     (GYM - dgn_builder_y()) / 2);
+}
+
+coord_def dgn_builder_br()
+{
+    return dgn_builder_tl()
+           + coord_def(dgn_builder_x() - 1, dgn_builder_y() - 1);
 }
 
 /**********************************************************************
@@ -1643,6 +1681,19 @@ void dgn_reset_level(bool enable_random_maps)
     env.level_build_method.clear();
     env.level_layout_types.clear();
     level_clear_vault_memory();
+    if (you.where_are_you != BRANCH_ABYSS)
+    {
+        const coord_def btl = dgn_builder_tl();
+        const coord_def bbr = dgn_builder_br();
+        for (rectangle_iterator ri(0); ri; ++ri)
+        {
+            if (ri->x < btl.x || ri->x > bbr.x || ri->y < btl.y || ri->y > bbr.y)
+            {
+                env.level_map_mask(*ri) |= MMT_NO_MONS | MMT_NO_ITEM | MMT_NO_TRAP
+                                         | MMT_NO_POOL | MMT_NO_WALL;
+            }
+        }
+    }
     _vault_placed_features.init(DNGN_UNSEEN);
     _vault_feature_heights.reset();
 
@@ -1721,55 +1772,73 @@ static int _num_items_wanted(int absdepth0)
 {
     if (branches[you.where_are_you].branch_flags & brflag::no_items)
         return 0;
-    else if (absdepth0 > 5 && one_chance_in(500 - 5 * absdepth0))
-        return 9 + random2avg(80, 2); // rich level!
-    else
-        return 3 + roll_dice(3, 9);
+
+    const int extra = party::extra_player_count();
+    if (absdepth0 > 5 && one_chance_in(500 - 5 * absdepth0))
+        return 9 + random2avg(80 + extra * 20, 2) + extra * 3; // rich level!
+
+    const int wanted = (3 + extra) + roll_dice(3 + extra, 9);
+    return min(wanted, 50 + extra * 15);
 }
 
 static int _mon_die_size()
 {
+    const int extra = party::extra_player_count();
+
     // This is a very goofy hack to maintain historical populations.
     // TODO: remove this!
     if (you.where_are_you == BRANCH_LAIR && you.depth == 5)
-        return DEFAULT_MON_DIE_SIZE;
+        return DEFAULT_MON_DIE_SIZE + extra;
 
-    const int size = branches[you.where_are_you].mon_die_size;
+    const int size = branch_population_die_size(you.where_are_you, you.depth,
+                                               branches[you.where_are_you].mon_die_size);
     if (you.where_are_you != BRANCH_DUNGEON)
-        return size;
+        return size + extra;
 
     // Dungeon is a very special place and needs a lot of hand-holding.
     // Historically we used weird mysterious MONS_NO_MONSTER weights for
     // this balancing, but now we have technology.
+    int base_die = 8;
     switch (you.depth)
     {
         case 1:
-            return 12;
+            base_die = 12;
+            break;
         case 2:
-            return 10;
         case 3:
+            base_die = 8;
+            break;
         case 4:
-            return 9;
+            base_die = 7;
+            break;
         case 5:
         case 6:
-            return 7;
+            base_die = 6;
+            break;
         case 7:
-            return 6;
         case 8:
+            base_die = 5;
+            break;
         case 9:
-            return 5;
+            base_die = x_chance_in_y(2, 3) ? 4 : 3;
+            break;
         case 10:
-            return 4;
+            base_die = 4;
+            break;
         case 11:
-            return 5;
+            base_die = coinflip() ? 4 : 5;
+            break;
         case 12:
         case 13:
         case 14:
         case 15:
-            return 6;
+            base_die = 6;
+            break;
         default:
-            return 12;
+            base_die = 8;
+            break;
     }
+    return base_die + extra;
 }
 
 // Return how many level monster are wanted for level generation.
@@ -1784,12 +1853,14 @@ static int _num_mons_wanted()
         return 0;
     }
 
-    int mon_wanted = roll_dice(3, _mon_die_size());
-    if (mon_wanted > 60)
-        mon_wanted = 60;
+    const int extra = party::extra_player_count();
+    int mon_wanted = roll_dice(3 + extra, _mon_die_size());
+    const int cap = 60 + extra * 35;
+    if (mon_wanted > cap)
+        mon_wanted = cap;
 
     if (level_id::current() == level_id(BRANCH_ZOT, 5))
-        mon_wanted = max(10, mon_wanted - 4);
+        mon_wanted = max(10 + extra * 5, mon_wanted - 4);
     return mon_wanted;
 }
 
@@ -2339,9 +2410,22 @@ static bool _add_connecting_escape_hatches()
     if (branches[you.where_are_you].branch_flags & brflag::islanded)
         return true;
 
-    // Veto D:1, Elf:2 (for Blade), or Pan if there are disconnected areas.
+    if (player_in_branch(BRANCH_HIVE)
+        && _process_disconnected_zones(false, {}, [](const coord_def& p)
+           {
+               return _dgn_square_is_passable(p)
+                      && env.grid(p) != DNGN_SHALLOW_HONEY;
+           }) > 1)
+    {
+        return false;
+    }
+
+    // Veto D:1, Elf:2 (for Blade), Burrows, or Pan if there are disconnected areas.
     // Veto any non-abyss descent level with disconnected areas, too.
     if (player_in_branch(BRANCH_PANDEMONIUM)
+        || player_in_branch(BRANCH_BURROWS)
+        || player_in_branch(BRANCH_WORMLANDS)
+        || player_in_branch(BRANCH_HIVE)
         || (player_in_branch(BRANCH_DUNGEON) && you.depth == 1)
         || (player_in_branch(BRANCH_ELF) && you.depth == 2)
         || (crawl_state.game_is_descent() && !player_in_branch(BRANCH_ABYSS)))
@@ -3652,14 +3736,17 @@ static void _place_minivaults()
 
     if (use_random_maps)
     {
+        const int target_minivaults = 1 + (party::extra_player_count() > 0 ? coinflip() : 0);
+        int placed = 0;
         int tries = 0;
         do
         {
             vault = random_map_in_depth(level_id::current(), true);
-            if (vault)
-                _build_secondary_vault(vault);
+            if (vault && _build_secondary_vault(vault) && !vault->is_extra_vault())
+                placed++;
         } // if ALL maps eligible are "extra" but fail to place, we'd be screwed
-        while (vault && vault->is_extra_vault() && tries++ < 10000);
+        while (vault && (vault->is_extra_vault() || placed < target_minivaults)
+               && tries++ < 10000);
     }
 }
 
@@ -3705,15 +3792,16 @@ static bool _builder_normal()
 
 static void _place_traps()
 {
-    int num_traps = random2avg(2 * trap_rate_for_place(), 2);
+    const int extra = party::extra_player_count();
+    int num_traps = random2avg((2 + extra) * trap_rate_for_place(), 2);
 
     // Snake and Vaults don't have a lot of unique terrain types or open
     // themes compared to their adjacent branches, and have themed weaker
     // trap options to fall back on, so they get extra traps.
     if (player_in_branch(BRANCH_SNAKE))
-        num_traps += 2;
+        num_traps += 2 + extra;
     else if (player_in_branch(BRANCH_VAULTS))
-        num_traps += 1;
+        num_traps += 1 + extra / 2;
 
     ASSERT(num_traps >= 0);
     dprf("attempting to place %d traps", num_traps);
@@ -3921,9 +4009,11 @@ bool dgn_has_adjacent_feat(coord_def c, dungeon_feature_type feat)
 
 coord_def dgn_random_point_in_margin(int margin)
 {
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
     coord_def res;
-    res.x = random_range(margin, GXM - margin - 1);
-    res.y = random_range(margin, GYM - margin - 1);
+    res.x = random_range(tl.x + margin, br.x - margin);
+    res.y = random_range(tl.y + margin, br.y - margin);
     return res;
 }
 
@@ -4034,6 +4124,13 @@ static bool _place_vault_by_tag(const string &tag)
 
 bool in_descent_parent(branch_type branch)
 {
+    if (crawl_state.game_is_descent()
+        && you.props.exists(DESCENT_POIS_BRANCH_KEY)
+        && branches_are_mutually_exclusive(branch,
+            static_cast<branch_type>(you.props[DESCENT_POIS_BRANCH_KEY].get_int())))
+    {
+        return false;
+    }
     vector<branch_type> parents = descent_parents(branch);
     for (branch_type parent : parents)
         if (player_in_branch(parent))
@@ -4043,6 +4140,28 @@ bool in_descent_parent(branch_type branch)
 
 static void _place_branch_entrances(bool use_vaults)
 {
+    for (const auto& link : branch_connections)
+    {
+        if ((link.from.branch != root_branch && !brentry[link.from.branch].is_valid())
+            || (link.to.branch != root_branch && !brentry[link.to.branch].is_valid()))
+        {
+            continue;
+        }
+        const level_id here = level_id::current();
+        const dungeon_feature_type feat = here == link.from ? link.downstairs
+            : here == link.to ? link.upstairs : NUM_FEATURES;
+        if (feat == NUM_FEATURES)
+            continue;
+        bool placed = false;
+        for (rectangle_iterator ri(0); ri; ++ri)
+            placed |= env.grid(*ri) == feat;
+        if (!placed)
+        {
+            const coord_def pos = _place_specific_feature(feat);
+            env.level_map_mask(pos) |= MMT_VAULT;
+        }
+    }
+
     // Find what branch entrances are already placed, and what branch
     // entrances could be placed here.
     bool branch_entrance_placed[NUM_BRANCHES];
@@ -4072,6 +4191,14 @@ static void _place_branch_entrances(bool use_vaults)
             continue;
         if (!feat_is_branch_entrance(env.grid(*ri)))
             continue;
+
+        const level_id connection = branch_connection_destination(
+            env.grid(*ri), level_id::current());
+        if (connection.is_valid())
+        {
+            branch_entrance_placed[connection.branch] = true;
+            continue;
+        }
 
         for (branch_iterator it; it; ++it)
         {
@@ -4105,7 +4232,6 @@ static void _place_branch_entrances(bool use_vaults)
             brentry_allowed = it->entry_stairs != NUM_FEATURES
                 && in_descent_parent(it->id)
                 && it->id != you.props[DESCENT_WATER_BRANCH_KEY].get_int()
-                && it->id != you.props[DESCENT_POIS_BRANCH_KEY].get_int()
                 && at_branch_bottom();
         }
         else
@@ -4162,10 +4288,12 @@ static void _place_branch_entrances(bool use_vaults)
 
 static void _place_extra_vaults()
 {
+    const int extra = party::extra_player_count();
     int tries = 0;
+    int non_extra_placed = 0;
     while (true)
     {
-        if (!player_in_branch(BRANCH_DUNGEON) && use_random_maps)
+        if ((extra > 0 || !player_in_branch(BRANCH_DUNGEON)) && use_random_maps)
         {
             const map_def *vault = random_map_in_depth(level_id::current(),
                                                        false, true);
@@ -4179,9 +4307,12 @@ static void _place_extra_vaults()
                 const map_def &map(*vault);
                 if (map.is_extra_vault())
                     continue;
-                use_random_maps = false;
+                if (++non_extra_placed >= (extra > 0 ? 2 : 1))
+                    use_random_maps = false;
+                else
+                    continue;
             }
-            else if (++tries >= 3)
+            else if (++tries >= (extra > 0 ? 5 : 3))
                 break;
         }
         break;
@@ -4199,11 +4330,12 @@ static int _place_uniques()
 #endif
 
     int num_placed = 0;
+    const int extra = party::extra_player_count();
 
     // Magic numbers for dpeg's unique system.
     int A = 2;
-    const int B = 5;
-    while (one_chance_in(A))
+    const int B = max(3, 5 - extra);
+    while ((extra > 0 && A == 2) ? x_chance_in_y(3 + extra, 6) : one_chance_in(A))
     {
         // In dpeg's unique placement system, chances is always 1 in A of even
         // starting to place a unique; reduced if there are less uniques to be
@@ -4232,7 +4364,7 @@ static int _place_uniques()
             // Make the placement chance drop steeply after
             // some have been placed, to reduce chance of
             // many uniques per level.
-            if (num_placed >= 3)
+            if (num_placed >= 3 + extra / 2)
                 A++;
 #ifdef DEBUG_UNIQUE_PLACEMENT
             fprintf(ostat, "Placed valid unique map: %s.\n",
@@ -4261,7 +4393,10 @@ static void _place_aquatic_in(vector<coord_def> &places, const vector<pop_entry>
 {
     if (places.size() < 35)
         return;
-    int num = min(random_range(places.size() / 35, places.size() / 18), 15);
+    const int extra = party::extra_player_count();
+    int num = min(random_range(places.size() / max(25, 35 - extra * 3),
+                               places.size() / max(12, 18 - extra * 2)),
+                  15 + extra * 3);
     shuffle_array(places);
 
     for (int i = 0; i < num; i++)
@@ -4361,7 +4496,8 @@ static vector<monster_type> _zombifiables()
 static void _place_assorted_zombies()
 {
     static const vector<monster_type> zombifiable = _zombifiables();
-    int num_zombies = random_range(6, 12, 3);
+    const int extra = party::extra_player_count();
+    int num_zombies = random_range(6 + extra * 2, 12 + extra * 4, 3);
     for (int i = 0; i < num_zombies; ++i)
     {
         bool skel = x_chance_in_y(2, 5);
@@ -4411,7 +4547,8 @@ static void _builder_monsters()
             mg.behaviour = BEH_SLEEP;
             mg.proximity = PROX_AWAY_FROM_ENTRANCE;
         }
-        else if (player_in_connected_branch() && one_chance_in(8))
+        else if (player_in_connected_branch()
+                 && one_chance_in(max(5, 8 - party::extra_player_count())))
         {
             // Chance to generate the monster awake, but away from all level
             // stairs (including the delver start stairs).
@@ -4959,6 +5096,15 @@ static void _build_postvault_level(vault_placement &place)
         const int connchance = random_choose(0, 5, 20, 50, 100);
         const int top = random_choose(1, 20, 125, 500, 999999);
         delve(0, ngb_min, ngb_max, connchance, -1, top);
+    }
+    else if (player_in_branch(BRANCH_BURROWS)
+             || player_in_branch(BRANCH_WORMLANDS)
+             || player_in_branch(BRANCH_HIVE))
+    {
+        // Grow passages from the connected vault instead of cutting a room
+        // layout across its rock partitions. Keep the outer tunnels narrow.
+        const int cells = dgn_builder_x() * dgn_builder_y() / 6;
+        delve(nullptr, 2, 4, 10, cells, 20);
     }
     else
     {
@@ -6870,6 +7016,8 @@ double dgn_degrees_to_radians(int degrees)
 
 coord_def dgn_random_point_from(const coord_def &c, int radius, int margin)
 {
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
     int attempts = 70;
     while (attempts-- > 0)
     {
@@ -6877,8 +7025,13 @@ coord_def dgn_random_point_from(const coord_def &c, int radius, int margin)
         const coord_def res =
             c + coord_def(static_cast<int>(radius * cos(angle)),
                           static_cast<int>(radius * sin(angle)));
-        if (map_bounds_with_margin(res, margin))
+        if (map_bounds_with_margin(res, margin)
+            && (you.where_are_you == BRANCH_ABYSS
+                || (res.x >= tl.x + margin && res.x <= br.x - margin
+                    && res.y >= tl.y + margin && res.y <= br.y - margin)))
+        {
             return res;
+        }
     }
     return coord_def();
 }

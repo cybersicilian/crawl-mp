@@ -1179,8 +1179,11 @@ function loopsInsertCornerDiamond (e, center_x, center_y,
   e.mapgrd[center_x][center_y + 5] = '+'
   e.mapgrd[center_x][center_y - 5] = '+'
 
-  loopsInsertDividedLoop(e, positions1, center_x, center_y, 7, 13, 3)
-  loopsInsertLoopGroup(e, positions2, positions1, 5, 1, 4, 1, 1)
+  local area_scale = (e.width() * e.height()) / (80 * 70)
+  local max_r = math.min(16, math.floor(13 * e.width() / 80))
+  local divs = e.width() > 80 and 4 or 3
+  loopsInsertDividedLoop(e, positions1, center_x, center_y, 7, max_r, divs)
+  loopsInsertLoopGroup(e, positions2, positions1, math.floor(5 * area_scale), 1, e.width() > 80 and 5 or 4, 1, 1)
   loopsInsertRoomsAtPositions(e, positions1, room_corner_percent,
                               room_radius_min, room_radius_max,
                               1, wall_glyph)
@@ -1336,23 +1339,26 @@ TAGS:   no_rotate no_vmirror no_hmirror
   local ROOM_RADIUS_MAX = IS_ELF and 5 or 4
   local ROOM_BORDER = 1
 
+  local gxm, gym = dgn.max_bounds()
+  local area_scale = (gxm * gym) / (80 * 70)
+  local min_scale = math.min(gxm / 80, gym / 70)
+
   local CONNECTION_PLUS_OFFSET = 4
-  local CONNECTION_VARIATION_BIG = 8
-  local CONNECTION_VARIATION_SMALL = 3
+  local CONNECTION_VARIATION_BIG = math.floor(8 * min_scale)
+  local CONNECTION_VARIATION_SMALL = 4
 
   local PLACE_STAIRS_PERCENT = IS_ELF and 50 or 0
   local ROOM_CORNER_PERCENT  = IS_ELF and 25 or 20
 
   -- Elf + length 20 arms can result in floor on map edge
-  local CROSS_ARM_LENGTH      = IS_ELF and 19 or 20
-  local STAIR_ROOM_DISTANCE   = IS_ELF and 10 or 8
+  local CROSS_ARM_LENGTH      = math.floor((IS_ELF and 18 or 20) * min_scale)
+  local STAIR_ROOM_DISTANCE   = math.floor((IS_ELF and 9 or 8) * min_scale)
   local STAIR_ROOM_SIZE_MIN   = IS_ELF and 3 or 2
   local STAIR_ROOM_SIZE_RANGE = 2
   local STAIR_COUNT = 12
 
   local wall_glyph = getRandomWallMaterial()
 
-  local gxm, gym = dgn.max_bounds()
   extend_map{width = gxm, height = gym, fill = wall_glyph}
 
   local positions_use = {}
@@ -1414,12 +1420,14 @@ TAGS:   no_rotate no_vmirror no_hmirror
                           center_x + CONNECTION_VARIATION_BIG, 0, 3)
 
   -- add in some other rooms and passages
-  loopsInsertDividedLoop(_G, positions_use, center_xm, center_y,  5, 10, 3)
-  loopsInsertDividedLoop(_G, positions_use, center_xp, center_y,  5, 10, 3)
-  loopsInsertDividedLoop(_G, positions_use, center_x,  center_ym, 5, 10, 3)
-  loopsInsertDividedLoop(_G, positions_use, center_x,  center_yp, 5, 10, 3)
+  local arm_loop_max = math.floor(10 * min_scale)
+  local arm_loop_divs = gxm > 80 and 4 or 3
+  loopsInsertDividedLoop(_G, positions_use, center_xm, center_y,  6, arm_loop_max, arm_loop_divs)
+  loopsInsertDividedLoop(_G, positions_use, center_xp, center_y,  6, arm_loop_max, arm_loop_divs)
+  loopsInsertDividedLoop(_G, positions_use, center_x,  center_ym, 6, arm_loop_max, arm_loop_divs)
+  loopsInsertDividedLoop(_G, positions_use, center_x,  center_yp, 6, arm_loop_max, arm_loop_divs)
 
-  loopsInsertLoopGroup(_G, positions_dummy, positions_use, 25, 2, 3, 1, 1)
+  loopsInsertLoopGroup(_G, positions_dummy, positions_use, math.floor(25 * area_scale), 2, 4, 1, 1)
   loopsInsertRoomsAtPositions(_G, positions_use,
                               ROOM_CORNER_PERCENT,
                               ROOM_RADIUS_MIN,
@@ -1616,10 +1624,12 @@ TAGS:   no_rotate no_vmirror no_hmirror
   local gxm, gym = dgn.max_bounds()
   extend_map{width = gxm, height = gym, fill = wall_glyph}
 
-  local center_xm = width() / 2 - 17
-  local center_xp = width() / 2 + 17
-  local center_ym = height() / 2 - 17
-  local center_yp = height() / 2 + 17
+  local off_x = math.floor(17 * gxm / 80)
+  local off_y = math.floor(17 * gym / 70)
+  local center_xm = width() / 2 - off_x
+  local center_xp = width() / 2 + off_x
+  local center_ym = height() / 2 - off_y
+  local center_yp = height() / 2 + off_y
 
   for x = center_xm, center_xp - 1 do
     mapgrd[x][center_ym] = '.'

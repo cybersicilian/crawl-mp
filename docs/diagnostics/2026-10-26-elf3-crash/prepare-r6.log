@@ -1,0 +1,14 @@
+/tmp/dcss-elf3-deployment-01a17a3a-r6.tar.gz: OK
+Existing host keys found in /Users/iancaltabiano/.ssh/google_compute_known_hosts
+WARNING: 
+
+To increase the performance of the tunnel, consider installing NumPy. For instructions,
+please see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
+
+Traceback (most recent call last):
+  File "/tmp/dcss-elf3-payload-01a17a3a-r6/prepare_deployment.py", line 164, in <module>
+    prepare(args.payload, args.operation, args.attempt)
+  File "/tmp/dcss-elf3-payload-01a17a3a-r6/prepare_deployment.py", line 138, in prepare
+    assert not removed and not changed_levels
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

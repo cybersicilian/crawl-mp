@@ -1,0 +1,119 @@
+#party_hud { padding: 6px 7px; margin: 4px 0; font: 10px/1.25 var(--tt-font-mono); }
+#party_hud { background: radial-gradient(ellipse at 0 0, #87372e25, transparent 80%), var(--tt-hide); }
+:is(#party_hud_header, .party-hud-header) { border-bottom-color: var(--tt-rule); gap: 4px; }
+:is(#party_hud_title, .party-hud-title) {
+    font-family: var(--tt-font-title);
+    font-size: 12px;
+    color: var(--tt-brass-light);
+}
+.party-header-left, .party-header-right { gap: 4px; }
+:is(.party-badge, #party_mode_badge) { border: 1px solid var(--tt-rule); border-radius: 3px; padding: 1px 4px; font-size: 9px; }
+:is(.party-badge.explore, #party_mode_badge.is-explore) { color: var(--tt-verdigris); background: #283c2b; }
+:is(.party-badge.combat, #party_mode_badge.is-combat) { color: #ffd0b5; background: #572523; border-color: #bd6c4d; }
+:is(.party-hud-btn.ff-on, .party-ping-btn[data-ping-kind="danger"]) { color: var(--tt-wax-light); }
+:is(.party-hud-btn.ff-off, .party-hud-btn.join-btn, .party-ping-btn[data-ping-kind="stairs"]) { color: var(--tt-verdigris); }
+:is(.party-ping-btn[data-ping-kind="look"], .party-inspect-btn, #party_banner_inspect) { color: #b4cedb; }
+.party-ping-btn[data-ping-kind="loot"] { color: var(--tt-brass-light); }
+#party_add_drawer { background: var(--tt-hide); border-color: var(--tt-brass-shadow); padding: 6px; }
+.party-custom-row { flex-wrap: wrap; }
+.party-custom-row > * { max-width: 100%; min-width: 0; }
+.party-preset-chip, .party-preset-btn { padding: 3px 5px; }
+:is(.party-card, .party-member-card) {
+    --slot-accent: var(--tt-brass);
+    background: var(--tt-hide);
+    border: 1px solid #6b4a2c;
+    border-left: 2px solid var(--slot-accent);
+    border-radius: 3px;
+    padding: 4px 5px;
+    margin-bottom: 4px;
+    box-shadow: inset 0 1px 0 #f3d78b12, 0 2px 4px #00000050;
+}
+.slot-0 { --slot-accent: var(--tt-brass); }
+.slot-1 { --slot-accent: #83b8c7; }
+.slot-2 { --slot-accent: #a1b984; }
+.slot-3 { --slot-accent: #bd9cc8; }
+:is(.party-card, .party-member-card):hover { background: var(--tt-hide); border-color: var(--tt-brass); }
+:is(.party-card.is-active, .party-card.active-turn, .party-member-card.active-turn) {
+    background: radial-gradient(ellipse at 0 0, #d9b15f20, transparent 80%), var(--tt-hide);
+    border-color: var(--tt-brass);
+    box-shadow: inset 0 0 0 1px #d9b15f20, 0 2px 6px #00000060;
+}
+:is(.party-card.is-downed, .party-card.downed-haunting, .party-member-card.downed-haunting) {
+    background: linear-gradient(130deg, #382030, #21131c);
+    border-color: #976c8c;
+    opacity: 1;
+}
+:is(.party-member-top, .party-card-top) { font-size: 10px; gap: 4px; }
+:is(.party-member-name, .party-name) { font-weight: bold; }
+:is(.party-def-badges, .party-def) { font-size: 9px; white-space: nowrap; }
+.party-stat-lbl { color: var(--tt-muted); }
+.party-stat-val { color: var(--tt-text); }
+.party-stat-sep { color: var(--tt-brass-shadow); }
+:is(.party-floor-badge, .party-place-tag, .party-sub) { color: var(--tt-vellum-aged); }
+.party-floor-badge.other-floor { color: #b4cedb; }
+:is(.party-turn-pill, .party-slot-tag, .party-haunt-badge) {
+    background: var(--tt-metal);
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 2px;
+    color: var(--tt-ink);
+    text-shadow: 0 1px 0 #ffffff30;
+}
+.party-haunt-badge { background: #4a293e; color: #e6b8db; border-color: #976c8c; }
+.party-bars { gap: 5px; margin: 3px 0; }
+:is(.party-bar-wrap, .party-bar) {
+    position: relative;
+    height: 12px;
+    background: #220f13;
+    border: 1px solid var(--tt-brass-shadow);
+    border-top-color: var(--tt-brass);
+    border-bottom-color: var(--tt-brass-dark);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px #000, 0 1px 0 #e7d2a41a;
+}
+:is(.party-bar-wrap.hp-track, .party-bar.hp-bar) { background: #260f15; }
+:is(.party-bar-wrap.mp-track, .party-bar.mp-bar) { background: #10192a; }
+:is(.party-hp-fill, .hp-bar .party-bar-fill) { height: 100%; background: var(--tt-hp-liquid); }
+.party-hp-fill.warn { background: var(--tt-glass), linear-gradient(90deg, #8e3c2b, #dc8850); }
+.party-hp-fill.crit { background: var(--tt-glass), linear-gradient(90deg, #9d1b2d, #ed6664); }
+:is(.party-mp-fill, .mp-bar .party-bar-fill) { height: 100%; background: var(--tt-mp-liquid); }
+.party-bar-label { font: 9px/1 var(--tt-font-mono); color: #fff4dd; text-shadow: 0 1px 2px #000, 0 0 2px #000; }
+.party-buff-strip { gap: 3px; align-items: center; margin: 3px 0 2px; }
+.party-buff-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font: 9px/1.25 var(--tt-font-mono);
+    padding: 1px 4px;
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 3px 3px 5px 5px;
+    background: linear-gradient(180deg, #ffffff10, #00000030), #302318;
+    color: var(--tt-vellum);
+    box-shadow: inset 0 1px 0 #ffffff18, 0 1px 2px #00000060;
+    white-space: nowrap;
+    cursor: help;
+}
+:is(.party-buff-pill.is-buff, .party-buff-pill.is-ready, .party-buff-pill.is-aut-ready) {
+    background: linear-gradient(180deg, #ffffff12, transparent), #223728;
+    border-color: #64815b;
+}
+.party-buff-pill.is-bad { background: linear-gradient(180deg, #a8453a, #57201e); border-color: #bf7560; }
+:is(.party-buff-pill.is-speed, .party-buff-pill.is-aut-recov) { background: #4e3421; border-color: #ad8748; }
+.party-buff-pill.is-passive { background: #23373d; border-color: #6e909a; }
+.party-buff-pill.is-trait { background: #3b2d1b; border-color: #a58a51; }
+.party-buff-pill.is-clickable { cursor: pointer; }
+.party-buff-pill.is-clickable:hover { border-color: var(--tt-brass-light); }
+:is(.party-member-footer, .party-card-foot) { gap: 4px; font-size: 9px; }
+:is(.party-weapon-text, .party-wpn) { color: var(--tt-muted); }
+.party-speed-meta { font: 9px/1.3 var(--tt-font-mono); color: var(--tt-vellum-aged); }
+.party-mini-btn { padding: 1px 4px; font-size: 9px; }
+:is(#party_ping_toolbar, .party-ping-bar) { border-top-color: var(--tt-rule); }
+.party-ping-btn { padding: 2px 3px; }
+:is(.party-ping-btn.armed, #party_banner_sim_toggle.sim-on) { border-color: #91b88b; background: #2b3926; }
+#party_banner_sim_toggle.sim-off { border-color: var(--tt-brass); }
+/* Dense four-hero roster stays useful on a laptop; the sidebar can scroll. */
+@media (max-height: 820px) {
+    #party_hud { padding: 5px 6px; }
+    :is(.party-card, .party-member-card) { padding: 3px 5px; margin-bottom: 3px; }
+    .party-buff-strip { margin: 2px 0; }
+}

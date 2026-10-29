@@ -1,55 +1,6 @@
 #if TAG_MAJOR_VERSION == 34
-{ JOB_ABYSSAL_KNIGHT, {
-    "AK", "Abyssal Knight",
-} },
-
-{ JOB_SKALD, {
-    "Sk", "Skald",
-    0, 0, 0,
-    { },
-    { },
-    { },
-    weapon_choice::none,
-    { },
-} },
-
-{ JOB_DEATH_KNIGHT, {
-    "DK", "Death Knight",
-    0, 0, 0,
-    { },
-    { },
-    { },
-    weapon_choice::none,
-    { },
-} },
-
-{ JOB_HEALER, {
-    "He", "Healer",
-    0, 0, 0,
-    { },
-    { },
-    { },
-    weapon_choice::none,
-    { },
-} },
-
-{ JOB_JESTER, {
-    "Jr", "Jester",
-    0, 0, 0,
-    { },
-    { },
-    { },
-    weapon_choice::none,
-    { },
-} },
-
+// Retain the enum and name for saved characters and historical scores.
 { JOB_PRIEST, {
-    "Pr", "Priest",
-    0, 0, 0,
-    { },
-    { },
-    { },
-    weapon_choice::none,
-    { },
+    "Pr", "Priest", 5, 4, 3, {}, {}, {}, weapon_choice::plain, {},
 } },
 #endif

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "baseline_native_sha256": "8adcfbcb080e95ee7c3859dd91fd570b26b8bebb6cedbc05c1c004df0fb00a37",
+  "source": "/opt/dcss/releases/render-smoothness-01a1801a/crawl-ref/source",
+  "started_at": 1793157479.9009037,
+  "baseline_cflags": "x86_64-linux-gnu-gcc x86_64-linux-gnu-g++ -O0 -pipe -DUSE_TILE -DUSE_TILE_WEB -Wall -Wformat-security -Wundef -Wextra -Wno-missing-field-initializers -Wno-implicit-fallthrough -Wno-type-limits -Wno-uninitialized -Wno-array-bounds -Wno-format-zero-length -Wmissing-declarations -Wredundant-decls -Wno-parentheses -Wwrite-strings -Wshadow -pedantic -Iutil -I. -isystem /usr/include/lua5.4 -DASSERTS -DCLUA_BINDINGS -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600",
+  "command": [
+    "make",
+    "-j2",
+    "WEBTILES=y",
+    "NOWIZARD=y",
+    "NO_OPTIMIZE=y",
+    "CFOPTIMIZE=-O2",
+    "STDFLAG=-std=c++17",
+    "PYTHON=python3",
+    "crawl"
+  ],
+  "exit_code": 0,
+  "candidate_cflags": "x86_64-linux-gnu-gcc x86_64-linux-gnu-g++ -O2 -pipe -DUSE_TILE -DUSE_TILE_WEB -Wall -Wformat-security -Wundef -Wextra -Wno-missing-field-initializers -Wno-implicit-fallthrough -Wno-type-limits -Wno-uninitialized -Wno-array-bounds -Wno-format-zero-length -Wmissing-declarations -Wredundant-decls -Wno-parentheses -Wwrite-strings -Wshadow -pedantic -Iutil -I. -isystem /usr/include/lua5.4 -DASSERTS -DCLUA_BINDINGS -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600",
+  "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+  "source_content_unchanged": true,
+  "elapsed_seconds": 1070.0814683437347,
+  "pid": 382627,
+  "generated_compiler_metadata_audit": "generated-flags-audit.json"
+}

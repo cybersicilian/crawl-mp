@@ -1,0 +1,622 @@
+ Seeded DCSS version 0.33-a0 (console) character file.
+
+Game seed: 2026102702 (custom seed)
+
+220584 Route_melee the Severer (level 18, -3/176 HPs) *WIZ*
+             Began as a Minotaur Fighter on Oct 28, 2026.
+             Was an Initiate of Okawaru.
+             Slain by an iron dragon (7 damage)
+             ... on level 3 of the Wormlands.
+             The game lasted 00:01:16 (11931 turns).
+
+Route_melee the Severer (Minotaur Fighter)         Turns: 11931, Time: 00:01:16
+
+Health: -3/176     AC: 23    Str: 24    XL:     18   Next: 85%
+Magic:  26/26      EV: 10    Int:  8    God:    Okawaru 28 (0)
+Gold:   808        SH: 15    Dex: 16    Spells: 17/17 levels left
+
+rFire   . . .  (100%)   k - +3 broad axe
+rCold   . . .  (100%)   i - +1 kite shield
+rNeg    . . .  (100%)   j - +2 plate armour
+rPois   +      (33%)    (no helmet)
+rElec   .      (100%)   g - +0 cloak
+rCorr   .      (100%)   f - +0 pair of gloves
+SInv    .               (no boots)
+Will    +....           (no amulet)
+Stlth                   d - ring of poison resistance
+HPRegen 0.49/turn       (no ring)
+MPRegen 0.20/turn
+
+%: no passive effects
+@: no status effects
+A: horns 2, retaliatory headbutt
+a: Renounce Religion (0%), Build terrain (0%), Set terrain to build (0%), Clear
+terrain to floor (0%)
+
+
+You were on level 3 of the Wormlands.
+You worshipped Okawaru.
+Okawaru was noncommittal.
+You visited 4 branches of the dungeon, and saw 10 of its levels.
+
+You collected 808 gold pieces.
+
+Inventory:
+
+Hand Weapons
+ a - a +0 war axe
+ k - a +3 broad axe (weapon)
+Armour
+ b - a +0 scale mail
+ c - a +0 buckler
+ e - a +0 barding
+ f - a +0 pair of gloves (worn)
+ g - a +0 cloak (worn)
+ h - a +0 helmet
+ i - a +1 kite shield (worn)
+ j - a +2 plate armour (worn)
+ q - a +0 pair of boots
+Jewellery
+ d - a ring of poison resistance (worn)
+ l - the ring of Violets {rC+ rN+ Str+5}
+   (You found it on level 2 of the Hive)   
+   
+   [ring of positive energy]
+   
+   rC+:       It protects you from cold.
+   rN+:       It protects you from negative energy.
+   Str+5:     It affects your strength (+5).
+ m - a +6 ring of strength
+ n - an amulet of guardian spirit
+ o - a +5 ring of evasion
+ p - the amulet "Bommikh" {Wildshape ^Drain +Blink rPois Int+4}
+   (You found it on level 4 of the Burrows)   
+   
+   [amulet of wildshape]
+   
+   Wildshape: It improves your skill with shapeshifting (+5).
+   ^Drain:    It drains your maximum health when unequipped.
+   +Blink:    It lets you blink.
+   rPois:     It protects you from poison.
+   Int+4:     It affects your intelligence (+4).
+ r - a +4 ring of slaying
+Wands
+ b - a wand of acid (8)
+ c - a wand of warping (6)
+Scrolls
+ T - a scroll of torment
+ r - 3 scrolls of revelation
+ w - 2 scrolls of enchant weapon
+ W - a scroll of brand weapon
+ V - a scroll of vulnerability
+ a - a scroll of enchant armour
+Potions
+ b - a potion of brilliance
+ M - a potion of mutation
+ g - 2 potions of magic
+ a - a potion of ambrosia
+ c - a potion of curing
+ i - a potion of invisibility
+ r - a potion of resistance
+ e - a potion of enlightenment
+
+
+   Skills:
+ + Level 19.0 Fighting
+ + Level 20.6 Axes
+ + Level 18.2 Armour
+ - Level 8.0 Dodging
+ + Level 15.9 Shields
+ + Level 12.2 Invocations
+ - Level 8.0 Evocations
+
+
+You had 17 spell levels left.
+You didn't know any spells.
+Your spell library contained the following spells:
+
+ Spells                   Type           Power      Damage    Failure   Level
+ Aura of Protection       Erth/Aura      0 (100)    N/A       98%         1
+ Sandblast                Erth           0 (50)     2d4       98%         1
+ Ensorcelled Hibernation  Hex/Ice        0 (50)     N/A       99%         2
+ Aura of Passage          Tloc/Aura      0 (100)    N/A       100%        3
+ Aura of Rime             Ice/Aura       0 (100)    N/A       100%        3
+ Aura of Vitality         Alch/Aura      0 (100)    N/A       100%        3
+ Passwall                 Erth           0 (100)    N/A       100%        3
+ Stone Arrow              Conj/Erth      0 (50)     3d7       100%        3
+ Brom's Barrelling Bould  Conj/Erth      0 (100)    2d4       100%        4
+ Dimensional Bullseye     Hex/Tloc       0 (200)    N/A       100%        4
+ Alistair's Intoxication  Alch           0 (150)    N/A       100%        5
+ Irradiate                Conj/Alch      0 (200)    3d11      100%        5
+ Lee's Rapid Deconstruct  Erth           0 (200)    3d4*      100%        5
+ Nazja's Percussive Temp  Frge           0 (200)    4d4       100%        5
+ Plasma Beam              Fire/Air       0 (200)    2x1d10    100%        6
+
+
+Dungeon Overview and Level Annotations
+
+Branches:
+Dungeon (1/15)               Worm (3/4)* Bur:4         Hive (2/2) Bur:2       
+
+*You can no longer be shafted in this branch
+
+Altars:
+
+
+Innate Abilities, Weirdness & Mutations
+
+You have a pair of horns on your head.
+You reflexively headbutt those who attack you in melee.
+
+Message History
+
+The gallery worm is severely wounded.
+The gallery worm bites you but does no damage.
+You hit the gallery worm.
+The gallery worm is severely wounded.
+You hit the iron dragon.
+You headbutt the iron dragon but do no damage.
+The iron dragon is lightly wounded.
+You slash the gallery worm!
+The iron dragon breathes metal splinters at you.
+You block the spray of metal splinters.
+You hit the iron dragon but do no damage.
+You headbutt the iron dragon!
+The iron dragon is lightly wounded.
+You slash the gallery worm! You block the gallery worm's attack.
+You slash the iron dragon!
+You headbutt the iron dragon but do no damage.
+The iron dragon is moderately wounded.
+You slash the gallery worm!
+You kill the gallery worm!
+Okawaru accepts your kill.
+The iron dragon bites you!
+* * * LOW HITPOINT WARNING * * *
+You block the iron dragon's attack. The iron dragon tramples you!
+* * * LOW HITPOINT WARNING * * *
+You stumble backwards!
+You hit the iron dragon but do no damage.
+The iron dragon is moderately wounded.
+The iron dragon bites you.
+* * * LOW HITPOINT WARNING * * *
+The iron dragon claws you but does no damage.
+The iron dragon tramples you but does no damage.
+You slash the iron dragon!
+The iron dragon is moderately wounded.
+The deathcap draws from the surrounding life force!
+* * * LOW HITPOINT WARNING * * *
+You slash the iron dragon!
+You headbutt the iron dragon but do no damage.
+The iron dragon is heavily wounded.
+The iron dragon bites you!
+You die...
+
+  ####.......#....#.#.....##
+ ##..........#...##.#......##
+##...........##..#..#.......##
+#.............##....#.......<#
+#..#..........##...##........#
+#..#..........##..##.........##
+#..#..........##..#...........#
+#.............##..#...........#
+#.............##..#...........#
+#....[........##.##........#.†.
+##.........#..@..###......###..
+ ##.....#####.D.†########## ##.
+  #######   ##.†..##         ##
+             ##....#          #
+              #....##
+               #....#
+           #####.#..#
+           .....#ff.#
+           .........#
+           .........#
+           .......§##
+
+
+You could see an iron dragon (catching breath), a deathcap and a wandering
+mushroom.
+
+Vanquished Creatures
+  the Worldworm (Bur:4)
+  24 gallery worms
+  8 spark wasps (Hive:2)
+  15 coil worms
+  3 boulder beetles
+  5 caustic worms
+  6 iron trolls
+  6 deep trolls
+  43 burrowing beasts
+  38 crag boars
+  15 deep troll delvers
+  A lindwurm (Worm:1)
+  44 wax beetles
+  22 shale drakes
+  31 venom wasps
+  18 meliai
+  4 komodo dragons
+  19 wandering mushrooms
+  7 queen bees
+  11 hornets
+  7 earth elementals
+  19 killer bees
+  A deathcap (Worm:3)
+348 creatures vanquished.
+
+Vanquished Creatures (others)
+  A spark wasp (Hive:2)
+1 creature vanquished.
+
+Grand Total: 349 creatures vanquished
+
+Notes
+Turn   | Place    | Note
+-------+----------+-------------------------------------------
+     0 | D:1      | Route_melee the Minotaur Fighter began the quest for the
+                  | Orb.
+     0 | D:1      | You started the game in wizard mode.
+     0 | D:1      | Reached XP level 1. HP: 19/19 MP: 0/0
+     0 | D:1      | Reached XP level 2. HP: 20/20 MP: 1/1
+     0 | D:1      | Reached XP level 3. HP: 26/26 MP: 2/2
+     0 | D:1      | Reached XP level 4. HP: 33/33 MP: 3/3
+     0 | D:1      | Reached XP level 5. HP: 38/38 MP: 4/4
+     0 | D:1      | Reached XP level 6. HP: 45/45 MP: 5/5
+     0 | D:1      | Reached XP level 7. HP: 50/50 MP: 6/6
+     0 | D:1      | Reached XP level 8. HP: 57/57 MP: 7/7
+     0 | D:1      | Reached XP level 9. HP: 62/62 MP: 8/8
+     0 | D:1      | Reached XP level 10. HP: 69/69 MP: 9/9
+     0 | D:1      | Reached XP level 11. HP: 74/74 MP: 10/10
+     0 | D:1      | Reached XP level 12. HP: 81/81 MP: 11/11
+     0 | D:1      | Reached XP level 13. HP: 86/86 MP: 12/12
+     0 | D:1      | Reached XP level 14. HP: 93/93 MP: 13/13
+     0 | D:1      | Reached XP level 15. HP: 99/99 MP: 14/14
+     0 | D:1      | Reached XP level 16. HP: 105/105 MP: 15/15
+     0 | D:1      | Became a worshipper of Warmaster Okawaru
+    53 | D:1      | Reached * piety under Okawaru
+    53 | D:1      | Reached ** piety under Okawaru
+    53 | D:1      | Reached *** piety under Okawaru
+    53 | D:1      | Reached **** piety under Okawaru
+    53 | Bur:1    | Entered Level 1 of the Burrows
+    53 | Bur:1    | You fall into a shaft and drop 1 floor!
+   278 | Bur:2    | Found an opening to the Hive.
+  2370 | Hive:1   | Entered Level 1 of the Hive
+  4054 | Hive:2   | Entered Level 2 of the Hive
+  4168 | Hive:2   | Reached XP level 17. HP: 102/161 MP: 20/23
+  4379 | Hive:2   | Reached skill level 19 in Axes
+  4615 | Hive:2   | Identified the ring of Violets {rC+ rN+ Str+5}
+  4791 | Hive:2   | Reached skill level 10 in Invocations
+  5154 | Hive:2   | Identified the fortress talisman "Repnibui" {Dex+3}
+  7007 | Bur:4    | Entered Level 4 of the Burrows
+  7442 | Bur:4    | Reached XP level 18. HP: 172/172 MP: 22/25
+  7691 | Bur:4    | Found a tunnel to the Wormlands.
+  7691 | Bur:4    | Encountered the Worldworm
+  7703 | Bur:4    | Killed the Worldworm
+  7704 | Bur:4    | Reached skill level 15 in Shields
+  7849 | Bur:4    | Identified the amulet "Bommikh" {Wildshape ^Drain +Blink
+                  | rPois Int+4}
+  8040 | Bur:4    | Reached skill level 20 in Axes
+  8151 | Worm:1   | Entered Level 1 of the Wormlands
+ 11179 | Worm:2   | You fall into a shaft and drop 1 floor!
+ 11930 | Worm:3   | HP: 4/176 [drained]
+ 11931 | Worm:3   | Slain by an iron dragon
+
+Illustrated notes
+
+Levels and vault maps discovered:
+[+gen,+vis] D:1:      minmay_arrival_four_loops, layout_basic,
+                      shapermc_ecumenical_altar_acropolis
+[+gen,-vis] D:2
+[+gen,-vis] D:3
+[+gen,-vis] D:4
+[+gen,-vis] D:5
+[+gen,-vis] D:6
+[+gen,-vis] D:7
+[+gen,-vis] D:8
+[+gen,-vis] D:9
+[+gen,-vis] D:10
+[+gen,-vis] D:11
+[+gen,-vis] D:12
+[+gen,-vis] D:13
+[+gen,-vis] D:14
+[+gen,-vis] D:15
+[+gen,-vis] Temple
+[+gen,-vis] Lair:1
+[+gen,-vis] Lair:2
+[+gen,-vis] Lair:3
+[+gen,-vis] Lair:4
+[+gen,-vis] Lair:5
+[+gen,-vis] Swamp:1
+[+gen,-vis] Swamp:2
+[+gen,-vis] Swamp:3
+[+gen,-vis] Swamp:4
+[+gen,-vis] Shoals:1
+[+gen,-vis] Shoals:2
+[+gen,-vis] Shoals:3
+[+gen,-vis] Shoals:4
+[+gen,-vis] Snake:1
+[+gen,-vis] Snake:2
+[+gen,-vis] Snake:3
+[+gen,-vis] Snake:4
+[+gen,-vis] Spider:1
+[+gen,-vis] Spider:2
+[+gen,-vis] Spider:3
+[+gen,-vis] Spider:4
+[+gen,-vis] Slime:1
+[+gen,-vis] Slime:2
+[+gen,-vis] Slime:3
+[+gen,-vis] Slime:4
+[+gen,-vis] Slime:5
+[+gen,-vis] Orc:1
+[+gen,-vis] Orc:2
+[+gen,-vis] Elf:1
+[+gen,-vis] Elf:2
+[+gen,-vis] Elf:3
+[+gen,-vis] Vaults:1
+[+gen,-vis] Vaults:2
+[+gen,-vis] Vaults:3
+[+gen,-vis] Vaults:4
+[+gen,-vis] Vaults:5
+[+gen,-vis] Blade
+[+gen,-vis] Forest:1
+[+gen,-vis] Forest:2
+[+gen,-vis] Forest:3
+[+gen,-vis] Forest:4
+[+gen,-vis] Crypt:1
+[+gen,-vis] Crypt:2
+[+gen,-vis] Crypt:3
+[+gen,-vis] Tomb:1
+[+gen,-vis] Tomb:2
+[+gen,-vis] Tomb:3
+[+gen,-vis] Depths:1
+[+gen,-vis] Depths:2
+[+gen,-vis] Depths:3
+[+gen,-vis] Depths:4
+[+gen,-vis] Hell
+[+gen,-vis] Dis:1
+[+gen,-vis] Dis:2
+[+gen,-vis] Dis:3
+[+gen,-vis] Dis:4
+[+gen,-vis] Dis:5
+[+gen,-vis] Dis:6
+[+gen,-vis] Dis:7
+[+gen,-vis] Geh:1
+[+gen,-vis] Geh:2
+[+gen,-vis] Geh:3
+[+gen,-vis] Geh:4
+[+gen,-vis] Geh:5
+[+gen,-vis] Geh:6
+[+gen,-vis] Geh:7
+[+gen,-vis] Coc:1
+[+gen,-vis] Coc:2
+[+gen,-vis] Coc:3
+[+gen,-vis] Coc:4
+[+gen,-vis] Coc:5
+[+gen,-vis] Coc:6
+[+gen,-vis] Coc:7
+[+gen,-vis] Tar:1
+[+gen,-vis] Tar:2
+[+gen,-vis] Tar:3
+[+gen,-vis] Tar:4
+[+gen,-vis] Tar:5
+[+gen,-vis] Tar:6
+[+gen,-vis] Tar:7
+[+gen,-vis] Zot:1
+[+gen,-vis] Zot:2
+[+gen,-vis] Zot:3
+[+gen,-vis] Zot:4
+[+gen,-vis] Zot:5
+[+gen,-vis] Abyss:1
+[+gen,-vis] Abyss:2
+[+gen,-vis] Abyss:3
+[+gen,-vis] Abyss:4
+[+gen,-vis] Abyss:5
+[+gen,-vis] Abyss:6
+[+gen,-vis] Abyss:7
+[+gen,-vis] Pan
+[+gen,-vis] Zig:1
+[+gen,-vis] Zig:2
+[+gen,-vis] Zig:3
+[+gen,-vis] Zig:4
+[+gen,-vis] Zig:5
+[+gen,-vis] Zig:6
+[+gen,-vis] Zig:7
+[+gen,-vis] Zig:8
+[+gen,-vis] Zig:9
+[+gen,-vis] Zig:10
+[+gen,-vis] Zig:11
+[+gen,-vis] Zig:12
+[+gen,-vis] Zig:13
+[+gen,-vis] Zig:14
+[+gen,-vis] Zig:15
+[+gen,-vis] Zig:16
+[+gen,-vis] Zig:17
+[+gen,-vis] Zig:18
+[+gen,-vis] Zig:19
+[+gen,-vis] Zig:20
+[+gen,-vis] Zig:21
+[+gen,-vis] Zig:22
+[+gen,-vis] Zig:23
+[+gen,-vis] Zig:24
+[+gen,-vis] Zig:25
+[+gen,-vis] Zig:26
+[+gen,-vis] Zig:27
+[+gen,-vis] Bazaar
+[+gen,-vis] Trove
+[+gen,-vis] Sewer
+[+gen,-vis] Ossuary
+[+gen,-vis] Bailey
+[+gen,-vis] IceCv
+[+gen,-vis] Volcano
+[+gen,-vis] WizLab
+[+gen,-vis] Desolation
+[+gen,-vis] Gauntlet
+[+gen,-vis] Arena
+[+gen,-vis] Crucible
+[+gen,-vis] Necropolis
+[+gen,-vis] Gulch
+[+gen,+vis] Bur:1:    layout_burrows, bur_bone_cache, bur_animal_den
+[+gen,+vis] Bur:2:    layout_burrows, hive_entry_comb, bur_paired_dens,
+                      bur_flooded_roots, bur_root_pocket, bur_split_passage
+[+gen,+vis] Bur:3:    layout_burrows, bur_bent_gallery, bur_old_crossing
+[+gen,+vis] Bur:4:    bur_end_worldworm, bur_shale_cut
+[+gen,+vis] Worm:1:   layout_wormlands, worm_blind_bend, worm_shed_coils
+[+gen,+vis] Worm:2:   layout_wormlands, worm_fungal_nursery
+[+gen,+vis] Worm:3:   layout_wormlands, worm_corroded_gallery,
+                      worm_cross_gallery
+[+gen,-vis] Worm:4
+[+gen,+vis] Hive:1:   layout_hive, hive_guard_line, hive_flight_lane
+[+gen,+vis] Hive:2:   hive_end_amber_brood
+
+Skill      XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 |
+---------------+-------------------------------------------------------+-----
+Invocations    |                                               9 11 12 | 12.2
+Shields        |                                              13 14 15 | 15.9
+Armour         |                                              16 17 18 | 18.2
+Fighting       |                                              17 18 19 | 19.0
+Axes           |                                                 19 20 | 20.6
+Dodging        |                                                       |  8.0
+Evocations     |                                                       |  8.0
+
+Percentage of experience gained in each form (* = 100%):
+
+Form     XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 | XLs as
+-------------+-------------------------------------------------------+---------
+None         |                                               *  *  * |  3
+
+Action                     |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+---------------------------+-------+-------+-------+-------+-------+-------++-------
+ Attack: Normal            |       |       |       |       |       |  1601 ||  1601
+  Melee: Broad axe         |       |       |       |       |       |  2165 ||  2165
+         Headbutt          |       |       |       |       |       |   689 ||   689
+ Invoke: Heroism           |       |       |       |       |       |   100 ||   100
+  Drink: Might             |       |       |       |       |       |     5 ||     5
+         Curing            |       |       |       |       |       |     7 ||     7
+         Haste             |       |       |       |       |       |     4 ||     4
+         Heal wounds       |       |       |       |       |       |     6 ||     6
+   Read: Teleportation     |       |       |       |       |       |     2 ||     2
+         Fear              |       |       |       |       |       |     4 ||     4
+         Fog               |       |       |       |       |       |     3 ||     3
+         Blinking          |       |       |       |       |       |     2 ||     2
+   Stab: Fleeing           |       |       |       |       |       |     1 ||     1
+ Armour: Plate armour      |       |       |       |       |       |   723 ||   723
+  Dodge: Dodged            |       |       |       |       |       |   368 ||   368
+  Block: Kite shield       |       |       |       |       |       |   916 ||   916
+
+Table legend: (Time is in decaauts)
+ A = Elapsed time spent in this place.
+ B = Non-inter-level travel time spent in this place.
+ C = Inter-level travel time spent in this place.
+ D = Time resting spent in this place.
+ E = Time spent auto-exploring this place.
+ F = Levels seen in this place.
+ G = Mean time per level.
+                   A        B        C        D        E      F       G
+               +--------+--------+--------+--------+--------+-----+--------+
+         Total |  11467 |  11467 |      0 |   5758 |   3232 |  10 | 1146.7 |
+       Dungeon |     48 |     48 |      0 |      0 |      0 |   1 |   48.0 |
+       Burrows |   4396 |   4396 |      0 |   1734 |   1683 |   4 | 1099.0 |
+     Wormlands |   3614 |   3614 |      0 |   2232 |    703 |   3 | 1204.7 |
+          Hive |   3408 |   3408 |      0 |   1791 |    846 |   2 | 1704.0 |
+               +--------+--------+--------+--------+--------+-----+--------+
+
+Top non-repeatable levels by time:
+  Hive:2: 1773 daAuts
+  Hive:1: 1635 daAuts
+  Worm:1: 1481 daAuts
+  Worm:2: 1407 daAuts
+   Bur:2: 1345 daAuts
+   Bur:4: 1108 daAuts
+   Bur:3: 984 daAuts
+   Bur:1: 958 daAuts
+  Worm:3: 724 daAuts
+     D:1: 48 daAuts
+
+DLua errors:
+
+Table legend:
+ A = God
+ B = Rank
+ C = Start time
+ D = Start piety
+ E = Piety gained
+ F = Piety on gifts
+ G = Piety on penance
+ H = Piety on stepdowns
+ I = Piety wasted at max piety
+ J = Piety decays
+ K = Piety lost (inc. decay)
+         A          B      C       D     E     F     G     H     I     J     K   
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+ Okawaru          | 0 |       0 |  15 |  15 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |     485 |  30 |  20 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |     485 |  50 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 3 |     485 |  75 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 4 |     485 | 100 |   1 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 3 |     780 |  96 |   8 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 4 |    1338 | 100 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 3 |    2838 |  97 |  39 |   0 |   0 |   0 |   0 |   0 |  62 
+ Okawaru          | 2 |   18556 |  74 |  73 |   0 |   0 |   0 |   0 |   0 | 100 
+ Okawaru          | 1 |   42709 |  47 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |   42804 |  50 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 1 |   44830 |  48 |  61 |   0 |   0 |   0 |   0 |   0 |  80 
+ Okawaru          | 0 |   63853 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   64250 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |   64319 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   64341 |  30 |   9 |   0 |   0 |   0 |   0 |   0 |  11 
+ Okawaru          | 0 |   66448 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   66891 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |   67493 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   67522 |  30 |  43 |   0 |   0 |   0 |   0 |   0 |  44 
+ Okawaru          | 0 |   81051 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   81051 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   82767 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   83299 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   83408 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   85106 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   86318 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   86318 |  30 |   3 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |   87761 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   89351 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |   89440 |  26 |   4 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   91555 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |   93447 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   94749 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |   96176 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   96372 |  30 |  11 |   0 |   0 |   0 |   0 |   0 |  12 
+ Okawaru          | 0 |   99310 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   99310 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |  100673 |  26 |   4 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  101595 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |  101707 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  105033 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |  105838 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  105939 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |  106752 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  107505 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |  107630 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  108604 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |  110097 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  110481 |  30 |   3 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |  110675 |  29 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  110675 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |  111369 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |  113361 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |  113920 |  26 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+
+Conducts for god: Okawaru
+Piety from conduct
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+----------------------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |   328 ||   328
+         Kill Undead  |     0 |     0 |     0 |     0 |     0 |     0 ||     0
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     1 ||     1
+----------------------+-------+-------+-------+-------+-------+-------++-------
+Conduct count
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+----------------------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |   340 ||   340
+         Kill Undead  |     0 |     0 |     0 |     0 |     0 |     1 ||     1
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     7 ||     7
+----------------------+-------+-------+-------+-------+-------+-------++-------
+

@@ -1,0 +1,53 @@
+enum: SP_SPARKBORN
+monster: MONS_RAIJU
+name: Sparkborn
+short_name: Sb
+difficulty: Advanced
+difficulty_priority: 80
+aptitudes:
+  xp: 0
+  hp: -2
+  mp_mod: 2
+  wl: 4
+  short_blades: -2
+  long_blades: -1
+  axes: -3
+  maces_and_flails: -3
+  polearms: -3
+  staves: 1
+  ranged weapons: -1
+  armour: -1
+  dodging: -1
+  stealth: -2
+  shields: -2
+  spellcasting: -1
+  summoning: -2
+  necromancy: -2
+  translocations: 1
+  fire_magic: -2
+  ice_magic: -1
+  air_magic: 2
+  earth_magic: -4
+  alchemy: -2
+  invocations: 1
+  evocations: 1
+str: 7
+int: 9
+dex: 8
+levelup_stat_frequency: 4
+levelup_stats:
+  - int
+  - dex
+fake_mutations:
+  - long: Your living lightning makes you immune to electricity. Water attacks drain your magic, and grounded water prevents you from casting.
+    short: living lightning, vulnerable to water
+  - long: When hurt, you may choose a destination and burst into lightning, shocking creatures along your path. Suppressing this reaction causes magical contamination.
+    short: retaliatory blinkbolt
+recommended_jobs:
+  - skald
+  - warper
+  - enchanter
+  - air elementalist
+  - artificer
+recommended_weapons:
+  - staves

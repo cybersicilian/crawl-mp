@@ -1,0 +1,20 @@
+bind_address: 127.0.0.1
+bind_port: 8080
+bind_nonsecure: true
+http_xheaders: true
+development_mode: false
+game_data_no_cache: false
+password_db: /var/lib/dcss/accounts.db3
+disabled_accounts: [Host, Player2, Player3, Player4]
+allow_anon_spectate: false
+settings_db: /var/lib/dcss/settings.db3
+server_socket_path: /run/dcss
+lobby_url: https://dcss.iancaltabiano.com/
+server_id: dcss.iancaltabiano.com
+crypt_algorithm: "6"
+crypt_salt_length: 16
+max_passwd_length: 128
+max_connections: 64
+wizard_accounts: false
+enable_ttyrecs: false
+umask: 63

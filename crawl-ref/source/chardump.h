@@ -80,3 +80,6 @@ void count_action(caction_type type, int subtype = -32768,
                   int auxtype = -32768);
 pair<int, int> caction_extract_types(int compound_subtype);
 int caction_compound(int subtype = -32768, int auxtype = -32768);
+// Labels used by the morgue "Action" table (e.g. "Cast", "Magic Dart").
+string caction_category_name(caction_type type);
+string caction_subtype_name(caction_type type, int compound_subtype);

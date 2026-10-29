@@ -4,8 +4,8 @@ define(function () {
 
     var exports = {}, val;
     // Various constants
-    exports.gxm = 80;
-    exports.gym = 70;
+    exports.gxm = 120;
+    exports.gym = 104;
     exports.stat_width = 42;
 
     // UI States (tileweb.h)
@@ -272,6 +272,7 @@ define(function () {
     // ...
     mf.START_AT_END     = 0x1000;
     mf.PRESELECTED      = 0x2000;
+    mf.QUIET_SELECT     = 0x4000;
     // ...
     mf.ARROWS_SELECT    = 0x40000;
     exports.menu_flag = mf;

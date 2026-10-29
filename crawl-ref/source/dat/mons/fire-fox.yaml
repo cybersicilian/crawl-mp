@@ -1,0 +1,19 @@
+name: "fire fox"
+glyph: {char: "h", colour: red}
+flags: [unblindable, warm_blood]
+exp: 180
+genus: hound
+will: 10
+attacks:
+  - {type: bite, damage: 6}
+hd: 5
+hp_10x: 165
+ac: 1
+ev: 15
+spells: fire_fox
+has_corpse: true
+corpse_tile: jackal
+shout: bark
+intelligence: animal
+size: small
+shape: quadruped

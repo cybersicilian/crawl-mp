@@ -53,6 +53,11 @@ flail1 WPN_FLAIL
 flail2 WPN_FLAIL_MAGIC
 %enchant_variation WPN_FLAIL randart
 flail3 WPN_FLAIL_RANDART
+spiked_flail1 WPN_SPIKED_FLAIL
+%enchant_variation WPN_SPIKED_FLAIL shiny runed glowing
+spiked_flail2 WPN_SPIKED_FLAIL_MAGIC
+%enchant_variation WPN_SPIKED_FLAIL randart
+spiked_flail3 WPN_SPIKED_FLAIL_RANDART
 dire_flail1 WPN_DIRE_FLAIL
 %enchant_variation WPN_DIRE_FLAIL shiny runed glowing
 dire_flail2 WPN_DIRE_FLAIL_MAGIC
@@ -111,6 +116,11 @@ rapier1 WPN_RAPIER
 rapier2 WPN_RAPIER_MAGIC
 %enchant_variation WPN_RAPIER randart
 rapier3 WPN_RAPIER_RANDART
+cutlass1 WPN_CUTLASS
+%enchant_variation WPN_CUTLASS shiny runed glowing
+cutlass2 WPN_CUTLASS_MAGIC
+%enchant_variation WPN_CUTLASS randart
+cutlass3 WPN_CUTLASS_RANDART
 athame1 WPN_ATHAME
 %enchant_variation WPN_ATHAME shiny runed glowing
 athame2 WPN_ATHAME_MAGIC
@@ -266,6 +276,11 @@ sling1 WPN_SLING
 sling2 WPN_SLING_MAGIC
 %enchant_variation WPN_SLING randart
 sling3 WPN_SLING_RANDART
+fustibalus1 WPN_FUSTIBALUS
+%enchant_variation WPN_FUSTIBALUS shiny runed glowing
+fustibalus2 WPN_FUSTIBALUS_MAGIC
+%enchant_variation WPN_FUSTIBALUS randart
+fustibalus3 WPN_FUSTIBALUS_RANDART
 
 %rim 0
 shortbow1 WPN_SHORTBOW
@@ -624,6 +639,9 @@ barding1 ARM_BARDING
 barding2 ARM_BARDING_MAGIC
 %enchant_variation ARM_BARDING randart
 barding3 ARM_BARDING_RANDART
+centaur_barding ARM_CENTAUR_BARDING
+%enchant_variation ARM_CENTAUR_BARDING shiny runed glowing randart
+centaur_barding_magic ARM_CENTAUR_BARDING_MAGIC
 
 %sdir item/armour/shields
 
@@ -1502,6 +1520,7 @@ rune_demonic_4
 rune_demonic_5
 rune_demonic_6
 rune_elven RUNE_ELVEN
+rune_burrows RUNE_BURROWS
 
 #OBJ_GEMS
 %sdir item/gem
@@ -1533,6 +1552,8 @@ depths_found_whole GEM_DEPTHS
 depths_found_broken
 zot_found_whole GEM_ZOT
 zot_found_broken
+burrows_found_whole GEM_BURROWS
+burrows_found_broken
 
 generic_unfound GEM_GENERIC
 generic_unfound_broken
@@ -1593,6 +1614,7 @@ rune_tomb UNCOLLECTED_RUNE_TOMB
 rune_abyss UNCOLLECTED_RUNE_ABYSS
 rune_demonic UNCOLLECTED_RUNE_DEMONIC
 rune_elven UNCOLLECTED_RUNE_ELVEN
+rune_burrows UNCOLLECTED_RUNE_BURROWS
 
 #OBJ_CORPSES
 #handled in dc-corpse.txt

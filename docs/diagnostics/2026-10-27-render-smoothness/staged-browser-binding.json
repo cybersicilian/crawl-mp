@@ -1,0 +1,31 @@
+{
+  "files": {
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/game_data/static/dungeon_renderer.js": "ca235bf39bde2e2049e08bec126e656e46b0933268b47ee5300d0dc302664e5c",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/game_data/static/party-card-readings.js": "bb45453e2b28af715f84f1cb88f137e9bdbfae7a13a00d5a892d7c37ae351217",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/game_data/static/party-navigation.js": "cbbcbc8833a1a898393c3476d3b6b76510f71ce5b2ab7b50f84d68181d3da318",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/game_data/static/party-sidebar.js": "e787c4fd54b04a3b6e58aad9c8f8c1f717378e76c9b6d5e00d4d5b13df0859e2",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/game_data/static/party.js": "6f69945030bfcd193386612d89b9e47245ca314ae03ac6f54d8545ae3463d8a4",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/crawl-ref/source/webserver/static/scripts/visibility-feather.js": "647001da1bf6a0d4aa1c1f6ecd9d9f177cf7d8775ed569b54db57a631acd4838",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/deploy_overlay.py": "4ae6c6c019c23998553d1a25a854d37c6fd42d839f0ee14ff88a7f6e9b7f42ec",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/deployment_core.py": "64511a249cb6f1c6d995b9a8f01e04b86ecc82e2ca4b91731c067e13de646f1e",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/local-verification.json": "94d47468a70e8f23f9cb9da6f93c97559aa034587de21453b88420d48e5b5a3e",
+    "docs/diagnostics/2026-10-27-render-smoothness/deploy-payload/manifest.json": "c6e6bde0454333953f52d5c32fa5fd3142c66fc3f21be10731b24196a32b697a",
+    "docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs": "8b44175c60f8398a5dec08a140234d9d413fa9e7921768c4b1f3dff3f7fbf6ff",
+    "docs/diagnostics/2026-10-27-render-smoothness/run_public.py": "f83403838481278e8b1cc3d477b8231e099770b82a1d388e2e2fd78ad8d55acc"
+  },
+  "resources": {
+    "simultaneous_browsers": 1,
+    "browser_engines": [
+      "webkit"
+    ],
+    "existing_disposable_campaign_only": true,
+    "new_accounts": 0,
+    "client_pages": 2,
+    "host_native_actions_per_browser": 1,
+    "maximum_guest_recovery_actions": 10,
+    "maximum_seconds_per_browser": 300,
+    "target": "https://dcss.iancaltabiano.com",
+    "routed_candidate_assets": true
+  }
+}

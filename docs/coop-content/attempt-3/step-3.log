@@ -1,0 +1,20 @@
+Filters: [coop-content]
+Randomness seeded to: 1884144671
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+catch2-tests-executable is a Catch2 v3.2.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Shared prayer respects faith, penance, sight and floor boundaries
+-------------------------------------------------------------------------------
+catch2-tests/test_coop_content.cc:139
+...............................................................................
+
+catch2-tests/test_coop_content.cc:165: FAILED:
+  CHECK( ally.hp > 10 )
+with expansion:
+  6 > 10
+
+Cannot find data file 'dlua/macro.lua' anywhere, aborting
+

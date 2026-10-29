@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appearance &amp; graphics · Pebble Broth</title>
+  <link rel="stylesheet" href="/static/styles/graphics-settings.css?v={{ graphics_revision }}">
+  <script src="/static/scripts/contrib/require.js?v={{ graphics_revision }}"></script>
+  <script>require.config({baseUrl:'/static/scripts',urlArgs:'v={{ graphics_revision }}',paths:{jquery:'/static/scripts/contrib/jquery'},shim:{'contrib/jquery.json':['jquery']}});require(['profile-graphics']);</script>
+</head><body class="graphics-page">
+<main>
+  <a href="/#lobby">← Return to the tavern</a>
+  <header><p>Account · {{ username }}</p><h1>Graphics &amp; interface</h1></header>
+  <section id="profile_graphics" aria-label="Account graphics settings"></section>
+  <script id="profile_graphics_state" type="application/json">{% raw graphics_json %}</script>
+</main></body></html>

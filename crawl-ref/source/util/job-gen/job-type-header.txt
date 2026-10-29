@@ -57,4 +57,24 @@ enum job_type
     JOB_FORGEWRIGHT,
     JOB_MYSTIC,
 
+    JOB_BLOOD_HUNTER,
+
+    // Preserve the existing generated Paladin value before appending jobs.
+    JOB_PALADIN,
+    JOB_PREACHER,
+    JOB_SAGE,
+#if TAG_MAJOR_VERSION != 34
+    JOB_HEALER,
+#endif
+    JOB_HERMIT,
+    JOB_SLIME_PRIEST,
+    JOB_ARCHAEOLOGIST,
+    JOB_ROGUE,
+    JOB_FENCER,
+    JOB_RONIN,
+    JOB_APOTHECARY,
+    JOB_BILLIONAIRE,
+    JOB_NECKBEARD,
+    JOB_PHILOSOPHER,
+
     // Auto-generated enums start here

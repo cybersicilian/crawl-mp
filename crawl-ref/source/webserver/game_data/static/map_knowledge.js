@@ -34,7 +34,10 @@ define(["jquery", "./enums", "./util"], function ($, enums, util) {
     {
         k = new Array(65536);
         monster_table = {};
+        dirty_locs = [];
         bounds = null;
+        bounds_changed = false;
+        $(document).trigger("map_knowledge_cleared");
     }
 
     function visible(cell)
@@ -141,8 +144,21 @@ define(["jquery", "./enums", "./util"], function ($, enums, util) {
 
         var entry = get(x, y);
 
+        if (val.reset)
+        {
+            // Personal stream cells are complete replacements. Remove stale
+            // tile decorations and entity refs before applying the new record.
+            if (entry.mon) merge_monster(entry.mon, null);
+            // Consumers may retain a cell reference between native updates.
+            for (var old_prop in entry)
+                if (old_prop !== "x" && old_prop !== "y" && old_prop !== "dirty")
+                    delete entry[old_prop];
+        }
+
         for (var prop in val)
         {
+            if (prop == "reset")
+                continue;
             if (prop == "mon")
             {
                 entry[prop] = merge_monster(entry[prop], val[prop]);
@@ -199,12 +215,15 @@ define(["jquery", "./enums", "./util"], function ($, enums, util) {
 
     function merge_diff(vals)
     {
+        var changed = [];
         $.each(vals, function (i, val)
                {
                    merge(val);
+                   if (val) changed.push({ x: merge_last_x, y: merge_last_y });
                });
 
         clean_monster_table();
+        $(document).trigger("map_knowledge_changed", [changed]);
     };
 
     return {

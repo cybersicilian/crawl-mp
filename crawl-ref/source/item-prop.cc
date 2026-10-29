@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
 
 #include "item-prop.h"
 
@@ -29,6 +30,7 @@
 #include "message.h"
 #include "notes.h"
 #include "orb-type.h"
+#include "party.h"
 #include "potion-type.h"
 #include "random.h"
 #include "religion.h"
@@ -40,6 +42,7 @@
 #include "transform.h"
 #include "xom.h"
 #include "xp-evoker-data.h"
+#include "zot.h"
 
 typedef pair<special_armour_type, int> ego_weight_tuple;
 
@@ -503,11 +506,9 @@ static const weapon_def Weapon_prop[] =
     { WPN_CLUB,              "club",                5,  3, 13,
         SK_MACES_FLAILS, SIZE_LITTLE, SIZE_LITTLE,
         DAMV_CRUSHING, 10, 0, 5, CLUB_BRANDS },
-#if TAG_MAJOR_VERSION == 34
-    { WPN_SPIKED_FLAIL,      "old spiked flail",    5,  3, 13,
+    { WPN_SPIKED_FLAIL,      "spiked flail",       11, -1, 14,
         SK_MACES_FLAILS, SIZE_LITTLE, SIZE_LITTLE,
-        DAMV_CRUSHING, 0, 0, 0, {} },
-#endif
+        DAMV_CRUSHING | DAM_PIERCE, 5, 10, 45, M_AND_F_BRANDS },
     { WPN_WHIP,              "whip",                6,  2, 11,
         SK_MACES_FLAILS, SIZE_LITTLE, SIZE_LITTLE,
         DAMV_SLASHING, 4, 0, 25, {
@@ -523,11 +524,9 @@ static const weapon_def Weapon_prop[] =
             { SPWPN_DISTORTION,     2 },
             { SPWPN_ANTIMAGIC,      1 },
         }},
-#if TAG_MAJOR_VERSION == 34
-    { WPN_HAMMER,            "old hammer",          7,  3, 13,
+    { WPN_HAMMER,            "hammer",              9,  2, 13,
         SK_MACES_FLAILS, SIZE_LITTLE, SIZE_LITTLE,
-        DAMV_CRUSHING, 0, 0, 0, M_AND_F_BRANDS },
-#endif
+        DAMV_CRUSHING, 6, 10, 32, M_AND_F_BRANDS },
     { WPN_MACE,              "mace",                8,  3, 14,
         SK_MACES_FLAILS, SIZE_LITTLE, SIZE_LITTLE,
         DAMV_CRUSHING, 9, 0, 30, M_AND_F_BRANDS },
@@ -645,11 +644,9 @@ static const weapon_def Weapon_prop[] =
             { SPWPN_DISTORTION,      1 },
             { SPWPN_ANTIMAGIC,       1 },
         }},
-#if TAG_MAJOR_VERSION == 34
-    { WPN_CUTLASS,          "old cutlass",          8,  4, 12,
+    { WPN_CUTLASS,           "cutlass",             8,  4, 12,
         SK_SHORT_BLADES, SIZE_LITTLE, SIZE_LITTLE,
-        DAMV_SLICING | DAM_PIERCE, 0, 0, 0, {}},
-#endif
+        DAMV_SLICING | DAM_PIERCE, 5, 15, 65, SBL_BRANDS },
     // Temporary weapon
     { WPN_CENTIPEDE,          "assassin centipede",          7,  4, 10,
         SK_SHORT_BLADES, SIZE_LITTLE, SIZE_LITTLE,
@@ -739,11 +736,9 @@ static const weapon_def Weapon_prop[] =
     { WPN_HALBERD,           "halberd",            13, -3, 15,
         SK_POLEARMS,     SIZE_MEDIUM, NUM_SIZE_LEVELS,
         DAMV_CHOPPING | DAM_PIERCE, 5, 15, 40, POLEARM_BRANDS },
-#if TAG_MAJOR_VERSION == 34
-    { WPN_SCYTHE,            "old scythe",         14, -4, 20,
+    { WPN_SCYTHE,            "scythe",             14, -4, 20,
         SK_POLEARMS,     SIZE_MEDIUM, NUM_SIZE_LEVELS,
-        DAMV_SLICING, 0, 0, 0, POLEARM_BRANDS },
-#endif
+        DAMV_SLICING, 4, 15, 50, POLEARM_BRANDS },
     { WPN_PARTISAN,           "partisan",          14, 1, 17,
         SK_POLEARMS,     SIZE_LITTLE, SIZE_MEDIUM,
         DAMV_PIERCING, 3, 25, 70, POLEARM_BRANDS },
@@ -817,11 +812,9 @@ static const weapon_def Weapon_prop[] =
             { SPWPN_ELECTROCUTION, 4 },
             { SPWPN_ANTIMAGIC,     2 },
         } },
-#if TAG_MAJOR_VERSION == 34
-    { WPN_FUSTIBALUS,        "old fustibalus",     10, -2, 16,
+    { WPN_FUSTIBALUS,        "fustibalus",         10, -2, 16,
         SK_RANGED_WEAPONS,   SIZE_LITTLE, SIZE_SMALL,
-        DAMV_NON_MELEE, 0, 0, 150, RANGED_BRANDS },
-#endif
+        DAMV_NON_MELEE, 4, 15, 150, RANGED_BRANDS },
 
     { WPN_SHORTBOW,          "shortbow",            8,  2, 14,
         SK_RANGED_WEAPONS,   SIZE_LITTLE, NUM_SIZE_LEVELS,
@@ -979,6 +972,7 @@ static const gem_def Gem_prop[] =
     { GEM_TOMB,    "sanguine",    BRANCH_TOMB,    6000 },
     { GEM_DEPTHS,  "midnight",    BRANCH_DEPTHS,  7500 }, // big, travel time
     { GEM_ZOT,     "prismatic",   BRANCH_ZOT,     2000 }, // often dived
+    { GEM_BURROWS, "ochre",       BRANCH_BURROWS, 6000 },
 };
 
 struct item_set_def
@@ -1064,14 +1058,9 @@ const set<pair<object_class_type, int> > removed_items =
     { OBJ_POTIONS,   POT_GAIN_STRENGTH },
     { OBJ_POTIONS,   POT_GAIN_DEXTERITY },
     { OBJ_POTIONS,   POT_GAIN_INTELLIGENCE },
-    { OBJ_POTIONS,   POT_WATER },
-    { OBJ_POTIONS,   POT_STRONG_POISON },
     { OBJ_POTIONS,   POT_BLOOD_COAGULATED },
     { OBJ_POTIONS,   POT_BLOOD },
     { OBJ_POTIONS,   POT_PORRIDGE },
-    { OBJ_POTIONS,   POT_SLOWING },
-    { OBJ_POTIONS,   POT_DECAY },
-    { OBJ_POTIONS,   POT_POISON },
     { OBJ_POTIONS,   POT_RESTORE_ABILITIES },
     { OBJ_POTIONS,   POT_CURE_MUTATION },
     { OBJ_POTIONS,   POT_BENEFICIAL_MUTATION },
@@ -1828,7 +1817,7 @@ hands_reqd_type basic_hands_reqd(const item_def &item, size_type size)
     // Non-weapons.
     if (wpn_type == WPN_UNKNOWN)
         return HANDS_ONE;
-    if (is_unrandom_artefact(item, UNRAND_GYRE))
+    if (has_unrand_effect(item, UNRAND_GYRE))
         return HANDS_TWO;
     return size >= Weapon_prop[Weapon_index[wpn_type]].min_1h_size ? HANDS_ONE
                                                                    : HANDS_TWO;
@@ -2010,7 +1999,7 @@ skill_type item_attack_skill(const item_def &item)
     {
     case OBJ_WEAPONS:
         ASSERT_RANGE(item.sub_type, 0, NUM_WEAPONS);
-        if (is_unrandom_artefact(item, UNRAND_LOCHABER_AXE))
+        if (has_unrand_effect(item, UNRAND_LOCHABER_AXE))
             return _lochaber_skill();
         return Weapon_prop[ Weapon_index[item.sub_type] ].skill;
     case OBJ_STAVES:
@@ -2043,8 +2032,8 @@ skill_type item_attack_skill(object_class_type wclass, int wtype)
 // True if item is a staff that deals extra damage based on Evocations skill.
 static bool _staff_uses_evocations(const item_def &item)
 {
-    if (is_unrandom_artefact(item, UNRAND_ELEMENTAL_STAFF)
-        || is_unrandom_artefact(item, UNRAND_OLGREB))
+    if (has_unrand_effect(item, UNRAND_ELEMENTAL_STAFF)
+        || has_unrand_effect(item, UNRAND_OLGREB))
     {
         return true;
     }
@@ -2057,7 +2046,7 @@ static bool _orb_uses_evocations(const item_def &item)
     if (!item.is_type(OBJ_ARMOUR, ARM_ORB))
         return false;
 
-    if (is_unrandom_artefact(item, UNRAND_WUCAD_MU)
+    if (has_unrand_effect(item, UNRAND_WUCAD_MU)
         || item.brand == SPARM_ENERGY
         || item.brand == SPARM_GLASS
         || item.brand == SPARM_GUILE
@@ -2130,7 +2119,7 @@ bool item_skills(const item_def &item, set<skill_type> &skills)
     if (sk != SK_FIGHTING)
         skills.insert(sk);
 
-    if (is_unrandom_artefact(item, UNRAND_LOCHABER_AXE))
+    if (has_unrand_effect(item, UNRAND_LOCHABER_AXE))
     {
         skills.insert(SK_POLEARMS);
         skills.insert(SK_AXES);
@@ -2219,12 +2208,13 @@ string launched_projectile_name(const item_def &item)
     if (item.base_type == OBJ_MISSILES)
         return missile_name(static_cast<missile_type>(item.sub_type));
 
-    if (is_unrandom_artefact(item, UNRAND_DAMNATION))
+    if (has_unrand_effect(item, UNRAND_DAMNATION))
         return "damnation bolt";
 
     switch (item.sub_type)
     {
         case WPN_SLING:
+        case WPN_FUSTIBALUS:
             return "sling bullet";
 
         case WPN_SHORTBOW:
@@ -2345,7 +2335,7 @@ int gem_time_limit(gem_type gem)
     const int per_floor = Gem_prop[ Gem_index[gem]].time_per_floor;
     const branch_type br = Gem_prop[ Gem_index[gem]].branch;
     const int floors = branches[br].numlevels;
-    return per_floor * floors;
+    return (per_floor * floors) * zot_clock_scale_pct() / 100;
 }
 
 //
@@ -2353,10 +2343,10 @@ int gem_time_limit(gem_type gem)
 //
 int weapon_reach(const item_def &item)
 {
-    if (is_unrandom_artefact(item, UNRAND_RIFT))
+    if (has_unrand_effect(item, UNRAND_RIFT))
         return 3;
     if (item_attack_skill(item) == SK_POLEARMS
-        || is_unrandom_artefact(item, UNRAND_LOCHABER_AXE)
+        || has_unrand_effect(item, UNRAND_LOCHABER_AXE)
         || item.is_type(OBJ_WEAPONS, WPN_CENTIPEDE))
     {
         return 2;
@@ -2464,6 +2454,7 @@ bool ring_has_stackable_effect(const item_def &item)
     case RING_WIZARDRY:
     case RING_WILLPOWER:
     case RING_MAGICAL_POWER:
+    case RING_CAMARADERIE:
         return true;
 
     default:
@@ -2484,12 +2475,16 @@ static map<potion_type, item_rarity_type> _potion_rarity = {
     { POT_MIGHT,        RARITY_UNCOMMON },
     { POT_BRILLIANCE,   RARITY_UNCOMMON },
     { POT_MUTATION,     RARITY_UNCOMMON },
+    { POT_EMPATHY,      RARITY_UNCOMMON },
+    { POT_CONCORD,      RARITY_UNCOMMON },
     { POT_INVISIBILITY, RARITY_RARE },
     { POT_RESISTANCE,   RARITY_RARE },
     { POT_MAGIC,        RARITY_RARE },
     { POT_BERSERK_RAGE, RARITY_RARE },
     { POT_CANCELLATION, RARITY_RARE },
     { POT_AMBROSIA,     RARITY_RARE },
+    { POT_SOUL_AMBROSIA, RARITY_RARE },
+    { POT_TRANSFUSION,  RARITY_RARE },
     { POT_EXPERIENCE,   RARITY_VERY_RARE },
 };
 
@@ -2507,11 +2502,15 @@ static map<scroll_type, item_rarity_type> _scroll_rarity = {
     { SCR_IMMOLATION,     RARITY_UNCOMMON },
     { SCR_POISON,         RARITY_UNCOMMON },
     { SCR_VULNERABILITY,  RARITY_UNCOMMON },
+    { SCR_RALLYING,       RARITY_UNCOMMON },
+    { SCR_PHASE_SWAP,     RARITY_UNCOMMON },
     { SCR_BUTTERFLIES,    RARITY_RARE },
     { SCR_SUMMONING,      RARITY_RARE },
     { SCR_SILENCE,        RARITY_RARE },
     { SCR_BRAND_WEAPON,   RARITY_RARE },
     { SCR_TORMENT,        RARITY_RARE },
+    { SCR_SOUL_RECALL,    RARITY_RARE },
+    { SCR_SHARED_VIGOUR,  RARITY_RARE },
     { SCR_ACQUIREMENT,    RARITY_VERY_RARE },
 };
 
@@ -2522,6 +2521,14 @@ item_rarity_type consumable_rarity(const item_def &item)
 
 item_rarity_type consumable_rarity(object_class_type base_type, int sub_type)
 {
+    if (!coop_content::enabled())
+    {
+        if (base_type == OBJ_POTIONS && party::is_coop_potion(sub_type))
+            return RARITY_NONE;
+        if (base_type == OBJ_SCROLLS && party::is_coop_scroll(sub_type))
+            return RARITY_NONE;
+    }
+
     item_rarity_type *rarity = nullptr;
     if (base_type == OBJ_POTIONS)
         rarity = map_find(_potion_rarity, (potion_type) sub_type);
@@ -2683,7 +2690,7 @@ bool get_armour_rampaging(const item_def &arm, bool check_artp)
 {
     ASSERT(arm.base_type == OBJ_ARMOUR);
 
-    if (is_unrandom_artefact(arm, UNRAND_SEVEN_LEAGUE_BOOTS))
+    if (has_unrand_effect(arm, UNRAND_SEVEN_LEAGUE_BOOTS))
         return true;
 
     // check for ego resistance
@@ -2834,11 +2841,11 @@ int property(const item_def &item, int prop_type)
     {
     case OBJ_ARMOUR:
         if (prop_type == PARM_AC
-            && is_unrandom_artefact(item, UNRAND_SLICK_SLIPPERS))
+            && has_unrand_effect(item, UNRAND_SLICK_SLIPPERS))
         {
             return 0;
         }
-        else if (prop_type == PARM_EVASION && is_unrandom_artefact(item))
+        else if (prop_type == PARM_EVASION && is_artefact(item))
         {
             return armour_prop(item.sub_type, prop_type)
                 - artefact_property(item, ARTP_BASE_ENCUMBRANCE) * 10;
@@ -2846,7 +2853,7 @@ int property(const item_def &item, int prop_type)
         return armour_prop(item.sub_type, prop_type);
 
     case OBJ_WEAPONS:
-        if (is_unrandom_artefact(item))
+        if (is_artefact(item))
         {
             switch (prop_type)
             {
@@ -2928,14 +2935,15 @@ bool gives_ability(const item_def &item)
         return true;
     }
 
-    if (!is_artefact(item))
+    // Random spellbooks are artefacts, but have no equipment properties.
+    if (!is_artefact(item) || item.base_type == OBJ_BOOKS)
         return false;
 
     // Check for evokable artefact properties.
     if (artefact_property(item, ARTP_INVISIBLE)
         || artefact_property(item, ARTP_BLINK)
-        || is_unrandom_artefact(item, UNRAND_DISPATER)
-        || is_unrandom_artefact(item, UNRAND_OLGREB))
+        || has_unrand_effect(item, UNRAND_DISPATER)
+        || has_unrand_effect(item, UNRAND_OLGREB))
     {
         return true;
     }
@@ -3107,7 +3115,7 @@ vector<equipment_slot> get_all_item_slots(const item_def& item)
                 return {SLOT_OFFHAND};
 
             case SLOT_BODY_ARMOUR:
-                if (is_unrandom_artefact(item, UNRAND_LEAR))
+                if (has_unrand_effect(item, UNRAND_LEAR))
                     return {SLOT_BODY_ARMOUR, SLOT_HELMET, SLOT_GLOVES, SLOT_BOOTS};
                 else
                     return {SLOT_BODY_ARMOUR};
@@ -3119,7 +3127,7 @@ vector<equipment_slot> get_all_item_slots(const item_def& item)
                 return {SLOT_BARDING};
 
             case SLOT_CLOAK:
-                if (is_unrandom_artefact(item, UNRAND_FISTICLOAK))
+                if (has_unrand_effect(item, UNRAND_FISTICLOAK))
                     return {SLOT_CLOAK, SLOT_HELMET};
                 else
                     return {SLOT_CLOAK};
@@ -3128,7 +3136,7 @@ vector<equipment_slot> get_all_item_slots(const item_def& item)
                 return {SLOT_HELMET};
 
             case SLOT_GLOVES:
-                if (is_unrandom_artefact(item,UNRAND_CRAB_CLAWS))
+                if (has_unrand_effect(item,UNRAND_CRAB_CLAWS))
                 {
                     // Crab claws are wearable if you've sacrificed hand, but
                     // should take the offhand slot otherwise
@@ -3514,8 +3522,8 @@ int evoker_charges(int evoker_type)
     const int max_charges = evoker_max_charges(evoker_type);
     const int charge_xp_debt = evoker_charge_xp_debt(evoker_type);
     const int debt = evoker_debt(evoker_type);
-    return min(max_charges,
-            max_charges - debt / charge_xp_debt - (debt % charge_xp_debt > 0));
+    return max(0, min(max_charges,
+            max_charges - debt / charge_xp_debt - (debt % charge_xp_debt > 0)));
 }
 
 void expend_xp_evoker(int evoker_type)
@@ -3800,23 +3808,14 @@ bool is_usable_talisman(const item_def& item)
 // The equipment slot type(s) an item grants extra slots of (empty if none).
 vector<equipment_slot> item_granted_slots(const item_def& item)
 {
-    if (!is_unrandom_artefact(item))
-        return {};
-
-    switch (item.unrand_idx)
-    {
-        case UNRAND_FINGER_AMULET:
-        case UNRAND_VAINGLORY:
-            return {SLOT_RING};
-        case UNRAND_JUSTICARS_REGALIA:
-            return {SLOT_AMULET};
-        case UNRAND_SKULL_OF_ZONGULDROK:
-            return {SLOT_HELMET};
-        case UNRAND_FISTICLOAK:
-            return {SLOT_GLOVES};
-        default:
-            return {};
-    }
+    vector<equipment_slot> result;
+    for (int unrand : {UNRAND_FINGER_AMULET, UNRAND_VAINGLORY, UNRAND_JUSTICARS_REGALIA,
+                       UNRAND_SKULL_OF_ZONGULDROK, UNRAND_FISTICLOAK})
+        if (has_unrand_effect(item, unrand))
+            result.push_back(unrand == UNRAND_JUSTICARS_REGALIA ? SLOT_AMULET
+                : unrand == UNRAND_SKULL_OF_ZONGULDROK ? SLOT_HELMET
+                : unrand == UNRAND_FISTICLOAK ? SLOT_GLOVES : SLOT_RING);
+    return result;
 }
 
 bool item_gives_equip_slots(const item_def& item)
@@ -3848,7 +3847,11 @@ int jewellery_usefulness_limit(jewellery_type type)
         case AMU_ACROBAT:
         case AMU_GUARDIAN_SPIRIT:
         case AMU_FAITH:
+        case AMU_VANGUARD:
             return 1;
+
+        case RING_CAMARADERIE:
+            return 2;
 
         // Typically caps at 3, under most circumstances
         case RING_PROTECTION_FROM_FIRE:
@@ -3874,20 +3877,9 @@ bool item_affects_agrid(const item_def& item)
     if (item.base_type == OBJ_ARMOUR && get_armour_ego_type(item) == SPARM_LIGHT)
         return true;
 
-    if (is_unrandom_artefact(item))
-    {
-        switch (item.unrand_idx)
-        {
-            case UNRAND_EOS:
-            case UNRAND_BRILLIANCE:
-            case UNRAND_VAINGLORY:
-            case UNRAND_SHADOWS:
-                return true;
-
-            default:
-                return false;
-        }
-    }
+    for (int unrand : {UNRAND_EOS, UNRAND_BRILLIANCE, UNRAND_VAINGLORY, UNRAND_SHADOWS})
+        if (has_unrand_effect(item, unrand))
+            return true;
 
     return false;
 }

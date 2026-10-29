@@ -1,0 +1,1817 @@
+=Route_melee the Shield-Bearer     *WIZARD*MinotaurHealth: 19/19     ========================Magic:  0/0AC:  6 (25%)Str: 20EV:  8Int: 5SH:  4Dex: 9XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)a) +0 war axeNothing quivered♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Chopper      4/143ROUTE_EVENT setup 2
+Route_melee the Chopper           *WIZARD*MinotaurHealth: 14/14     ========================Magic:  0/0AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  1 Next: 33900Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 20/20     ========================Magic:  1/1========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  2 Next: 16949Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 26/26     ========================Magic:  2/2========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  3 Next: 84743Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 33/33     ========================Magic:  3/3========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  4 Next: 47929Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 38/38     ========================Magic:  4/4========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  5 Next: 25782Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 45/45     ========================Magic:  5/5========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  6 Next: 13396Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 50/50     ========================Magic:  6/6========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  7 Next: 68379Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 57/57     ========================Magic:  7/7========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  8 Next: 34487Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 62/62     ========================Magic:  8/8========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  9 Next: 17288Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 69/69     ========================Magic:  9/9========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 10 Next: 8614%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 74/74     ========================Magic:  10/10     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 11 Next: 4263%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 81/81     ========================Magic:  11/11     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 12 Next: 2797%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 86/86     ========================Magic:  12/12     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 13 Next: 1651%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 93/93     ========================Magic:  13/13     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 14 Next: 1067%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 99/99     ========================Magic:  14/14     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 15 Next: 737% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 105/105   ========================Magic:  15/15     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 16 Next: 515% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 111/111   ========================Magic:  16/16     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 17 Next: 348% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the True Ascetic      *WIZARD*MinotaurHealth: 117/117   ========================Magic:  17/17     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 18 Next: 213% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the True Ascetic      *WIZARD*MinotaurHealth: 123/123   ========================Magic:  18/18     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 19 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 9/1299/1920 0% ROUTE_EVENT setup 3
+
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 24 8 164816ROUTE_EVENT setup 4
+Route_melee the True Ascetic      *WIZARD*MinotaurHealth: 129/129   ========================Magic:  19/19     ========================AC:  6 (25%)Str: 24EV:  8Int: 8SH:  4Dex: 16XL: 20 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 24, 8, 16
+ Enter Wizard Command (? - help): Which god (by name)? Okawaru
+new experience level: Experience level set to 20.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 24, 8, 16
+ Enter Wizard Command (? - help): Which god (by name)? Okawaru
+ Okawaru welcomes you! of Okawaru ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 148ROUTE_EVENT setup 6
+
+_Increased Shields to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Invocations
+ Invocations
+ To what level? (current = 0.0) 825------ROUTE_EVENT setup 7
+
+_Increased Invocations to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 1887/187ROUTE_EVENT setup 8
+
+_Increased Fighting to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Axes
+ Axes
+ To what level? (current = 0.0) 20ROUTE_EVENT setup 9
+
+_Increased Axes to skill level 20.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 1014ROUTE_EVENT setup 10
+
+_Increased Dodging to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 11
+
+_Increased Evocations to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Armour
+ Armour
+ To what level? (current = 0.0) 1710 (28
+ Increased Armour to skill level 17.0.
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking------4
+_
+_g - 2 potions of magic5
+_
+_m - 4 potions of might (gained 2)20=6
+_
+_h - 2 potions of haste7
+_
+_c - 6 potions of curing8
+_
+_w - 6 potions of heal wounds9
+_
+_d - a ring of poison resistance=10.0 (1.0)
+_
+_e - a +0 pair of boots1=1
+_
+_f - a +0 pair of gloves2
+_
+_g - a +0 cloak of stealth3
+_
+_h - a +0 helmet4
+_
+_i - a +1 kite shield=5
+_
+_j - a +2 plate armour2=6
+_
+_k - a +3 broad axe7
+_
+ You unwield your +0 war axe.
+_k - a +3 broad axe (weapon)8k) +3 broad axe
+_0
+ You start removing your armour.=9.0 (120.0 (21.0 (33=2.0 (43.0 (5
+ 0 (0%) 6
+_You continue removing your +0 scale mail. x5
+ You finish removing your +0 scale mail.
+ You start putting on your armour.4.0 (65.0 (7=6.0 (84=7.0 (98.0 (10.0)
+19 (33%)1
+_You continue putting on your +2 plate armour. x5
+_You finish putting on your +2 plate armour.0.0)
+_9.0 (1=30.0 (21.0 (3
+_You start removing your armour. You continue removing your +0 buckler. x45=2.0 (4
+_Magic restored.3.0 (5
+0
+_You continue removing your +0 buckler.
+ You finish removing your +0 buckler.
+ You start putting on your armour.4.0 (65.0 (7=6.0 (87.0 (98.0 (10.0)
+14
+_You continue putting on your +1 kite shield. x5
+_You finish putting on your +1 kite shield.0.0)
+_
+ You start putting on your armour.9.0 (140.0 (21.0 (32.0 (43.0 (5
+21 (34
+_You continue putting on your +0 cloak of stealth. x5
+ You finish putting on your +0 cloak of stealth.
+_You feel stealthy.0
+_
+ You start putting on your armour.4.0 (15.0 (26.0 (37.0 (48.0 (5
+3 (35
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.9.0 (150.0 (21.0 (32.0 (43.0 (5
+5
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)5 (0.5
+_ROUTE_EVENT inventory +0 war axe
+ROUTE_EVENT inventory +0 scale mail
+ROUTE_EVENT inventory +0 buckler
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak of stealth
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +1 kite shield
+ROUTE_EVENT inventory +2 plate armour
+ROUTE_EVENT inventory +3 broad axe
+ROUTE_EVENT inventory 4 potions of might
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of magic
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain great but temporary skills.You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_melee the True Ascetic      *WIZARD*Minotaur of Okawaru ****..Health: 187/187   ========================##.....##Magic:  25/25     ========================##.......##AC: 25 (35%)Str: 24#.........#EV: 11Int: 8##.....f...#SH: 14Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 53.5 (0.0)##..w........#k) +3 broad axe.......@.....#Nothing quivered#..T.........##............##....C......##w   gallery worm....w......##T   iron troll#.........##C   stone giant (missile)##...######w   coil worm (constriction)####f   deathcapYou finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)
+ You can now gain great but temporary skills.You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) 4
+ You can now gain great but temporary skills.
+ You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) The stone giant shouts! The iron troll shouts!
+ Found a stone staircase leading up.ROUTE_AUDIT {"vaults":"worm_end_dragon_cavern","turn":59,"gold":0,"tag":"enter","where":"Worm:4","inventory":[{"class":"weapon","name":"+0 war axe","quantity":1},{"class":"armour","name":"+0 scale mail","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak of stealth","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+1 kite shield","quantity":1},{"class":"armour","name":"+2 plate armour","quantity":1},{"class":"weapon","name":"+3 broad axe","quantity":1},{"class":"potion","name":"4 potions of might","quantity":4},{"class":"scroll","name":"3 scrolls of fear","quantity":3},{"class":"scroll","name":"3 scrolls of fog","quantity":3},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"scroll","name":"2 scrolls of blinking","quantity":2},{"class":"potion","name":"2 potions of magic","quantity":2},{"class":"potion","name":"2 potions of haste","quantity":2},{"class":"potion","name":"6 potions of curing","quantity":6},{"class":"potion","name":"6 potions of heal wounds","quantity":6}],"maxmp":25,"items":[{"class":"gold","name":"14 gold pieces","quantity":14,"x":73,"artefact":false,"y":27},{"class":"wand","name":"wand of light (6)","quantity":1,"x":31,"artefact":false,"y":29},{"class":"magical staff","name":"staff of earth","quantity":1,"x":32,"artefact":false,"y":29},{"class":"weapon","name":"glowing great sword","quantity":1,"x":33,"artefact":false,"y":29},{"class":"gold","name":"20 gold pieces","quantity":20,"x":27,"artefact":false,"y":31},{"class":"gold","name":"17 gold pieces","quantity":17,"x":31,"artefact":false,"y":33},{"class":"gold","name":"21 gold pieces","quantity":21,"x":32,"artefact":false,"y":33},{"class":"gold","name":"17 gold pieces","quantity":17,"x":33,"artefact":false,"y":33},{"class":"gold","name":"20 gold pieces","quantity":20,"x":68,"artefact":false,"y":37},{"class":"magical staff","name":"staff of air","quantity":1,"x":32,"artefact":false,"y":45},{"class":"gold","name":"12 gold pieces","quantity":12,"x":67,"artefact":false,"y":45},{"class":"gold","name":"20 gold pieces","quantity":20,"x":32,"artefact":false,"y":46},{"class":"scroll","name":"scroll of identify","quantity":1,"x":57,"artefact":false,"y":48},{"class":"potion","name":"potion of moonshine","quantity":1,"x":38,"artefact":false,"y":55},{"class":"scroll","name":"scroll of blinking","quantity":1,"x":34,"artefact":false,"y":57},{"class":"potion","name":"potion of curing","quantity":1,"x":29,"artefact":false,"y":58},{"class":"weapon","name":"quarterstaff","quantity":1,"x":37,"artefact":false,"y":64},{"class":"scroll","name":"scroll of fog","quantity":1,"x":75,"artefact":false,"y":65},{"class":"weapon","name":"club","quantity":1,"x":76,"artefact":false,"y":66},{"class":"gold","name":"18 gold pieces","quantity":18,"x":39,"artefact":false,"y":67},{"class":"book","name":"parchment of Controlled Blink","quantity":1,"x":49,"artefact":false,"y":68},{"class":"armour","name":"plate armour","quantity":1,"x":67,"artefact":false,"y":69}],"hp":187,"xl":20,"maxhp":187,"mp":25,"xp":41493,"honey":0,"monsters":[{"xp":84,"name":"earth elemental","x":36,"y":27},{"xp":961,"name":"coil worm","x":38,"y":28},{"xp":746,"name":"iron troll","x":38,"y":30},{"xp":1235,"name":"iron dragon","x":42,"y":30},{"xp":1031,"name":"gallery worm","x":32,"y":31},{"xp":82,"name":"earth elemental","x":39,"y":32},{"xp":781,"name":"iron troll","x":38,"y":33},{"xp":1054,"name":"gallery worm","x":73,"y":33},{"xp":1037,"name":"gallery worm","x":27,"y":34},{"xp":641,"name":"lindwurm","x":34,"y":34},{"xp":6,"name":"deathcap","x":90,"y":34},{"xp":765,"name":"iron troll","x":28,"y":35},{"xp":768,"name":"iron troll","x":32,"y":35},{"xp":950,"name":"coil worm","x":73,"y":35},{"xp":885,"name":"great orb of eyes","x":36,"y":36},{"xp":1043,"name":"gallery worm","x":36,"y":37},{"xp":5,"name":"deathcap","x":78,"y":37},{"xp":1066,"name":"gallery worm","x":85,"y":37},{"xp":1056,"name":"gallery worm","x":33,"y":39},{"xp":763,"name":"iron troll","x":84,"y":39},{"xp":885,"name":"great orb of eyes","x":68,"y":40},{"xp":760,"name":"iron troll","x":37,"y":41},{"xp":972,"name":"coil worm","x":68,"y":41},{"xp":779,"name":"iron troll","x":78,"y":41},{"xp":1091,"name":"stone giant","x":86,"y":41},{"xp":1043,"name":"gallery worm","x":65,"y":42},{"xp":952,"name":"coil worm","x":85,"y":42},{"xp":1060,"name":"gallery worm","x":73,"y":43},{"xp":6,"name":"deathcap","x":37,"y":44},{"xp":1016,"name":"gallery worm","x":45,"y":46},{"xp":767,"name":"iron troll","x":61,"y":47},{"xp":979,"name":"coil worm","x":61,"y":56},{"xp":1045,"name":"gallery worm","x":32,"y":57},{"xp":748,"name":"iron troll","x":59,"y":58},{"xp":800,"name":"caustic worm","x":69,"y":58},{"xp":1031,"name":"gallery worm","x":32,"y":59},{"xp":963,"name":"coil worm","x":59,"y":60},{"xp":814,"name":"caustic worm","x":29,"y":61},{"xp":6,"name":"deathcap","x":39,"y":61},{"xp":6,"name":"deathcap","x":39,"y":65},{"xp":961,"name":"coil worm","x":43,"y":65},{"xp":801,"name":"deep troll earth mage","x":73,"y":65},{"xp":735,"name":"deep troll","x":37,"y":66},{"xp":746,"name":"deep troll","x":72,"y":66},{"xp":1050,"name":"gallery worm","x":34,"y":67},{"xp":808,"name":"deep troll earth mage","x":70,"y":67},{"xp":725,"name":"deep troll","x":72,"y":68},{"xp":1054,"name":"gallery worm","x":52,"y":69},{"xp":1033,"name":"gallery worm","x":46,"y":70},{"xp":1043,"name":"gallery worm","x":49,"y":70},{"xp":6,"name":"deathcap","x":59,"y":71},{"xp":793,"name":"caustic worm","x":75,"y":72},{"xp":1056,"name":"gallery worm","x":78,"y":74}],"progress":0}
+ROUTE_EVENT start melee AC=25 EV=11 SH=14
+ROUTE_EVENT ability Heroism turn=59
+
+ You encounter a stone giant, a coil worm, an iron troll, a deathcap and a gallery worm.You gain the combat prowess of a mighty hero.
+_You can no longer speed up your combat..3--8 (3646 6 ===--- 4.5 (1Hero  ##.....## ##.## #.# ##.....f...# ##.# #.#.##..w.#<.....#.#..T.#
+ #.# #....C......##.w......##.#.## ##...###### ####
+.w
+_You hear a shout!w.C. 0 ------ 5
+T.
+ You slash the gallery worm!
+_The gallery worm is lightly wounded.3 ==-6.3 (0.8
+_
+ You slice the gallery worm!!
+_The gallery worm is moderately wounded.The gallery worm bites you but does no damage.w.C.74--57.0 (0.7
+T.
+_The deathcap draws from the surrounding life force!
+ You open the gallery worm like a pillowcase!!!
+ You headbutt the gallery worm.
+ The gallery worm is severely wounded.
+_You slash the stone giant!w. 68----- 9 ===--- 7 
+ The gallery worm is severely wounded.
+_ash the stone giant!
+_The gallery worm bites you. The stone giant hits you.
+ You slash the gallery worm!
+ You headbutt the gallery worm but do no damage.
+ The gallery worm is severely wounded.slash the stone giant!
+ You hit the iron troll but do no damage.
+_You barely miss the coil worm.4= 4 ==---- 8.4
+_
+fYou hit the gallery worm.
+ You headbutt the gallery worm but do no damage.The gallery worm is severely wounded.
+_You hit the stone giant. You barely miss the iron troll. You slash the coil worm!
+TThe gallery worm bites you but does no damage.
+ You encounter a deathcap.
+T  2 iron trollsf  2 deathcapsYou block the coil worm's attack. x2; You block the stone giant's attack. The iron troll barely misses you. The iron troll claws you! The iron troll claws you.59--3 =--9.2 (0.8 
+_You hit the stone giant. You barely miss the iron troll. You slash the coil worm!
+ The gallery worm bites you but does no damage.
+ You encounter a deathcap.You block the coil worm's attack. x2; You block the stone giant's attack. The iron troll barely misses you. The iron troll claws you! The iron troll claws you._You encounter an iron troll.You barely miss the gallery worm.You hit the iron troll.
+ You block the gallery worm's attack. You block the coil worm's attack. x2; The stone giant misses you. You furiously retaliate!2 =-9 (0.7.T
+ The gallery worm is severely wounded.
+_You hit the stone giant. You hit the iron troll. You slash the coil worm!
+ You block the gallery worm's attack. You block the coil worm's attack. x2; The stone giant misses you. You furiously retaliate!
+_You headbutt the stone giant but do no damage.
+ You slash the gallery worm! You headbutt the gallery worm!
+ The gallery worm is almost dead.
+_You slice the coil worm!! You hit the stone giant. You slice the iron troll!!
+ The iron troll misses you.
+ The iron troll claws you but does no damage.
+. You block the iron troll's attack. You block the gallery worm's attack. You block the stone giant's attack. The coil worm grabs you.4--           4              7 ===--- 60.7 (0.8Constr 
+ The iron troll claws you but does no damage.iron troll's attack. You block the gallery worm's attack. You block the stone giant's attack. The coil worm grabs you.
+_The coil worm completely misses you. The coil worm constricts you.You barely miss the coil worm.
+ The coil worm is heavily wounded.
+ You hit the iron troll but do no damage.
+ You hit the gallery worm but do no damage.
+_You slash the stone giant!
+ The iron troll bites you!! You block the iron troll's attack.36---= 5 ==---- 1.4 (0.7T.
+_You slash the stone giant!
+ The iron troll bites you!! You block the iron troll's attack.
+_The iron troll claws you but does no damage.
+ You slash the coil worm!
+ You slash the stone giant! You slash the iron troll!
+_ The gallery worm bites you!coil worm bites you but does no damage. 113------2.2 (0.8ROUTE_EVENT use haste turn=70 place=Worm:4
+Route_melee the True Ascetic      *WIZARD*Minotaur of Okawaru ***...Health: 113/187   ==============----------##.....##Magic:  24/25     =======================-##.......##AC: 28 (36%)Str: 24#.........#EV:  4 Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  5 ==----  Time: 62.2 (0.0).##...T.......#k) +3 broad axef.....w@<.....#Nothing quivered.#....wC......#Hero Constr #............##.T.........##w   gallery worm............##TT  2 iron trolls.#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcapsThe iron troll bites you!! You block the iron troll's attack.
+_The iron troll claws you but does no damage.
+ You slash the coil worm!
+ The coil worm is heavily wounded.You slash the stone giant! You slash the iron troll!
+_You hit the gallery worm but do no damage.The gallery worm bites you!
+ The coil worm bites you but does no damage.
+_The coil worm constricts you! You block the stone giant's attack.
+.TThe coil worm is heavily wounded.
+ You slash the stone giant! You slash the iron troll!
+_You hit the gallery worm but do no damage.gallery worm bites you!
+ The coil worm bites you but does no damage.
+_The coil worm constricts you! You block the stone giant's attack.
+ You feel yourself speed up. You block the gallery worm's attack. The coil worm bites you! The coil worm constricts you. The stone giant hits you!
+ The iron troll bites you but does no damage.
+ You block the iron troll's attack.Severer     94/187 --3 =-3.2 (1Fast Hero Constr ROUTE_EVENT use might turn=71 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 94/187    ============------------##.....##Magic:  24/25     =======================-##.......##AC: 28 (36%)Str: 24#.........#EV:  4 Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  3 =-----  Time: 63.2 (0.0).##...T.......#k) +3 broad axef.....w@<.....#Nothing quivered.#....wC......#Fast Hero Constr #............##..T........##w   gallery worm............##TT  2 iron trolls.#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcapsYou slash the stone giant! You slash the iron troll!
+_You hit the gallery worm but do no damage.The gallery worm bites you!
+ The coil worm bites you but does no damage.
+_The coil worm constricts you! You block the stone giant's attack.
+ You feel yourself speed up. You block the gallery worm's attack. The coil worm bites you! The coil worm constricts you. The stone giant hits you!
+ The iron troll bites you but does no damage.
+ You block the iron troll's attack.
+_The iron troll claws you but does no damage.
+_The coil worm constricts you! You block the stone giant's attack.
+ You feel yourself speed up. You block the gallery worm's attack. The coil worm bites you! The coil worm constricts you. The stone giant hits you!iron troll bites you but does no damage.
+ You block the iron troll's attack.
+_The iron troll claws you but does no damage.
+ You feel very mighty all of a sudden.
+ You block the gallery worm's attack.
+ The coil worm bites you but does no damage.
+ The coil worm constricts you.3-5=29 (0.7t Might Hero Constr ROUTE_EVENT use fear turn=72 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 93/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV:  4 Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 63.9 (0.0).##...T.......#k) +3 broad axef.....w@<.....#Nothing quivered.#....wC......#Fast Might Hero Constr #............##..T........##w   gallery worm............##TT  2 iron trolls.#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcapsYou feel yourself speed up. You block the gallery worm's attack. The coil worm bites you! The coil worm constricts you. The stone giant hits you!
+ The iron troll bites you but does no damage.
+ You block the iron troll's attack.
+_The iron troll claws you but does no damage.
+ You feel very mighty all of a sudden.You block the gallery worm's attack.
+ The coil worm bites you but does no damage.
+ The coil worm constricts you.
+_The stone giant hits you but does no damage.Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 93/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV:  4 Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 63.9 (0.0).##...T.......#k) +3 broad axef.....w@<.....#Nothing quivered.#....wC......#Fast Might Hero Constr #...T........##...........##w   gallery worm............##TT  2 iron trolls.#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcaps
+_The stone giant hits you but does no damage.
+ Press: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, constricting you, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected. The stone giant looks frightened! The coil worm looks frightened!
+ The iron troll resists with almost no effort.
+ The deathcap is unaffected. The gallery worm looks frightened!
+ The iron troll resists with some effort.
+ The iron troll bites you but does no damage.w.w(fleeing)C, fleeing)w, fleeing)
+ Press: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, constricting you, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected. The stone giant looks frightened! The coil worm looks frightened!
+ The iron troll resists with almost no effort.deathcap is unaffected. The gallery worm looks frightened!iron troll resists with some effort.bites you but does no damage.claws you. You block the iron troll's attack.w.
+.CThe deathcap draws from the surrounding life force!
+ You break free of the coil worm!69---14 4.6 (0.7ROUTE_EVENT use heal wounds turn=73 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 69/187    ========----------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV: 14Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 64.6 (0.0).##...T.......#k) +3 broad axef....w.@<.....#Nothing quivered.#...w........#Fast Might Hero #...T.C......##...........##w   gallery worm (fleeing)............##TT  2 iron trolls.#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction, fleeing)####ff  2 deathcapsYou assume a fearsome visage. The deathcap is unaffected. The stone giant looks frightened! The coil worm looks frightened!
+ The iron troll resists with almost no effort.
+ The deathcap is unaffected. The gallery worm looks frightened!
+ The iron troll resists with some effort.
+ The iron troll bites you but does no damage.
+ The iron troll claws you. You block the iron troll's attack.
+ The deathcap draws from the surrounding life force!
+ You break free of the coil worm!
+_The stone giant begs, "Why can't we all just get along?"90===0 -5.3 (0.7ROUTE_EVENT use fear turn=74 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 90/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV: 14Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 65.3 (0.0).##...T.......#k) +3 broad axef....w.@<.....#Nothing quivered.#...w........#Fast Might Hero #...T.C......##...........##w   gallery worm (fleeing)............##TT  2 iron trolls.#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction, fleeing)####ff  2 deathcapsThe iron troll resists with almost no effort.
+ The deathcap is unaffected. The gallery worm looks frightened!
+ The iron troll resists with some effort.
+ The iron troll bites you but does no damage.
+ The iron troll claws you. You block the iron troll's attack.
+ The deathcap draws from the surrounding life force!
+ You break free of the coil worm!
+_The stone giant begs, "Why can't we all just get along?"
+_You feel much better.Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 90/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV: 14Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 65.3 (0.0).##...T.......#k) +3 broad axef...w..@<.....#Nothing quivered.#...w........#Fast Might Hero #...T.C......##...........##w   gallery worm (fleeing)............##TT  2 iron trolls.#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction, fleeing)####ff  2 deathcapsThe deathcap draws from the surrounding life force!
+ You break free of the coil worm!
+_The stone giant begs, "Why can't we all just get along?"
+_You feel much better.
+ Press: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected.
+ The iron troll resists with some effort.w.wYou break free of the coil worm!
+_The stone giant begs, "Why can't we all just get along?"You feel much better.
+ Press: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected.
+ The iron troll resists with some effort.deathcap is unaffected. The iron troll looks frightened!.C
+.TYou encounter a coil worm.The iron troll bites you but does no damage.
+ You block the iron troll's attack.
+ The iron troll claws you but does no damage.T(1 fleeing)w  2 coil worms (constriction, 1 wandering, 1 fleeing)2 =6.0 (0.7ROUTE_EVENT use fear turn=75 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 90/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV: 14Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 66.0 (0.0)w##...T.......#k) +3 broad axef...w..@<.....#Nothing quivered.#............#Fast Might Hero #..w.........##..T..C.....##w   gallery worm (fleeing)............##TT  2 iron trolls (1 fleeing).#.........##C   stone giant (missile, fleeing)##...######ww  2 coil worms (constriction, 1 wandering, 1 fleeing)####ff  2 deathcapsAs you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected.
+ The iron troll resists with some effort.
+ The deathcap is unaffected. The iron troll looks frightened!
+ You encounter a coil worm.The iron troll bites you but does no damage.
+ You block the iron troll's attack.
+ The iron troll claws you but does no damage.
+_The iron troll prays for help.Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 90/187    ===========-------------##.....##Magic:  25/25     ========================##.......##AC: 28 (36%)Str: 24#.........#EV: 14Int: 8##.....f...#SH: 16Dex: 16##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 66.0 (0.0).##...T.......#k) +3 broad axef...w..@<.....#Nothing quivered.#............#Fast Might Hero #..w.........##..T..C.....##w   gallery worm (fleeing)............##TT  2 iron trolls (1 fleeing).#.........##C   stone giant (missile, fleeing)##...######ww  2 coil worms (constriction, 1 wandering, 1 fleeing)####ff  2 deathcapsThe iron troll bites you but does no damage.
+ You block the iron troll's attack.
+ The iron troll claws you but does no damage.
+_The iron troll prays for help.Press: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected.
+ The iron troll resists with almost no effort.w..C.w   coil worm (constriction,0 -7 (0.7M.TPress: ? - help, Dir - look around, f - activateLook: a coil worm (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The deathcap is unaffected.
+ The iron troll resists with almost no effort.
+_The deathcap is unaffected. The coil worm looks frightened!
+ You slice the iron troll!!
+_The iron troll is severely wounded.bites you but does no damage.15 ==7.3 (0.6
+w.
+_The iron troll closely misses you. x2
+ You hit the iron troll.
+_The iron troll is severely wounded..w.C1 =-7 (0.4
+_
+ You slash the iron troll! You headbutt the iron troll!
+_The iron troll is almost dead.2 =-8.3 (0.6
+_
+.You slice the iron troll!!
+ You kill the iron troll!
+w.
+_Okawaru accepts your kill..Tw.
+T   iron troll (CC)The stone giant seems to regain its courage.28 (0.5#####  ##  ### .........# f...# ##...#  #.....# .##.....@.....# fw......<.....# .#......#. #..w........#T....C...##...######   deathcap####
+_The stone giant throws a large rock. The large rock barely misses you.0 -9.4 (0.6#####  ##  ### .........# f...# ##...#  #.....# .##...........# fw......<.#......# T   iron troll#. C   stone giant (missile)#.f   deathcap.w........#T....C...##...##########wwC...w   gallery worm w   coil worm (constriction)Tf   deathcap-70.1 (0.7M #######  ##.....## ## . ##.....f##..  #.....#w......f.<.... #w..........##.T......C...##.........##
+.w
+_You hear a grinding noise.fC..w.f  2 deathcaps32 =8
+_You block the deathcap's attack.
+ You hit the deathcap but do no damage.
+_You headbutt the deathcap but do no damage.11.2 (0.4
+_
+w.
+ You hit the deathcap. You headbutt the deathcap.
+_The deathcap is lightly damaged.TT   iron trollC   stone giant (missile)w   coil worm (constriction).ff  2 deathcaps
+w.
+ The deathcap draws from the surrounding life force!C.81-7 (0.5ROUTE_EVENT use heal wounds turn=85 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 81/187    ==========--------------Magic:  25/25     ========================AC: 28 (36%)Str: 24#######EV: 14Int: 8##.....##SH: 16Dex: 16##.......##XL: 20 Next:  0%  Place: Wormlands:4#.........#Noise:  1 =-----  Time: 71.7 (0.0)##.....f...#k) +3 broad axe##.....@....#Nothing quivered#.w.........#Fast Might Hero .#............#..f.....<.....#w   gallery worm.#............#T   iron troll#..w....C....#C   stone giant (missile)#T..........##w   coil worm (constriction)............##ff  2 deathcaps.#.........####...##########
+_The stone giant throws a large rock. The large rock barely misses you.
+_You hear a grinding noise.
+_You block the deathcap's attack.
+ You hit the deathcap but do no damage.
+_You headbutt the deathcap but do no damage.You hit the deathcap. You headbutt the deathcap.
+_The deathcap is lightly damaged.
+ The deathcap draws from the surrounding life force!
+_The deathcap is healed.107/187===0 -2.3 (0.6
+w.
+ You hi
+_You headbutt the deathcap but do no damage.
+ You hit the deathcap. You headbutt the deathcap.
+_is lightly damaged.
+ draws from the surrounding life force!
+_The deathcap is healed.
+_You feel much better.
+ You slash the deathcap!
+_The deathcap is lightly damaged.w.C..T8===2 =8 (0.5
+_The deathcap releases spores at you but does no damage.
+ You slice the deathcap!!
+_The deathcap is heavily damaged.4 ==3.3
+_
+.
+ You slice the deathcap!!
+w.
+_You destroy the deathcap!.w   deathcap5 6 ===--- 8 # ##.....## ##.## #.# ##.# ##..w.# #....# .#......# ..f...w.<.....# .#.......C....# #.# #.T.## .##
+ .#.##
+ ##...######
+ ####
+T.
+_The stone giant throws a large rock. The large rock hits you.w. 0 ------ 4.5 (0.7 # ##.....## ##.## #.# ##.# ##..w.# #....#
+ .#.....w......# ..f.....<.....# .#.......C....# #.T.# #.## ..##
+ .#.##
+ ##...######
+ ####C.42 =--5.1 (0.6
+.
+_The gallery worm bites you.
+ You slash the gallery worm!
+ You kill the gallery worm!
+w.
+_Okawaru accepts your kill.T.†T   iron trollC   stone giant (missile)w   coil worm (constriction)f   deathcap15 (0.4
+_
+ You slice the coil worm!!
+_The coil worm is almost dead.58/187 ------12 ====-- 9ROUTE_EVENT use heal wounds turn=93 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 58/187    =======-----------------Magic:  25/25     ========================AC: 28 (36%)Str: 24#######EV: 14Int: 8##.....##SH: 16Dex: 16##.......##XL: 20 Next:  1%  Place: Wormlands:4#.........#Noise: 12 ====--  Time: 75.9 (0.0)##.........#k) +3 broad axe##..†@......#Nothing quivered#....w......#Fast Might Hero .#............#..f.....<C....#T   iron troll.#..T.........#C   stone giant (missile)#............#w   coil worm (constriction)#...........##f   deathcap............##.#.........####...##########
+_You destroy the deathcap!
+_The stone giant throws a large rock. The large rock hits you.
+_The gallery worm bites you.
+ You slash the gallery worm!
+ You kill the gallery worm!
+_Okawaru accepts your kill.You slice the coil worm!!
+_The coil worm is almost dead.
+_The stone giant throws a large rock. The large rock hits you!!!C.84=== 2 =----- 6.6 (0.7ROUTE_EVENT use heal wounds turn=94 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 84/187    ==========--------------Magic:  25/25     ========================AC: 28 (36%)Str: 24#######EV: 14Int: 8##.....##SH: 16Dex: 16##.......##XL: 20 Next:  1%  Place: Wormlands:4#.........#Noise:  2 =-----  Time: 76.6 (0.0)##.........#k) +3 broad axe##..†@......#Nothing quivered#....w......#Fast Might Hero .#......C.....#..f.....<.....#T   iron troll.#..T.........#C   stone giant (missile)#............#w   coil worm (constriction)#...........##f   deathcap............##.#.........####...##########
+_The stone giant throws a large rock. The large rock hits you.
+_The gallery worm bites you.
+ You slash the gallery worm!
+ You kill the gallery worm!
+_Okawaru accepts your kill.You slice the coil worm!!
+_The coil worm is almost dead.
+_The stone giant throws a large rock. The large rock hits you!!!
+_You feel much better. You block the coil worm's attack. x2T.113/187====0 -7.2 (0.6
+.
+ You kill the gallery worm!
+_Okawaru accepts your kill.
+ You slice the coil worm!!
+_The coil worm is almost dead.
+_The stone giant throws a large rock. The large rock hits you!!!
+_You feel much better. You block the coil worm's attack. x2
+_You feel much better.
+ You slice the coil worm like a ripe choko!!!
+ You kill the coil worm!
+f   deathcap
+_Okawaru accepts your kill.99/187 ==--24 ==6 (0.4
+#########.....####.......##..###..†.#.....#......C..f..T..<#....... .#..#.........##
+_The stone giant throws a large rock. The large rock hits you!0 --8.2 (0.6
+T.
+ You slice the stone giant!!
+_The stone giant is severely wounded... 100/187--4 ==7 (0.5
+.
+_You block the stone giant's attack.
+ You hit the stone giant. You headbutt the stone giant!
+ You kill the stone giant!
+(f   deathcap
+ Okawaru accepts your kill. You can now speed up your combat.
+_You hit the iron troll.*31 =-9.2
+_ROUTE_EVENT ability Finesse turn=99
+
+ You can now deal lightning-fast blows.
+_You can no longer speed up your combat.The iron troll closely misses you. You furiously retaliate! You headbutt the iron troll!! You block the iron troll's attack..0-----2 =-9 (0.7Finesse 
+_The iron troll claws you but does no damage.
+ You hit the iron troll.
+_The iron troll is moderately wounded.180.2 (0.3
+_
+ You slice the iron troll!! You headbutt the iron troll!
+_The iron troll is severely wounded.15 ==5
+_
+ You barely miss the iron troll.
+_The iron troll is severely wounded.1 =-8
+_
+ You slash the iron troll!
+ You headbutt the iron troll but do no damage.
+_The iron troll is severely wounded.------1.1
+_
+.You slice the iron troll!! You headbutt the iron troll!
+ You kill the iron troll!
+f   deathcap
+_Okawaru accepts your kill.45 ==5 (0.4
+_#######.....##..## ..##.#†.......#.........#.#....@.(.....#...f.....<.....##............#  #......# ##.#####...####  ####
+0 --2.2 (0.7 ####### ##.....## ##.## #.# ##.# ##..†.......# ##...........# .#...@..(.....#.f.....<.....#.#.......#.  #.# #.## ..## ..#.##
+ ####...######
+ ####2=--9 ####### ##.....## ##.## #.# ##.# ##..†.......# ##...........# .#..@...(.....#.f.....<.....#.#........#.. #.#.   #.## ..## ..#.##
+ ####...######
+ ####3.6 ####### ##.....## ##.## #.# ##.# ##..†.......# ##...........# .#.@....(.....#.f.....<.....#.#.........#<... #.#..  #..##..  ..##.  ..#.## ####...######
+ ####
+_Found a stone staircase leading up.1=4.3
+_
+ You slice the deathcap!! You headbutt the deathcap!
+_The deathcap is severely damaged.3= 6 ===--- 7 (0.4
+.
+_The deathcap closely misses you.You slice the deathcap!!
+
+_You destroy the deathcap! 3 ==---- 5.1
+_w
+ You start resting.-w   gallery worm (wandering)00 --8 (0.7 ####### ##.....## ##.## #.# ##.# ##..†.......# ##...........# .#@.....(.....#.w......<.....#.#..........#.<....#.#.. #...##......##.....#.##....####...##
+ ####
+_You encounter a gallery worm.You feel like a meek peon again.4=5 (35142 =-6.5ROUTE_EVENT ability Heroism turn=113
+
+_The gallery worm bites you but does no damage.
+_You gain the combat prowess of a mighty hero.19--8 (36460 -7.1 (0.6 Hero Finesse 
+_
+ You chop the gallery worm into pieces!!!
+_The gallery worm is heavily wounded.11 ====-- 5 (0.4
+_You block the gallery worm's attack.
+ You hit the gallery worm but do no damage.
+_The gallery worm is heavily wounded. 1 =----- 9
+_
+ You open the gallery worm like a pillowcase!!!
+_The gallery worm is severely wounded. 9 ===--- 8.2 (0.3
+_
+ You slice the gallery worm!!
+_The gallery worm is almost dead.5-- 4 ==---- 5
+.
+_The gallery worm bites you but does no damage.
+ You slash the gallery worm!
+ You kill the gallery worm!
+†
+_Okawaru accepts your kill.51 =--9 (0.4
+_20=67=
+_You start resting.0 --93.0 (4.1-7 (4.8Fast 
+_Your extra speed is starting to run out.81=9=
+_You start resting.10=708.4 (4.7
+_You feel yourself slow down.1=2=
+_You start resting.2101.4 (3.0)2.4 (4
+_You feel a little less mighty now.3=3=45=64=
+_You start resting.7=11.4 (92.4 (10.0)
+_Your hands slow down.8=
+_You start resting.A coil worm comes into view.ww   coil worm (constriction, wandering)4.4 (2.0)=5.4 (3
+_ROUTE_EVENT use might turn=150 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 118/187   ===============---------#######Magic:  24/25     =======================-##.....##AC: 28 (36%)Str: 24##.......##EV: 14Int: 8#.........#SH: 16Dex: 16##.........#XL: 20 Next:  5%  Place: Wormlands:4##..†.......#Noise:  0 ------  Time: 115.4 (0.0)##...........#k) +3 broad axe.#@.....(.....#Nothing quivered.w....†......<.....#Hero ......#............#.<....#............#w   coil worm (constriction, wandering)..... #...........##.................##......#.........##....####...##########
+_Your extra speed is starting to run out.
+_You start resting.
+_You feel yourself slow down.
+_You start resting.
+_You feel a little less mighty now.
+_You start resting.
+_Your hands slow down.
+_You start resting.
+_A coil worm comes into view..ww)95=6.4 (1Might Hero #######...#.....##.  #....##.. #..#   ..#...#...  ##.#..#.... ##..†.......#.......##.....#.......#......(.....#...w...@......<.....#.....#............#<....#............#......##.....#.####...#########   #####
+
+.w
+_You feel very mighty all of a sudden.7 #..  ...     ##.....##.. #..    ##.......##..#..##  #..#.#...# ##.#.#....###..†.......#.##....#.#......(.....#.w.@†......<.....#.#............#.<....#.......#.#...##.........##.#.......###.....####...######   #####
+.w
+_You see here a gallery worm corpse.208
+_
+ You slice the coil worm!! You headbutt the coil worm!
+_The coil worm is heavily wounded.The coil worm grabs you.
+ The coil worm bites you but does no damage.           4              6 ===--- 9.1 (0.7Constr 
+_The coil worm constricts you.You slash the coil worm!
+_The coil worm is heavily wounded.You feel like a meek peon again.09--=5 (3514 3 ==---- 9 (0.8ROUTE_EVENT ability Heroism turn=155
+
+_The coil worm bites you. The coil worm constricts you!
+_You gain the combat prowess of a mighty hero.3--8 (36462 =--20.9 (1.0 Hero Constr 
+ 
+_You block the coil worm's attack. The coil worm constricts you.You slice the coil worm!!
+_The coil worm is almost dead.6-- 6 ===--- 1.6 (0.7
+_The coil worm completely misses you. The coil worm constricts you.You barely miss the coil worm.
+_The coil worm is almost dead. 1 =----- 2.4 (0.8
+_
+ You slash the coil worm!
+_The coil worm is almost dead.93/187 --2 =--3.2
+.
+_The coil worm bites you. The coil worm constricts you!You slice the coil worm!!
+ You kill the coil worm!
+†
+_Okawaru accepts your kill.4=---14 69 (0.7
+_4=5=6=
+_You start resting.Magic restored.70 -8.9 (5.05=-9.9 (6
+_89=100/18712=3=
+_You start resting.ww   gallery worm (wandering)41.9 (12.0)2.9 (13...  ...#     #####w.  ...#    ## #..#   ##.##....#..##  #...#..#...# ##...##....###..†.#.##...........#.@.#......(.....#†.†......<.....#......#.#<....#..##......##.......##.........#.........##.....####...############   #####
+.w
+_You encounter a gallery worm.w43.0).  ...#           .  ...#     #####... ...#    ##..w. #..#   #####....#..##  #.##.....#...# ##..##....###..†.#.##...........#...#......(.....#��.†......<.....#......#.#<....#..##...........##........##.........#.........##.....####...############   #####.w4<.. ..#......#           .....#     #####.....#    ## #.....#..#   ## ##..w.#..##  #. #.....#...# ##.. .....#@...###..†.#.##...........#...#......(.....#†.†......<...........#.<....#..#..#....##.........#.........##.....####...############   #####
+.w
+_Found a stone staircase leading up.55
+_
+ You hit the gallery worm.
+ You headbutt the gallery worm but do no damage.
+_The gallery worm is lightly wounded.42 =6.6 (0.7
+ 
+_The gallery worm bites you.
+ You slice the gallery worm!!
+_The gallery worm is moderately wounded.55 ==7.3
+_
+ You slash the gallery worm! You headbutt the gallery worm.
+_The gallery worm is moderately wounded.38.0
+_You block the gallery worm's attack.
+ You hit the gallery worm.
+_The gallery worm is moderately wounded.2 =-8 (0.8
+ 
+_You block the gallery worm's attack.
+ You carve the gallery worm like a ham!!!
+_The gallery worm is almost dead.612 ====-- 9.5 (0.7
+_The gallery worm barely misses you.You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.5 (3514 1 =----- 50.3 (0.8ROUTE_EVENT ability Heroism turn=188
+
+w
+_You feel like a meek peon again.
+_You gain the combat prowess of a mighty hero.
+GYou encounter a coil worm.
+w   coil worm (constriction)G   great orb of eyes (wandering)The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm!73--8 (36462 =---1.3 (1.0Hero ROUTE_EVENT use haste turn=189 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 107/187   =============-----------....<.. ..#Magic:  23/25     ======================--..........#AC: 28 (36%)Str: 24..........#     #######     EV: 14Int: 8#.........#    ##.....##    SH: 16Dex: 16#.....#..#   ##.......#    XL: 20 Next:  6%  Place: Wormlands:4##....#..##  #.........    Noise:  2 =-----  Time: 151.3 (0.0)#....w#...# ##.........    k) +3 broad axe.....#@...###..†.......    Nothing quivered#..........##...........    Might Hero #..........#......(.....#........†.†......<.....    w   gallery wormG..........#............    w   coil worm (constriction)w.....<....#............    G   great orb of eyes (wandering)...........#...........##.....................###.........#.........####.....####...############   #####
+_The gallery worm is almost dead.
+_The gallery worm barely misses you.You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.
+_You feel like a meek peon again.
+_You gain the combat prowess of a mighty hero.You encounter a coil worm.The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm!
+_You encounter a great orb of eyes.
+w.
+ You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.
+_You feel like a meek peon again.
+_You gain the combat prowess of a mighty hero.You encounter a coil worm.
+ The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm!
+_You encounter a great orb of eyes.You feel yourself speed up.
+ The great orb of eyes turns its gaze towards you.G.G2.3 (1Fast Might Hero 
+w.
+_You block the gallery worm's attack.
+ You hit the gallery worm.
+_The gallery worm is almost dead.G.8 (0.5
+_The gallery worm closely misses you.You hit the gallery worm.
+_The gallery worm is almost dead.813.4 (0.6
+_
+w.
+ You barely miss the gallery worm.
+_The gallery worm is almost dead.G.28 (0.4
+.
+_The gallery worm bites you but does no damage.
+ You slash the gallery worm!
+ You kill the gallery worm!
+w   coil worm (constriction)G   great orb of eyes
+_Okawaru accepts your kill.714.3 (0.5
+_....<.. ..##..........##...#     ####### #...#.....#  #.....#..#.. ##....#..##  ..#...# ##.###..†#..G..@....##... #..w.#( #..†.†......<....#......<....#.......#..##.... ###.  ##.....####...####  ######   #####
+w..Gww   gallery worm (wanderingw   coil worm (constriction)G   great orb of eyes90 -5.0 (0.7 ....<.. ..# #..........# #..........#      #.........#    ##..... #.....#..#   ## ##....#..##  # ##.....#...# ## #.....#....###..† #...w@.....## #...G......#......( #.†.†......<.w.#.<....#..##... ##.#..
+ ##.....####...######
+ ######   #####
+.w
+_You encounter a gallery worm.You block the coil worm's attack. x2w4=2 =6 (0.6
+ 
+_The great orb of eyes bites you but does no damage.
+ You slash the coil worm! You headbutt the coil worm!!
+ The coil worm is heavily wounded.
+_You hit the great orb of eyes.4 ==6.2
+_
+w.
+ You open the coil worm like a pillowcase!!!
+ The coil worm is severely wounded.
+_You slice the great orb of eyes!!
+ You block the coil worm's attack. x2   9 ===--- 7 (0.5
+.
+_The great orb of eyes completely misses you.You slice the coil worm!!
+ You kill the coil worm!
+G   great orb of eyes
+ Okawaru accepts your kill.
+_You slash the great orb of eyes!10= 5 ==---- 7.3 (0.6
+_
+ You slice the great orb of eyes!!
+_The great orb of eyes is almost dead.
+w.
+ The great orb of eyes gazes at you.= 7 ===--- 7 (0.4
+.
+_You resist with some effort.
+ You slash the great orb of eyes!
+ You kill the great orb of eyes!
+
+_Okawaru accepts your kill.=8 2 =----- 8.2 (0.5
+_ ....<.. ..# #..# #....#      #...#    ## #.....#..#   ## ##....#..##  # ##.....#...# ## #.....#....###..† #.## #..w.#......( #.†.†......< ..#.<....#.#.### ##.#. ##.....####...
+ ######   #####--8 (0.6
+ 
+_The gallery worm closely misses you.You slice the gallery worm!! You headbutt the gallery worm!
+_The gallery worm is moderately wounded.15 ==9.3 (0.5
+_
+ You slash the gallery worm!
+_The gallery worm is heavily wounded.38
+ 
+_You block the gallery worm's attack.
+ You slash the gallery worm!
+_The gallery worm is severely wounded.460.3
+_
+.
+ You slice the gallery worm!! You headbutt the gallery worm!
+ You kill the gallery worm!
+
+_Okawaru accepts your kill.25=958
+_
+_You start resting.0 --2.1 (1.3--7 (1.9
+_You feel a little less mighty now.3=4567=8=
+_You start resting.73.1 (10.4)8 (11.1Fast 
+_Your extra speed is starting to run out.920
+_You start resting.17.8 (4.0)8.5 (4.7Hero 
+_You feel yourself slow down.2345=
+_You start resting.6=87.5 (9.05 (35148.5 (10.0)
+_You feel like a meek peon again.7893012133=4=56789401=2=3456789=50=123456=7=89601234=5=67897012=3=45678980=1=23456
+_You start resting.HP restored..307.5 (119.0)7=8.5 (120
+_=
+_You now have 20 gold pieces.
+_You now have 32 gold pieces (gained 12).
+ You encounter a coil worm and an iron troll.#................##...........<....#   #................#    #...###...........    #...# ##.........   #...#  ###.....###  #...#    #######  ####  #...#             ...T. #...#             ......#...#             ....#             ....#....#..#T   iron troll (asleep)#...#w   coil worm (constriction, asleep) .........# #..w.#  #
+220.0)w.TTw)9.5 (21
+_ROUTE_EVENT ability Heroism turn=384
+
+.T
+_You gain the combat prowess of a mighty hero.w.3--8 (364630.5 (1.0)Hero 
+_ #. #.<.... #. #...### #...# ##. #...#  ###..... #...#    ### #...##.....##...#?....T.#...#.#.#.#.#.#...#.w...#....#.##.....###....#  #.....
+.T
+_Found a scroll of identify.w.1
+_
+ You hit the iron troll but do no damage.
+_Your headbutt misses the iron troll.1 =2.2 (0.7
+_
+w.
+_You completely miss the iron troll.29
+w.
+_The iron troll misses you. You block the iron troll's attack. x2
+_You hit the iron troll but do no damage.--13.6
+_
+ You slash the iron troll!
+_The iron troll is lightly wounded.78--3 ==4.4 (0.8
+w.
+_You block the iron troll's attack. The iron troll claws you! The iron troll misses you.You slash the iron troll!
+_The iron troll is moderately wounded. 4=5.2
+_You block the iron troll's attack. The iron troll claws you! The iron troll misses you.
+ You slash the iron troll!
+_The iron troll is moderately wounded.
+ You hit the iron troll.
+ You headbutt the iron troll but do no damage.
+ The iron troll is moderately wounded.
+_You barely miss the coil worm.block the coil worm's attack. x2; The iron troll completely misses you.
+ The iron troll claws you but does no damage.9--2 =-9 (0.7 The iron troll is moderately wounded.
+_You barely miss the coil worm.You block the coil worm's attack. x2; The iron troll completely misses you.The iron troll claws you but does no damage.
+_You block the iron troll's attack.
+ You hit the iron troll but do no damage.
+_You hit the coil worm.-6.6You headbutt the iron troll but do no damage.
+ The iron troll is moderately wounded.
+_You hit the coil worm.
+_You block the coil worm's attack. The coil worm closely misses you. You furiously retaliate! You headbutt the coil worm.
+ You hit the iron troll.eadbutt the iron troll but do no damage.The iron troll is moderately wounded.
+_You hit the coil worm.
+ The iron troll bites you!63--5 ==7.3
+ 
+_The iron troll claws you but does no damage. x2
+ You hit the iron troll but do no damage.The iron troll is moderately wounded.
+_You slash the coil worm!=2 =-8.1 (0.8
+ 
+_You block the coil worm's attack. x2
+ You chop the iron troll into pieces!!! You headbutt the iron troll.
+ The iron troll is severely wounded.
+_You slash the coil worm!
+ You block the iron troll's attack. The iron troll claws you! You block the iron troll's attack. You block the coil worm's attack.52--- 9 ===--- 8 (0.7
+_The coil worm closely misses you. You furiously retaliate! You headbutt the coil worm.
+ You hit the iron troll but do no damage.The iron troll is severely wounded.
+_You hit the coil worm.3- 2 =----- 9.5
+T
+_The coil worm misses you. You block the coil worm's attack.
+ You hit the iron troll but do no damage.The iron troll is severely wounded.
+_You barely miss the coil worm.
+T  2 iron trollsYou encounter an iron troll.The iron troll bites you but does no damage.
+ You block the iron troll's attack.5=--40.2
+T.
+_The iron troll claws you but does no damage.
+ You slash the iron troll!
+ The iron troll is severely wounded.
+_You hit the coil worm but do no damage.1.0 (0.8
+.
+_You block the coil worm's attack.
+ You slice the iron troll!!
+ You kill the iron troll!
+.†   iron trollOkawaru accepts your kill.
+_You hit the coil worm but do no damage.47-104 ==7 (0.7
+T.
+_You block the coil worm's attack. The coil worm bites you!
+ You slash the coil worm! You headbutt the coil worm!
+_The coil worm is heavily wounded.36--           4             2 =-2.5 (0.8Constr 
+_The coil worm grabs you. You block the coil worm's attack. The coil worm constricts you!You slash the coil worm! You headbutt the coil worm.
+_The coil worm is heavily wounded.7-=-3.2 (0.7
+_
+T.
+ You completely miss the coil worm. You headbutt the coil worm.
+_The coil worm is severely wounded.The coil worm bites you but does no damage. 121--4.0 (0.8ROUTE_EVENT use might turn=403 place=Worm:4
+#................    Route_melee the Severer           *WIZARD*#...........<....    Minotaur of Okawaru ***...#................    Health: 121/187   ===============---------#...###..........    Magic:  25/25     ========================#...# ##.........    AC: 28 (36%)Str: 24#...#  ###.....##    EV:  4 Int: 8#...#    #######     SH: 16Dex: 16###### #...#XL: 20 Next: 10%  Place: Wormlands:4#.....##...#Noise:  2 =-----  Time: 344.0 (0.0)?......#...#k) +3 broad axe......†@...#Nothing quivered.......w...#Hero Constr ............#............#T   iron troll....T...#...#w   coil worm (constriction)........#....#.......##.....###....#  #.....
+ You slash the coil worm! You headbutt the coil worm!
+_The coil worm is heavily wounded.
+_The coil worm grabs you. You block the coil worm's attack. The coil worm constricts you!You slash the coil worm! You headbutt the coil worm.
+_The coil worm is heavily wounded.You completely miss the coil worm. You headbutt the coil worm.
+_The coil worm is severely wounded.The coil worm bites you but does no damage.
+_The coil worm constricts you!
+_The coil worm is heavily wounded.
+_The coil worm grabs you. You block the coil worm's attack. The coil worm constricts you!
+ You slash the coil worm! You headbutt the coil worm.
+_The coil worm is heavily wounded.
+ You completely miss the coil worm. You headbutt the coil worm.
+_The coil worm is severely wounded.
+ The coil worm bites you but does no damage.
+_The coil worm constricts you!You feel very mighty all of a sudden.175.0 (1Might Hero Constr 
+T.
+_You block the coil worm's attack. The coil worm constricts you.You slice the coil worm!!
+_The coil worm is almost dead. 3-5 ==7 (0.7
+.
+_You block the coil worm's attack. The coil worm constricts you.You slash the coil worm! You headbutt the coil worm.
+ You kill the coil worm!
+†
+_Okawaru accepts your kill.-14 136.5 (0.8
+_ #< #. #...### #...# ## #...#  ###.....# #...#    ########### #...#          .....##...#?......#...#.......†....#.@†...#......#T.#.....#...#.#....##.....#### #.....  #   T.40 --7.5 (1.0
+ You slash the iron troll!
+_The iron troll is lightly wounded.2 =-8.2 (0.7
+_You block the iron troll's attack. x2; The iron troll misses you.You hit the iron troll.
+_The iron troll is lightly wounded.519.0 (0.8
+_
+ You slash the iron troll! You headbutt the iron troll!
+_The iron troll is heavily wounded.The iron troll bites you but does no damage.
+ The iron troll claws you but does no damage.3 ==7 (0.7
+_You block the iron troll's attack.
+ You hit the iron troll.
+ You headbutt the iron troll but do no damage.
+_The iron troll is heavily wounded.1 =-50.4
+_
+ You slice the iron troll!! Your headbutt misses the iron troll.
+_The iron troll is severely wounded.The iron troll bites you but does no damage.6 6 ===--- 1.1
+_The iron troll closely misses you. The iron troll misses you. You furiously retaliate! You headbutt the iron troll.
+ You hit the iron troll but do no damage.You headbutt the iron troll but do no damage.
+_The iron troll is severely wounded. 1 =----- 8
+_
+ You hit the iron troll but do no damage.You headbutt the iron troll!
+_The iron troll is almost dead.2 =--2.5
+.
+_You block the iron troll's attack. x3
+ You slice the iron troll!!
+ You kill the iron troll!
+
+_Okawaru accepts your kill.7=3.3 (0.8
+_8=92012
+_You start resting.0 -63.3 (10.0)5 (3514-4.3 (11
+_You feel like a meek peon again.345=6=789
+_You start resting.3078.3 (149.3 (15
+_You feel a little less mighty now.12133=4=567
+_You start resting.8w   caustic worm (wandering)w93.3 (144.3 (15ROUTE_EVENT ability Heroism turn=456
+
+w.
+_You encounter a caustic worm.
+_You gain the combat prowess of a mighty hero.w3--8 (36465.0)Hero 
+_#..#...####...# #...#  ###.....###...#    ####### ###### #...#            ##.....##...# #?......#...# .......†....# .†...#........@........# .#...#.#..##.###....## #..w #...#     ....#...      .w.96#...####...# ##...#  ###.....####...#    #######  ###### #...#            ##.....##...# #?......#...# .......†....# .†...#.............# ...@...# .#...# .#..##..w###....## #...... #...#    ##...      .#..       .
+(catching breath)The caustic worm spits acid at you.6 ==7#...# ##...#  ###.....####...#    #######  ###### #...#            ##.....##...# #?......#...# .......†....# .†...#.............# .......# .........#@..# .........#.........##..w###....####....... #...#   #...      .#..       . .
+w.
+_The splash of acid hits you but does no damage.400 --8
+You slash the caustic worm!
+_The caustic worm is lightly wounded.--2 =-9.0 (0.7
+ 
+_The caustic worm closely misses you.You slice the caustic worm!!
+ You headbutt the caustic worm but do no damage.
+_The caustic worm is heavily wounded.4=5 ==8 (0.8
+ 
+_The caustic worm bites you but does no damage.
+ You slash the caustic worm! You headbutt the caustic worm.
+_The caustic worm is severely wounded.1=2 =-400.5 (0.7
+ 
+_You block the caustic worm's attack.
+ You slice the caustic worm!!
+_The caustic worm is almost dead.5 ==1.2
+_
+.
+ You slash the caustic worm!
+ You kill the caustic worm!
+
+_Okawaru accepts your kill.=21 =-9
+_2=3
+_You start resting.Magic restored.0 --3.9 (2.05=-4.9 (3
+_45=678
+_You start resting.13.9 (95 (35144.9 (10.0)
+_You feel like a meek peon again.9=50=123456=7=89601234=5=67897012=3=45678980=1=23456
+_You start resting.HP restored.89.9 (757=90.9 (76
+_=
+ You encounter a deep troll earth mage.#?......#...#.......†....#........†...##.............#  .............#  .........#...## .........#....#........##.....###########....####............#...#   ##...........#...     #.@.........#..      #........... #........... .....T   deep troll earth mage (asleep) #.....# #.....# #............T.?
+8.9 (8.0)T.
+ Found a scroll of fog.T
+T(wandering)T   deep troll earth mageThe deep troll earth mage shouts!3 =9.9 (9ROUTE_EVENT ability Heroism turn=563
+
+T.
+_You encounter a deep troll.
+_You gain the combat prowess of a mighty hero.T
+T.
+ The deep troll shouts!TT  2 deep troll earth magi (1 wandering)3--8 (3646500.9 (1Hero .......†....# .†...#.....# .# .#...#.#..##.#########....##.......  #...#    #...     #. #..      #.  #. #...#.# T  2 deep trolls (1 wandering)#....T# #......T......T..?..T..)
+T.
+_You encounter a deep troll earth mage.You encounter a deep troll.
+_Found a club.T.T.T.TT4 ==1
+.†...##.....#...##.####.....###########....####............  #...#   ##      #...T#..TT..... ..............
+T.
+_The deep troll earth mage shouts! The deep troll shouts!T.T.T.0 --2
+T.
+_You hit the deep troll earth mage but do no damage.TT
+T.
+ You block the deep troll earth mage's attack.
+ The deep troll earth mage claws you.w
+w   caustic worm (wandering)TTsTT  2 deep troll earth magiThe deep troll earth mage barely misses you.6-2 =-3.6 (0.7
+ww
+_You encounter a caustic worm.
+_You completely miss the deep troll earth mage.7=--14.4 (0.8
+_
+T.
+ You slice the deep troll earth mage!!
+_The deep troll earth mage is heavily wounded.The deep troll earth mage bites you but does no damage.T.T.w.4= 7 ===--- 5.1 (0.7
+.
+_You block the deep troll earth mage's attack. x2
+ You slice the deep troll earth mage!!
+ You kill the deep troll earth mage!Okawaru accepts your kill.
+wThe troll leather armour is intact enough to wear.
+_You completely miss the deep troll earth mage.T.T.
+[w   gallery(wandering)w   caustic wormTTsT   deep troll earth mageYou encounter a gallery worm.The deep troll earth mage bites you!
+ The deep troll earth mage claws you but does no damage. x2
+w (catching breath)wThe caustic worm spits acid at you.The splash of acid hits you but does no damage.0-24 (35%)    3 6 ==---- 9 (0.8Corr (-4) 
+w.
+_The acid corrodes you!You slice the deep troll!!
+ The deep troll is moderately wounded.
+_You hit the deep troll earth mage but do no damage.w.
+T.
+ You block the deep troll's attack. x3
+ The deep troll earth mage bites you but does no damage.
+ The deep troll earth mage claws you..77--5 ==-6.6 (0.7
+ 
+_The deep troll earth mage claws you but does no damage.
+ You slice the deep troll!! You headbutt the deep troll.
+ The deep troll is severely wounded.
+_You slash the deep troll earth mage! You slice the deep troll!!7.4 (0.8
+_
+w.
+ You hit the deep troll but do no damage.The deep troll is severely wounded.
+_You closely miss the deep troll. You slash the deep troll earth mage!
+w.
+ You block the deep troll earth mage's attack.
+ The deep troll earth mage claws you but does no damage.
+ You block the deep troll earth mage's attack.
+ You block the deep troll's attack. The deep troll misses you.The deep troll claws you but does no damage.
+ The deep troll bites you but does no damage.
+ The deep troll completely misses you.8-=2 =-8.1 (0.7
+w.
+_The deep troll claws you but does no damage.
+ You completely miss the deep troll.The deep troll is severely wounded.
+_You slice the deep troll!! You hit the deep troll earth mage.w.T[
+ The deep troll misses you. The deep troll closely misses you. You furiously retaliate!
+ You headbutt the deep troll but do no damage.The deep troll barely misses you. The deep troll earth mage bites you.54 ==9 (0.8w.
+_You slice the deep troll!! You hit the deep troll earth mage.misses you. The deep troll closely misses you. You furiously retaliate!
+ You headbutt the deep troll but do no damage.The deep troll barely misses you. The deep troll earth mage bites you.
+_You block the deep troll earth mage's attack. x2
+ ash You headbutt the deep troll.
+ The deep troll is almost dead.completely miss the deep troll.
+_You barely miss the deep troll earth mage.
+ The deep troll earth mage bites you.
+ The deep troll earth mage claws you but does no damage. x2
+(catching breath)The caustic worm spits acid at you.The splash of acid hits you!! The acid corrodes you! You block the deep troll's attack. The deep troll claws you!
+ The deep troll claws you but does no damage.113--------0 (3369.78ROUTE_EVENT use might turn=575 place=Worm:4
+  ........†...##Route_melee the Severer           *WIZARD*.............#Minotaur of Okawaru ***................#Health: 113/187   ==============----------.........#...##Magic:  24/25     =======================-.........#....##AC: 20 (33%)      Str: 24........##.....########EV: 14Int: 8###....####............SH: 16Dex: 16#...#   ##...........XL: 20 Next: 13%  Place: Wormlands:4#...     #...........Noise:  6 ==----  Time: 509.7 (0.0)#..#...........k) +3 broad axe#.T@T.......Nothing quivered#...[T.......Hero Corr (-8) #...........##...ww......#w   gallery worm#...........w   caustic worm (catching breath).........?..TT  2 deep trolls...........).T   deep troll earth mage..............
+ The deep troll is almost dead.You completely miss the deep troll.
+_You barely miss the deep troll earth mage.The deep troll earth mage bites you.
+ The deep troll earth mage claws you but does no damage. x2
+ The caustic worm spits acid at you.The splash of acid hits you!! The acid corrodes you! You block the deep troll's attack. The deep troll claws you!
+ The deep troll claws you but does no damage.
+_The deep troll bites you! You block the deep troll's attack. x2w.w.
+ The caustic worm spits acid at you.The splash of acid hits you!! The acid corrodes you! You block the deep troll's attack. The deep troll claws you!
+ The deep troll claws you but does no damage.
+_bites you! You block the deep troll's attack. x2
+ You feel very mighty all of a sudden.
+ You block the deep troll's attack.deep troll claws you but does no damage.
+ You block the deep troll's attack. The deep troll bites you! The deep troll barely misses you. You block the deep troll's attack.
+ earth mage bites you!94/187 --5=410.7 (1Might Hero Corr (-8) 
+.
+_The deep troll earth mage claws you but does no damage. x2
+ You open the deep troll like a pillowcase!!!
+ You kill the deep troll!
+.Okawaru accepts your kill.You slice the deep troll!!
+ You kill the deep troll!
+.Okawaru accepts your kill.You slice the deep troll earth mage!!
+ You kill the deep troll earth mage!
+..
+_Okawaru accepts your kill.5/188--551.4 (0.7
+_.....#...##.####.....###########....####............  #...#   ##      ... ##.....#...ww#.. ..?...)....2 =-2.4 (1.0
+_You block the gallery worm's attack. You block the caustic worm's attack.
+ Things that are here:
+ a +0 troll leather armour; a deep troll corpseYou hit the gallery worm.
+ The gallery worm is lightly wounded.
+_You barely miss the caustic worm.2--3.2 (0.8
+ 
+_The gallery worm completely misses you. The caustic worm bites you.
+ You slice the gallery worm!!
+ The gallery worm is moderately wounded.
+_You hit the caustic worm but do no damage.You block the gallery worm's attack.
+(catching breath)The caustic worm spits acid at you.73---=16 (32 7 ===--- 9 (0.712) ROUTE_EVENT use heal wounds turn=580 place=Worm:4
+  .............#Route_melee the Severer           *WIZARD*.............#Minotaur of Okawaru ***............#...##Health: 73/188    =========---------------.........#....##Magic:  25/25     ========================........##.....########AC: 16 (32%)      Str: 24###....####............EV: 14Int: 8#...#   ##...........SH: 16Dex: 16#...     #...........XL: 20 Next: 15%  Place: Wormlands:4#..#...........Noise:  7 ===---  Time: 513.9 (0.0)##...........k) +3 broad axe#...@........Nothing quivered#...ww......#Might Hero Corr (-12) #...........##...........w   gallery worm..........?..w   caustic worm (catching breath)............)...............................
+ The gallery worm is lightly wounded.
+_You barely miss the caustic worm.
+_The gallery worm completely misses you. The caustic worm bites you.
+ You slice the gallery worm!!
+ The gallery worm is moderately wounded.
+_You hit the caustic worm but do no damage.You block the gallery worm's attack.
+ The caustic worm spits acid at you.
+_The splash of acid hits you!! The acid corrodes you!97=== 2 =----- 4.9 (1
+_You hit the caustic worm but do no damage.
+ You block the gallery worm's attack.
+ The caustic worm spits acid at you.
+_The splash of acid hits you!! The acid corrodes you!
+_You feel much better. You block the gallery worm's attack. You block the caustic worm's attack.
+ You slice the gallery worm!! Your headbutt misses the gallery worm.The gallery worm is heavily wounded.
+_You hit the caustic worm but do no damage.
+ The gallery worm bites you but does no damage. 7 ===--- 5.6 (0.7
+  
+_The caustic worm misses you.You slash the gallery worm!
+ The gallery worm is severely wounded.
+_You slash the caustic worm! 4 ==---- 6.3
+_
+ You hit the gallery worm but do no damage.You headbutt the gallery worm.
+ The gallery worm is severely wounded.
+_You hit the caustic worm but do no damage.
+(catching breath)The caustic worm spits acid at you.8===5 ==-7.0
+ 
+_The splash of acid misses you. You block the gallery worm's attack.
+ You hit the gallery worm.
+ The gallery worm is severely wounded.
+_You slice the caustic worm!! 6 ===--- 8 (0.8
+
+_You block the gallery worm's attack. The caustic worm completely misses you. You furiously retaliate! You headbutt the caustic worm.
+ You hit the gallery worm but do no damage.The gallery worm is severely wounded.
+_You slash the caustic worm! 2 =----- 8.5 (0.7
+ 
+_You block the gallery worm's attack. You block the caustic worm's attack.
+ You hit the gallery worm but do no damage.The gallery worm is severely wounded.
+_You slash the caustic worm!93 ==-9.2
+_
+ You hit the caustic worm but do no damage.You headbutt the caustic worm but do no damage.The caustic worm is almost dead.
+_You hit the gallery worm but do no damage.2 =-9
+.
+_The gallery worm misses you. You furiously retaliate! You headbutt the gallery worm! You block the caustic worm's attack.
+ You slash the gallery worm!
+ The gallery worm is almost dead.You hit the caustic worm.
+ You kill the caustic worm!
+†
+_Okawaru accepts your kill.6-20.6
+.
+_You block the gallery worm's attack.
+ You slash the gallery worm!
+ You kill the gallery worm!
+†
+_Okawaru accepts your kill.100/188711.3
+_12=3=45678910=1=
+_You start resting.20 -43.3 (22.0)3 (3014-4.3 (23
+_You feel like a meek peon again.3456
+_You start resting.753.3 (9.0)25 (35%)    4.3 (10.0)
+_You are no longer corroded.8=9=20123
+_You start resting.66.3 (127.3 (13
+_You feel a little less mighty now.456=7=8930123134=5=6789401=2=3456789=50=1234567=8=96012345=6=78970123=4=56789801=2=34567
+_You start resting.HP restored.692.3 (125.0)8=36
+_.# 
+ .#...#.#..##.#########....##.......  #...#   ## #...     #. #..      #.....  ##........... 0.0)#...[.. #...†@......# #...........##.#....?..)....[4.3 (1
+_Found a plate armour.
+_You see here a caustic worm corpse.
+_=
+_g - 4 scrolls of fog (gained 1)
+ You encounter a deathcap. .# #...†.......#..# ...##...........#.## .....#...........#.# .^...................# .....)...# ..........# ..........### ........[..........................#............f..........##..................@...###................###### ##.........#...#         ##........###            ##.......    f   deathcap (dormant) ##...... ##..... ##.... #####730.3 (36.0)ff1.3 (37
+_ .# #...†.#..# ...##.#.## .....#.#.#.^.#.)...#.#..[......#.f.##.####......###### ###...## ## ### ## ## ## ## 2.3 (1.0)
+ .# #...†.#.. ...##.#. .....#.#.#.^.#.)...#.#..[.##.f.###.####......###### ## ##...### ## #### ##..###3
+ .# #...†.# ...##.#. .....#.#.#...^..).....#.[#.# #.f.## #.### ##......###### ## ##...### ## #### ##.##4
+ .# #...†.# ...##.# .....#.##...^.)# #.[ #.# #.f.## #.### ##......###### ## ##...### ## ##### ###5
+ .# #...†. ...##. .....#.#...^.) # #.[ #.# #.f.## #.### ##......###### ## ##...### ## ##### ##6
+ .# #...† ...## .....#.###...^.)  # #.[ #.# #.f.## #.### ##......###### ## ##...### ## ##### ##2 =7
+ 
+_The deathcap releases spores at you but does no damage.
+ You slice the deathcap!! You headbutt the deathcap!
+_The deathcap is heavily damaged.5 ==8.0 (0.7
+ 
+_The deathcap releases spores at you but does no damage.
+ You slash the deathcap! You headbutt the deathcap.
+_The deathcap is almost destroyed.2 =-8 (0.8
+_You block the deathcap's attack.
+ You hit the deathcap.
+_The deathcap is almost destroyed.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!7--                       0          3 =-9.6Conf ROUTE_EVENT use curing turn=809 place=Worm:4
+.# #...†......    Route_melee the Severer           *WIZARD*...##..........    Minotaur of Okawaru ***........#..........    Health: 178/188   ======================--.###...^................    Magic:  25/25     ========================.......................)    AC: 25 (35%)Str: 24.......................    EV: 11Int: 8#.....................    SH:  0            Dex: 16#..........[.........    XL: 20 Next: 17%  Place: Wormlands:4#.............#......    Noise:  3 =-----  Time: 739.6 (0.0)#.f..........##.....    k) +3 broad axe#..@.........###....    Nothing quivered##......###### ##...    Conf ##...#####..#######.    f   deathcap###
+_The deathcap releases spores at you but does no damage.
+ You slash the deathcap! You headbutt the deathcap.
+_The deathcap is almost destroyed.
+_You block the deathcap's attack.
+ You hit the deathcap.
+_The deathcap is almost destroyed.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.
+_The deathcap is almost destroyed.
+_You block the deathcap's attack.
+ You hit the deathcap.
+_The deathcap is almost destroyed.
+ The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better. The deathcap releases spores at you.
+ You are engulfed in a cloud of dizzying spores!85=240.6 (1ROUTE_EVENT use curing turn=810 place=Worm:4
+.# #...†......    Route_melee the Severer           *WIZARD*...##..........    Minotaur of Okawaru ***........#..........    Health: 185/188   =======================-.###...^................    Magic:  25/25     ========================.......................)    AC: 25 (35%)Str: 24.......................    EV: 11Int: 8#.....................    SH:  0            Dex: 16#..........[.........    XL: 20 Next: 17%  Place: Wormlands:4#.............#......    Noise:  2 =-----  Time: 740.6 (0.0)#.f..........##.....    k) +3 broad axe#..@.........###....    Nothing quivered##......###### ##...    Conf ##...#####..#######.    f   deathcap###
+_You block the deathcap's attack.
+ You hit the deathcap.
+_The deathcap is almost destroyed.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better. The deathcap releases spores at you.
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.8=14          1.6 (1
+.
+_The deathcap is almost destroyed.
+ The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.feel better. The deathcap releases spores at you.
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.
+_You feel better. You block the deathcap's attack.
+ You slice the deathcap!!
+
+_You destroy the deathcap!12.4 (0.8
+_=
+ You encounter 2 gallery worms and a coil worm.#...#   ###...     # #..      # w..##  ## ....## #...[.. #.....# #...† #########  #...#.....###...^......0 -...............:.....#.................w. ##..........[...w...   #.............#..    ww  2 gallery worms (asleep)...    ##............##.    w   coil worm (constriction, asleep)..#............##.##......###### ###...########7.4 (5.0w..w.wwww)-8.4 (6ROUTE_EVENT ability Heroism turn=818
+
+w.
+_Found a parchment of Controlled Blink.
+_You gain the combat prowess of a mighty hero..w.w3--8 (36469.4 (1Hero 
+_ #...#   ## #...     # #..      # ...##  ## ....## #...[ #w....# #...† ##.####  #.#.###...^.:....w#.w...##.[... #.#.... ##.##....#  #........#   ##......##...#     ##...###
+ #####.ww.2 =50
+.w
+_The gallery worm misses you. You furiously retaliate! You headbutt the gallery worm!
+ You hit the gallery worm but do no damage.You headbutt the gallery worm.
+_The gallery worm is lightly wounded.w.1.2 (0.8
+.w
+_You block the gallery worm's attack.
+ You slice the gallery worm like a ripe choko!!!
+_The gallery worm is heavily wounded..w10 ====-- 9 (0.7
+.w
+_The gallery worm closely misses you.You slash the gallery worm! Your headbutt misses the gallery worm.The gallery worm is severely wounded.
+_You hit the gallery worm.w
+w  3 gallery worms (1 wandering)You block the gallery worm's attack.
+ You encounter a gallery worm.-- 4 ==---- 2.6ww
+ The gallery worm is severely wounded.
+_You hit the gallery worm.
+ You block the gallery worm's attack.
+ You encounter a gallery worm.
+_The gallery worm closely misses you.
+ You barely miss the gallery worm.
+ You headbutt the gallery worm but do no damage.The gallery worm is severely wounded.
+_You hit the coil worm. You slash the gallery worm!4=3 ==--3.4 (0.8
+_w.
+ You headbutt the gallery worm but do no damage.
+ The gallery worm is severely wounded.
+_You hit the coil worm. You slash the gallery worm!
+ You slice the gallery worm!!
+ You headbutt the gallery worm but do no damage.The gallery worm is almost dead.
+_You slash the gallery worm! You hit the coil worm.
+ The gallery worm bites you but does no damage.
+ You block the coil worm's attack. x254.2
+:wThe gallery worm bites you but does no damage.
+ You block the coil worm's attack. x2
+_The gallery worm bites you but does no damage.ash Your headbutt misses the gallery worm.
+_You barely miss the gallery worm. You slash the coil worm!
+ The coil worm grabs you.
+ The coil worm bites you but does no damage.73--           4             3 =-9 (0.7Constr w.
+ The coil worm grabs you.
+ The coil
+_The coil worm constricts you. The gallery worm bites you!
+ You slice the coil worm!!
+ The coil worm is heavily wounded.
+ You hit the gallery worm but do no damage.
+_You hit the gallery worm. 1--- 6 ===--- 5.7 (0.8
+.
+_The coil worm constricts you. You block the gallery worm's attack. x2
+ You slash the coil worm! You headbutt the coil worm!
+ The coil worm is severely wounded.You slice the gallery worm!! x2
+ You kill the gallery worm!
+†  2 
+_Okawaru accepts your kill.2-=                      8 5 ==---- 6.4 (0.7
+_
+.
+ You carve the coil worm like a ham!!!
+ You kill the coil worm!
+.wOkawaru accepts your kill.
+_You barely miss the gallery worm.14  7 ===--- 7.2 (0.8
+.w
+_You block the gallery worm's attack.
+ You slice the gallery worm!!
+_The gallery worm is almost dead.3=89 (0.7
+.
+_You block the gallery worm's attack.
+ You slash the gallery worm!
+ You kill the gallery worm!
+.w
+_Okawaru accepts your kill.   gallery worm=5=9 3 ==---- 8.7 (0.8
+_
+ You hit the gallery worm but do no damage.
+_You headbutt the gallery worm but do no damage.2 =--9.5
+ 
+_You block the gallery worm's attack.
+ You open the gallery worm like a pillowcase!!!
+ You headbutt the gallery worm but do no damage.
+_The gallery worm is moderately wounded.4 9 ===--- 60.2 (0.7
+_
+ You slice the gallery worm!!
+ You headbutt the gallery worm but do no damage.
+_The gallery worm is severely wounded.61.0 (0.8
+ 
+_The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm!
+ You hit the gallery worm but do no damage.You headbutt the gallery worm!
+_The gallery worm is almost dead.63--= 3 =----- 7 (0.7
+.
+_The gallery worm bites you!
+ You slice the gallery worm!!
+ You kill the gallery worm!
+†
+_Okawaru accepts your kill.4--20=-2.5 (0.8
+_5=6=78970123=4=5678980
+_You start resting.1=0 --94.5 (32.0)5 (3514--5.5 (33
+_You feel like a meek peon again.2=34567
+_You start resting.HP restored.808.5 (18=9.5 (14
+_
+ You see here a gallery worm corpse.
+_=
+ #...     #..      ...##   ....##  #.....# #####        ##.......###....####### #...............###...^.......†.   #...@....†#.   #.........##   #.........##.....   #.........###.   ##.......## #..    ##.....##  ##...... ##...##    ##...### #####      #####
+ You pick up a parchment of Controlled Blink and begin reading...15.5 (6.0)6.5 (7
+_You add the spell Controlled Blink to your library.
+ You encounter a deep troll. #.. #.. .. .. #.. ######       ##... ##....####### #.   ##.....###...^T..##$.....†.......@#........†#.......##.........######### #.........## #.........###T   deep troll (asleep) ##.......## # ##.....##  ##.. ##...##    ##. #####      ##f21.5 (5
+.TThe deep troll shouts!Tf   deathcap3 =2.5 (6ROUTE_EVENT ability Heroism turn=896
+
+.T
+_You encounter a deathcap.
+_You gain the combat prowess of a mighty hero.3--8 (36460 -3.5 (1Hero 
+_ # #   # ###### ##.     ##....# #..  ##.###....f.##.T.†.#.†#.##.#####.## #.### ##.## # ##.....##  ## ##...##    ## #####      $T-4 # #. #..      ###### ##.)    ##....# #.  ##.###.f.##.$T.†.#.†##.##.####.## #.### ##.## # ##.....##  ## ##...##     #####
+.T
+_Found a quarterstaff.ff  2 deathcaps (1 wandering)5
+ff
+_You encounter a deathcap.
+_You barely miss the deep troll. Your headbutt misses the deep troll.1 =6.2 (0.7
+_.
+_Found a quarterstaff.
+_You encounter a deathcap.
+_You barely miss the deep troll. Your headbutt misses the deep troll.You slice the deep troll!! You headbutt the deep troll!
+_The deep troll is severely wounded.
+ You block the deep troll's attack.
+ The deep troll claws you but does no damage.
+ The deep troll barely misses you. You furiously retaliate! You headbutt the deep troll!
+ You kill the deep troll!w
+..w   gallery wormOkawaru accepts your kill.--1 7 ===--- 7.0 (0.8. f         ...      ######       ##ww.)    ##....####### #..  #####f.##.$.@............†...........#........†........##.#############. ..###    w   caustic worm (wandering)..## #    ff  2 deathcaps..##...#######
+.w
+_You encounter a gallery worm.
+_You encounter a caustic worm..www  2 gallery wormsw4= 0 ------ 8.0 (1.0........w......f........   ###### .w)..  ##....# #.w.... ##.###.f.##.$@...†......#.†##.##.## ##.## #. ##.##  ##.....##
+ ##...##
+ #####
+.w
+_You encounter a gallery worm..w.w---9...#.w......#.f......#... ###### .w...###....# ..##...w.f.##.@....†#......#.†##.##. ##. #. ##.##
+ ##.....##
+ ##...##
+ #####)w.w.w2 =30
+_You block the deathcap's attack.
+.wYou see here 18 gold pieces.
+ You slash the deathcap!
+_The deathcap is moderately damaged..w
+.wThe deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!75--                       0          4 ==7 (0.7Conf Hero ROUTE_EVENT use curing turn=905 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 175/188   ======================--..........#Magic:  24/25     =======================-..........#AC: 28 (36%)Str: 24...f......#EV: 14Int: 8.....w.... ######SH:  0            Dex: 16.....)...###....#######     XL: 20 Next: 21%  Place: Wormlands:4.........##...........##    Noise:  4 ==----  Time: 830.7 (0.0)......fw##..............    k) +3 broad axe......w@..............†.    Nothing quivered#............#........†#    Conf Hero ####........##.........############.........#    ww  2 gallery worms#.........#    w   caustic worm##.......##    ff  2 deathcaps##.....####...#######
+_You encounter a caustic worm.
+_You encounter a gallery worm.
+_You block the deathcap's attack.
+ You see here 18 gold pieces.
+ You slash the deathcap!
+_The deathcap is moderately damaged.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused..w
+_You encounter a gallery worm.
+_You block the deathcap's attack.ee here 18 gold pieces.
+ You slash the deathcap!
+_The deathcap is moderately damaged.
+ The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better. You block the caustic worm's attack. The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm.8016          2 =-1.7 (1Hero .wThe deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better. You block the caustic worm's attack. The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm.
+_You block the deathcap's attack.slash the gallery worm!
+ The gallery worm is lightly wounded.
+_You barely miss the caustic worm. You hit the deathcap.1=-2.5 (0.8
+ 
+_The caustic worm completely misses you. The deathcap barely misses you. You block the gallery worm's attack.
+ You hit the deathcap.
+ The deathcap is moderately damaged.You slice the caustic worm!!
+_You hit the gallery worm but do no damage.5=5 ==3.2 (0.7
+_
+ The deathcap is moderately damaged.ice the caustic!!
+_You hit the gallery worm but do no damage.
+ You hit the caustic worm.
+ You headbutt the caustic worm but do no damage.
+ The caustic worm is moderately wounded.
+_You slash the deathcap! You hit the gallery worm.
+ The gallery worm bites you but does no damage.
+ You block the caustic worm's attack.
+.wThe deathcap draws from the surrounding life force!
+ The deathcap is healed.#7--2 =-9You hear a grinding noise.
+ The caustic worm is moderately wounded.
+ You slice the deathcap!! You hit the gallery worm.You hit the gallery worm but do no damage.
+ The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+ You block the gallery worm's attack.
+(catching breath)The caustic worm spits acid at you.57---24 (35%)    6 ==4.6Corr (-4) are engulfed in a cloud of dizzying spores!
+ You block the gallery worm's attack.
+ The caustic worm spits acid at you.
+_The splash of acid hits you. The acid corrodes you!You hit the deathcap but do no damage.
+ The deathcap is severely damaged.slash the gallery worm!
+ You hit the caustic worm but do no damage.
+_You hit the gallery worm.2 =-5.3
+_
+ You hit the caustic worm but do no damage.
+_You hit the gallery worm.
+ You hit the deathcap.
+ You barely miss the caustic worm.gallery
+_You block the gallery worm's attack. x2; You block the caustic worm's attack. The deathcap closely misses you. You furiously retaliate!
+ You headbutt the deathcap!41---=-6.0You headbutt the deathcap!
+_The deathcap draws from the surrounding life force!almost destroyYou hit the gallery worm.caustic
+_You hit the gallery worm but do no damage.The deathcap releases spores at you!are engulfed in a cloud of dizzying spores!126----                       0          5 ==7Conf Hero Corr (-4) ROUTE_EVENT use curing turn=913 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 126/188   ================--------..........#Magic:  25/25     ========================..........#AC: 24 (35%)      Str: 24...f......#EV: 14Int: 8.......... ######SH:  0            Dex: 16.....)...###....#######     XL: 20 Next: 21%  Place: Wormlands:4.........##...........##    Noise:  5 ==----  Time: 836.7 (0.0)......fww#..............    k) +3 broad axe......w@..............†.    Nothing quivered#............#........†#    Conf Hero Corr (-4) ####........##.........############.........#    ww  2 gallery worms#.........#    w   caustic worm (catching breath)##.......##    ff  2 deathcaps##.....####...#######
+_The deathcap draws from the surrounding life force!
+ You hit the deathcap.
+ The deathcap is almost destroyed.You hit the gallery worm.
+ You hit the caustic worm but do no damage.
+_You hit the gallery worm but do no damage.You block the gallery worm's attack. x2; You block the caustic worm's attack. The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.
+You hit the gallery worm.
+ caustic
+_You hit the gallery worm but do no damage.block the gallery worm's attack. x2; You block the caustic worm's attack. The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better.
+ The caustic worm bites you but does no damage.
+ The gallery worm bites you!
+ The deathcap draws from the surrounding life force!15--16          47.7 (1
+.
+_The deathcap is healed. You block the gallery worm's attack.
+ You slash the deathcap!
+   deathcapYou destroy the deathcap!
+_You slice the caustic worm!! You slash the gallery worm! You hit the gallery worm.6--8.4 (0.7
+_
+ You hit the caustic worm but do no damage.You headbutt the caustic worm!
+ The caustic worm is severely wounded.
+_You completely miss the gallery worm. You slash the gallery worm!39.1
+ 
+_You block the gallery worm's attack. The gallery worm barely misses you. You block the caustic worm's attack.
+ You slash the caustic worm! Your headbutt misses the caustic worm.The caustic worm is almost dead.
+_You hit the gallery worm but do no damage. x2
+(catching breath)The caustic worm spits acid at you.68
+_You block the splash of acid. You block the gallery worm's attack. The gallery worm barely misses you.You hit the caustic worm.
+ The caustic worm is almost dead.
+_You hit the gallery worm but do no damage. x272 =-40.5
+_The gallery worm barely misses you. You block the gallery worm's attack. You block the caustic worm's attack.
+ You barely miss the caustic worm.The caustic worm is almost dead.
+_You hit the gallery worm. You slash the gallery worm!3 ==1.3 (0.8
+_You barely miss the caustic worm.The caustic worm is almost dead.
+_You hit the gallery worm. You slash the gallery worm!
+ You hit the caustic worm.
+ You hit the gallery worm but do no damage.
+_You slash the gallery worm!62.1
+.
+_You block the gallery worm's attack. The gallery worm closely misses you. The caustic worm bites you.
+ You slash the caustic worm!
+ You kill the caustic worm!
+f   deathcap
+ Okawaru accepts your kill.You hit the gallery worm but do no damage.
+_You slash the gallery worm!722 =-8 (0.7
+_You block the gallery worm's attack. x2
+ You hit the gallery worm. Your headbutt misses the gallery worm.The gallery worm is severely wounded.
+_You hit the gallery worm but do no damage.-3.6 (0.8
+.
+_You block the gallery worm's attack. x2
+ You slice the gallery worm!!
+ You kill the gallery worm!
+†   gallery wormOkawaru accepts your kill.
+_You slash the gallery worm!8=3 6 ===--- 4.3 (0.7
+_
+ You hit the gallery worm but do no damage.You headbutt the gallery worm.
+_The gallery worm is severely wounded. 2 =----- 5.0
+_You block the gallery worm's attack.
+ You hit the gallery worm but do no damage.
+_The gallery worm is severely wounded.--7
+_The gallery worm barely misses you.You hit the gallery worm but do no damage.You headbutt the gallery worm!
+_The gallery worm is severely wounded.9=16.4
+_
+ You hit the gallery worm. You headbutt the gallery worm!
+_The gallery worm is almost dead.27.1
+_The gallery worm completely misses you.You slash the gallery worm!
+ You headbutt the gallery worm but do no damage.
+_The gallery worm is almost dead.You are no longer corroded.
+ The deathcap draws from the surrounding life force!01---28 (36%)    8
+_You block the gallery worm's attack.
+ You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.2=--8.5
+.
+_The gallery worm completely misses you. You furiously retaliate! You headbutt the gallery worm.
+ You slice the gallery worm!!
+ You kill the gallery worm!
+†f   deathcap
+_Okawaru accepts your kill.=419.2
+_.#.#..#f......#     ......#######     )...###....#####...##...#††#.....$......†............#†####........##.###########. ....#.....##...#######30 -50.2 (1.0.#.#.#..#f......#     ......#######     )...###....#####...##.††#....$..................#####........############# .....#...#######78/188 -----1ROUTE_EVENT use heal wounds turn=932 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 78/188    =========---------------............#Magic:  25/25     ========================............#AC: 28 (36%)Str: 24............#EV: 14Int: 8............#SH: 16Dex: 16.....f......#XL: 20 Next: 24%  Place: Wormlands:4............#######Noise:  0 ------  Time: 851.2 (0.0).......)...###....######    k) +3 broad axe.......@...##...........    Nothing quivered#........††#............    Hero ##.......$..............##............#........    f   deathcap####........##........###########........#........##.......##.....###...#######The deathcap draws from the surrounding life force!
+_You block the gallery worm's attack.
+ You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.
+_The gallery worm completely misses you. You furiously retaliate! You headbutt the gallery worm.
+ You slice the gallery worm!!
+ You kill the gallery worm!
+_Okawaru accepts your kill.
+_The deathcap draws from the surrounding life force!101/188===2.2 (1?.#!.#.#.#..#f......#     ......#######    #)...###....#####...##.††#..$.................#####........############# ......#
+ You hit the gallery worm but do no damage.
+_The gallery worm is almost dead.
+_The gallery worm completely misses you. You furiously retaliate! You headbutt the gallery worm.
+ You slice the gallery worm!!
+ You kill the gallery worm!Okawaru accepts your kill.
+_The deathcap draws from the surrounding life force!
+_You feel much better.
+_Found a potion of curing and a scroll of blinking.3
+_M#.....#.....?!.f      ......#######    )...###....#####...####.††#..##.......$.............2====2 =4
+. 
+_You block the deathcap's attack.
+ You slice the deathcap!! You headbutt the deathcap!
+_The deathcap is severely damaged.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!86/188 ---                       0           6 ===--- 5.0 (0.8Conf Hero ROUTE_EVENT use curing turn=936 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 86/188    ==========--------------#...........##Magic:  25/25     ========================.....?.......#AC: 28 (36%)Str: 24!............#EV: 14Int: 8.............#SH:  0            Dex: 16.............#XL: 20 Next: 24%  Place: Wormlands:4.............#Noise:  6 ===---  Time: 855.0 (0.0)......f......#k) +3 broad axe.......@.....#######Nothing quivered#.......)...###....#####    Conf Hero #...........##..........##........††#...........    f   deathcap##.......$.............##............#.......####........##.......###########.......#.......##......##.....
+_The deathcap draws from the surrounding life force!
+_You feel much better.
+_Found a potion of curing and a scroll of blinking.
+_You block the deathcap's attack.
+ You slice the deathcap!! You headbutt the deathcap!
+_The deathcap is severely damaged.The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.
+_You feel much better.
+_Found a potion of curing and a scroll of blinking.
+_You block's attack.
+ You slice the deathcap!! You headbutt the deathcap!
+_The deathcap is severely damaged.
+ The deathcap releases spores at you!
+ You are engulfed in a cloud of dizzying spores!
+_You are confused.You feel better.
+ The deathcap draws from the surrounding life force!76-16           0 ------ 6.0 (1Hero 
+ 
+_The deathcap is healed.
+ You slash the deathcap!
+_The deathcap is severely damaged.4 ==-7 (0.7
+.
+_The deathcap closely misses you.You slice the deathcap!!
+
+_You destroy the deathcap!37.4
+_7-789=
+_You start resting.0 --62.4 (5.05 (3514--3.4 (6
+_You feel like a meek peon again.80=1
+_You start resting.2ww   gallery worm (wandering)
+7.4 (48.4 (5ROUTE_EVENT ability Heroism turn=950
+
+.w
+_You encounter a gallery worm.
+_You gain the combat prowess of a mighty hero.w3--8 (36469.4 (1Hero 
+_M#!.## #...........#.....?w!.      .............#######    )...###....#####...####........††#...........#########
+.w
+_Found a potion of moonshine.370
+_M #..######## #!.## #.....#.....?.!.....w..      .............#####)...###....######...........##............####.........w1M         #..######## #!.## #.....#.....?!.w...............#######    #.......)...###....#######..........42 =2
+_You block the gallery worm's attack.
+_You hit the gallery worm but do no damage.4=-3.1 (0.7
+_The gallery worm barely misses you. You furiously retaliate! You headbutt the gallery worm.
+ You slash the gallery worm!
+ You headbutt the gallery worm but do no damage.
+_The gallery worm is lightly wounded.58
+ 
+_You block the gallery worm's attack.
+ You hit the gallery worm. You headbutt the gallery worm!
+_The gallery worm is moderately wounded.4.5
+_You block the gallery worm's attack.
+ You hit the gallery worm but do no damage.
+_The gallery worm is moderately wounded.15.3 (0.8
+_
+ You hit the gallery worm. You headbutt the gallery worm!
+_The gallery worm is heavily wounded.6=26.1
+_You block the gallery worm's attack.
+ You slice the gallery worm!!
+_The gallery worm is heavily wounded.4 ==9
+ 
+_The gallery worm bites you but does no damage.
+ You hit the gallery worm. You headbutt the gallery worm.
+_The gallery worm is severely wounded.77-3 =-7.7
+_The gallery worm bites you!
+ You slash the gallery worm! Your headbutt misses the gallery worm.
+_The gallery worm is severely wounded.5==8.4 (0.7
+_
+.
+ You slice the gallery worm!!
+ You kill the gallery worm!
+
+_Okawaru accepts your kill.78/189-5 6 ===--- 9.2 (0.8
+_9==80=1234567=8=9901234
+_You start resting. 0 ------ 910.2 (31.0)5 (3514---1.2 (32
+_You feel like a meek peon again.5=6=789100/189123=4=56789101=2=3456789=20=123456=7=89301234=135=67894012=3=45678950=1=2345678=9=60123456=7=89701234=5=67898012=3=45678
+_You start resting.HP restored...1096.2 (185.0)9=76
+_=
+_b - 3 scrolls of blinking (gained 1)
+_c - 2 potions of curing (gained 1)
+_You now have 50 gold pieces (gained 18).
+ You encounter a deathcap.   #.......f..   #..|.......   ##..$........   #....   #....#   #.#    # #.@...#   ##...## #...## #..########    f   deathcap (dormant)    ##.......!.##   ##...........##  ##.............# #........#..##......##..............#
+f133.2 (36.0)f4.2 (37
+_#..#.......f..|. ##..$ #. #.#..#...@....###.....######...##      #..#########.......!.##.....####......
+5.2 (1.0)  ##..#.......f..|.##..$##.#.#..##........##.....######.#..#########.......!.##.####
+6wT....####..#.......f..|..##..$# #.#.#..##........##.....###T   iron troll (asleep)##w   coil worm (constriction, wandering)#...##      f   deathcap#..#########.......!.######
+
+.w
+_You encounter an iron troll and a coil worm..TTw)3 =7ROUTE_EVENT ability Heroism turn=1221
+
+_The iron troll shouts! You hear a shout!
+_You gain the combat prowess of a mighty hero..ww
+.TThe deathcap draws from the surrounding life force!w   gallery wormT   iron trollw   coil worm (constriction)f   deathcap61----3--8 (36460 -8Hero ## # #......###.....wT.......#.......f....ww..|...##..$# #.#.#..##........w  2 gallery worms (1 wandering)##.....######...##      #..########!.######
+w.
+_You encounter a gallery worm. x2w..ww-9M .##  ### ## #...........##T..........wf...ww #..|...#..$..##..####........####.....#####...###...###..#.w.w.w.T2----40
+GYou slice the coil worm like a ripe choko!!!
+ You headbutt the coil worm.
+_The coil worm is severely wounded.
+.wYou hear a shout! x2; You hear a roar!
+ You encounter a great orb of eyes.The coil worm closely misses you. You furiously retaliate!
+ You headbutt the coil worm but do no damage..w.T G   great orb of eyesf   deathcap12 ====-- 1.0 (0.8
+w.
+_The coil worm barely misses you.You slash the coil worm! You headbutt the coil worm.
+ The coil worm is severely wounded.
+_You hit the iron troll but do no damage.w..G 3-- 3 ==---- 7 (0.7
+ 
+_You block the coil worm's attack. x2
+ You barely miss the coil worm. You headbutt the coil worm!
+ The coil worm is almost dead.
+_You hit the iron troll but do no damage.4=2 =---2.4
+w.
+_The iron troll misses you. You furiously retaliate! You headbutt the iron troll! The iron troll barely misses you. You block the iron troll's attack.
+ You hit the coil worm.
+ The coil worm is almost dead.
+_You slash the iron troll!w..G 54-           4             3 ==3.1Constr 
+.G
+_The coil worm grabs you. The coil worm completely misses you. You furiously retaliate! You headbutt the coil worm. The coil worm constricts you!You hit the coil worm.
+ The coil worm is almost dead.You hit the iron troll but do no damage.
+_You hit the gallery worm but do no damage..w
+ The coil worm bites you but does no damage.
+ The coil worm constricts you. You block the gallery worm's attack. The iron troll barely misses you. You furiously retaliate!
+ You headbutt the iron troll but do no damage.2-2 =-8
+.G
+_The iron troll barely misses you. You block the iron troll's attack.
+ You hit the coil worm but do no damage. Your headbutt misses the coil worm.The coil worm is almost dead.
+_You hit the gallery worm. x2; You hit the iron troll.130---6 ==4.6 (0.8coil worm but do no damage. Your headbutt misses the coil worm.
+ The coil worm is almost dead.
+_You hit the gallery worm. x2; You hit the iron troll.
+_You block the gallery worm's attack. The gallery worm bites you!! The coil worm bites you. The coil worm constricts you.completely miss the coil worm.
+ The coil worm is almost dead.
+ You slash the iron troll! You hit the gallery worm.
+_You hit the gallery worm but do no damage.
+ The iron troll bites you but does no damage.1---=35.3 (0.7
+.
+_The iron troll claws you but does no damage. x2
+ You barely miss the coil worm. You headbutt the coil worm.
+ You kill the coil worm!
+.GOkawaru accepts your kill.You hit the iron troll.
+ You hit the gallery worm but do no damage.
+_You slice the gallery worm!!k
+TThe gallery worm closely misses you.You encounter a lindwurm.
+T  2 iron trollsG   great orb of eyesf   deathcapk   lindwurm
+ You block the gallery worm's attack.14  46.1 (0.8
+.G
+_You encounter an iron troll.You slice the iron troll!!
+ The iron troll is almost dead.
+_You barely miss the gallery worm. You slash the gallery worm!.k
+.You block the gallery worm's attack. x2; You block the iron troll's attack. 8 ===--- 8 (0.7
+.T
+_The iron troll claws you but does no damage. x2
+ You slash the iron troll! You headbutt the iron troll.
+ The iron troll is almost dead.
+_You slice the great orb of eyes!! You hit the gallery worm. You barely miss the gallery worm.
+wThe gallery worm bites you!
+.kThe gallery worm bites you but does no damage.
+w  3 gallery worms You encounter a gallery worm.
+ The great orb of eyes gazes at you.15--5=77.5
+.
+_You resist with some effort.
+ You slash the iron troll!
+ You kill the iron troll!
+   iron troll Okawaru accepts your kill.
+_You slash the great orb of eyes! You hit the gallery worm. You barely miss the gallery worm.--6 4 ==---- 8.2
+_
+.wYou hit the great orb of eyes.
+ The great orb of eyes is severely wounded.You slash the gallery worm!
+_You hit the gallery worm but do no damage..k
+ You block the gallery worm's attack.
+.TThe great orb of eyes gazes at you.You turn into an insubstantial wisp.Your +3 broad axe, +2 plate armour, +1 kite shield, +0 cloak of stealth, +0 pair of gloves, +0 pair of boots and ring of poison resistance meld into your body.v15 (3130 02 =--9-) Misty tendrilsWisp Hero Fly v
+.w
+_You feel less stealthy. The gallery worm completely misses you.You completely miss the great orb of eyes.
+_The great orb of eyes is severely wounded..k09--9.5 (0.6
+.T
+_The great orb of eyes misses you. The gallery worm bites you! The gallery worm closely misses you.You touch the great orb of eyes but do no damage.
+_The great orb of eyes is severely wounded.=150.2 (0.7
+_
+.wYou touch the great orb of eyes!
+_The great orb of eyes is almost dead. 
+.kThe great orb of eyes gazes at you.You resist with some effort.
+ The gallery worm bites you but does no damage.93/189 ---5 ==8 (0.6v
+_The gallery worm bites you!
+ You barely miss the great orb of eyes.
+_The great orb of eyes is almost dead.4--1 =-1.4
+_v
+.wYou touch the great orb of eyes!
+_The great orb of eyes is almost dead..G
+ The gallery worm completely misses you.
+.TThe lindwurm breathes flames at you.(catching breath)74--6 ==2.0
+.
+_The blast of flame hits you! You resist. The gallery worm bites you!
+ You touch the great orb of eyes.
+ You kill the great orb of eyes!
+.w
+_Okawaru accepts your kill..kf   deathcapk   lindwurm (catching breath)0---72 =-6v
+.T
+_The gallery worm completely misses you. The gallery worm bites you.
+ You touch the gallery worm but do no damage.
+_The gallery worm is moderately wounded.TT  2 iron trolls (1 wandering)1=1 =-3.2
+
+_You encounter an iron troll.You touch the gallery worm.
+_The gallery worm is moderately wounded.The lindwurm bites you but does no damage.29 (0.7v
+kT
+_The lindwurm misses you. The lindwurm completely misses you. The gallery worm completely misses you. The gallery worm misses you.You touch the gallery worm!
+_The gallery worm is heavily wounded.
+.wThe iron troll shouts!.kTT3 ==4.6
+.T
+_The gallery worm completely misses you. The gallery worm barely misses you.You touch the gallery worm.
+_The gallery worm is heavily wounded.2=1 =-5.3
+_v
+ You touch the gallery worm but do no damage.
+_The gallery worm is heavily wounded.The gallery worm misses you. The gallery worm barely misses you. The lindwurm barely misses you. x2; The lindwurm completely misses you.2 =-9 (0.6
+.T
+_The gallery worm misses you. The iron troll completely misses you. The iron troll misses you. x2
+ You touch the gallery worm but do no damage.
+_The gallery worm is heavily wounded.
+ The lindwurm completely misses you. x2
+ The lindwurm claws you but does no damage.6.5v
+_The gallery worm barely misses you. The gallery worm completely misses you. x2
+ You touch the gallery worm but do no damage.
+_The gallery worm is heavily wounded.317.2 (0.7
+_v.TYou touch the gallery worm but do no damage.
+_The gallery worm is heavily wounded.
+ You touch the gallery worm.The gallery worm is severely wounded.gallery worm misses you. The lindwurm misses you. The lindwurm completely misses you. The lindwurm barely misses you. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *
+ The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *
+ The iron troll completely misses you.42----6 ==8 (0.6vROUTE_EVENT use blinking turn=1250 place=Worm:4
+Route_melee the Severer           *WIZARD*Minotaur of Okawaru ***...Health: 42/189    =====-------------------........##Magic:  25/25     ========================##........##AC: 15 (31%)Str: 24##..........#EV: 30Int: 8##......T....##SH:  0Dex: 16#..............XL: 20 Next: 27%  Place: Wormlands:4#.......f......Noise:  6 ==----  Time: 1157.8 (0.0)#..|..wTk......-) Misty tendrils##..$...vw...#Nothing quivered#........w...#Wisp Hero Fly #...........###..........##www  3 gallery worms##........##TT  2 iron trolls##.....###f   deathcap##...##k   lindwurm#...###..##########.......!.####...........##
+_The gallery worm is heavily wounded.You touch the gallery worm.
+_The gallery worm is severely wounded.The gallery worm misses you. The lindwurm misses you. The lindwurm completely misses you. The lindwurm barely misses you. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *The iron troll completely misses you.
+_The iron troll claws you but does no damage. x2##..........#Route_melee the Severer           *WIZARD*##......T....##Minotaur of Okawaru ***...#..............Health: 42/189    =====-------------------#.......f......Magic:  25/25     ========================#..|..wTk......AC: 15 (31%)Str: 24##..$...§w...#EV: 30Int: 8#........w...#SH:  0Dex: 16#...........##XL: 20 Next: 27%  Place: Wormlands:4#..........##Noise:  6 ==----  Time: 1157.8 (0.0)##........##-) Misty tendrils##v....###Nothing quivered##...##Wisp Hero Fly #...###..########www  3 gallery worms##.......!.##T   iron troll##...........##f   deathcap##.............#k   lindwurm#..............##..............##..............##..............#
+_The gallery worm is severely wounded.The gallery worm misses you. The lindwurm misses you. The lindwurm completely misses you. The lindwurm barely misses you. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *The iron troll completely misses you.
+_The iron troll claws you but does no damage. x2
+ Blink to where?Press: ? - help, Dir - move target.w.w.w.kkT0 --8.8 (1ROUTE_EVENT use blinking turn=1251 place=Worm:4
+##..........#Route_melee the Severer           *WIZARD*##......T....##Minotaur of Okawaru ***...#..............Health: 42/189    =====-------------------#.......f......Magic:  25/25     ========================#..|...k.......AC: 15 (31%)Str: 24##..$..wT....#EV: 30Int: 8#.......w....#SH:  0Dex: 16#.......w...##XL: 20 Next: 27%  Place: Wormlands:4#..........##Noise:  0 ------  Time: 1158.8 (0.0)##........##-) Misty tendrils##v....###Nothing quivered##...##Wisp Hero Fly #...###..########www  3 gallery worms##.......!.##T   iron troll##...........##f   deathcap##.............#k   lindwurm#..............##..............##..............##..............#The gallery worm misses you. The lindwurm misses you. The lindwurm completely misses you. The lindwurm barely misses you. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *The iron troll completely misses you.
+_The iron troll claws you but does no damage. x2
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.#.......w....#Route_melee the Severer           *WIZARD*#.......w...##Minotaur of Okawaru ***...#..........##Health: 42/189    =====-------------------##........##Magic:  25/25     ========================##§....###AC: 15 (31%)Str: 24##...##EV: 30Int: 8#...##SH:  0Dex: 16#..########XL: 20 Next: 27%  Place: Wormlands:4##.......!.##Noise:  0 ------  Time: 1158.8 (0.0)##...........##-) Misty tendrils##...v.........#Nothing quivered#..............#Wisp Hero Fly #..............##..............##..............##..............###.............#######    ##.......)...###....#    #...........##......    ##..........#.......    ##.................    The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *The iron troll completely misses you.
+_The iron troll claws you but does no damage. x2
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?Press: ? - help, Dir - move target39.8 (1* * * LOW HITPOINT WARNING * * *The iron troll completely misses you.
+_The iron troll claws you but does no damage. x2
+ Blink to where?
+ Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?
+ Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.w
+ You start resting.A gallery worm comes into view..w   gallery worm
+.060.8 (1
+_ROUTE_EVENT use blinking turn=1253 place=Worm:4
+#.......w....#Route_melee the Severer           *WIZARD*#...........##Minotaur of Okawaru ***...#..........##Health: 43/189    =====-------------------##....w...##Magic:  25/25     ========================##.....###AC: 15 (31%)Str: 24##...##EV: 30Int: 8#...##SH:  0Dex: 16#..########XL: 20 Next: 27%  Place: Wormlands:4##.......!.##Noise:  0 ------  Time: 1160.8 (0.0)##...........##-) Misty tendrils##...v.........#Nothing quivered#..............#Wisp Hero Fly #..............##..............#w   gallery worm#..............##..............###.............#########.......)...###....##...........##......##..........#.......##.................
+_The iron troll claws you but does no damage. x2
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ You start resting.
+_A gallery worm comes into view.#...##Route_melee the Severer           *WIZARD*#..########Minotaur of Okawaru ***...##.......!.##Health: 43/189    =====-------------------##...........##Magic:  25/25     ========================##...§.........#AC: 15 (31%)Str: 24#..............#EV: 30Int: 8#..............#SH:  0Dex: 16#..............#XL: 20 Next: 27%  Place: Wormlands:4#..............#Noise:  0 ------  Time: 1160.8 (0.0)#..............#-) Misty tendrils##v............####    Nothing quivered##.......)...###..    Wisp Hero Fly #...........##...##..........#....##..............##............#####........###############Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+ You start resting.
+_A gallery worm comes into view.Blink to where?Press: ? - help, Dir - move target41.8 (1v
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?
+ Press: ? - help, Dir - move targetAs you read the scroll of blinking, it crumbles to dust.
+ You start resting.
+_A gallery worm comes into view.
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.
+_You start resting.56
+_You hear a grinding noise. x6
+ A gallery worm comes into view.w.vw   gallery worm5.8 (46.8 (5
+_v#...##.##      #..########  ##..w....!.##  ##w###.v.......   ##.............######)...###.#w  2 gallery worms##.###..##....####........###########w.w.w.w  3 gallery worms77.8 (1M##.....####...###...##      ...#.######  #w.......!.##  ##..w##wv...   ##.............######)...####...........##...###.
+.w
+_You hear a grinding noise..w.w8=258Fly vROUTE_EVENT ability Heroism turn=1261
+
+.w
+_You feel like a meek peon again.
+_You gain the combat prowess of a mighty hero..wk.wk   lindwurm3--309Hero Fly 
+_M##........####.....####...##.f.#.      .k.#.######  #!.##  ##.##.w...wwv...###.............######.......)...###..    f   deathcap (wandering)#.....k
+.wThe gallery worm bites you!!.w30---5 ==70
+_* * * LOW HITPOINT WARNING * * *You touch the gallery worm.
+_The gallery worm is heavily wounded.1 =-1.4 (0.6
+_
+.wYou touch the gallery worm!
+_The gallery worm is severely wounded..k
+ The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!5/189     ------5 ==2.0ROUTE_AUDIT {"vaults":"worm_end_dragon_cavern","turn":1265,"gold":50,"tag":"death","where":"Worm:4","inventory":[{"class":"weapon","name":"+0 war axe","quantity":1},{"class":"armour","name":"+0 scale mail","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak of stealth","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+1 kite shield","quantity":1},{"class":"armour","name":"+2 plate armour","quantity":1},{"class":"weapon","name":"+3 broad axe","quantity":1},{"class":"scroll","name":"4 scrolls of fog","quantity":4},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"potion","name":"2 potions of magic","quantity":2},{"class":"potion","name":"2 potions of curing","quantity":2}],"maxmp":25,"items":[{"class":"gold","name":"14 gold pieces","quantity":14,"x":73,"artefact":false,"y":27},{"class":"wand","name":"wand of light (6)","quantity":1,"x":31,"artefact":false,"y":29},{"class":"magical staff","name":"staff of earth","quantity":1,"x":32,"artefact":false,"y":29},{"class":"weapon","name":"glowing great sword","quantity":1,"x":33,"artefact":false,"y":29},{"class":"gold","name":"20 gold pieces","quantity":20,"x":27,"artefact":false,"y":31},{"class":"gold","name":"17 gold pieces","quantity":17,"x":31,"artefact":false,"y":33},{"class":"gold","name":"21 gold pieces","quantity":21,"x":32,"artefact":false,"y":33},{"class":"gold","name":"17 gold pieces","quantity":17,"x":33,"artefact":false,"y":33},{"class":"missile","name":"4 large rocks","quantity":4,"x":88,"artefact":false,"y":37},{"class":"corpse","name":"stone giant skeleton","quantity":1,"x":88,"artefact":false,"y":37},{"class":"magical staff","name":"staff of air","quantity":1,"x":32,"artefact":false,"y":45},{"class":"gold","name":"20 gold pieces","quantity":20,"x":32,"artefact":false,"y":46},{"class":"scroll","name":"scroll of identify","quantity":1,"x":57,"artefact":false,"y":48},{"class":"corpse","name":"iron troll skeleton","quantity":1,"x":63,"artefact":false,"y":49},{"class":"potion","name":"potion of moonshine","quantity":1,"x":38,"artefact":false,"y":55},{"class":"armour","name":"+0 troll leather armour","quantity":1,"x":70,"artefact":false,"y":61},{"class":"corpse","name":"deep troll skeleton","quantity":1,"x":70,"artefact":false,"y":61},{"class":"weapon","name":"quarterstaff","quantity":1,"x":37,"artefact":false,"y":64},{"class":"weapon","name":"club","quantity":1,"x":76,"artefact":false,"y":66},{"class":"armour","name":"plate armour","quantity":1,"x":67,"artefact":false,"y":69}],"hp":-2,"xl":20,"maxhp":189,"mp":23,"xp":11246,"honey":0,"monsters":[{"xp":82,"name":"earth elemental","x":61,"y":17},{"xp":1037,"name":"gallery worm","x":41,"y":28},{"xp":781,"name":"iron troll","x":38,"y":32},{"xp":1043,"name":"gallery worm","x":37,"y":40},{"xp":746,"name":"iron troll","x":34,"y":42},{"xp":765,"name":"iron troll","x":38,"y":42},{"xp":1235,"name":"iron dragon","x":33,"y":45},{"xp":768,"name":"iron troll","x":31,"y":50},{"xp":6,"name":"deathcap","x":32,"y":53},{"xp":961,"name":"coil worm","x":61,"y":53},{"xp":641,"name":"lindwurm","x":30,"y":56},{"xp":1031,"name":"gallery worm","x":28,"y":59},{"xp":1016,"name":"gallery worm","x":29,"y":59},{"xp":1050,"name":"gallery worm","x":30,"y":59},{"xp":84,"name":"earth elemental","x":57,"y":90}],"progress":27}
+ROUTE_EVENT death Worm:4
+_The gallery worm is severely wounded.The gallery worm bites you!
+ * * * LOW HITPOINT WARNING * * * engulf the gallery worm!!
+_The gallery worm is almost dead.
+ The gallery worm bites you
+ You die...Gear: 11/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ k - a +3 broad axe (melded)a - a +0 war axe
+Armour         (go to first with [)
+ e - a +0 pair of boots (melded)
+ f - a +0 pair of gloves (melded)
+ g - a +0 cloak of stealth (melded)
+ i - a +1 kite shield (melded)
+ j - a +2 plate armour (melded)b - a +0 scale mail
+ c - a +0 buckler
+ h - a +0 helmet
+Jewellery      (go to first with "=)
+ d - a ring of poison resistance (melded)
+ k - a +3 broad axe (melded)
+Goodbye, Route_melee.276940 Route_melee the Severer (level 20, -2/189 HPs) *WIZ*Began as a Minotaur Fighter on Oct 27, 2026.Was a Priest of Okawaru.Slain by a gallery worm (7 damage)... on level 4 of the Wormlands.The game lasted 00:00:05 (1265 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/bottom-final-2/games/melee-2026102701
+>

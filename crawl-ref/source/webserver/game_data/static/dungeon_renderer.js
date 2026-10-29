@@ -1,9 +1,10 @@
 define(["jquery", "comm", "./cell_renderer", "./map_knowledge", "./options",
-    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control"],
+    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view"],
 function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
-    mouse_control) {
+    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains) {
     "use strict";
     var global_anim_counter = 0;
+    var last_background_tick = -1;
 
     function is_torch(basetile)
     {
@@ -12,7 +13,7 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
                 || basetile == dngn.WALL_BRICK_DARK_6_TORCH);
     }
 
-    function cell_is_animated(cell)
+    function background_is_animated(cell)
     {
         if (cell == null || cell.bg == null) return false;
         var base_bg = dngn.basetile(cell.bg.value);
@@ -32,6 +33,7 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
     function animate_cell(cell)
     {
+        if (!background_is_animated(cell)) return;
         var base_bg = dngn.basetile(cell.bg.value);
         if (base_bg == dngn.DNGN_PORTAL_WIZARD_LAB
             || base_bg == dngn.DNGN_EXIT_NECROPOLIS
@@ -74,22 +76,37 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
         init: function (element)
         {
             var renderer = this;
+            // Older server templates put the canvas directly in the column.
+            // Give every presentation layer the same bounded coordinate frame.
+            if (element.id === "dungeon" && element.parentElement.id !== "dungeon_viewport") {
+                var viewport = document.createElement("div"); viewport.id = "dungeon_viewport";
+                element.parentElement.insertBefore(viewport, element); viewport.appendChild(element);
+            }
             $(element)
-                .off("update_cells mousemove mouseleave mousedown")
+                .attr({ tabindex: "0", "aria-haspopup": "menu", "aria-label": "Dungeon. Right-click a tile for actions." })
+                .off("update_cells mousemove mouseleave mousedown contextmenu keydown.dungeonContext")
                 .on("update_cells", function (ev, cells) {
                     $.each(cells, function (i, loc) {
-                        renderer.render_loc(loc.x, loc.y);
+                        map_knowledge.touch(loc.x, loc.y);
                     });
+                    $(document).trigger("dungeon_tiles_changed", [cells]);
                 })
-                .on("mousemove mouseleave mousedown", function (ev) {
+                .on("mousemove mouseleave mousedown contextmenu", function (ev) {
                     renderer.handle_mouse(ev);
                 })
+                .on("keydown.dungeonContext", function (ev) {
+                    if (ev.key === "ContextMenu" || (ev.shiftKey && ev.key === "F10")) {
+                        ev.preventDefault(); ev.stopImmediatePropagation();
+                        $(element).trigger($.Event("cell_contextmenu", { cell: renderer.view_center }));
+                    }
+                });
 
             cr.DungeonCellRenderer.prototype.init.call(this, element);
         },
 
         handle_mouse: function (ev)
         {
+            if (ev.type === "mouseleave") presence.leave();
             if (!options.get("tile_web_mouse_control"))
                 return;
             if (ev.type === "mouseleave")
@@ -104,8 +121,10 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             }
             else
             {
-                // convert logical mouse coordinates to device coordinates
-                let scaled = this.scaled_size(ev.clientX, ev.clientY);
+                // Pointer coordinates are relative to the canvas, including
+                // headers or other surrounding chrome and device pixel ratio.
+                var bounds = this.element.getBoundingClientRect();
+                let scaled = this.scaled_size(ev.clientX - bounds.left, ev.clientY - bounds.top);
                 let cell_size = this.scaled_size();
                 var loc = {
                     x: Math.floor(scaled.width / cell_size.width) + this.view.x,
@@ -113,8 +132,9 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
                 };
 
                 view_data.place_cursor(enums.CURSOR_MOUSE, loc);
+                presence.point(loc, ev);
 
-                if (game.can_target())
+                if (game.can_target() && ev.type !== "contextmenu" && !(ev.type === "mousedown" && (ev.which === 3 || ev.ctrlKey)))
                 {
                     // XX refactor into mouse_control.js?
                     if (loc.x != this.last_sent_cursor.x
@@ -139,12 +159,12 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
                             cell: loc
                         });
                         $(element).trigger(new_ev);
-                    }, 500);
+                    }, tip_policy.hover_ms);
                 }
-                else if (ev.type === "mousedown")
+                else if (ev.type === "mousedown" || ev.type === "contextmenu")
                 {
                     var new_ev = $.extend({}, ev, {
-                        type: "cell_click",
+                        type: ev.type === "contextmenu" ? "cell_contextmenu" : "cell_click",
                         cell: loc
                     });
                     $(this.element).trigger(new_ev);
@@ -154,18 +174,23 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
         set_size: function (c, r)
         {
+            var cell = this.scaled_size();
+            var pixel_width = c * cell.width, pixel_height = r * cell.height;
             if ((this.cols == c) && (this.rows == r) &&
-                (this.element.width == c * this.cell_width) &&
-                (this.element.height == r * this.cell_height))
+                (this.element.width == pixel_width) &&
+                (this.element.height == pixel_height))
                 return;
 
             this.cols = c;
             this.rows = r;
             this.view.x = this.view_center.x - Math.floor(c / 2);
             this.view.y = this.view_center.y - Math.floor(r / 2);
-            util.init_canvas(this.element,
-                             c * this.cell_width,
-                             r * this.cell_height);
+            // Match the integer device pixels used to paint each tile, even
+            // when browser zoom produces a fractional device pixel ratio.
+            util.init_canvas(this.element, pixel_width / window.devicePixelRatio,
+                             pixel_height / window.devicePixelRatio);
+            this.element.width = pixel_width;
+            this.element.height = pixel_height;
             this.init(this.element);
             this.clear(); // clear the canvas and override default alpha fill
         },
@@ -174,12 +199,11 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
         {
             this.view_center.x = x;
             this.view_center.y = y;
-            var old_view = this.view;
             this.view = {
                 x: x - Math.floor(this.cols / 2),
                 y: y - Math.floor(this.rows / 2)
             };
-            this.shift(this.view.x - old_view.x, this.view.y - old_view.y);
+            $(document).trigger("game_camera_changed", [{ x: x, y: y }]);
         },
 
         // convert grid coordinates/dimensions to scaled canvas coordinates
@@ -205,73 +229,52 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             };
         },
 
-        // Shifts the dungeon view by cx/cy cells.
-        shift: function(x, y)
+        render_view: function(dirty)
         {
-            if ((x == 0) && (y == 0))
-                return;
-
-            if (x > this.cols) x = this.cols;
-            if (x < -this.cols) x = -this.cols;
-            if (y > this.rows) y = this.rows;
-            if (y < -this.rows) y = -this.rows;
-
-            var sx, sy, dx, dy;
-
-            if (x > 0)
-            {
-                sx = x;
-                dx = 0;
+            // All terrain shaders in this paint share one phase at tile seams.
+            this.frame_time = window.performance ? window.performance.now() : Date.now();
+            var signature = [this.view.x, this.view.y, this.cols, this.rows,
+                this.element.width, this.element.height, this.cell_width, this.cell_height].join(":");
+            var full = !dirty || signature !== this.paint_signature;
+            this.paint_signature = signature;
+            this.sprite_reach = this.sprite_reach || 1;
+            var cx, cy;
+            if (full) {
+                for (cy = this.view.y; cy < this.view.y + this.rows; cy++)
+                    for (cx = this.view.x; cx < this.view.x + this.cols; cx++)
+                        this.sprite_reach = Math.max(this.sprite_reach, spriteReach(map_knowledge.get(cx, cy).t));
+            } else {
+                // Keep the maximum conservative when an old sprite disappears;
+                // only newly changed sprites can increase its required reach.
+                dirty.forEach(function (loc) {
+                    this.sprite_reach = Math.max(this.sprite_reach, spriteReach(map_knowledge.get(loc.x, loc.y).t));
+                }, this);
             }
-            else
-            {
-                sx = 0;
-                dx = -x;
+            var damage = full ? null : chunks.plan({ x: this.view.x, y: this.view.y,
+                cols: this.cols, rows: this.rows }, dirty, this.sprite_reach);
+            if (damage && !damage.rectangles.length) {
+                this.last_paint = { chunks: 0, cells: 0, full: false }; return;
             }
-            if (y > 0)
-            {
-                sy = y;
-                dy = 0;
-            }
-            else
-            {
-                sy = 0;
-                dy = -y;
-            }
-
-            const cw = this.cols - Math.abs(x);
-            const ch = this.rows - Math.abs(y);
-
-            let source = this.canvas_coords(sx, sy, cw, ch, true);
-
-            if (source.width > 0 && source.height > 0)
-            {
-                // copy from source to dest
-                // written a bit over-generally: don't really need to
-                // recalculate destination size, unless this function is
-                // ever used for rescaling
-                let dest = this.canvas_coords(dx, dy, cw, ch, true);
-                this.ctx.drawImage(this.element,
-                    source.x, source.y, source.width, source.height,
-                    dest.x, dest.y, dest.width, dest.height);
-            }
-
-            // Render cells that came into view
-            for (var cy = 0; cy < dy; cy++)
-                for (var cx = 0; cx < this.cols; cx++)
-                    this.render_grid_cell(cx + this.view.x, cy + this.view.y);
-
-            for (var cy = dy; cy < this.rows - sy; cy++)
-            {
-                for (var cx = 0; cx < dx; cx++)
-                    this.render_grid_cell(cx + this.view.x, cy + this.view.y);
-                for (var cx = this.cols - sx; cx < this.cols; cx++)
-                    this.render_grid_cell(cx + this.view.x, cy + this.view.y);
-            }
-
-            for (var cy = this.rows - sy; cy < this.rows; cy++)
-                for (var cx = 0; cx < this.cols; cx++)
-                    this.render_grid_cell(cx + this.view.x, cy + this.view.y);
+            this.ctx.save();
+            try {
+                if (damage) {
+                    this.ctx.beginPath();
+                    var renderer = this;
+                    damage.rectangles.forEach(function (rect) {
+                        var point = renderer.canvas_coords(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+                        renderer.ctx.rect(point.x, point.y, point.width, point.height);
+                    });
+                    // A single union clip preserves exact-once translucent
+                    // compositing at chunk seams and original depth ordering.
+                    this.ctx.clip();
+                }
+                this.clear();
+                var count = 0;
+                for (cy = this.view.y; cy < this.view.y + this.rows; cy++)
+                    for (cx = this.view.x; cx < this.view.x + this.cols; cx++)
+                        if (!damage || damage.includes(cx, cy)) { this.render_grid_cell(cx, cy); count++; }
+                this.last_paint = { chunks: damage ? damage.rectangles.length : null, cells: count, full: full };
+            } finally { this.ctx.restore(); }
         },
 
         fit_to: function(width, height, min_diameter)
@@ -309,9 +312,30 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             else
                 this.set_cell_size(cell_size.w, cell_size.h);
 
-            var view_width = Math.floor(width / this.cell_width);
-            var view_height = Math.floor(height / this.cell_height);
+            // Explicit dungeon zoom may crop the visible region; canvas geometry
+            // and hit testing use the same integer cell dimensions.
+            if (this.ui_state === enums.ui.NORMAL && options.get("tile_display_mode") !== "glyphs") {
+                var zoom = this.viewport_zoom || 1;
+                this.set_cell_size(Math.max(1, Math.floor(this.cell_width * zoom)),
+                                   Math.max(1, Math.floor(this.cell_height * zoom)));
+            }
+
+            var viewport = this.element.parentElement;
+            var framed = viewport && viewport.id === "dungeon_viewport";
+            var bleed = framed ? 12 : 0;
+            var ratio = window.devicePixelRatio, unit = this.scaled_size();
+            // Layout uses exact available pixels; render complete tiles beyond
+            // every edge so zoom cannot leave gaps or move neighboring panels.
+            // Odd counts keep the followed tile centered at every zoom level.
+            var view_width = Math.max(1, 2 * Math.ceil(((width + bleed * 2) * ratio / unit.width - 1) / 2) + 1);
+            var view_height = Math.max(1, 2 * Math.ceil(((height + bleed * 2) * ratio / unit.height - 1) / 2) + 1);
             this.set_size(view_width, view_height);
+            if (framed) {
+                viewport.style.width = width + "px";
+                viewport.style.height = height + "px";
+                this.element.style.left = Math.floor((width * ratio - this.element.width) / 2) / ratio + "px";
+                this.element.style.top = Math.floor((height * ratio - this.element.height) / 2) / ratio + "px";
+            }
         },
 
         in_view: function(cx, cy)
@@ -329,59 +353,41 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             cell = cell || map_cell.t;
             let scaled = this.canvas_coords(cx, cy);
             this.render_cell(cx, cy, scaled.x, scaled.y, map_cell, cell);
+            presence.draw(this, cx, cy, scaled.x, scaled.y);
         },
 
-        // render a cell on the map grid, recursing as necessary based on
-        // overlaps with adjacent cells below/right
-        render_loc: function(cx, cy, map_cell)
+        // Cursor and peer-hover changes use the same frame as native updates.
+        render_loc: function(cx, cy)
         {
-            this.render_grid_cell(cx, cy, map_cell);
-
-            // Redraw the cell below if it overlapped
-            if (this.in_view(cx, cy + 1))
-            {
-                let cell_below = map_knowledge.get(cx, cy + 1);
-                if (cell_below.t && cell_below.t.sy && (cell_below.t.sy < 0))
-                    this.render_loc(cx, cy + 1, cell_below);
-            }
-            // Redraw the cell to the right if it overlapped
-            if (this.in_view(cx + 1, cy))
-            {
-                let cell_right = map_knowledge.get(cx + 1, cy);
-                if (cell_right.t && cell_right.t.left_overlap
-                    && (cell_right.t.left_overlap < 0))
-                {
-                    this.render_loc(cx + 1, cy, cell_right);
-                }
-            }
-            // And the cell to the bottom-right if both overlapped
-            if (this.in_view(cx + 1, cy + 1))
-            {
-                let cell_diag = map_knowledge.get(cx + 1, cy + 1);
-                if (cell_diag.t && cell_diag.t.sy && (cell_diag.t.sy < 0)
-                    && cell_diag.t.left_overlap && (cell_diag.t.left_overlap < 0))
-                {
-                    this.render_loc(cx + 1, cy + 1, cell_diag);
-                }
-            }
+            map_knowledge.touch(cx, cy);
+            $(document).trigger("dungeon_tiles_changed", [[{ x: cx, y: cy }]]);
         },
 
         animate: function ()
         {
-            global_anim_counter++;
-            if (global_anim_counter >= 65536) global_anim_counter = 0;
+            var tick = Math.floor(window.performance.now() / 250);
+            var background = !options.get("tile_realtime_anim") || tick !== last_background_tick;
+            if (background) {
+                last_background_tick = tick; global_anim_counter++;
+                if (global_anim_counter >= 65536) global_anim_counter = 0;
+            }
+            var changed = [];
 
             for (var cy = this.view.y; cy < this.view.y + this.rows; ++cy)
                 for (var cx = this.view.x; cx < this.view.x + this.cols; ++cx)
             {
                 var map_cell = map_knowledge.get(cx, cy);
                 var cell = map_cell.t;
-                if (map_knowledge.visible(map_cell) && cell_is_animated(cell))
+                if (map_knowledge.visible(map_cell) && (background && background_is_animated(cell)
+                    || effects.animated(cell) || regions.animated(cell, cx, cy, this)))
                 {
-                    animate_cell(cell);
-                    this.render_grid_cell(cx, cy, map_cell, cell);
+                    if (background) animate_cell(cell);
+                    map_knowledge.touch(cx, cy);
+                    changed.push({ x: cx, y: cy });
                 }
             }
+            if (changed.length)
+                $(document).trigger("dungeon_tiles_changed", [changed]);
         },
 
         // This is mostly here so that it can inherit cell size
@@ -412,7 +418,15 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
     });
 
     var renderer = new DungeonViewRenderer();
-    var anim_interval = null;
+    presence.attach(renderer);
+    traversal.attach(renderer);
+    chains.attach(renderer);
+    shells.attach(renderer);
+    feedback.attach(renderer);
+    encounters.attach(renderer);
+    movement.attach(renderer);
+    plannedRoute.attach(renderer);
+    var anim_interval = null, animation_running = false;
 
     function update_animation_interval()
     {
@@ -421,28 +435,34 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             clearTimeout(anim_interval);
             anim_interval = null;
         }
-        if (options.get("tile_realtime_anim"))
+        if (animation_running && options.get("tile_realtime_anim"))
         {
             anim_interval = setInterval(function () {
                 renderer.animate();
-            }, 1000 / 4);
+            }, effects.fast && effects.fast() ? 100 : 250);
         }
     }
 
     options.add_listener(update_animation_interval);
+    $(document).on("visual_presentation_changed.dungeon_renderer premium_animation_cadence_changed.dungeon_renderer visibilitychange.dungeon_renderer game_ui_changed.dungeon_renderer", update_animation_interval);
 
     $(document).off("game_init.dungeon_renderer");
     $(document).on("game_init.dungeon_renderer", function () {
+        animation_running = true; last_background_tick = -1;
         renderer.cols = 0;
         renderer.rows = 0;
         renderer.view = { x: 0, y: 0 };
         renderer.view_center = { x: 0, y: 0 };
+        renderer.paint_signature = null;
+        renderer.sprite_reach = 1;
 
         renderer.init($("#dungeon")[0]);
+        update_animation_interval();
     });
 
     $(document).off("game_cleanup.dungeon_renderer")
-        .on("game_cleanup.dungeon_renderer", function () {
+        .on("game_cleanup.dungeon_renderer game_connection_lost.dungeon_renderer game_preinit.dungeon_renderer", function () {
+            animation_running = false;
             if (anim_interval)
             {
                 clearTimeout(anim_interval);

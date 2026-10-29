@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "mon-cast.h"
 
@@ -359,7 +360,7 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
             return ai_action::good_or_impossible(
                     !caster.has_ench(ENCH_MIRROR_DAMAGE)
                     && (!caster.props.exists(MIRROR_RECAST_KEY)
-                        || you.elapsed_time >=
+                        || level_elapsed_time(caster) >=
                            caster.props[MIRROR_RECAST_KEY].get_int()));
         },
         _cast_injury_mirror,
@@ -1492,7 +1493,7 @@ static void _cast_injury_mirror(monster &mons, mon_spell_slot /*slot*/, bolt&)
     mons.add_ench(mon_enchant(ENCH_MIRROR_DAMAGE, &mons,
                               random_range(7, 9) * BASELINE_DELAY));
     mons.props[MIRROR_RECAST_KEY].get_int()
-        = you.elapsed_time + 150 + random2(60);
+        = level_elapsed_time(mons) + 150 + random2(60);
 }
 
 static void _cast_smiting(monster &caster, mon_spell_slot slot, bolt&)
@@ -3999,7 +4000,7 @@ static bool _make_monster_angry(const monster* mon, monster* targ, bool actual)
 
     if (you.can_see(*mon))
     {
-        if (mon->type == MONS_QUEEN_BEE && (targ->type == MONS_KILLER_BEE ||
+        if (mons_genus(mon->type) == MONS_KILLER_BEE && (targ->type == MONS_KILLER_BEE ||
                                             targ->type == MONS_MELIAI))
         {
             mprf("%s calls on %s to defend %s!",
@@ -4022,17 +4023,18 @@ static bool _incite_monsters(const monster* mon, bool actual)
     // Only things both in LOS of the inciter and within radius 3.
     const int radius = 3;
     int goaded = 0;
+    const bool bee_inciter = mons_genus(mon->type) == MONS_KILLER_BEE;
     for (monster_near_iterator mi(mon->pos(), LOS_NO_TRANS); mi; ++mi)
     {
         // XXX: Ugly hack to skip the spellcaster rules for meliai.
-        if (*mi == mon || !mi->needs_berserk(mon->type != MONS_QUEEN_BEE))
+        if (*mi == mon || !mi->needs_berserk(!bee_inciter))
             continue;
 
         // Cannot goad other moths of wrath!
         if (mon->type == MONS_MOTH_OF_WRATH
             && mi->type == MONS_MOTH_OF_WRATH
         // Queen bees can only incite bees.
-            || mon->type == MONS_QUEEN_BEE
+            || bee_inciter
                && mi->type != MONS_KILLER_BEE &&
                   mi->type != MONS_MELIAI)
         {
@@ -6562,6 +6564,12 @@ static branch_summon_pair _invitation_summons[] =
       {  1,   1,   40, FLAT, MONS_NAGA_WARRIOR },
       {  1,   1,   20, FLAT, MONS_MANA_VIPER },
     }},
+  { BRANCH_BURROWS,
+    {
+      {  1,   1,   80, FLAT, MONS_BURROWING_BEAST },
+      {  1,   1,   60, FLAT, MONS_CRAG_BOAR },
+      {  1,   1,   20, FLAT, MONS_SHALE_DRAKE },
+    }},
   { BRANCH_SPIDER,
     { // Spider enemies
       {  1,   1,   60, FLAT, MONS_TARANTELLA },
@@ -7183,7 +7191,7 @@ static void _mons_vortex(monster *mons)
 
     const int ench_dur = 60;
 
-    mons->props[POLAR_VORTEX_KEY].get_int() = you.elapsed_time;
+    mons->props[POLAR_VORTEX_KEY].get_int() = level_elapsed_time(*mons);
     mon_enchant me(ENCH_POLAR_VORTEX, mons, ench_dur);
     mons->add_ench(me);
 
@@ -7388,7 +7396,7 @@ static void _cast_bestow_arms(monster& caster)
 
     // Set cooldown (to prevent bestowing different types of arms to different
     // subsets of visible allies).
-    caster.props[ARMS_COOLDOWN_KEY] = you.elapsed_time + dur;
+    caster.props[ARMS_COOLDOWN_KEY] = level_elapsed_time(caster) + dur;
 }
 
 static bool _mons_cast_prisms(monster& caster, actor& foe, int pow, bool check_only)
@@ -8394,7 +8402,7 @@ void mons_cast(monster* mons, bolt pbolt, spell_type spell_cast,
 
         mons->add_ench(mon_enchant(ENCH_AWAKEN_FOREST, mons, duration));
         // Actually, it's a boolean marker... save for a sanity check.
-        env.forest_awoken_until = you.elapsed_time + duration;
+        env.forest_awoken_until = level_elapsed_time() + duration;
 
         env.forest_is_hostile = !mons->friendly();
 
@@ -9696,7 +9704,7 @@ ai_action::goodness monster_spell_goodness(monster* mon, spell_type spell)
 
     case SPELL_AWAKEN_FOREST:
         if (mon->has_ench(ENCH_AWAKEN_FOREST)
-               || env.forest_awoken_until > you.elapsed_time)
+               || env.forest_awoken_until > level_elapsed_time())
         {
             return ai_action::impossible();
         }
@@ -10045,7 +10053,7 @@ ai_action::goodness monster_spell_goodness(monster* mon, spell_type spell)
     {
         // Don't use while on cooldown
         if (mon->props.exists(ARMS_COOLDOWN_KEY)
-            && you.elapsed_time < mon->props[ARMS_COOLDOWN_KEY].get_int())
+            && level_elapsed_time(*mon) < mon->props[ARMS_COOLDOWN_KEY].get_int())
         {
             return ai_action::impossible();
         }

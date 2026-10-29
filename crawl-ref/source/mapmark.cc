@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "party.h"
 
 #include "mapmark.h"
 
@@ -982,8 +983,10 @@ map_marker *map_active_feature_marker::read(reader &inf, map_marker_type)
 
 string map_active_feature_marker::debug_describe() const
 {
-    return make_stringf("active feature (%s, owner: %d, power: %d)",
-            dungeon_feature_name(feat), (int)owner, power);
+    return make_stringf("active feature (%s, owner: %d, power: %d%s)",
+            dungeon_feature_name(feat), (int)owner,
+            feat == DNGN_SPIKE_LAUNCHER ? spike_power() : power,
+            automatic_spike() ? ", automatic" : "");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1085,6 +1088,11 @@ void map_markers::run_all(int time, map_marker_type type)
     {
         if (type != MAT_ANY && dynamic_markers[i]->get_type() != type)
             continue;
+        if (in_bounds(dynamic_markers[i]->pos)
+            && !party::position_in_active_region(dynamic_markers[i]->pos))
+        {
+            continue;
+        }
 
         // Skip any markers that are flagged for deletion (which can sometimes
         // even happen during an invocation of this method).

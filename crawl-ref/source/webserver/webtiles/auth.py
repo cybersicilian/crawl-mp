@@ -17,6 +17,13 @@ login_tokens = {}  # type: Dict[Tuple[str,str],datetime.datetime]
 rand = random.SystemRandom()
 
 
+def account_disabled(username):
+    """Apply the configured account denylist to passwords and saved sessions."""
+    return isinstance(username, str) and username.strip().casefold() in {
+        name.casefold() for name in config.get('disabled_accounts')
+    }
+
+
 def purge_login_tokens():
     for token in list(login_tokens):
         if datetime.datetime.now() > login_tokens[token]:
@@ -50,7 +57,7 @@ def _parse_login_cookie(cookie):
 
 def check_login_cookie(cookie):
     username, token = _parse_login_cookie(cookie)
-    ok = (token, username) in login_tokens
+    ok = (token, username) in login_tokens and not account_disabled(username)
     return username, ok
 
 

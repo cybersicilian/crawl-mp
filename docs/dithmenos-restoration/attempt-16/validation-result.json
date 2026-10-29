@@ -1,0 +1,37 @@
+{
+  "startedAt": 1792502517.2188091,
+  "finishedAt": 1792502598.204211,
+  "results": [
+    {
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "NOWIZARD=y",
+        "NO_OPTIMIZE=y",
+        "STDFLAG=-std=c++14",
+        "PYTHON=/usr/local/bin/python3",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "snapshotMatchesRequest": true,
+  "workingSourceChangedDuringBuild": [
+    "main.cc",
+    "mon-behv.cc",
+    "party-session.cc",
+    "spl-vortex.cc",
+    "monster.cc",
+    "bloodcraft-curses.cc",
+    "mon-place.cc",
+    "timed-effects.cc",
+    "party.h",
+    "mon-death.cc",
+    "mon-act.cc",
+    "mon-abil.cc",
+    "mapmark.cc",
+    "mon-cast.cc"
+  ],
+  "passed": false
+}

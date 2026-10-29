@@ -1,0 +1,18 @@
+name: "crag boar"
+glyph: {char: "a", colour: brown}
+flags: [warm_blood]
+exp: 700
+genus: hog
+will: 40
+attacks:
+ - {type: gore, damage: 32}
+hd: 11
+hp_10x: 750
+ac: 10
+ev: 5
+has_corpse: true
+shout: squeal
+intelligence: animal
+size: large
+shape: quadruped
+tile: crag_boar

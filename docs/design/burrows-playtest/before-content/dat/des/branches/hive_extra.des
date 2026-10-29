@@ -1,0 +1,160 @@
+# Short flight routes, ground blockers and quiet abandoned combs.
+: crawl_require("dlua/vault.lua")
+: crawl_require("dlua/layout/hive.lua")
+
+NAME:   hive_beetle_gate
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   wax beetle, venom wasp
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+        xxxxxxx
+       xx.....xx
+  xxxxxx...2...x
+xxx...........xx
+@.....1........x
+.......xxx.....xx
+xxxx...xxx......@
+   xx............
+    xxxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_queen_gallery
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   queen bee, killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+          xxxxxxx
+         xx.....xx
+  xxxxxxxx...1...x
+xxx.............x
+@.....2...xxx...xx
+...........xx....x
+xxxx...xx.....2..@
+   xx...xx........
+    xx.......xxxxx
+     xxxxxxxxx
+ENDMAP
+
+NAME:   hive_spark_crossing
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen
+MONS:   spark wasp, wax beetle
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+       xxxxxxxx
+      xx......xx
+xxxxxxx....1...xx
+@...............x
+......xxx.......@
+xxxx..xxxx..2....
+   xx...xx.....xx
+    xx........xx
+     xxxxxxxxxx
+ENDMAP
+
+NAME:   hive_pollen_pockets
+DEPTH:  Hive
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+SUBST:  $ = $..
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+    xxxxxx
+   xx....xx
+xxxx......xxx
+@...........xx
+.....xx......x
+xxxx..xxx....xx
+   x.....x....x
+   xx......$.xx
+    xxx.....xx
+      xxxxxxx
+ENDMAP
+
+NAME:   hive_lost_apothecary
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   venom wasp, wax beetle
+KITEM:  p = potion of curing / potion of resistance
+KITEM:  s = scroll of fog
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+        xxxxxxx
+       xx.....xx
+  xxxxxx..1....xx
+xxx............x
+@........xx....xx
+......2...xx....x
+xxxx...........xx
+   xxx....p.s.xx
+     xxx..$.xx
+       xxxxxx
+ENDMAP
+
+NAME:   hive_winged_hunt
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen
+MONS:   meliai, venom wasp
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+    xxxxxxx
+   xx.....xx
+xxxx..1....xxx
+@...........xx
+......xxx....x
+xxxx...xxx...xxxxx
+   xx...xx...2...xx
+    xx............@
+     xxx...........
+       xxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_amber_jewels
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   queen bee, killer bee
+KITEM:  a = any jewellery good_item
+KITEM:  b = any book
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+      xxxxxxxxx
+     xx.......xx
+xxxxxx....2....x
+@..............xx
+.....xxxx..1....x
+xxxx..xxx.......x
+   x...xx...a..xx
+   xx.....2.b.xx
+    xxx...$..xx
+      xxxxxxxx
+ENDMAP
+
+NAME:   hive_end_amber_brood
+PLACE:  Hive:$
+ORIENT: encompass
+TAGS:   transparent no_item_gen
+KMONS:  Q = queen bee
+KMONS:  W = venom wasp
+KMONS:  B = wax beetle
+KMONS:  R = killer bee
+KITEM:  $ = gold
+KITEM:  * = any jewellery good_item / any book / any wand
+TILE:   x = wall_wax
+COLOUR: x = yellow
+{{
+    local nodes = hive_layout(_G, true)
+    local hoard = nodes[#nodes]
+    mapgrd[hoard.x+1][hoard.y+1] = 'B'
+    mapgrd[hoard.x-1][hoard.y+1] = 'R'
+}}
+MAP
+ENDMAP

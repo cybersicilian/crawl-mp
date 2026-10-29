@@ -1,0 +1,12 @@
+WARN:root:Skipping game definitions in `games.d/` based on config
+WARN:root:User database '/tmp/dcss-smooth-1xuxwhsc/accounts.db3' didn't exist; creating it now.
+WARN:root:User settings database didn't exist at '/tmp/dcss-smooth-1xuxwhsc/settings.db3'; creating it now.
+WARN:root:#0     P1     Error while starting the Crawl process!
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/process_handler.py", line 1204, in _start_process
+    self.process.start(self.ttyrec_filename, self._ttyrec_id_header())
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/terminal.py", line 61, in start
+    self.ttyrec = open(ttyrec_filename, "wb") # type: Optional[BinaryIO]
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/dcss-smooth-1xuxwhsc/rcs/ttyrecs/Smoothmvrfuqri/2026-10-28.01:31:19.ttyrec'

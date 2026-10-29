@@ -6,6 +6,7 @@
 #include "defines.h"
 #include "externs.h"
 #include "fixedarray.h"
+#include "owned-grid.h"
 #include "rltiles/tiledef_defines.h"
 
 struct flavour_knowledge
@@ -49,18 +50,24 @@ struct flavour_knowledge
         set_feat_flavour(pos, 0, 0);
     }
 
+    void swap(flavour_knowledge& other) noexcept
+    {
+        _feat_flavour.swap(other._feat_flavour);
+        _feat_flavour_idx.swap(other._feat_flavour_idx);
+    }
+
 private:
-    FixedArray<tileidx_t, GXM, GYM> _feat_flavour;
-    FixedArray<unsigned short, GXM, GYM> _feat_flavour_idx;
+    owned_grid<tileidx_t, GXM, GYM> _feat_flavour;
+    owned_grid<unsigned short, GXM, GYM> _feat_flavour_idx;
 };
 
 struct crawl_tile_environment
 {
     // indexed by grid coords
 #ifdef USE_TILE // TODO: separate out this stuff from crawl_environment
-    FixedArray<tile_fg_store, GXM, GYM> bk_fg;
-    FixedArray<tile_with_flags_t, GXM, GYM> bk_bg;
-    FixedArray<tileidx_t, GXM, GYM> bk_cloud;
+    owned_grid<tile_fg_store, GXM, GYM> bk_fg;
+    owned_grid<tile_with_flags_t, GXM, GYM> bk_bg;
+    owned_grid<tileidx_t, GXM, GYM> bk_cloud;
     map<coord_def, set<tileidx_t>> icons;
 #endif
     FixedArray<tile_flavour, GXM, GYM> flv;

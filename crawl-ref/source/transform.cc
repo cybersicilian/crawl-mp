@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vellum.h"
+#include "shell.h"
 
 #include "transform.h"
 
@@ -953,7 +955,6 @@ public:
     string get_untransform_message() const override { return "You stop sporulating."; }
 };
 
-#if TAG_MAJOR_VERSION == 34
 class FormShadow : public Form
 {
 private:
@@ -961,6 +962,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(FormShadow);
 public:
     static const FormShadow &instance() { static FormShadow inst; return inst; }
+
+    string transform_message() const override
+    {
+        return "You slip into the darkness.";
+    }
 
     /**
      * Get a message for untransforming from this form.
@@ -972,7 +978,6 @@ public:
         return "You emerge from the shadows.";
     }
 };
-#endif
 
 class FormStorm : public Form
 {
@@ -1549,6 +1554,22 @@ public:
     }
 };
 
+class FormScorpion : public Form
+{
+private:
+    FormScorpion() : Form(transformation::scorpion) { }
+    DISALLOW_COPY_AND_ASSIGN(FormScorpion);
+public:
+    static const FormScorpion &instance() { static FormScorpion inst; return inst; }
+
+    int get_ac_bonus(int skill = -1) const override
+    {
+        const int power = you.props.exists("scorpion_form_power")
+                            ? you.props["scorpion_form_power"].get_int() : 0;
+        return Form::get_ac_bonus(skill) + 22 * max(0, power);
+    }
+};
+
 static const Form* forms[] =
 {
     &FormNone::instance(),
@@ -1573,8 +1594,8 @@ static const Form* forms[] =
     &FormWisp::instance(),
     &FormJelly::instance(),
     &FormFungus::instance(),
-#if TAG_MAJOR_VERSION == 34
     &FormShadow::instance(),
+#if TAG_MAJOR_VERSION == 34
     &FormHydra::instance(),
 #endif
     &FormStorm::instance(),
@@ -1599,6 +1620,7 @@ static const Form* forms[] =
     &FormJademantle::instance(),
     &FormHypnogecko::instance(),
     &FormMistmane::instance(),
+    &FormScorpion::instance(),
 };
 
 const Form* get_form(transformation xform)
@@ -1850,7 +1872,8 @@ static bool _flying_in_new_form(transformation which_trans, const item_def* tali
         if (entry.is_overflow)
             continue;
 
-        if (item_grants_flight(entry.get_item()))
+        if (item_grants_flight(entry.get_item())
+            || vellum::item_bonus(you, entry.get_item(), ARTP_FLY))
         {
             has_flight_item = true;
             break;
@@ -1991,7 +2014,8 @@ bool lifeless_prevents_form(transformation which_trans)
     if (which_trans == transformation::none)
         return false; // everything can become itself
 
-    if (which_trans == transformation::slaughter)
+    if (which_trans == transformation::slaughter
+        || which_trans == transformation::shadow)
         return false; // Godly power can transcend such things as unlife
 
     return true;
@@ -2003,6 +2027,10 @@ bool lifeless_prevents_form(transformation which_trans)
 string cant_transform_reason(transformation which_trans,
                              bool involuntary, bool temp)
 {
+    if (you.species == SP_ENT && which_trans != transformation::none)
+        return "Your rooted body cannot change form.";
+    if (you.species == SP_PROTEAN && which_trans != transformation::none)
+        return "Your protean body cannot change form.";
     if (!involuntary && you.has_mutation(MUT_NO_FORMS))
         return "You have sacrificed the ability to change form!";
 
@@ -2126,6 +2154,12 @@ static void _on_enter_form(transformation which_trans)
     // Extra effects
     switch (which_trans)
     {
+    case transformation::shadow:
+        drain_player(25, true, true);
+        you.duration[DUR_CORONA] = 0;
+        mpr("You fade into the shadows.");
+        break;
+
     case transformation::tree:
         mpr("Your roots penetrate the ground.");
         if (you.duration[DUR_TELEPORT])
@@ -2198,6 +2232,8 @@ static void _on_enter_form(transformation which_trans)
 
 void set_form(transformation which_trans, int dur, bool scale_hp)
 {
+    if (which_trans != you.form)
+        shell::emerge(true);
     you.form = which_trans;
     you.duration[DUR_TRANSFORMATION] = max(1, dur * BASELINE_DELAY);
     update_player_symbol();

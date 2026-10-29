@@ -1,0 +1,16 @@
+{
+  "runId": "b0e1e839-f528-438c-94da-b429642c7497",
+  "owner": "codex/01a17a3a-4a0c-79c3-ab41-79bd3aa07976",
+  "label": "DCSS Elf3 bounded local native verification",
+  "requestedAt": 1793052853.048494,
+  "supervisorPid": 34147,
+  "status": "failed_held",
+  "reservation": true,
+  "requestId": "78e40881179f9cad28fe8a419e473ae7630fe82e5276a4b9e2cee7d60d62dee8",
+  "startedAt": 1793052853.080158,
+  "workerPid": 34163,
+  "processGroup": 34163,
+  "exitCode": 1,
+  "finishedAt": 1793052948.082794,
+  "supervisedProcessGroupGone": true
+}

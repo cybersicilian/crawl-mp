@@ -27,8 +27,9 @@ enum unarmed_attack_type
     UNAT_MEDUSA_STINGER,
     UNAT_TALISMAN_BLADE_1,
     UNAT_TALISMAN_BLADE_2,  // 'Same' aux, but can trigger twice
+    UNAT_RETALIATORY_BITE,
     UNAT_FIRST_ATTACK = UNAT_CONSTRICT,
-    UNAT_LAST_ATTACK = UNAT_TALISMAN_BLADE_2,
+    UNAT_LAST_ATTACK = UNAT_RETALIATORY_BITE,
     NUM_UNARMED_ATTACKS,
 };
 
@@ -119,6 +120,7 @@ private:
     void decapitate();
 
     bool run_player_attack_set();
+    bool run_hydra_attack_set();
     bool swing_with(item_def &weapon);
 
     bool run_monster_attack_set();
@@ -144,6 +146,7 @@ private:
 
     /* Retaliation Effects */
     void do_minotaur_retaliation();
+    void maybe_retaliatory_bite();
     void maybe_riposte();
     void maybe_do_mesmerism();
 
@@ -189,7 +192,7 @@ private:
     void attacker_sustain_passive_damage();
     int  staff_damage(stave_type staff) const;
     string staff_message(stave_type staff, int damage) const;
-    bool apply_staff_damage();
+    bool apply_staff_damage(const item_def* staff_weapon);
     void player_stab_check() override;
     bool player_good_stab() override;
     void player_announce_aux_hit(unarmed_attack_type atk);

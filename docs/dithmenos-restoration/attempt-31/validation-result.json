@@ -1,0 +1,31 @@
+{
+  "startedAt": 1792504371.056759,
+  "finishedAt": 1792504382.2271209,
+  "results": [
+    {
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "NOWIZARD=y",
+        "NO_OPTIMIZE=y",
+        "STDFLAG=-std=c++14",
+        "PYTHON=/usr/local/bin/python3",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "./catch2-tests-executable",
+        "[dithmenos]",
+        "--reporter",
+        "console"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "snapshotMatchesRequest": true,
+  "workingSourceChangedDuringBuild": [],
+  "passed": false
+}

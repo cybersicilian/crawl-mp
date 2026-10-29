@@ -180,6 +180,8 @@ bool beogh_cancel_leaving_floor();
 
 void beogh_increase_orcification();
 
+spret dithmenos_shadow_step(coord_def target, bool fail);
+int dithmenos_shadow_form_duration();
 void dithmenos_change_shadow_appearance(monster& shadow, int dur);
 string dithmenos_cannot_shadowslip_reason();
 spret dithmenos_shadowslip(bool fail);
@@ -203,7 +205,7 @@ bool gozag_bribe_branch();
 
 dice_def qazlal_upheaval_damage(bool allow_random = true);
 spret qazlal_upheaval(coord_def target, bool quiet = false,
-                           bool fail = false, dist *player_target=nullptr);
+                           bool fail = false, dist *player_target=nullptr, int damage_percent = 100);
 vector<coord_def> find_elemental_targets();
 spret qazlal_elemental_force(bool fail);
 spret qazlal_disaster_area(bool fail);
@@ -214,6 +216,7 @@ void ru_offer_new_sacrifices();
 string ru_sac_text(ability_type sac);
 string ru_sacrifice_description(ability_type sac);
 bool ru_do_sacrifice(ability_type sac);
+bool ru_starting_health_sacrifice();
 bool ru_reject_sacrifices(bool forced_rejection = false);
 void ru_reset_sacrifice_timer(bool clear_timer = false,
                               bool faith_penalty = false);

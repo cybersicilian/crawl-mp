@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "settings": 131,
+  "screenshots": [
+    "settings-desktop.png",
+    "settings-mobile.png"
+  ],
+  "nativeGameStarted": false,
+  "rcPreserved": true,
+  "savePreserved": true,
+  "runtimeArguments": [
+    "-extra-opt-last",
+    "hp_warning = 41",
+    "-extra-opt-last",
+    "autopickup_exceptions = <potion of curing, >scroll of noise",
+    "-extra-opt-last",
+    "travel_delay = 33"
+  ],
+  "browserErrors": []
+}

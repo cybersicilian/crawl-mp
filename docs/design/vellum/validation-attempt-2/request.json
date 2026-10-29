@@ -1,0 +1,56 @@
+{
+  "commands": [
+    [
+      "make",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "crawl",
+      "catch2-tests-executable"
+    ],
+    [
+      "./crawl",
+      "--builddb",
+      "--reset-cache"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum-balance]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[pakellas],[oozle],[equipment-memory],[party-session],[save-compatibility],[cooperative-delay]",
+      "--reporter",
+      "console"
+    ]
+  ],
+  "createdAt": 1792631588.395643,
+  "gateScript": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/host_heavy.py",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "notClaimed": [
+    "campaign balance",
+    "browser gameplay",
+    "deployment"
+  ],
+  "owner": "codex/01a160b4-b4fc-79b3-98dd-cf71c2f05445",
+  "project": "/Users/iancaltabiano/Documents/Projects/dcss",
+  "resourceBinding": {
+    "makeJobs": 2,
+    "phases": "sequential"
+  },
+  "runnerSha256": "0e60758a5e5a9a97b9eb65f91b0224de86304393478dfa09084edc75060ddf3f",
+  "scope": "isolated native build, Vellum contracts, matched god loadouts, adjacent regressions",
+  "sourceManifest": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/source.json",
+  "sourceSha256": "4687663bd74108ee4ac7e45b5fc5cc811e6c6ed542c652216fb512c7e8e97f05",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy"
+}

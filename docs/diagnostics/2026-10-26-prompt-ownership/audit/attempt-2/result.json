@@ -1,0 +1,40 @@
+{
+  "passed": false,
+  "binding_sha256": "dc3a9dfb5770cc99b561ec8d1d172ac579c1b03db13cbd9d10f6745486da7d59",
+  "existing_saves_used": false,
+  "production_mutation": false,
+  "checks": [
+    "13 backend lifecycle/transport/save modules",
+    "Six browser queue/transport/recovery/planner suites",
+    {
+      "request": 1,
+      "command": "menu_action",
+      "completed": true
+    },
+    {
+      "request": 2,
+      "command": "target_cursor",
+      "completed": true
+    },
+    {
+      "request": 3,
+      "command": "inv_item_action",
+      "completed": true
+    },
+    {
+      "request": 4,
+      "command": "key",
+      "completed": true
+    },
+    {
+      "macro_turns": 2,
+      "completed_after_entire_macro": true
+    },
+    {
+      "alternating_actions": 3,
+      "actor_ownership_preserved": true
+    }
+  ],
+  "native_sha256": "fc1ba99a9a83bff4fb6ab662c982db39c2eae3568514baf2765c175e5346d7e5",
+  "elapsed_seconds": 50.910980124999696
+}

@@ -1,0 +1,177 @@
+<div id="party_hud" role="group" aria-label="Heroes" style="display: none">
+      <div id="party_session_tools" hidden>
+          <button
+            id="party_add_btn"
+            class="party-hud-btn dcss-dock-btn add-btn"
+            type="button"
+            data-tip-title="Add Companion Hero"
+            data-tip-badge="[+Hero]"
+            data-tip-body="Spawn an additional hero companion into your party (up to 4 heroes total)."
+            data-tip-meta="Choose an archetype preset or custom build"
+          >Add hero</button>
+          <button
+            id="party_join_btn"
+            class="party-hud-btn dcss-dock-btn join-btn"
+            type="button"
+            data-tip-title="Claim Co-op Party Slot"
+            data-tip-key="/party join"
+            data-tip-body="Bind your browser session to a specific party hero slot for multiplayer co-op play."
+            data-tip-meta="Allows spectators to join and control a companion"
+          >[Slot:P1]</button>
+      </div>
+      <div id="party_add_drawer">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px">
+          <span style="color: #fce94f; font-size: 10.5px; font-weight: bold">Spawn Companion (max 4)</span>
+          <button id="party_add_close" class="party-mini-btn" type="button">[x]</button>
+        </div>
+        <div class="party-custom-row" style="margin-bottom: 4px">
+          <span class="party-stat-lbl" style="font-size: 10px">Name:</span>
+          <input id="party_add_name" type="text" placeholder="Optional" style="flex: 1" />
+        </div>
+        <div style="font-size: 9.5px; color: #e9b96e">Archetype Presets:</div>
+        <div class="party-preset-grid">
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Deep Elf/Conjurer"
+            data-default-name="Lyra"
+            data-tip-title="Lyra — Deep Elf Conjurer"
+            data-tip-badge="[Blaster]"
+            data-tip-body="High-MP arcane ranged spellcaster with elite Conjurations aptitude."
+            data-tip-meta="Click to spawn into your party"
+          >[DECj Deep Elf Conjurer]</button>
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Mountain Dwarf/Berserker"
+            data-default-name="Thrain"
+            data-tip-title="Thrain — Mountain Dwarf Berserker"
+            data-tip-badge="[Frontline]"
+            data-tip-body="Armoured melee powerhouse following Trog with immediate Berserk access."
+            data-tip-meta="Click to spawn into your party"
+          >[MDBe Dwarf Berserker]</button>
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Gargoyle/Earth Elementalist"
+            data-default-name="Karn"
+            data-tip-title="Karn — Gargoyle Earth Elementalist"
+            data-tip-badge="[Tank Caster]"
+            data-tip-body="Innate high AC, poison/elec immunity, and physical-damage Earth magic."
+            data-tip-meta="Click to spawn into your party"
+          >[GrEE Gargoyle Earth]</button>
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Minotaur/Fighter"
+            data-default-name="Aster"
+            data-tip-title="Aster — Minotaur Fighter"
+            data-tip-badge="[Vanguard]"
+            data-tip-body="Durable shield-and-weapon martial specialist with reflexive headbutt counterattacks."
+            data-tip-meta="Click to spawn into your party"
+          >[MiFi Minotaur Fighter]</button>
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Spriggan/Enchanter"
+            data-default-name="Pip"
+            data-tip-title="Pip — Spriggan Enchanter"
+            data-tip-badge="[Stealth/Hex]"
+            data-tip-body="Ultra-fast movement speed with Hexes and stealthy stabbing capability."
+            data-tip-meta="Click to spawn into your party"
+          >[SpEn Spriggan Enchanter]</button>
+          <button
+            type="button"
+            class="party-preset-chip"
+            data-spec="Demigod/Alchemist"
+            data-default-name="Vael"
+            data-tip-title="Vael — Demigod Alchemist"
+            data-tip-badge="[Hybrid]"
+            data-tip-body="Massive attribute pools and toxic/transmutative Alchemy spells."
+            data-tip-meta="Click to spawn into your party"
+          >[DgAl Demigod Alchemist]</button>
+        </div>
+        <div class="party-custom-row">
+          <select id="party_add_species" style="flex: 1">
+            <option value="Minotaur">Minotaur</option>
+            <option value="Mountain Dwarf">Mountain Dwarf</option>
+            <option value="Deep Elf">Deep Elf</option>
+            <option value="Gargoyle">Gargoyle</option>
+            <option value="Spriggan">Spriggan</option>
+            <option value="Draconian">Draconian</option>
+            <option value="Demonspawn">Demonspawn</option>
+            <option value="Demigod">Demigod</option>
+            <option value="Gnoll">Gnoll</option>
+            <option value="Human">Human</option>
+            <option value="Kobold">Kobold</option>
+            <option value="Merfolk">Merfolk</option>
+            <option value="Troll">Troll</option>
+          </select>
+          <select id="party_add_job" style="flex: 1">
+            <option value="Fighter">Fighter</option>
+            <option value="Berserker">Berserker</option>
+            <option value="Conjurer">Conjurer</option>
+            <option value="Earth Elementalist">Earth Elementalist</option>
+            <option value="Fire Elementalist">Fire Elementalist</option>
+            <option value="Ice Elementalist">Ice Elementalist</option>
+            <option value="Air Elementalist">Air Elementalist</option>
+            <option value="Enchanter">Enchanter</option>
+            <option value="Alchemist">Alchemist</option>
+            <option value="Summoner">Summoner</option>
+            <option value="Necromancer">Necromancer</option>
+            <option value="Hunter">Hunter</option>
+            <option value="Gladiator">Gladiator</option>
+            <option value="Monk">Monk</option>
+          </select>
+          <button
+            id="party_add_custom_submit"
+            class="party-hud-btn join-btn"
+            type="button"
+            data-tip-title="Spawn Custom Companion"
+            data-tip-badge="[Spawn]"
+            data-tip-body="Create and add a companion hero with the selected Species and Background."
+            data-tip-meta="Spawns adjacent to the party leader"
+          >[Spawn]</button>
+        </div>
+      </div>
+      <div id="party_hud_members"></div>
+      <div id="party_ping_toolbar" class="party-ping-bar">
+        <span class="party-ping-heading" role="img" aria-label="Party signals" data-tip-title="Party signals"></span>
+        <button
+          type="button"
+          class="party-ping-btn"
+          data-ping-kind="look"
+          data-tip-title="Tactical Ping: Look"
+          data-tip-key="Alt+Click"
+          data-tip-body="Arm a cyan Look ping and click any dungeon tile to highlight it for the party."
+          data-tip-meta="Shortcut: Alt+Left-Click any tile"
+        >[Look]</button>
+        <button
+          type="button"
+          class="party-ping-btn"
+          data-ping-kind="danger"
+          data-tip-title="Tactical Ping: Danger"
+          data-tip-key="Shift+Alt+Click"
+          data-tip-body="Arm a red Danger ping to warn party members about lethal monsters or traps."
+          data-tip-meta="Shortcut: Shift+Alt+Left-Click any tile"
+        >[Danger]</button>
+        <button
+          type="button"
+          class="party-ping-btn"
+          data-ping-kind="loot"
+          data-tip-title="Tactical Ping: Loot"
+          data-tip-badge="[Loot]"
+          data-tip-body="Arm a gold Loot ping to point out weapons, spellbooks, potions, or artefacts for an ally."
+          data-tip-meta="Click a dungeon tile after arming"
+        >[Loot]</button>
+        <button
+          type="button"
+          class="party-ping-btn"
+          data-ping-kind="stairs"
+          data-tip-title="Tactical Ping: Stairs"
+          data-tip-badge="[Rally]"
+          data-tip-body="Arm a green Stairs rally ping to call all living party members to gather for floor descent."
+          data-tip-meta="Required within 2 tiles for branch entries"
+        >[Stairs]</button>
+      </div>
+    </div>

@@ -1,12 +1,12 @@
 import fcntl
+import errno
 import os
 import os.path
 import socket
 import tempfile
 import time
 import warnings
-from datetime import datetime
-from datetime import timedelta
+from collections import deque
 
 from tornado.escape import json_encode
 from tornado.escape import to_unicode
@@ -28,6 +28,8 @@ class WebtilesSocketConnection(object):
         self.username = ""
 
         self.msg_buffer = None
+        self.pending_messages = deque()
+        self.write_blocked = False
 
     def connect(self, primary = True):
         if not os.path.exists(self.crawl_socketpath):
@@ -81,9 +83,17 @@ class WebtilesSocketConnection(object):
 
     def _handle_read(self, fd, events):
         if events & IOLoop.READ:
-            data = self.socket.recv(128 * 1024, socket.MSG_DONTWAIT)
+            while self.socket is not None:
+                try:
+                    data = self.socket.recv(128 * 1024, socket.MSG_DONTWAIT)
+                except BlockingIOError:
+                    break
+                if not data:
+                    break
+                self._handle_data(data)
 
-            self._handle_data(data)
+        if events & IOLoop.WRITE:
+            self._flush_pending_messages()
 
         if events & IOLoop.ERROR:
             pass
@@ -105,24 +115,41 @@ class WebtilesSocketConnection(object):
                 self.message_callback(to_unicode(data))
 
     def send_message(self, data): # type: (str) -> None
-        start = datetime.now()
-        try:
-            self.socket.sendto(utf8(data), self.crawl_socketpath)
-        except socket.timeout:
-            self.logger.warning("Game socket send timeout", exc_info=True)
-            self.close()
+        if not self.open:
             return
-        except FileNotFoundError:
-            # I *think* this may be a relatively normal thing to happen, in
-            # which case it probably doesn't need a warning...
-            self.logger.warning("Game socket closed during sendto")
-            self.close()
-            return
-        end = datetime.now()
-        if end - start >= timedelta(seconds=1):
-            self.logger.warning("Slow socket send: " + str(end - start))
+        self.pending_messages.append(utf8(data))
+        self._flush_pending_messages()
+
+    def _flush_pending_messages(self):
+        while self.socket is not None and self.pending_messages:
+            try:
+                self.socket.sendto(self.pending_messages[0], self.crawl_socketpath)
+            except OSError as error:
+                if error.errno == errno.EINTR:
+                    continue
+                if error.errno in (errno.EAGAIN, errno.EWOULDBLOCK, errno.ENOBUFS):
+                    # Backpressure must not discard keystrokes or reorder hero
+                    # selection and the input that follows it. Retry on writable.
+                    if not self.write_blocked:
+                        self.write_blocked = True
+                        IOLoop.current().update_handler(self.socket.fileno(),
+                            IOLoop.READ | IOLoop.ERROR | IOLoop.WRITE)
+                    return
+                if (isinstance(error, (socket.timeout, FileNotFoundError))
+                        or error.errno == errno.ECONNREFUSED):
+                    self.logger.warning("Game socket closed during sendto", exc_info=True)
+                    self.close()
+                    return
+                raise
+            self.pending_messages.popleft()
+        if self.socket is not None and self.write_blocked:
+            self.write_blocked = False
+            IOLoop.current().update_handler(self.socket.fileno(), IOLoop.READ | IOLoop.ERROR)
 
     def close(self):
+        self.open = False
+        self.pending_messages.clear()
+        self.write_blocked = False
         if self.socket:
             IOLoop.current().remove_handler(self.socket.fileno())
             self.socket.close()

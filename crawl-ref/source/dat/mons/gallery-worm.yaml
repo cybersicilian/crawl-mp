@@ -1,0 +1,17 @@
+name: "gallery worm"
+glyph: {char: "w", colour: brown}
+flags: [burrows, no_skeleton]
+exp: 1050
+genus: ribbon_worm
+will: 60
+attacks:
+ - {type: bite, damage: 36}
+hd: 13
+hp_10x: 1000
+ac: 14
+ev: 4
+has_corpse: true
+intelligence: animal
+size: giant
+shape: snake
+tile: gallery_worm

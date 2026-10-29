@@ -164,6 +164,7 @@ function () {
 
 
     return {
+        colours: cols,
         formatted_string_to_html: formatted_string_to_html,
         init_canvas: init_canvas,
         make_key: make_key

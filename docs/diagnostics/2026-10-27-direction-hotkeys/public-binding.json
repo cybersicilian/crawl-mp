@@ -1,0 +1,15 @@
+{
+  "files": {
+    "docs/diagnostics/2026-10-27-direction-hotkeys/public-ui.cjs": "7c7545cddc22e592515ab4df6bf8751bcbb1942339735fbc1e168723525a5315",
+    "docs/diagnostics/2026-10-27-direction-hotkeys/run_public_ui.py": "fcb9328dbab1030bc8d3346790688388dd409ee57ca2ba4b5bb05e159636eb77",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1"
+  },
+  "release": "/opt/dcss/releases/multiplayer-performance-01a17ea4-ui",
+  "resources": {
+    "browser_instances": 1,
+    "accounts_created": 0,
+    "timeout_seconds": 240,
+    "gameplay_actions": 1
+  },
+  "campaign": "e813e777-feac-4221-9b97-4c875be376a9"
+}

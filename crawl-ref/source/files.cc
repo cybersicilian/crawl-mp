@@ -13,6 +13,7 @@
 #include "AppHdr.h"
 
 #include "files.h"
+#include "game-record.h"
 
 #include "json.h"
 #include "json-wrapper.h"
@@ -74,6 +75,7 @@
 #include "mon-place.h"
 #include "nearby-danger.h"
 #include "notes.h"
+#include "party.h"
 #include "place.h"
 #include "prompt.h"
 #include "religion.h"
@@ -83,6 +85,7 @@
 #include "spl-transloc.h" // cell_vetoes_teleport
 #include "stairs.h"
 #include "state.h"
+#include "stats-json.h"
 #include "stringutil.h"
 #include "syscalls.h"
 #include "tag-version.h"
@@ -141,7 +144,7 @@ static bool _ghost_version_compatible(const save_version &version);
 
 static bool _restore_tagged_chunk(package *save, const string &name,
                                   tag_type tag, const char* complaint);
-static player_save_info _read_character_info(package *save);
+static player_save_info _read_character_info(package *save, const string &chunk_name = "chr");
 
 static bool _convert_obsolete_species();
 
@@ -1059,6 +1062,9 @@ static void _write_tagged_chunk(const string &chunkname, tag_type tag)
 static int _get_dest_stair_type(dungeon_feature_type stair_taken,
                                 bool &find_first)
 {
+    const dungeon_feature_type counterpart = branch_connection_return(stair_taken);
+    if (counterpart != NUM_FEATURES)
+        return counterpart;
     // Order is important here.
     if (stair_taken == DNGN_EXIT_ABYSS)
     {
@@ -1756,6 +1762,8 @@ bool generate_level(const level_id &l)
 
     // initialize env for builder
     env.turns_on_level = -1;
+    if (party::multiplayer_enabled())
+        env.elapsed_time = 0;
     tile_init_default_flavour();
     tile_clear_flavour();
     tile_env.names.clear();
@@ -1838,6 +1846,9 @@ static const vector<branch_type> branch_generation_order =
     BRANCH_ORC,
     BRANCH_SPIDER,
     BRANCH_SNAKE,
+    BRANCH_BURROWS,
+    BRANCH_WORMLANDS,
+    BRANCH_HIVE,
     BRANCH_SHOALS,
     BRANCH_SWAMP,
     BRANCH_VAULTS,
@@ -1975,6 +1986,7 @@ bool pregen_dungeon(const level_id &stopping_point)
             {
             case BRANCH_SPIDER:
             case BRANCH_SNAKE:
+            case BRANCH_BURROWS:
                 status += "a lair branch";
                 break;
             case BRANCH_SHOALS:
@@ -2143,7 +2155,7 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
 
     // We clear twice - on save and on load.
     // Once would be enough...
-    if (make_changes)
+    if (make_changes && !party::multiplayer_enabled())
         delete_all_clouds();
 
     // This block is to grab followers and save the old level to disk.
@@ -2154,7 +2166,7 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
         // games.
         if (old_level.depth != -1)
         {
-            if (!crawl_state.game_is_descent())
+            if (!crawl_state.game_is_descent() && !party::multiplayer_enabled())
                 _grab_followers_and_expire_summons();
 
             if (env.level_state & LSTATE_DELETED)
@@ -2263,13 +2275,15 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
     // Markers must be activated early, since they may rely on
     // events issued later, e.g. DET_ENTERING_LEVEL or
     // the DET_TURN_ELAPSED from update_level.
-    if (make_changes || load_mode == LOAD_RESTART_GAME)
+    if (make_changes || load_mode == LOAD_RESTART_GAME
+        || (party::multiplayer_enabled() && load_mode == LOAD_VISITOR))
     {
-        bool message = !(load_mode == LOAD_RESTART_GAME && descent_peek);
+        bool message = load_mode != LOAD_VISITOR
+                       && !(load_mode == LOAD_RESTART_GAME && descent_peek);
         env.markers.activate_all(message);
     }
 
-    if (make_changes && env.elapsed_time && !just_created_level && !descent_peek
+    if (!party::multiplayer_enabled() && make_changes && env.elapsed_time && !just_created_level && !descent_peek
         && stair_taken != DNGN_EXIT_ARENA)
     {
         update_level(you.elapsed_time - env.elapsed_time);
@@ -2288,9 +2302,15 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
         // also some things that aren't, such as bribe branch.
         catchup_dactions();
 
-        delete_all_clouds();
+        if (!party::multiplayer_enabled())
+            delete_all_clouds();
 
         _place_player(stair_taken, return_pos, dest_pos, hatch_name);
+        if (party::is_enabled() && load_mode == LOAD_START_GAME)
+        {
+            party::place_party_around_active();
+            party::sync_all_proxies();
+        }
     }
 
     crawl_view.set_player_at(you.pos(), load_mode != LOAD_VISITOR);
@@ -2379,6 +2399,7 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
         PlaceInfo  delta;
 
         if (load_mode == LOAD_START_GAME
+            || (party::multiplayer_enabled() && curr_PlaceInfo.num_visits == 0)
             || (load_mode == LOAD_ENTER_LEVEL
                 && old_level.branch != you.where_are_you
                 && !popped))
@@ -2386,7 +2407,8 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
             delta.num_visits++;
         }
 
-        if (just_created_level)
+        if (just_created_level
+            || (party::multiplayer_enabled() && curr_PlaceInfo.levels_seen == 0))
             delta.levels_seen++;
 
         you.global_info += delta;
@@ -2552,11 +2574,17 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
         _fixup_transmuters();
 #endif
 
+    if (party::is_enabled() && load_mode != LOAD_VISITOR)
+        party::sync_all_proxies();
+
     return just_created_level;
 }
 
 void save_level(const level_id& lid)
 {
+    if (party::is_enabled())
+        party::remove_all_proxies();
+
     if (you.level_visited(lid))
         travel_cache.get_level_info(lid).update();
 
@@ -2567,6 +2595,12 @@ void save_level(const level_id& lid)
     fix_item_coordinates();
 
     _write_tagged_chunk(lid.describe(), TAG_LEVEL);
+
+    if (party::is_enabled() && !you.entering_level && !crawl_state.saving_game
+        && lid == level_id::current())
+    {
+        party::sync_all_proxies();
+    }
 }
 
 #if TAG_MAJOR_VERSION == 34
@@ -2586,6 +2620,13 @@ void save_level(const level_id& lid)
 // complain.
 static void _save_game_base()
 {
+    if (party::multiplayer_enabled())
+        party::set_multiplayer(true);
+    game_record::publish(true);
+    stats_append_hero_snapshots();
+    if (party::is_enabled())
+        party::remove_all_proxies();
+
     /* Stashes */
     SAVEFILE("st", "stashes", StashTrack.save);
 
@@ -2617,8 +2658,26 @@ static void _save_game_base()
     SAVEFILE("tdl", "tiles_doll", save_doll_file);
 #endif
 
-    _write_tagged_chunk("you", TAG_YOU);
-    _write_tagged_chunk("chr", TAG_CHR);
+    if (party::is_enabled())
+    {
+        party::sync_shared_state_from_active();
+        {
+            party::scoped_player_context ctx0(0);
+            _write_tagged_chunk("you", TAG_YOU);
+            _write_tagged_chunk("chr", TAG_CHR);
+        }
+        for (int slot = 1; slot < party::player_count(); ++slot)
+        {
+            party::scoped_player_context ctx(slot);
+            _write_tagged_chunk(make_stringf("you_%d", slot), TAG_YOU);
+            _write_tagged_chunk(make_stringf("chr_%d", slot), TAG_CHR);
+        }
+    }
+    else
+    {
+        _write_tagged_chunk("you", TAG_YOU);
+        _write_tagged_chunk("chr", TAG_CHR);
+    }
 }
 
 // Stack allocated string's go in separate function, so Valgrind doesn't
@@ -2646,6 +2705,9 @@ static void _save_game_exit()
 
     delete you.save;
     you.save = 0;
+    // Every party member aliases this package. Clear those aliases before
+    // the game-loop reset releases player state, as on other game endings.
+    party::sync_shared_state_from_active();
 }
 
 void save_game(bool leave_game, const char *farewellmsg)
@@ -2691,6 +2753,8 @@ void save_game(bool leave_game, const char *farewellmsg)
             you.save->commit();
             save_game_prefs();
         }
+        if (party::is_enabled() && !you.entering_level)
+            party::sync_all_proxies();
         return;
     }
 
@@ -3298,6 +3362,40 @@ static bool _restore_game(const string& filename)
                                   // everything is fully loaded
     _restore_tagged_chunk(you.save, "you", TAG_YOU, "Save data is invalid.");
 
+    if (you.save->has_chunk("you_1"))
+    {
+        package *pkg = you.save;
+        for (int slot = 1; slot < party::MAX_PARTY_PLAYERS; ++slot)
+        {
+            const string chunk_name = make_stringf("you_%d", slot);
+            const string chr_chunk = make_stringf("chr_%d", slot);
+            if (!pkg->has_chunk(chunk_name))
+                break;
+            party::set_player_count(slot + 1);
+            party::scoped_player_context ctx(slot);
+            you.save = pkg;
+            if (pkg->has_chunk(chr_chunk))
+            {
+                player_save_info member_info = _read_character_info(pkg, chr_chunk);
+                you.init_from_save_info(member_info);
+            }
+            else
+                you.init_from_save_info(save_info);
+            you.mid = party::mid_for_slot(slot);
+            _restore_tagged_chunk(pkg, chunk_name, TAG_YOU, "you tag corrupt");
+        }
+        for (int slot = 1; slot < party::player_count(); ++slot)
+        {
+            const player &member = party::get_player(slot);
+            you.gold = max(you.gold, member.gold);
+            you.attribute[ATTR_GOLD_FOUND] =
+                max(you.attribute[ATTR_GOLD_FOUND],
+                    member.attribute[ATTR_GOLD_FOUND]);
+        }
+        party::sync_shared_state_from_active();
+    }
+
+    party::restore_downed_state();
     _convert_obsolete_species();
 
     const int minorVersion = crawl_state.minor_version;
@@ -3573,7 +3671,7 @@ static bool _convert_obsolete_species()
 {
     // At this point the character has been loaded but not resaved, but the grid, lua, stashes, etc have not been.
 #if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_LAVA_ORC)
+    if (false && you.species == SP_LAVA_ORC)
     {
         if (!yesno(
             "This Lava Orc save game cannot be loaded as-is. If you load it now,\n"
@@ -3646,9 +3744,9 @@ static bool _loadable_save_ver(int major, int minor)
     return major == TAG_MAJOR_VERSION && minor <= TAG_MINOR_VERSION;
 }
 
-static player_save_info _read_character_info(package *save)
+static player_save_info _read_character_info(package *save, const string &chunk_name)
 {
-    reader inf(save, "chr");
+    reader inf(save, chunk_name);
 
     try
     {
@@ -3663,7 +3761,7 @@ static player_save_info _read_character_info(package *save)
         vector<unsigned char> buf;
         buf.resize(len);
         inf.read(&buf[0], len);
-        inf.fail_if_not_eof("chr");
+        inf.fail_if_not_eof(chunk_name);
         reader th(buf);
 
         // 0.8 trunks (30.0 .. 32.12) were format 0 but without the marker.
@@ -3683,7 +3781,7 @@ static player_save_info _read_character_info(package *save)
         // Check if we read everything only on the exact same version,
         // but that's the common case.
         if (major == TAG_MAJOR_VERSION && minor == TAG_MINOR_VERSION)
-            inf.fail_if_not_eof("chr");
+            inf.fail_if_not_eof(chunk_name);
 
         result.save_loadable = _loadable_save_ver(major, minor);
         return result;
@@ -3931,7 +4029,25 @@ void save_ghosts(const vector<ghost_demon> &ghosts, bool force, bool use_store)
     // chars, so for debugging anything to do with deaths in wizmode, you will
     // need to edit a conditional at the end of ouch.cc:ouch.
     _ghost_dprf("Trying to save ghosts.");
-    if (ghosts.empty())
+    if (!force && you.props.exists("chronicle_bones_saved_turn")
+        && you.props["chronicle_bones_saved_turn"].get_int() == you.num_turns)
+    {
+        return;
+    }
+
+    if (party::is_enabled())
+        force = true;
+
+    vector<ghost_demon> effective_ghosts = ghosts;
+    if (effective_ghosts.empty() && force
+        && !crawl_state.game_is_tutorial() && !crawl_state.game_is_arena())
+    {
+        ghost_demon player_ghost;
+        player_ghost.init_player_ghost();
+        effective_ghosts.push_back(player_ghost);
+    }
+
+    if (effective_ghosts.empty())
     {
         _ghost_dprf("Could not find any ghosts for this level to save.");
         return;
@@ -3945,9 +4061,9 @@ void save_ghosts(const vector<ghost_demon> &ghosts, bool force, bool use_store)
 
     vector<ghost_demon> leftovers;
     if (use_store)
-        leftovers = _update_permastore(ghosts);
+        leftovers = _update_permastore(effective_ghosts);
     else
-        leftovers = ghosts;
+        leftovers = effective_ghosts;
     if (leftovers.size() == 0)
         return;
 

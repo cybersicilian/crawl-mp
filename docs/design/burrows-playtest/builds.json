@@ -1,0 +1,115 @@
+{
+  "melee": {
+    "species": "Minotaur",
+    "background": "Fighter",
+    "weapon": "war axe",
+    "stats": [
+      24,
+      8,
+      16
+    ],
+    "gain": "s",
+    "skills": {
+      "Fighting": 14,
+      "Axes": 16,
+      "Armour": 13,
+      "Shields": 10,
+      "Dodging": 6,
+      "Evocations": 6
+    },
+    "gear": [
+      "+3 broad axe",
+      "+2 plate armour",
+      "+1 kite shield",
+      "+0 helmet",
+      "+0 cloak",
+      "+0 gloves",
+      "+0 boots",
+      "ring of poison resistance"
+    ],
+    "train": [
+      "Fighting",
+      "Axes",
+      "Armour",
+      "Shields"
+    ]
+  },
+  "ranged": {
+    "species": "Human",
+    "background": "Hunter",
+    "weapon": "shortbow",
+    "stats": [
+      14,
+      10,
+      24
+    ],
+    "gain": "d",
+    "skills": {
+      "Fighting": 12,
+      "Ranged Weapons": 16,
+      "Dodging": 13,
+      "Armour": 7,
+      "Stealth": 5,
+      "Evocations": 6
+    },
+    "gear": [
+      "+3 orcbow",
+      "+2 ring mail",
+      "+0 helmet",
+      "+0 cloak",
+      "+0 gloves",
+      "+0 boots",
+      "ring of poison resistance"
+    ],
+    "train": [
+      "Fighting",
+      "Ranged Weapons",
+      "Dodging"
+    ]
+  },
+  "caster": {
+    "species": "Deep Elf",
+    "background": "Earth Elementalist",
+    "weapon": "dagger",
+    "stats": [
+      8,
+      28,
+      14
+    ],
+    "gain": "i",
+    "skills": {
+      "Fighting": 10,
+      "Spellcasting": 14,
+      "Conjurations": 14,
+      "Earth Magic": 14,
+      "Fire Magic": 10,
+      "Translocations": 8,
+      "Dodging": 12,
+      "Shields": 4,
+      "Evocations": 6
+    },
+    "gear": [
+      "+2 dagger",
+      "+2 robe",
+      "+0 buckler",
+      "+0 helmet",
+      "+0 cloak",
+      "+0 gloves",
+      "+0 boots",
+      "ring of poison resistance"
+    ],
+    "spells": [
+      "Stone Arrow",
+      "Fireball",
+      "Iskenderun's Mystic Blast",
+      "Bombard"
+    ],
+    "train": [
+      "Fighting",
+      "Spellcasting",
+      "Conjurations",
+      "Earth Magic",
+      "Dodging"
+    ]
+  }
+}

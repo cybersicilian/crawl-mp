@@ -1,7 +1,7 @@
-TAG_MAJOR_VERSION: 34
 enum: shadow
 equivalent_mons: player_shadow
 description: a swirling mass of dark shadows.
+skill: {min: 0, max: 0}
 resists: {poison: 3, neg: 3, miasma: 1, petrify: 1}
 unarmed_colour: magenta
 can_swim: no

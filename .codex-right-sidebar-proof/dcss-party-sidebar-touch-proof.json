@@ -1,0 +1,168 @@
+{
+  "1440x900": {
+    "height": 900,
+    "content": 900,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 34,
+        "bottom": 530,
+        "left": 1095,
+        "right": 1430,
+        "height": 496
+      },
+      {
+        "top": 535,
+        "bottom": 863,
+        "left": 1095,
+        "right": 1430,
+        "height": 328
+      }
+    ],
+    "clippedControls": [],
+    "previews": 1,
+    "extras": 2,
+    "inventoryHeight": 43
+  },
+  "1728x1100": {
+    "height": 1100,
+    "content": 1100,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 34,
+        "bottom": 622,
+        "left": 1383,
+        "right": 1718,
+        "height": 588
+      },
+      {
+        "top": 627,
+        "bottom": 1047,
+        "left": 1383,
+        "right": 1718,
+        "height": 420
+      }
+    ],
+    "clippedControls": [],
+    "previews": 1,
+    "extras": 2,
+    "inventoryHeight": 135
+  },
+  "1280x800": {
+    "height": 800,
+    "content": 800,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 32,
+        "bottom": 485,
+        "left": 956.203125,
+        "right": 1272,
+        "height": 453
+      },
+      {
+        "top": 490,
+        "bottom": 741,
+        "left": 956.203125,
+        "right": 1272,
+        "height": 251
+      }
+    ],
+    "clippedControls": [],
+    "previews": 1,
+    "extras": 0,
+    "inventoryHeight": 43
+  },
+  "1024x768": {
+    "height": 768,
+    "content": 768,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 32,
+        "bottom": 551,
+        "left": 733,
+        "right": 1016,
+        "height": 519
+      },
+      {
+        "top": 556,
+        "bottom": 719,
+        "left": 733,
+        "right": 1016,
+        "height": 163
+      }
+    ],
+    "clippedControls": [],
+    "previews": 0,
+    "extras": 0,
+    "inventoryHeight": 89
+  },
+  "short": {
+    "height": 390,
+    "content": 698,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 32,
+        "bottom": 505,
+        "left": 733,
+        "right": 1016,
+        "height": 473
+      },
+      {
+        "top": 510,
+        "bottom": 673,
+        "left": 733,
+        "right": 1016,
+        "height": 163
+      }
+    ],
+    "clippedControls": [],
+    "previews": 0,
+    "extras": 0,
+    "inventoryHeight": 43
+  },
+  "four": {
+    "height": 1100,
+    "content": 1100,
+    "overflow": false,
+    "cards": [
+      {
+        "top": 34,
+        "bottom": 530,
+        "left": 1095,
+        "right": 1430,
+        "height": 496
+      },
+      {
+        "top": 535,
+        "bottom": 700,
+        "left": 1095,
+        "right": 1430,
+        "height": 165
+      },
+      {
+        "top": 705,
+        "bottom": 870,
+        "left": 1095,
+        "right": 1430,
+        "height": 165
+      },
+      {
+        "top": 875,
+        "bottom": 1040,
+        "left": 1095,
+        "right": 1430,
+        "height": 165
+      }
+    ],
+    "clippedControls": [],
+    "previews": 0,
+    "extras": 1,
+    "inventoryHeight": 43
+  },
+  "passed": true,
+  "errors": []
+}

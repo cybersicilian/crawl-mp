@@ -1,0 +1,28 @@
+{
+  "baseline": "/opt/dcss/releases/ui-settings-01a182e1",
+  "files": {
+    "crawl": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    "webserver/webtiles/process_handler.py": "6bef25ab25f98a3b0cc67ca0ad7ebd7d5bde9e2b345bf39df2151cf63a80af7c",
+    "webserver/webtiles/ws_handler.py": "d1c85282588e8683dc789a677b61f10ddecff2898c1e2a9fa243f1f851bd5580",
+    "webserver/static/scripts/client-lobby.js": "2961f09fd0c5303985cff0fcf34a9cce49312ae7b261484a43e50b84729239fc",
+    "webserver/static/scripts/client.js": "3434b0508667baf428308a82d3a4f71609548e40a56d1fcca0c84a89c2f7a5e4",
+    "webserver/static/scripts/rc-settings.js": "9bb22e8a7967c05587b29b73c751714d863589d3e7b5d0cf532b94e9a5bb273c",
+    "webserver/static/styles/rc-settings.css": "58d10bfecd3c216c36df0b2d691cc8b08a900677c76099928dc15ba67232d1b7",
+    "webserver/templates/client.html": "e4b91aa2b49fd7df4edad77bdf0593f0c1bfc8e9d4ae444e139f74fa5d800a84",
+    "webserver/templates/game_links.html": "336bbaa8b292e4aff1b0139c01160d333d59c85fd59accaa6046939ea8aca3a2"
+  },
+  "operation": "categorized-settings-01a1838c-r2",
+  "payload_files": {
+    "deploy_settings.py": "61e1ddc0b7b39aaaa27be137af33799149b94f243693b6a3174951690609b0a7",
+    "deployment_core.py": "64511a249cb6f1c6d995b9a8f01e04b86ecc82e2ca4b91731c067e13de646f1e",
+    "edits.json": "0030b1b8e2fc6bbaee5d423e0e38d44da1135cd4b2e90c38ef15ef484f157369",
+    "overlay/webserver/static/game-settings.json": "53c27abd026b774120338ead6b06ad96b2643337c99416766846c3992df36503",
+    "overlay/webserver/static/scripts/rc-settings.js": "94c615517923f37c496947e14af02391d0c2f408821e98b441327d1b47fb9032",
+    "overlay/webserver/static/styles/rc-settings.css": "481ed4c83e531061d992a2f61f2085b4574f2f4fa9f50185ac9884233c08a327",
+    "overlay/webserver/templates/game-settings.html": "e0158fdfd64ce4ccea0690c928edfe27ff9a840a68a6e03c36140e880e1754c5",
+    "overlay/webserver/webtiles/game_settings.py": "959552e2fc2e5abe7008aa39f4204ab3185499ced3496779b57dd9abed419f1c",
+    "overlay/webserver/webtiles/game_settings_model.py": "3a7b6f58178a8e26bd831599383d3f2157f9b4eec6137b15c7e5bed5ca5cdf57",
+    "overlay/webserver/webtiles/game_settings_socket.py": "13fb857df8118e63c6f4f1b7274773e1aa5e3b4b02c81f14e41a4a7a42b67a0a",
+    "overlay/webserver/webtiles/game_settings_test.py": "334aa3c2b75caed9df6d8800b930040bfbaf1dd6d5200ee0d22012f700ddcd8c"
+  }
+}

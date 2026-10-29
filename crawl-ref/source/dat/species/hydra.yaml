@@ -1,0 +1,65 @@
+enum: SP_HYDRA
+monster: MONS_HYDRA
+name: Hydra
+short_name: Hy
+adjective: Hydrous
+genus: Hydra
+difficulty: Intermediate
+difficulty_priority: 35
+aptitudes:
+  xp: 0
+  hp: 2
+  mp_mod: 0
+  wl: 5
+  fighting: 2
+  short_blades: False
+  long_blades: False
+  axes: False
+  maces_and_flails: False
+  polearms: False
+  staves: False
+  ranged weapons: False
+  armour: -2
+  dodging: -2
+  stealth: -2
+  shields: False
+  unarmed_combat: 2
+  spellcasting: -3
+  conjurations: -3
+  hexes: -3
+  summoning: -3
+  forgecraft: -3
+  necromancy: -3
+  translocations: -3
+  shapeshifting: -3
+  fire_magic: -4
+  ice_magic: -3
+  air_magic: -3
+  earth_magic: -3
+  alchemy: -3
+  evocations: 1
+can_swim: true
+size: giant
+str: 6
+int: 6
+dex: 6
+levelup_stat_frequency: 4
+levelup_stats:
+  - str
+mutations:
+  1:
+    MUT_DEFORMED: 1
+    MUT_POISON_RESISTANCE: 1
+    MUT_COLD_BLOODED: 1
+    MUT_REGENERATION: 1
+fake_mutations:
+  - long: Your heads grow with experience. You gain a primary bite and an amulet slot at one head, and another of each at four, seven, ten heads, and so on. Remaining heads may bite adjacent enemies.
+    short: many heads
+  - long: You cannot wield weapons or carry shields.
+    short: no weapons
+  - long: You move quickly through water, but grow noisier as you gain experience levels.
+    short: swift swimmer, noisy
+recommended_jobs:
+  - gladiator
+recommended_weapons:
+  - unarmed combat

@@ -1,0 +1,150 @@
+/* One spatial hierarchy across working surfaces. Content determines height. */
+#lobby.has-chapter-index {
+    max-width: 1360px; padding: 0 var(--tt-page-gutter) var(--tt-space-6);
+}
+#lobby_navigation {
+    min-height: 68px; gap: var(--tt-space-3); padding-block: var(--tt-space-2);
+    margin-bottom: var(--tt-space-4);
+}
+#lobby_navigation .lobby-book-title strong { font-size: 23px; }
+#lobby_navigation .lobby-chapter-link { min-height: 38px; padding: 8px 10px; }
+#lobby_navigation .lobby-account summary { min-height: 38px; padding-block: 8px; }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel,
+    #lobby_body, #play_now, #lobby_friends_panel, #lobby_rooms_panel) {
+    padding: var(--tt-panel-padding); margin-bottom: var(--tt-space-4); border-radius: 6px;
+}
+#lobby.has-chapter-index.has-party-room #party_lobby_panel { padding: var(--tt-panel-padding); }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) > .party-hall-header {
+    margin-bottom: var(--tt-space-3); padding-bottom: var(--tt-space-3);
+    border-bottom-style: solid; gap: var(--tt-space-3);
+}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title,
+#lobby.has-chapter-index #game_library_panel h2,
+#lobby .lobby-discovery-header h1, #lobby #play_now h1 {
+    font-size: var(--tt-title-page); line-height: 1.2; margin-bottom: var(--tt-space-2);
+}
+#lobby .lobby-discovery-rooms h2, #lobby #lobby_body h2, #lobby #play_now h2,
+#lobby .lobby-recent h2 { font-size: var(--tt-title-section); line-height: 1.25; }
+#lobby .lobby-home { margin-bottom: var(--tt-space-4); border-radius: 6px; }
+#lobby .lobby-home-copy { padding: var(--tt-space-5); }
+#lobby #lobby_home h1 { font-size: var(--tt-title-page); line-height: 1.2; max-width: 22ch; }
+#lobby .lobby-home-intro { margin-bottom: var(--tt-space-4); line-height: 1.6; }
+#lobby .lobby-home-art { min-height: 0; }
+#lobby :is(.lobby-recent, .lobby-daily-broth) { padding: var(--tt-space-4) var(--tt-space-5); }
+#lobby .lobby-daily-broth { gap: var(--tt-space-2); justify-content: start; }
+.lobby-discovery-tools { margin-top: var(--tt-space-4); gap: var(--tt-space-3); }
+#lobby.has-chapter-index #game_library_panel > header {
+    padding-bottom: var(--tt-space-3); gap: var(--tt-space-3);
+}
+#lobby.has-chapter-index #game_library_panel .library-search { margin-top: var(--tt-space-3); min-height: 40px; }
+#lobby.has-chapter-index #game_library_panel .game-library-list { margin-top: var(--tt-space-3); gap: var(--tt-space-2); }
+#lobby.has-chapter-index #game_library_panel .game-library-entry { padding: var(--tt-space-3) var(--tt-space-4); gap: var(--tt-space-3); }
+#lobby.has-chapter-index #game_library_panel h3 { font-size: var(--tt-title-entry); }
+#lobby .game-library-entry .library-entry-actions { gap: var(--tt-space-2); }
+#lobby .library-header-actions { gap: var(--tt-space-3); }
+.chronicle-tools { margin-bottom: var(--tt-space-4); padding-block: var(--tt-space-3); gap: var(--tt-space-3); border-block-style: solid; }
+#coop_chronicle_panel .lobby-section-intro { margin-bottom: var(--tt-space-3) !important; }
+#lobby.has-chapter-index #coop_chronicle_grid { gap: var(--tt-space-4); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box-header { padding-bottom: var(--tt-space-2); font-size: 20px; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry { padding: var(--tt-space-3); gap: var(--tt-space-2); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-list { gap: var(--tt-space-2); }
+.chronicle-record-links { margin-top: var(--tt-space-4); padding-top: var(--tt-space-3); gap: var(--tt-space-3) var(--tt-space-4); }
+#lobby #play_now .mode-groups { gap: var(--tt-space-4); }
+#lobby #play_now :is(.mode-groups, .mode-groups > *, .mode-grid) { min-width: 0; }
+#lobby #play_now .mode-card { padding: var(--tt-space-3); gap: var(--tt-space-2); }
+#lobby #play_now .mode-page-heading { margin-bottom: var(--tt-space-4); }
+#lobby #play_now .mode-group > p { margin-bottom: var(--tt-space-3); }
+#lobby #play_now .mode-character-name input {
+    color: var(--tt-folio-ink); background: var(--tt-folio-raised);
+    border: 1px solid var(--tt-folio-rule); border-radius: 4px; padding: 8px 10px;
+}
+#lobby.has-chapter-index #party_room_footer { padding-block: var(--tt-space-2); margin-bottom: var(--tt-space-3); border-block-style: solid; }
+#lobby .party-setup-tools { gap: var(--tt-space-2) var(--tt-space-4); margin-bottom: var(--tt-space-3); }
+#lobby.has-chapter-index #party_slots_grid { gap: var(--tt-space-3); align-items: start; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-box { padding: var(--tt-space-4); gap: var(--tt-space-3); border-radius: 5px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-top { padding-bottom: var(--tt-space-3); gap: var(--tt-space-3); min-height: 0; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-hero-name { font-size: 22px; }
+#lobby .party-slot-monogram { flex-basis: 54px; height: 66px; }
+#lobby .party-slot-monogram .native-player-tile { width: 48px; height: 48px; }
+#lobby .party-slot-monogram .native-player-tile :is(img, canvas) { width: 44px; height: 44px; }
+#lobby .party-character-fields { gap: var(--tt-space-2) var(--tt-space-3); }
+#lobby.has-chapter-index #party_slots_grid .party-archetype-row { padding-top: var(--tt-space-2); gap: var(--tt-space-1); }
+#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { padding-top: var(--tt-space-2); margin-top: 0; }
+#lobby.has-chapter-index #party_slots_grid :is(.slot-state-open, .slot-state-closed) { gap: var(--tt-space-2); }
+#lobby .party-composition-header { margin-bottom: var(--tt-space-3); }
+#lobby .party-composition-roster { gap: var(--tt-space-3); align-items: start; }
+#lobby .party-composition-hero { padding: var(--tt-space-4); gap: var(--tt-space-3); }
+#lobby .welcome-entry {
+    margin-block: var(--tt-space-4); padding: var(--tt-space-6); gap: var(--tt-space-5);
+    border-radius: 8px;
+}
+#lobby:not(.has-chapter-index):has(.welcome-entry) { padding-top: var(--tt-space-3); }
+#lobby .welcome-brand { margin-bottom: var(--tt-space-4); }
+#lobby .welcome-intro { padding-right: var(--tt-space-5); }
+#lobby .welcome-entry #coop_quick_login { padding-top: var(--tt-space-4); }
+#lobby .welcome-account { align-self: start; }
+#lobby .welcome-entry #login { padding: var(--tt-space-5); border-radius: 6px; }
+#lobby .welcome-account-heading p { margin-bottom: var(--tt-space-4); }
+#lobby .welcome-entry #login_form .text { margin-bottom: var(--tt-space-3); }
+#lobby .welcome-features { margin-top: var(--tt-space-4); }
+#lobby .account-dialog-title { margin-bottom: var(--tt-space-4); font-size: 25px; }
+
+/* The archive and statistics are reading/work surfaces, not empty hero banners. */
+.library-page main { max-width: 1360px; margin-bottom: var(--tt-space-6); padding-inline: var(--tt-page-gutter); }
+.library-page .library-navigation { min-height: 68px; padding-block: var(--tt-space-2); gap: var(--tt-space-3) var(--tt-space-4); }
+.library-page .library-book { border-radius: 6px; }
+.library-page .library-page-header { min-height: 0; padding: var(--tt-panel-padding); border-bottom-style: solid; }
+.library-page .library-eyebrow { margin-bottom: var(--tt-space-2); font-size: 10px; }
+.library-page h1 { margin-bottom: var(--tt-space-2); font-size: var(--tt-title-page); line-height: 1.2; font-variant-caps: normal; }
+.library-page .library-content { padding: var(--tt-panel-padding); }
+.library-page h2 { margin-block: var(--tt-space-5) var(--tt-space-3); font-size: var(--tt-title-section); font-variant-caps: normal; border-bottom-style: solid; }
+.library-page .library-breadcrumb { margin-bottom: var(--tt-space-4); }
+.library-page .library-records { gap: var(--tt-space-2); }
+.library-page .library-records li { padding: var(--tt-space-3) var(--tt-space-4); }
+.library-page .library-record-title { font-size: var(--tt-title-entry); }
+.library-page dl { margin-block: var(--tt-space-4); padding: var(--tt-space-3) var(--tt-space-4); gap: var(--tt-space-2) var(--tt-space-5); }
+.library-page .library-records .library-empty { padding: var(--tt-space-4); }
+.stats-page .stats-sidebar { padding: var(--tt-space-4) var(--tt-space-2); }
+.stats-page :is(.stats-lookup, .stats-filters, .stats-content) { padding: var(--tt-space-4) var(--tt-panel-padding); }
+.stats-page .stats-section-head { margin-block: var(--tt-space-4) var(--tt-space-3); }
+.stats-page .stats-section-head h2 { margin: 0; }
+.stats-page .stats-description, .stats-page .stats-section { margin-bottom: var(--tt-space-4); }
+.stats-page .stats-metrics { margin-bottom: var(--tt-space-4); }
+.stats-page .stats-metrics strong { font-size: 24px; line-height: 1.3; }
+
+/* The same folio can be opened during setup or from the dungeon. */
+:is(dialog#party_inspector_modal, dialog.character-starting-sheet) .party-insp-header { padding: var(--tt-space-4) var(--tt-panel-padding); }
+:is(dialog#party_inspector_modal, dialog.character-starting-sheet) .party-insp-title-wrap :is(h1, h2) { font-size: 25px; }
+:is(dialog#party_inspector_modal, dialog.character-starting-sheet) .party-insp-tab-btn { min-height: 40px; padding-block: var(--tt-space-2); }
+:is(dialog#party_inspector_modal, dialog.character-starting-sheet) .party-insp-body,
+.starting-sheet-panels { padding: var(--tt-space-4) var(--tt-panel-padding); }
+@media (min-width: 1181px) {
+    #lobby_navigation .lobby-book-brand { margin-right: var(--tt-space-3); }
+    #lobby_navigation .lobby-account { margin-left: auto; }
+}
+@media (max-width: 760px) {
+    #lobby_navigation { margin-bottom: var(--tt-space-3); }
+    #lobby .lobby-home-copy, #lobby :is(.lobby-recent, .lobby-daily-broth) { padding: var(--tt-space-4); }
+    #lobby .welcome-entry { padding: var(--tt-space-5); }
+    #lobby .welcome-intro { padding-right: 0; }
+    #lobby .welcome-entry #login { padding: var(--tt-space-4); }
+    #lobby .welcome-account-heading h2 { font-size: 24px; }
+    #lobby .welcome-intro h1 { margin-block: var(--tt-space-2) var(--tt-space-3); font-size: 30px; }
+    #lobby .welcome-intro > p { font-size: 12px; line-height: 1.55; }
+    #lobby .welcome-brand { margin-bottom: var(--tt-space-3); }
+    #lobby .welcome-features { margin-top: var(--tt-space-3); gap: 5px 8px; }
+}
+@media (max-width: 680px) {
+    #lobby.has-chapter-index #party_slots_grid .party-slot-box { padding: var(--tt-space-3); }
+    #lobby .party-setup-tools { gap: var(--tt-space-3); }
+    #lobby .welcome-entry { padding: var(--tt-space-4); margin-block: var(--tt-space-2); gap: var(--tt-space-4); }
+    .library-page .library-navigation { min-height: 0; gap: var(--tt-space-2); padding-block: var(--tt-space-3); }
+    .library-page .library-page-header { background-size: auto, cover; }
+    .library-page .library-navigation .library-chapters { gap: var(--tt-space-1); }
+    .library-page .library-chapters a { padding: 8px; }
+    .library-page dl { column-gap: var(--tt-space-3); }
+    #lobby #play_now .mode-party-sizes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--tt-space-2); }
+    #lobby #play_now .mode-party-link { flex-wrap: wrap; min-width: 0; gap: 3px; padding: 8px 5px; white-space: normal; }
+    #lobby #play_now .mode-party-link small { flex-basis: 100%; padding: 0; text-align: center; }
+    #lobby #play_now .mode-card-copy { overflow-wrap: anywhere; }
+}

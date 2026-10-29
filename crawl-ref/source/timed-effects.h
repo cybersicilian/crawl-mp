@@ -9,7 +9,7 @@
 
 void update_level(int elapsedTime);
 monster* update_monster(monster& mon, int turns);
-void handle_time();
+void handle_time(int world_delta = -1);
 
 int count_malign_gateways(const actor& owner);
 

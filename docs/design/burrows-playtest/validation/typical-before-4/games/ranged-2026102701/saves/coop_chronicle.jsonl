@@ -1,0 +1,4 @@
+{"type":"party_comp","player_count":1,"friendly_fire":true,"seed":"2026102701","place":"D:1","party_spec":"Route_ranged:Human/Hunter","members":[{"slot":0,"name":"Route_ranged","species":"Human","job":"Hunter","weapon":"","xl":1}]}
+{"type":"cool_item","item_name":"a +2 ring mail","category":"ego_gear","finder_name":"Route_ranged","finder_species":"Human","finder_job":"Hunter","slot":0,"place":"D:1","value_score":120}
+{"type":"cool_item","item_name":"a +3 orcbow","category":"ego_gear","finder_name":"Route_ranged","finder_species":"Human","finder_job":"Hunter","slot":0,"place":"D:1","value_score":130}
+{"type":"ghost","hero_name":"Route_ranged","slot":0,"species":"Human","job":"Hunter","xl":16,"god":"Okawaru","place":"Hive:2","killer":"wax beetle (15)","hp_max":134,"ac":17,"ev":26,"sh":0,"weapon":"+3 orcbow","down_type":"permadeath_ghost","bones_saved":true}

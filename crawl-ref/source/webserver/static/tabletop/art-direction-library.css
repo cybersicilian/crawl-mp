@@ -1,0 +1,16 @@
+/* The same book material applies to archive, character and statistics pages. */
+body:has(.library-book) {
+    background: radial-gradient(ellipse at 50% 0, #31423944, transparent 65%), var(--art-night);
+    color: var(--art-ink);
+    font-family: var(--art-copy);
+}
+.library-book { background: var(--tt-paper); border-color: var(--art-brass-dim); border-radius: 3px; box-shadow: var(--art-shadow); }
+.library-book :is(h1, h2, h3) { color: var(--art-ink); font-family: var(--art-title); font-weight: 400; }
+.library-book :is(input, select, button, .button) { border-radius: 2px; }
+.library-book :is(table, article, section) { border-color: #b8b29b; }
+.library-book thead { color: var(--art-paper-light); background: var(--art-teal-ink); }
+.library-book tbody tr:nth-child(even) { background: #788c6e0b; }
+.library-book a { color: var(--art-teal-ink); }
+.library-book :is(a, button, input, select, summary):focus-visible { outline: 2px solid var(--art-teal-ink); outline-offset: 3px; }
+body:has(.library-book) .outgame-navigation { background: var(--art-frame); border-color: var(--art-rule); color: var(--art-ivory); }
+body:has(.library-book) .outgame-navigation a { color: var(--art-brass-light); }

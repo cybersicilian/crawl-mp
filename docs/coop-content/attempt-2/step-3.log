@@ -1,0 +1,23 @@
+ASSERT(index != -1) in 'spl-util.cc' at line 1022 failed.
+Filters: [coop-content]
+Randomness seeded to: 916781216
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+catch2-tests-executable is a Catch2 v3.2.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Solo generation and starting libraries exclude dedicated support content
+-------------------------------------------------------------------------------
+catch2-tests/test_coop_content.cc:103
+...............................................................................
+
+catch2-tests/test_coop_content.cc:103: FAILED:
+  {Unknown expression after the reported line}
+due to a fatal error condition:
+  SIGABRT - Abort (abnormal termination) signal
+
+===============================================================================
+test cases:  2 |  1 passed | 1 failed
+assertions: 27 | 26 passed | 1 failed
+

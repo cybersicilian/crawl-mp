@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "shell.h"
 
 #include <algorithm>
 #include <cerrno>
@@ -67,6 +68,7 @@
 #include "evoke.h"
 #include "fight.h"
 #include "files.h"
+#include "game-modifiers.h"
 #include "fineff.h"
 #include "god-abil.h"
 #include "god-companions.h"
@@ -106,6 +108,7 @@
 #include "notes.h"
 #include "options.h"
 #include "output.h"
+#include "party.h"
 #include "player.h"
 #include "player-notices.h"
 #include "player-reacts.h"
@@ -170,8 +173,6 @@ CLua dlua(false);      // Lua interpreter for the dungeon builder.
 #endif
 crawl_environment env; // Requires dlua.
 crawl_tile_environment tile_env;
-
-player you;
 
 game_state crawl_state;
 
@@ -254,12 +255,13 @@ int main(int argc, char *argv[])
 #endif
 #ifdef DEBUG_GLOBALS
     real_Options = new game_options();
-    real_you = new player();
+    real_you = &party::get_player(0);
     real_clua = new CLua(true);
     real_dlua = new CLua(false);
     real_crawl_state = new game_state();
     real_env = new crawl_environment();
 #endif
+    party::init();
     // do this explicitly so that static initialization order woes can be
     // ignored.
     msg::force_stderr echo(maybe_bool::maybe);
@@ -363,7 +365,7 @@ static void _reset_game()
     crawl_state.show_more_prompt = true;
     the_lost_ones.clear();
     shopping_list = ShoppingList();
-    you = player();
+    party::reset();
     reset_hud();
     StashTrack = StashTracker();
     travel_cache = TravelCache();
@@ -425,6 +427,22 @@ NORETURN static void _launch_game()
 {
     const bool game_start = startup_step();
 
+    if (party::is_enabled())
+    {
+        if (game_start)
+        {
+            for (int i = 1; i < party::player_count(); ++i)
+            {
+                player &p = party::get_player(i);
+                p.where_are_you = you.where_are_you;
+                p.depth = you.depth;
+            }
+            party::place_party_around_active();
+        }
+        party::sync_shared_state_from_active();
+        party::sync_all_proxies();
+    }
+
     // Attach the macro key recorder
     remove_key_recorder(&repeat_again_rec);
     add_key_recorder(&repeat_again_rec);
@@ -452,6 +470,20 @@ NORETURN static void _launch_game()
                 msg::stream << "<white> [" << type_name << "]</white>";
         }
         msg::stream << endl;
+
+        if (party::is_enabled())
+        {
+            msg::stream << (party::multiplayer_enabled() ? "<lightcyan>Party members:"
+                                                       : "<lightcyan>Party companions:");
+            for (int i = 1; i < party::player_count(); ++i)
+            {
+                const player &p = party::get_player(i);
+                msg::stream << (i > 1 ? "," : "") << " " << p.your_name
+                            << " (" << species::name(p.species) << " "
+                            << get_job_name(p.char_class) << ")";
+            }
+            msg::stream << ".</lightcyan>" << endl;
+        }
     }
 
 #ifdef USE_TILE
@@ -520,6 +552,9 @@ static void _show_commandline_options_help()
     puts("  -name <string>        character name");
     puts("  -species <arg>        preselect character species (by letter, abbreviation, or name)");
     puts("  -background <arg>     preselect character background (by letter, abbreviation, or name)");
+    puts("  -party <N|spec>       enable multiplayer party mode (2-4 players)");
+    puts("                        Hero:Species/Background/Weapon/Seed/Trait; traits: mummy, zombie, ghost");
+    puts("                        Campaign options: runelocks=off, traps=normal|none|floor|random");
     puts("  -dir <path>           crawl directory");
     puts("  -rc <file>            init file name");
     puts("  -rcdir <dir>          directory that contains (included) rc files");
@@ -604,7 +639,9 @@ static void _show_commandline_options_help()
     puts("  -gdb/-no-gdb     produce gdb backtrace when a crash happens (default:on)");
 #endif
     puts("  -playable-json   list playable species, jobs, and character combos.");
+    puts("  -character-preview-json <party>  inspect native starting characters without a dungeon or save.");
     puts("  -branches-json   list branch data.");
+    puts("  -stats-json      dump reference data (monsters, items, spells...) for /stats.");
     puts("  -no-player-bones do not write player's info to bones files.");
 
 #if defined(TARGET_OS_WINDOWS) && defined(USE_TILE_LOCAL)
@@ -1085,6 +1122,31 @@ static void _input()
 
     crawl_state.clear_mon_acting();
 
+    // Resolve extra lives before scheduling, which skips zero-HP members.
+    if (party::is_enabled())
+    {
+        bool revived = false;
+        if (you.pending_revival && !party::is_player_downed(party::active_slot()))
+        {
+            revive();
+            bring_to_safety();
+            revived = true;
+        }
+        revived |= party::resolve_pending_revivals();
+        if (revived)
+        {
+            redraw_screen();
+            update_screen();
+        }
+    }
+
+    if (party::is_enabled() && !party::multiplayer_enabled()
+        && (party::is_player_downed(party::active_slot())
+            || (!party::simultaneous_turns_enabled() && !party::party_feels_safe())))
+    {
+        party::switch_to_player(party::select_next_acting_player());
+    }
+
     disable_check player_disabled(you.incapacitated());
     religion_turn_start();
     god_conduct_turn_start();
@@ -1094,7 +1156,8 @@ static void _input()
 
     reset_damage_counters();
 
-    if (you.pending_revival)
+    if (you.pending_revival
+        && (!party::is_enabled() || !party::is_player_downed(party::active_slot())))
     {
         revive();
         bring_to_safety();
@@ -1187,6 +1250,7 @@ static void _input()
         autoinscribe();
 
     if (you_are_delayed()
+        && !(party::multiplayer_enabled() && current_delay()->is_cooperative())
         && !dynamic_cast<MacroProcessKeyDelay*>(current_delay().get()))
     {
         if (!current_delay().get()->is_macro())
@@ -1444,14 +1508,15 @@ static bool _can_take_stairs(dungeon_feature_type ftype, bool down,
     switch (ftype)
     {
     case DNGN_EXIT_VAULTS:
-        if (runes_in_pack() < 1)
+        if (!game_modifiers::rune_locks_disabled(you) && runes_in_pack() < 1)
         {
             mpr("You need a rune to leave the Vaults.");
             return false;
         }
         break;
     case DNGN_ENTER_ZOT:
-        if (runes_in_pack() < ZOT_ENTRY_RUNES && !crawl_state.game_is_descent())
+        if (!game_modifiers::rune_locks_disabled(you)
+            && runes_in_pack() < ZOT_ENTRY_RUNES && !crawl_state.game_is_descent())
         {
             mprf("You need at least %d runes to enter the Realm of Zot.",
                  ZOT_ENTRY_RUNES);
@@ -2120,6 +2185,8 @@ void process_command(command_type cmd, command_type prev_cmd)
         cmd = m.cmd;
     }
 
+    shell::prepare_command(cmd);
+
     switch (cmd)
     {
 #ifdef USE_TILE
@@ -2621,66 +2688,128 @@ void world_reacts()
     _check_sanctuary();
     check_spectral_weapon(you);
 
-    run_environment_effects();
+    if (!party::multiplayer_enabled())
+        run_environment_effects();
 
     if (!crawl_state.game_is_arena())
         player_reacts();
 
-    if (player_in_branch(BRANCH_ABYSS))
-        maybe_shift_abyss_around_player();
+    const int orig_time_taken = you.time_taken;
+    int floor_delta = orig_time_taken;
+    const int world_delta = party::is_enabled()
+        ? party::record_player_turn_and_get_world_delta(orig_time_taken, &floor_delta)
+        : orig_time_taken;
 
-    abyss_morph();
-    apply_noises();
-    handle_monsters(true);
+    if (party::is_enabled())
+        party::sync_all_proxies();
 
-    // Monsters can schedule final effects, too!
-    // (mostly by exploding)
-    fire_final_effects();
+    if (party::is_enabled() && !crawl_state.game_is_arena())
+        incr_party_zot_clocks(party::multiplayer_enabled()
+            ? party::global_time_delta(orig_time_taken) : world_delta);
 
-    check_banished();
-
-    ASSERT(you.time_taken >= 0);
-    you.elapsed_time += you.time_taken;
-    if (you.elapsed_time >= 2*1000*1000*1000)
+    if (!party::is_enabled() || world_delta > 0)
     {
-        // 2B of 1/10 turns. A 32-bit signed int can hold 2.1B.
-        // The worst case of mummy scumming had 92M turns, the second worst
-        // merely 8M. This limit is ~200M turns, with an efficient bot that
-        // keeps resting on a fast machine, it takes ~24 hours to hit it
-        // on a level with no monsters, at 100% CPU utilization, producing
-        // a gigabyte of bzipped ttyrec.
-        // We could extend the counters to 64 bits, but in the light of the
-        // above, it's an useless exercise.
-        mpr("Outside, the world ends.");
-        mpr("Sorry, but your quest for the Orb is now rather pointless. "
-            "You quit...");
-        // Please do not give it a custom ktyp or make it cool in any way
-        // whatsoever, because players are insane. Usually, not being dragged
-        // down by sanity is good, but this is not the case here.
-        player_die(KILLED_BY_QUITTING);
+        you.time_taken = world_delta;
+
+        if (party::multiplayer_enabled())
+        {
+            run_environment_effects();
+        }
+
+        if (player_in_branch(BRANCH_ABYSS))
+            maybe_shift_abyss_around_player();
+
+        abyss_morph();
+        apply_noises();
+        handle_monsters(true);
+
+        // Monsters can schedule final effects, too!
+        // (mostly by exploding)
+        fire_final_effects();
+
+        check_banished();
+
+        ASSERT(you.time_taken >= 0);
+        if (party::multiplayer_enabled())
+            env.elapsed_time += floor_delta;
+        else
+            you.elapsed_time += you.time_taken;
+        if (you.elapsed_time >= 2*1000*1000*1000)
+        {
+            // 2B of 1/10 turns. A 32-bit signed int can hold 2.1B.
+            // The worst case of mummy scumming had 92M turns, the second worst
+            // merely 8M. This limit is ~200M turns, with an efficient bot that
+            // keeps resting on a fast machine, it takes ~24 hours to hit it
+            // on a level with no monsters, at 100% CPU utilization, producing
+            // a gigabyte of bzipped ttyrec.
+            // We could extend the counters to 64 bits, but in the light of the
+            // above, it's an useless exercise.
+            mpr("Outside, the world ends.");
+            mpr("Sorry, but your quest for the Orb is now rather pointless. "
+                "You quit...");
+            // Please do not give it a custom ktyp or make it cool in any way
+            // whatsoever, because players are insane. Usually, not being dragged
+            // down by sanity is good, but this is not the case here.
+            player_die(KILLED_BY_QUITTING);
+        }
+
+        if (!party::multiplayer_enabled())
+            handle_time();
+        // handle_time might have scheduled on death effects for monsters killed
+        // by contamination explosions etc.
+        fire_final_effects();
+
+        manage_clouds();
+
+        handle_lurkers();
+
+        // This needs to happen after `manage_clouds` is called as fog clouds
+        // decaying will affect whether a monster is still in view
+        print_mons_left_view_messages();
+
+        if (env.level_state & LSTATE_STILL_WINDS)
+            _update_still_winds();
+        if (!crawl_state.game_is_arena())
+        {
+            if (party::is_enabled())
+            {
+                const int act_slot = party::active_slot();
+                for (int slot = 0; slot < party::player_count(); ++slot)
+                {
+                    if (party::is_player_downed(slot)
+                        || party::get_player(slot).hp <= 0
+                        || !party::same_region(act_slot, slot))
+                    {
+                        continue;
+                    }
+                    party::scoped_player_context ctx(slot, true);
+                    you.time_taken = world_delta;
+                    player_reacts_to_monsters();
+                }
+                you.time_taken = world_delta;
+            }
+            else
+                player_reacts_to_monsters();
+        }
+
+        clear_monster_flags();
+        env.invis_knowledge.handle_time();
     }
 
-    handle_time();
-    // handle_time might have scheduled on death effects for monsters killed
-    // by contamination explosions etc.
-    fire_final_effects();
+    you.time_taken = orig_time_taken;
+    if (party::multiplayer_enabled())
+    {
+        you.elapsed_time += orig_time_taken;
+        handle_time(floor_delta);
+        fire_final_effects();
+    }
+    if (party::is_enabled())
+    {
+        party::sync_shared_state_from_active();
+        party::sync_all_proxies();
+    }
 
-    manage_clouds();
-
-    handle_lurkers();
-
-    // This needs to happen after `manage_clouds` is called as fog clouds
-    // decaying will affect whether a monster is still in view
-    print_mons_left_view_messages();
-
-    if (env.level_state & LSTATE_STILL_WINDS)
-        _update_still_winds();
-    if (!crawl_state.game_is_arena())
-        player_reacts_to_monsters();
-
-    clear_monster_flags();
-    env.invis_knowledge.handle_time();
-
+    party::interrupt_unsafe_activities();
     viewwindow();
 
     // Needs to happen after viewwindow() so that the map knowledge is up to

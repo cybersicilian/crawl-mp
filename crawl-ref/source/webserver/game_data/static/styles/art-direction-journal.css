@@ -1,0 +1,44 @@
+/* The journal uses broad paper, fine rules and an editorial reading hierarchy. */
+#ui-stack {
+    --workflow-paper: var(--art-paper);
+    --workflow-ink: var(--art-ink);
+    --workflow-rule: #b8b29b;
+    --menu-quiet: var(--art-ink-muted);
+}
+#ui-stack .ui-popup-overlay { background: #080f0bbf; }
+#ui-stack .ui-popup-outer:has(.workflow-surface) {
+    border-color: var(--art-brass);
+    outline-color: #242c20;
+    border-radius: 3px;
+    background: var(--tt-paper);
+    box-shadow: inset 0 0 0 4px #f6f1e633, inset 0 0 0 5px #636a4d33, 0 24px 70px #000a;
+}
+#game #ui-stack .workflow-surface { color: var(--art-ink); font-family: var(--art-copy); }
+#game #ui-stack .workflow-surface > :is(.header, .menu_title) {
+    color: var(--art-ink);
+    font-family: var(--art-title);
+    font-weight: 400;
+    letter-spacing: -.025em;
+    border-color: #b8b29b;
+}
+#ui-stack .workflow-popup-hero { color: var(--art-teal-ink); letter-spacing: .09em; }
+#ui-stack .workflow-popup-tools { border-bottom: 1px solid #b8b29b55; padding-bottom: 10px; }
+#game #ui-stack .workflow-surface button { border-radius: 2px; border-color: #9f9e84; color: var(--art-ink); background: #f6f1e6a8; box-shadow: inset 0 1px 0 #fff8; }
+#game #ui-stack .workflow-surface button:hover:not(:disabled) { border-color: var(--art-teal-ink); background: #dde3d1; }
+#game #ui-stack .workflow-surface :is(.workflow-primary, .workflow-categories [aria-selected="true"], .workflow-pane-tabs [aria-selected="true"]) {
+    background: var(--art-teal-ink); border-color: var(--art-teal-ink); color: var(--art-paper-light); box-shadow: none;
+}
+#game #ui-stack .workflow-surface :is(button, input, select, a, [role="button"]):focus-visible { outline-color: var(--art-teal-ink); }
+#ui-stack .workflow-surface .menu_contents li.selectable { border-radius: 1px; }
+#ui-stack .workflow-surface .menu_contents li.selectable:is(:hover, :focus-visible, .hovered) { background: #d7dfcb; border-color: #9baa89; }
+#game #ui-stack .workflow-surface .menu_contents li.workflow-selected { background: #d1ddc3; border-color: #70885e; box-shadow: inset 3px 0 0 #587247; }
+#ui-stack .workflow-surface .workflow-entry-copy { color: inherit; }
+#ui-stack .workflow-table-head { background: #d9dece; border-color: #adb59b; color: #3e523a; }
+#ui-stack .workflow-surface :is(.body, .footer) { border-color: #b8b29b; }
+#ui-stack .describe-item .body { line-height: 1.65; }
+#ui-stack .describe-item .body > :is(p, blockquote) { max-width: 78ch; }
+#ui-stack .workflow-surface .quote { color: #676c5c; font-family: var(--art-title); }
+:is(#dcss_rich_tooltip, .dcss-tooltip-card, .lobby-tooltip) { border-color: var(--art-brass-dim); border-radius: 3px; background: var(--tt-paper); color: var(--art-ink); box-shadow: var(--art-shadow); }
+@media (forced-colors: active) {
+    #ui-stack .workflow-surface li:focus-visible { outline: 2px solid Highlight; }
+}

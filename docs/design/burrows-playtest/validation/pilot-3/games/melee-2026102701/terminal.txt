@@ -1,0 +1,342 @@
+=Route_melee the Shield-Bearer     *WIZARD*MinotaurHealth: 19/19     ========================Magic:  0/0AC:  6 (25%)Str: 20EV:  8Int: 5SH:  4Dex: 9XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)a) +0 war axeNothing quivered♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Chopper      4/143ROUTE_EVENT setup 2
+Route_melee the Chopper           *WIZARD*MinotaurHealth: 14/14     ========================Magic:  0/0AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  1 Next: 46047Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 20/20     ========================Magic:  1/1========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  2 Next: 23018Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 26/26     ========================Magic:  2/2========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  3 Next: 11504Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 33/33     ========================Magic:  3/3========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  4 Next: 65018Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 38/38     ========================Magic:  4/4========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  5 Next: 34928Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 45/45     ========================Magic:  5/5========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  6 Next: 18103Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 50/50     ========================Magic:  6/6========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  7 Next: 9196%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 57/57     ========================Magic:  7/7========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  8 Next: 4594%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 62/62     ========================Magic:  8/8========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL:  9 Next: 2259%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 69/69     ========================Magic:  9/9========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 10 Next: 1082%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 74/74     ========================Magic:  10/10     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 11 Next: 491% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 81/81     ========================Magic:  11/11     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 12 Next: 263% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_melee the Chopper           *WIZARD*MinotaurHealth: 86/86     ========================Magic:  12/12     ========================AC:  6 (25%)Str: 20EV:  8Int: 5SH:  3Dex: 9XL: 13 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 war axe♣@♣Nothing quivered♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 93/933/134 0% ROUTE_EVENT setup 3
+
+_Experience level set to 14.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 24 8 164816ROUTE_EVENT setup 4
+
+
+_Setting attributes (Str, Int, Dex) to: 24, 8, 16
+ Enter Wizard Command (? - help): Which skill (by name)? Axes
+ Axes
+ To what level? (current = 0.0) 16SeverROUTE_EVENT setup 5
+
+_Increased Axes to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 611ROUTE_EVENT setup 6
+
+_Increased Dodging to skill level 6.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 14132/132ROUTE_EVENT setup 7
+Fighting
+ Fighting14Fighting to skill level 14.0.Evocations
+ Evocations6ROUTE_EVENT setup 8
+
+_Increased Evocations to skill level 6.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 106ROUTE_EVENT setup 9
+
+_Increased Shields to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Armour
+ Armour
+ To what level? (current = 0.0) 139 (272
+ Increased Armour to skill level 13.0.
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking4
+_
+_g - 2 potions of magic5
+_
+_m - 4 potions of might (gained 2)6
+_
+_h - 2 potions of haste7
+_
+_c - 6 potions of curing8
+_
+_w - 6 potions of heal wounds9
+_
+_d - a ring of poison resistance10.0 (1.0)
+_
+_e - a +0 pair of boots1
+_
+_f - a +0 pair of gloves2
+_
+_g - a +0 cloak of stealth3
+_
+_h - a +0 helmet4
+_
+_i - a +1 kite shield5
+_
+_j - a +2 plate armour6
+_
+_k - a +3 broad axe7
+_
+ You unwield your +0 war axe.
+_k - a +3 broad axe (weapon)8k) +3 broad axe
+_0
+ You start removing your armour.9.0 (120.0 (21.0 (32.0 (43.0 (5
+0 (0%) 4
+_You continue removing your +0 scale mail. x5
+ You finish removing your +0 scale mail.
+ You start putting on your armour.4.0 (65.0 (76.0 (87.0 (98.0 (10.0)
+17 (32%) 9
+_You continue putting on your +2 plate armour. x5
+_You finish putting on your +2 plate armour.0.0)
+_9.0 (130.0 (21.0 (32.0 (43.0 (5
+0
+_You start removing your armour. You continue removing your +0 buckler. x5
+ You finish removing your +0 buckler.
+ You start putting on your armour.4.0 (65.0 (76.0 (87.0 (98.0 (10.0)
+812
+_You continue putting on your +1 kite shield. x5
+_You finish putting on your +1 kite shield.0.0)
+_
+ You start putting on your armour.9.0 (140.0 (21.0 (32.0 (43.0 (5
+9 (33
+_You continue putting on your +0 cloak of stealth. x5
+ You finish putting on your +0 cloak of stealth.
+_You feel stealthy.0
+_
+ You start putting on your armour.4.0 (15.0 (26.0 (37.0 (48.0 (5
+21 (34
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.9.0 (150.0 (21.0 (32.0 (43.0 (5
+2
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)5 (0.5
+_
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): Route_melee the Severer           *WIZARD*MinotaurHealth: 132/132   ========================.......Magic:  13/13     ========================.......AC: 22 (34%)Str: 24.......EV:  8Int: 8.......SH: 12Dex: 16.......XL: 14 Next:  0%  Place: Hall of Blades.......Noise:  0 ------  Time: 53.5 (0.0).......##k) +3 broad axe.......@#Nothing quivered.............................................................................#.............###...........
+_You finish putting on your +0 pair of gloves.
+ You start putting on your armour.
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): 
+ You start putting on your armour.
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)You feel a rush of knowledge.
+_Healing.
+ Enter Wizard Command (? - help): 
+_Found a staircase back to the Vaults.Route_melee the Severer           *WIZARD*MinotaurHealth: 132/132   ========================.......Magic:  13/13     ========================.......AC: 22 (34%)Str: 24.......EV:  8Int: 8.......SH: 12Dex: 16.......XL: 14 Next:  0%  Place: Hall of Blades.......Noise:  0 ------  Time: 53.5 (0.0).......##k) +3 broad axe.......@#Nothing quivered.............................................................................#.............###...........
+ You start putting on your armour.
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_d - a ring of poison resistance (worn)
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): 
+_Found a staircase back to the Vaults.
+ Okay, then.
+_ROUTE_AUDIT {"progress":0,"vaults":"hall_of_blades","monsters":[{"x":59,"y":22,"xp":720,"name":"dancing weapon"},{"x":64,"y":22,"xp":816,"name":"dancing weapon"},{"x":67,"y":23,"xp":624,"name":"dancing weapon"},{"x":54,"y":25,"xp":768,"name":"dancing weapon"},{"x":64,"y":25,"xp":720,"name":"dancing weapon"},{"x":59,"y":26,"xp":768,"name":"dancing weapon"},{"x":59,"y":31,"xp":816,"name":"dancing weapon"},{"x":63,"y":38,"xp":816,"name":"dancing weapon"},{"x":56,"y":61,"xp":816,"name":"dancing weapon"},{"x":48,"y":67,"xp":624,"name":"dancing weapon"},{"x":62,"y":70,"xp":960,"name":"dancing weapon"},{"x":60,"y":71,"xp":768,"name":"dancing weapon"},{"x":62,"y":73,"xp":960,"name":"dancing weapon"},{"x":68,"y":73,"xp":816,"name":"dancing weapon"},{"x":59,"y":77,"xp":624,"name":"dancing weapon"},{"x":54,"y":78,"xp":960,"name":"dancing weapon"},{"x":64,"y":78,"xp":816,"name":"dancing weapon"},{"x":59,"y":81,"xp":528,"name":"dancing weapon"}],"tag":"enter","maxhp":132,"turn":59,"xp":13920,"xl":14,"hp":132,"mp":13,"items":[],"maxmp":13,"where":"Blade"}
+ROUTE_EVENT start melee AC=22 EV=8 SH=12
+
+_Unknown command.
+ You encounter a dancing +3 heavy dire flail........##     .<###...........(   dancing +3 heavy dire flail (dormant)####   ##.(#((4.5 (1
+_
+........##   ...<###..................(.5
+..........##   ..<###.....#............(.(.6
+....##  #.<###.....(#......###.............
+ The dancing +3 heavy dire flail barely misses you.You furiously retaliate!5 ==7
+ 
+_You headbutt the dancing +3 heavy dire flail!
+ You slash the dancing +3 heavy dire flail!
+ Your headbutt misses the dancing +3 heavy dire flail.
+_The dancing +3 heavy dire flail is almost destroyed.24-- 7 ===--- 8.4 (0.9
+_The dancing +3 heavy dire flail hits you!
+ You miss the dancing +3 heavy dire flail.Your headbutt misses the dancing +3 heavy dire flail.
+_The dancing +3 heavy dire flail is almost destroyed. 5 ==---- 9.3
+.
+_The dancing +3 heavy dire flail hits you but does no damage.
+ You hit the dancing +3 heavy dire flail.
+)
+_The dancing +3 heavy dire flail falls from the air.5--22 =--60.2
+_67=8=9301
+_You start resting.HP restored.0 --75.2 (15.0)2=-6.2 (16
+_
+...##  #<###.........^.........0.0)7.2 (1
+_You see here a +3 heavy dire flail.
+_
+ You encounter a dancing +2 vampiric partisan.  .......     ... ..##  #.....<###...................................... ..).......  ..#..  .###.. ##.# #..    #.......(   dancing +2 vampiric partisan (polearm, dormant).....^......(.#.....9.2 (2(.()=80.2 (3
+_.##  #....<###.... ......... ........ ........ ........  ........).  ..#..... .###..    ### .............^...(.....#.##. #(.1.2 (1.<###.... ......... . .... ....  ........).  ..#..... .###..    ###...#.......#..(....^....#........## ##..  # (.2 ......... . . ..  .).## ..#.....##...###.#...#  ####...#..#....#..(......^...... ##  ##...  # 
+..The dancing +2 vampiric partisan hits you!
+ The dancing +2 vampiric partisan barely misses you.You furiously retaliate!16--- 7 ===--- 3
+ 
+_You headbutt the dancing +2 vampiric partisan.
+ You slash the dancing +2 vampiric partisan!
+ Your headbutt misses the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is moderately damaged.7--- 5 ==---- 4.1 (0.9
+_You block the dancing +2 vampiric partisan's attack.
+ You barely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is moderately damaged.0---5.0
+ 
+_The dancing +2 vampiric partisan hits you!
+ You slash the dancing +2 vampiric partisan!
+_The dancing +2 vampiric partisan is severely damaged.8-- 6 ===--- 9
+_The dancing +2 vampiric partisan is moderately damaged.
+_The dancing +2 vampiric partisan hits you!
+ You slash the dancing +2 vampiric partisan!
+_The dancing +2 vampiric partisan is severely damaged.
+_You block the dancing +2 vampiric partisan's attack.
+ You miss the dancing +2 vampiric partisan.
+ You headbutt the dancing +2 vampiric partisan!
+_The dancing +2 vampiric partisan is almost destroyed.
+ The dancing +2 vampiric partisan hits you!!87/132 ----86.8
+_The dancing +2 vampiric partisan draws vitality from your wounds!
+ You barely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged. 6 ==---- 7.6 (0.8
+.
+_The dancing +2 vampiric partisan hits you but does no damage.
+ You closely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged.The dancing +2 vampiric partisan hits you!!
+ The dancing +2 vampiric partisan draws vitality from your wounds!68------- 9 ===--- 8.5 (0.9ROUTE_EVENT use might turn=95 place=Blade
+.................Route_melee the Severer           *WIZARD*.................Minotaur.................Health: 68/132    ============------------.................Magic:  13/13     ========================........).......AC: 22 (34%)Str: 24## ..#............EV:  8Int: 8##...###...........SH: 12Dex: 16#...#  ##.........#XL: 14 Next:  2%  Place: Hall of Blades#...###...........Noise:  9 ===---  Time: 88.5 (0.0)#...#............k) +3 broad axe#..(@............Nothing quivered#.......^.........#.................##...............(   dancing +2 vampiric partisan (polearm)##..............#.......................................
+_The dancing +2 vampiric partisan draws vitality from your wounds!
+ You barely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged.
+_The dancing +2 vampiric partisan hits you but does no damage.
+ You closely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged.The dancing +2 vampiric partisan hits you!!
+ The dancing +2 vampiric partisan draws vitality from your wounds!
+_You block the dancing +2 vampiric partisan's attack.(
+(.
+ You barely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged.
+_The dancing +2 vampiric partisan hits you but does no damage.
+ You closely miss the dancing +2 vampiric partisan.
+_The dancing +2 vampiric partisan is severely damaged.hits you!!
+ The dancing +2 vampiric partisan draws vitality from your wounds!
+_You block the dancing +2 vampiric partisan's attack.
+ You feel very mighty all of a sudden.
+(  2 dancing weapons (1 polearm, 1 wandering)You encounter a dancing +5 mace of protection. 5 ==---- 9.5 (1Might 
+.
+_You block the dancing +2 vampiric partisan's attack.
+ You hit the dancing +2 vampiric partisan but do no damage.You headbutt the dancing +2 vampiric partisan!
+(.
+_The dancing +2 vampiric partisan falls from the air.)(   dancing +5 mace of protection3-90.4 (0.9
+_. . . ..) ## ..#...... ##...###... #...#  ##.# ##.. .. ##..).. #.....@.^ #..........  #.. .(....#.....#..##(.(.90 --1.4 (1.0. . ) ## ..#...... ##...###.. #...#  ##.# ##.. .. ##..).. #.......^ #.......@..  #(  ...  #..#..#
+ The dancing +5 mace of protection hits you.74 ==2
+_The dancing +5 mace of protection hits you but does no damage.
+_You barely miss the dancing +5 mace of protection.663.3 (0.9
+ 
+_The dancing +5 mace of protection hits you.
+ You slash the dancing +5 mace of protection!
+_The dancing +5 mace of protection is moderately damaged.3- 7 ===--- 4.2
+_The dancing +5 mace of protection hits you.
+ You closely miss the dancing +5 mace of protection.You headbutt the dancing +5 mace of protection.
+_The dancing +5 mace of protection is heavily damaged.You block the dancing +5 mace of protection's attack.53---85.1ROUTE_EVENT use heal wounds turn=102 place=Blade
+.................Route_melee the Severer           *WIZARD*.................Minotaur........).......Health: 53/132    =========---------------## ..#............Magic:  13/13     ========================##...###...........AC: 22 (34%)Str: 24#...#  ##.........#EV:  8Int: 8#...###...........SH: 12Dex: 16#...#............XL: 14 Next:  3%  Place: Hall of Blades##..).............Noise:  8 ===---  Time: 95.1 (0.0)#.......^.........k) +3 broad axe#.......@.........Nothing quivered##.......(.......Might ##..............#.............(   dancing +5 mace of protection#..............#...............##..............##.............
+_The dancing +5 mace of protection hits you.
+ You slash the dancing +5 mace of protection!
+_The dancing +5 mace of protection is moderately damaged.
+_The dancing +5 mace of protection hits you.
+ You closely miss the dancing +5 mace of protection.You headbutt the dancing +5 mace of protection.
+_The dancing +5 mace of protection is heavily damaged.You block the dancing +5 mace of protection's attack.
+_The dancing +5 mace of protection hits you!
+ You closely miss the dancing +5 mace of protection.
+ You headbutt the dancing +5 mace of protection.
+_The dancing +5 mace of protection is heavily damaged.
+ You block the dancing +5 mace of protection's attack.
+_The dancing +5 mace of protection hits you!
+ You feel much better.
+ The dancing +5 mace of protection hits you but does no damage.
+ The dancing +5 mace of protection closely misses you.You furiously retaliate!77===== 6 ==---- 6.1 (1
+_You headbutt the dancing +5 mace of protection!
+ You closely miss the dancing +5 mace of protection.
+_The dancing +5 mace of protection is almost destroyed.5 ==-7.0 (0.9
+.
+_You block the dancing +5 mace of protection's attack.
+ You slice the dancing +5 mace of protection!!
+)
+_The dancing +5 mace of protection falls from the air.8=====59
+_980123=4=5678=9=9012394=5=6789=100/132=12
+_You start resting.30 --156.9 (59.0)--7.9 (60
+_You feel a little less mighty now.45=6=78910=1=23456=7=89201=2=34567=8=9301
+_You start resting.HP restored.225.9 (682=6.9 (69
+_ROUTE_AUDIT {"progress":5,"vaults":"hall_of_blades","monsters":[{"x":59,"y":22,"xp":720,"name":"dancing weapon"},{"x":64,"y":22,"xp":816,"name":"dancing weapon"},{"x":67,"y":23,"xp":624,"name":"dancing weapon"},{"x":54,"y":25,"xp":768,"name":"dancing weapon"},{"x":64,"y":25,"xp":720,"name":"dancing weapon"},{"x":59,"y":26,"xp":768,"name":"dancing weapon"},{"x":59,"y":31,"xp":816,"name":"dancing weapon"},{"x":63,"y":38,"xp":816,"name":"dancing weapon"},{"x":62,"y":70,"xp":960,"name":"dancing weapon"},{"x":62,"y":73,"xp":960,"name":"dancing weapon"},{"x":68,"y":73,"xp":816,"name":"dancing weapon"},{"x":59,"y":77,"xp":624,"name":"dancing weapon"},{"x":54,"y":78,"xp":960,"name":"dancing weapon"},{"x":64,"y":78,"xp":816,"name":"dancing weapon"},{"x":59,"y":81,"xp":528,"name":"dancing weapon"}],"tag":"turn-limit","maxhp":132,"turn":234,"xp":11712,"xl":14,"hp":132,"mp":13,"items":[{"class":"weapon","artefact":false,"quantity":1,"y":58,"x":57,"name":"+3 heavy dire flail"},{"class":"weapon","artefact":false,"quantity":1,"y":64,"x":51,"name":"+2 vampiric partisan"},{"class":"weapon","artefact":false,"quantity":1,"y":67,"x":55,"name":"+5 mace of protection"}],"maxmp":13,"where":"Blade"}
+ROUTE_EVENT turn-limit turn=234 minimumHp=0.40151515151515
+Gear: 11/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ k - a +3 broad axe (weapon)a - a +0 war axe
+Armour         (go to first with [)
+ e - a +0 pair of boots (worn)
+ f - a +0 pair of gloves (worn)
+ g - a +0 cloak of stealth (worn)
+ i - a +1 kite shield (worn)
+ j - a +2 plate armour (worn)b - a +0 scale mail
+ c - a +0 buckler
+ h - a +0 helmet
+Jewellery      (go to first with "=)
+ d - a ring of poison resistance (worn)

@@ -1,4 +1,9 @@
 %%%%
+Engraved Laser spell
+
+An automaton's mechanisms focus a powerful, non-elemental beam. The pattern
+must be engraved before it can fire automatically, and firing it generates heat.
+%%%%
 Abjuration spell
 
 Reduces the remaining duration of any nearby hostile summoned creatures.
@@ -235,11 +240,14 @@ caster staggering backwards.
 %%%%
 Borgnjor's Revivification spell
 
-Instantly heals any and all wounds suffered by the caster, but also permanently
-damages their health, to a degree dependent on (and inversely related to) power.
+Instantly heals any and all wounds suffered by the caster and any living
+allies in sight, and revives any downed co-op teammates at 20% of their maximum
+health without inflicting frailty. Casting this spell inflicts no permanent
+maximum health loss, but temporarily leaves the caster weakened and contaminated
+with residual magical energy.
 
 It is powerful enough to cancel the effects of Death's Door, although doing so
-will briefly paralyse the caster. It has no effect on the undead.
+will briefly paralyse the caster.
 %%%%
 Borgnjor's Vile Clutch spell
 
@@ -709,6 +717,27 @@ Eruption spell
 
 Splits the earth to draw up a localised, short-lived volcano under the target.
 %%%%
+Evaporate spell
+
+Superheats a potion from the caster's inventory and hurls it at a target, where
+it shatters and releases a billowing cloud of alchemical fumes. The type of
+cloud created depends on the potion evaporated:
+
+  * Poison: poison gas
+  * Strong poison or cancellation: poison gas or noxious fumes
+  * Slowing, moonshine, attraction, or empathy: noxious fumes
+  * Decay or soul ambrosia: foul miasma
+  * Mutation: mutagenic fog or random alchemical clouds
+  * Berserk rage: roaring flames
+  * Haste or brilliance: fire or steam
+  * Might or enlightenment: freezing clouds or steam
+  * Resistance or experience: fire, cold, or toxic clouds
+  * Curing, heal wounds, ambrosia, concord, or transfusion: steam or blue smoke
+  * Invisibility: opaque black smoke
+  * Magic: purple smoke
+  * Lignification: rain
+  * Water or mist: scalding steam
+%%%%
 Fastroot spell
 
 Fires a magical seed, entangling victims in quick-growing tree roots. Those
@@ -825,6 +854,18 @@ freely.
 Spellpower causes the spell to complete more quickly, but the damage depends
 entirely upon the caster's AC.
 %%%%
+Fulsome Distillation spell
+
+Extracts alchemical humours from a corpse in the caster's line of sight,
+prioritising any corpse at the caster's feet and otherwise choosing the most
+potent corpse in view. The distilled potion is identified and drawn directly
+into the caster's inventory.
+
+Venomous, undead, confusing, cold-blooded, or mutagenic creatures yield
+correspondingly noxious or volatile potions - ideal fuel for the Evaporate
+spell - though insufficient spellpower or weak corpses may yield only a flask
+of water.
+%%%%
 Foxfire spell
 
 Conjures two balls of burning swamp gas adjacent to the caster. The balls will
@@ -857,10 +898,10 @@ Fugue of the Fallen spell
 
 Calls out to the lingering remnants of the long dead. While active, each
 non-summoned enemy the caster or their allies slays attracts more vengeful
-souls into the caster's weapon, temporarily enhancing their melee and ranged
-effectiveness. When this bonus reaches its maximum, every hit will unleash a
-glimmer of the dead's suffering, causing pain damage to each other foe adjacent
-to your target.
+souls into the weapons of the caster and any co-op teammates in sight,
+temporarily enhancing their melee and ranged effectiveness. When this bonus
+reaches its maximum, every hit will unleash a glimmer of the dead's suffering,
+causing pain damage to each other foe adjacent to your target.
 
 Recasting this spell will release your grip on the souls you've attracted,
 resetting any bonus you've accumulated, and the cacophonous wailing of the dead
@@ -987,7 +1028,9 @@ pulled adjacent to the caster or collide with anything blocking the way.
 %%%%
 Haste spell
 
-Speeds the actions of the caster.
+Speeds the actions of the caster or a targeted ally in line of sight,
+allowing them to move and act much more rapidly for a short duration, after
+which the caster is left contaminated with residual magical energy.
 %%%%
 Haunt spell
 
@@ -1127,7 +1170,9 @@ is dependent on the size of the target.
 %%%%
 Invisibility spell
 
-Turns the caster invisible and randomly displaces them a short distance away.
+Turns the caster or a targeted ally in line of sight invisible, hiding them
+from the sight of most monsters and leaving the caster contaminated with
+residual magical energy.
 
 While an enemy is invisible to you, your accuracy against them is reduced and
 you suffer a major penalty to your evasion and ability to block any attacks they
@@ -1261,6 +1306,85 @@ Lightning Bolt spell
 
 Fires a mighty penetrating bolt of lightning. Its damage bypasses half of
 defenders' armour, and it can be bounced off walls to hit targets twice.
+%%%%
+Kindled Veins spell
+
+Commits a portion of the caster's essence to their weapon strikes, adding fire
+damage to melee, launched and unarmed attacks. The weapon retains its own brand.
+Winter's Due and Borrowed Thunder provide alternative elements; only one rite
+may be active. These spells require Necromancy rather than elemental training.
+
+Activation reserves 12% of unreserved maximum HP, rounded up, with a minimum of
+2 HP: both current and maximum HP fall by that amount. Healing cannot restore
+the reserved capacity. Dismiss Rite restores capacity without healing. Switching
+directly to another rite keeps the same reservation and costs a normal cast.
+
+The rite lasts until dismissed or forgotten. Its damage uses current spell
+power, capped at 200: 1d(3 + power/20), scaled to the time of the weapon action.
+Dual wielding, multiple hits, cleaving and penetrating missiles share one damage
+budget. Auxiliary attacks, retaliation and spell-generated attacks do not trigger
+it. Normal fire resistance applies. Death's Door suppresses its damage.
+%%%%
+Winter's Due spell
+
+Commits the caster's essence to their weapon strikes, adding cold damage.
+It follows the same reservation and damage rules as Kindled Veins: 12% of
+unreserved maximum HP (minimum 2) remains reserved while active, and dismissing
+the rite never heals. Switching rites retains the existing reservation.
+
+Bonus damage is 1d(3 + power/20) per 10 aut of weapon attack time, with power
+capped at 200 and one budget shared across the action. It works with melee,
+launched and unarmed attacks, retains the weapon's brand, and respects cold
+resistance. Current spell power determines damage; Death's Door suppresses it.
+%%%%
+Borrowed Thunder spell
+
+Commits the caster's essence to their weapon strikes, adding electricity damage.
+It follows the same reservation and damage rules as Kindled Veins: 12% of
+unreserved maximum HP (minimum 2) remains reserved while active, and dismissing
+the rite never heals. Switching rites retains the existing reservation.
+
+Bonus damage is 1d(3 + power/20) per 10 aut of weapon attack time, with power
+capped at 200 and one budget shared across the action. It works with melee,
+launched and unarmed attacks, retains the weapon's brand, and respects electricity
+resistance. Current spell power determines damage; Death's Door suppresses it.
+%%%%
+Scarlet Fetters spell
+
+Binds one quarry in place if it fails a Willpower check. The victim can still
+attack, cast, dodge and use abilities. Range grows from 4 to 7 tiles with spell
+power. Binding lasts 1 + power/100 normal turns, with power capped at 200.
+It cannot refresh an active blood bind, and after release the victim has three
+normal turns of recovery before any caster can bind it with this spell again.
+
+The Amplify Scarlet Fetters action casts the same spell for 2 additional MP and
+6% of unreserved maximum HP, rounded up (minimum 2 HP). Amplification adds 30
+power to the Willpower check and two turns to the duration. It also anchors the
+quarry against dimensional escape, even if the movement bind is resisted;
+normal teleport immunity rules still apply. A resisted cast still costs blood.
+
+Scarlet Fetters and Stolen Sight can coexist on one quarry per caster. Choosing
+a new quarry releases that caster's curses on the previous one. Leaving the
+floor releases those curses. Neither caster nor victim needs literal blood:
+these spells manipulate living or animating essence. Other Hexes are unaffected.
+%%%%
+Stolen Sight spell
+
+Impairs a quarry's combat perception without a Willpower check. Its accuracy
+rating falls by 15 + power/20 percent for 3 + power/50 normal turns, with power
+capped at 200. Range grows from 4 to 7 tiles. This ordinary impairment does not
+grant blindness stabs, remove vision or stop spellcasting. Automatic effects
+such as smiting and torment are unaffected.
+
+The Amplify Stolen Sight action costs 2 additional MP and 6% of unreserved
+maximum HP, rounded up (minimum 2 HP). It extends the curse by two turns and
+attempts full blindness against Willpower at power + 30, respecting blindness
+immunity. If resisted, the ordinary accuracy penalty remains. Full blindness
+uses its stronger impairment rather than multiplying the accuracy penalties.
+
+It shares Scarlet Fetters' one-quarry focus: both spells can coexist on that
+quarry, but choosing another releases your previous blood curses. Other casters'
+effects and ordinary Hexes remain independent. Bloodless creatures are eligible.
 %%%%
 Magic Dart spell
 
@@ -1928,10 +2052,11 @@ body.
 %%%%
 Sigil of Binding spell
 
-Creates two sigils nearby. Anyone who passes over them will be bound, able to
-act and dodge normally but unable to move away. For bound creatures other than
-the caster, their movement speed will rebound when the effect wears off, giving
-them temporary swiftness. Swiftness from any source grants immunity to binding.
+Creates two sigils nearby. Ordinarily, anyone who passes over them will be
+bound, able to act and dodge normally but unable to move away. For bound
+creatures other than the caster, their movement speed will rebound when the
+effect wears off, giving them temporary swiftness. Swiftness from any source
+grants immunity to binding.
 
 Only one set of sigils can be maintained at a time, and they will expire
 prematurely if they leave your sight.
@@ -2525,3 +2650,214 @@ destructive mutagenic radiation. The victim and anyone adjacent will be
 blasted and heavily deformed, weakening them and reducing their armour.
 Summoned creatures are particularly vulnerable, as the enchantments binding
 them to this plane will unravel and cause them to be dismissed immediately.
+%%%%
+Controlled Blink spell
+
+Teleports the caster directly to a chosen visible square, leaving a brief
+spatial instability cooldown before it can be cast again.
+%%%%
+Regeneration spell
+
+Greatly accelerates the natural healing rate of the caster and any co-op
+teammates within a 4-tile radius for a short duration.
+%%%%
+Shroud of Golubria spell
+
+Wraps the caster and any adjacent co-op teammates in a tenuous distortion of
+space that deflects a portion of incoming melee and ranged attacks before
+unravelling.
+%%%%
+Song of Slaying spell
+
+Chants a bloody battle-hymn that empowers the caster and any co-op teammates
+in sight. Each enemy slain while the song is active increases the accuracy and
+damage of their melee and ranged attacks (up to +9), at the cost of continual
+noise.
+%%%%
+Conjure Flame spell
+
+Conjures a roaring pillar of flame on a targeted open floor tile within range.
+%%%%
+Cloud Cone spell
+
+Conjures a wide cone of dense, hazardous clouds at a targeted distance.
+%%%%
+Scattershot spell
+
+Blasts a wide cone of metallic shrapnel at close range, tearing through foes
+with devastating physical force.
+%%%%
+Linked Ward spell
+
+Folds a protective ward around the caster and their nearest living companion
+in clear sight. Both gain +2 AC and +1 SH. While warded companions remain in
+sight of one another, the healthier companion can absorb 35% of the more
+wounded companion's damage. Spell power extends the ward's duration.
+
+A Translocations/Auramancy spell available only in multiplayer. A living
+companion on this floor must be in clear sight to cast it.
+%%%%
+Song of Fellowship spell
+
+A battle song in the tradition of the Skalds, matching the steps and strokes
+of the caster and living companions in clear sight. Those who take up the
+song gain +4 slaying and +3 evasion. Spell power extends its duration.
+
+A Hexes/Auramancy spell available only in multiplayer. A living companion on
+this floor must be in clear sight to cast it.
+%%%%
+Cleansing Mist spell
+
+Surrounds the caster and living companions in clear sight with a restorative
+alchemical mist. It removes poison, corrosion and slowness, then grants +2 AC,
+rN+ and accelerated health regeneration. Spell power extends its duration.
+The mist offers no special protection against smiting, damnation or torment.
+
+An Alchemy/Auramancy spell available only in multiplayer. A living companion
+on this floor must be in clear sight to cast it.
+%%%%
+Aura of Protection spell
+
+Weaves a sheltering lattice around the caster and living companions. Those
+inside gain +1 to +3 AC with spell power. Standing next to another living
+companion also grants +1 to +3 SH: a scattered company cannot lock shields.
+The dwarven road-wardens called this spell a wall with room for everyone.
+
+Auramancy extends the radius from 2 to 6 tiles, gaining one tile at skill
+6, 12, 18 and 24. Clear line of sight and the same floor are required. Power
+extends duration from 12 to 32 turns. Each caster maintains one aura; different
+auras combine, while copies use the strongest eligible source.
+%%%%
+Aura of Zeal spell
+
+Kindles a shared resolve, granting +1 to +3 slaying and immunity to fear.
+Melee strikes deal an additional 1-2 holy damage, rising to 1-6 with power,
+against undead, demons, or a hostile foe adjacent to another living companion.
+Surrounding one dangerous enemy rewards cooperation; scattering blows does not.
+
+The lantern-knights taught that courage travels along a battle line, never
+away from it. Auramancy extends this line's radius from 2 to 6 tiles, gaining
+one tile at skill 6, 12, 18 and 24. Clear line of sight and the same floor are
+required. Power extends duration from 12 to 32 turns. Each caster maintains
+one aura; different auras combine, while copies use the strongest source.
+%%%%
+Aura of Rime spell
+
+Wraps the caster and living companions in frost, granting cold resistance
+(rC+). An adjacent enemy that strikes a warded hero in melee has a 20-40%
+chance, improving with power, to be slowed for 2-6 turns. Cold-resistant and
+stasis-bound attackers are unaffected. Letting a pursuer reach the front line
+can buy the rear line time to escape, but the frost does not stop the blow.
+
+This was the last spell of the winter rearguard, whose footprints were found
+facing the enemy. Auramancy extends its radius from 2 to 6 tiles, gaining one
+tile at skill 6, 12, 18 and 24. Clear line of sight and the same floor are
+required. Power extends duration from 12 to 32 turns. Each caster maintains
+one aura; different auras combine, while copies use the strongest source.
+%%%%
+Aura of Vitality spell
+
+Shares a patient current of life between the caster and living companions,
+granting +0.50 to +1.00 HP regeneration per turn with power. This bonus doubles
+for a hero below half health. A wounded companion must stay inside the circle
+to benefit; casting or refreshing it does not immediately heal or cleanse.
+
+Caravan healers likened it to tending several small fires from one ember.
+Auramancy extends the radius from 2 to 6 tiles, gaining one tile at skill
+6, 12, 18 and 24. Clear line of sight and the same floor are required. Power
+extends duration from 12 to 32 turns. Each caster maintains one aura; different
+auras combine, while copies use the strongest eligible source.
+%%%%
+Aura of Sanctuary spell
+
+Promises to bear a companion's wounds. When a living ally within the aura
+suffers damage, a bearer with a higher percentage of health takes 15-30% of it,
+improving with power. This transfer cannot reduce the bearer below one-third
+health, bypasses further armour and redirection, and never protects the bearer
+themself. Poison and Zot damage are not shared. Only one eligible bearer takes
+each wound; the strongest eligible aura is used.
+
+The first sanctuary was a person who refused to step aside. Auramancy extends
+its radius from 2 to 6 tiles, gaining one tile at skill 6, 12, 18 and 24. Clear
+line of sight and the same floor are required. Power extends duration from
+12 to 32 turns. Each caster maintains one aura; different auras combine.
+%%%%
+Aura of Passage spell
+
+Spins a bright thread toward the bearer. Living companions inside the aura
+spend 10-20% less movement time, improving with power, when stepping closer to
+the bearer. Moving away, attacking and casting are unaffected. The bearer gains
+no speed from their own thread. It does not stack with haste or swiftness, and
+cannot quicken a follower of Cheibriados.
+
+Guides of the Lantern Road walked ahead in the dark so that the slowest
+traveller would always have a light to reach. Auramancy extends the radius
+from 2 to 6 tiles, gaining one tile at skill 6, 12, 18 and 24. Clear line of
+sight and the same floor are required. Power extends duration from 12 to
+32 turns. Each caster maintains one aura; different auras combine, while
+copies use the strongest eligible source.
+%%%%
+Aura of Resonance spell
+
+Tunes the caster and living companions into a single harmonic field. Spells
+outside the Auramancy school gain 10-25% spell power, improving with the aura's
+power, up to their usual power caps. It does not improve casting success.
+Aura spells cannot amplify each other, so several bearers must choose between
+supporting spellcasters and sustaining a different stance.
+
+The glass choirs of the old observatories found that a voice need not be loud
+if every other voice knows its note. Auramancy extends the radius from 2 to
+6 tiles, gaining one tile at skill 6, 12, 18 and 24. Clear line of sight and
+the same floor are required. Power extends duration from 12 to 32 turns. Each
+caster maintains one aura; copies use the strongest eligible source.
+%%%%
+
+Shackle spell
+
+Magically binds a creature in place. It can still act or teleport, carrying the binding to its new location. Insubstantial and gelatinous creatures resist the magic.
+%%%%
+
+False Image spell
+
+Creates a stationary, harmless illusion of the caster. The caster’s projectiles and spells can pass through their own image.
+%%%%
+
+Mana Rupture spell
+
+Destabilises a creature’s magic, causing an explosion whose strength depends on its resistance to enchantments. Surviving creatures that are not immune become more vulnerable to enchantments. Summoned creatures are dismissed instead.
+%%%%
+
+Icicle Burst spell
+
+Launches a spread of icy shards, trading accuracy and armour penetration for destructive power.
+%%%%
+
+Steam Barrier spell
+
+Surrounds the caster with viscous steam. It grants protection and fire resistance, but increases vulnerability to cold and reduces spell power.
+%%%%
+
+Blight spell
+
+Creates an explosion of vile blight, draining and poisoning creatures in its area and slowing or confusing them.
+%%%%
+
+Scorpion Form spell
+
+Transforms the caster into a giant scorpion, granting a venomous stinger and resistance to fire, poison and acid. Weapons and armour meld, casting becomes harder, and alchemy becomes more powerful.
+%%%%
+
+Eringya's Rootspike spell
+
+Raises poisonous, sharp roots from the ground. The roots can hurt enemies resistant to poison, and greater power extends their reach.
+%%%%
+
+Olgreb's Last Mercy spell
+
+Causes poison in a targeted creature to erupt. If the victim dies, a blast of poison engulfs nearby creatures.
+%%%%
+
+Elemental Weapon spell
+
+Infuses an unbranded weapon with elemental potential. Casting an elemental spell grants the weapon a temporary matching brand and slaying bonus.
+%%%%

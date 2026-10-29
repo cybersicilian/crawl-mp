@@ -1,0 +1,24 @@
+{
+  "reservationId": "95bc0c86-5713-46cc-b03b-33f7bb76f2c9",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "95bc0c86-5713-46cc-b03b-33f7bb76f2c9",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS native tuned route floor and honey previews",
+      "requestedAt": 1793154859.489015,
+      "supervisorPid": 27816,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "98579a50ea68d0ab6811b51c90cf316400c1abecccddb6be34729b0f4d6e42e4",
+      "startedAt": 1793154859.4905448,
+      "workerPid": 27852,
+      "processGroup": 27852,
+      "exitCode": 1,
+      "finishedAt": 1793154860.087048,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "98579a50ea68d0ab6811b51c90cf316400c1abecccddb6be34729b0f4d6e42e4"
+  }
+}

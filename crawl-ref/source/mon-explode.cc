@@ -14,6 +14,7 @@
 #include "english.h"
 #include "env.h"
 #include "fineff.h"
+#include "fight.h"
 #include "fprop.h"
 #include "message.h"
 #include "monster.h"
@@ -21,6 +22,8 @@
 #include "mon-place.h"
 #include "mon-util.h"
 #include "mpr.h"
+#include "party.h"
+#include "player.h"
 #include "spl-damage.h"
 #include "spl-goditem.h"
 #include "state.h"
@@ -31,6 +34,62 @@
 #include "torment-source-type.h"
 #include "view.h"
 #include "viewchar.h"
+
+namespace automaton_blazeheart
+{
+const char* const MARKER_KEY = "automaton_blazeheart";
+
+bool marked(const monster& mon)
+{
+    return mon.props.exists(MARKER_KEY) && mon.props[MARKER_KEY].get_bool();
+}
+
+bool owner_adjacent(const monster& mon)
+{
+    if (party::is_enabled())
+    {
+        const int slot = party::slot_for_mid(mon.summoner);
+        return slot >= 0 && party::slot_is_alive(slot)
+               && party::slot_is_on_current_floor(slot)
+               && grid_distance(mon.pos(), party::get_player(slot).pos()) <= 1;
+    }
+    return mon.summoner == you.mid && you.alive()
+           && grid_distance(mon.pos(), you.pos()) <= 1;
+}
+
+static bool protected_near_impl(const coord_def& pos, const monster* ignored)
+{
+    if (you.alive() && grid_distance(pos, you.pos()) <= 1)
+        return true;
+    if (party::is_enabled())
+        for (int slot = 0; slot < party::player_count(); ++slot)
+            if (party::slot_is_alive(slot) && party::slot_is_on_current_floor(slot)
+                && grid_distance(pos, party::get_player(slot).pos()) <= 1)
+                return true;
+    for (adjacent_iterator ai(pos, false); ai; ++ai)
+    {
+        const monster* other = monster_at(*ai);
+        if (!other || other == ignored || !other->alive())
+            continue;
+        string adj, suffix;
+        bool penance = false;
+        if (party::is_proxy_monster(*other) || other->wont_attack()
+            || other->neutral() || bad_attack(other, adj, suffix, penance))
+            return true;
+    }
+    return false;
+}
+
+bool protected_near(const monster& mon)
+{
+    return protected_near_impl(mon.pos(), &mon);
+}
+
+bool protected_near(const coord_def& pos)
+{
+    return protected_near_impl(pos, nullptr);
+}
+}
 
 static void _setup_base_explosion(bolt & beam, const monster& origin)
 {
@@ -215,7 +274,7 @@ static void _setup_haemoclasm_explosion(bolt& beam, const monster& origin)
     beam.ex_size     = 1;
     beam.source_name = origin.name(DESC_PLAIN, true);
     beam.thrower     = KILL_YOU_MISSILE;
-    beam.source_id   = MID_PLAYER;
+    beam.source_id   = you.mid;
 }
 
 static dice_def _bloated_husk_damage(int hd)
@@ -340,6 +399,13 @@ bool explode_monster(monster* mons, killer_type killer, bool pet_kill)
         return false;
     }
 
+    if (mons->type == MONS_BLAZEHEART_CORE && automaton_blazeheart::marked(*mons)
+        && automaton_blazeheart::protected_near(*mons))
+    {
+        simple_monster_message(*mons, " cools harmlessly before it can explode.");
+        return true;
+    }
+
     bolt beam;
     const monster_type type = mons->type;
     string sanct_msg = "";
@@ -433,8 +499,11 @@ bool explode_monster(monster* mons, killer_type killer, bool pet_kill)
     }
     else
     {
-        schedule_explosion_fineff(beam, boom_msg, sanct_msg,
-                                  EXPLOSION_FINEFF_GENERIC, agent, poof_msg);
+        const auto kind = type == MONS_BLAZEHEART_CORE
+                          && automaton_blazeheart::marked(*mons)
+                          ? EXPLOSION_FINEFF_AUTOMATON_BLAZEHEART
+                          : EXPLOSION_FINEFF_GENERIC;
+        schedule_explosion_fineff(beam, boom_msg, sanct_msg, kind, agent, poof_msg);
     }
 
     // Monster died in explosion, so don't print a death message for it.

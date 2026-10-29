@@ -1,0 +1,22 @@
+name: "void-tether stalker"
+enum: void_tether_stalker
+glyph: {char: "B", colour: magenta}
+flags: [fighter, see_invis, insubstantial]
+resists: {elec: 1, cold: 2, neg: 3}
+exp: 1080
+holiness: [demonic]
+will: 80
+attacks:
+ - {type: hit, flavour: drain, damage: 22}
+ - {type: hit, flavour: blink_with, damage: 18}
+hd: 13
+hp_10x: 800
+ac: 7
+ev: 15
+spells: void_tether_stalker
+intelligence: human
+speed: 13
+uses: open_doors
+size: medium
+shape: humanoid
+tile: entropy_weaver

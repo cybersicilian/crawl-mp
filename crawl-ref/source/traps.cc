@@ -24,6 +24,7 @@
 #include "dungeon-feature-type.h"
 #include "english.h"
 #include "god-passive.h" // passive_t::avoid_traps
+#include "game-modifiers.h"
 #include "hints.h"
 #include "item-prop.h"
 #include "items.h"
@@ -67,6 +68,8 @@ static string _net_immune_reason()
 
 bool trap_is_bad_for_player(dungeon_feature_type type)
 {
+    if (!game_modifiers::floor_traps_enabled(you) && type != DNGN_TRAP_PLATE)
+        return false;
     return type == DNGN_TRAP_ALARM
            || type == DNGN_TRAP_DISPERSAL
            || type == DNGN_TRAP_ZOT
@@ -82,6 +85,11 @@ bool trap_is_safe(dungeon_feature_type type, const actor* act)
 {
     if (!act)
         act = &you;
+
+    if (!game_modifiers::floor_traps_enabled(you)
+        && type != DNGN_TRAP_PLATE && type != DNGN_TRAP_TELEPORT
+        && type != DNGN_TRAP_TELEPORT_PERMANENT)
+        return true;
 
     // TODO: For now, just assume they're safe; they don't damage outright,
     // and the messages get old very quickly
@@ -272,12 +280,28 @@ static void _zot_trap()
     (*random_choose_weighted(zot_effects))();
 }
 
+bool floor_trap_suppressed(dungeon_feature_type type, bool in_vault)
+{
+    const bool vault_travel = in_vault
+        && (type == DNGN_TRAP_TELEPORT || type == DNGN_TRAP_TELEPORT_PERMANENT
+            || type == DNGN_TRAP_SHAFT);
+    return !game_modifiers::floor_traps_enabled(you)
+        && type != DNGN_TRAP_PLATE && type != DNGN_PASSAGE_OF_GOLUBRIA
+        && type != DNGN_TRAP_TELEPORT_PERMANENT && !vault_travel;
+}
+
 // Triggers a trap-like feature at a given actor's location.
 // (If there isn't one, nothing happens)
 void trigger_trap(actor& triggerer)
 {
     dungeon_feature_type type = env.grid(triggerer.pos());
     if (!feat_is_trap(type))
+        return;
+
+    // Plates, passages and vault travel traps may be essential to a puzzle or
+    // the only route through a vault. Vault masks conservatively protect all
+    // vault teleport and shaft features because their purpose is not tagged.
+    if (floor_trap_suppressed(type, map_masked(triggerer.pos(), MMT_VAULT)))
         return;
 
     const bool you_trigger = triggerer.is_player();
@@ -744,6 +768,11 @@ static bool _is_valid_shaft_effect_level()
  */
 void roll_trap_effects()
 {
+    if (!game_modifiers::random_traps_enabled(you))
+    {
+        you.trapped = false;
+        return;
+    }
     int trap_rate = trap_rate_for_place();
 
     you.trapped = you.num_turns
@@ -768,7 +797,8 @@ static void _print_malev()
  */
 void do_trap_effects()
 {
-    if (crawl_state.game_is_descent())
+    if (crawl_state.game_is_descent()
+        || !game_modifiers::random_traps_enabled(you))
         return;
 
     // Try to shaft, teleport, or alarm the player.

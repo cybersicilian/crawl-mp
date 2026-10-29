@@ -1,0 +1,24 @@
+--- a/webserver/webtiles/activity_pump.py
++++ b/webserver/webtiles/activity_pump.py
+@@ -225,13 +225,19 @@
+     def command_boundary(self, request_id=None):
+         if self.inflight and request_id != self.request_id:
+             return
++        if request_id is not None and request_id != self.request_id:
++            return
+         self.inflight = False
+         self.manual = False
+         self.owner = None
+         self.prompt = False
+-        if self.inputs:
++        # The exact native completion token also proves COMMAND readiness.
++        # Rejected actions can complete without a separate input_mode packet.
++        self.streams.native_ready = True
++        # Local rejections/cancellations may consume no native command. Drain
++        # those callbacks until one actually takes ownership of the engine.
++        while self.inputs and not self.inflight and self.streams.native_ready:
+             callback = self.inputs.pop(0)
+-            self.streams.native_ready = True
+             callback()
+ 
+     def cancel(self, slot):

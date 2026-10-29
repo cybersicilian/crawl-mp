@@ -1,0 +1,509 @@
+###############################################################################
+# The Burrows: branch entrances, ordinary vaults and Wormlands approaches.
+###############################################################################
+
+NAME:   dummy_bur_entry
+TAGS:   bur_entry transparent
+KFEAT:  O = enter_burrows
+MAP
+O
+ENDMAP
+
+
+NAME:   bur_entry_root_mouth
+TAGS:   bur_entry transparent no_monster_gen
+MONS:   komodo dragon
+KFEAT:  O = enter_burrows
+MAP
+xxxxxxxxxxx
+xxx.....xxx
+@....O....@
+xx.......xx
+xxx..1..xxx
+xxxxxxxxxxx
+ENDMAP
+
+
+NAME:   bur_entry_cairn
+TAGS:   bur_entry transparent no_monster_gen
+KFEAT:  O = enter_burrows
+MAP
+xxxxxxxxxxx
+xx.......xx
+@...c.c...@
+xx...O...xx
+xx..c.c..xx
+xx.......xx
+xxxxxxxxxxx
+ENDMAP
+
+
+NAME:   bur_animal_den
+DEPTH:  Bur:1-3
+TAGS:   transparent no_monster_gen
+MONS:   crag boar / burrowing beast
+SUBST:  1 = 11.
+SUBST:  % = %.
+MAP
+     xxxxxxx
+    xx.....xx
+   xx.......xx
+xxxx....1....x
+@............x
+..........1..x
+xxxxx....%..xx
+    xx.....xx
+     xxxxxxx
+ENDMAP
+
+
+NAME:   bur_troll_shelter
+DEPTH:  Bur:2-4
+TAGS:   transparent no_monster_gen
+MONS:   deep troll, deep troll delver
+SUBST:  % = %.
+MAP
+   xxxxx     xxxxxxx
+  xx...xx   xx.....xx
+ xx.....xx xx....2..xx
+ x...1...x x.........x
+xx.......x xx.......xx
+@........xxxx......xx
+..........x....xxxxx
+xxxx.......+..xxxxx
+   xxxxxx.........xx
+        xxx........xxxx
+          x....$......@
+          xx.....%.....
+           xx.....xxxxx
+            xxxxxxx
+ENDMAP
+
+
+NAME:   bur_winding_tunnel
+DEPTH:  Bur
+TAGS:   transparent no_monster_gen
+MONS:   burrowing beast
+MAP
+   xxxxxxxxxxxxxxx
+ xxx.............xx
+xx................x
+@........xxxxxxx..x
+.........xxx   x..xx
+xxxx.......x   x...x
+   xxxxx...x xxx...xx
+       xx..xxx....x.@
+        x............
+        x......1....x
+        xxxx.......xx
+           xxx...xxx
+             xxxxx
+ENDMAP
+
+
+NAME:   bur_mineral_cavern
+DEPTH:  Bur:2-4
+TAGS:   transparent no_monster_gen
+MONS:   shale drake, earth elemental
+SUBST:  2 = 2.
+MAP
+              xxxxx
+  xxxxxxx   xxx...xxx
+ xx.....xx  x...cc..x
+xx...c...xxxx.......xx
+x.........xx.........x
+@.........xx....1....xx
+.....2....xx..........@
+xx................c....
+ xx.................xxx
+  xxxxxxxx..xxx...xxx
+         xxxx xxxxx
+ENDMAP
+
+
+NAME:   bur_old_hoard
+DEPTH:  Bur:2-4
+TAGS:   transparent no_monster_gen
+MONS:   burrowing beast / crag boar, shale drake / deep troll delver
+SUBST:  % = %.
+MAP
+   xxxxxxxxxxx
+  xx...x.....xxxxx
+ xx..............x
+xx.......xxx.....x
+@....1...x xxxx..x
+.........xx xx...xx
+xxx.......xxx.....xx
+  xx...x..xx....2..xx
+   xxxxx...x........@
+       xx.....%$.%...
+        xx........xxx
+         x...x...xx
+         xxxxxxxxx
+ENDMAP
+
+
+NAME:   bur_abandoned_tunnels
+DEPTH:  Bur
+TAGS:   transparent no_monster_gen
+WEIGHT: 5
+MAP
+     xxxxxx
+     x....xxxxx
+    xx........x
+xxxxx...x.....x
+@......xxxxx..x
+.......xx  x..x xxx
+xxxxx...x  x..xxx.@
+    xx..xxxx..xx...
+     x.....x......x
+     x...........xx
+     xxxxx....xxxx
+         xxxxxx
+ENDMAP
+
+
+# Small extra vaults use the ordinary repeated placement pass.
+
+NAME:   bur_side_den
+DEPTH:  Bur:1-3
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   crag boar / burrowing beast
+MAP
+      xxxxx
+xxxxxxx...xx
+@..........xx
+............x
+xxxxx...1...x
+    x.......x
+    xx.....xx
+     xx...xx
+      xxxxx
+ENDMAP
+
+
+NAME:   bur_split_passage
+DEPTH:  Bur
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   burrowing beast
+SUBST: 1 = 1.
+MAP
+      xxxxxxxxx
+     xx.......xx
+     x.........xx
+    xx..xx......x
+xxxxx...x........
+@......xx..1..x.@
+.......xx.....x..
+xxxxx...xx...x...
+    xx..xxxxx...x
+     x.........xx
+     xx.......xx
+      xxxxxxxxx
+ENDMAP
+
+
+NAME:   bur_bent_gallery
+DEPTH:  Bur
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MAP
+xxxxxxxxx
+@.......x
+........x        xx
+xxxxxx..xx     xxx@
+     x...xxx xxx...
+     xx....xxx.....
+      x..........xx
+      xxxx.....xxx
+         xxxxxxx
+ENDMAP
+
+
+NAME:   bur_paired_dens
+DEPTH:  Bur:1-3
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   crag boar, burrowing beast
+SUBST: 2 = 2.
+MAP
+   xxxxx
+ xxx...xxx
+xx.......x
+@....1...x
+.........xxxxxxxx
+xxxx........x...xxx
+   xxxxx..........xx
+       xxxx...2....@
+          x.........
+          xxx...xxxx
+            xxxxx
+ENDMAP
+
+
+NAME:   bur_shale_cut
+DEPTH:  Bur:2-4
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   shale drake / earth elemental
+MAP
+        xxxxxxx
+       xx.....xx
+xxxxxxxx..cc...xx
+@...............x
+...........1....xxx
+xxxxxxx...........x
+      xx.....c....@
+       xx.....xxx..
+        xxxxxxx xxx
+ENDMAP
+
+
+NAME:   bur_root_pocket
+DEPTH:  Bur
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MAP
+     xxxxx
+xxxxxx...xxx
+@..........x
+...........x
+xxxx.......x
+   xxx...xxx
+     xxxxx
+ENDMAP
+
+
+NAME:   bur_bone_cache
+DEPTH:  Bur
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   burrowing beast
+SUBST: 1 = 1.
+KITEM:  b = crag boar corpse
+MAP
+xxxxxxxxxxxx
+@.....xx...xx
+......x.....xx
+xxxx.....1...x
+   xx........x
+    x....b...x
+    xxx.....xx
+      xx...xx
+       xxxxx
+ENDMAP
+
+
+NAME:   bur_troll_store
+DEPTH:  Bur:2-4
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   deep troll delver
+MAP
+      xxxxx
+     xx...xx
+    xx.....xx
+xxxxx...1...x
+@...........x
+.........$..x
+xxxxxx.....xx
+     xx...xx
+      xxxxx
+ENDMAP
+
+
+NAME:   bur_beetle_burrow
+DEPTH:  Bur:2-4
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MONS:   boulder beetle
+MAP
+xxxxxxxx  xxxxx
+@......x xx...xx
+.......xxx.....xx
+xxxxx...x.......x
+    xx..x...1...x
+     x..........x
+     x.........xx
+     xxxxxx...xx
+          xxxxx
+ENDMAP
+
+
+NAME:   bur_old_crossing
+DEPTH:  Bur
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+WEIGHT: 10
+MAP
+     xxxxxxxxxxxx
+     x..........x
+     x..........x
+xxxxxx..xxxxxx..x
+@.......xx   x..x
+.........xxx x..x
+xxxxxxx....xxx..xxx
+      xx..........@
+       xxx.........
+        xx..xxxxxxx
+        x...x
+        x..xx
+        x..x
+        xxxx
+ENDMAP
+
+
+
+NAME:   bur_end_worldworm
+PLACE:  Bur:$
+ORIENT: float
+TAGS:   transparent no_monster_gen
+KFEAT:  O = enter_wormlands
+KITEM:  R = ochre gem
+MONS:   Worldworm, burrowing beast, crag boar, shale drake, boulder beetle
+MAP
+    xxxxxxx
+   xx.....xx                   xxxxxxx
+  xx.......xx                 xx.....xx
+  x.........x                xx.......xx
+  x....2....x                x.........x
+  x.........x                x....3....x
+  xx.......xx                x.........x
+   xx......xxxx      xxxxxxxxx........xx
+    xxxxx.....xxxx xxx.....xx..........xx
+       xx........xxx...........xxxxxx...x
+      xx...xx.........c........x    xx..x
+xxxxxxx...xxxxxx...4..........xx     x..x
+@........xx    xxx......1......x     x..x
+........xx       x.............x    xx..x
+xxxxxx...x       x......OR...4.x    x...x
+     xx..xxxxx   xx...%$..*....xxxxxx..xx
+      x......xx   x......%.c........x..x
+     xx.......xx xx..........x.........x
+     x.........x x...x.....xxxxx..x....x
+     x....3....xxx..xxxxxxxx   x...xxxxx
+     x......5...x...x          xx.....xx
+     xx............xx         xx.......xx
+      xx.....xx...xx          x.........xxx
+       xxxxxxxxxxxx           x....2......@
+                              x............
+                              xx.......xxxx
+                               xx.....xx
+                                xxxxxxx
+ENDMAP
+
+
+NAME:   bur_end_troll_cairn
+PLACE:  Bur:$
+ORIENT: float
+TAGS:   transparent no_monster_gen
+KFEAT:  O = enter_wormlands
+KITEM:  R = ochre gem
+MONS:   deep troll, deep troll delver, shale drake, cyclops
+MAP
+                  xxxxxxx
+    xxxxxxx      xx.....xx
+   xx.....xx    xx.......xx
+  xx.......xx  xx...2.....xxxxxxxxxxxx
+  x.........x xx..............xx.....xx
+xxx....1....xxx.......................xx
+@...........xx...xxxxx..xxxxx.....1....xxxx
+.............x..xx   x..xx  xx............@
+xxxxx.....x..+..x    x...x   x....3........
+    xx...xxx...xx    xx..x   xx.......xxxxx
+     x..xx xxxxx    xx...x    xx.....xx
+     x..x          xx...xx     xx..xxx
+     x..xx         x...xxxx    x...x
+     x...xx        x......xx   x+.xx
+     xx...xx      xx...cc..xx  x...xx
+      xx...xx    xx.........xx xx...xx
+       xx...x    x.....1OR...x  xx...xx
+       xxx..xx   x....2...%..x   xx...x
+      xx.....xx  x......2$...x   xxx..xx
+     xx.......xx xx...*.%....xxxxx.....xx
+     x.........x  xx............x.......xx
+     x....1....xxxx.......xx.........4...x
+     x....3......x...xxxxxxxxxx....2.....x
+     xx.............xx        xx.........x
+      xx.....xxx...xx          xx.......xx
+       xxxxxxx xxxxx            xx.....xx
+                                 xxxxxxx
+ENDMAP
+
+
+NAME:   bur_end_old_warren
+PLACE:  Bur:$
+ORIENT: float
+TAGS:   transparent no_monster_gen
+KFEAT:  O = enter_wormlands
+KITEM:  R = ochre gem
+MONS:   death yak, catoblepas, burrowing beast, crag boar, shale drake, boulder beetle
+MAP
+                  xxxxxxx
+    xxxxxxx      xx.....xx
+   xx.....xx    xx.......xx      xxxxxxx
+  xx.......xx   x.........x     xx.....xx
+  x.........x   x....3....x    xx.......xx
+  x....1....x   x.........xx   x....6....x
+  x.....4...xxxxx..........xxxxx....2....x
+  xx..........x..............xx..........x
+   xx.....x.......xx..xxxx..............xx
+    xx..xxxxx...xxxx..x  xxx....xx......x
+     x..x   xxxxx  x..xxxx xxxxxxxxxxx..xx
+    xx..x         xx.....xx          x...x
+    x...x        xxc......xx         xx..xxx
+xxxxx..xx        x....5....x          x....xx
+@......x         x..%$OR...x          xx....@
+.......xx        x...5*%...x          x......
+xxxxx...x        xx......cxx          x..xxxx
+    xx..xxx       xx.....xx        xxxx..x
+    xx....xxx      xxxx..x       xxx.....x
+    x.......xxxxxxx   x..x   xxxxx.......x
+   xx.......xx....xxxxx..xxxxx...x.......xx
+   x...............xx.....xx..............x
+   x....16.....xx..............x.....34...x
+   x.........xxxxx...........xxxx.........x
+   xx.......xx   xx..c......xx  xx.......xx
+    x.......x     x.........x    x.......x
+    xxx...xxx     xx.......xx    xxx...xxx
+      xxxxx        xx.....xx       xxxxx
+                    xxxxxxx
+ENDMAP
+
+
+NAME:   worm_entry_fault
+TAGS:   worm_entry transparent no_monster_gen
+KFEAT:  O = enter_wormlands
+MAP
+xxxxxxxxx
+xx.....xx
+@...O...@
+xx.....xx
+xxxxxxxxx
+ENDMAP
+
+
+NAME:   hive_entry_comb
+TAGS:   hive_entry transparent no_monster_gen
+KFEAT:  O = enter_hive
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MONS:   killer bee
+MAP
+xxxxxxxxxxx
+xx.......xx
+@..1.O....@
+xx.......xx
+xxxxxxxxxxx
+ENDMAP

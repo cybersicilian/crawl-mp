@@ -1,0 +1,34 @@
+# Git metadata (keep .git if version string generation needs it, but ignore heavy pack/logs if any)
+.git/logs/
+*.o
+*.d
+*.a
+*.so
+*.dylib
+*.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+# Existing local build artifacts and runtime state
+crawl-ref/source/crawl
+crawl-ref/source/*.o
+crawl-ref/source/*.d
+crawl-ref/source/rcs/
+crawl-ref/source/saves/
+crawl-ref/source/morgue/
+crawl-ref/source/webserver/run/
+crawl-ref/source/util/
+crawl-ref/source/rltiles/*.o
+crawl-ref/source/rltiles/*.png
+!crawl-ref/source/rltiles/**/*.png
+
+# Local deployment tarballs and logs
+*.tar.gz
+*.tgz
+*.log

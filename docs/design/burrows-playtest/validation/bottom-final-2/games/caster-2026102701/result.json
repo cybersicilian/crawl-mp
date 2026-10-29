@@ -1,0 +1,1284 @@
+{
+  "build": "caster",
+  "seed": "2026102701",
+  "start": "Worm:4",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": false,
+  "audits": [
+    {
+      "turn": 60,
+      "tag": "enter",
+      "where": "Worm:4",
+      "maxmp": 44,
+      "monsters": [
+        {
+          "xp": 84,
+          "name": "earth elemental",
+          "y": 27,
+          "x": 36
+        },
+        {
+          "xp": 961,
+          "name": "coil worm",
+          "y": 28,
+          "x": 38
+        },
+        {
+          "xp": 746,
+          "name": "iron troll",
+          "y": 30,
+          "x": 38
+        },
+        {
+          "xp": 1235,
+          "name": "iron dragon",
+          "y": 30,
+          "x": 42
+        },
+        {
+          "xp": 1031,
+          "name": "gallery worm",
+          "y": 31,
+          "x": 32
+        },
+        {
+          "xp": 82,
+          "name": "earth elemental",
+          "y": 32,
+          "x": 39
+        },
+        {
+          "xp": 781,
+          "name": "iron troll",
+          "y": 33,
+          "x": 38
+        },
+        {
+          "xp": 1054,
+          "name": "gallery worm",
+          "y": 33,
+          "x": 73
+        },
+        {
+          "xp": 1037,
+          "name": "gallery worm",
+          "y": 34,
+          "x": 27
+        },
+        {
+          "xp": 641,
+          "name": "lindwurm",
+          "y": 34,
+          "x": 34
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 34,
+          "x": 90
+        },
+        {
+          "xp": 765,
+          "name": "iron troll",
+          "y": 35,
+          "x": 28
+        },
+        {
+          "xp": 768,
+          "name": "iron troll",
+          "y": 35,
+          "x": 32
+        },
+        {
+          "xp": 950,
+          "name": "coil worm",
+          "y": 35,
+          "x": 73
+        },
+        {
+          "xp": 885,
+          "name": "great orb of eyes",
+          "y": 36,
+          "x": 36
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 37,
+          "x": 36
+        },
+        {
+          "xp": 5,
+          "name": "deathcap",
+          "y": 37,
+          "x": 78
+        },
+        {
+          "xp": 1066,
+          "name": "gallery worm",
+          "y": 37,
+          "x": 85
+        },
+        {
+          "xp": 1056,
+          "name": "gallery worm",
+          "y": 39,
+          "x": 33
+        },
+        {
+          "xp": 763,
+          "name": "iron troll",
+          "y": 39,
+          "x": 84
+        },
+        {
+          "xp": 885,
+          "name": "great orb of eyes",
+          "y": 40,
+          "x": 68
+        },
+        {
+          "xp": 760,
+          "name": "iron troll",
+          "y": 41,
+          "x": 37
+        },
+        {
+          "xp": 972,
+          "name": "coil worm",
+          "y": 41,
+          "x": 68
+        },
+        {
+          "xp": 779,
+          "name": "iron troll",
+          "y": 41,
+          "x": 78
+        },
+        {
+          "xp": 1091,
+          "name": "stone giant",
+          "y": 41,
+          "x": 86
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 42,
+          "x": 65
+        },
+        {
+          "xp": 952,
+          "name": "coil worm",
+          "y": 42,
+          "x": 85
+        },
+        {
+          "xp": 1060,
+          "name": "gallery worm",
+          "y": 43,
+          "x": 73
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 44,
+          "x": 37
+        },
+        {
+          "xp": 1016,
+          "name": "gallery worm",
+          "y": 46,
+          "x": 45
+        },
+        {
+          "xp": 767,
+          "name": "iron troll",
+          "y": 47,
+          "x": 61
+        },
+        {
+          "xp": 979,
+          "name": "coil worm",
+          "y": 56,
+          "x": 61
+        },
+        {
+          "xp": 1045,
+          "name": "gallery worm",
+          "y": 57,
+          "x": 32
+        },
+        {
+          "xp": 748,
+          "name": "iron troll",
+          "y": 58,
+          "x": 59
+        },
+        {
+          "xp": 800,
+          "name": "caustic worm",
+          "y": 58,
+          "x": 69
+        },
+        {
+          "xp": 1031,
+          "name": "gallery worm",
+          "y": 59,
+          "x": 32
+        },
+        {
+          "xp": 963,
+          "name": "coil worm",
+          "y": 60,
+          "x": 59
+        },
+        {
+          "xp": 814,
+          "name": "caustic worm",
+          "y": 61,
+          "x": 29
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 61,
+          "x": 39
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 65,
+          "x": 39
+        },
+        {
+          "xp": 961,
+          "name": "coil worm",
+          "y": 65,
+          "x": 43
+        },
+        {
+          "xp": 801,
+          "name": "deep troll earth mage",
+          "y": 65,
+          "x": 73
+        },
+        {
+          "xp": 735,
+          "name": "deep troll",
+          "y": 66,
+          "x": 37
+        },
+        {
+          "xp": 746,
+          "name": "deep troll",
+          "y": 66,
+          "x": 72
+        },
+        {
+          "xp": 1050,
+          "name": "gallery worm",
+          "y": 67,
+          "x": 34
+        },
+        {
+          "xp": 808,
+          "name": "deep troll earth mage",
+          "y": 67,
+          "x": 70
+        },
+        {
+          "xp": 725,
+          "name": "deep troll",
+          "y": 68,
+          "x": 72
+        },
+        {
+          "xp": 1054,
+          "name": "gallery worm",
+          "y": 69,
+          "x": 52
+        },
+        {
+          "xp": 1033,
+          "name": "gallery worm",
+          "y": 70,
+          "x": 46
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 70,
+          "x": 49
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 71,
+          "x": 59
+        },
+        {
+          "xp": 793,
+          "name": "caustic worm",
+          "y": 72,
+          "x": 75
+        },
+        {
+          "xp": 1056,
+          "name": "gallery worm",
+          "y": 74,
+          "x": 78
+        }
+      ],
+      "mp": 44,
+      "xp": 41493,
+      "hp": 127,
+      "vaults": "worm_end_dragon_cavern",
+      "maxhp": 127,
+      "gold": 0,
+      "inventory": [
+        {
+          "class": "armour",
+          "name": "+0 robe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 robe",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+2 devious dagger",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of magic",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of haste",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        }
+      ],
+      "progress": 0,
+      "xl": 20,
+      "items": [
+        {
+          "class": "gold",
+          "name": "14 gold pieces",
+          "y": 27,
+          "x": 73,
+          "quantity": 14,
+          "artefact": false
+        },
+        {
+          "class": "wand",
+          "name": "wand of light (6)",
+          "y": 29,
+          "x": 31,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "magical staff",
+          "name": "staff of earth",
+          "y": 29,
+          "x": 32,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "glowing great sword",
+          "y": 29,
+          "x": 33,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 31,
+          "x": 27,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 33,
+          "x": 31,
+          "quantity": 17,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "21 gold pieces",
+          "y": 33,
+          "x": 32,
+          "quantity": 21,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 33,
+          "x": 33,
+          "quantity": 17,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 37,
+          "x": 68,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "magical staff",
+          "name": "staff of air",
+          "y": 45,
+          "x": 32,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "12 gold pieces",
+          "y": 45,
+          "x": 67,
+          "quantity": 12,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 46,
+          "x": 32,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 48,
+          "x": 57,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "potion",
+          "name": "potion of moonshine",
+          "y": 55,
+          "x": 38,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of blinking",
+          "y": 57,
+          "x": 34,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "potion",
+          "name": "potion of curing",
+          "y": 58,
+          "x": 29,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "quarterstaff",
+          "y": 64,
+          "x": 37,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of fog",
+          "y": 65,
+          "x": 75,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "club",
+          "y": 66,
+          "x": 76,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "18 gold pieces",
+          "y": 67,
+          "x": 39,
+          "quantity": 18,
+          "artefact": false
+        },
+        {
+          "class": "book",
+          "name": "parchment of Controlled Blink",
+          "y": 68,
+          "x": 49,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "armour",
+          "name": "plate armour",
+          "y": 69,
+          "x": 67,
+          "quantity": 1,
+          "artefact": false
+        }
+      ],
+      "honey": 0
+    },
+    {
+      "turn": 95,
+      "tag": "combat-stalled",
+      "where": "Worm:4",
+      "maxmp": 44,
+      "monsters": [
+        {
+          "xp": 84,
+          "name": "earth elemental",
+          "y": 27,
+          "x": 36
+        },
+        {
+          "xp": 746,
+          "name": "iron troll",
+          "y": 30,
+          "x": 38
+        },
+        {
+          "xp": 1235,
+          "name": "iron dragon",
+          "y": 30,
+          "x": 42
+        },
+        {
+          "xp": 1031,
+          "name": "gallery worm",
+          "y": 31,
+          "x": 32
+        },
+        {
+          "xp": 1056,
+          "name": "gallery worm",
+          "y": 32,
+          "x": 28
+        },
+        {
+          "xp": 82,
+          "name": "earth elemental",
+          "y": 32,
+          "x": 39
+        },
+        {
+          "xp": 781,
+          "name": "iron troll",
+          "y": 33,
+          "x": 38
+        },
+        {
+          "xp": 1037,
+          "name": "gallery worm",
+          "y": 34,
+          "x": 27
+        },
+        {
+          "xp": 641,
+          "name": "lindwurm",
+          "y": 34,
+          "x": 34
+        },
+        {
+          "xp": 1054,
+          "name": "gallery worm",
+          "y": 34,
+          "x": 74
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 34,
+          "x": 90
+        },
+        {
+          "xp": 765,
+          "name": "iron troll",
+          "y": 35,
+          "x": 28
+        },
+        {
+          "xp": 768,
+          "name": "iron troll",
+          "y": 35,
+          "x": 32
+        },
+        {
+          "xp": 885,
+          "name": "great orb of eyes",
+          "y": 36,
+          "x": 36
+        },
+        {
+          "xp": 961,
+          "name": "coil worm",
+          "y": 37,
+          "x": 27
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 37,
+          "x": 36
+        },
+        {
+          "xp": 763,
+          "name": "iron troll",
+          "y": 37,
+          "x": 87
+        },
+        {
+          "xp": 5,
+          "name": "deathcap",
+          "y": 38,
+          "x": 82
+        },
+        {
+          "xp": 1066,
+          "name": "gallery worm",
+          "y": 38,
+          "x": 85
+        },
+        {
+          "xp": 885,
+          "name": "great orb of eyes",
+          "y": 39,
+          "x": 77
+        },
+        {
+          "xp": 972,
+          "name": "coil worm",
+          "y": 40,
+          "x": 77
+        },
+        {
+          "xp": 1060,
+          "name": "gallery worm",
+          "y": 40,
+          "x": 85
+        },
+        {
+          "xp": 760,
+          "name": "iron troll",
+          "y": 41,
+          "x": 37
+        },
+        {
+          "xp": 950,
+          "name": "coil worm",
+          "y": 41,
+          "x": 82
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 42,
+          "x": 65
+        },
+        {
+          "xp": 779,
+          "name": "iron troll",
+          "y": 42,
+          "x": 78
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 44,
+          "x": 37
+        },
+        {
+          "xp": 1016,
+          "name": "gallery worm",
+          "y": 46,
+          "x": 45
+        },
+        {
+          "xp": 767,
+          "name": "iron troll",
+          "y": 47,
+          "x": 61
+        },
+        {
+          "xp": 1050,
+          "name": "gallery worm",
+          "y": 52,
+          "x": 33
+        },
+        {
+          "xp": 979,
+          "name": "coil worm",
+          "y": 56,
+          "x": 61
+        },
+        {
+          "xp": 1045,
+          "name": "gallery worm",
+          "y": 57,
+          "x": 32
+        },
+        {
+          "xp": 748,
+          "name": "iron troll",
+          "y": 58,
+          "x": 59
+        },
+        {
+          "xp": 800,
+          "name": "caustic worm",
+          "y": 58,
+          "x": 69
+        },
+        {
+          "xp": 1031,
+          "name": "gallery worm",
+          "y": 59,
+          "x": 32
+        },
+        {
+          "xp": 963,
+          "name": "coil worm",
+          "y": 60,
+          "x": 59
+        },
+        {
+          "xp": 814,
+          "name": "caustic worm",
+          "y": 61,
+          "x": 29
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 61,
+          "x": 39
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 65,
+          "x": 39
+        },
+        {
+          "xp": 801,
+          "name": "deep troll earth mage",
+          "y": 65,
+          "x": 73
+        },
+        {
+          "xp": 735,
+          "name": "deep troll",
+          "y": 66,
+          "x": 37
+        },
+        {
+          "xp": 746,
+          "name": "deep troll",
+          "y": 66,
+          "x": 72
+        },
+        {
+          "xp": 808,
+          "name": "deep troll earth mage",
+          "y": 67,
+          "x": 70
+        },
+        {
+          "xp": 725,
+          "name": "deep troll",
+          "y": 68,
+          "x": 72
+        },
+        {
+          "xp": 1054,
+          "name": "gallery worm",
+          "y": 69,
+          "x": 52
+        },
+        {
+          "xp": 1033,
+          "name": "gallery worm",
+          "y": 70,
+          "x": 46
+        },
+        {
+          "xp": 1043,
+          "name": "gallery worm",
+          "y": 70,
+          "x": 49
+        },
+        {
+          "xp": 961,
+          "name": "coil worm",
+          "y": 70,
+          "x": 52
+        },
+        {
+          "xp": 6,
+          "name": "deathcap",
+          "y": 71,
+          "x": 59
+        },
+        {
+          "xp": 793,
+          "name": "caustic worm",
+          "y": 72,
+          "x": 75
+        },
+        {
+          "xp": 1056,
+          "name": "gallery worm",
+          "y": 74,
+          "x": 78
+        }
+      ],
+      "mp": 29,
+      "xp": 39450,
+      "hp": 13,
+      "vaults": "worm_end_dragon_cavern",
+      "maxhp": 127,
+      "gold": 0,
+      "inventory": [
+        {
+          "class": "armour",
+          "name": "+0 robe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 robe",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+2 devious dagger",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of magic",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of blinking",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "potion of haste",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        }
+      ],
+      "progress": 1,
+      "xl": 20,
+      "items": [
+        {
+          "class": "gold",
+          "name": "14 gold pieces",
+          "y": 27,
+          "x": 73,
+          "quantity": 14,
+          "artefact": false
+        },
+        {
+          "class": "wand",
+          "name": "wand of light (6)",
+          "y": 29,
+          "x": 31,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "magical staff",
+          "name": "staff of earth",
+          "y": 29,
+          "x": 32,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "glowing great sword",
+          "y": 29,
+          "x": 33,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 31,
+          "x": 27,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 33,
+          "x": 31,
+          "quantity": 17,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "21 gold pieces",
+          "y": 33,
+          "x": 32,
+          "quantity": 21,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 33,
+          "x": 33,
+          "quantity": 17,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 37,
+          "x": 68,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "missile",
+          "name": "4 large rocks",
+          "y": 39,
+          "x": 88,
+          "quantity": 4,
+          "artefact": false
+        },
+        {
+          "class": "corpse",
+          "name": "stone giant corpse",
+          "y": 39,
+          "x": 88,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "magical staff",
+          "name": "staff of air",
+          "y": 45,
+          "x": 32,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "12 gold pieces",
+          "y": 45,
+          "x": 67,
+          "quantity": 12,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 46,
+          "x": 32,
+          "quantity": 20,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 48,
+          "x": 57,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "potion",
+          "name": "potion of moonshine",
+          "y": 55,
+          "x": 38,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of blinking",
+          "y": 57,
+          "x": 34,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "potion",
+          "name": "potion of curing",
+          "y": 58,
+          "x": 29,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "quarterstaff",
+          "y": 64,
+          "x": 37,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of fog",
+          "y": 65,
+          "x": 75,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "weapon",
+          "name": "club",
+          "y": 66,
+          "x": 76,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "gold",
+          "name": "18 gold pieces",
+          "y": 67,
+          "x": 39,
+          "quantity": 18,
+          "artefact": false
+        },
+        {
+          "class": "book",
+          "name": "parchment of Controlled Blink",
+          "y": 68,
+          "x": 49,
+          "quantity": 1,
+          "artefact": false
+        },
+        {
+          "class": "armour",
+          "name": "plate armour",
+          "y": 69,
+          "x": 67,
+          "quantity": 1,
+          "artefact": false
+        }
+      ],
+      "honey": 0
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "setup 12",
+    "setup 13",
+    "setup 14",
+    "setup 15",
+    "setup 16",
+    "setup 17",
+    "inventory +0 robe",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +0 buckler",
+    "inventory +2 robe",
+    "inventory +2 devious dagger",
+    "inventory 3 potions of magic",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of might",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start caster AC=8 EV=18 SH=6",
+    "use haste turn=67 place=Worm:4",
+    "use heal wounds turn=68 place=Worm:4",
+    "use heal wounds turn=69 place=Worm:4",
+    "use heal wounds turn=73 place=Worm:4",
+    "use magic turn=77 place=Worm:4",
+    "use magic turn=87 place=Worm:4",
+    "use heal wounds turn=88 place=Worm:4",
+    "use heal wounds turn=89 place=Worm:4",
+    "use heal wounds turn=90 place=Worm:4",
+    "use fear turn=91 place=Worm:4",
+    "use fear turn=92 place=Worm:4",
+    "use fear turn=93 place=Worm:4",
+    "use blinking turn=94 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "use blinking turn=95 place=Worm:4",
+    "combat-stalled turn=95 minimumHp=0.10236220472441"
+  ],
+  "nativeSha256": "e373dc0e1068ba504c29766dba4477944670864d16617c33cb1459bc07083465",
+  "startVerified": true,
+  "routeFloorsExplored": [],
+  "fullRoute": false
+}

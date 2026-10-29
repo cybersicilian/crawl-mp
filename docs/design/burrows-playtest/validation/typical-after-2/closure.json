@@ -1,0 +1,24 @@
+{
+  "reservationId": "f7dc707d-abfe-4d62-987b-5e9ddd3ba5d0",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "f7dc707d-abfe-4d62-987b-5e9ddd3ba5d0",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS complete native route builds typical-after-2",
+      "requestedAt": 1793153801.0406568,
+      "supervisorPid": 60013,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "4259deab9e879721851f45056a58ede7ecd76d17d10290be4db8ef9d126fb586",
+      "startedAt": 1793153801.042377,
+      "workerPid": 60022,
+      "processGroup": 60022,
+      "exitCode": 1,
+      "finishedAt": 1793153864.2231429,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "4259deab9e879721851f45056a58ede7ecd76d17d10290be4db8ef9d126fb586"
+  }
+}

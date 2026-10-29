@@ -8,6 +8,7 @@ int: 6
 dex: 0
 spells:
   - SPELL_SCORCH
+  - SPELL_AURA_OF_ZEAL
 equipment:
   - "robe"
 weapon_choice: plain

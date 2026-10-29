@@ -34,6 +34,7 @@
 #include "fight.h"
 #include "fineff.h"        // For the Storm Queen's Shield
 #include "god-abil.h"      // For Forgewarden's cuirass (ru_reject_sacrifices)
+#include "losglobal.h"     // For cell_see_cell
 #include "mgen-data.h"     // For Sceptre of Asmodeus
 #include "melee-attack.h"  // For Fungal Fisticloak
 #include "message.h"
@@ -42,6 +43,7 @@
 #include "mon-place.h"     // For Sceptre of Asmodeus
 #include "nearby-danger.h" // For Zhor
 #include "output.h"
+#include "party.h"
 #include "player.h"
 #include "player-reacts.h" // For the consecrated labrys
 #include "player-stats.h"
@@ -1004,7 +1006,6 @@ static void _FORCE_LANCE_melee_effects(item_def* /*weapon*/, actor* attacker,
 
 ///////////////////////////////////////////////////
 
-#if TAG_MAJOR_VERSION == 34
 static void _CHILLY_DEATH_equip(item_def */*item*/, bool *show_msgs,
                                 bool /*unmeld*/)
 {
@@ -1039,11 +1040,9 @@ static void _CHILLY_DEATH_melee_effects(item_def* /*weapon*/, actor* attacker,
         }
     }
 }
-#endif
 
 ///////////////////////////////////////////////////
 
-#if TAG_MAJOR_VERSION == 34
 static void _FLAMING_DEATH_equip(item_def */*item*/, bool *show_msgs,
                                  bool /*unmeld*/)
 {
@@ -1071,7 +1070,6 @@ static void _FLAMING_DEATH_melee_effects(item_def* /*weapon*/, actor* attacker,
         }
     }
 }
-#endif
 
 ///////////////////////////////////////////////////
 
@@ -1109,9 +1107,10 @@ static int _octorings_worn()
 
     vector<item_def*> rings = you.equipment.get_slot_items(SLOT_RING);
     for (item_def* ring : rings)
-        if (is_unrandom_artefact(*ring, UNRAND_OCTOPUS_KING_RING))
+        if (has_unrand_effect(*ring, UNRAND_OCTOPUS_KING_RING))
             worn++;
 
+    if (oozle::absorbed_unrand(you, UNRAND_OCTOPUS_KING_RING)) ++worn;
     return worn;
 }
 
@@ -1166,7 +1165,6 @@ static void _FENCERS_equip(item_def */*item*/, bool *show_msgs, bool /*unmeld*/)
     _equip_mpr(show_msgs, "En garde!");
 }
 
-#if TAG_MAJOR_VERSION == 34
 ///////////////////////////////////////////////////
 
 static void _ETHERIC_CAGE_equip(item_def */*item*/, bool *show_msgs,
@@ -1198,7 +1196,6 @@ static void _ETERNAL_TORMENT_unequip(item_def */*item*/, bool */*show_msgs*/)
 {
     calc_hp();
 }
-#endif
 
 ///////////////////////////////////////////////////
 
@@ -1905,3 +1902,381 @@ static void _FORGEWARDEN_equip(item_def */*item*/, bool *show_msgs, bool unmeld)
         lose_piety(piety_loss);
     }
 }
+
+/////////////////////////////////////////////////////
+static void _POWER_melee_effects(item_def* /*weapon*/, actor* attacker,
+                                 actor* /*defender*/, int dam,
+                                 melee_attack* /*atk*/)
+{
+    if (!attacker || !attacker->is_player() || dam <= 0)
+        return;
+
+    // SPWPN_VALOUR: when at >= 80% HP in Co-op mode, 25% chance to heal
+    // adjacent living party members (grid_distance <= 1) for 2 + random2(5) HP.
+    if (!party::is_enabled()
+        || you.hp * 5 < you.hp_max * 4
+        || !one_chance_in(4))
+    {
+        return;
+    }
+
+    const int active = party::active_slot();
+    const int count = party::player_count();
+    for (int slot = 0; slot < count; ++slot)
+    {
+        if (slot == active || party::is_player_downed(slot))
+            continue;
+        player &ally = party::get_player(slot);
+        if (ally.hp <= 0 || grid_distance(ally.pos(), you.pos()) > 1)
+            continue;
+        party::heal_or_buff_party_member(slot, 2 + random2(5));
+    }
+}
+
+static void _BLOODBANE_melee_effects(item_def* /*weapon*/, actor* attacker,
+                                     actor* defender, int dam,
+                                     melee_attack* /*atk*/)
+{
+    if (attacker && attacker->is_player()
+        && dam > 0
+        && defender && defender->alive()
+        && one_chance_in(20)
+        && you.can_go_berserk())
+    {
+        you.go_berserk(false);
+    }
+}
+
+static void _BULLSEYE_world_reacts(item_def */*item*/)
+{
+    if (!you.time_taken || !party::is_enabled() || i_feel_safe())
+        return;
+
+    if (one_chance_in(4))
+        party::apply_party_aura_buff(DUR_RESISTANCE, 3 + random2(4), 2, false);
+}
+
+static void _TALOS_world_reacts(item_def */*item*/)
+{
+    if (!you.time_taken || !party::is_enabled() || i_feel_safe())
+        return;
+
+    if (one_chance_in(4))
+        party::apply_party_aura_buff(DUR_MIGHT, 3 + random2(4), 2, false);
+}
+
+////////////////////////////////////////////////////
+// Kite shield "Aegis of Fellowship"
+
+static void _AEGIS_OF_FELLOWSHIP_equip(item_def */*item*/, bool *show_msgs,
+                                       bool unmeld)
+{
+    if (!unmeld)
+        _equip_mpr(show_msgs, "A radiant bulwark extends to shelter those who stand beside you.");
+}
+
+static void _AEGIS_OF_FELLOWSHIP_melee_effects(item_def* /*shield*/,
+                                               actor* wearer,
+                                               actor* attacker,
+                                               int /*dam*/,
+                                               melee_attack*)
+{
+    if (!party::is_enabled() || !wearer || !wearer->is_player()
+        || !attacker || !attacker->alive() || !attacker->is_monster())
+    {
+        return;
+    }
+
+    if ((party::count_living_allies_near(wearer->pos(), 1) > 0
+         || party::pos_adjacent_to_living_ally(attacker->pos(), party::active_slot()))
+        && one_chance_in(4))
+    {
+        monster *mon = attacker->as_monster();
+        if (mon && !mon->has_ench(ENCH_DAZED) && !mon->stasis())
+        {
+            mon->add_ench(mon_enchant(ENCH_DAZED, wearer, random_range(2, 4) * BASELINE_DELAY));
+            simple_monster_message(*mon, " is staggered by the Aegis of Fellowship's phalanx ward!");
+        }
+    }
+}
+
+////////////////////////////////////////////////////
+// Quarterstaff "Conduit Staff"
+
+static void _CONDUIT_STAFF_melee_effects(item_def* /*weapon*/, actor* attacker,
+                                         actor* defender, int dam,
+                                         melee_attack*)
+{
+    if (!party::is_enabled()
+        || !attacker || !attacker->is_player()
+        || !defender || dam <= 0
+        || defender->is_firewood()
+        || defender->is_summoned())
+    {
+        return;
+    }
+
+    const int active = party::active_slot();
+    const int mp_gift = min(4, 1 + random2(2) + dam / 8);
+    if (mp_gift <= 0)
+        return;
+
+    int allies_fed = 0;
+    for (int s = 0; s < party::player_count(); ++s)
+    {
+        if (s == active || party::is_player_downed(s))
+            continue;
+        const player &ally = party::get_player(s);
+        if (ally.hp <= 0
+            || ally.where_are_you != you.where_are_you
+            || ally.depth != you.depth
+            || grid_distance(you.pos(), ally.pos()) > 4
+            || !you.see_cell_no_trans(ally.pos())
+            || ally.magic_points >= ally.max_magic_points)
+        {
+            continue;
+        }
+
+        {
+            party::scoped_player_context ctx(s);
+            inc_mp(mp_gift, true);
+        }
+        ++allies_fed;
+    }
+
+    if (allies_fed > 0)
+    {
+        mprf("Arcane current arcs from the Conduit Staff to your %s!",
+             allies_fed > 1 ? "companions" : "companion");
+    }
+}
+
+////////////////////////////////////////////////////
+// Ring of Twin Souls
+
+static void _TWIN_SOUL_RING_equip(item_def */*item*/, bool *show_msgs,
+                                  bool unmeld)
+{
+    if (!unmeld)
+    {
+        int partner_slot = -1;
+        if (party::has_twin_soul_resonance(&partner_slot) && partner_slot >= 0)
+        {
+            if (!show_msgs || *show_msgs)
+            {
+                mprf("The ring of Twin Souls resonates with %s!",
+                     party::get_player(partner_slot).your_name.c_str());
+            }
+        }
+        else
+            _equip_mpr(show_msgs, "The ring of Twin Souls hums, seeking a companion in sight.");
+    }
+    you.redraw_armour_class = true;
+}
+
+static void _TWIN_SOUL_RING_unequip(item_def */*item*/, bool *show_msgs)
+{
+    _equip_mpr(show_msgs, "The twin-soul resonance subsides.");
+    you.redraw_armour_class = true;
+}
+
+static void _TWIN_SOUL_RING_melee_effects(item_def* /*item*/, actor* attacker,
+                                          actor* defender, int dam,
+                                          melee_attack*)
+{
+    if (!party::is_enabled()
+        || !attacker || !attacker->is_player()
+        || !defender || !defender->alive()
+        || dam <= 0
+        || defender->is_firewood()
+        || !one_chance_in(3))
+    {
+        return;
+    }
+
+    int partner_slot = -1;
+    if (!party::has_twin_soul_resonance(&partner_slot) || partner_slot < 0)
+        return;
+
+    const player &partner = party::get_player(partner_slot);
+    if (!cell_see_cell(partner.pos(), defender->pos(), LOS_NO_TRANS))
+        return;
+
+    const int flare_dam = 2 + random2(8);
+    mprf("Twin-soul light flares between you and %s, searing %s!",
+         partner.your_name.c_str(), defender->name(DESC_THE).c_str());
+    defender->hurt(attacker, flare_dam, BEAM_MMISSILE, KILLED_BY_BEAM,
+                   "", "twin-soul resonance");
+
+    if (partner.hp < partner.hp_max && !defender->is_summoned())
+    {
+        const int heal = 1 + random2(4);
+        party::scoped_player_context ctx(partner_slot);
+        inc_hp(heal);
+    }
+}
+
+////////////////////////////////////////////////////
+// Broad axe "Dawnforged" & Demon blade "Duskweaver"
+
+static void _DAWNFORGED_equip(item_def */*item*/, bool *show_msgs, bool unmeld)
+{
+    if (!unmeld)
+    {
+        int partner_slot = -1;
+        if (party::has_dawn_dusk_resonance(&partner_slot) && partner_slot >= 0)
+        {
+            if (!show_msgs || *show_msgs)
+            {
+                mprf("Dawnforged answers the cold of %s's Duskweaver!",
+                     party::get_player(partner_slot).your_name.c_str());
+            }
+        }
+        else
+            _equip_mpr(show_msgs, "Dawnforged radiates solar heat, seeking its lunar twin.");
+    }
+    you.redraw_armour_class = true;
+}
+
+static void _DAWNFORGED_unequip(item_def */*item*/, bool *show_msgs)
+{
+    _equip_mpr(show_msgs, "The solar warmth of Dawnforged subsides.");
+    you.redraw_armour_class = true;
+}
+
+static void _DAWNFORGED_melee_effects(item_def* /*weapon*/, actor* attacker,
+                                      actor* defender, int dam, melee_attack*)
+{
+    if (!attacker || !attacker->is_player() || !defender || !defender->alive()
+        || dam <= 0 || defender->is_firewood())
+    {
+        return;
+    }
+
+    int partner_slot = -1;
+    if (party::has_dawn_dusk_resonance(&partner_slot) && partner_slot >= 0
+        && one_chance_in(3))
+    {
+        const player &partner = party::get_player(partner_slot);
+        mprf("The paired blades erupt in fire and frost between you and %s!",
+             partner.your_name.c_str());
+        for (adjacent_iterator ai(defender->pos(), false); ai; ++ai)
+        {
+            monster *mon = monster_at(*ai);
+            if (!mon || mon->wont_attack() || party::is_proxy_monster(*mon))
+                continue;
+            const int burst = 4 + random2(10);
+            mon->hurt(attacker, burst, BEAM_FIRE, KILLED_BY_BEAM, "",
+                      "paired fire and frost");
+        }
+    }
+}
+
+static void _DUSKWEAVER_equip(item_def */*item*/, bool *show_msgs, bool unmeld)
+{
+    if (!unmeld)
+    {
+        int partner_slot = -1;
+        if (party::has_dawn_dusk_resonance(&partner_slot) && partner_slot >= 0)
+        {
+            if (!show_msgs || *show_msgs)
+            {
+                mprf("Duskweaver answers the heat of %s's Dawnforged!",
+                     party::get_player(partner_slot).your_name.c_str());
+            }
+        }
+        else
+            _equip_mpr(show_msgs, "Duskweaver hums with starlight frost, seeking its solar twin.");
+    }
+    you.redraw_armour_class = true;
+}
+
+static void _DUSKWEAVER_unequip(item_def */*item*/, bool *show_msgs)
+{
+    _equip_mpr(show_msgs, "The lunar chill of Duskweaver subsides.");
+    you.redraw_armour_class = true;
+}
+
+static void _DUSKWEAVER_melee_effects(item_def* /*weapon*/, actor* attacker,
+                                      actor* defender, int dam, melee_attack*)
+{
+    if (!attacker || !attacker->is_player() || !defender || !defender->alive()
+        || dam <= 0 || defender->is_firewood())
+    {
+        return;
+    }
+
+    if (!defender->is_summoned() && one_chance_in(3))
+        inc_mp(1 + random2(2), true);
+
+    int partner_slot = -1;
+    if (party::has_dawn_dusk_resonance(&partner_slot) && partner_slot >= 0
+        && one_chance_in(3))
+    {
+        const player &partner = party::get_player(partner_slot);
+        mprf("The paired blades erupt in frost and fire between you and %s!",
+             partner.your_name.c_str());
+        for (adjacent_iterator ai(defender->pos(), false); ai; ++ai)
+        {
+            monster *mon = monster_at(*ai);
+            if (!mon || mon->wont_attack() || party::is_proxy_monster(*mon))
+                continue;
+            const int burst = 4 + random2(10);
+            mon->hurt(attacker, burst, BEAM_COLD, KILLED_BY_BEAM, "",
+                      "paired fire and frost");
+        }
+    }
+}
+
+////////////////////////////////////////////////////
+// Gauntlets of the Shieldmate
+
+static void _SHIELDMATE_GAUNTLETS_equip(item_def */*item*/, bool *show_msgs,
+                                        bool unmeld)
+{
+    if (!unmeld)
+        _equip_mpr(show_msgs, "Your gauntlets thrum with the sworn oath of the shield-wall.");
+    you.redraw_armour_class = true;
+}
+
+static void _SHIELDMATE_GAUNTLETS_unequip(item_def */*item*/, bool *show_msgs)
+{
+    _equip_mpr(show_msgs, "The oath of the shield-wall fades from your hands.");
+    you.redraw_armour_class = true;
+}
+
+static void _SHIELDMATE_GAUNTLETS_melee_effects(item_def* /*gloves*/,
+                                                actor* attacker,
+                                                actor* defender,
+                                                int dam,
+                                                melee_attack*)
+{
+    if (!party::is_enabled() || !attacker || !attacker->is_player()
+        || !defender || dam <= 0 || defender->is_firewood()
+        || !one_chance_in(3))
+    {
+        return;
+    }
+
+    const int active = party::active_slot();
+    int bolstered = 0;
+    for (int s = 0; s < party::player_count(); ++s)
+    {
+        if (s == active || party::is_player_downed(s))
+            continue;
+        const player &ally = party::get_player(s);
+        if (ally.hp <= 0
+            || ally.where_are_you != you.where_are_you
+            || ally.depth != you.depth
+            || grid_distance(you.pos(), ally.pos()) > 1)
+        {
+            continue;
+        }
+        party::heal_or_buff_party_member(s, 2 + random2(4), DUR_DIVINE_SHIELD, 4, false);
+        ++bolstered;
+    }
+
+    if (bolstered > 0)
+        mpr("Your Shieldmate gauntlets pulse with golden warding across the shield-wall!");
+}
+

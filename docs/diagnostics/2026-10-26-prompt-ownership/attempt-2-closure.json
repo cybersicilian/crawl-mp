@@ -1,0 +1,16 @@
+{
+  "runId": "916d99e3-c905-4b85-ab3b-dafaf801701f",
+  "owner": "codex/01a17b3b-e474-7e71-b44c-78b20124ab32",
+  "label": "DCSS corrected macro and three-owner native validation",
+  "requestedAt": 1793076302.447523,
+  "supervisorPid": 69920,
+  "status": "failed_held",
+  "reservation": true,
+  "requestId": "ffba688d84ab1e3cd980f14dc2c5ab0d7de414d21bc649cba7ec871ae5d23cf1",
+  "startedAt": 1793076302.448658,
+  "workerPid": 69928,
+  "processGroup": 69928,
+  "exitCode": 1,
+  "finishedAt": 1793076315.344467,
+  "supervisedProcessGroupGone": true
+}

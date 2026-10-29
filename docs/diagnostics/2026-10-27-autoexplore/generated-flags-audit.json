@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "all_cpp_and_header_inputs_checked": true,
+  "generated_compiler_metadata_only": true,
+  "changes": {
+    ".cflags": {
+      "before": "99c8b3b35300ab2954437e9bccb1ec0e9e7f263e77a30ebce795812c9f3bfc6f",
+      "after": "074a81e760aaec07167b491e35cbbc5fc90e96f2aa953bbbf91c8484201925db"
+    },
+    "compflag.h": {
+      "before": "87eed406ed55983c08b14bc3eb87b470f489b2903f5d9cc5780ca20255d319ae",
+      "after": "76842d213e53fc171cd1143b4192fa8e5c338cbc76b4ee32968451a6c34b83b1"
+    }
+  }
+}

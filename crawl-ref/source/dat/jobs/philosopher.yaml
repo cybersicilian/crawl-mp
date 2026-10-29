@@ -1,0 +1,21 @@
+enum: JOB_PHILOSOPHER
+name: Philosopher
+short_name: Ph
+category: Adventurer
+category_priority: 65
+str: 0
+int: 12
+dex: 0
+equipment:
+  - "robe"
+  - "hat"
+recommended_species:
+  - naga
+  - spriggan
+  - gale centaur
+skills:
+  fighting: 2
+  spellcasting: 2
+  hexes: 1
+  stealth: 2
+create_enum: false

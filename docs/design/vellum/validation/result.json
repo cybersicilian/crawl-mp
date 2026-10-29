@@ -1,0 +1,62 @@
+{
+  "complete": true,
+  "passed": true,
+  "requestId": "9de545cb57aed4d333974961b0163850b89528fcf0db5632a94a454562bf0430",
+  "results": [
+    {
+      "command": [
+        "make",
+        "-k",
+        "-j2",
+        "WEBTILES=y",
+        "STDFLAG=-std=c++17",
+        "NO_OPTIMIZE=y",
+        "PYTHON=/usr/local/bin/python3",
+        "crawl",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-1.log"
+    },
+    {
+      "command": [
+        "./crawl",
+        "--builddb",
+        "--reset-cache"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-2.log"
+    },
+    {
+      "command": [
+        "./catch2-tests-executable",
+        "[vellum]",
+        "--reporter",
+        "console"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-3.log"
+    },
+    {
+      "command": [
+        "./catch2-tests-executable",
+        "[vellum-balance]",
+        "--reporter",
+        "console"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-4.log"
+    },
+    {
+      "command": [
+        "./catch2-tests-executable",
+        "[pakellas],[oozle],[equipment-memory],[party-session],[save-compatibility],[cooperative-delay]",
+        "--reporter",
+        "console"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-5.log"
+    }
+  ],
+  "snapshot": "/private/tmp/dcss-vellum-baae6b032ea87023"
+}

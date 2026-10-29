@@ -1,0 +1,21 @@
+/* Shared account action for the live lobby and standalone record pages. */
+.site-logout { margin: 0; flex-shrink: 0; }
+.site-logout button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 9px 13px;
+    border: 1px solid #d89b4866;
+    border-radius: 6px;
+    background: transparent;
+    color: #f7deb0;
+    font: 600 12px/1.4 var(--tt-font-ui, system-ui, sans-serif);
+    white-space: nowrap;
+    cursor: pointer;
+}
+.site-logout button:hover { background: #c86d3b24; border-color: #d89b48; }
+.site-logout button:focus-visible { outline: 2px solid #f4cb78; outline-offset: 3px; }
+@media (max-width: 600px) {
+    .site-logout button { padding: 9px 10px; }
+}

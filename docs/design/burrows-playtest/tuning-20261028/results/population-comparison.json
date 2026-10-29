@@ -1,0 +1,444 @@
+[
+  {
+    "place": "Bur:1",
+    "before": {
+      "monsters": 34.833333333333336,
+      "xp": 19972.333333333332,
+      "items": 19.333333333333332,
+      "gold": 80.83333333333333,
+      "artefacts": 0.16666666666666666,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 21,
+        "burrowing beast": 168,
+        "crag boar": 137,
+        "earth elemental": 1,
+        "komodo dragon": 40,
+        "shale drake": 29,
+        "deep troll delver": 22
+      }
+    },
+    "after": {
+      "monsters": 30.333333333333332,
+      "xp": 19989.583333333332,
+      "items": 17.916666666666668,
+      "gold": 82.41666666666667,
+      "artefacts": 0.25,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 1,
+        "burrowing beast": 159,
+        "crag boar": 117,
+        "deep troll delver": 21,
+        "earth elemental": 1,
+        "komodo dragon": 29,
+        "shale drake": 36
+      },
+      "entryNearby3Max": 0
+    }
+  },
+  {
+    "place": "Bur:2",
+    "before": {
+      "monsters": 35.25,
+      "xp": 19647.75,
+      "items": 17.75,
+      "gold": 81.66666666666667,
+      "artefacts": 0.4166666666666667,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 20,
+        "burrowing beast": 151,
+        "crag boar": 101,
+        "deep troll delver": 42,
+        "earth elemental": 18,
+        "killer bee": 12,
+        "shale drake": 62,
+        "komodo dragon": 17
+      }
+    },
+    "after": {
+      "monsters": 34.25,
+      "xp": 21952.333333333332,
+      "items": 15.5,
+      "gold": 83.5,
+      "artefacts": 0.16666666666666666,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 23,
+        "burrowing beast": 145,
+        "crag boar": 101,
+        "deep troll delver": 45,
+        "earth elemental": 10,
+        "killer bee": 12,
+        "shale drake": 57,
+        "komodo dragon": 16,
+        "deep troll": 2
+      },
+      "entryNearby3Max": 5
+    }
+  },
+  {
+    "place": "Bur:3",
+    "before": {
+      "monsters": 39.416666666666664,
+      "xp": 23044.833333333332,
+      "items": 19.416666666666668,
+      "gold": 92,
+      "artefacts": 0.25,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 30,
+        "burrowing beast": 159,
+        "crag boar": 129,
+        "deep troll delver": 55,
+        "earth elemental": 20,
+        "shale drake": 80
+      }
+    },
+    "after": {
+      "monsters": 27.333333333333332,
+      "xp": 17722.166666666668,
+      "items": 15.166666666666666,
+      "gold": 73.41666666666667,
+      "artefacts": 0.16666666666666666,
+      "honey": 0,
+      "rosterTotals": {
+        "boulder beetle": 13,
+        "burrowing beast": 103,
+        "crag boar": 90,
+        "deep troll delver": 47,
+        "earth elemental": 17,
+        "shale drake": 58
+      },
+      "entryNearby3Max": 5
+    }
+  },
+  {
+    "place": "Bur:4",
+    "before": {
+      "monsters": 55.083333333333336,
+      "xp": 33245.583333333336,
+      "items": 25.166666666666668,
+      "gold": 158.33333333333334,
+      "artefacts": 0.5,
+      "honey": 0,
+      "rosterTotals": {
+        "Worldworm": 2,
+        "boulder beetle": 33,
+        "burrowing beast": 196,
+        "crag boar": 154,
+        "deep troll delver": 107,
+        "earth elemental": 14,
+        "shale drake": 141,
+        "catoblepas": 3,
+        "death yak": 6,
+        "cyclops": 1,
+        "deep troll": 4
+      }
+    },
+    "after": {
+      "monsters": 52.083333333333336,
+      "xp": 35379.166666666664,
+      "items": 22.833333333333332,
+      "gold": 138.58333333333334,
+      "artefacts": 0.5,
+      "honey": 0,
+      "rosterTotals": {
+        "Worldworm": 3,
+        "boulder beetle": 44,
+        "burrowing beast": 175,
+        "crag boar": 156,
+        "deep troll": 5,
+        "deep troll delver": 74,
+        "earth elemental": 11,
+        "shale drake": 138,
+        "catoblepas": 6,
+        "death yak": 12,
+        "cyclops": 1
+      },
+      "entryNearby3Max": 10
+    }
+  },
+  {
+    "place": "Hive:1",
+    "before": {
+      "monsters": 56.833333333333336,
+      "xp": 18505.25,
+      "items": 23.666666666666668,
+      "gold": 111.66666666666667,
+      "artefacts": 0.3333333333333333,
+      "honey": 30,
+      "rosterTotals": {
+        "hornet": 50,
+        "killer bee": 270,
+        "meliai": 75,
+        "queen bee": 28,
+        "venom wasp": 118,
+        "wax beetle": 135,
+        "spark wasp": 5,
+        "Vespara": 1
+      }
+    },
+    "after": {
+      "monsters": 46.916666666666664,
+      "xp": 18713.5,
+      "items": 23.666666666666668,
+      "gold": 111.66666666666667,
+      "artefacts": 0.3333333333333333,
+      "honey": 30,
+      "rosterTotals": {
+        "hornet": 46,
+        "killer bee": 141,
+        "meliai": 42,
+        "queen bee": 21,
+        "venom wasp": 133,
+        "wax beetle": 177,
+        "Vespara": 1,
+        "spark wasp": 2
+      },
+      "entryNearby3Max": 0
+    }
+  },
+  {
+    "place": "Hive:2",
+    "before": {
+      "monsters": 77.5,
+      "xp": 37757.333333333336,
+      "items": 23.833333333333332,
+      "gold": 125.58333333333333,
+      "artefacts": 1,
+      "honey": 28.75,
+      "rosterTotals": {
+        "hornet": 57,
+        "killer bee": 184,
+        "meliai": 206,
+        "queen bee": 32,
+        "spark wasp": 155,
+        "venom wasp": 138,
+        "wax beetle": 158
+      }
+    },
+    "after": {
+      "monsters": 64,
+      "xp": 33092.583333333336,
+      "items": 24.5,
+      "gold": 130.33333333333334,
+      "artefacts": 1,
+      "honey": 28.75,
+      "rosterTotals": {
+        "hornet": 63,
+        "killer bee": 79,
+        "meliai": 119,
+        "queen bee": 31,
+        "spark wasp": 100,
+        "venom wasp": 162,
+        "wax beetle": 214
+      },
+      "entryNearby3Max": 0
+    }
+  },
+  {
+    "place": "Worm:1",
+    "before": {
+      "monsters": 23.916666666666668,
+      "xp": 16971,
+      "items": 17.333333333333332,
+      "gold": 86.5,
+      "artefacts": 0.25,
+      "honey": 0,
+      "rosterTotals": {
+        "coil worm": 66,
+        "gallery worm": 74,
+        "great orb of eyes": 1,
+        "lindwurm": 21,
+        "stone giant": 2,
+        "wandering mushroom": 63,
+        "deep troll": 17,
+        "deep troll delver": 18,
+        "earth elemental": 8,
+        "caustic worm": 2,
+        "fungus": 12,
+        "iron troll": 1,
+        "deathcap": 2
+      }
+    },
+    "after": {
+      "monsters": 23.916666666666668,
+      "xp": 16190.166666666666,
+      "items": 17.333333333333332,
+      "gold": 86.5,
+      "artefacts": 0.25,
+      "honey": 0,
+      "rosterTotals": {
+        "coil worm": 49,
+        "gallery worm": 72,
+        "lindwurm": 26,
+        "stone giant": 2,
+        "wandering mushroom": 79,
+        "caustic worm": 2,
+        "deep troll": 22,
+        "deep troll delver": 15,
+        "earth elemental": 5,
+        "deathcap": 2,
+        "fungus": 12,
+        "iron troll": 1
+      },
+      "entryNearby3Max": 0
+    }
+  },
+  {
+    "place": "Worm:2",
+    "before": {
+      "monsters": 35.25,
+      "xp": 26698,
+      "items": 18.333333333333332,
+      "gold": 110.25,
+      "artefacts": 0.16666666666666666,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 32,
+        "coil worm": 93,
+        "deathcap": 22,
+        "deep troll": 42,
+        "deep troll earth mage": 13,
+        "earth elemental": 11,
+        "gallery worm": 105,
+        "lindwurm": 9,
+        "wandering mushroom": 45,
+        "deep troll delver": 17,
+        "fungus": 6,
+        "iron troll": 19,
+        "deep troll shaman": 5,
+        "great orb of eyes": 3,
+        "Old Coil": 1
+      }
+    },
+    "after": {
+      "monsters": 35.333333333333336,
+      "xp": 26202.333333333332,
+      "items": 17.583333333333332,
+      "gold": 105.66666666666667,
+      "artefacts": 0.25,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 27,
+        "coil worm": 83,
+        "earth elemental": 11,
+        "gallery worm": 116,
+        "lindwurm": 20,
+        "wandering mushroom": 88,
+        "deep troll": 33,
+        "deep troll delver": 18,
+        "fungus": 6,
+        "iron troll": 17,
+        "deathcap": 4,
+        "Old Coil": 1
+      },
+      "entryNearby3Max": 4
+    }
+  },
+  {
+    "place": "Worm:3",
+    "before": {
+      "monsters": 56.583333333333336,
+      "xp": 42744.5,
+      "items": 21.666666666666668,
+      "gold": 124,
+      "artefacts": 0.6666666666666666,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 38,
+        "coil worm": 123,
+        "deathcap": 54,
+        "deep troll": 83,
+        "deep troll delver": 13,
+        "deep troll earth mage": 38,
+        "deep troll shaman": 26,
+        "earth elemental": 13,
+        "gallery worm": 135,
+        "great orb of eyes": 14,
+        "iron dragon": 6,
+        "iron troll": 65,
+        "wandering mushroom": 50,
+        "stone giant": 11,
+        "lindwurm": 7,
+        "fungus": 3
+      }
+    },
+    "after": {
+      "monsters": 45.5,
+      "xp": 32163.333333333332,
+      "items": 21.25,
+      "gold": 144.66666666666666,
+      "artefacts": 0.3333333333333333,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 32,
+        "coil worm": 91,
+        "deathcap": 18,
+        "deep troll": 35,
+        "earth elemental": 17,
+        "gallery worm": 136,
+        "iron dragon": 2,
+        "iron troll": 37,
+        "lindwurm": 28,
+        "wandering mushroom": 130,
+        "deep troll delver": 9,
+        "stone giant": 8,
+        "fungus": 3
+      },
+      "entryNearby3Max": 5
+    }
+  },
+  {
+    "place": "Worm:4",
+    "before": {
+      "monsters": 58.083333333333336,
+      "xp": 43322.666666666664,
+      "items": 24.666666666666668,
+      "gold": 168.33333333333334,
+      "artefacts": 0.75,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 32,
+        "coil worm": 96,
+        "deathcap": 78,
+        "deep troll": 119,
+        "deep troll earth mage": 42,
+        "deep troll shaman": 24,
+        "earth elemental": 18,
+        "gallery worm": 129,
+        "great orb of eyes": 23,
+        "iron dragon": 16,
+        "iron troll": 74,
+        "stone giant": 18,
+        "wandering mushroom": 25,
+        "lindwurm": 3
+      }
+    },
+    "after": {
+      "monsters": 56.416666666666664,
+      "xp": 41398.083333333336,
+      "items": 24.166666666666668,
+      "gold": 166.75,
+      "artefacts": 0.75,
+      "honey": 0,
+      "rosterTotals": {
+        "caustic worm": 36,
+        "coil worm": 116,
+        "deathcap": 39,
+        "deep troll": 36,
+        "earth elemental": 12,
+        "gallery worm": 145,
+        "iron dragon": 26,
+        "iron troll": 38,
+        "lindwurm": 52,
+        "stone giant": 35,
+        "wandering mushroom": 140,
+        "deep troll earth mage": 2
+      },
+      "entryNearby3Max": 0
+    }
+  }
+]

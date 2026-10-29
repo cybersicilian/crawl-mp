@@ -1,0 +1,16 @@
+{
+  "file": "tileweb-party.cc",
+  "fix": "Promote the vision byte to int for std::max; preserve the existing radius calculation.",
+  "sources": [
+    {
+      "source": "working",
+      "before": "1fae04b733b6be172cf1ab58c700ff6062cf2246a0be7261937d2be43d5dd647",
+      "after": "5d00ee82d2cd0b94e22da551b86b63ece69ae720f138cda72c2724e03298ab5e"
+    },
+    {
+      "source": "isolated",
+      "before": "162f2d088b2840313546aae8a6a9b84f1fe2beb1832cf42c90cfb38126c3aa3c",
+      "after": "7c90f41c00b4414f2c973cb3fd7f242eaad3bc589f8276c2bdad839864eefe2b"
+    }
+  ]
+}

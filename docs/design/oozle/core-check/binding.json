@@ -1,0 +1,29 @@
+{
+  "owner": "codex/01a15523-0d2a-7a92-b63a-f7e2469fd2fe",
+  "preparedAt": 1792432585.705652,
+  "scope": "Standalone equipment-memory core; existing hash-bound Catch2 object reused",
+  "compileJobs": 1,
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy",
+  "capacity": {
+    "logicalCpus": 18,
+    "loadAverage": [
+      7.2392578125,
+      11.8798828125,
+      24.8125
+    ]
+  },
+  "inputs": {
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/equipment-memory.h": "7c635d95e60afdaa3b1d08e6708bc6cfc07aa8e4c7354fef30516df9e5bf26aa",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/equipment-memory.cc": "560a4950a95a0baf44f9aa60a4eebe4ba648bd963227b3c90d6898114ad7ff26",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/artefact-prop-type.h": "6ecefbac0e10b7c41470d9310a39431e9ee88cf14cbf4b0a4dd93b1bc50cc0d1",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/item-prop-enum.h": "1504c802367c25d295e5d3b1fe1d5b06bf19068e5e9da0df712efb305d4bdd96",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/tag-version.h": "e0bd4740eabdda86665f03ff8d542ffc41c01f780f3ed40d8a4b5c59363a85ee",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/macros.h": "35f8deb47270369c567171c44cb403f264296d6f07d0558cea40f8c0a2ed2caf",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/catch2-tests/test_equipment_memory.cc": "b5fb886867e8e9a62ee9f052bc6f89f7d65aa5b7d53587df5155cbad84a112bc",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/catch2-tests/catch_amalgamated.hpp": "6420f3abd84d7b5242151459bf268f744a00ee5f2f6297f2954aca09038a13ef",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/catch2-tests/catch_amalgamated.cc": "713d9ed6fab7637984c930a76375bfd2729dbe979bebee4455abd9b884e4a27e",
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/catch2-tests/catch_amalgamated.o": "84a9180dbd11da3829b00dfaecef11d45ed34524670776e3ec771d797d5672ee",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/oozle/run_memory_core_checks.py": "c7ba4538d79b34234eedfa32188c289db8028ce6cedfd58e1256441038a273d2"
+  }
+}

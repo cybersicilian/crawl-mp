@@ -1,0 +1,41 @@
+{
+  "cacheSha256": "ed5a2ea67bd76448a8ba93efa77a3894a335a75bcefded327e647f898441974e",
+  "commands": [
+    [
+      "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+      "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/verify_browser.py"
+    ]
+  ],
+  "createdAt": 1792785544.707205,
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "inputs": {
+    "live-browser-aux.tar.gz": "1eb260f3d731f17a5ce24471b2e2995057d54635c9fde8d0753e2082063e32b0",
+    "live-browser-tests.tar.gz": "e9a8a214d0611cd3f416d931994dbf4381d7c495e19e48f089a331de8567ea3c",
+    "overlay-manifest.json": "fb3cb4f869481b9ed2f81cd9bd51901aee10152933a0646bb1e02d85d2b8cb65",
+    "overlay.tar.gz": "650c286839ad22bde1bb510dbf0db637496bc121ab5fb9cc97b69064c3448300",
+    "refresh_species.py": "250a4dcb0e1c695bb2fd912e8f60c6010b1d32a741f020aed868cfaef456be37",
+    "validate_final.py": "3633760e89776842e421ab97517a52cfbdaa33b2d79d7ff12d807687ae119236",
+    "validate_merged.py": "4b669d944f51887ce1c98d0c2c3617ba3e520c3b92cc89158ee16aa1f434c4e9",
+    "verify-browser.cjs": "27b7d92e69b6381fd28d45392ee51dfb6919839d27ef9f6dddfec7f486fe95cc",
+    "verify_browser.py": "19e4a90bbe3b69e22ec979d11317aa091d9777fe23091773a7392a123554ceb1",
+    "verify_creation.py": "2ec167441f5d0fdc418178aa171b762315af3b92268c3636a1edd8f361bb6252",
+    "verify_vellum_actions.cjs": "48374868ff9f2bcef626e3c93f6ea179e6718bd454f714b0bd43a4f7e619c464"
+  },
+  "notClaimed": [
+    "Linux runtime",
+    "production deployment"
+  ],
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "resourceBinding": {
+    "browserInstances": 1,
+    "makeJobs": 2,
+    "phases": "sequential"
+  },
+  "reusedNativeEvidence": {
+    "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/merged-validation-5/result.json",
+    "sha256": "fb032560680e2032f7b3d822c793a99aa6222882a8673b994b9f9244ff9e6bb4"
+  },
+  "runtime": "/private/tmp/dcss-content-qa-01a16a0f-6",
+  "scope": "Private exact merged native build, contracts, catalog and real two-owner browser save/resume",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy"
+}

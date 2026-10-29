@@ -1,0 +1,19 @@
+name: "deep dwarf"
+glyph: {char: "g", colour: white}
+flags: [fighter, speaks, warm_blood]
+resists: {neg: 1}
+exp: 520
+will: 80
+attacks:
+ - {type: hit, damage: 18}
+hd: 9
+hp_10x: 680
+ac: 6
+ev: 10
+has_corpse: false
+shout: shout
+intelligence: human
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: deep_dwarf

@@ -2250,3 +2250,13 @@ icy_wall_overlay3
 
 rime_wall0 DNGN_WALL_FRIGID
 rime_wall1
+
+# Diggable clay-packed rock; undiggable shale stays visibly distinct.
+%sdir dngn/wall
+%weight 10
+wall_burrows0 WALL_BURROWS
+wall_burrows1
+wall_burrows2
+wall_burrows3
+stone_wall_burrows0 STONE_WALL_BURROWS
+stone_wall_burrows1

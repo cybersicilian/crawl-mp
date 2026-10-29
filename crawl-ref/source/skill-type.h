@@ -62,7 +62,8 @@ enum skill_type
     SK_INVOCATIONS,
     SK_EVOCATIONS,
     SK_SHAPESHIFTING,
-    SK_LAST_SKILL = SK_SHAPESHIFTING,
+    SK_AURAMANCY,
+    SK_LAST_SKILL = SK_AURAMANCY,
     NUM_SKILLS,                        // must remain last regular member
 
     SK_BLANK_LINE,                     // used for skill output

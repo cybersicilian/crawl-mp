@@ -1,0 +1,27 @@
+{
+  "build": "caster",
+  "seed": "2026102701",
+  "exitCode": 124,
+  "timedOut": true,
+  "completed": false,
+  "death": false,
+  "audits": [],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "setup 12",
+    "setup 13",
+    "setup 14",
+    "setup 15"
+  ],
+  "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c"
+}

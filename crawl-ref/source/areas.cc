@@ -23,6 +23,7 @@
 #include "message.h"
 #include "mon-behv.h"
 #include "mutation.h"
+#include "party.h"
 #include "religion.h"
 #include "stepdown.h"
 #include "terrain.h"
@@ -144,6 +145,76 @@ static void _update_agrid()
     _actor_areas(&you);
     for (monster_iterator mi; mi; ++mi)
         _actor_areas(*mi);
+
+    if (party::is_enabled())
+    {
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == party::active_slot() || party::is_player_downed(i))
+                continue;
+            const player &member = party::get_player(i);
+            if (member.where_are_you != you.where_are_you
+                || member.depth != you.depth
+                || !in_bounds(member.pos()))
+            {
+                continue;
+            }
+
+            if (member.religion == GOD_SHINING_ONE
+                && !member.penance[GOD_SHINING_ONE])
+            {
+                const int r = min((int)member.piety(), piety_breakpoint(5))
+                              * member.normal_vision / piety_breakpoint(5);
+                if (r >= 0)
+                {
+                    if (party::are_gods_concordant(GOD_SHINING_ONE, you.religion)
+                        && !(you.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                    {
+                        _apply_area(member.pos(), r, area_type::halo);
+                    }
+                    else
+                    {
+                        const auto rel = party::get_god_political_relation(
+                            GOD_SHINING_ONE, you.religion);
+                        if ((rel == party::pantheon_relation_type::RIVAL
+                             || rel == party::pantheon_relation_type::ANATHEMA
+                             || (you.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                            && grid_distance(member.pos(), you.pos()) <= r
+                            && cell_see_cell(member.pos(), you.pos(), LOS_DEFAULT))
+                        {
+                            // Backlight the Rival/Anathema player without illuminating monsters for them!
+                            _set_agrid_flag(you.pos(), area_type::halo);
+                            no_areas = false;
+                        }
+                    }
+                }
+            }
+            else if (member.religion == GOD_DITHMENOS
+                     && !member.penance[GOD_DITHMENOS]
+                     && member.piety() >= piety_breakpoint(0))
+            {
+                const int r = dithmenos_umbra_radius(member.piety(), member.normal_vision);
+                if (party::are_gods_concordant(GOD_DITHMENOS, you.religion))
+                    _apply_area(member.pos(), r, area_type::umbra);
+                else
+                {
+                    const auto rel = party::get_god_political_relation(
+                        GOD_DITHMENOS, you.religion);
+                    if (rel == party::pantheon_relation_type::RIVAL
+                        || rel == party::pantheon_relation_type::ANATHEMA)
+                    {
+                        // Shroud monsters in shadow against Rival/Anathema teammates without cloaking the player!
+                        for (radius_iterator ri(member.pos(), r, C_SQUARE, LOS_DEFAULT); ri; ++ri)
+                        {
+                            if (*ri != you.pos())
+                                _set_agrid_flag(*ri, area_type::umbra);
+                        }
+                        no_areas = false;
+                    }
+                }
+            }
+        }
+    }
 
     if ((player_has_orb() || you.unrand_equipped(UNRAND_CHARLATANS_ORB)))
         _apply_area(you.pos(), 2, area_type::orb);
@@ -446,7 +517,47 @@ bool silenced(const coord_def& p)
 
 bool haloed(const coord_def& p)
 {
-    return _update_and_check_agrid(p, area_type::halo);
+    if (_update_and_check_agrid(p, area_type::halo))
+        return true;
+
+    if (party::is_enabled() && map_bounds(p))
+    {
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == party::active_slot() || party::is_player_downed(i))
+                continue;
+            const player &member = party::get_player(i);
+            if (member.where_are_you == you.where_are_you
+                && member.depth == you.depth
+                && in_bounds(member.pos())
+                && member.religion == GOD_SHINING_ONE
+                && !member.penance[GOD_SHINING_ONE])
+            {
+                const int r = min((int)member.piety(), piety_breakpoint(5))
+                              * member.normal_vision / piety_breakpoint(5);
+                if (r >= 0 && grid_distance(member.pos(), p) <= r
+                    && cell_see_cell(member.pos(), p, LOS_DEFAULT))
+                {
+                    if (party::are_gods_concordant(GOD_SHINING_ONE, you.religion)
+                        && !(you.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                    {
+                        return true;
+                    }
+                    const auto rel = party::get_god_political_relation(
+                        GOD_SHINING_ONE, you.religion);
+                    if (p == you.pos()
+                        && (rel == party::pantheon_relation_type::RIVAL
+                            || rel == party::pantheon_relation_type::ANATHEMA
+                            || (you.holiness() & (MH_UNDEAD | MH_DEMONIC))))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 bool actor::haloed() const
@@ -510,12 +621,12 @@ int monster::halo_radius() const
     int size = -1;
 
     item_def* wpn = mslot_item(MSLOT_WEAPON);
-    if (wpn && is_unrandom_artefact(*wpn, UNRAND_EOS))
+    if (wpn && has_unrand_effect(*wpn, UNRAND_EOS))
         size = max(size, 3);
 
     item_def* alt_wpn = mslot_item(MSLOT_ALT_WEAPON);
     if (mons_wields_two_weapons(*this) && alt_wpn
-        && is_unrandom_artefact(*alt_wpn, UNRAND_EOS))
+        && has_unrand_effect(*alt_wpn, UNRAND_EOS))
     {
         size = max(size, 3);
     }
@@ -614,7 +725,9 @@ int player::umbra_radius() const
 
     if (have_passive(passive_t::umbra))
     {
-        if (piety() >= piety_breakpoint(4))
+        if (religion == GOD_DITHMENOS)
+            size = dithmenos_umbra_radius(piety(), normal_vision);
+        else if (piety() >= piety_breakpoint(4))
             size = 4;
         else if (piety() >= piety_breakpoint(3))
             size = 3;
@@ -642,18 +755,18 @@ int monster::umbra_radius() const
         size = ghost_umbra_radius();
 
     item_def* wpn = mslot_item(MSLOT_WEAPON);
-    if (wpn && is_unrandom_artefact(*wpn, UNRAND_BRILLIANCE))
+    if (wpn && has_unrand_effect(*wpn, UNRAND_BRILLIANCE))
         size = max(size, 3);
 
     item_def* alt_wpn = mslot_item(MSLOT_ALT_WEAPON);
     if (mons_wields_two_weapons(*this) && alt_wpn
-        && is_unrandom_artefact(*alt_wpn, UNRAND_BRILLIANCE))
+        && has_unrand_effect(*alt_wpn, UNRAND_BRILLIANCE))
     {
         size = max(size, 3);
     }
 
     item_def* ring = mslot_item(MSLOT_JEWELLERY);
-    if (ring && is_unrandom_artefact(*ring, UNRAND_SHADOWS))
+    if (ring && has_unrand_effect(*ring, UNRAND_SHADOWS))
         size = max(size, 3);
 
     // Death knights get a small umbra.

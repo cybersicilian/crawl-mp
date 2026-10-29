@@ -1,0 +1,24 @@
+{
+  "reservationId": "707c5cc8-4329-47f8-8546-ab69a74a39a7",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "707c5cc8-4329-47f8-8546-ab69a74a39a7",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS corrected baseline and six paired encounter replays",
+      "requestedAt": 1793196917.379915,
+      "supervisorPid": 89864,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "b6a69d5099665f5b754d6740aba676eb271a42680721e17d3a172c07eb88252e",
+      "startedAt": 1793196917.3801868,
+      "workerPid": 89865,
+      "processGroup": 89865,
+      "exitCode": 0,
+      "finishedAt": 1793197102.408017,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "b6a69d5099665f5b754d6740aba676eb271a42680721e17d3a172c07eb88252e"
+  }
+}

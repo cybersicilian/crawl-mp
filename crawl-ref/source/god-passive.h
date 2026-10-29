@@ -10,6 +10,7 @@
 #include "player.h"
 
 class monster;
+struct bolt;
 class dist;
 
 // Passive god abilities.
@@ -79,6 +80,9 @@ enum class passive_t
 
     /// You have an umbra.
     umbra,
+
+    /// You emit clouds of smoke when injured.
+    hit_smoke,
 
     /// Your shadow attacks alongside you.
     shadow_attacks,
@@ -298,7 +302,8 @@ monster* create_player_shadow(coord_def pos, bool friendly = true,
                               spell_type spell_known = SPELL_NO_SPELL);
 void dithmenos_shadow_melee(actor* target);
 void dithmenos_shadow_shoot(const coord_def& targ, missile_type thrown_projectile = NUM_MISSILES);
-void dithmenos_shadow_spell(spell_type spell);
+void dithmenos_shadow_spell(const bolt& original, spell_type spell);
+int dithmenos_umbra_radius(int piety, int vision);
 
 void uskayaw_prepares_audience();
 void uskayaw_bonds_audience();

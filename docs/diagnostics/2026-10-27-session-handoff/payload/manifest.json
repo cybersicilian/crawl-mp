@@ -1,0 +1,20 @@
+{
+  "baseline_release": "/opt/dcss/releases/tav-lobby-fix-01a17f43",
+  "baseline_runtime_sha256": "1facc2035325e5fdc9511098377d1304d7b92169e1bbead6b0d0aeb3d4e8fdd3",
+  "files": {
+    "session_recovery_test.py": "988a165bade8773e8f86219742ed89a84804e6eee0a3e86848d3f60748e3f49b",
+    "session_handoff_test.py": "50ce188db99f78db387223a3486ea19cdd3a329a3ee2dfa6cea802b90d08a19e",
+    "session_recovery.py": "92c2936274612a1ae88234be8ecf5f086083f93a45e70e4f6e25a0a9c0824d99"
+  },
+  "runtime_overlay": {
+    "session_recovery.py": "crawl-ref/source/webserver/webtiles/session_recovery.py"
+  },
+  "validation": {
+    "focused_python_tests_passed": 21,
+    "socket_lifecycle_passed": true,
+    "two_real_websocket_connections": true,
+    "native_engine": "controlled process fixture; no native game played",
+    "original_runtime_reproduces_reported_error": true
+  },
+  "production_deployed": false
+}

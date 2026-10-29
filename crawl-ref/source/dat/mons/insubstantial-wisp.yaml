@@ -1,0 +1,19 @@
+name: "insubstantial wisp"
+glyph: {char: "v", colour: lightgrey}
+flags: [flies, see_invis, insubstantial, batty]
+resists: {elec: 1, fire: 2, cold: 2}
+exp: 235
+holiness: [nonliving]
+will: invuln
+attacks:
+ - {type: touch, flavour: blink, damage: 12}
+hd: 7
+hp_10x: 250
+ac: 5
+ev: 16
+shout: moan
+intelligence: brainless
+speed: 12
+size: tiny
+shape: orb
+tile: will_o_the_wisp

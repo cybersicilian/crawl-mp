@@ -1,0 +1,25 @@
+# Preserve independently managed applications on a shared host.
+import /etc/caddy/apps/*.caddy
+
+dcss.iancaltabiano.com {
+    encode zstd gzip
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options SAMEORIGIN
+    }
+    @foreignSocket {
+        path /socket
+        header Origin *
+        not header Origin https://dcss.iancaltabiano.com
+    }
+    respond @foreignSocket 403
+    handle /healthz {
+        root * /var/lib/dcss-health
+        rewrite * /status.json
+        file_server
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8080
+    }
+}

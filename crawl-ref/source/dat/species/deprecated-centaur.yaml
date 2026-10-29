@@ -2,7 +2,7 @@ TAG_MAJOR_VERSION: 34
 enum: SP_CENTAUR
 monster: MONS_CENTAUR
 name: Centaur
-difficulty: False
+difficulty: Simple
 species_flags:
   - small_torso
   - barding
@@ -51,5 +51,18 @@ mutations:
     MUT_FAST: 2
     MUT_DEFORMED: 1
     MUT_HOOVES: 3
+recommended_jobs:
+  - hunter
+  - gladiator
+  - fighter
+  - berserker
+  - brigand
+  - warper
+recommended_weapons:
+  - polearms
+  - long blades
+  - axes
+  - maces and flails
+  - staves
 
 orc_name: Centorc

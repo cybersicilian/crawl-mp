@@ -1,0 +1,382 @@
+Route_melee
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(0, 0, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(4, 8, Bur:1)
+  a scroll of identify
+(10, -42, Bur:1)
+  a +0 long sword
+(13, -41, Bur:1)
+  a burrowing beast skeleton
+(14, -40, Bur:1)
+  a crag boar skeleton
+(16, -7, Bur:1)
+  a parchment of Martyr's Knell
+(16, 9, Bur:1)
+  a +0 leather armour
+(17, -41, Bur:1)
+  a +0 battleaxe
+  a crag boar skeleton
+(17, -25, Bur:1)
+  a +0 short sword
+(17, 5, Bur:1)
+  a +0 rapier
+(23, -25, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(26, -25, Bur:1)
+  a +0 dagger
+(30, 4, Bur:1)
+  a +0 chain mail
+(32, -10, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(32, 6, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(37, -6, Bur:1)
+  a +0 scale mail
+(37, 6, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(44, -30, Bur:1)
+  a scroll of noise
+(45, -17, Bur:1)
+  a +0 robe
+(46, -33, Bur:1)
+  a shale drake corpse (skeletalised by now)
+
+Level 2 of the Burrows
+(0, 0, Bur:2)
+  a +0 chain mail
+(2, 19, Bur:2)
+  a crag boar skeleton
+(2, 20, Bur:2)
+  a crag boar skeleton
+(8, 4, Bur:2)
+  a wand of charming (5)
+(8, 51, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(13, 5, Bur:2)
+  a crag boar skeleton
+(14, 5, Bur:2)
+  a burrowing beast skeleton
+(14, 6, Bur:2)
+  a crag boar skeleton
+(17, 34, Bur:2)
+  a shale drake skeleton
+(20, 17, Bur:2)
+  a crag boar skeleton
+(20, 18, Bur:2)
+  a burrowing beast skeleton
+(21, 29, Bur:2)
+  a crag boar skeleton
+(22, 24, Bur:2)
+  a +0 troll leather armour
+  a deep troll skeleton
+(22, 30, Bur:2)
+  a crag boar skeleton
+(23, 38, Bur:2)
+  a scroll of identify
+(24, 27, Bur:2)
+  a deep troll skeleton
+(24, 28, Bur:2)
+  a crag boar skeleton
+(25, 40, Bur:2)
+  a burrowing beast skeleton
+(27, 41, Bur:2)
+  a shale drake skeleton
+(29, 37, Bur:2)
+  a crag boar skeleton
+(29, 42, Bur:2)
+  a crag boar skeleton
+(42, 16, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(43, 51, Bur:2)
+  a +0 dagger
+(44, 24, Bur:2)
+  5 poisoned darts
+
+Level 3 of the Burrows
+(4, -38, Bur:3)
+  a crag boar skeleton
+(4, -37, Bur:3)
+  a +0 troll leather armour
+  a crag boar skeleton
+  a deep troll skeleton
+(4, -34, Bur:3)
+  a crag boar skeleton
+(5, -36, Bur:3)
+  a burrowing beast skeleton
+  a shale drake skeleton
+(5, -35, Bur:3)
+  a shale drake skeleton
+(5, -33, Bur:3)
+  a deep troll skeleton
+(7, -16, Bur:3)
+  3 javelins
+(10, -23, Bur:3)
+  a burrowing beast skeleton
+(14, -17, Bur:3)
+  4 large rocks
+(19, -17, Bur:3)
+  a shale drake skeleton
+(19, -16, Bur:3)
+  a burrowing beast skeleton
+(30, -21, Bur:3)
+  a burrowing beast skeleton
+(32, -20, Bur:3)
+  a crag boar skeleton
+(33, -32, Bur:3)
+  a crag boar corpse (skeletalised by now)
+(36, -37, Bur:3)
+  a crag boar skeleton
+(39, -35, Bur:3)
+  a burrowing beast skeleton
+(41, -35, Bur:3)
+  a +0 cloak
+(43, -47, Bur:3)
+  a +0 shortbow
+(44, -46, Bur:3)
+  a crag boar skeleton
+
+Level 4 of the Burrows
+(0, 0, Bur:4)
+  a +0 troll leather armour
+  a deep troll skeleton
+(15, 13, Bur:4)
+  a crag boar skeleton
+(15, 18, Bur:4)
+  a burrowing beast skeleton
+(16, 19, Bur:4)
+  a +0 troll leather armour
+  a deep troll skeleton
+(17, 15, Bur:4)
+  a parchment of Soul Splinter
+(21, 17, Bur:4)
+  a parchment of Summon Ice Beast
+(22, 42, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+(29, 0, Bur:4)
+  a +0 scale mail
+(30, 25, Bur:4)
+  a +0 arbalest
+(30, 29, Bur:4)
+  5 curare-tipped darts
+(32, -5, Bur:4)
+  a +0 scale mail
+(33, 9, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+  a deep troll skeleton
+(35, 1, Bur:4)
+  a scroll of identify
+(35, 36, Bur:4)
+  a crag boar corpse (skeletalised by now)
+(36, 8, Bur:4)
+  a +0 troll leather armour
+  a deep troll skeleton
+(36, 16, Bur:4)
+  a shale drake skeleton
+(36, 17, Bur:4)
+  a burrowing beast skeleton
+(40, 3, Bur:4)
+  a burrowing beast skeleton
+(41, 1, Bur:4)
+  a burrowing beast skeleton
+(48, -10, Bur:4)
+  a crag boar skeleton
+(51, -12, Bur:4)
+  a crag boar skeleton
+(52, -12, Bur:4)
+  a burrowing beast skeleton
+(56, -6, Bur:4)
+  a crag boar corpse (skeletalised by now)
+(62, 2, Bur:4)
+  a burrowing beast skeleton
+(63, 2, Bur:4)
+  a burrowing beast skeleton
+
+Level 1 of the Wormlands
+(4, 32, Worm:1)
+  a scroll of identify
+(5, 30, Worm:1)
+  a lindwurm skeleton
+(6, 31, Worm:1)
+  4 large rocks
+(27, 1, Worm:1)
+  a +0 leather armour
+(41, 26, Worm:1)
+  a lindwurm skeleton
+(46, 8, Worm:1)
+  a lindwurm skeleton
+(47, 4, Worm:1)
+  a +0 giant spiked club
+(50, 9, Worm:1)
+  a +0 leather armour
+(61, 39, Worm:1)
+  a +0 robe
+(62, 42, Worm:1)
+  a potion of moonshine
+
+Level 2 of the Wormlands
+(0, 0, Worm:2)
+  a +0 buckler
+(12, -16, Worm:2)
+  a +0 falchion
+(14, -1, Worm:2)
+  a +0 rapier
+(16, -18, Worm:2)
+  a +0 chain mail
+(26, 5, Worm:2)
+  a +0 dagger
+(30, -4, Worm:2)
+  4 silver javelins
+(31, -27, Worm:2)
+  2 scrolls of identify
+(35, -20, Worm:2)
+  a staff of earth
+(44, -14, Worm:2)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+(45, -14, Worm:2)
+  a deep troll corpse (skeletalised by now)
+(45, -12, Worm:2)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+
+Level 3 of the Wormlands
+(0, 0, Worm:3)
+  a +0 ring mail
+(4, -8, Worm:3)
+  a gallery worm corpse
+(9, -4, Worm:3)
+  a gallery worm corpse
+(13, -6, Worm:3)
+  a scroll of identify
+(24, -10, Worm:3)
+  a +0 dagger
+(25, -16, Worm:3)
+  a gallery worm corpse
+(25, -11, Worm:3)
+  a +0 troll leather armour
+  a deep troll corpse
+(27, -17, Worm:3)
+  21 gold pieces
+(28, -13, Worm:3)
+  a +0 troll leather armour
+  an iron troll corpse
+(29, -12, Worm:3)
+  a +0 troll leather armour
+  a coil worm corpse
+  a deep troll corpse
+(33, -12, Worm:3)
+  a +0 robe
+(34, -12, Worm:3)
+  the eel talisman of Dishonour {-Tele rPois Dex-3 Slay+4}
+    [eel talisman]
+    -Tele:     It prevents most forms of teleportation.
+    rPois:     It protects you from poison.
+    Dex-3:     It affects your dexterity (-3).
+    Slay+4:    It affects your accuracy & damage with ranged weapons and melee
+    (+4).
+  (unseen)
+(39, 18, Worm:3)
+  a +0 troll leather armour
+  a deep troll skeleton
+(40, 17, Worm:3)
+  a +0 troll leather armour
+  a deep troll skeleton
+(40, 18, Worm:3)
+  a +0 troll leather armour
+  a +0 troll leather armour
+  an iron troll skeleton
+  a deep troll skeleton
+
+Level 1 of the Hive
+(18, 6, Hive:1)
+  a +2 vampiric dagger
+(19, -1, Hive:1)
+  a +0 broad axe
+(22, -3, Hive:1)
+  a +0 pair of gloves
+(24, 35, Hive:1)
+  a +0 leather armour of cold resistance
+  a +0 war axe
+(25, 35, Hive:1)
+  a +0 war axe
+  a +0 leather armour
+(25, 36, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(31, 18, Hive:1)
+  a +0 leather armour
+(31, 37, Hive:1)
+  a +0 hand axe
+  a +0 robe
+(34, 17, Hive:1)
+  a +0 war axe
+  a +0 robe
+  a +0 hand axe
+  a +0 robe
+(35, 15, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(37, 11, Hive:1)
+  a +0 leather armour
+(37, 37, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(37, 39, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(50, 12, Hive:1)
+  the mist talisman of Kyvopren {rPois Int-3 Dex+2}
+    [mist talisman]
+    rPois:     It protects you from poison.
+    Int-3:     It affects your intelligence (-3).
+    Dex+2:     It affects your dexterity (+2).
+(52, 5, Hive:1)
+  a +1 cutlass of holy wrath
+(53, 44, Hive:1)
+  3 poisoned darts
+
+Level 2 of the Hive
+(2, 11, Hive:2)
+  a +0 war axe
+  a +0 leather armour
+(17, -22, Hive:2)
+  a +0 hand axe
+  a +0 fustibalus
+  a +0 leather armour
+(17, -21, Hive:2)
+  a +2 war axe of flaming
+  a +0 leather armour
+(21, -10, Hive:2)
+  a +0 war axe
+  a +0 robe
+(42, -9, Hive:2)
+  a +0 lajatang
+(46, -20, Hive:2)
+  the eel talisman of the Lemon {Rampage Str+4}
+    [eel talisman]
+    Rampage:   It causes one to take an extra step when moving towards enemies,
+               briefly stunning them if this results in an attack.
+    Str+4:     It affects your strength (+4).
+(47, 10, Hive:2)
+  a +1 antimagic orcbow
+(48, -24, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+(49, -23, Hive:2)
+  a +1 war axe of draining
+  a +0 hand axe
+  a +0 leather armour
+  a +0 leather armour
+(52, -16, Hive:2)
+  a +0 chain mail
+(60, -7, Hive:2)
+  a +0 mace
+(64, -6, Hive:2)
+  a scroll of identify
+(64, -4, Hive:2)
+  a +0 ring mail
+

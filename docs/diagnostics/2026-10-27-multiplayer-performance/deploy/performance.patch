@@ -1,0 +1,63 @@
+--- player_stream.py
++++ player_stream.py
+@@ -5,8 +5,9 @@
+ """
+ import json
+ 
+-from webtiles.state_transport import append_snapshot
++from webtiles.state_transport import append_snapshot, changed_fields
+ from webtiles.map_snapshot import MapSnapshot
++from webtiles.player_update import merge_player, player_update
+ 
+ 
+ class PlayerStreams:
+@@ -57,6 +58,7 @@
+         receiver.personal_stream = self
+         receiver.personal_packets = {}
+         receiver.personal_center = None
++        receiver.personal_map_metadata = {}
+         receiver.party_view_floor = None
+         receiver.last_party_snapshot = None
+ 
+@@ -134,15 +136,30 @@
+             return
+         if kind in {"map", "player", "record_identity"}:
+             previous = getattr(receiver, "personal_packets", {})
++            prior = previous.get(kind)
+             baseline = (floor, packet)
+-            if previous.get(kind) == baseline:
++            if kind != "player" and prior == baseline:
+                 return
+             # Native projections are immutable after ingestion. Share their
+             # baseline between same-character sessions without copying maps.
+             previous[kind] = baseline
+             receiver.personal_packets = previous
++            if kind == "player" and prior is not None and prior[0] == floor:
++                packet = player_update(prior[1], packet)
++                if packet is None:
++                    return
+         if kind == "map":
+             packet = dict(packet)
++            # Sequence/work counters describe native projection, not a visual
++            # change. Empty projections must not repaint every idle teammate.
++            metadata = {key: value for key, value in packet.items()
++                        if key not in {"cells", "clear", "view_seq", "view_work"}}
++            same_floor = getattr(receiver, "party_view_floor", None) == floor
++            old_metadata = receiver.personal_map_metadata if same_floor else {}
++            metadata_changed = bool(changed_fields(old_metadata, metadata))
++            receiver.personal_map_metadata = dict(old_metadata, **metadata)
++            if same_floor and not packet.get("clear") and not packet.get("cells") and not metadata_changed:
++                return
+             if "vgrdc" in packet:
+                 center = (floor, packet["vgrdc"].get("x"), packet["vgrdc"].get("y"))
+                 if getattr(receiver, "personal_center", None) == center:
+@@ -191,6 +208,9 @@
+             self.control.views[slot] = payload
+             self._share_expedition_facts(payload, slot, receivers, send)
+         if kind in self.projected or kind in {"input_mode", "ui_state"}:
++            if kind == "player":
++                previous = self.cached.get(slot, {}).get(kind)
++                payload = merge_player(previous[0] if previous is not None and previous[1] == floor else {}, payload)
+             self.cached.setdefault(slot, {})[kind] = (payload, floor)
+         if kind == "map":
+             self.maps.setdefault(slot, MapSnapshot()).update(payload, floor)

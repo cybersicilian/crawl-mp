@@ -1,0 +1,12 @@
+/* Party actors already have cards; other nearby creatures use a quiet list. */
+#normal #monster_list {
+    display: block; box-sizing: border-box; flex: 0 0 auto;
+    height: auto !important; min-height: 0 !important; max-height: 72px !important;
+    padding: 3px 8px; margin: 0; overflow-x: hidden; overflow-y: auto;
+    background: transparent; border: 0; border-top: 1px solid #ae925628;
+    box-shadow: none; font-size: 10px;
+}
+#normal #monster_list:empty { display: none; }
+#normal #monster_list .group { display: flex; align-items: center; gap: 4px; min-height: 22px; padding: 1px 0; }
+#normal #monster_list .picture { flex: 0 0 auto; width: auto !important; height: 22px !important; max-width: 132px; image-rendering: pixelated; }
+#normal #monster_list .name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

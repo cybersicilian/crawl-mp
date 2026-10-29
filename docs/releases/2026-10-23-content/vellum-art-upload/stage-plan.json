@@ -1,0 +1,16 @@
+{
+  "actual_changed_files": 110,
+  "authorized_utc": "2026-10-23T21:58:36.282540+00:00",
+  "created_utc": "2026-10-23T19:38:49.369169+00:00",
+  "expected_current": "/opt/dcss/releases/20261023T190229Z-stats-website",
+  "expected_native_sha256": "4be647f2df085bd578004a27c79bc998a9000bf26bcf0cd0a90e727324548e21",
+  "human_authorization": "Yes, upload the reviewed Chain Devil, Eldritch, and Vellum release to dcss-coop-server in chuk-437319, then finish Linux validation and deploy it please.",
+  "overlay_archive_sha256": "3718354f6d7f6646b49b710f80646b71f1df018d03b834d2342fa42bc5ae5539",
+  "overlay_manifest_sha256": "5eff4c47e74f5a6b47aaaf5a9f60bedc9cdd6b46e781fe4a270bc892bb130ef4",
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "production_mutation_authorized": true,
+  "review_patch": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/release.patch",
+  "review_patch_sha256": "09a162d6e95d23a394524f4af761d7ca76ca22da22e8616b7e2434a11028232e",
+  "stage": "/opt/dcss/staging/content-01a16a0f-v1",
+  "targeting_fix": "Chain Lash opens ordinary chooser when caller passes an uninitialized dist; cancel remains free."
+}

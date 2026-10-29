@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "existing_saves_used": false,
+  "checks": {
+    "optimized": {
+      "exit_code": 0
+    },
+    "save-compatibility": {
+      "exit_code": 0
+    }
+  }
+}

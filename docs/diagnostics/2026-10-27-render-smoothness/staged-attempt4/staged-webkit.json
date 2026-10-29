@@ -1,0 +1,62 @@
+{
+  "passed": false,
+  "phase": "staged",
+  "engine": "webkit",
+  "checks": [
+    "All six exact optimization assets loaded in the native game",
+    "Enhanced dungeon and cached fog edges render at Retina resolution"
+  ],
+  "errors": [],
+  "assets": {
+    "webserver/game_data/static/dungeon_renderer.js": {
+      "sha256": "ca235bf39bde2e2049e08bec126e656e46b0933268b47ee5300d0dc302664e5c",
+      "url": "https://dcss.iancaltabiano.com/gamedata/c61c9ec6c57fc5e43b80f89538c2716c6c37cd37/dungeon_renderer.js?v=1fc19cf5612cb783593b"
+    },
+    "webserver/game_data/static/party.js": {
+      "sha256": "6f69945030bfcd193386612d89b9e47245ca314ae03ac6f54d8545ae3463d8a4",
+      "url": "https://dcss.iancaltabiano.com/gamedata/c61c9ec6c57fc5e43b80f89538c2716c6c37cd37/party.js?v=1fc19cf5612cb783593b"
+    },
+    "webserver/game_data/static/party-navigation.js": {
+      "sha256": "cbbcbc8833a1a898393c3476d3b6b76510f71ce5b2ab7b50f84d68181d3da318",
+      "url": "https://dcss.iancaltabiano.com/gamedata/c61c9ec6c57fc5e43b80f89538c2716c6c37cd37/party-navigation.js?v=1fc19cf5612cb783593b"
+    },
+    "webserver/game_data/static/party-card-readings.js": {
+      "sha256": "bb45453e2b28af715f84f1cb88f137e9bdbfae7a13a00d5a892d7c37ae351217",
+      "url": "https://dcss.iancaltabiano.com/gamedata/c61c9ec6c57fc5e43b80f89538c2716c6c37cd37/party-card-readings.js?v=1fc19cf5612cb783593b"
+    },
+    "webserver/game_data/static/party-sidebar.js": {
+      "sha256": "e787c4fd54b04a3b6e58aad9c8f8c1f717378e76c9b6d5e00d4d5b13df0859e2",
+      "url": "https://dcss.iancaltabiano.com/gamedata/c61c9ec6c57fc5e43b80f89538c2716c6c37cd37/party-sidebar.js?v=1fc19cf5612cb783593b"
+    },
+    "webserver/static/scripts/visibility-feather.js": {
+      "sha256": "647001da1bf6a0d4aa1c1f6ecd9d9f177cf7d8775ed569b54db57a631acd4838",
+      "url": "https://dcss.iancaltabiano.com/static/scripts/visibility-feather.js?v=1fc19cf5612cb783593b"
+    }
+  },
+  "game_id": "e813e777-feac-4221-9b97-4c875be376a9",
+  "fixture_recovery_waits": 0,
+  "before_action": [
+    {
+      "slot": 0,
+      "turns": 26,
+      "can_act": true,
+      "aut_clock": 280
+    },
+    {
+      "slot": 1,
+      "turns": 4,
+      "can_act": true,
+      "aut_clock": 280
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(await page.locator('#inspection_dialog').evaluate(node => node.contains(document.activeElement)))\n\n    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs:137:9\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:541:9)",
+  "guest_snapshot": {
+    "controlled": 1,
+    "members": 2,
+    "hash": "#expedition-e813e777-feac-4221-9b97-4c875be376a9",
+    "messages": "0\nD:1\n0\n107 ms\nYield\noExplore\nTabAuto-fight\n5Rest\ngPick up\nMenu\nEsc\nCommon hotkeys\n↖\ny\n7\n↑\nk\n8\n↗\nu\n9\n←\nh\n4\n→\nl\n6\n↙\nb\n1\n↓\nj\n2\n↘\nn\n3\nDungeon zoom 100%\nCenter camera\nOn this tile\nPick up g\n\nNothing to pick up here.\n\nZOT\n8.1kt\n×1\nEnemies0\nAllies0\nNeutrals0\nNo nearby creatures\nIn sync\nP2\nPerf1mvr3l91d\n1\nD:1\n\nHP 10/10\nMP 6/6\n75\n1.0\nInspect\nCenter camera\n0%\n2\n11\n0\n4\n22\n13\n0\n0\n0\n0\n0\n0\n4\n0\nAbilities & spells\n1 known\nSpell library\n3 spells · 0 can memorize\na1 MP\nInventory\n2 / 52\na◆\ng\nP1\nPerf0mvr3l91d\n\n1\nD:1\n6\n8\n4\nHP 19/19\nMP 0/0\n0\n1.0\nNavigate to\nInspect\nTrade\nCenter camera\n0%\n20\n5\n9\n0\n0\n0\n0\n0\n0\n3\n0\nInventory\n4 / 52\na◆\nb◆\nc◆\nm2\nLook\nDanger\nLoot\nStairs\nPlan\nGo\nWait +\nClear · Esc\nShift-click a route, or Plan actions"
+  },
+  "graphics_restored": true,
+  "cleanup_error": "TimeoutError: locator.click: Timeout 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#dock_session_menu')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" class=\"dcss-dock-btn\" id=\"dock_session_menu\" aria-haspopup=\"dialog\" aria-keyshortcuts=\"Escape\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" closedby=\"any\" id=\"inspection_dialog\" aria-labelledby=\"inspection_heading\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <dialog open=\"\" closedby=\"any\" id=\"inspection_dialog\" aria-labelledby=\"inspection_heading\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    173 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m        - element is visible, enabled and stable\u001b[22m\n\u001b[2m        - scrolling into view if needed\u001b[22m\n\u001b[2m        - done scrolling\u001b[22m\n\u001b[2m        - <dialog open=\"\" closedby=\"any\" id=\"inspection_dialog\" aria-labelledby=\"inspection_heading\">…</dialog> intercepts pointer events\u001b[22m\n\u001b[2m      - retrying click action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n",
+  "test_game_saved": false
+}

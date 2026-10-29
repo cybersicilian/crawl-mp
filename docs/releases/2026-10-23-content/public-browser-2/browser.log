@@ -1,0 +1,10 @@
+Ordinary fresh Chain Devil and Eldritch games expose native powers and visible Defiance
+All ten served Vellum/species/ability sprites match the finished native pixels exactly
+Actual native map dolls and initial ability tiles select the new species artwork
+Both human owners take real native actions independently
+page.waitForFunction: Timeout 20000ms exceeded.
+    at ready (/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/browser-support/webserver/tests/multiplayer-native-client.cjs:48:16)
+    at /Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/release-browser.cjs:113:19 {
+  log: [],
+  name: 'TimeoutError'
+}

@@ -1,10 +1,11 @@
 define(["jquery", "exports", "comm", "client", "key_conversion", "./dungeon_renderer",
         "./display", "./minimap", "./enums", "./messages", "./options",
-        "./mouse_control", "./text", "./menu", "./action_panel",  "./player",
-        "./ui","./ui-layouts"],
+        "./mouse_control", "./party", "./party-inspector", "./party-rpg-stats", "library-ui", "./game-context", "./hud-layout", "./text", "./menu", "./action_panel",  "./player",
+        "./ui","./ui-layouts", "./adventure-ui", "./direction-pad"],
 function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
-        minimap, enums, messages, options, mouse_control) {
+        minimap, enums, messages, options, mouse_control, party, inspector, rpgStats, library, context, hud) {
     "use strict";
+    var game = context;
 
     var layout_parameters = null, ui_state, input_mode;
     var stat_width = 42;
@@ -69,6 +70,8 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
     {
         layout_parameters = null;
         ui_state = -1;
+        input_mode = undefined;
+        library.set_ready(false);
         options.clear();
         setup_keycodes();
     }
@@ -100,15 +103,10 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         var state = ui_state;
         set_ui_state(enums.ui.NORMAL);
 
-        // Determine width of stats area
-
-        var old_stats = $("#stats").contents().detach();
-        var s = "";
-        for (var i = 0; i < enums.stat_width; i++)
-            s = s + "&nbsp;";
-        $("#stats").html(s);
-        var stat_width_px = $("#stats").outerWidth();
-        $("#stats").empty().append(old_stats);
+        // Deliberate sidebar width, independent of terminal glyph metrics.
+        var stat_width_px = hud.sidebarWidth();
+        var remaining_width = window_width - stat_width_px;
+        $("#left_column").width(remaining_width);
 
         // Determine height of messages area
 
@@ -116,7 +114,7 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         // embedded in here on an input box.
         var old_messages = $("#messages").clone(true);
         var old_scroll_top = $("#messages_container").scrollTop();
-        s = "";
+        var s = "";
         for (var i = 0; i < msg_height+1; i++)
             s = s + "<br>";
         $("#messages").html(s);
@@ -124,14 +122,15 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         $("#messages").replaceWith(old_messages);
         $("#messages_container").scrollTop(old_scroll_top);
 
-        var remaining_width = window_width - stat_width_px;
-        var remaining_height = window_height - msg_height_px;
+        var log_frame = $("#message_pane").outerHeight() - $("#message_pane").height();
+        var remaining_height = Math.max(1, window_height - hud.messageHeight(Math.max(88, msg_height_px + log_frame)) - hud.height());
 
         layout_parameters.remaining_width = remaining_width;
         layout_parameters.remaining_height = remaining_height;
 
         // Position controls
         client.set_layer("normal");
+        $("#left_column").width(remaining_width);
         $("#messages_container").css({
             "max-height": msg_height_px*msg_height/(msg_height+1),
             "width": remaining_width
@@ -139,10 +138,11 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         dungeon_renderer.fit_to(remaining_width, remaining_height,
                                 show_diameter);
 
-        minimap.fit_to(stat_width_px, layout_parameters);
+        minimap.fit_to($("#hud_minimap").width() || stat_width_px, layout_parameters);
 
-        $("#stats").width(stat_width_px);
-        $("#monster_list").width(stat_width_px);
+        $("#stats").not(".hud-floating").not(".party-self-details #stats").outerWidth(stat_width_px);
+        $("#party_hud").not(".hud-floating").outerWidth(stat_width_px);
+        $("#monster_list").outerWidth(stat_width_px);
         $("#mobile_input input").width(remaining_width-12); // 2*padding+2*border
 
         // Go back to the old layer
@@ -212,7 +212,7 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
                 $("#right_column").hide();
             }
             if (options.get("tile_level_map_hide_messages") === true) {
-                height = layout_parameters.window_height - 5;
+                height = layout_parameters.window_height - hud.height() - 5;
                 messages.hide();
             }
             $(".action-panel").hide();
@@ -257,6 +257,7 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
             toggle_full_window_dungeon_view(true);
             break;
         }
+        $(document).trigger("game_ui_changed", [ui_state]);
     }
 
     function handle_set_layout(data)
@@ -296,10 +297,22 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
     {
         if (mode == input_mode) return;
         input_mode = mode;
+        $(document).trigger("game_input_changed", [mode]);
+        library.set_ready(mode === enums.mouse_mode.COMMAND);
         dungeon_renderer.update_mouse_mode(input_mode);
         if (mode == enums.mouse_mode.COMMAND)
             messages.new_command();
     }
+
+    game.set_view_zoom = function(factor) {
+        if (!Number.isFinite(factor) || factor < .5 || factor > 4) return false;
+        dungeon_renderer.viewport_zoom = factor;
+        if (layout_parameters) {
+            layout($.extend({}, layout_parameters), true);
+            display.invalidate(true); display.display(); minimap.update_overlay();
+        }
+        return true;
+    };
 
     game.get_input_mode = function() { return input_mode; }
     game.get_ui_state = function() { return ui_state; }
@@ -329,6 +342,8 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
     function handle_set_input_mode(data)
     {
         set_input_mode(data.mode);
+        if (data.mode === enums.mouse_mode.COMMAND && Number.isInteger(data.plan_id))
+            $(document).trigger("game_command_boundary", [data.plan_id, data.plan_turns]);
     }
 
     function handle_delay(data)
@@ -484,6 +499,9 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
     }
 
     $(document).ready(function () {
+        inspector.ensure();
+        inspector.tooltips();
+        inspector.hotkeys();
         $(window)
             .off("resize.game")
             .on("resize.game", function () {
@@ -496,6 +514,13 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         });
     });
 
+    $(document).on("game_init.hudLayout", function () {
+        hud.observe(function () {
+            if (layout_parameters && ui_state === enums.ui.NORMAL)
+                layout($.extend({}, layout_parameters), true);
+        });
+    }).on("game_cleanup.hudLayout", hud.stop);
+
     comm.register_handlers({
         "delay": handle_delay,
         "version": handle_version,
@@ -503,8 +528,11 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         "ui_state": handle_set_ui_state,
         "ui_cutoff": handle_set_ui_cutoff,
         "input_mode": handle_set_input_mode,
+        "party_state": party.state,
+        "party_ping": party.ping,
     });
 
     // ugly circular reference breaking
     mouse_control.game = game;
+    $.extend(exports, game);
 });

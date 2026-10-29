@@ -1,0 +1,24 @@
+enum: JOB_NECKBEARD
+name: Neckbeard
+short_name: Nb
+category: Warrior
+category_priority: 55
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "robe"
+  - "hat"
+  - "cloak"
+  - "long sword plus:-4"
+recommended_species:
+  - human
+  - minotaur
+  - merfolk
+skills:
+  fighting: 2
+  dodging: 2
+  long blades: 3
+  spellcasting: 1
+  translocations: 2
+create_enum: false

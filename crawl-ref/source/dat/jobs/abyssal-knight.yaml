@@ -1,0 +1,27 @@
+TAG_MAJOR_VERSION: 34
+enum: JOB_ABYSSAL_KNIGHT
+name: "Abyssal Knight"
+short_name: AK
+category: Zealot
+category_priority: 62
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "leather armour plus:1"
+  - "scroll of blinking"
+weapon_choice: plain
+recommended_species:
+  - hill orc
+  - demonspawn
+  - troll
+  - draconian
+  - merfolk
+  - gnoll
+skills:
+  fighting: 3
+  armour: 1
+  dodging: 1
+  invocations: 3
+  weapon: 2
+create_enum: false

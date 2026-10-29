@@ -248,7 +248,6 @@ BRAND:   SPWPN_FREEZING
 DESCRIP: Prune:     It halves damage taken while paralysed, petrified or
  unconscious.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    sword of Power
 OBJ:     OBJ_WEAPONS/WPN_GREAT_SWORD
 PLUS:    +9
@@ -257,8 +256,8 @@ TILE:    spwpn_sword_of_power
 TILE_EQ: SWORD_OF_POWER
 VALUE:   800
 BRAND:   SPWPN_VALOUR
-BOOL:    deleted
-# end TAG_MAJOR_VERSION
+DESCRIP: Valour:    In co-op, striking foes at 80% or more health has a chance
+ to heal adjacent living party members.
 
 NAME:    staff of Olgreb
 INSCRIP: rPois∞
@@ -331,7 +330,6 @@ VALUE:   1200
 DBRAND:  Torment:   It occasionally torments all nearby living foes when it
  strikes in combat.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    sword of Zonguldrok
 OBJ:     OBJ_WEAPONS/WPN_DOUBLE_SWORD
 PLUS:    +9
@@ -341,8 +339,6 @@ TILE_EQ: ZONGULDROK
 BRAND:   SPWPN_REAPING
 FB_BRAND: SPWPN_PAIN
 VALUE:   800
-BOOL:    deleted
-# end TAG_MAJOR_VERSION
 
 NAME:    sword of Cerebov
 APPEAR:  great serpentine sword
@@ -393,7 +389,6 @@ TILE:    urand_faerie
 TILE_EQ: FAERIE_DRAGON_ARMOUR
 BOOL:    nogen, no_upgrade
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    demon blade "Bloodbane"
 OBJ:     OBJ_WEAPONS/WPN_DEMON_BLADE
 PLUS:    +8
@@ -401,12 +396,8 @@ COLOUR:  ETC_DARK
 TILE:    urand_bloodbane
 TILE_EQ: BLOODBANE
 BRAND:   SPWPN_DRAINING
-ANGRY:   5
-BOOL:    deleted
 STEALTH: -1
-# end TAG_MAJOR_VERSION
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    scimitar of Flaming Death
 OBJ:     OBJ_WEAPONS/WPN_SCIMITAR
 INSCRIP: sticky flame,
@@ -417,9 +408,8 @@ TILE_EQ: FLAMING_DEATH
 BRAND:   SPWPN_FLAMING
 FIRE:    2
 COLD:    -1
-BOOL:    poison, skip_ego, deleted
+BOOL:    poison, skip_ego
 WILL:    1
-# end TAG_MAJOR_VERSION
 
 NAME:     eveningstar "Brilliance"
 OBJ:      OBJ_WEAPONS/WPN_EVENINGSTAR
@@ -446,7 +436,6 @@ BOOL:    drain, harm, skip_ego
 DBRAND:  Evervamp:  It heals its wielder for a portion of the damage dealt every
  time it strikes a living foe.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    dagger of Chilly Death
 OBJ:     OBJ_WEAPONS/WPN_DAGGER
 INSCRIP: flash freeze,
@@ -458,10 +447,8 @@ BRAND:   SPWPN_FREEZING
 FIRE:    -1
 COLD:    2
 WILL:    1
-BOOL:    poison, skip_ego, deleted
-# end TAG_MAJOR_VERSION
+BOOL:    poison, skip_ego
 
-# start TAG_MAJOR_VERSION == 34
 NAME:     dagger "Morg"
 OBJ:      OBJ_WEAPONS/WPN_DAGGER
 PLUS:     +4
@@ -471,8 +458,6 @@ TILE_EQ:  MORG
 BRAND:    SPWPN_PAIN
 INT:      5
 WILL:     1
-BOOL:     deleted
-# end TAG_MAJOR_VERSION
 
 NAME:    scythe "Finisher"
 OBJ:     OBJ_WEAPONS/WPN_HALBERD
@@ -591,7 +576,6 @@ BOOL:    elec
 DESCRIP: Halo:      It grants its wielder a halo, revealing invisible creatures
  and increasing accuracy against all within it other than the wielder.
 
-# start TAG_MAJOR_VERSION == 34
 # Was "spear of Voo-Doo". In the African origin, there is a distinction
 # between voodoo and bo, the latter dealing with curses, witchcraft and
 # spells designed to do harm. Priests (or rather sorcerers) of bo are
@@ -607,8 +591,7 @@ BRAND:    SPWPN_REAPING
 FB_BRAND: SPWPN_PAIN
 HP:       -6
 LIFE:     1
-BOOL:     poison, deleted
-# end TAG_MAJOR_VERSION
+BOOL:     poison, enh_hexes
 
 NAME:      trident of the Octopus King
 OBJ:       OBJ_WEAPONS/WPN_TRIDENT
@@ -660,7 +643,6 @@ BOOL:     seeinv
 INSCRIP:  Acc+∞
 DESCRIP:  Acc+∞:     It never misses its target.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    longbow "Piercer"
 OBJ:     OBJ_WEAPONS/WPN_LONGBOW
 PLUS:    +7
@@ -669,23 +651,20 @@ TILE:    urand_piercer
 TILE_EQ: GREAT_BOW
 BRAND:   SPWPN_PENETRATION
 EV:      -2
-BOOL:    deleted
-# end TAG_MAJOR_VERSION
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:    BLOWGUN_ASSASSIN
-NAME:    blowgun of the Assassin
+NAME:    shortbow of the Assassin
 INSCRIP: stab,
-OBJ:     OBJ_WEAPONS/WPN_BLOWGUN
+OBJ:     OBJ_WEAPONS/WPN_SHORTBOW
 # fallback is just to prevent errors
 FALLBACK: OBJ_WEAPONS/WPN_LONGBOW
 PLUS:    +6
 COLOUR:  ETC_DEATH
 TILE:    urand_blowgun
 TILE_EQ: GREAT_BOW
+BRAND:   SPWPN_VENOM
 STEALTH: 2
-BOOL:    inv, tilerim, deleted
-# end TAG_MAJOR_VERSION
+BOOL:    inv, tilerim
 
 NAME:    lance "Wyrmbane"
 OBJ:     OBJ_WEAPONS/WPN_SPEAR
@@ -756,7 +735,6 @@ BOOL:    poison
 DBRAND:  Curare:    It occasionally inflicts asphyxiating poison on those it
  strikes, dealing poison damage and causing slowness.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:     knife of Accuracy
 OBJ:      OBJ_WEAPONS/WPN_DAGGER
 TYPE:     knife
@@ -764,10 +742,8 @@ PLUS:     +27
 COLOUR:   LIGHTCYAN
 TILE:     urand_knife_of_accuracy
 TILE_EQ:  KNIFE_OF_ACCURACY
-BOOL:     tilerim, deleted
-# end TAG_MAJOR_VERSION
+BOOL:     tilerim
 
-# start TAG_MAJOR_VERSION == 34
 # A play on the spell of the same name. Colour taken from crystal walls.
 ENUM:     CRYSTAL_SPEAR
 NAME:     Lehudib's crystal spear
@@ -777,8 +753,6 @@ COLOUR:   GREEN
 TILE:     urand_crystal_spear
 TILE_EQ:  CRYSTAL_SPEAR
 INT:      3
-BOOL:     deleted
-# end TAG_MAJOR_VERSION
 
 ENUM:     CAPTAIN
 NAME:     captain's cutlass
@@ -837,7 +811,6 @@ STEALTH:  1
 BOOL:     seeinv
 DESCRIP:  Quiet:      All noise in your surroundings is dampened.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    tower shield "Bullseye"
 OBJ:     OBJ_ARMOUR/ARM_TOWER_SHIELD
 PLUS:    +15
@@ -845,8 +818,8 @@ COLOUR:  RED
 TILE:    urand_bullseye
 TILE_EQ: KITE_SHIELD_BULLSEYE
 EV:      -5
-BOOL:    deleted
-# end TAG_MAJOR_VERSION
+DESCRIP: Vanguard:  In co-op, when monsters are in sight, nearby living party
+ members within 2 tiles periodically receive a resistance boost.
 
 NAME:    crown of Dyrovepreva
 OBJ:     OBJ_ARMOUR/ARM_HAT
@@ -883,7 +856,6 @@ EV:        5
 BOOL:      harm, slow, corrode
 MAX_LEVEL: 11
 
-# start TAG_MAJOR_VERSION == 34
 NAME:     cloak of Flash
 OBJ:      OBJ_ARMOUR/ARM_CLOAK
 PLUS:     +3
@@ -891,8 +863,7 @@ COLOUR:   ETC_FLASH
 TILE:     urand_flash
 TILE_EQ:  RED
 EV:       4
-BOOL:     fly, deleted
-# end TAG_MAJOR_VERSION
+BOOL:     fly
 
 ENUM:     HOOD_ASSASSIN
 NAME:     hood of the Assassin
@@ -1110,7 +1081,6 @@ VALUE:   400
 DESCRIP: Umbra:     It surrounds you with an aura of shadow, increasing your
  stealth and reducing the accuracy of all others within it.
 
-# start TAG_MAJOR_VERSION == 34
 NAME:    amulet of Cekugob
 OBJ:     OBJ_JEWELLERY/AMU_ACROBAT
 COLOUR:  ETC_SILVER
@@ -1118,8 +1088,7 @@ TILE:    urand_cekugob
 AC:      1
 EV:      1
 LIFE:    2
-BOOL:    elec, poison, notelep, deleted
-# end TAG_MAJOR_VERSION
+BOOL:    elec, poison, notelep
 
 NAME:    amulet of Tranquillity
 OBJ:     OBJ_JEWELLERY/AMU_NOTHING
@@ -1325,18 +1294,15 @@ VALUE:    400
 INSCRIP:  Ring+
 DESCRIP:  Ring+:   It enables you to equip an extra ring.
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:     SPIDER
 NAME:     boots of the spider
 OBJ:      OBJ_ARMOUR/ARM_BOOTS
 TILE:     urand_spider
 TILE_EQ:  SPIDER
 PLUS:     +3
-BRAND:    SPARM_JUMPING
+BRAND:    SPARM_RAMPAGING
 COLOUR:   LIGHTMAGENTA
 STEALTH:  1
-BOOL:     deleted
-# end TAG_MAJOR_VERSION
 
 NAME:     dark maul
 OBJ:      OBJ_WEAPONS/WPN_GREAT_MACE
@@ -1350,7 +1316,6 @@ BASE_DAM: +20
 BASE_DELAY: +7
 BRAND:    SPWPN_HEAVY
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:    HIGH_COUNCIL
 NAME:    hat of the High Council
 INSCRIP: Wiz-
@@ -1361,8 +1326,6 @@ TILE_EQ: WIZARD_LIGHTGREEN
 PLUS:    +2
 BRAND:   SPARM_ARCHMAGI
 STEALTH: -1
-BOOL:    deleted
-# end TAG_MAJOR_VERSION
 
 NAME:     arc blade
 INSCRIP:  discharge,
@@ -1461,7 +1424,6 @@ PLUS:    8
 BRAND:   SPWPN_PROTECTION
 FB_BRAND: SPWPN_FREEZING
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:    ETHERIC_CAGE
 NAME:    Maxwell's etheric cage
 OBJ:     OBJ_ARMOUR/ARM_HELMET
@@ -1471,11 +1433,9 @@ TILE_EQ: ETHERIC_CAGE
 INSCRIP: RegenMP+
 PLUS:    +0
 MP:      +4
-BOOL:    mutate, elec, chaotic, deleted
+BOOL:    mutate, elec, chaotic
 VALUE:   400
-# end TAG_MAJOR_VERSION
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:    ETERNAL_TORMENT
 NAME:    crown of Eternal Torment
 OBJ:     OBJ_ARMOUR/ARM_HAT
@@ -1485,8 +1445,7 @@ TILE:    urand_eternal_torment
 TILE_EQ: ETERNAL_TORMENT
 INSCRIP: rTorment HP--
 LIFE:    3
-BOOL:    evil, seeinv, drain, deleted
-# end TAG_MAJOR_VERSION
+BOOL:    evil, seeinv, drain
 
 ENUM:    VINES
 NAME:    robe of Vines
@@ -1527,7 +1486,6 @@ BOOL:    fly, noises
 DBRAND:  Freezing Cloud: It occasionally leaves clouds of freezing vapour upon
  striking a foe, and grants immunity to clouds of freezing vapour.
 
-# start TAG_MAJOR_VERSION == 34
 ENUM:     TALOS
 NAME:     armour of Talos
 OBJ:      OBJ_ARMOUR/ARM_PLATE_ARMOUR
@@ -1537,8 +1495,8 @@ TILE_EQ:  TALOS
 COLOUR:   ETC_FIRE
 BRAND:    SPARM_PONDEROUSNESS
 FIRE:     1
-BOOL:     deleted
-# end TAG_MAJOR_VERSION
+DESCRIP:  Vanguard:  In co-op, when monsters are in sight, nearby living party
+ members within 2 tiles periodically receive a might boost.
 
 ENUM:     WARLOCK_MIRROR
 NAME:     warlock's mirror
@@ -2133,9 +2091,103 @@ DESCRIP: Mist:   It may create clouds of spectral mist when the wearer attacks
  a greater chance to produce spectral mist.
 MAX_LEVEL: 11
 
+ENUM:    AEGIS_OF_FELLOWSHIP
+NAME:    kite shield "Aegis of Fellowship"
+OBJ:     OBJ_ARMOUR/ARM_KITE_SHIELD
+PLUS:    +4
+COLOUR:  ETC_SILVER
+TILE:    urand_resistance
+TILE_EQ: KITE_SHIELD_OF_RESISTANCE
+AC:      3
+BOOL:    rcorr
+INSCRIP: Bulwark
+DESCRIP: Bulwark:   It projects half of its bearer's shielding to adjacent allies,
+ and grants an additional shield block each turn for every adjacent ally.
+
+ENUM:    CONDUIT_STAFF
+NAME:    quarterstaff "Conduit Staff"
+OBJ:     OBJ_WEAPONS/WPN_QUARTERSTAFF
+PLUS:    +7
+COLOUR:  ETC_ELECTRICITY
+TILE:    urand_meek
+TILE_EQ: STAFF_MAGE2
+BRAND:   SPWPN_ELECTROCUTION
+INT:     4
+WILL:    1
+BOOL:    elec
+INSCRIP: Siphon, Ley-Pulse
+DBRAND:  Siphon:    Striking foes in melee channels a surge of mana to nearby
+ allies in sight.
+DESCRIP: Ley-Pulse: Casting spells restores mana to nearby allies within four
+ tiles.
+
+ENUM:    TWIN_SOUL_RING
+NAME:    ring of Twin Souls
+OBJ:     OBJ_JEWELLERY/RING_SLAYING
+PLUS:    +4
+COLOUR:  ETC_GOLD
+TILE:    urand_shadows
+EV:      4
+FIRE:    1
+COLD:    1
+INSCRIP: TwinSoul
+DESCRIP: TwinSoul:  While an ally is in sight within six tiles, both you and your
+ nearest visible ally gain +3 Slaying, +3 AC, and enhanced health and magic
+ regeneration. Melee attacks against foes in your partner's sight unleash a
+ resonant flare and mend your partner's wounds.
+
+ENUM:    DAWNFORGED
+NAME:    broad axe "Dawnforged"
+OBJ:     OBJ_WEAPONS/WPN_BROAD_AXE
+PLUS:    +9
+COLOUR:  ETC_FIRE
+TILE:    urand_arga
+TILE_EQ: ARGA
+BRAND:   SPWPN_FLAMING
+FIRE:    2
+STR:     3
+INSCRIP: Flame, Paired
+DBRAND:  Flame: Striking foes sears them with fire, and if an ally
+ in sight wields Duskweaver, the paired enchantments erupt in fire and frost.
+DESCRIP: Paired: While an ally in sight wields Duskweaver, both wielders
+ gain +4 Slaying and +4 AC.
+
+ENUM:    DUSKWEAVER
+NAME:    demon blade "Duskweaver"
+OBJ:     OBJ_WEAPONS/WPN_DEMON_BLADE
+PLUS:    +9
+COLOUR:  ETC_ICE
+TILE:    urand_bloodbane
+TILE_EQ: BLOODBANE
+BRAND:   SPWPN_FREEZING
+COLD:    2
+DEX:     3
+INSCRIP: Rime, Paired
+DBRAND:  Rime: Striking foes chills their essence and siphons mana, and if
+ an ally in sight wields Dawnforged, the paired enchantments erupt in fire
+ and frost.
+DESCRIP: Paired: While an ally in sight wields Dawnforged, both wielders
+ gain +4 Slaying and +4 AC.
+
+ENUM:    SHIELDMATE_GAUNTLETS
+NAME:    gauntlets of the Shieldmate
+OBJ:     OBJ_ARMOUR/ARM_GLOVES
+PLUS:    +3
+COLOUR:  ETC_GOLD
+TILE:    urand_war
+TILE_EQ: GLOVE_BLACK
+AC:      3
+SH:      4
+STR:     3
+INSCRIP: Shieldmate
+DESCRIP: Shieldmate: Melee attacks bolster adjacent living companions with
+ Shielding and mending, and while standing beside a companion you gain +3 AC
+ and +3 Slaying.
+
 # This entry must always be last.
 ENUM:   DUMMY2
 NAME:   DUMMY UNRANDART 2
 OBJ:    OBJ_UNASSIGNED/250
 PLUS:   250
 COLOUR: BLACK
+

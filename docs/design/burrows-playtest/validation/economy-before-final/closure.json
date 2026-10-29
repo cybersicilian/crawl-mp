@@ -1,0 +1,24 @@
+{
+  "reservationId": "f78c3c3b-abb8-4c03-8a21-8e0a4a075d52",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "f78c3c3b-abb8-4c03-8a21-8e0a4a075d52",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS native XP parity survey economy-before-final",
+      "requestedAt": 1793149953.229729,
+      "supervisorPid": 48894,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "34743086e4b7bff2cc4ce00247e22027f48612143ece53251b0eb665868700eb",
+      "startedAt": 1793149953.2305012,
+      "workerPid": 48898,
+      "processGroup": 48898,
+      "exitCode": 0,
+      "finishedAt": 1793150048.0889401,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "34743086e4b7bff2cc4ce00247e22027f48612143ece53251b0eb665868700eb"
+  }
+}

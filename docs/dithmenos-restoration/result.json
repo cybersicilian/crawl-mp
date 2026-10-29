@@ -1,0 +1,87 @@
+{
+  "status": "implemented_and_focused_native_checks_passed",
+  "features": [
+    "Piety-scaled umbra and nightvision at one star",
+    "Shadow Step at two stars",
+    "Bleed smoke at three stars",
+    "Transient melee/ranged/targeted-spell mimic at four stars",
+    "Shadow Form at five stars, including invisibility, willpower, damage reduction, smoke, drain and offensive penalties",
+    "Saved hotkey and quiver migration",
+    "Native and WebTiles descriptions/icons"
+  ],
+  "validation": {
+    "engine": "isolated macOS arm64 NOWIZARD test executable",
+    "dithmenos": {
+      "cases": 8,
+      "assertions": 1917,
+      "passed": true
+    },
+    "saveCompatibility": {
+      "cases": 2,
+      "assertions": 22,
+      "passed": true
+    },
+    "webArtSyntax": "node --check passed",
+    "workingDithmenosFilesMatchTestedSnapshot": true,
+    "scope": "Frozen engine baseline with the scoped Dithmenos sources; subsequent unrelated renderer/test-manifest work is outside this acceptance."
+  },
+  "auxiliaryCompileFix": {
+    "file": "tileweb-party.cc",
+    "fix": "Promote the vision byte to int for std::max; preserve the existing radius calculation.",
+    "sources": [
+      {
+        "source": "working",
+        "before": "1fae04b733b6be172cf1ab58c700ff6062cf2246a0be7261937d2be43d5dd647",
+        "after": "5d00ee82d2cd0b94e22da551b86b63ece69ae720f138cda72c2724e03298ab5e"
+      },
+      {
+        "source": "isolated",
+        "before": "162f2d088b2840313546aae8a6a9b84f1fe2beb1832cf42c90cfb38126c3aa3c",
+        "after": "7c90f41c00b4414f2c973cb3fd7f242eaad3bc589f8276c2bdad839864eefe2b"
+      }
+    ]
+  },
+  "preserved": "Modern wrath and in-flight effects from saved games remain compatible; reworked powers are no longer granted.",
+  "deployed": false,
+  "productionMutation": false,
+  "sourceFiles": [
+    "Makefile.obj",
+    "ability-type.h",
+    "ability.cc",
+    "ability.h",
+    "areas.cc",
+    "attack.cc",
+    "catch2-tests/test_dithmenos.cc",
+    "dat/descript/ability.txt",
+    "dat/descript/gods.txt",
+    "dat/forms/deprecated-shadow.yaml",
+    "describe-god.cc",
+    "god-abil.h",
+    "god-dithmenos.cc",
+    "god-passive.cc",
+    "god-passive.h",
+    "ouch.cc",
+    "player.cc",
+    "quiver.cc",
+    "religion.cc",
+    "spl-cast.cc",
+    "spl-goditem.cc",
+    "status.cc",
+    "tags.cc",
+    "target-dithmenos.cc",
+    "target-dithmenos.h",
+    "tilepick-p.cc",
+    "tilepick.cc",
+    "tileweb-party.cc",
+    "transform.cc",
+    "transformation.h",
+    "webserver/game_data/static/power-art.js"
+  ],
+  "patchSha256": "6328e31ac31ac3418e10e46bce16aa84b718efe7f426ea82712db97dc53ca567",
+  "nativeBinarySha256": "121ee8cc0421ad09fcdb809607b72825514b8b4b8923db5fa21d6bb4576aa83c",
+  "sourceBindingSha256": "866cbcebdfc76acc871121ec3df05327d6564115f24cc9beda929e03120fc427",
+  "closure": "/Users/iancaltabiano/Documents/Projects/dcss/docs/dithmenos-restoration/attempt-32-closure.json",
+  "webLanguageFileLineCounts": {
+    "webserver/game_data/static/power-art.js": 411
+  }
+}

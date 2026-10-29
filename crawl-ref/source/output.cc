@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "automaton.h"
+#include "eldritch.h"
 
 #include "output.h"
 
@@ -15,6 +17,7 @@
 #include "art-enum.h"
 #include "areas.h"
 #include "branch.h"
+#include "character-trait.h"
 #include "colour.h"
 #include "describe.h"
 #ifndef USE_TILE_LOCAL
@@ -38,6 +41,7 @@
 #include "mutation.h"
 #include "notes.h"
 #include "ouch.h"
+#include "party.h"
 #include "player-equip.h"
 #include "player-stats.h"
 #include "prompt.h"
@@ -680,7 +684,7 @@ void update_turn_count()
 
     textcolour(HUD_VALUE_COLOUR);
     string time = Options.show_game_time
-        ? make_stringf("%.1f", you.elapsed_time / 10.0)
+        ? make_stringf("%.1f", party::global_elapsed_time() / 10.0)
         : make_stringf("%d", you.num_turns);
 
     if (!_is_using_small_layout())
@@ -913,14 +917,16 @@ static void _print_stats_mp(int x, int y)
     }
 
     textcolour(HUD_CAPTION_COLOUR);
-    CPRINTF(player_drained() ? "MP: " : "Magic:  ");
+    const bool heat_gauge = you.species == SP_AUTOMATON;
+    const int displayed = heat_gauge ? automaton::heat(you) : you.magic_points;
+    CPRINTF(heat_gauge ? "Heat:   " : player_drained() ? "MP: " : "Magic:  ");
     textcolour(mp_colour);
-    CPRINTF("%d", you.magic_points);
+    CPRINTF("%d", displayed);
     if (!boosted)
         textcolour(HUD_VALUE_COLOUR);
     CPRINTF("/%d", you.max_magic_points);
 
-    int col = _count_digits(you.magic_points)
+    int col = _count_digits(displayed)
               + _count_digits(you.max_magic_points) + 1;
 
 #if TAG_MAJOR_VERSION == 34
@@ -943,13 +949,13 @@ static void _print_stats_mp(int x, int y)
     if (_is_using_small_layout())
     {
         if (_low_vertical_space())
-            MP_Bar.vdraw(6, 21, you.magic_points, you.max_magic_points);
+            MP_Bar.vdraw(6, 21, displayed, you.max_magic_points);
         else
-            MP_Bar.vdraw(6, 26, you.magic_points, you.max_magic_points);
+            MP_Bar.vdraw(6, 26, displayed, you.max_magic_points);
     }
     else
 #endif
-        MP_Bar.draw(19, y, you.magic_points, you.max_magic_points);
+        MP_Bar.draw(19, y, displayed, you.max_magic_points);
 
     you.redraw_magic_points = false;
 }
@@ -1476,7 +1482,12 @@ static void _redraw_title()
     NOWRAP_EOL_CPRINTF("%s", species.c_str());
     if (you_worship(GOD_NO_GOD))
     {
-        if (you.char_class == JOB_MONK
+        if (you.species == SP_ELDRITCH)
+        {
+            NOWRAP_EOL_CPRINTF(" D:%d R:%d/3", eldritch::reserve(you), eldritch::rank());
+            clear_to_end_of_line();
+        }
+        else if (you.char_class == JOB_MONK
             && !you.has_mutation(MUT_FORLORN) // XX is this necessary?
             && !had_gods())
         {
@@ -2200,7 +2211,10 @@ static string _overview_screen_title(int sw)
     string title = player_title();
     title = (title[0] == ',' ? "" : " ") + title + " ";
 
-    string species_job = make_stringf("(%s %s)",
+    const auto trait = get_character_trait(you);
+    const string prefix = trait == character_trait::none ? ""
+        : uppercase_first(character_trait_name(trait)) + " ";
+    string species_job = make_stringf("(%s%s %s)", prefix.c_str(),
                                       species::name(you.species).c_str(),
                                       get_job_name(you.char_class));
 
@@ -2360,7 +2374,9 @@ static vector<formatted_string> _get_overview_stats()
     if (!you.has_mutation(MUT_HP_CASTING))
     {
         entry.textcolour(HUD_CAPTION_COLOUR);
-        if (player_drained())
+        if (you.species == SP_AUTOMATON)
+            entry.cprintf("Heat:   ");
+        else if (player_drained())
             entry.cprintf("MP:   ");
         else
             entry.cprintf("Magic:  ");
@@ -2370,7 +2386,8 @@ static vector<formatted_string> _get_overview_stats()
         else
             entry.textcolour(HUD_VALUE_COLOUR);
 
-        entry.cprintf("%d/%d", you.magic_points, you.max_magic_points);
+        entry.cprintf("%d/%d", you.species == SP_AUTOMATON
+                      ? automaton::heat(you) : you.magic_points, you.max_magic_points);
 #if TAG_MAJOR_VERSION == 34
         if (you.species == SP_DEEP_DWARF
             && get_real_mp(false) != you.max_magic_points)
@@ -2537,6 +2554,7 @@ static string _resist_composer(const char * name, int spacing, int value,
     string out;
 
     const bool immune = ((type == MR_RES_POISON && value == 3)
+                         || (type == MR_RES_ELEC && value > 3)
                          || type == MR_NO_FLAGS && value == WILL_INVULN);
 
     string colour = _determine_colour_string(value, max, immune);
@@ -2555,6 +2573,8 @@ static string _resist_composer(const char * name, int spacing, int value,
 
     if (value < -1)
         value = -1;
+    if (immune && value > 3)
+        value = 3;
     ASSERT(value <= 3);
     switch (type)
     {

@@ -20,10 +20,8 @@ enum potion_type
     POT_GAIN_INTELLIGENCE,
 #endif
     POT_ENLIGHTENMENT,
-#if TAG_MAJOR_VERSION == 34
     POT_POISON,
     POT_SLOWING,
-#endif
     POT_CANCELLATION,
     POT_AMBROSIA,
     POT_INVISIBILITY,
@@ -31,16 +29,14 @@ enum potion_type
     POT_PORRIDGE,
 #endif
     POT_MOONSHINE,
-#if TAG_MAJOR_VERSION == 34
     POT_DECAY,
     POT_WATER,
-#endif
     POT_EXPERIENCE,
     POT_MAGIC,
 #if TAG_MAJOR_VERSION == 34
     POT_RESTORE_ABILITIES,
-    POT_STRONG_POISON,
 #endif
+    POT_STRONG_POISON,
     POT_BERSERK_RAGE,
 #if TAG_MAJOR_VERSION == 34
     POT_CURE_MUTATION,
@@ -57,6 +53,10 @@ enum potion_type
     POT_DUMMY_AGILITY,
 #endif
     POT_MIST,
+    POT_EMPATHY,
+    POT_SOUL_AMBROSIA,
+    POT_CONCORD,
+    POT_TRANSFUSION,
     NUM_POTIONS
 };
 
@@ -80,6 +80,10 @@ const vector<potion_type> potion_types =
     POT_MUTATION,
     POT_RESISTANCE,
     POT_LIGNIFY,
+    POT_EMPATHY,
+    POT_SOUL_AMBROSIA,
+    POT_CONCORD,
+    POT_TRANSFUSION,
 };
 
 #if TAG_MAJOR_VERSION == 34
@@ -87,13 +91,8 @@ const vector<potion_type> potion_types =
 case POT_GAIN_STRENGTH: \
 case POT_GAIN_DEXTERITY: \
 case POT_GAIN_INTELLIGENCE: \
-case POT_POISON: \
-case POT_SLOWING: \
 case POT_PORRIDGE: \
-case POT_DECAY: \
-case POT_WATER: \
 case POT_RESTORE_ABILITIES: \
-case POT_STRONG_POISON: \
 case POT_CURE_MUTATION: \
 case POT_BLOOD: \
 case POT_BLOOD_COAGULATED: \

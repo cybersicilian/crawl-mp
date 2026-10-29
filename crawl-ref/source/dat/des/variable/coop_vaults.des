@@ -1,0 +1,120 @@
+###############################################################################
+# coop_vaults.des: Multiplayer Multi-Wing Vaults and
+#                  Paired Boss Arenas.
+#
+# Includes:
+#   1. The Twin Crucible (D:9-13 / Lair:2-5)
+#   2. The Sunken Reliquary (Vaults:1-4 / Depths:1-3)
+#   3. The Divided Reliquary (Vaults:2-4 / Depths:1-4) featuring paired bosses
+#      Vaelen the Dawn-Warden and Nyx the Dusk-Cantor.
+###############################################################################
+
+: crawl_require("dlua/dungeon.lua")
+: crawl_require("dlua/vault.lua")
+
+# The saved multiplayer mode is authoritative even before every hero spawns.
+
+
+###############################################################################
+# 1. The Twin Crucible
+# Two parallel grate-separated gauntlets (Fire vs. Ice) where each wing has
+# clear line-of-sight across iron grates (`m`) into the opposite lane, enabling
+# cross-lane ranged support, elemental cross-combos, and Paladin auras.
+###############################################################################
+
+NAME:   coop_twin_crucible
+TAGS:   transparent no_monster_gen
+DEPTH:  D:9-13, Lair:2-5
+WEIGHT: 15
+veto {{ return not you.multiplayer() }}
+MONS:   fire elemental / lindwurm, ice beast / rime drake
+MONS:   crimson imp / fire bat, white imp / simulacrum
+MONS:   orc sorcerer / efreet, freezing wraith / bog body
+KFEAT:  m = iron_grate
+MAP
+ccccccccccccccccccc
+c*..c.........c..*c
+c.5.m....0....m.6.c
+c...c.........c...c
+cc+ccmmmcccmmmcc+cc
+c.1.....mwm.....2.c
+c...lll.mwm.WWW...c
+c.3.lll.mwm.WWW.4.c
+c.......mwm.......c
+c.1.lll.mwm.WWW.2.c
+c...lll.mwm.WWW...c
+c.3.....mwm.....4.c
+cc+ccmmmcccmmmcc+cc
+c........G........c
+cccccccc+++cccccccc
+       ..@..
+ENDMAP
+
+###############################################################################
+# 2. The Sunken Reliquary
+# A flooded sanctum guarded by Chain Wardens and Void-Tether Stalkers around
+# a central island reliquary.
+###############################################################################
+
+NAME:   coop_sunken_reliquary
+TAGS:   transparent
+DEPTH:  Vaults:1-4, Depths:1-3
+WEIGHT: 15
+veto {{ return not you.multiplayer() }}
+MONS:   chain-warden, void-tether stalker, deep dwarf
+MONS:   ironbound preserver, vault sentinel, silver star
+KITEM:  * = star_item / any good_item
+KFEAT:  m = iron_grate
+MAP
+  ccccccccccccccccc
+ ccWWWWWWWWWWWWWWWcc
+ccWWWcccccccccccWWWcc
+cWWcc*..1...2..*ccWWc
+cWWc..3.......3..cWWc
+cWWc....mmmmm....cWWc
+cWWc.4..m*|*m..4.cWWc
+cWWc....m.6.m....cWWc
+cWWc.5..mm+mm..5.cWWc
+cWWcc...........ccWWc
+ccWWWcccc+++ccccWWWcc
+ ccWWWWWW...WWWWWWcc
+  ccccccc.@.ccccccc
+ENDMAP
+
+###############################################################################
+# 3. The Divided Reliquary (Paired Boss Encounter: Vaelen & Nyx)
+# Vaelen the Dawn-Warden (fire-branded warden) and Nyx the Dusk-Cantor (death mage)
+# guard two ruined archways and a central reliquary cache.
+###############################################################################
+
+NAME:   coop_concordat_sanctum_vaelen_nyx
+TAGS:   transparent no_monster_gen uniq_concordat_sanctum
+DEPTH:  Vaults:2-4, Depths:1-3
+WEIGHT: 15
+veto {{ return not you.multiplayer() }}
+KMONS:  V = vault warden name:Vaelen_the_Dawn-Warden n_rpl col:yellow \
+            ; broad axe ego:flaming | broad axe good_item . \
+              plate armour good_item . tower shield
+KMONS:  N = deep elf death mage name:Nyx_the_Dusk-Cantor n_rpl col:lightmagenta \
+            ; demon blade ego:draining | rapier ego:chaos . \
+              robe ego:resistance
+MONS:   chain-warden, void-tether stalker, deep dwarf, peacekeeper
+KFEAT:  A = stone_arch
+KFEAT:  B = stone_arch
+KFEAT:  m = iron_grate
+KITEM:  | = acquire any / star_item
+MAP
+  ccccccccccccccccccccc
+ cc*..c.....G.....c..*cc
+cc..A.m...V...N...m.B..cc
+c..1..m...........m..2..c
+c.....ccmmm+++mmmcc.....c
+cc+cccc....*|*....cccc+cc
+c.....m....*|*....m.....c
+c..3..m.....4.....m..3..c
+c.....ccmmm+++mmmcc.....c
+cc.....................cc
+ cccccccc.......cccccccc
+        ccc+++ccc
+          ..@..
+ENDMAP

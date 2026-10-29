@@ -1,56 +1,90 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
   <head>
-    <title>WebTiles - Dungeon Crawl Stone Soup</title>
-    <link rel="icon" href="/static/stone_soup_icon-32x32.png" type="image/png">
+    <title>Pebble Broth — Culinary-Dungeon Roguelike</title>
+    <link rel="icon" href="/static/tabletop/assets/lobby-expedition-mark.svg" type="image/svg+xml">
     <script type="text/javascript">
       {% set fail_safe_game_version = globals().get('game_version', '') %}
       var socket_server = "{{ socket_server }}";
       var game_version = "{{ fail_safe_game_version }}";
+      {% set browser_revision = globals().get('client_asset_revision', static_url("scripts/lobby-navigation.js").split("?v=")[-1]) %}
+      var client_asset_version = "{{ browser_revision }}";
+      // Configure the loader before its data-main request can time out.
+      var require = { waitSeconds: 0 };
     </script>
-    <script src="{{ static_url("scripts/contrib/require.js") }}" data-main="/static/scripts/app"></script>
-    <link rel="stylesheet" type="text/css" href="{{ static_url("style.css") }}">
+    <script src="{{ static_url("scripts/contrib/require.js") }}" data-main="{{ static_url("scripts/app.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_url("style.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/tokens.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/navigation.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url('tabletop/site-resources.css') }}">
+    <link rel="stylesheet" href="{{ static_url("styles/account-actions.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("styles/connection-quality.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-workspace.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/character-builder.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/character-folio.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/starting-sheet.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/party-setup.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-dashboard.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/layout-rhythm.css") }}&amp;ui={{ browser_revision }}">
     <link rel="stylesheet" type="text/css" href="{{ static_url("fonts/fonts.css") }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=860, initial-scale=1.0">
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ static_url('tabletop/art-direction.css') }}&amp;ui={{ browser_revision }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/outgame-hierarchy.css') }}&amp;ui={{ browser_revision }}">
+</head>
   <body>
     <noscript>Please enable javascript!</noscript>
 
     <div id="lobby" style="display: none;">
-      <div class="login_placeholder">
+
+      <section class="welcome-entry" aria-label="Enter Pebble Broth">
+        <header class="welcome-intro">
+          <div class="welcome-brand"><span class="welcome-brand-mark" aria-hidden="true">✦</span><span><strong>Pebble Broth</strong> · Field Guide &amp; Tavern</span></div>
+          <div class="welcome-eyebrow">Quasi-competitive dungeon cookery</div>
+          <h1>Toss your pebble.<br><em>Stir the pot.</em></h1>
+          <p>Descend together into a boiling dungeon of shared floors, rival scores, and simmering chaos. Cooperate to survive the depths—or out-cook your companions on the way to the Orb.</p>
+          <div class="welcome-features"><span>1–4 cooks per pot</span><span>Daily Soup seeds</span><span>Co-opetitive superlatives</span><span>Run Seasonings</span></div>
+        </header>
+
+      <div class="login_placeholder welcome-account">
         <div id="login">
-          <span id="login_message"></span>
+            <div class="welcome-account-heading"><span class="welcome-eyebrow">Your adventurer account</span><h2>Welcome to the tavern.</h2><p>Sign in or create an account to play, resume an expedition, or join friends.</p></div>
+          <span id="login_message" role="status" aria-live="polite"></span>
           <form action="#" id="login_form">
-            <label for="username">User:</label>
-            <input class="text" type="text" name="username" id="username">
-            <label for="password">Pass:</label>
-            <input class="text" type="password" name="password" id="password">
-            <input class="button" type="submit" name="submit" id="submit" value="Login">
+            <label for="username">Adventurer name</label>
+            <input class="text" type="text" name="username" id="username" placeholder="Your name" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+            <label for="password">Password</label>
+            <input class="text" type="password" name="password" id="password" placeholder="Your password" autocomplete="current-password" required>
+            <input class="button" type="submit" name="submit" id="submit" value="Sign in & play">
           </form>
-          <span class="extra_links">|
-          <a id="reg_link" href="javascript:">Register</a>
+          <span class="extra_links">
+          <a id="reg_link" href="javascript:">Create an account</a>
 {% if getattr(config, "allow_password_reset", False) %}
           <a id="forgot_link" href="javascript:">Forgot Password</a>
 {% end %}
           <a id="chem_link" href="javascript:" style="display: none;">Change Email</a>
           <a id="chpw_link" href="javascript:" style="display: none;">Change Password</a>
-          <a id="logout_link" href="javascript:" style="display: none;">Logout</a></span>
+          </span>
+          {% include "logout.html" %}
         </div>
       </div>
 
+      <p class="welcome-footnote">Three pebbles in the kettle. Four spoons in the broth. Try not to boil your friends.</p>
+      </section>
+
       <div id="register" class="floating_dialog" style="display: none;">
+        <h2 class="account-dialog-title">Begin your story</h2>
         <span id="register_message"></span>
         <form action="#" id="register_form">
-          <label for="username">Username:</label>
-          <input class="text" type="text" name="username" id="reg_username">
+          <label for="reg_username">Adventurer name</label>
+          <input class="text" type="text" name="username" id="reg_username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
           <br>
           <label for="reg_password">Password:</label>
-          <input class="text" type="password" name="reg_password" id="reg_password">
+          <input class="text" type="password" name="reg_password" id="reg_password" autocomplete="new-password" required>
           <br>
           <label for="reg_repeat_password">Repeat password:</label>
-          <input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password">
+          <input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password" autocomplete="new-password" required>
           <br>
           <label for="reg_email">Email address:</label>
           <input class="text" type="text" name="reg_email" id="reg_email">
@@ -58,17 +92,18 @@
           <p>If you do not enter an email, you can't recover your password.</p>
           <input class="button" type="button" name="cancel" id="reg_cancel"
                  value="Cancel">
-          <input class="button" type="submit" name="submit" id="reg_submit" value="Submit">
+          <input class="button" type="submit" name="submit" id="reg_submit" value="Create account">
         </form>
       </div>
 
       <div id="change_password" class="floating_dialog" style="display: none;">
+        <h2 class="account-dialog-title">Change password</h2>
         <span id="chpw_message"></span>
         <form action="#" id="chpw_form">
           <label for="change_cur_password">Current password:</label>
           <input class="text" type="password" name="change_cur_password" id="change_cur_password">
           <br>
-          <label for="change_password">New password:</label>
+          <label for="change_new_password">New password:</label>
           <input class="text" type="password" name="change_new_password" id="change_new_password">
           <br>
           <label for="change_repeat_password">Repeat password:</label>
@@ -81,6 +116,7 @@
       </div>
 
       <div id="change_email" class="floating_dialog" style="display: none;">
+        <h2 class="account-dialog-title">Your account email</h2>
         <p>Your current email address is: <span id="chem_current"></span></p>
         <span id="chem_message"></span>
         <form action="#" id="chem_form">
@@ -145,16 +181,7 @@
       </div>
 {% end %}
 
-      <div id="rc_edit" class="floating_dialog" style="display: none;">
-        <form action="#" id="rc_edit_form">
-          <textarea class="text" name="rc_file_contents" id="rc_file_contents"
-                    cols="80" rows="25">
-          </textarea>
-          <br>
-          <input class="button" type="submit" name="submit" id="rc_submit" value="Save"
-                 style="float: right;">
-        </form>
-      </div>
+      {% include game-settings.html %}
 
       <div id="exit_game" class="floating_dialog" style="display: none;">
           <p id="exit_game_reason"></p>
@@ -201,27 +228,150 @@
         </div>
       </div>
 
+      <div id="party_lobby_panel" style="display: none;">
+        <div class="party-hall-header">
+          <h2 class="party-hall-title">Your party</h2>
+          <div class="party-hall-controls">
+            <button type="button" id="party_game_settings" class="dcss-btn" hidden>Game settings</button>
+            <a class="party-other-modes" href="#play_now" data-lobby-section="play_now">Other modes ↗</a>
+            <span id="party_turn_pacing_badge" class="dcss-badge-pacing" tabindex="0"
+                  data-tip-title="Simultaneous Co-op Turn Pacing"
+                  data-tip-body="All active heroes queue and execute actions simultaneously on a shared dungeon clock with a 250ms hybrid tactical grace window. Exploration stays snappy while combat remains synchronized."
+                  data-tip-meta="Turn Mode: Simultaneous + 250ms Hybrid Window">[Turns: Simultaneous + Hybrid]</span>
+            <button type="button" id="btn_toggle_party_ff" class="dcss-btn dcss-btn-gold"
+                    data-tip-title="Friendly Fire &amp; Projectile Rules"
+                    data-tip-body="Classic Friendly Fire (ON): Beams, bolts, and AoE explosions can strike party allies in the line of fire — positioning matters! Safe Shoot-Through (OFF): Allied projectiles and spells pass harmlessly through party members."
+                    data-tip-meta="Click to toggle Classic Friendly Fire vs Safe Shoot-Through">[FF: Classic | Safe]</button>
+            <button type="button" id="btn_create_party_room" class="dcss-btn dcss-btn-primary"
+                    data-tip-title="Create Co-op Party Staging Room"
+                    data-tip-body="Opens a 4-slot Expedition Staging Room where you can customize 1-4 heroes (Species, Background, Archetype presets), toggle Friendly Fire, or invite friends before entering D:1."
+                    data-tip-meta="Host Controls: 1-4 Heroes | Custom Species &amp; Backgrounds">New party</button>
+          </div>
+        </div>
+
+        <div id="party_rooms_list_view">
+          <div id="party_rooms_empty" class="party-empty-notice">
+            <span>No parties are gathering yet. Start a new expedition above to choose your heroes and make room for friends.</span>
+            <button type="button" id="btn_create_party_room_empty" class="dcss-btn dcss-btn-primary"
+                    data-tip-title="Create Co-op Party Staging Room"
+                    data-tip-body="Opens a 4-slot Expedition Staging Room where you can customize 1-4 heroes (Species, Background, Archetype presets), toggle Friendly Fire, or invite friends before entering D:1."
+                    data-tip-meta="Host Controls: 1-4 Heroes | Custom Species &amp; Backgrounds">[+ Create Party Room]</button>
+          </div>
+          <table id="party_rooms_table" style="display: none;">
+            <thead>
+              <tr>
+                <th>Room / Expedition</th>
+                <th>Host</th>
+                <th>Slots</th>
+                <th>Party Roster (Hero : Species / Background)</th>
+                <th>Friendly Fire</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="party_rooms_tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="party_room_view" style="display: none;">
+          <div class="party-room-banner">
+            <div>
+              <span id="party_room_title_text">Your party</span>
+              <span style="color: #888a85; margin-left: 8px;" id="party_room_host_text"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span class="dcss-badge-pacing-inline" tabindex="0"
+                    data-tip-title="Simultaneous Co-op Turn Pacing"
+                    data-tip-body="All active heroes queue and execute actions simultaneously on a shared dungeon clock with a 250ms hybrid tactical grace window."
+                    data-tip-meta="Turn Mode: Simultaneous + 250ms Hybrid Window">[Turns: Simultaneous + Hybrid]</span>
+              <span>
+                <span style="color: #e9b96e;">Friendly Fire: </span>
+                <span id="party_room_ff_badge" tabindex="0" style="color: #ef2929; font-weight: bold; cursor: help;"
+                      data-tip-title="Friendly Fire &amp; Projectile Rules"
+                      data-tip-body="Classic Friendly Fire (ON): Beams, bolts, and AoE explosions can strike party allies in the line of fire. Safe Shoot-Through (OFF): Allied projectiles and spells pass harmlessly through party members."
+                      data-tip-meta="Host can toggle Friendly Fire in the Staging Hall header">[CLASSIC (ON)]</span>
+              </span>
+            </div>
+          </div>
+
+          <p class="party-builder-intro">Bring companions, save seats for friends, or head down alone.</p>
+
+          <div id="party_slots_grid"></div>
+
+          <div id="party_room_footer">
+            <div class="party-launch-controls">
+              <button type="button" id="btn_launch_party_room" class="dcss-btn dcss-btn-primary"
+                      data-tip-title="Launch Dungeon Expedition (Enter D:1)"
+                      data-tip-body="Starts the co-op expedition on Dungeon:1 with all active party slots, applying each hero's chosen name, Species, Background, and Friendly Fire rules."
+                      data-tip-meta="Host Action: Spawns all active party heroes on D:1">Enter the dungeon</button>
+              <span id="party_room_status_hint" style="color: #e9b96e; font-size: 12px;"></span>
+            </div>
+            <div>
+              <button type="button" id="btn_leave_party_room" class="dcss-btn dcss-btn-danger"
+                      data-tip-title="Leave Party Staging Room"
+                      data-tip-body="Exits the current Party Staging Room and returns to the Staging Hall room browser."
+                      data-tip-meta="Room Control: Leave / Disband">Leave party</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="coop_chronicle_panel" style="display: none;">
+        <div class="party-hall-header">
+          <h1 class="party-hall-title">The Chronicle</h1>
+          <div class="party-hall-controls">
+            <button type="button" id="btn_refresh_chronicle" class="dcss-btn dcss-btn-gold"
+                    data-tip-title="Refresh Dungeon Chronicle Vault"
+                    data-tip-body="Fetches the latest Stored Party Compositions, Hall of Player Ghosts (DCSS bones.* files), and Cool Items &amp; Relics discovered across expeditions."
+                    data-tip-meta="Syncs live with server chronicle &amp; bones vault">Refresh</button>
+          </div>
+        </div>
+        <div id="coop_chronicle_grid">
+          <div class="chronicle-box chronicle-col">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Stored Party Compositions"
+                 data-tip-body="Saved 1-4 hero party rosters from past expeditions. Hover any comp to inspect its roster, seed, and Friendly Fire mode, or click [Load Comp] to apply it directly to your Staging Room."
+                 data-tip-meta="1-Click Party Roster Restore">STORED PARTY COMPS <span id="chronicle_comps_count" class="chronicle-count">(0)</span></div>
+            <div id="chronicle_comps_list" class="chronicle-list"></div>
+          </div>
+          <div class="chronicle-box chronicle-col">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Hall of Player Ghosts (DCSS Bones)"
+                 data-tip-body="Fallen heroes from solo and co-op expeditions. Stored in persistent DCSS bones.* files so their ghosts can spawn as dangerous bosses on the floor where they perished."
+                 data-tip-meta="Persistent DCSS bones.* Ghost Registry">HALL OF PLAYER GHOSTS (BONES) <span id="chronicle_ghosts_count" class="chronicle-count">(0)</span></div>
+            <div id="chronicle_ghosts_list" class="chronicle-list"></div>
+          </div>
+          <div class="chronicle-box chronicle-col">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Cool Items &amp; Relics Found"
+                 data-tip-body="Notable discoveries across your expeditions, including Unrandarts, Runes of Zot, Randarts, and Skill Manuals, along with the hero who found them and the discovery floor."
+                 data-tip-meta="Unrandarts | Runes of Zot | Randarts | Manuals">COOL ITEMS &amp; RELICS FOUND <span id="chronicle_items_count" class="chronicle-count">(0)</span></div>
+            <div id="chronicle_items_list" class="chronicle-list"></div>
+          </div>
+        </div>
+      </div>
+
       <div id="play_now"></div>
 
       <br>
 
       <div id="lobby_body">
-        <span>
-          Games currently running:
+        <span style="color: #fce94f;">
+          Join a live expedition
         </span>
         <table id="player_list" class="no_game_times">
           <thead>
             <tr>
-              <th class="username">User</th>
-              <th class="game_id">Game</th>
-              <th class="xl">XL</th>
-              <th class="char">Char</th>
+              <th class="username">Host</th>
+              <th class="coop_join">Action</th>
+              <th class="game_id">Mode</th>
+              <th class="xl">Level</th>
+              <th class="char">Hero</th>
               <th class="place">Place</th>
               <th class="turn">Turn</th>
               <th class="dur">Time</th>
               <th class="god">God</th>
               <th class="idle_time">Idle</th>
-              <th class="spectator_count">Specs</th>
+              <th class="spectator_count">Watching</th>
               <th class="milestone_col">Milestone</th>
             </tr>
           </thead>
@@ -232,6 +382,7 @@
           <table>
             <tr id="game_entry_template">
               <td class="username"></td>
+              <td class="coop_join"></td>
               <td class="game_id"></td>
               <td class="xl"></td>
               <td class="char"></td>
@@ -252,7 +403,9 @@
         </div>
       </div>
 
+      {% include "site-resources.html" %}
       <div id="footer">{% include footer.html %}</div>
+      <div id="lobby_rich_tooltip" style="display: none" aria-hidden="true"></div>
     </div>
 
     <div id="game">
@@ -331,7 +484,7 @@
 
     <div id="chat" style="display: none;">
       <a href="javascript:" id="chat_hide_button">
-        <span id="chat_hide_button_span">(-)</span>
+        <span id="chat_hide_button_span">×</span>
       </a>
       <a href="javascript:" id="chat_caption">
         <span id="spectator_count">0 spectators</span>
@@ -345,8 +498,11 @@
           <span id="chat_history"></span>
         </div>
 
+        <div class="chat-compose">
         <input class="text" type="text" name="chat_input"
                id="chat_input" style="display: none">
+        <button type="button" id="chat_send_btn" class="dcss-btn dcss-btn-primary">Send</button>
+        </div>
         <div id="chat_login_text">
           <a id="chat_login_link" href="javascript:">Login</a> to chat
         </div>

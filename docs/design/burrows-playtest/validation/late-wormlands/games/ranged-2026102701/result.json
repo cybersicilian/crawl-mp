@@ -1,0 +1,1420 @@
+{
+  "build": "ranged",
+  "seed": "2026102701",
+  "start": "Worm:1",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "items": [
+        {
+          "y": 21,
+          "class": "scroll",
+          "artefact": false,
+          "x": 49,
+          "name": "scroll of identify",
+          "quantity": 1
+        },
+        {
+          "y": 21,
+          "class": "book",
+          "artefact": false,
+          "x": 70,
+          "name": "book of the Grave",
+          "quantity": 1
+        },
+        {
+          "y": 23,
+          "class": "potion",
+          "artefact": false,
+          "x": 56,
+          "name": "potion of enlightenment",
+          "quantity": 1
+        },
+        {
+          "y": 24,
+          "class": "gold",
+          "artefact": false,
+          "x": 73,
+          "name": "16 gold pieces",
+          "quantity": 16
+        },
+        {
+          "y": 26,
+          "class": "book",
+          "artefact": false,
+          "x": 41,
+          "name": "parchment of Frozen Ramparts",
+          "quantity": 1
+        },
+        {
+          "y": 26,
+          "class": "armour",
+          "artefact": false,
+          "x": 59,
+          "name": "dyed leather armour",
+          "quantity": 1
+        },
+        {
+          "y": 32,
+          "class": "wand",
+          "artefact": false,
+          "x": 41,
+          "name": "wand of light (5)",
+          "quantity": 1
+        },
+        {
+          "y": 33,
+          "class": "book",
+          "artefact": false,
+          "x": 40,
+          "name": "parchment of Confusing Touch",
+          "quantity": 1
+        },
+        {
+          "y": 36,
+          "class": "armour",
+          "artefact": false,
+          "x": 44,
+          "name": "ice dragon scales",
+          "quantity": 1
+        },
+        {
+          "y": 36,
+          "class": "gold",
+          "artefact": false,
+          "x": 76,
+          "name": "16 gold pieces",
+          "quantity": 16
+        },
+        {
+          "y": 43,
+          "class": "armour",
+          "artefact": false,
+          "x": 51,
+          "name": "shiny plate armour",
+          "quantity": 1
+        },
+        {
+          "y": 47,
+          "class": "gold",
+          "artefact": false,
+          "x": 43,
+          "name": "15 gold pieces",
+          "quantity": 15
+        },
+        {
+          "y": 47,
+          "class": "gold",
+          "artefact": false,
+          "x": 50,
+          "name": "15 gold pieces",
+          "quantity": 15
+        },
+        {
+          "y": 48,
+          "class": "scroll",
+          "artefact": false,
+          "x": 78,
+          "name": "2 scrolls of enchant armour",
+          "quantity": 2
+        },
+        {
+          "y": 50,
+          "class": "gold",
+          "artefact": false,
+          "x": 49,
+          "name": "18 gold pieces",
+          "quantity": 18
+        },
+        {
+          "y": 54,
+          "class": "weapon",
+          "artefact": false,
+          "x": 68,
+          "name": "trident",
+          "quantity": 1
+        },
+        {
+          "y": 55,
+          "class": "gold",
+          "artefact": false,
+          "x": 81,
+          "name": "28 gold pieces",
+          "quantity": 28
+        },
+        {
+          "y": 59,
+          "class": "weapon",
+          "artefact": false,
+          "x": 50,
+          "name": "trident",
+          "quantity": 1
+        },
+        {
+          "y": 66,
+          "class": "scroll",
+          "artefact": false,
+          "x": 35,
+          "name": "scroll of acquirement",
+          "quantity": 1
+        },
+        {
+          "y": 67,
+          "class": "scroll",
+          "artefact": false,
+          "x": 77,
+          "name": "scroll of identify",
+          "quantity": 1
+        },
+        {
+          "y": 68,
+          "class": "armour",
+          "artefact": false,
+          "x": 76,
+          "name": "leather armour",
+          "quantity": 1
+        },
+        {
+          "y": 70,
+          "class": "scroll",
+          "artefact": false,
+          "x": 84,
+          "name": "scroll of noise",
+          "quantity": 1
+        },
+        {
+          "y": 75,
+          "class": "weapon",
+          "artefact": false,
+          "x": 48,
+          "name": "battleaxe",
+          "quantity": 1
+        },
+        {
+          "y": 76,
+          "class": "missile",
+          "artefact": false,
+          "x": 45,
+          "name": "throwing net",
+          "quantity": 1
+        }
+      ],
+      "maxmp": 26,
+      "where": "Tomb:1",
+      "tag": "enter",
+      "turn": 53,
+      "xl": 20,
+      "gold": 0,
+      "monsters": [
+        {
+          "y": 23,
+          "x": 49,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 25,
+          "x": 72,
+          "name": "guardian mummy",
+          "xp": 328
+        },
+        {
+          "y": 28,
+          "x": 49,
+          "name": "zombie",
+          "xp": 307
+        },
+        {
+          "y": 28,
+          "x": 59,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 32,
+          "x": 42,
+          "name": "royal mummy",
+          "xp": 3505
+        },
+        {
+          "y": 32,
+          "x": 47,
+          "name": "royal mummy",
+          "xp": 3491
+        },
+        {
+          "y": 32,
+          "x": 52,
+          "name": "draugr",
+          "xp": 279
+        },
+        {
+          "y": 32,
+          "x": 57,
+          "name": "royal mummy",
+          "xp": 3462
+        },
+        {
+          "y": 33,
+          "x": 54,
+          "name": "royal mummy",
+          "xp": 3412
+        },
+        {
+          "y": 35,
+          "x": 68,
+          "name": "ushabti",
+          "xp": 207
+        },
+        {
+          "y": 35,
+          "x": 72,
+          "name": "mummy priest",
+          "xp": 891
+        },
+        {
+          "y": 36,
+          "x": 68,
+          "name": "guardian mummy",
+          "xp": 326
+        },
+        {
+          "y": 36,
+          "x": 77,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 38,
+          "x": 71,
+          "name": "guardian mummy",
+          "xp": 320
+        },
+        {
+          "y": 38,
+          "x": 79,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 40,
+          "x": 47,
+          "name": "mummy",
+          "xp": 17
+        },
+        {
+          "y": 41,
+          "x": 50,
+          "name": "revenant soulmonger",
+          "xp": 1361
+        },
+        {
+          "y": 41,
+          "x": 52,
+          "name": "mummy priest",
+          "xp": 936
+        },
+        {
+          "y": 41,
+          "x": 65,
+          "name": "royal mummy",
+          "xp": 3505
+        },
+        {
+          "y": 43,
+          "x": 48,
+          "name": "guardian mummy",
+          "xp": 332
+        },
+        {
+          "y": 43,
+          "x": 54,
+          "name": "mummy priest",
+          "xp": 936
+        },
+        {
+          "y": 43,
+          "x": 59,
+          "name": "guardian mummy",
+          "xp": 330
+        },
+        {
+          "y": 44,
+          "x": 48,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 44,
+          "x": 82,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 47,
+          "x": 59,
+          "name": "lich",
+          "xp": 1797
+        },
+        {
+          "y": 47,
+          "x": 77,
+          "name": "guardian sphinx",
+          "xp": 1783
+        },
+        {
+          "y": 47,
+          "x": 84,
+          "name": "guardian sphinx",
+          "xp": 1680
+        },
+        {
+          "y": 49,
+          "x": 63,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 49,
+          "x": 69,
+          "name": "skeletal warrior",
+          "xp": 754
+        },
+        {
+          "y": 49,
+          "x": 75,
+          "name": "guardian sphinx",
+          "xp": 1703
+        },
+        {
+          "y": 50,
+          "x": 39,
+          "name": "royal mummy",
+          "xp": 3434
+        },
+        {
+          "y": 51,
+          "x": 42,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 51,
+          "x": 51,
+          "name": "ancient champion",
+          "xp": 1483
+        },
+        {
+          "y": 52,
+          "x": 40,
+          "name": "guardian mummy",
+          "xp": 320
+        },
+        {
+          "y": 52,
+          "x": 56,
+          "name": "guardian mummy",
+          "xp": 329
+        },
+        {
+          "y": 53,
+          "x": 66,
+          "name": "guardian mummy",
+          "xp": 322
+        },
+        {
+          "y": 53,
+          "x": 69,
+          "name": "guardian mummy",
+          "xp": 329
+        },
+        {
+          "y": 53,
+          "x": 75,
+          "name": "guardian sphinx",
+          "xp": 1729
+        },
+        {
+          "y": 53,
+          "x": 77,
+          "name": "guardian sphinx",
+          "xp": 1725
+        },
+        {
+          "y": 53,
+          "x": 82,
+          "name": "guardian sphinx",
+          "xp": 1722
+        },
+        {
+          "y": 54,
+          "x": 46,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 55,
+          "x": 47,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 55,
+          "x": 55,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 55,
+          "x": 80,
+          "name": "guardian sphinx",
+          "xp": 1700
+        },
+        {
+          "y": 55,
+          "x": 84,
+          "name": "guardian sphinx",
+          "xp": 1703
+        },
+        {
+          "y": 58,
+          "x": 48,
+          "name": "mummy priest",
+          "xp": 905
+        },
+        {
+          "y": 58,
+          "x": 51,
+          "name": "royal mummy",
+          "xp": 3391
+        },
+        {
+          "y": 58,
+          "x": 54,
+          "name": "guardian mummy",
+          "xp": 341
+        },
+        {
+          "y": 58,
+          "x": 83,
+          "name": "mummy priest",
+          "xp": 934
+        },
+        {
+          "y": 59,
+          "x": 39,
+          "name": "royal mummy",
+          "xp": 3526
+        },
+        {
+          "y": 59,
+          "x": 48,
+          "name": "guardian mummy",
+          "xp": 328
+        },
+        {
+          "y": 61,
+          "x": 50,
+          "name": "mummy priest",
+          "xp": 939
+        },
+        {
+          "y": 62,
+          "x": 39,
+          "name": "mummy",
+          "xp": 17
+        },
+        {
+          "y": 63,
+          "x": 40,
+          "name": "royal mummy",
+          "xp": 3548
+        },
+        {
+          "y": 66,
+          "x": 53,
+          "name": "revenant soulmonger",
+          "xp": 1348
+        },
+        {
+          "y": 66,
+          "x": 66,
+          "name": "royal mummy",
+          "xp": 3501
+        },
+        {
+          "y": 66,
+          "x": 67,
+          "name": "guardian mummy",
+          "xp": 332
+        },
+        {
+          "y": 66,
+          "x": 70,
+          "name": "royal mummy",
+          "xp": 3594
+        },
+        {
+          "y": 67,
+          "x": 72,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 69,
+          "x": 41,
+          "name": "royal mummy",
+          "xp": 3519
+        },
+        {
+          "y": 69,
+          "x": 70,
+          "name": "royal mummy",
+          "xp": 3501
+        },
+        {
+          "y": 70,
+          "x": 42,
+          "name": "guardian mummy",
+          "xp": 322
+        },
+        {
+          "y": 72,
+          "x": 80,
+          "name": "draugr",
+          "xp": 211
+        },
+        {
+          "y": 73,
+          "x": 56,
+          "name": "draugr",
+          "xp": 211
+        },
+        {
+          "y": 73,
+          "x": 80,
+          "name": "ushabti",
+          "xp": 210
+        },
+        {
+          "y": 74,
+          "x": 68,
+          "name": "zombie",
+          "xp": 114
+        },
+        {
+          "y": 75,
+          "x": 62,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 77,
+          "x": 66,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 79,
+          "x": 54,
+          "name": "ushabti",
+          "xp": 205
+        }
+      ],
+      "hp": 164,
+      "vaults": "tomb_1 [tomb_1_centre_grunt_layered, tomb_1_hall_stairs_nicolae_galleries]",
+      "xp": 80428,
+      "progress": 0,
+      "maxhp": 164,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 shortbow",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 leather armour",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 ring mail",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 orcbow",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of butterflies",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of haste",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        }
+      ],
+      "honey": 0,
+      "mp": 26
+    },
+    {
+      "items": [
+        {
+          "y": 21,
+          "class": "scroll",
+          "artefact": false,
+          "x": 49,
+          "name": "scroll of identify",
+          "quantity": 1
+        },
+        {
+          "y": 26,
+          "class": "armour",
+          "artefact": false,
+          "x": 59,
+          "name": "+2 leather armour of poison resistance",
+          "quantity": 1
+        },
+        {
+          "y": 32,
+          "class": "wand",
+          "artefact": false,
+          "x": 41,
+          "name": "wand of light (5)",
+          "quantity": 1
+        },
+        {
+          "y": 33,
+          "class": "book",
+          "artefact": false,
+          "x": 40,
+          "name": "parchment of Confusing Touch",
+          "quantity": 1
+        },
+        {
+          "y": 36,
+          "class": "armour",
+          "artefact": false,
+          "x": 44,
+          "name": "ice dragon scales",
+          "quantity": 1
+        },
+        {
+          "y": 43,
+          "class": "armour",
+          "artefact": false,
+          "x": 51,
+          "name": "shiny plate armour",
+          "quantity": 1
+        },
+        {
+          "y": 47,
+          "class": "gold",
+          "artefact": false,
+          "x": 43,
+          "name": "15 gold pieces",
+          "quantity": 15
+        },
+        {
+          "y": 47,
+          "class": "gold",
+          "artefact": false,
+          "x": 50,
+          "name": "15 gold pieces",
+          "quantity": 15
+        },
+        {
+          "y": 48,
+          "class": "scroll",
+          "artefact": false,
+          "x": 78,
+          "name": "2 scrolls of enchant armour",
+          "quantity": 2
+        },
+        {
+          "y": 50,
+          "class": "gold",
+          "artefact": false,
+          "x": 49,
+          "name": "18 gold pieces",
+          "quantity": 18
+        },
+        {
+          "y": 54,
+          "class": "weapon",
+          "artefact": false,
+          "x": 68,
+          "name": "trident",
+          "quantity": 1
+        },
+        {
+          "y": 55,
+          "class": "gold",
+          "artefact": false,
+          "x": 81,
+          "name": "28 gold pieces",
+          "quantity": 28
+        },
+        {
+          "y": 59,
+          "class": "weapon",
+          "artefact": false,
+          "x": 50,
+          "name": "trident",
+          "quantity": 1
+        },
+        {
+          "y": 66,
+          "class": "scroll",
+          "artefact": false,
+          "x": 35,
+          "name": "scroll of acquirement",
+          "quantity": 1
+        },
+        {
+          "y": 67,
+          "class": "scroll",
+          "artefact": false,
+          "x": 77,
+          "name": "scroll of identify",
+          "quantity": 1
+        },
+        {
+          "y": 68,
+          "class": "armour",
+          "artefact": false,
+          "x": 76,
+          "name": "leather armour",
+          "quantity": 1
+        },
+        {
+          "y": 70,
+          "class": "scroll",
+          "artefact": false,
+          "x": 84,
+          "name": "scroll of noise",
+          "quantity": 1
+        },
+        {
+          "y": 75,
+          "class": "weapon",
+          "artefact": false,
+          "x": 48,
+          "name": "battleaxe",
+          "quantity": 1
+        },
+        {
+          "y": 76,
+          "class": "missile",
+          "artefact": false,
+          "x": 45,
+          "name": "throwing net",
+          "quantity": 1
+        }
+      ],
+      "maxmp": 26,
+      "where": "Tomb:1",
+      "tag": "death",
+      "turn": 223,
+      "xl": 20,
+      "gold": 32,
+      "monsters": [
+        {
+          "y": 32,
+          "x": 42,
+          "name": "royal mummy",
+          "xp": 3505
+        },
+        {
+          "y": 32,
+          "x": 47,
+          "name": "royal mummy",
+          "xp": 3491
+        },
+        {
+          "y": 32,
+          "x": 52,
+          "name": "draugr",
+          "xp": 279
+        },
+        {
+          "y": 32,
+          "x": 57,
+          "name": "royal mummy",
+          "xp": 3462
+        },
+        {
+          "y": 33,
+          "x": 54,
+          "name": "royal mummy",
+          "xp": 3412
+        },
+        {
+          "y": 35,
+          "x": 72,
+          "name": "mummy priest",
+          "xp": 891
+        },
+        {
+          "y": 36,
+          "x": 68,
+          "name": "guardian mummy",
+          "xp": 326
+        },
+        {
+          "y": 36,
+          "x": 70,
+          "name": "ushabti",
+          "xp": 207
+        },
+        {
+          "y": 37,
+          "x": 82,
+          "name": "guardian sphinx",
+          "xp": 1680
+        },
+        {
+          "y": 37,
+          "x": 84,
+          "name": "guardian sphinx",
+          "xp": 1783
+        },
+        {
+          "y": 38,
+          "x": 71,
+          "name": "guardian mummy",
+          "xp": 320
+        },
+        {
+          "y": 38,
+          "x": 82,
+          "name": "guardian sphinx",
+          "xp": 1729
+        },
+        {
+          "y": 38,
+          "x": 83,
+          "name": "guardian sphinx",
+          "xp": 1725
+        },
+        {
+          "y": 38,
+          "x": 84,
+          "name": "guardian sphinx",
+          "xp": 1722
+        },
+        {
+          "y": 39,
+          "x": 83,
+          "name": "guardian sphinx",
+          "xp": 1703
+        },
+        {
+          "y": 40,
+          "x": 47,
+          "name": "mummy",
+          "xp": 17
+        },
+        {
+          "y": 41,
+          "x": 50,
+          "name": "revenant soulmonger",
+          "xp": 1361
+        },
+        {
+          "y": 41,
+          "x": 52,
+          "name": "mummy priest",
+          "xp": 936
+        },
+        {
+          "y": 41,
+          "x": 65,
+          "name": "royal mummy",
+          "xp": 3505
+        },
+        {
+          "y": 43,
+          "x": 48,
+          "name": "guardian mummy",
+          "xp": 332
+        },
+        {
+          "y": 43,
+          "x": 54,
+          "name": "mummy priest",
+          "xp": 936
+        },
+        {
+          "y": 43,
+          "x": 58,
+          "name": "skeletal warrior",
+          "xp": 754
+        },
+        {
+          "y": 43,
+          "x": 59,
+          "name": "guardian mummy",
+          "xp": 330
+        },
+        {
+          "y": 44,
+          "x": 48,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 46,
+          "x": 59,
+          "name": "guardian sphinx",
+          "xp": 1703
+        },
+        {
+          "y": 46,
+          "x": 81,
+          "name": "guardian mummy",
+          "xp": 329
+        },
+        {
+          "y": 47,
+          "x": 59,
+          "name": "lich",
+          "xp": 1797
+        },
+        {
+          "y": 49,
+          "x": 63,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 49,
+          "x": 80,
+          "name": "guardian sphinx",
+          "xp": 1700
+        },
+        {
+          "y": 49,
+          "x": 82,
+          "name": "mummy priest",
+          "xp": 934
+        },
+        {
+          "y": 50,
+          "x": 39,
+          "name": "royal mummy",
+          "xp": 3434
+        },
+        {
+          "y": 51,
+          "x": 42,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 51,
+          "x": 51,
+          "name": "ancient champion",
+          "xp": 1483
+        },
+        {
+          "y": 52,
+          "x": 40,
+          "name": "guardian mummy",
+          "xp": 320
+        },
+        {
+          "y": 52,
+          "x": 56,
+          "name": "guardian mummy",
+          "xp": 329
+        },
+        {
+          "y": 53,
+          "x": 66,
+          "name": "guardian mummy",
+          "xp": 322
+        },
+        {
+          "y": 54,
+          "x": 46,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 55,
+          "x": 47,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 55,
+          "x": 55,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 58,
+          "x": 48,
+          "name": "mummy priest",
+          "xp": 905
+        },
+        {
+          "y": 58,
+          "x": 51,
+          "name": "royal mummy",
+          "xp": 3391
+        },
+        {
+          "y": 58,
+          "x": 54,
+          "name": "guardian mummy",
+          "xp": 341
+        },
+        {
+          "y": 59,
+          "x": 39,
+          "name": "royal mummy",
+          "xp": 3526
+        },
+        {
+          "y": 59,
+          "x": 48,
+          "name": "guardian mummy",
+          "xp": 328
+        },
+        {
+          "y": 61,
+          "x": 50,
+          "name": "mummy priest",
+          "xp": 939
+        },
+        {
+          "y": 62,
+          "x": 39,
+          "name": "mummy",
+          "xp": 17
+        },
+        {
+          "y": 63,
+          "x": 40,
+          "name": "royal mummy",
+          "xp": 3548
+        },
+        {
+          "y": 66,
+          "x": 53,
+          "name": "revenant soulmonger",
+          "xp": 1348
+        },
+        {
+          "y": 66,
+          "x": 66,
+          "name": "royal mummy",
+          "xp": 3501
+        },
+        {
+          "y": 66,
+          "x": 67,
+          "name": "guardian mummy",
+          "xp": 332
+        },
+        {
+          "y": 66,
+          "x": 70,
+          "name": "royal mummy",
+          "xp": 3594
+        },
+        {
+          "y": 67,
+          "x": 72,
+          "name": "mummy priest",
+          "xp": 925
+        },
+        {
+          "y": 69,
+          "x": 41,
+          "name": "royal mummy",
+          "xp": 3519
+        },
+        {
+          "y": 69,
+          "x": 70,
+          "name": "royal mummy",
+          "xp": 3501
+        },
+        {
+          "y": 70,
+          "x": 65,
+          "name": "guardian mummy",
+          "xp": 322
+        },
+        {
+          "y": 72,
+          "x": 80,
+          "name": "draugr",
+          "xp": 211
+        },
+        {
+          "y": 73,
+          "x": 80,
+          "name": "ushabti",
+          "xp": 210
+        },
+        {
+          "y": 74,
+          "x": 68,
+          "name": "zombie",
+          "xp": 114
+        },
+        {
+          "y": 75,
+          "x": 62,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 75,
+          "x": 64,
+          "name": "draugr",
+          "xp": 211
+        },
+        {
+          "y": 77,
+          "x": 66,
+          "name": "mummy",
+          "xp": 18
+        },
+        {
+          "y": 79,
+          "x": 54,
+          "name": "ushabti",
+          "xp": 205
+        }
+      ],
+      "hp": -2,
+      "vaults": "tomb_1 [tomb_1_centre_grunt_layered, tomb_1_hall_stairs_nicolae_galleries]",
+      "xp": 79703,
+      "progress": 0,
+      "maxhp": 164,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 shortbow",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 leather armour",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 ring mail",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 orcbow",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of butterflies",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "potion of haste",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "quantity": 1
+        }
+      ],
+      "honey": 0,
+      "mp": 26
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "inventory +0 shortbow",
+    "inventory +0 leather armour",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +2 ring mail",
+    "inventory +3 orcbow",
+    "inventory scroll of butterflies",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of might",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start ranged AC=15 EV=23 SH=0",
+    "ability Heroism turn=85",
+    "ability Heroism turn=157",
+    "ability Heroism turn=202",
+    "use heal wounds turn=217 place=Tomb:1",
+    "use heal wounds turn=218 place=Tomb:1",
+    "use heal wounds turn=219 place=Tomb:1",
+    "use heal wounds turn=220 place=Tomb:1",
+    "use heal wounds turn=221 place=Tomb:1",
+    "use heal wounds turn=222 place=Tomb:1",
+    "use haste turn=223 place=Tomb:1",
+    "death Tomb:1"
+  ],
+  "nativeSha256": "55a76994e4424eef2bdd87bccb049d10cc21b456882bffafb3e11ee81d1fc87d",
+  "routeFloorsExplored": [],
+  "fullRoute": false
+}

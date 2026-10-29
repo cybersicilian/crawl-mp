@@ -1,0 +1,46 @@
+--- a/crawl-ref/source/webserver/webtiles/session_recovery.py
++++ b/crawl-ref/source/webserver/webtiles/session_recovery.py
+@@ -1,4 +1,4 @@
+-"""Transfer a briefly disconnected host's existing process after authentication."""
++"""Transfer an authenticated host's live process between browser sessions."""
+ from tornado.ioloop import IOLoop
+ 
+ from webtiles import config
+@@ -28,7 +28,7 @@
+ 
+ 
+ def reclaim(receiver, sockets, reconnect=False):
+-    if not receiver.username:
++    if not receiver.username or getattr(receiver, "_library_fresh", False):
+         return False
+     for previous in list(sockets):
+         if (previous is receiver
+@@ -49,17 +49,22 @@
+                 # protocol ping times out. Wait without taking over a live tab.
+                 receiver.send_message("connection_wait", retry_after=1)
+                 return True
+-            continue
+-        if getattr(previous, "reconnect_timeout", None) is None:
+-            continue
+-        # An explicit library load must never attach a different running save.
+-        if getattr(receiver, "_library_fresh", False):
++        elif getattr(previous, "reconnect_timeout", None) is None:
+             continue
+         cancel(previous)
++        process.remove_watcher(previous)
++        # Detach before closing: the old socket's on_close must not stop the
++        # native process or retain input control after the handoff.
+         previous.process = None
+-        previous.try_cleanup()
+         receiver.process = process
+         receiver._library_resume_id = None
++        previous.clear_timeouts()
++        if not previous.client_closed:
++            reason = "This expedition was opened in another session."
++            previous.send_message("close", reason=reason)
++            # A normal close also stops automatic recovery in older clients.
++            previous.close(1000, reason)
++        previous.try_cleanup()
+         process.end_callback = receiver._on_crawl_end
+         receiver.reset_idle_timeouts()
+         process.add_watcher(receiver)

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 158 100" preserveAspectRatio="none">
+  <defs>
+    <path id="seam" d="M5 5H153V95H5L18 50Z" vector-effect="non-scaling-stroke"/>
+  </defs>
+  <path d="M1 1H157V99H1L14 50Z" fill="none" stroke="#c5a57a" stroke-opacity=".34" stroke-width="1" stroke-dasharray="1 2" vector-effect="non-scaling-stroke"/>
+  <use href="#seam" fill="none" stroke="#180f18" stroke-opacity=".8" stroke-width="3" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+  <use href="#seam" fill="none" stroke="#d4b48a" stroke-opacity=".82" stroke-width="1" stroke-linecap="round" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+</svg>

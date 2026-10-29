@@ -1,0 +1,6200 @@
+{
+  "build": "melee",
+  "seed": "2026102702",
+  "start": "Bur:1",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "maxhp": 151,
+      "progress": 0,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 53,
+      "hp": 151,
+      "gold": 0,
+      "monsters": [
+        {
+          "xp": 710,
+          "name": "burrowing beast",
+          "y": 22,
+          "x": 85
+        },
+        {
+          "xp": 711,
+          "name": "crag boar",
+          "y": 27,
+          "x": 76
+        },
+        {
+          "xp": 700,
+          "name": "burrowing beast",
+          "y": 27,
+          "x": 77
+        },
+        {
+          "xp": 714,
+          "name": "crag boar",
+          "y": 28,
+          "x": 39
+        },
+        {
+          "xp": 652,
+          "name": "deep troll delver",
+          "y": 34,
+          "x": 80
+        },
+        {
+          "xp": 701,
+          "name": "crag boar",
+          "y": 37,
+          "x": 72
+        },
+        {
+          "xp": 709,
+          "name": "crag boar",
+          "y": 42,
+          "x": 45
+        },
+        {
+          "xp": 688,
+          "name": "crag boar",
+          "y": 45,
+          "x": 55
+        },
+        {
+          "xp": 712,
+          "name": "burrowing beast",
+          "y": 46,
+          "x": 36
+        },
+        {
+          "xp": 706,
+          "name": "burrowing beast",
+          "y": 47,
+          "x": 72
+        },
+        {
+          "xp": 354,
+          "name": "komodo dragon",
+          "y": 48,
+          "x": 69
+        },
+        {
+          "xp": 362,
+          "name": "komodo dragon",
+          "y": 58,
+          "x": 54
+        },
+        {
+          "xp": 718,
+          "name": "burrowing beast",
+          "y": 65,
+          "x": 77
+        },
+        {
+          "xp": 362,
+          "name": "komodo dragon",
+          "y": 71,
+          "x": 64
+        },
+        {
+          "xp": 696,
+          "name": "crag boar",
+          "y": 72,
+          "x": 70
+        },
+        {
+          "xp": 654,
+          "name": "deep troll delver",
+          "y": 76,
+          "x": 39
+        },
+        {
+          "xp": 659,
+          "name": "deep troll delver",
+          "y": 76,
+          "x": 61
+        }
+      ],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "xp": 10808,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "4 potions of might",
+          "quantity": 4,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of haste",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:1",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 20,
+          "artefact": false,
+          "name": "crag boar corpse",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "gold",
+          "y": 25,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "quantity": 16,
+          "x": 59
+        },
+        {
+          "class": "book",
+          "y": 35,
+          "artefact": false,
+          "name": "parchment of Brom's Barrelling Boulder",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 44,
+          "artefact": false,
+          "name": "chain mail",
+          "quantity": 1,
+          "x": 48
+        },
+        {
+          "class": "gold",
+          "y": 44,
+          "artefact": false,
+          "name": "6 gold pieces",
+          "quantity": 6,
+          "x": 53
+        },
+        {
+          "class": "scroll",
+          "y": 46,
+          "artefact": false,
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "gold",
+          "y": 47,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 39
+        },
+        {
+          "class": "gold",
+          "y": 56,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 46
+        },
+        {
+          "class": "gold",
+          "y": 57,
+          "artefact": false,
+          "name": "24 gold pieces",
+          "quantity": 24,
+          "x": 54
+        },
+        {
+          "class": "scroll",
+          "y": 59,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "scroll",
+          "y": 63,
+          "artefact": false,
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "x": 53
+        },
+        {
+          "class": "armour",
+          "y": 72,
+          "artefact": false,
+          "name": "scale mail",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "gold",
+          "y": 73,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "quantity": 16,
+          "x": 63
+        },
+        {
+          "class": "scroll",
+          "y": 76,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        }
+      ]
+    },
+    {
+      "maxhp": 151,
+      "progress": 0,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 54,
+      "hp": 151,
+      "gold": 0,
+      "monsters": [
+        {
+          "xp": 714,
+          "name": "burrowing beast",
+          "y": 23,
+          "x": 38
+        },
+        {
+          "xp": 694,
+          "name": "crag boar",
+          "y": 30,
+          "x": 56
+        },
+        {
+          "xp": 688,
+          "name": "burrowing beast",
+          "y": 30,
+          "x": 68
+        },
+        {
+          "xp": 591,
+          "name": "shale drake",
+          "y": 33,
+          "x": 38
+        },
+        {
+          "xp": 702,
+          "name": "burrowing beast",
+          "y": 34,
+          "x": 71
+        },
+        {
+          "xp": 696,
+          "name": "crag boar",
+          "y": 36,
+          "x": 56
+        },
+        {
+          "xp": 593,
+          "name": "shale drake",
+          "y": 38,
+          "x": 36
+        },
+        {
+          "xp": 703,
+          "name": "crag boar",
+          "y": 38,
+          "x": 52
+        },
+        {
+          "xp": 690,
+          "name": "burrowing beast",
+          "y": 41,
+          "x": 84
+        },
+        {
+          "xp": 696,
+          "name": "burrowing beast",
+          "y": 42,
+          "x": 57
+        },
+        {
+          "xp": 692,
+          "name": "burrowing beast",
+          "y": 43,
+          "x": 48
+        },
+        {
+          "xp": 821,
+          "name": "boulder beetle",
+          "y": 44,
+          "x": 50
+        },
+        {
+          "xp": 704,
+          "name": "burrowing beast",
+          "y": 44,
+          "x": 69
+        },
+        {
+          "xp": 700,
+          "name": "burrowing beast",
+          "y": 46,
+          "x": 53
+        },
+        {
+          "xp": 694,
+          "name": "crag boar",
+          "y": 47,
+          "x": 37
+        },
+        {
+          "xp": 595,
+          "name": "shale drake",
+          "y": 48,
+          "x": 34
+        },
+        {
+          "xp": 661,
+          "name": "deep troll delver",
+          "y": 51,
+          "x": 34
+        },
+        {
+          "xp": 688,
+          "name": "crag boar",
+          "y": 51,
+          "x": 61
+        },
+        {
+          "xp": 692,
+          "name": "burrowing beast",
+          "y": 52,
+          "x": 35
+        },
+        {
+          "xp": 595,
+          "name": "shale drake",
+          "y": 53,
+          "x": 37
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 56,
+          "x": 32
+        },
+        {
+          "xp": 692,
+          "name": "crag boar",
+          "y": 56,
+          "x": 67
+        },
+        {
+          "xp": 370,
+          "name": "komodo dragon",
+          "y": 57,
+          "x": 69
+        },
+        {
+          "xp": 638,
+          "name": "deep troll delver",
+          "y": 58,
+          "x": 65
+        },
+        {
+          "xp": 682,
+          "name": "burrowing beast",
+          "y": 62,
+          "x": 82
+        },
+        {
+          "xp": 631,
+          "name": "deep troll delver",
+          "y": 63,
+          "x": 81
+        },
+        {
+          "xp": 711,
+          "name": "crag boar",
+          "y": 65,
+          "x": 65
+        },
+        {
+          "xp": 706,
+          "name": "burrowing beast",
+          "y": 67,
+          "x": 68
+        },
+        {
+          "xp": 606,
+          "name": "shale drake",
+          "y": 68,
+          "x": 50
+        },
+        {
+          "xp": 706,
+          "name": "burrowing beast",
+          "y": 72,
+          "x": 33
+        },
+        {
+          "xp": 696,
+          "name": "crag boar",
+          "y": 74,
+          "x": 78
+        },
+        {
+          "xp": 722,
+          "name": "burrowing beast",
+          "y": 75,
+          "x": 36
+        }
+      ],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 20831,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "4 potions of might",
+          "quantity": 4,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of haste",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "wand",
+          "y": 31,
+          "artefact": false,
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "scroll",
+          "y": 32,
+          "artefact": false,
+          "name": "scroll of enchant weapon",
+          "quantity": 1,
+          "x": 71
+        },
+        {
+          "class": "book",
+          "y": 37,
+          "artefact": false,
+          "name": "parchment of Dimensional Bullseye",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "scroll",
+          "y": 41,
+          "artefact": false,
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "x": 58
+        },
+        {
+          "class": "gold",
+          "y": 46,
+          "artefact": false,
+          "name": "13 gold pieces",
+          "quantity": 13,
+          "x": 40
+        },
+        {
+          "class": "scroll",
+          "y": 46,
+          "artefact": false,
+          "name": "scroll of enchant weapon",
+          "quantity": 1,
+          "x": 52
+        },
+        {
+          "class": "gold",
+          "y": 46,
+          "artefact": false,
+          "name": "23 gold pieces",
+          "quantity": 23,
+          "x": 83
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "scroll",
+          "y": 50,
+          "artefact": false,
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "x": 32
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "gold",
+          "y": 52,
+          "artefact": false,
+          "name": "18 gold pieces",
+          "quantity": 18,
+          "x": 54
+        },
+        {
+          "class": "gold",
+          "y": 69,
+          "artefact": false,
+          "name": "20 gold pieces",
+          "quantity": 20,
+          "x": 52
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 33,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 1285,
+      "hp": 152,
+      "gold": 74,
+      "monsters": [],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        }
+      ],
+      "tag": "explored",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 38
+        },
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 33,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 69
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 troll leather armour",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 43,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 45,
+          "artefact": false,
+          "name": "burrowing beast corpse",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 37
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 68
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "+0 trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "corpse",
+          "y": 50,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "corpse",
+          "y": 65,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "corpse",
+          "y": 67,
+          "artefact": false,
+          "name": "burrowing beast corpse",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 70,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 33,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 1312,
+      "hp": 152,
+      "gold": 74,
+      "monsters": [],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        }
+      ],
+      "tag": "exit",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 38
+        },
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 33,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 69
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 troll leather armour",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 43,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 45,
+          "artefact": false,
+          "name": "burrowing beast corpse",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 37
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 68
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "+0 trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "corpse",
+          "y": 50,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "corpse",
+          "y": 65,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "corpse",
+          "y": 67,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 70,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 33,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 1314,
+      "hp": 152,
+      "gold": 74,
+      "monsters": [
+        {
+          "xp": 710,
+          "name": "burrowing beast",
+          "y": 22,
+          "x": 85
+        },
+        {
+          "xp": 711,
+          "name": "crag boar",
+          "y": 27,
+          "x": 76
+        },
+        {
+          "xp": 700,
+          "name": "burrowing beast",
+          "y": 27,
+          "x": 77
+        },
+        {
+          "xp": 714,
+          "name": "crag boar",
+          "y": 28,
+          "x": 39
+        },
+        {
+          "xp": 652,
+          "name": "deep troll delver",
+          "y": 33,
+          "x": 80
+        },
+        {
+          "xp": 701,
+          "name": "crag boar",
+          "y": 37,
+          "x": 72
+        },
+        {
+          "xp": 709,
+          "name": "crag boar",
+          "y": 45,
+          "x": 38
+        },
+        {
+          "xp": 688,
+          "name": "crag boar",
+          "y": 45,
+          "x": 55
+        },
+        {
+          "xp": 712,
+          "name": "burrowing beast",
+          "y": 46,
+          "x": 36
+        },
+        {
+          "xp": 706,
+          "name": "burrowing beast",
+          "y": 47,
+          "x": 72
+        },
+        {
+          "xp": 354,
+          "name": "komodo dragon",
+          "y": 48,
+          "x": 69
+        },
+        {
+          "xp": 362,
+          "name": "komodo dragon",
+          "y": 58,
+          "x": 54
+        },
+        {
+          "xp": 718,
+          "name": "burrowing beast",
+          "y": 65,
+          "x": 77
+        },
+        {
+          "xp": 362,
+          "name": "komodo dragon",
+          "y": 71,
+          "x": 64
+        },
+        {
+          "xp": 696,
+          "name": "crag boar",
+          "y": 72,
+          "x": 70
+        },
+        {
+          "xp": 654,
+          "name": "deep troll delver",
+          "y": 76,
+          "x": 39
+        },
+        {
+          "xp": 659,
+          "name": "deep troll delver",
+          "y": 76,
+          "x": 61
+        }
+      ],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "xp": 10808,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:1",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 20,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "gold",
+          "y": 25,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "quantity": 16,
+          "x": 59
+        },
+        {
+          "class": "book",
+          "y": 35,
+          "artefact": false,
+          "name": "parchment of Brom's Barrelling Boulder",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 44,
+          "artefact": false,
+          "name": "chain mail",
+          "quantity": 1,
+          "x": 48
+        },
+        {
+          "class": "gold",
+          "y": 44,
+          "artefact": false,
+          "name": "6 gold pieces",
+          "quantity": 6,
+          "x": 53
+        },
+        {
+          "class": "scroll",
+          "y": 46,
+          "artefact": false,
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "gold",
+          "y": 47,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 39
+        },
+        {
+          "class": "gold",
+          "y": 56,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 46
+        },
+        {
+          "class": "gold",
+          "y": 57,
+          "artefact": false,
+          "name": "24 gold pieces",
+          "quantity": 24,
+          "x": 54
+        },
+        {
+          "class": "scroll",
+          "y": 59,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "scroll",
+          "y": 63,
+          "artefact": false,
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "x": 53
+        },
+        {
+          "class": "armour",
+          "y": 72,
+          "artefact": false,
+          "name": "scale mail",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "gold",
+          "y": 73,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "quantity": 16,
+          "x": 63
+        },
+        {
+          "class": "scroll",
+          "y": 76,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 1966,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "explored",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:1",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 20,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 26,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 75
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 40
+        },
+        {
+          "class": "armour",
+          "y": 44,
+          "artefact": false,
+          "name": "+0 chain mail",
+          "quantity": 1,
+          "x": 48
+        },
+        {
+          "class": "scroll",
+          "y": 46,
+          "artefact": false,
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "corpse",
+          "y": 46,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 74
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 74
+        },
+        {
+          "class": "scroll",
+          "y": 59,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 72,
+          "artefact": false,
+          "name": "scale mail",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "corpse",
+          "y": 73,
+          "artefact": false,
+          "name": "komodo dragon corpse",
+          "quantity": 1,
+          "x": 56
+        },
+        {
+          "class": "corpse",
+          "y": 73,
+          "artefact": false,
+          "name": "deep troll corpse",
+          "quantity": 1,
+          "x": 57
+        },
+        {
+          "class": "scroll",
+          "y": 76,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 2027,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "exit",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:1",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 20,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 26,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 75
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 40
+        },
+        {
+          "class": "armour",
+          "y": 44,
+          "artefact": false,
+          "name": "+0 chain mail",
+          "quantity": 1,
+          "x": 48
+        },
+        {
+          "class": "scroll",
+          "y": 46,
+          "artefact": false,
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "corpse",
+          "y": 46,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 74
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 74
+        },
+        {
+          "class": "scroll",
+          "y": 59,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 72,
+          "artefact": false,
+          "name": "scale mail",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "corpse",
+          "y": 73,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 56
+        },
+        {
+          "class": "corpse",
+          "y": 73,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 57
+        },
+        {
+          "class": "scroll",
+          "y": 76,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 2029,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 38
+        },
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 33,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 69
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 troll leather armour",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 43,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 45,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 37
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 68
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "+0 trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "corpse",
+          "y": 50,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "corpse",
+          "y": 65,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "corpse",
+          "y": 67,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 70,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 2029,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "explored",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 38
+        },
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 33,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 69
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 troll leather armour",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 43,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 45,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 37
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 68
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "+0 trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "corpse",
+          "y": 50,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "corpse",
+          "y": 65,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "corpse",
+          "y": 67,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 70,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 2050,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [],
+      "vaults": "layout_burrows, hive_entry_comb, bur_paired_dens, bur_flooded_roots, bur_root_pocket and bur_split_passage",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "exit",
+      "xl": 16,
+      "honey": 0,
+      "where": "Bur:2",
+      "items": [
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 38
+        },
+        {
+          "class": "corpse",
+          "y": 30,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 33,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 69
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 troll leather armour",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 43,
+          "artefact": false,
+          "name": "deep troll skeleton",
+          "quantity": 1,
+          "x": 35
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 44,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 45,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 85
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "corpse",
+          "y": 47,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 37
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "corpse",
+          "y": 48,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 68
+        },
+        {
+          "class": "weapon",
+          "y": 48,
+          "artefact": false,
+          "name": "+0 trident",
+          "quantity": 1,
+          "x": 86
+        },
+        {
+          "class": "corpse",
+          "y": 50,
+          "artefact": false,
+          "name": "shale drake skeleton",
+          "quantity": 1,
+          "x": 36
+        },
+        {
+          "class": "missile",
+          "y": 51,
+          "artefact": false,
+          "name": "4 boomerangs",
+          "quantity": 4,
+          "x": 27
+        },
+        {
+          "class": "corpse",
+          "y": 65,
+          "artefact": false,
+          "name": "komodo dragon skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "corpse",
+          "y": 67,
+          "artefact": false,
+          "name": "burrowing beast skeleton",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 70,
+          "artefact": false,
+          "name": "crag boar skeleton",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 71,
+          "artefact": false,
+          "name": "bardiche",
+          "quantity": 1,
+          "x": 37
+        }
+      ]
+    },
+    {
+      "maxhp": 152,
+      "progress": 50,
+      "mp": 21,
+      "maxmp": 21,
+      "turn": 2052,
+      "hp": 152,
+      "gold": 166,
+      "monsters": [
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 26,
+          "x": 77
+        },
+        {
+          "xp": 487,
+          "name": "venom wasp",
+          "y": 27,
+          "x": 41
+        },
+        {
+          "xp": 580,
+          "name": "wax beetle",
+          "y": 27,
+          "x": 76
+        },
+        {
+          "xp": 606,
+          "name": "wax beetle",
+          "y": 28,
+          "x": 52
+        },
+        {
+          "xp": 471,
+          "name": "meliai",
+          "y": 29,
+          "x": 85
+        },
+        {
+          "xp": 592,
+          "name": "wax beetle",
+          "y": 30,
+          "x": 50
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 30,
+          "x": 86
+        },
+        {
+          "xp": 601,
+          "name": "wax beetle",
+          "y": 32,
+          "x": 51
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 32,
+          "x": 84
+        },
+        {
+          "xp": 60,
+          "name": "killer bee",
+          "y": 33,
+          "x": 44
+        },
+        {
+          "xp": 616,
+          "name": "wax beetle",
+          "y": 34,
+          "x": 53
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 35,
+          "x": 39
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 35,
+          "x": 87
+        },
+        {
+          "xp": 580,
+          "name": "wax beetle",
+          "y": 37,
+          "x": 67
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 38,
+          "x": 47
+        },
+        {
+          "xp": 596,
+          "name": "wax beetle",
+          "y": 38,
+          "x": 64
+        },
+        {
+          "xp": 497,
+          "name": "venom wasp",
+          "y": 38,
+          "x": 84
+        },
+        {
+          "xp": 595,
+          "name": "wax beetle",
+          "y": 39,
+          "x": 62
+        },
+        {
+          "xp": 609,
+          "name": "wax beetle",
+          "y": 40,
+          "x": 34
+        },
+        {
+          "xp": 596,
+          "name": "wax beetle",
+          "y": 40,
+          "x": 50
+        },
+        {
+          "xp": 611,
+          "name": "wax beetle",
+          "y": 40,
+          "x": 86
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 42,
+          "x": 39
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 43,
+          "x": 35
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 44,
+          "x": 38
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 44,
+          "x": 39
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 46,
+          "x": 35
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 48,
+          "x": 64
+        },
+        {
+          "xp": 505,
+          "name": "venom wasp",
+          "y": 49,
+          "x": 32
+        },
+        {
+          "xp": 505,
+          "name": "venom wasp",
+          "y": 49,
+          "x": 66
+        },
+        {
+          "xp": 278,
+          "name": "hornet",
+          "y": 49,
+          "x": 86
+        },
+        {
+          "xp": 280,
+          "name": "hornet",
+          "y": 50,
+          "x": 51
+        },
+        {
+          "xp": 598,
+          "name": "wax beetle",
+          "y": 50,
+          "x": 84
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 51,
+          "x": 28
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 51,
+          "x": 43
+        },
+        {
+          "xp": 496,
+          "name": "meliai",
+          "y": 51,
+          "x": 66
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 53,
+          "x": 27
+        },
+        {
+          "xp": 603,
+          "name": "wax beetle",
+          "y": 53,
+          "x": 28
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 53,
+          "x": 29
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 53,
+          "x": 48
+        },
+        {
+          "xp": 309,
+          "name": "queen bee",
+          "y": 54,
+          "x": 49
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 54,
+          "x": 64
+        },
+        {
+          "xp": 596,
+          "name": "wax beetle",
+          "y": 58,
+          "x": 40
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 59,
+          "x": 67
+        },
+        {
+          "xp": 505,
+          "name": "venom wasp",
+          "y": 60,
+          "x": 82
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 65,
+          "x": 32
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 65,
+          "x": 43
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 66,
+          "x": 41
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 67,
+          "x": 32
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 68,
+          "x": 40
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 69,
+          "x": 29
+        },
+        {
+          "xp": 304,
+          "name": "queen bee",
+          "y": 69,
+          "x": 47
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 69,
+          "x": 69
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 70,
+          "x": 28
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 70,
+          "x": 29
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 70,
+          "x": 33
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 71,
+          "x": 28
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 72,
+          "x": 28
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 72,
+          "x": 29
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 72,
+          "x": 32
+        },
+        {
+          "xp": 471,
+          "name": "meliai",
+          "y": 72,
+          "x": 66
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 73,
+          "x": 25
+        },
+        {
+          "xp": 606,
+          "name": "wax beetle",
+          "y": 73,
+          "x": 65
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 73,
+          "x": 69
+        },
+        {
+          "xp": 60,
+          "name": "killer bee",
+          "y": 74,
+          "x": 29
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 74,
+          "x": 33
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 75,
+          "x": 29
+        },
+        {
+          "xp": 61,
+          "name": "killer bee",
+          "y": 75,
+          "x": 30
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 75,
+          "x": 32
+        },
+        {
+          "xp": 505,
+          "name": "venom wasp",
+          "y": 75,
+          "x": 69
+        },
+        {
+          "xp": 505,
+          "name": "venom wasp",
+          "y": 76,
+          "x": 77
+        },
+        {
+          "xp": 608,
+          "name": "wax beetle",
+          "y": 76,
+          "x": 89
+        },
+        {
+          "xp": 285,
+          "name": "hornet",
+          "y": 77,
+          "x": 77
+        },
+        {
+          "xp": 485,
+          "name": "venom wasp",
+          "y": 78,
+          "x": 27
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 78,
+          "x": 29
+        },
+        {
+          "xp": 497,
+          "name": "venom wasp",
+          "y": 78,
+          "x": 88
+        }
+      ],
+      "vaults": "layout_hive, hive_guard_line and hive_flight_lane",
+      "xp": 26453,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 30,
+      "where": "Hive:1",
+      "items": [
+        {
+          "class": "gold",
+          "y": 28,
+          "artefact": false,
+          "name": "12 gold pieces",
+          "quantity": 12,
+          "x": 79
+        },
+        {
+          "class": "book",
+          "y": 29,
+          "artefact": false,
+          "name": "parchment of Aura of Rime",
+          "quantity": 1,
+          "x": 80
+        },
+        {
+          "class": "weapon",
+          "y": 30,
+          "artefact": false,
+          "name": "short sword",
+          "quantity": 1,
+          "x": 80
+        },
+        {
+          "class": "weapon",
+          "y": 31,
+          "artefact": false,
+          "name": "quarterstaff",
+          "quantity": 1,
+          "x": 41
+        },
+        {
+          "class": "gold",
+          "y": 31,
+          "artefact": false,
+          "name": "8 gold pieces",
+          "quantity": 8,
+          "x": 86
+        },
+        {
+          "class": "gold",
+          "y": 34,
+          "artefact": false,
+          "name": "14 gold pieces",
+          "quantity": 14,
+          "x": 45
+        },
+        {
+          "class": "gold",
+          "y": 34,
+          "artefact": false,
+          "name": "21 gold pieces",
+          "quantity": 21,
+          "x": 79
+        },
+        {
+          "class": "gold",
+          "y": 35,
+          "artefact": false,
+          "name": "21 gold pieces",
+          "quantity": 21,
+          "x": 58
+        },
+        {
+          "class": "gold",
+          "y": 37,
+          "artefact": false,
+          "name": "19 gold pieces",
+          "quantity": 19,
+          "x": 87
+        },
+        {
+          "class": "scroll",
+          "y": 44,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "potion",
+          "y": 45,
+          "artefact": false,
+          "name": "potion of curing",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "scroll",
+          "y": 49,
+          "artefact": false,
+          "name": "scroll of enchant armour",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "armour",
+          "y": 51,
+          "artefact": false,
+          "name": "plate armour",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "gold",
+          "y": 54,
+          "artefact": false,
+          "name": "14 gold pieces",
+          "quantity": 14,
+          "x": 61
+        },
+        {
+          "class": "gold",
+          "y": 57,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 57
+        },
+        {
+          "class": "talisman",
+          "y": 63,
+          "artefact": false,
+          "name": "fortress talisman",
+          "quantity": 1,
+          "x": 31
+        },
+        {
+          "class": "weapon",
+          "y": 69,
+          "artefact": false,
+          "name": "partisan",
+          "quantity": 1,
+          "x": 61
+        }
+      ]
+    },
+    {
+      "maxhp": 155,
+      "progress": 92,
+      "mp": 22,
+      "maxmp": 22,
+      "turn": 3526,
+      "hp": 155,
+      "gold": 290,
+      "monsters": [],
+      "vaults": "layout_hive, hive_guard_line and hive_flight_lane",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "scroll of enchant armour",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 potions of curing",
+          "quantity": 3,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of heal wounds",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "explored",
+      "xl": 16,
+      "honey": 30,
+      "where": "Hive:1",
+      "items": [
+        {
+          "class": "weapon",
+          "y": 30,
+          "artefact": false,
+          "name": "+0 short sword",
+          "quantity": 1,
+          "x": 80
+        },
+        {
+          "class": "weapon",
+          "y": 31,
+          "artefact": false,
+          "name": "quarterstaff",
+          "quantity": 1,
+          "x": 41
+        },
+        {
+          "class": "weapon",
+          "y": 33,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "armour",
+          "y": 33,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "weapon",
+          "y": 34,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "armour",
+          "y": 34,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "weapon",
+          "y": 35,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 78
+        },
+        {
+          "class": "armour",
+          "y": 35,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 78
+        },
+        {
+          "class": "weapon",
+          "y": 37,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "armour",
+          "y": 37,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "weapon",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 58
+        },
+        {
+          "class": "armour",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 58
+        },
+        {
+          "class": "weapon",
+          "y": 38,
+          "artefact": false,
+          "name": "+1 war axe of sundering",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "armour",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "weapon",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "armour",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "weapon",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "scroll",
+          "y": 44,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "armour",
+          "y": 51,
+          "artefact": false,
+          "name": "plate armour",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "talisman",
+          "y": 63,
+          "artefact": false,
+          "name": "fortress talisman",
+          "quantity": 1,
+          "x": 31
+        },
+        {
+          "class": "weapon",
+          "y": 65,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "armour",
+          "y": 65,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "weapon",
+          "y": 66,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "armour",
+          "y": 66,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "weapon",
+          "y": 67,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "armour",
+          "y": 67,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "weapon",
+          "y": 69,
+          "artefact": false,
+          "name": "partisan",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "corpse",
+          "y": 76,
+          "artefact": false,
+          "name": "venom wasp corpse",
+          "quantity": 1,
+          "x": 84
+        },
+        {
+          "class": "corpse",
+          "y": 76,
+          "artefact": false,
+          "name": "wax beetle corpse",
+          "quantity": 1,
+          "x": 85
+        }
+      ]
+    },
+    {
+      "maxhp": 155,
+      "progress": 92,
+      "mp": 22,
+      "maxmp": 22,
+      "turn": 3583,
+      "hp": 155,
+      "gold": 290,
+      "monsters": [],
+      "vaults": "layout_hive, hive_guard_line and hive_flight_lane",
+      "xp": 0,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "scroll of enchant armour",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 potions of curing",
+          "quantity": 3,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of heal wounds",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "exit",
+      "xl": 16,
+      "honey": 30,
+      "where": "Hive:1",
+      "items": [
+        {
+          "class": "weapon",
+          "y": 30,
+          "artefact": false,
+          "name": "+0 short sword",
+          "quantity": 1,
+          "x": 80
+        },
+        {
+          "class": "weapon",
+          "y": 31,
+          "artefact": false,
+          "name": "quarterstaff",
+          "quantity": 1,
+          "x": 41
+        },
+        {
+          "class": "weapon",
+          "y": 33,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "armour",
+          "y": 33,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "weapon",
+          "y": 34,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "armour",
+          "y": 34,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 79
+        },
+        {
+          "class": "weapon",
+          "y": 35,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 78
+        },
+        {
+          "class": "armour",
+          "y": 35,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 78
+        },
+        {
+          "class": "weapon",
+          "y": 37,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "armour",
+          "y": 37,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "weapon",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 58
+        },
+        {
+          "class": "armour",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 58
+        },
+        {
+          "class": "weapon",
+          "y": 38,
+          "artefact": false,
+          "name": "+1 war axe of sundering",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "armour",
+          "y": 38,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 59
+        },
+        {
+          "class": "weapon",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "armour",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "weapon",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "weapon",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 64
+        },
+        {
+          "class": "scroll",
+          "y": 44,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "armour",
+          "y": 51,
+          "artefact": false,
+          "name": "plate armour",
+          "quantity": 1,
+          "x": 63
+        },
+        {
+          "class": "talisman",
+          "y": 63,
+          "artefact": false,
+          "name": "fortress talisman",
+          "quantity": 1,
+          "x": 31
+        },
+        {
+          "class": "weapon",
+          "y": 65,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "armour",
+          "y": 65,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "weapon",
+          "y": 66,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "armour",
+          "y": 66,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "weapon",
+          "y": 67,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "armour",
+          "y": 67,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "weapon",
+          "y": 69,
+          "artefact": false,
+          "name": "partisan",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "corpse",
+          "y": 76,
+          "artefact": false,
+          "name": "venom wasp corpse",
+          "quantity": 1,
+          "x": 84
+        },
+        {
+          "class": "corpse",
+          "y": 76,
+          "artefact": false,
+          "name": "wax beetle corpse",
+          "quantity": 1,
+          "x": 85
+        }
+      ]
+    },
+    {
+      "maxhp": 155,
+      "progress": 92,
+      "mp": 22,
+      "maxmp": 22,
+      "turn": 3585,
+      "hp": 155,
+      "gold": 290,
+      "monsters": [
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 18,
+          "x": 48
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 18,
+          "x": 50
+        },
+        {
+          "xp": 963,
+          "name": "spark wasp",
+          "y": 18,
+          "x": 67
+        },
+        {
+          "xp": 603,
+          "name": "wax beetle",
+          "y": 19,
+          "x": 41
+        },
+        {
+          "xp": 600,
+          "name": "wax beetle",
+          "y": 19,
+          "x": 49
+        },
+        {
+          "xp": 307,
+          "name": "queen bee",
+          "y": 20,
+          "x": 48
+        },
+        {
+          "xp": 303,
+          "name": "queen bee",
+          "y": 20,
+          "x": 77
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 21,
+          "x": 35
+        },
+        {
+          "xp": 64,
+          "name": "killer bee",
+          "y": 21,
+          "x": 49
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 22,
+          "x": 34
+        },
+        {
+          "xp": 496,
+          "name": "meliai",
+          "y": 22,
+          "x": 38
+        },
+        {
+          "xp": 312,
+          "name": "queen bee",
+          "y": 22,
+          "x": 41
+        },
+        {
+          "xp": 487,
+          "name": "venom wasp",
+          "y": 22,
+          "x": 48
+        },
+        {
+          "xp": 972,
+          "name": "spark wasp",
+          "y": 26,
+          "x": 82
+        },
+        {
+          "xp": 283,
+          "name": "hornet",
+          "y": 27,
+          "x": 33
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 28,
+          "x": 31
+        },
+        {
+          "xp": 998,
+          "name": "spark wasp",
+          "y": 28,
+          "x": 80
+        },
+        {
+          "xp": 603,
+          "name": "wax beetle",
+          "y": 32,
+          "x": 44
+        },
+        {
+          "xp": 598,
+          "name": "wax beetle",
+          "y": 33,
+          "x": 47
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 35,
+          "x": 79
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 37,
+          "x": 79
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 38,
+          "x": 77
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 39,
+          "x": 77
+        },
+        {
+          "xp": 510,
+          "name": "venom wasp",
+          "y": 39,
+          "x": 79
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 40,
+          "x": 71
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 40,
+          "x": 74
+        },
+        {
+          "xp": 492,
+          "name": "venom wasp",
+          "y": 41,
+          "x": 63
+        },
+        {
+          "xp": 502,
+          "name": "venom wasp",
+          "y": 41,
+          "x": 69
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 42,
+          "x": 74
+        },
+        {
+          "xp": 960,
+          "name": "spark wasp",
+          "y": 44,
+          "x": 48
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 47,
+          "x": 47
+        },
+        {
+          "xp": 306,
+          "name": "queen bee",
+          "y": 47,
+          "x": 50
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 48,
+          "x": 50
+        },
+        {
+          "xp": 608,
+          "name": "wax beetle",
+          "y": 48,
+          "x": 51
+        },
+        {
+          "xp": 632,
+          "name": "wax beetle",
+          "y": 48,
+          "x": 65
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 49,
+          "x": 53
+        },
+        {
+          "xp": 590,
+          "name": "wax beetle",
+          "y": 50,
+          "x": 50
+        },
+        {
+          "xp": 590,
+          "name": "wax beetle",
+          "y": 52,
+          "x": 36
+        },
+        {
+          "xp": 969,
+          "name": "spark wasp",
+          "y": 52,
+          "x": 37
+        },
+        {
+          "xp": 992,
+          "name": "spark wasp",
+          "y": 52,
+          "x": 59
+        },
+        {
+          "xp": 598,
+          "name": "wax beetle",
+          "y": 52,
+          "x": 74
+        },
+        {
+          "xp": 963,
+          "name": "spark wasp",
+          "y": 52,
+          "x": 75
+        },
+        {
+          "xp": 969,
+          "name": "spark wasp",
+          "y": 54,
+          "x": 38
+        },
+        {
+          "xp": 502,
+          "name": "venom wasp",
+          "y": 55,
+          "x": 29
+        },
+        {
+          "xp": 595,
+          "name": "wax beetle",
+          "y": 55,
+          "x": 39
+        },
+        {
+          "xp": 992,
+          "name": "spark wasp",
+          "y": 56,
+          "x": 49
+        },
+        {
+          "xp": 276,
+          "name": "hornet",
+          "y": 56,
+          "x": 83
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 58,
+          "x": 34
+        },
+        {
+          "xp": 1013,
+          "name": "spark wasp",
+          "y": 59,
+          "x": 41
+        },
+        {
+          "xp": 978,
+          "name": "spark wasp",
+          "y": 60,
+          "x": 38
+        },
+        {
+          "xp": 585,
+          "name": "wax beetle",
+          "y": 61,
+          "x": 61
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 62,
+          "x": 41
+        },
+        {
+          "xp": 983,
+          "name": "spark wasp",
+          "y": 64,
+          "x": 83
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 66,
+          "x": 83
+        },
+        {
+          "xp": 601,
+          "name": "wax beetle",
+          "y": 66,
+          "x": 88
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 68,
+          "x": 80
+        },
+        {
+          "xp": 1004,
+          "name": "spark wasp",
+          "y": 68,
+          "x": 87
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 70,
+          "x": 36
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 70,
+          "x": 42
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 70,
+          "x": 44
+        },
+        {
+          "xp": 500,
+          "name": "meliai",
+          "y": 70,
+          "x": 83
+        },
+        {
+          "xp": 606,
+          "name": "wax beetle",
+          "y": 72,
+          "x": 42
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 72,
+          "x": 43
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 73,
+          "x": 55
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 73,
+          "x": 57
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 75,
+          "x": 66
+        },
+        {
+          "xp": 285,
+          "name": "hornet",
+          "y": 75,
+          "x": 85
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 76,
+          "x": 53
+        },
+        {
+          "xp": 592,
+          "name": "wax beetle",
+          "y": 77,
+          "x": 54
+        },
+        {
+          "xp": 595,
+          "name": "wax beetle",
+          "y": 77,
+          "x": 68
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 78,
+          "x": 77
+        },
+        {
+          "xp": 601,
+          "name": "wax beetle",
+          "y": 78,
+          "x": 83
+        },
+        {
+          "xp": 497,
+          "name": "venom wasp",
+          "y": 79,
+          "x": 49
+        },
+        {
+          "xp": 487,
+          "name": "venom wasp",
+          "y": 80,
+          "x": 68
+        },
+        {
+          "xp": 972,
+          "name": "spark wasp",
+          "y": 80,
+          "x": 71
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 81,
+          "x": 43
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 81,
+          "x": 45
+        },
+        {
+          "xp": 983,
+          "name": "spark wasp",
+          "y": 81,
+          "x": 71
+        },
+        {
+          "xp": 596,
+          "name": "wax beetle",
+          "y": 83,
+          "x": 50
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 84,
+          "x": 44
+        },
+        {
+          "xp": 490,
+          "name": "venom wasp",
+          "y": 84,
+          "x": 79
+        }
+      ],
+      "vaults": "hive_end_amber_brood",
+      "xp": 45882,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "scroll of enchant armour",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 potions of curing",
+          "quantity": 3,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of heal wounds",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "enter",
+      "xl": 16,
+      "honey": 29,
+      "where": "Hive:2",
+      "items": [
+        {
+          "class": "jewellery",
+          "y": 19,
+          "artefact": false,
+          "name": "amulet of guardian spirit",
+          "quantity": 1,
+          "x": 46
+        },
+        {
+          "class": "gold",
+          "y": 19,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 50
+        },
+        {
+          "class": "jewellery",
+          "y": 20,
+          "artefact": false,
+          "name": "+6 ring of strength",
+          "quantity": 1,
+          "x": 46
+        },
+        {
+          "class": "gold",
+          "y": 20,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 48
+        },
+        {
+          "class": "gold",
+          "y": 20,
+          "artefact": false,
+          "name": "24 gold pieces",
+          "quantity": 24,
+          "x": 50
+        },
+        {
+          "class": "jewellery",
+          "y": 21,
+          "artefact": true,
+          "name": "wavering platinum ring",
+          "quantity": 1,
+          "x": 46
+        },
+        {
+          "class": "gold",
+          "y": 21,
+          "artefact": false,
+          "name": "5 gold pieces",
+          "quantity": 5,
+          "x": 50
+        },
+        {
+          "class": "gold",
+          "y": 29,
+          "artefact": false,
+          "name": "10 gold pieces",
+          "quantity": 10,
+          "x": 32
+        },
+        {
+          "class": "armour",
+          "y": 34,
+          "artefact": false,
+          "name": "glowing scale mail",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "weapon",
+          "y": 40,
+          "artefact": false,
+          "name": "falchion",
+          "quantity": 1,
+          "x": 47
+        },
+        {
+          "class": "scroll",
+          "y": 41,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        },
+        {
+          "class": "scroll",
+          "y": 53,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 62
+        },
+        {
+          "class": "gold",
+          "y": 53,
+          "artefact": false,
+          "name": "21 gold pieces",
+          "quantity": 21,
+          "x": 63
+        },
+        {
+          "class": "scroll",
+          "y": 54,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "scroll",
+          "y": 56,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "potion",
+          "y": 58,
+          "artefact": false,
+          "name": "potion of brilliance",
+          "quantity": 1,
+          "x": 81
+        },
+        {
+          "class": "talisman",
+          "y": 59,
+          "artefact": true,
+          "name": "transparent fortress talisman",
+          "quantity": 1,
+          "x": 42
+        },
+        {
+          "class": "book",
+          "y": 65,
+          "artefact": false,
+          "name": "parchment of Ensorcelled Hibernation",
+          "quantity": 1,
+          "x": 80
+        },
+        {
+          "class": "gold",
+          "y": 69,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "quantity": 16,
+          "x": 38
+        },
+        {
+          "class": "scroll",
+          "y": 71,
+          "artefact": false,
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "x": 66
+        },
+        {
+          "class": "armour",
+          "y": 71,
+          "artefact": false,
+          "name": "ring mail",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "book",
+          "y": 72,
+          "artefact": false,
+          "name": "parchment of Shadow Creatures",
+          "quantity": 1,
+          "x": 55
+        },
+        {
+          "class": "scroll",
+          "y": 77,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 77
+        }
+      ]
+    },
+    {
+      "maxhp": 161,
+      "progress": 15,
+      "mp": 22,
+      "maxmp": 23,
+      "turn": 4620,
+      "hp": -9,
+      "gold": 355,
+      "monsters": [
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 18,
+          "x": 48
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 18,
+          "x": 50
+        },
+        {
+          "xp": 603,
+          "name": "wax beetle",
+          "y": 19,
+          "x": 41
+        },
+        {
+          "xp": 600,
+          "name": "wax beetle",
+          "y": 19,
+          "x": 49
+        },
+        {
+          "xp": 307,
+          "name": "queen bee",
+          "y": 20,
+          "x": 48
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 21,
+          "x": 35
+        },
+        {
+          "xp": 64,
+          "name": "killer bee",
+          "y": 21,
+          "x": 49
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 22,
+          "x": 34
+        },
+        {
+          "xp": 496,
+          "name": "meliai",
+          "y": 22,
+          "x": 38
+        },
+        {
+          "xp": 312,
+          "name": "queen bee",
+          "y": 22,
+          "x": 41
+        },
+        {
+          "xp": 487,
+          "name": "venom wasp",
+          "y": 22,
+          "x": 48
+        },
+        {
+          "xp": 500,
+          "name": "venom wasp",
+          "y": 28,
+          "x": 31
+        },
+        {
+          "xp": 510,
+          "name": "venom wasp",
+          "y": 28,
+          "x": 35
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 31,
+          "x": 37
+        },
+        {
+          "xp": 598,
+          "name": "wax beetle",
+          "y": 33,
+          "x": 47
+        },
+        {
+          "xp": 960,
+          "name": "spark wasp",
+          "y": 44,
+          "x": 48
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 47,
+          "x": 47
+        },
+        {
+          "xp": 603,
+          "name": "wax beetle",
+          "y": 47,
+          "x": 52
+        },
+        {
+          "xp": 590,
+          "name": "wax beetle",
+          "y": 50,
+          "x": 50
+        },
+        {
+          "xp": 969,
+          "name": "spark wasp",
+          "y": 52,
+          "x": 37
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 53,
+          "x": 50
+        },
+        {
+          "xp": 969,
+          "name": "spark wasp",
+          "y": 54,
+          "x": 38
+        },
+        {
+          "xp": 502,
+          "name": "venom wasp",
+          "y": 55,
+          "x": 29
+        },
+        {
+          "xp": 595,
+          "name": "wax beetle",
+          "y": 55,
+          "x": 39
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 55,
+          "x": 58
+        },
+        {
+          "xp": 992,
+          "name": "spark wasp",
+          "y": 56,
+          "x": 49
+        },
+        {
+          "xp": 479,
+          "name": "meliai",
+          "y": 57,
+          "x": 49
+        },
+        {
+          "xp": 507,
+          "name": "venom wasp",
+          "y": 58,
+          "x": 34
+        },
+        {
+          "xp": 1013,
+          "name": "spark wasp",
+          "y": 59,
+          "x": 41
+        },
+        {
+          "xp": 978,
+          "name": "spark wasp",
+          "y": 60,
+          "x": 38
+        },
+        {
+          "xp": 585,
+          "name": "wax beetle",
+          "y": 61,
+          "x": 61
+        },
+        {
+          "xp": 983,
+          "name": "spark wasp",
+          "y": 63,
+          "x": 83
+        },
+        {
+          "xp": 283,
+          "name": "hornet",
+          "y": 68,
+          "x": 41
+        },
+        {
+          "xp": 487,
+          "name": "venom wasp",
+          "y": 68,
+          "x": 85
+        },
+        {
+          "xp": 1004,
+          "name": "spark wasp",
+          "y": 69,
+          "x": 42
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 70,
+          "x": 36
+        },
+        {
+          "xp": 495,
+          "name": "venom wasp",
+          "y": 71,
+          "x": 38
+        },
+        {
+          "xp": 972,
+          "name": "spark wasp",
+          "y": 71,
+          "x": 85
+        },
+        {
+          "xp": 606,
+          "name": "wax beetle",
+          "y": 72,
+          "x": 42
+        },
+        {
+          "xp": 590,
+          "name": "wax beetle",
+          "y": 72,
+          "x": 60
+        },
+        {
+          "xp": 595,
+          "name": "wax beetle",
+          "y": 73,
+          "x": 84
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 74,
+          "x": 55
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 74,
+          "x": 56
+        },
+        {
+          "xp": 592,
+          "name": "wax beetle",
+          "y": 77,
+          "x": 54
+        },
+        {
+          "xp": 475,
+          "name": "meliai",
+          "y": 78,
+          "x": 54
+        },
+        {
+          "xp": 497,
+          "name": "venom wasp",
+          "y": 79,
+          "x": 49
+        },
+        {
+          "xp": 492,
+          "name": "meliai",
+          "y": 81,
+          "x": 43
+        },
+        {
+          "xp": 488,
+          "name": "meliai",
+          "y": 81,
+          "x": 45
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 81,
+          "x": 50
+        },
+        {
+          "xp": 608,
+          "name": "wax beetle",
+          "y": 81,
+          "x": 51
+        },
+        {
+          "xp": 62,
+          "name": "killer bee",
+          "y": 81,
+          "x": 55
+        },
+        {
+          "xp": 63,
+          "name": "killer bee",
+          "y": 82,
+          "x": 48
+        },
+        {
+          "xp": 596,
+          "name": "wax beetle",
+          "y": 83,
+          "x": 50
+        },
+        {
+          "xp": 484,
+          "name": "meliai",
+          "y": 84,
+          "x": 44
+        }
+      ],
+      "vaults": "hive_end_amber_brood",
+      "xp": 30046,
+      "inventory": [
+        {
+          "name": "+0 war axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 scale mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 buckler",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 barding",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+1 kite shield",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 plate armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 broad axe",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "amulet of guardian spirit",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "potion of brilliance",
+          "quantity": 1,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of enchant armour",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of brand weapon",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 potions of curing",
+          "quantity": 3,
+          "class": "potion"
+        },
+        {
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of enchant weapon",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "wand of acid (3)",
+          "quantity": 1,
+          "class": "wand"
+        },
+        {
+          "name": "scroll of vulnerability",
+          "quantity": 1,
+          "class": "scroll"
+        }
+      ],
+      "tag": "death",
+      "xl": 17,
+      "honey": 29,
+      "where": "Hive:2",
+      "items": [
+        {
+          "class": "gold",
+          "y": 20,
+          "artefact": false,
+          "name": "15 gold pieces",
+          "quantity": 15,
+          "x": 48
+        },
+        {
+          "class": "gold",
+          "y": 29,
+          "artefact": false,
+          "name": "10 gold pieces",
+          "quantity": 10,
+          "x": 32
+        },
+        {
+          "class": "armour",
+          "y": 34,
+          "artefact": false,
+          "name": "robe",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "weapon",
+          "y": 40,
+          "artefact": false,
+          "name": "falchion",
+          "quantity": 1,
+          "x": 47
+        },
+        {
+          "class": "scroll",
+          "y": 41,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 47
+        },
+        {
+          "class": "weapon",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 66
+        },
+        {
+          "class": "armour",
+          "y": 42,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 66
+        },
+        {
+          "class": "weapon",
+          "y": 43,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 43,
+          "artefact": false,
+          "name": "+2 leather armour of willpower",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "weapon",
+          "y": 46,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "armour",
+          "y": 46,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 65
+        },
+        {
+          "class": "scroll",
+          "y": 53,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 62
+        },
+        {
+          "class": "scroll",
+          "y": 54,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 60
+        },
+        {
+          "class": "weapon",
+          "y": 55,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 81
+        },
+        {
+          "class": "armour",
+          "y": 55,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 81
+        },
+        {
+          "class": "corpse",
+          "y": 55,
+          "artefact": false,
+          "name": "meliai corpse",
+          "quantity": 1,
+          "x": 81
+        },
+        {
+          "class": "scroll",
+          "y": 56,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 61
+        },
+        {
+          "class": "weapon",
+          "y": 57,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "armour",
+          "y": 57,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "corpse",
+          "y": 57,
+          "artefact": false,
+          "name": "meliai corpse",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "talisman",
+          "y": 59,
+          "artefact": true,
+          "name": "transparent fortress talisman",
+          "quantity": 1,
+          "x": 42
+        },
+        {
+          "class": "scroll",
+          "y": 71,
+          "artefact": false,
+          "name": "scroll of revelation",
+          "quantity": 1,
+          "x": 66
+        },
+        {
+          "class": "armour",
+          "y": 71,
+          "artefact": false,
+          "name": "ring mail",
+          "quantity": 1,
+          "x": 67
+        },
+        {
+          "class": "book",
+          "y": 72,
+          "artefact": false,
+          "name": "parchment of Shadow Creatures",
+          "quantity": 1,
+          "x": 55
+        },
+        {
+          "class": "corpse",
+          "y": 75,
+          "artefact": false,
+          "name": "wax beetle corpse",
+          "quantity": 1,
+          "x": 84
+        },
+        {
+          "class": "scroll",
+          "y": 77,
+          "artefact": false,
+          "name": "scroll of identify",
+          "quantity": 1,
+          "x": 77
+        },
+        {
+          "class": "weapon",
+          "y": 78,
+          "artefact": false,
+          "name": "+0 hand axe",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "armour",
+          "y": 78,
+          "artefact": false,
+          "name": "+2 robe of cold resistance",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "weapon",
+          "y": 78,
+          "artefact": false,
+          "name": "+0 war axe of flaming",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "armour",
+          "y": 78,
+          "artefact": false,
+          "name": "+0 robe",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "corpse",
+          "y": 78,
+          "artefact": false,
+          "name": "venom wasp corpse",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "corpse",
+          "y": 78,
+          "artefact": false,
+          "name": "meliai corpse",
+          "quantity": 1,
+          "x": 82
+        },
+        {
+          "class": "weapon",
+          "y": 78,
+          "artefact": false,
+          "name": "+0 war axe",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "armour",
+          "y": 78,
+          "artefact": false,
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "x": 83
+        },
+        {
+          "class": "corpse",
+          "y": 78,
+          "artefact": false,
+          "name": "venom wasp corpse",
+          "quantity": 1,
+          "x": 83
+        }
+      ]
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "inventory +0 war axe",
+    "inventory +0 scale mail",
+    "inventory +0 buckler",
+    "inventory ring of poison resistance",
+    "inventory +0 barding",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +1 kite shield",
+    "inventory +2 plate armour",
+    "inventory +3 broad axe",
+    "inventory 4 potions of might",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start melee AC=22 EV=9 SH=13",
+    "leave Bur:1",
+    "ability Heroism turn=75",
+    "ability Heroism turn=155",
+    "ability Heroism turn=183",
+    "ability Heroism turn=228",
+    "ability Heroism turn=414",
+    "use haste turn=436 place=Bur:2",
+    "use might turn=437 place=Bur:2",
+    "ability Heroism turn=632",
+    "ability Heroism turn=678",
+    "ability Heroism turn=739",
+    "ability Heroism turn=765",
+    "use haste turn=780 place=Bur:2",
+    "use might turn=781 place=Bur:2",
+    "ability Heroism turn=919",
+    "ability Heroism turn=1013",
+    "ability Heroism turn=1069",
+    "leave Bur:2",
+    "ability Heroism turn=1314",
+    "ability Heroism turn=1381",
+    "ability Heroism turn=1437",
+    "ability Heroism turn=1538",
+    "ability Heroism turn=1614",
+    "ability Heroism turn=1690",
+    "ability Heroism turn=1730",
+    "ability Heroism turn=1785",
+    "ability Heroism turn=1878",
+    "ability Heroism turn=1946",
+    "leave Bur:1",
+    "leave Bur:2",
+    "ability Heroism turn=2052",
+    "use curing turn=2058 place=Hive:1",
+    "use might turn=2059 place=Hive:1",
+    "use heal wounds turn=2060 place=Hive:1",
+    "use heal wounds turn=2061 place=Hive:1",
+    "use heal wounds turn=2062 place=Hive:1",
+    "use heal wounds turn=2063 place=Hive:1",
+    "use teleportation turn=2064 place=Hive:1",
+    "use teleportation turn=2071 place=Hive:1",
+    "use curing turn=2075 place=Hive:1",
+    "ability Heroism turn=2201",
+    "ability Heroism turn=2238",
+    "use curing turn=2248 place=Hive:1",
+    "use curing turn=2249 place=Hive:1",
+    "ability Heroism turn=2377",
+    "ability Heroism turn=2432",
+    "ability Heroism turn=2514",
+    "ability Heroism turn=2566",
+    "ability Heroism turn=2641",
+    "ability Heroism turn=2726",
+    "ability Heroism turn=2750",
+    "use might turn=2757 place=Hive:1",
+    "ability Heroism turn=2944",
+    "ability Heroism turn=2993",
+    "ability Heroism turn=3214",
+    "ability Heroism turn=3398",
+    "leave Hive:1",
+    "ability Heroism turn=3585",
+    "ability Heroism turn=3743",
+    "ability Heroism turn=3838",
+    "ability Heroism turn=3945",
+    "use fog turn=3947 place=Hive:2",
+    "use fear turn=3949 place=Hive:2",
+    "use heal wounds turn=3953 place=Hive:2",
+    "use heal wounds turn=3972 place=Hive:2",
+    "ability Heroism turn=4120",
+    "ability Heroism turn=4283",
+    "ability Heroism turn=4433",
+    "ability Heroism turn=4547",
+    "use fear turn=4588 place=Hive:2",
+    "use fog turn=4589 place=Hive:2",
+    "use blinking turn=4596 place=Hive:2",
+    "use blinking turn=4597 place=Hive:2",
+    "use fear turn=4604 place=Hive:2",
+    "use fog turn=4605 place=Hive:2",
+    "ability Heroism turn=4611",
+    "death Hive:2"
+  ],
+  "nativeSha256": "f846f4dea0de3063899f50338a02501899d55c7de63c7689c070498ba0377b72",
+  "startVerified": true,
+  "routeFloorsExplored": [
+    "Bur:1",
+    "Bur:2",
+    "Hive:1"
+  ],
+  "scenarioCompleted": false,
+  "fullRoute": false
+}

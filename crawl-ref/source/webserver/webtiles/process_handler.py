@@ -17,6 +17,14 @@ from tornado.escape import xhtml_escape
 from tornado.ioloop import IOLoop
 
 from webtiles import config, connection, game_data_handler, inotify, terminal, util, ws_handler
+from webtiles.chat_tags import chat_payload
+from webtiles.party_control import PartyControl
+from webtiles.activity_pump import ActivityPump
+from webtiles.ai_party import AIParty
+from webtiles.player_stream import PlayerStreams
+from webtiles.tile_presence import TilePresence
+from webtiles.state_transport import append_snapshot
+from webtiles import crash_reports, game_settings
 from webtiles.config import dgl_format_str
 from webtiles.connection import WebtilesSocketConnection
 from webtiles.game_data_handler import GameDataHandler
@@ -127,6 +135,23 @@ class CrawlProcessHandlerBase(object):
 
         self.blocked = set()
         self.kicked = {} # not persisted across sessions!
+        self.party_members = {}
+        if username:
+            self.party_members[username] = 0
+        self.party_slot_specs = {}
+        self.party_mode = False
+        spec_info = getattr(ws_handler, "USER_PARTY_SPECS", {}).get(username) if username else None
+        if spec_info:
+            self.party_mode = True
+            for u, s_idx in spec_info.get("slot_users", {}).items():
+                if u:
+                    self.party_members[u] = int(s_idx)
+            self.party_slot_specs = dict(spec_info.get("slot_specs", {}))
+        self.party_control = PartyControl(username, self.party_members)
+        self.party_control.ai_slots = {int(slot) for slot in (spec_info or {}).get("ai_slots", [])
+                                       if str(slot) in {"1", "2", "3"}}
+        self.tile_presence = TilePresence()
+        self.player_streams = PlayerStreams(self.party_control, self.tile_presence, self._request_native_view)
 
         now = datetime.datetime.utcnow()
         self.formatted_time = now.strftime("%Y-%m-%d.%H:%M:%S")
@@ -137,6 +162,16 @@ class CrawlProcessHandlerBase(object):
         self.last_activity_time = time.time()
         self.idle_checker = PeriodicCallback(self.check_idle, 10000)
         self.idle_checker.start()
+        self.activity_pump = ActivityPump(self.party_control, self.player_streams,
+            lambda: {self.party_control.selected(receiver) for receiver in self._receivers} | self.party_control.ai_slots,
+            self._step_native_activity, probe=self._probe_native_activity,
+            restore_prompt=self._restore_native_prompt,
+            diagnostic=self._report_input_lifecycle)
+        self.activity_timer = PeriodicCallback(self.activity_pump.tick, ActivityPump.tick_interval_ms)
+        self.activity_timer.start()
+        self.ai_party = AIParty(self, self.party_control.ai_slots)
+        self.ai_timer = PeriodicCallback(self.ai_party.tick, 200)
+        self.ai_timer.start()
         self._was_idle = False
         self.last_watcher_join = 0
         self.receiving_direct_milestones = False
@@ -144,6 +179,62 @@ class CrawlProcessHandlerBase(object):
         global last_game_id
         self.id = last_game_id + 1
         last_game_id = self.id
+
+    def is_party_member(self, watcher):
+        if not watcher:
+            return False
+        if not watcher.watched_game:
+            return True
+        return self.party_control.reservation(watcher) is not None
+
+    def join_party_member(self, watcher, slot=None):
+        if not getattr(watcher, "username", None):
+            watcher.send_message("game_action_error", message="Log in to reserve your multiplayer character across reconnects.")
+            return None
+        try:
+            slot = self.party_control.claim(watcher, slot)
+        except ValueError as error:
+            watcher.send_message("game_action_error", message=str(error))
+            return None
+        self.party_mode = True
+        if self.username and self.username not in self.party_members:
+            self.party_members[self.username] = 0
+        uname = self.party_control.identity(watcher)
+        if watcher is not None:
+            watcher.party_member_active = True
+            watcher.party_slot = slot
+        if self.party_control.multiplayer:
+            self.player_streams.request(watcher)
+        if self.username and getattr(self, "record_id", None):
+            from webtiles import game_library
+            saved = game_library.get_game(self.record_id)
+            spec = json_decode(saved["party_json"]) if saved else {}
+            spec.update(getattr(ws_handler, "USER_PARTY_SPECS", {}).get(self.username, {}))
+            spec.update(slot_users=dict(self.party_members), multiplayer=self.party_control.multiplayer)
+            if not spec.get("party_arg"):
+                spec["party_arg"] = "%d,mp=on" % len(self.party_members)
+            ws_handler.USER_PARTY_SPECS[self.username] = spec
+            game_library.update_party(self.record_id, spec)
+        chat_msg = ("<span class='chat_sender'>[Party]</span>: "
+                    "<span class='chat_msg'>%s joined Co-op Party (Slot %d)!</span>"
+                    % (xhtml_escape(uname), slot + 1))
+        self.send_to_all("chat", content=chat_msg)
+        return slot
+
+    def publish_ai_status(self):
+        for receiver in self._receivers:
+            if self.party_control.state or self.party_control.views:
+                append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+
+    def _request_native_view(self, slot):
+        if not getattr(self, "conn", None) or not self.conn.open:
+            return False
+        if slot >= 1:
+            self.conn.send_message(json_encode(dict(msg="party_action", action="ensure_party_slot",
+                slot=slot, spec=self.party_slot_specs.get(slot, ""))))
+        self.conn.send_message(json_encode(dict(msg="party_session")))
+        self.conn.send_message(json_encode(dict(msg="view_player", slot=slot)))
+        return True
 
     def _process_log_msg(self, msg, kwargs):
         return "P%-5s %s" % (self.id, msg), kwargs
@@ -193,7 +284,106 @@ class CrawlProcessHandlerBase(object):
         tocheck = msg[0:50]
         return re.search(r'"spect_only" *: *true', tocheck)
 
+    def _step_native_activity(self, slot, cancel=False):
+        if not self.conn or not self.conn.open:
+            return False
+        packet = dict(msg="party_activity", action="cancel", player_id=slot) if cancel else dict(msg="party_activity_step", player_id=slot)
+        packet["activity_id"] = self.activity_pump.request_id
+        self.conn.send_message(utf8(json_encode(packet)))
+        return True
+
+    def _probe_native_activity(self, request_id):
+        if self.conn and self.conn.open:
+            self.conn.send_message(utf8(json_encode(dict(msg="party_activity_probe", request_id=request_id))))
+
+    def _restore_native_prompt(self):
+        if self.conn and self.conn.open:
+            self.conn.send_message(utf8(json_encode(dict(msg="spectator_joined"))))
+
+    def _report_input_lifecycle(self, event):
+        log = self.logger.warning if event["event"] in {"native_unknown", "native_unresponsive"} else self.logger.info
+        log("Input lifecycle: %s", json_encode(event))
+
     def handle_process_message(self, msg, send): # type: (str, bool) -> None
+        if re.search(r'"msg"\s*:\s*"party_packet"', msg[:80]):
+            envelope = json_decode(msg)
+            payload = envelope.get("payload", {})
+            if (envelope.get("view") is True
+                    and payload.get("msg") in {"party_activity_ready", "party_activity_status"}):
+                return
+            if getattr(self, "ai_party", None):
+                self.ai_party.ingest(envelope.get("slot"), payload, envelope.get("view") is True)
+                if (envelope.get("view") is not True and payload.get("msg") == "input_mode"
+                        and payload.get("mode", 0) > 1 and self.activity_pump.owner in self.party_control.ai_slots):
+                    self.activity_pump.prompt_boundary()
+            if payload.get("msg") in {"ai_state", "ai_prompt_result"}:
+                return  # Semantic observations stay server-side.
+            if payload.get("msg") == "party_activity_status" and getattr(self, "activity_pump", None):
+                pump = self.activity_pump
+                if (pump.inflight and type(payload.get("activity_id")) is int
+                        and payload["activity_id"] == pump.request_id and payload.get("state") == "complete"
+                        and type(payload.get("plan_id")) is int and type(payload.get("plan_turns")) is int):
+                    # A lost native boundary can also strand the browser's
+                    # tactical plan. Replay only this proven completion to its
+                    # original hero, before dispatching any queued command.
+                    owner = payload.get("owner")
+                    for receiver in self._receivers:
+                        if self.party_control.selected(receiver) == owner:
+                            self.player_streams.deliver(receiver, dict(msg="input_mode", mode=1,
+                                plan_id=payload["plan_id"], plan_turns=payload["plan_turns"]),
+                                pump._view(owner).get("floor"), send)
+                self.activity_pump.recover(payload)
+                self.activity_pump.tick()
+                return
+            if (envelope.get("view") is not True and getattr(self, "activity_pump", None)
+                    and (payload.get("msg") in {"ui-push", "menu", "init_input"}
+                         or payload.get("msg") == "input_mode" and payload.get("mode", 0) > 1)):
+                self.activity_pump.prompt_boundary()
+            if payload.get("msg") == "party_activity_ready" and getattr(self, "activity_pump", None):
+                request = payload.get("activity_id")
+                if type(request) is int and self.activity_pump.command_boundary(request):
+                    # Resume automation at its real completion, after the rest
+                    # of this socket batch refreshes personal eligibility. Yield
+                    # to the loop so queued stop/input events can run as well.
+                    IOLoop.current().add_callback(self.activity_pump.tick)
+                return
+            if payload.get("msg") == "party_state" and getattr(self, "activity_pump", None):
+                self.activity_pump.note_party_state(payload)
+            self.player_streams.ingest(envelope, self._receivers, send)
+            if (envelope.get("view") is not True and getattr(self, "activity_pump", None)
+                    and envelope.get("payload", {}).get("msg") == "input_mode"):
+                mode = envelope["payload"].get("mode")
+                if mode == 1:
+                    self.activity_pump.command_boundary()
+                    if self.activity_pump.queued_action:
+                        self.activity_pump.tick()
+            return
+        if getattr(self, "ai_party", None) and self.activity_pump.owner in self.party_control.ai_slots:
+            self.ai_party.ingest(self.activity_pump.owner, json_decode(msg))
+        if getattr(self, "player_streams", None) and any(
+                '"%s"' % kind in msg[:60] for kind in PlayerStreams.shared | {"input_mode"}):
+            packet = json_decode(msg)
+            self.player_streams.note_mode(packet)
+            self.player_streams.remember_shared(packet)
+        if self.party_control.multiplayer and getattr(self, "player_streams", None):
+            data = json_decode(msg)
+            if data.get("msg") not in PlayerStreams.shared:
+                # Fail closed during initialization or a late-join transition;
+                # a union map is never a fallback for missing personal state.
+                return
+        if re.search(r'"msg"\s*:\s*"party_(state|control)"', msg[:80]):
+            data = json_decode(msg)
+            if data["msg"] == "party_control":
+                self.party_control.acknowledge(data.get("slot"))
+            else:
+                if getattr(self, "activity_pump", None):
+                    self.activity_pump.note_party_state(data)
+                self.party_control.state = data
+                for receiver in self._receivers:
+                    append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), send)
+            return
+        if self._is_full_map_msg(msg) and not self._is_spectator_only(msg):
+            self.tile_presence.reset(self._receivers)
         # special handling for map messages on a new spectator: these can be
         # massive, and the deflate time adds up, so only send it to new
         # spectators. This is all a bit heuristic, and probably could use
@@ -232,6 +422,9 @@ class CrawlProcessHandlerBase(object):
         self.handle_notification(source, "The following chat commands are available:")
         self.chat_help_message(source, "/help", "show chat command help")
         self.chat_help_message(source, "/hide", "hide the chat window")
+        self.chat_help_message(source, "/party join", "join the co-op party as an active player")
+        self.chat_help_message(source, "/party ff", "toggle party friendly fire mode")
+        self.chat_help_message(source, "/party status", "show active co-op party members")
         if self.is_player(source):
             self.chat_help_message(source, "/kick <name> [<minutes>]", "kick <name> for some time")
             self.chat_help_message(source, "", "default: 15 minutes. Not saved across sessions.")
@@ -272,6 +465,34 @@ class CrawlProcessHandlerBase(object):
             self.hide_chat(source_ws, remainder.strip())
         elif command == "/kick":
             self.kick(source, remainder)
+        elif command == "/party":
+            subcmd = remainder.strip().lower()
+            if subcmd.startswith("join"):
+                parts = subcmd.split()
+                req_slot = None
+                if len(parts) > 1:
+                    try:
+                        req_slot = max(0, int(parts[1]) - 1)
+                    except ValueError:
+                        req_slot = None
+                slot = self.join_party_member(source_ws, slot=req_slot)
+                if slot is not None:
+                    source_ws.send_message("party_joined", slot=slot)
+            elif subcmd in ("ff", "friendlyfire", "friendly_fire"):
+                if not source or source.lower() != (self.username or "").lower():
+                    self.handle_notification(source, "Only the expedition owner can change friendly fire.")
+                    return True
+                if hasattr(self, "conn") and self.conn and self.conn.open:
+                    self.conn.send_message(utf8(json_encode({"msg": "toggle_friendly_fire"})))
+                self.handle_notification(source, "Toggled party friendly fire mode.")
+            elif subcmd == "status" or subcmd == "":
+                members_desc = ", ".join(
+                    ["%s (Slot %d)" % (u, s + 1)
+                     for u, s in sorted(self.party_members.items(), key=lambda kv: kv[1])]
+                ) or "Solo / Host"
+                self.handle_notification(source, "Party Co-op Members: " + members_desc)
+            else:
+                self.handle_notification(source, "Usage: /party join | /party ff | /party status")
         else:
             return False
         return True
@@ -291,10 +512,8 @@ class CrawlProcessHandlerBase(object):
                 del self.kicked[username]
         return username in self.blocked
 
-    def handle_chat_message(self, username, text): # type: (str, str) -> None
-        chat_msg = ("<span class='chat_sender'>%s</span>: <span class='chat_msg'>%s</span>" %
-                    (username, xhtml_escape(text)))
-        self.send_to_all("chat", content = chat_msg)
+    def handle_chat_message(self, username, text, tags=None):
+        self.send_to_all("chat", **chat_payload(username, text, tags))
 
     def get_receivers_by_username(self, username):
         result = list()
@@ -344,6 +563,11 @@ class CrawlProcessHandlerBase(object):
             self.kill_timeout = None
 
         self.idle_checker.stop()
+        if getattr(self, "activity_timer", None):
+            self.activity_timer.stop()
+        if getattr(self, "ai_timer", None):
+            self.ai_timer.stop()
+            self.ai_party.close()
 
         # send game_ended message to watchers. The player is handled in cleanup
         # code in ws_handler.py.
@@ -580,6 +804,7 @@ class CrawlProcessHandlerBase(object):
             if watcher.watched_game == self:
                 watcher.send_json_options(self.game_params.id, self.username)
         self._receivers.add(watcher)
+        self.tile_presence.sync(watcher)
         self.update_watcher_description()
 
     def remove_watcher(self, watcher):
@@ -587,6 +812,7 @@ class CrawlProcessHandlerBase(object):
         # don't crash in that case
         if watcher in self._receivers:
             self._receivers.remove(watcher)
+            self.tile_presence.remove(watcher, self._receivers)
             self.update_watcher_description()
 
     def watcher_count(self):
@@ -600,6 +826,8 @@ class CrawlProcessHandlerBase(object):
                                            self.username)
 
     def _send_client(self, watcher):
+        # Reloaded clients and returning spectators need a complete first state.
+        watcher.last_party_snapshot = None
         h = hashlib.sha1(utf8(os.path.abspath(self.client_path)))
         if self.crawl_version:
             h.update(utf8(self.crawl_version))
@@ -701,6 +929,7 @@ class CrawlProcessHandlerBase(object):
             "spectator_count": self.watcher_count(),
             "idle_time": (self.idle_time() if self.is_idle() else 0),
             "game_id": self.game_params.id,
+            "expedition_id": getattr(self, "record_id", None),
             }
         for key in CrawlProcessHandlerBase.interesting_info:
             if key in self.where:
@@ -718,8 +947,7 @@ class CrawlProcessHandlerBase(object):
     def _base_call(self):
         game = self.game_params
         call = game.get_call_base()
-
-        call += ["-name",   self.username,
+        call += ["-name",   getattr(self, "character_name", self.username),
                  "-rc",     os.path.join(self.config_path("rcfile_path"),
                                          self.username + ".rc"),
                  "-macro",  os.path.join(self.config_path("macro_path"),
@@ -732,6 +960,18 @@ class CrawlProcessHandlerBase(object):
         if "options" in game:
             call += game.templated("options", username=self.username)
 
+        spec_info = getattr(ws_handler, "USER_PARTY_SPECS", {}).get(self.username) if self.username else None
+        if spec_info and spec_info.get("party_arg"):
+            party_arg = spec_info["party_arg"]
+            replaced = False
+            for i in range(len(call) - 1):
+                if call[i] == "-party":
+                    call[i + 1] = party_arg
+                    replaced = True
+                    break
+            if not replaced:
+                call += ["-party", party_arg]
+
         if "dir_path" in game:
             call += ["-dir", self.config_path("dir_path")]
 
@@ -741,7 +981,18 @@ class CrawlProcessHandlerBase(object):
         self.last_activity_time = time.time()
         self.check_idle()
 
-    def handle_input(self, msg):
+    def _launch_environment(self):
+        env = dict(self.game_params.templated("env", username=self.username, default={}))
+        # Native indices are already compacted from the authenticated lobby
+        # roster. Empty seats must also overwrite inherited/configured values.
+        for slot in range(4):
+            env["CRAWL_ACCOUNT_%d" % slot] = ""
+        for username, slot in self.party_members.items():
+            if username and type(slot) is int and 0 <= slot < 4:
+                env["CRAWL_ACCOUNT_%d" % slot] = username
+        return env
+
+    def handle_input(self, msg, source=None):
         raise NotImplementedError()
 
 class CrawlProcessHandler(CrawlProcessHandlerBase):
@@ -942,10 +1193,13 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         connected = False
 
         try:
+            # Native late options override legacy RC, while mode-enforced options stay last.
+            rc_path = os.path.join(self.config_path("rcfile_path"), self.username + ".rc")
+            call[1:1] = game_settings.launch_arguments(self.username, rc_path)
             self.process = TerminalRecorder(call,
                                             self.logger,
                                             config.get('recording_term_size'),
-                                            env_vars = game.templated("env", username=self.username, default={}),
+                                            env_vars = self._launch_environment(),
                                             game_cwd = game.templated("cwd", username=self.username, default=None),)
             self.process.end_callback = self._on_process_end
             self.process.output_callback = self._on_process_output
@@ -1061,9 +1315,211 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         if self.conn and self.conn.open:
             self._fresh_watchers.add(watcher)
             self.conn.send_message('{"msg":"spectator_joined"}')
+        if self.party_control.multiplayer:
+            self.player_streams.restore(watcher)
+            self.player_streams.request(watcher)
 
-    def handle_input(self, msg): # type: (str) -> None
+    def handle_input(self, msg, source=None, queued_floor=None):
         obj = json_decode(msg)
+        if obj.get("msg") == "ai_control":
+            if not self.party_control.is_owner(source):
+                if source:
+                    source.send_message("game_action_error", message="Only the expedition owner can manage AI players.")
+                return
+            try:
+                self.ai_party.control(obj.get("slot"), obj.get("action"))
+            except ValueError as error:
+                source.send_message("game_action_error", message=str(error))
+            return
+        if obj.get("msg") in ("ai_configure", "ai_action", "ai_prompt", "ai_state", "view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
+            return
+        obj.pop("activity_id", None)
+        obj.pop("prompt_activity_id", None)
+        obj.pop("input_floor", None)
+        pump = getattr(self, "activity_pump", None)
+        cancel_activity = obj.get("msg") == "party_activity" and obj.get("action") == "cancel"
+        selected = self.party_control.selected(source)
+        if self.party_control.multiplayer:
+            error = None
+            if obj.get("msg") == "key" and (type(obj.get("keycode")) is not int
+                    or not -2147483648 <= obj["keycode"] <= 2147483647):
+                error = "Choose a valid game key."
+            elif obj.get("msg") == "input":
+                data, text = obj.get("data", []), obj.get("text", "")
+                if (not isinstance(data, list) or not isinstance(text, str)
+                        or len(data) + len(text) > 32
+                        or any(type(value) is not int or not 0 <= value <= 1114111 for value in data)):
+                    error = "Send at most 32 valid game keys at a time."
+            if error:
+                if source:
+                    source.send_message("game_action_error", message=error)
+                return
+        own_prompt = pump and pump.prompt and pump.owner == selected
+        streams = getattr(self, "player_streams", None) or getattr(pump, "streams", None)
+        is_escape = (
+            (obj.get("msg") == "key" and obj.get("keycode") == 27)
+            or (obj.get("msg") == "input" and (obj.get("data") == [27] or obj.get("text") == "\x1b"))
+        )
+        if self.party_control.multiplayer and pump and is_escape and selected is not None:
+            removed = pump.clear_queued_action(selected)
+            removed = pump.clear_queued_input(selected) or removed
+            if removed:
+                for receiver in getattr(self, "_receivers", ()):
+                    if self.party_control.state or self.party_control.views:
+                        append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+                if not own_prompt and (pump.inflight or streams and streams.native_ready):
+                    return
+        if (pump and pump.inflight and not own_prompt and not cancel_activity and obj.get("msg") not in
+                {"party_hover", "party_ping", "ui_state_sync"}):
+            if selected is None:
+                if source:
+                    source.send_message("game_action_error", message="Claim a party hero before sending game input.")
+                return
+            if pump.prompt:
+                if source:
+                    source.send_message("game_action_error", message="Another hero is finishing an action. Your view is unchanged.")
+                return
+            queued_floor = pump._view(selected).get("floor")
+            accepted = pump.queue_input(
+                lambda: self.handle_input(msg, source, queued_floor=queued_floor)
+                if source in getattr(self, "_receivers", ())
+                and self.party_control.selected(source) == selected
+                and pump._view(selected).get("floor") == queued_floor else None,
+                selected,
+            )
+            if not accepted and source:
+                source.send_message("game_action_error", message="Input queue is full (32 commands). Escape clears it.")
+            return
+
+        if obj.get("msg") == "party_hover":
+            slot = self.party_control.selected(source)
+            if source is not None and slot is not None:
+                metadata = dict(slot=slot, user=self.party_control.identity(source))
+                view = self.party_control.views.get(slot)
+                if self.party_control.multiplayer:
+                    if not view or not view.get("floor"):
+                        return
+                    metadata["floor"] = view.get("floor")
+                self.tile_presence.update(source, obj, metadata, self._receivers)
+            return
+
+        if obj.get("msg") == "skill_training":
+            username = getattr(source, "username", None)
+            slot = obj.get("slot")
+            owner = bool(username and username.lower() == (self.username or "").lower())
+            allowed = (type(slot) is int and 0 <= slot < 4 and username
+                       and ((owner and not self.party_control.multiplayer)
+                            or self.party_control.reservation(source) == slot))
+            if not allowed:
+                if source:
+                    source.send_message("skill_training_result", ok=False,
+                                        request_id=obj.get("request_id"),
+                                        error="You can change training only for heroes you control.")
+                return
+
+        if obj.get("msg") == "record_save" and (not source or not source.username
+                or source.username.lower() != (self.username or "").lower()):
+            return
+
+        if obj.get("msg") == "party_ping":
+            x, y = obj.get("x"), obj.get("y")
+            if any(type(value) is not int or abs(value) > 256 for value in (x, y)):
+                return
+            sender_name = (source.username if (source and source.username)
+                           else (self.username or "Party"))
+            floor = None
+            if self.party_control.multiplayer:
+                slot = self.party_control.selected(source)
+                floor = self.party_control.views.get(slot, {}).get("floor")
+                if not floor or obj.get("floor") != floor:
+                    return
+            for receiver in self._receivers:
+                # A valid ping belongs to the sender's authoritative personal
+                # view even before reconnect restores its delivery metadata.
+                if receiver is source or not floor or getattr(receiver, "party_view_floor", None) == floor:
+                    receiver.send_message("party_ping", user=sender_name,
+                                          x=x, y=y, floor=floor,
+                                          kind=obj.get("kind", "look"))
+            return
+
+        owner_input = self.party_control.is_owner(source)
+        player_id = self.party_control.selected(source)
+        if player_id is None:
+            if source:
+                source.send_message("game_action_error", message="Claim a party hero before sending game input.")
+            return
+        if (obj.get("msg") == "party_activity" and obj.get("action") == "cancel"
+                and self.party_control.multiplayer):
+            self.activity_pump.cancel(player_id)
+            for receiver in getattr(self, "_receivers", ()):
+                if self.party_control.state or self.party_control.views:
+                    append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+            return
+        # Only this server can request an acknowledgement of owner selection.
+        obj.pop("control_owner", None)
+
+        action = obj.get("action") if obj.get("msg") == "party_action" else obj.get("msg")
+        party_rules = {"toggle_friendly_fire", "toggle_simultaneous_turns",
+                       "add_party_member", "ensure_party_slot", "cycle_player", "force_terminate"}
+        if self.party_control.multiplayer and action in {"add_party_member", "ensure_party_slot"}:
+            source.send_message("game_action_error", message="Only joining players add heroes to a multiplayer expedition.")
+            return
+        wrong_hero = action == "switch_player" and obj.get("slot") != player_id
+        if self.party_control.multiplayer and (wrong_hero or action == "cycle_player"):
+            if source:
+                source.send_message("game_action_error",
+                                    message="In multiplayer, you stay with your assigned hero.")
+            return
+        if not owner_input and ((isinstance(action, str) and action in party_rules) or wrong_hero):
+            if source:
+                source.send_message("game_action_error",
+                                    message="Only the expedition owner can change party rules or control another hero.")
+            return
+
+        if owner_input and action in ("switch_player", "cycle_player"):
+            target = self.party_control.next_slot(source) if action == "cycle_player" else obj.get("slot")
+            if target not in self.party_control.controllable(source) or type(target) is not int:
+                source.send_message("game_action_error", message="Choose a companion that is not controlled by another player.")
+                return
+            obj.update(msg="switch_player", slot=target, control_owner=True)
+            obj.pop("action", None)
+
+        if (self.party_control.multiplayer and pump and streams and getattr(streams, "native_ready", False)
+                and obj.get("msg") in {"key", "input", "click_cell", "power_action", "inv_item_use", "floor_item_action"}
+                and obj.get("keycode") not in {27, 38}
+                and pump.should_buffer_action(player_id)):
+            if obj.get("msg") == "key":
+                kc = obj.get("keycode")
+                label = chr(kc) if isinstance(kc, int) and 32 <= kc <= 126 else ("key:%s" % kc)
+            elif obj.get("msg") == "input":
+                raw = "".join(chr(x) for x in obj.get("data", []) if isinstance(x, int)) + obj.get("text", "")
+                label = raw.strip() or "input"
+            else:
+                label = obj.get("msg")
+            queued_floor = pump._view(player_id).get("floor")
+            accepted = pump.queue_action(
+                player_id,
+                label,
+                lambda: (self.handle_input(msg, source, queued_floor=queued_floor)
+                         if hasattr(self, "handle_input")
+                         else CrawlProcessHandler.handle_input(self, msg, source, queued_floor=queued_floor))
+                         if source in getattr(self, "_receivers", ())
+                         and self.party_control.selected(source) == player_id
+                         and pump._view(player_id).get("floor") == queued_floor else None,
+            )
+            if not accepted and source:
+                source.send_message("game_action_error", message="Action queue is full (32 actions). Escape clears it.")
+            for receiver in getattr(self, "_receivers", ()):
+                if self.party_control.state or self.party_control.views:
+                    append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+            try:
+                loop = IOLoop.current(instance=False)
+            except TypeError:
+                loop = IOLoop.current()
+            if loop is not None and hasattr(loop, "call_later"):
+                rem = max(0.01, pump.cooldown_until.get(player_id, 0.0) - pump._now())
+                loop.call_later(rem, pump.tick)
+            return
 
         if obj["msg"] == "input" and self.process:
             self.last_action_time = time.time()
@@ -1074,7 +1530,23 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
 
             data += obj.get("text", "")
 
-            self.process.write_input(utf8(data))
+            if self.party_mode or self.party_control.state:
+                if not self.conn or not self.conn.open:
+                    return
+                for ch in data:
+                    if self.party_control.multiplayer and pump:
+                        # Use the same ownership/serialization path as a single
+                        # key. Raw strings must not create untracked suffixes.
+                        self.handle_input(json_encode(dict(msg="key", keycode=ord(ch))), source, queued_floor=queued_floor)
+                        continue
+                    packet = {
+                        "msg": "key",
+                        "keycode": ord(ch),
+                        "player_id": player_id
+                    }
+                    self.conn.send_message(utf8(json_encode(packet)))
+            else:
+                self.process.write_input(utf8(data))
 
         elif obj["msg"] == "force_terminate":
             self._do_force_terminate(obj["answer"])
@@ -1083,10 +1555,25 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
             self._stop_purging_stale_processes()
 
         elif self.conn and self.conn.open:
-            self.conn.send_message(utf8(msg))
+            if player_id is not None:
+                obj["player_id"] = player_id
+            else:
+                obj.pop("player_id", None)
+            if (pump and self.party_control.multiplayer and obj.get("msg") in
+                    {"key", "click_cell", "target_cursor", "inv_item_action", "inv_item_describe",
+                     "inv_item_use", "power_action", "floor_item_action", "party_trade",
+                     "main_menu_action", "menu_action", "party_activity"}):
+                activity_id = pump.start_manual(player_id)
+                if activity_id:
+                    obj["activity_id"] = activity_id
+            if pump and pump.inflight and own_prompt:
+                obj["prompt_activity_id"] = pump.request_id
+            if queued_floor is not None:
+                obj["input_floor"] = queued_floor
+            self.conn.send_message(utf8(json_encode(obj)))
 
-    def handle_chat_message(self, username, text): # type: (str, str) -> None
-        super(CrawlProcessHandler, self).handle_chat_message(username, text)
+    def handle_chat_message(self, username, text, tags=None):
+        super(CrawlProcessHandler, self).handle_chat_message(username, text, tags)
 
         if self.conn and self.conn.open:
             self.conn.send_message(json_encode({
@@ -1116,7 +1603,8 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 receiver.append_message(line, True)
 
     def _on_process_error(self, line): # type: (str) -> None
-        morgue_url = self.game_params.templated("morgue_url", username=self.username)
+        crash_reports.capture(self, line)
+        morgue_url = crash_reports.public_base(self.game_params.templated("morgue_url", username=self.username))
         # The msg this is parsing can be found in dbg-asrt.cc:do_crash_dump
         # this is run line-by-line, so multi-line errors (the norm) may trigger
         # this call more than once
@@ -1178,7 +1666,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 self.queue_messages = True;
                 self.flush_messages_to_all()
             elif msgobj["msg"] == "dump":
-                morgue_url = self.game_params.templated("morgue_url", username=self.username)
+                morgue_url = crash_reports.public_base(self.game_params.templated("morgue_url", username=self.username))
                 if morgue_url:
                     url = morgue_url + msgobj["filename"]
                     if msgobj["type"] == "command":

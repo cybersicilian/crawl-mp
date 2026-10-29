@@ -1,0 +1,67 @@
+enum: SP_WIGHT
+monster: MONS_WIGHT
+name: Wight
+genus: Dead
+short_name: Wt
+difficulty: Intermediate
+species_flags:
+  - no_blood
+aptitudes:
+  xp: -1
+  hp: 1
+  mp_mod: -1
+  wl: 4
+  short_blades: -3
+  long_blades: -2
+  axes: -2
+  maces_and_flails: -2
+  polearms: -2
+  staves: -2
+  ranged weapons: -2
+  throwing: -3
+  armour: -2
+  dodging: 2
+  stealth: 1
+  shields: -2
+  unarmed_combat: -2
+  spellcasting: -3
+  conjurations: -3
+  summoning: -3
+  translocations: -3
+  fire_magic: -3
+  air_magic: -3
+  earth_magic: -3
+  alchemy: -3
+  invocations: -1
+  evocations: -2
+undead_type: undead
+str: 9
+int: 6
+dex: 9
+levelup_stat_frequency: 5
+levelup_stats:
+  - str
+  - dex
+mutations:
+  1:
+    MUT_NEGATIVE_ENERGY_RESISTANCE: 3
+    MUT_COLD_RESISTANCE: 1
+    MUT_TORMENT_RESISTANCE: 1
+    MUT_UNBREATHING: 1
+fake_mutations:
+  - long: At level 6, your melee attacks begin to drain living enemies; their draining grows stronger at level 18.
+    short: draining melee at levels 6 and 18
+  - long: At level 12, you can bind and enhance a wielded weapon by draining maximum health, which recovers as you gain experience.
+    short: weapon burial at level 12
+recommended_jobs:
+  - gladiator
+  - hunter
+  - enchanter
+  - necromancer
+  - ice elementalist
+recommended_weapons:
+  - long blades
+  - axes
+  - maces and flails
+  - polearms
+  - staves

@@ -1,10 +1,10 @@
-define(["jquery", "comm", "client", "./textinput", "./util", "./options"],
-function ($, comm, client, textinput, util, options) {
+define(["jquery", "comm", "client", "./textinput", "./util", "./options", "./nested-tips", "./message-references", "scrollback", "./inspection-dialog"],
+function ($, comm, client, textinput, util, options, nested, references, scrollback, inspection) {
     "use strict";
 
     var more = false;
     var old_scroll_top;
-    var message_pane_height = 7; // default value, overridden by client
+    var history_limit = 500;
 
     function hide()
     {
@@ -38,7 +38,7 @@ function ($, comm, client, textinput, util, options) {
 
     /**
     * Remove all message elements from the player messages window save for the
-    * last height + 10.
+    * last 500 entries, retaining useful scrollback within a bounded DOM.
 
     * This is necessary to prevent <div> elements from messages no longer in
     * view from pilling up over longer WebTiles session and thus slowing down
@@ -47,7 +47,7 @@ function ($, comm, client, textinput, util, options) {
     function remove_old_messages()
     {
         var all_messages = $("#messages .game_message");
-        var keep = message_pane_height + 10;
+        var keep = history_limit;
         if (all_messages.length > keep)
         {
             var messages_to_remove = all_messages.slice(0, -keep);
@@ -57,7 +57,6 @@ function ($, comm, client, textinput, util, options) {
 
     function add_message(data)
     {
-        remove_old_messages();
         var msg_elem = $("<div>");
         $("#messages").append(msg_elem);
         msg_elem.addClass("game_message");
@@ -66,7 +65,8 @@ function ($, comm, client, textinput, util, options) {
         prefix_glyph.html("&nbsp;");
         msg_elem.html(prefix_glyph);
         msg_elem.append(util.formatted_string_to_html(data.text));
-        $("#messages_container").scrollTop($("#messages").height());
+        // Glossary terms in the log open (nestable) tooltips on hover.
+        nested.linkify(msg_elem[0]);
     }
 
     function rollback(count)
@@ -76,6 +76,8 @@ function ($, comm, client, textinput, util, options) {
 
     function handle_messages(msg)
     {
+        var container = document.getElementById("messages_container");
+        var position = scrollback.capture(container, document.querySelectorAll("#messages .game_message"));
         if (msg.rollback)
             rollback(msg.rollback);
         if (msg.old_msgs)
@@ -99,6 +101,16 @@ function ($, comm, client, textinput, util, options) {
         var cursor = $("#text_cursor");
         if (cursor.length > 0)
             cursor.appendTo($("#messages .game_message").last());
+        remove_old_messages();
+        scrollback.restore(container, position);
+    }
+
+    function history() {
+        var copy = document.createElement("div");
+        document.querySelectorAll("#messages .game_message").forEach(function (entry) {
+            var line = document.createElement("p"); line.textContent = entry.textContent; copy.appendChild(line);
+        });
+        inspection.showContent("Message history", copy, "Recent game messages. Viewing takes no turn.");
     }
 
     function messages_key_handler()
@@ -153,10 +165,15 @@ function ($, comm, client, textinput, util, options) {
     $(document).off("game_init.messages")
         .on("game_init.messages", function () {
             more = false;
+            $("#messages_container").attr({ tabindex: 0, role: "region", "aria-label": "Game message log" })
+                .off(".messageScroll").on("keydown.messageScroll keypress.messageScroll", function (event) {
+                    // Arrow/Page/Home/End keys scroll this region without also moving a hero.
+                    event.stopPropagation();
+                });
             $(document).off("game_keydown.messages game_keypress.messages")
                 .on("game_keydown.messages", messages_key_handler)
                 .on("game_keypress.messages", messages_key_handler);
-        });
+        }).on("game_message_history.messages", history);
 
     return {
         hide: hide,

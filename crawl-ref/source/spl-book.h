@@ -32,6 +32,14 @@ bool book_has_title(const item_def &book);
 
 bool can_learn_spell(bool silent = false);
 bool player_has_available_spells();
+struct spell_library_summary
+{
+    int total = 0;
+    int memorisable = 0;
+    int without_automatic_trigger = 0;
+};
+// Unlearned library spells and divine offers, including hidden entries.
+spell_library_summary get_spell_library_summary();
 bool learn_spell();
 bool learn_spell(spell_type spell, bool wizard = false, bool interactive = true);
 

@@ -1,0 +1,564 @@
+{
+  "build": "melee",
+  "seed": "2026102701",
+  "exitCode": 124,
+  "timedOut": true,
+  "completed": false,
+  "death": false,
+  "audits": [
+    {
+      "items": [
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of fog",
+          "x": 51,
+          "y": 23,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "wand",
+          "name": "wand of iceblast (7)",
+          "x": 66,
+          "y": 24,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "16 gold pieces",
+          "x": 42,
+          "y": 31,
+          "quantity": 16
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of fear",
+          "x": 84,
+          "y": 44,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "armour",
+          "name": "buckler",
+          "x": 46,
+          "y": 45,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "weapon",
+          "name": "quarterstaff",
+          "x": 51,
+          "y": 49,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "book",
+          "name": "parchment of Mass Confusion",
+          "x": 41,
+          "y": 51,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "potion",
+          "name": "potion of magic",
+          "x": 42,
+          "y": 52,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "book",
+          "name": "parchment of Magnavolt",
+          "x": 52,
+          "y": 53,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of enchant armour",
+          "x": 72,
+          "y": 56,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "wand",
+          "name": "wand of mindburst (8)",
+          "x": 43,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "armour",
+          "name": "plate armour",
+          "x": 46,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "x": 46,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "15 gold pieces",
+          "x": 65,
+          "y": 60,
+          "quantity": 15
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "12 gold pieces",
+          "x": 47,
+          "y": 61,
+          "quantity": 12
+        },
+        {
+          "artefact": false,
+          "class": "weapon",
+          "name": "quarterstaff",
+          "x": 67,
+          "y": 75,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "11 gold pieces",
+          "x": 73,
+          "y": 76,
+          "quantity": 11
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of revelation",
+          "x": 73,
+          "y": 76,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "6 gold pieces",
+          "x": 42,
+          "y": 78,
+          "quantity": 6
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of blinking",
+          "x": 81,
+          "y": 79,
+          "quantity": 1
+        }
+      ],
+      "turn": 59,
+      "xl": 14,
+      "progress": 0,
+      "vaults": "layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket",
+      "maxmp": 13,
+      "where": "Bur:1",
+      "xp": 10149,
+      "hp": 132,
+      "tag": "enter",
+      "maxhp": 132,
+      "monsters": [
+        {
+          "xp": 550,
+          "y": 23,
+          "name": "crag boar",
+          "x": 68
+        },
+        {
+          "xp": 841,
+          "y": 24,
+          "name": "boulder beetle",
+          "x": 51
+        },
+        {
+          "xp": 554,
+          "y": 27,
+          "name": "crag boar",
+          "x": 70
+        },
+        {
+          "xp": 600,
+          "y": 30,
+          "name": "burrowing beast",
+          "x": 43
+        },
+        {
+          "xp": 554,
+          "y": 30,
+          "name": "crag boar",
+          "x": 51
+        },
+        {
+          "xp": 849,
+          "y": 45,
+          "name": "boulder beetle",
+          "x": 59
+        },
+        {
+          "xp": 551,
+          "y": 54,
+          "name": "crag boar",
+          "x": 51
+        },
+        {
+          "xp": 588,
+          "y": 58,
+          "name": "burrowing beast",
+          "x": 72
+        },
+        {
+          "xp": 365,
+          "y": 58,
+          "name": "komodo dragon",
+          "x": 78
+        },
+        {
+          "xp": 367,
+          "y": 58,
+          "name": "komodo dragon",
+          "x": 80
+        },
+        {
+          "xp": 608,
+          "y": 59,
+          "name": "burrowing beast",
+          "x": 55
+        },
+        {
+          "xp": 555,
+          "y": 61,
+          "name": "crag boar",
+          "x": 48
+        },
+        {
+          "xp": 548,
+          "y": 62,
+          "name": "crag boar",
+          "x": 40
+        },
+        {
+          "xp": 597,
+          "y": 65,
+          "name": "shale drake",
+          "x": 37
+        },
+        {
+          "xp": 83,
+          "y": 76,
+          "name": "earth elemental",
+          "x": 44
+        },
+        {
+          "xp": 834,
+          "y": 76,
+          "name": "boulder beetle",
+          "x": 48
+        },
+        {
+          "xp": 555,
+          "y": 77,
+          "name": "crag boar",
+          "x": 36
+        },
+        {
+          "xp": 550,
+          "y": 77,
+          "name": "crag boar",
+          "x": 72
+        }
+      ],
+      "mp": 13
+    },
+    {
+      "items": [
+        {
+          "artefact": false,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "x": 67,
+          "y": 27,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "x": 51,
+          "y": 30,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of fear",
+          "x": 84,
+          "y": 44,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "armour",
+          "name": "buckler",
+          "x": 46,
+          "y": 45,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "weapon",
+          "name": "quarterstaff",
+          "x": 51,
+          "y": 49,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "book",
+          "name": "parchment of Mass Confusion",
+          "x": 41,
+          "y": 51,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "potion",
+          "name": "potion of magic",
+          "x": 42,
+          "y": 52,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "book",
+          "name": "parchment of Magnavolt",
+          "x": 52,
+          "y": 53,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of enchant armour",
+          "x": 72,
+          "y": 56,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "wand",
+          "name": "wand of mindburst (8)",
+          "x": 43,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "armour",
+          "name": "plate armour",
+          "x": 46,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "x": 46,
+          "y": 60,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "15 gold pieces",
+          "x": 65,
+          "y": 60,
+          "quantity": 15
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "12 gold pieces",
+          "x": 47,
+          "y": 61,
+          "quantity": 12
+        },
+        {
+          "artefact": false,
+          "class": "weapon",
+          "name": "quarterstaff",
+          "x": 67,
+          "y": 75,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "11 gold pieces",
+          "x": 73,
+          "y": 76,
+          "quantity": 11
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of revelation",
+          "x": 73,
+          "y": 76,
+          "quantity": 1
+        },
+        {
+          "artefact": false,
+          "class": "gold",
+          "name": "6 gold pieces",
+          "x": 42,
+          "y": 78,
+          "quantity": 6
+        },
+        {
+          "artefact": false,
+          "class": "scroll",
+          "name": "scroll of blinking",
+          "x": 81,
+          "y": 79,
+          "quantity": 1
+        }
+      ],
+      "turn": 460,
+      "xl": 14,
+      "progress": 11,
+      "vaults": "layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket",
+      "maxmp": 13,
+      "where": "Bur:1",
+      "xp": 5593,
+      "hp": 122,
+      "tag": "turn-limit",
+      "maxhp": 132,
+      "monsters": [
+        {
+          "xp": 551,
+          "y": 50,
+          "name": "crag boar",
+          "x": 52
+        },
+        {
+          "xp": 588,
+          "y": 58,
+          "name": "burrowing beast",
+          "x": 72
+        },
+        {
+          "xp": 365,
+          "y": 58,
+          "name": "komodo dragon",
+          "x": 78
+        },
+        {
+          "xp": 367,
+          "y": 59,
+          "name": "komodo dragon",
+          "x": 81
+        },
+        {
+          "xp": 555,
+          "y": 60,
+          "name": "crag boar",
+          "x": 48
+        },
+        {
+          "xp": 548,
+          "y": 62,
+          "name": "crag boar",
+          "x": 40
+        },
+        {
+          "xp": 597,
+          "y": 65,
+          "name": "shale drake",
+          "x": 37
+        },
+        {
+          "xp": 83,
+          "y": 76,
+          "name": "earth elemental",
+          "x": 44
+        },
+        {
+          "xp": 834,
+          "y": 76,
+          "name": "boulder beetle",
+          "x": 48
+        },
+        {
+          "xp": 555,
+          "y": 76,
+          "name": "crag boar",
+          "x": 50
+        },
+        {
+          "xp": 550,
+          "y": 77,
+          "name": "crag boar",
+          "x": 72
+        }
+      ],
+      "mp": 13
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "inventory +0 war axe",
+    "inventory +0 scale mail",
+    "inventory +0 buckler",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak of stealth",
+    "inventory +0 helmet",
+    "inventory +1 kite shield",
+    "inventory +2 plate armour",
+    "inventory +3 broad axe",
+    "inventory 4 potions of might",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start melee AC=22 EV=8 SH=12",
+    "turn-limit turn=460 minimumHp=0.68181818181818"
+  ],
+  "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c"
+}

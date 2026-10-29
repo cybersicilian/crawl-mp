@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "mon-behv.h"
 
@@ -38,6 +39,7 @@
 #include "stringutil.h"
 #include "terrain.h"
 #include "transform.h"
+#include "party.h"
 #include "traps.h"
 #include "view.h"
 
@@ -76,6 +78,12 @@ static bool _is_valid_foe(monster* mon, unsigned short foe)
         return false;
 
     const monster* foe_mons = &env.mons[foe];
+    if (party::is_proxy_monster(*foe_mons)
+        && foe_mons->props.exists("party_downed_ghost"))
+    {
+        return false;
+    }
+
     return foe_mons->alive()
             && monster_los_is_valid(mon, foe_mons)
             && (mon->has_ench(ENCH_FRENZIED) || !mons_aligned(mon, foe_mons));
@@ -153,10 +161,18 @@ static void _set_firing_pos(monster* mon, coord_def target)
 
 static void _decide_monster_firing_position(monster* mon, actor* owner)
 {
+    const bool foe_is_proxy_player =
+        mon->foe < MAX_MONSTERS
+        && party::is_proxy_monster(env.mons[mon->foe])
+        && !env.mons[mon->foe].props.exists("party_downed_ghost");
+
     // Monster can see foe: continue 'tracking'
     // by updating target x,y.
-    if (mon->foe == MHITYOU)
+    if (mon->foe == MHITYOU || foe_is_proxy_player)
     {
+        const coord_def player_pos = foe_is_proxy_player
+                                     ? env.mons[mon->foe].pos()
+                                     : you.pos();
         const bool ignore_special_firing_AI = mon->friendly()
                                               || mon->berserk_or_frenzied();
 
@@ -165,7 +181,7 @@ static void _decide_monster_firing_position(monster* mon, actor* owner)
             && !ignore_special_firing_AI)
             {
                 // Get to firing range even if we are close.
-                _set_firing_pos(mon, you.pos());
+                _set_firing_pos(mon, player_pos);
             }
         else if (mon->type == MONS_MERFOLK_AVATAR && !ignore_special_firing_AI)
             find_merfolk_avatar_water_target(mon);
@@ -184,12 +200,17 @@ static void _decide_monster_firing_position(monster* mon, actor* owner)
             // the traditional way.
 
             // During monster catchup, monsters should track the player's *last* position.
-            mon->target = you.doing_monster_catchup ? env.old_player_pos : you.pos();
+            mon->target = (!foe_is_proxy_player && you.doing_monster_catchup)
+                          ? env.old_player_pos
+                          : player_pos;
 
             // And then, if they've actually reached it, should semi-randomly
             // fan out to an appropriate range around it.
-            if (you.doing_monster_catchup && mon->target == env.old_player_pos)
+            if (!foe_is_proxy_player && you.doing_monster_catchup
+                && mon->target == env.old_player_pos)
+            {
                 _set_firing_pos(mon, env.old_player_pos);
+            }
         }
     }
     else
@@ -225,8 +246,11 @@ static void _decide_monster_firing_position(monster* mon, actor* owner)
  * @param mon     The monster in question.
  * @param         Whether the monster correctly guessed the player's presence.
  */
-static bool _monster_guesses_invis_player(const monster &mon)
+static bool _monster_guesses_invis_player(const monster &mon, int slot = -1)
 {
+    const int target_slot = (slot >= 0) ? slot : party::active_slot();
+    party::scoped_player_context ctx(target_slot);
+
     // Sometimes, if a player is right next to a monster, they will 'see'.
     if (grid_distance(you.pos(), mon.pos()) == 1 && one_chance_in(3))
         return true;
@@ -287,6 +311,17 @@ static bool _adjust_jade_crystal_positioning(monster* mon)
  */
 void handle_behaviour(monster* mon)
 {
+    if (party::is_proxy_monster(*mon))
+    {
+        if (mon->props.exists("party_downed_ghost"))
+        {
+            mon->foe = MHITYOU;
+            mon->target = you.pos();
+            mon->behaviour = BEH_SEEK;
+        }
+        return;
+    }
+
     // Test spawners should always be BEH_SEEK against a foe, since
     // their only purpose is to spew out monsters for testing
     // purposes.
@@ -309,16 +344,26 @@ void handle_behaviour(monster* mon)
     bool isNeutral  = mon->neutral();
     bool wontAttack = mon->wont_attack() && !mon->has_ench(ENCH_FRENZIED);
 
+    player* near_party = party::is_enabled() ? party::nearest_visible_player(mon) : nullptr;
+    monster* near_proxy = nullptr;
+    if (near_party && near_party != &you)
+    {
+        int slot = party::slot_for_mid(near_party->mid);
+        if (slot >= 0)
+            near_proxy = party::get_proxy_monster(slot);
+    }
+
     // Whether the player position is in LOS of the monster
     // (or we're pretending that it is for purposes of off-level catchup).
-    bool proxPlayer = !crawl_state.game_is_arena()
-                      && ((mon->see_cell(you.pos()) && in_bounds(you.pos())
-                          || (you.doing_monster_catchup && mon->see_cell(env.old_player_pos))));
+    bool proxYou = !crawl_state.game_is_arena()
+                   && ((mon->see_cell(you.pos()) && in_bounds(you.pos())
+                       || (you.doing_monster_catchup && mon->see_cell(env.old_player_pos))));
 
     // If set, pretend the player isn't there, but only for hostile monsters.
-    if (proxPlayer && crawl_state.disables[DIS_MON_SIGHT] && !mon->wont_attack())
-        proxPlayer = false;
+    if (proxYou && crawl_state.disables[DIS_MON_SIGHT] && !mon->wont_attack())
+        proxYou = false;
 
+    bool proxPlayer = proxYou;
     bool proxFoe;
     bool isSmart    = (mons_intel(*mon) >= I_HUMAN);
     bool isScared   = mon->has_ench(ENCH_FEAR);
@@ -356,10 +401,17 @@ void handle_behaviour(monster* mon)
         return;
     }
 
-    // Change proxPlayer depending on invisibility and standing
+    // Change proxYou/proxPlayer depending on invisibility and standing
     // in shallow water.
-    if (proxPlayer && !you.visible_to(mon))
-        proxPlayer = _monster_guesses_invis_player(*mon);
+    if (proxYou && !you.visible_to(mon))
+        proxYou = _monster_guesses_invis_player(*mon);
+
+    proxPlayer = proxYou;
+    if (!proxPlayer && near_party != nullptr
+        && (!crawl_state.disables[DIS_MON_SIGHT] || mon->wont_attack()))
+    {
+        proxPlayer = true;
+    }
 
     // Handle leashing monster behavior: return to creator if non-adjacent,
     // otherwise try to pick a monster in reach to attack.
@@ -416,7 +468,7 @@ void handle_behaviour(monster* mon)
             && proxPlayer
             && mons_intel(*mon) >= I_HUMAN)
         {
-            mon->foe = MHITYOU;
+            mon->foe = near_proxy ? near_proxy->mindex() : MHITYOU;
         }
         else
             set_nearest_monster_foe(mon);
@@ -459,7 +511,9 @@ void handle_behaviour(monster* mon)
     if (isNeutral
         && !mon->has_ench(ENCH_FRENZIED)
         && mon->foe != MHITNOT
-        && (mon->foe == MHITYOU || env.mons[mon->foe].neutral()))
+        && (mon->foe == MHITYOU
+            || env.mons[mon->foe].neutral()
+            || party::is_proxy_monster(env.mons[mon->foe])))
     {
         mon->foe = MHITNOT;
     }
@@ -468,12 +522,29 @@ void handle_behaviour(monster* mon)
     // target the player (unless it is a leashing monster returning to its owner).
     if (!isFriendly && !isNeutral && !should_return
         && !mons_is_avatar(mon->type)
-        && mon->foe != MHITYOU && mon->foe != MHITNOT
+        && mon->foe != MHITNOT
         && proxPlayer && !mon->berserk_or_frenzied()
-        && !mon->has_ench(ENCH_DAZED)
-        && !one_chance_in(3))
+        && !mon->has_ench(ENCH_DAZED))
     {
-        mon->foe = MHITYOU;
+        const unsigned short best_player_foe =
+            near_proxy ? near_proxy->mindex() : MHITYOU;
+        const coord_def best_player_pos =
+            near_proxy ? near_proxy->pos() : you.pos();
+        const bool foe_is_player =
+            mon->foe == MHITYOU
+            || (mon->foe < MAX_MONSTERS
+                && party::is_proxy_monster(env.mons[mon->foe]));
+
+        if (!foe_is_player && !one_chance_in(3))
+        {
+            mon->foe = best_player_foe;
+            mon->target = best_player_pos;
+        }
+        else if (foe_is_player && mon->foe != best_player_foe)
+        {
+            mon->foe = best_player_foe;
+            mon->target = best_player_pos;
+        }
     }
 
     // Validate current target again.
@@ -523,7 +594,20 @@ void handle_behaviour(monster* mon)
             // foe == MHITYOU, so make afoe point to the player here.
             // -cao
             afoe = &you;
-            proxFoe = proxPlayer;   // Take invis into account.
+            proxFoe = proxYou;   // Take invis into account.
+        }
+        else if (afoe && afoe->is_monster()
+                 && party::is_proxy_monster(*afoe->as_monster())
+                 && !afoe->as_monster()->props.exists("party_downed_ghost"))
+        {
+            if (proxFoe && crawl_state.disables[DIS_MON_SIGHT] && !mon->wont_attack())
+                proxFoe = false;
+            else if (!proxFoe && mon->see_cell(afoe->pos()) && in_bounds(afoe->pos())
+                     && (!crawl_state.disables[DIS_MON_SIGHT] || mon->wont_attack()))
+            {
+                proxFoe = _monster_guesses_invis_player(
+                    *mon, party::proxy_slot(*afoe->as_monster()));
+            }
         }
 
         coord_def foepos = coord_def(0,0);
@@ -565,8 +649,16 @@ void handle_behaviour(monster* mon)
                 }
                 else if (!mon->has_ench(ENCH_DAZED))
                 {
-                    new_foe = MHITYOU;
-                    mon->target = you.pos();
+                    if (!isFriendly && near_proxy)
+                    {
+                        new_foe = near_proxy->mindex();
+                        mon->target = near_proxy->pos();
+                    }
+                    else
+                    {
+                        new_foe = MHITYOU;
+                        mon->target = you.pos();
+                    }
                 }
                 break;
             }
@@ -666,8 +758,15 @@ void handle_behaviour(monster* mon)
                     // intuition only go so far).
                     if (mon->pos() == mon->target)
                     {
-                        if (mon->foe == MHITYOU)
+                        if (mon->foe == MHITYOU
+                            || (mon->foe < MAX_MONSTERS
+                                && party::is_proxy_monster(env.mons[mon->foe])
+                                && !env.mons[mon->foe].props.exists("party_downed_ghost")))
                         {
+                            const int fslot = (mon->foe == MHITYOU)
+                                              ? party::active_slot()
+                                              : party::proxy_slot(env.mons[mon->foe]);
+                            party::scoped_player_context ctx(fslot);
                             if (in_bounds(you.pos())
                                 && (x_chance_in_y(50, you.stealth())
                                     || you.penance[GOD_ASHENZARI]
@@ -697,10 +796,14 @@ void handle_behaviour(monster* mon)
                 // attack, we assume it sees in which direction the player went
                 // and it tries to find a line of fire instead of following the
                 // player.
-                else if (grid_distance(mon->target, you.pos()) == 1
+                else if ((mon->foe == MHITYOU
+                          || (mon->foe < MAX_MONSTERS
+                              && party::is_proxy_monster(env.mons[mon->foe])))
+                         && in_bounds(foepos)
+                         && grid_distance(mon->target, foepos) == 1
                          && _mon_tries_regain_los(mon))
                 {
-                    _set_firing_pos(mon, you.pos());
+                    _set_firing_pos(mon, foepos);
                 }
                 else //
                     mon->firing_pos.reset();
@@ -800,16 +903,42 @@ void handle_behaviour(monster* mon)
             // Creatures not currently pursuing another foe are
             // alerted by a sentinel's mark
             if (mon->foe == MHITNOT
-                && (you.duration[DUR_SENTINEL_MARK]
-                    || mon->has_ench(ENCH_TOUCH_OF_BEOGH))
-                && in_bounds(you.pos())
                 && (!isFriendly && !mons_is_avatar(mon->type) && !isNeutral
                     && !isPacified
                     || mon->has_ench(ENCH_FRENZIED)))
             {
-                new_foe = MHITYOU;
-                new_beh = BEH_SEEK;
-                break;
+                if ((you.duration[DUR_SENTINEL_MARK]
+                     || mon->has_ench(ENCH_TOUCH_OF_BEOGH))
+                    && in_bounds(you.pos()))
+                {
+                    new_foe = MHITYOU;
+                    new_beh = BEH_SEEK;
+                    break;
+                }
+                else if (party::is_enabled())
+                {
+                    const player &active = party::get_player(party::active_slot());
+                    for (int s = 0; s < party::player_count(); ++s)
+                    {
+                        if (s == party::active_slot() || party::is_player_downed(s))
+                            continue;
+                        const player &p = party::get_player(s);
+                        if (p.hp <= 0 || p.where_are_you != active.where_are_you
+                            || p.depth != active.depth || !in_bounds(p.pos())
+                            || !p.duration[DUR_SENTINEL_MARK])
+                        {
+                            continue;
+                        }
+                        if (monster *proxy = party::get_proxy_monster(s))
+                        {
+                            new_foe = proxy->mindex();
+                            new_beh = BEH_SEEK;
+                            break;
+                        }
+                    }
+                    if (new_beh == BEH_SEEK)
+                        break;
+                }
             }
 
             // Pacified monsters who have 'given up' on leaving should wander
@@ -890,7 +1019,9 @@ void handle_behaviour(monster* mon)
                     && !patrolling
                     && !crawl_state.game_is_arena())
                 {
-                    new_foe = MHITYOU;
+                    new_foe = (!isFriendly && near_proxy)
+                              ? near_proxy->mindex()
+                              : MHITYOU;
                 }
                 else
                     new_beh = BEH_WANDER;
@@ -927,9 +1058,9 @@ void handle_behaviour(monster* mon)
                      && mon->pos() == mon->props[LAST_POS_KEY].get_coord())
                 {
                     if (!mon->props.exists(BLOCKED_DEADLINE_KEY))
-                        mon->props[BLOCKED_DEADLINE_KEY] = you.elapsed_time + 30;
+                        mon->props[BLOCKED_DEADLINE_KEY] = level_elapsed_time(*mon) + 30;
 
-                    if (you.elapsed_time >= mon->props[BLOCKED_DEADLINE_KEY].get_int())
+                    if (level_elapsed_time(*mon) >= mon->props[BLOCKED_DEADLINE_KEY].get_int())
                         stop_retreat = true;
                 }
                 else
@@ -984,6 +1115,15 @@ static bool _mons_check_foe(monster* mon, const coord_def& p,
     // -- But why should they always attack monsters? -- 1KB
 
     monster* foe = monster_at(p);
+    if (foe && party::is_proxy_monster(*foe))
+    {
+        if (foe->props.exists("party_downed_ghost"))
+            return false;
+        return mon->has_ench(ENCH_FRENZIED)
+               && foe->visible_to(mon)
+               && monster_los_is_valid(mon, p);
+    }
+
     return foe && foe != mon
            && foe->visible_to(mon)
            && (foe->friendly() != friendly
@@ -1230,7 +1370,7 @@ void behaviour_event(monster* mon, mon_event_type event, const actor *src,
         {
             // Protection from being immediately snapped out of a
             // freshly-applied daze effect.
-            if (you.elapsed_time > mon->get_ench(ENCH_DAZED).degree)
+            if (level_elapsed_time(*mon) > mon->get_ench(ENCH_DAZED).degree)
             {
                 if (you.can_see(*mon))
                 {
@@ -1396,7 +1536,10 @@ void behaviour_event(monster* mon, mon_event_type event, const actor *src,
     if (setTarget && src)
     {
         mon->target = src_pos;
-        if (src->is_player() && mon->angered_by_attacks()
+        const bool src_is_any_player =
+            src->is_player()
+            || (src->is_monster() && party::is_proxy_monster(*src->as_monster()));
+        if (src_is_any_player && mon->angered_by_attacks()
             && mon->attitude() != ATT_HOSTILE)
         {
             // Why only attacks by the player change attitude? -- 1KB
@@ -1431,9 +1574,18 @@ void behaviour_event(monster* mon, mon_event_type event, const actor *src,
 #ifdef DEBUG_NOISE_PROPAGATION
     dprf("%s could shout in behavioural event, allow_shout: %d, foe: %d", mon->name(DESC_A, true).c_str(), allow_shout, mon->foe);
 #endif
+    const bool foe_is_any_player =
+        mon->foe == MHITYOU
+        || (mon->foe < MAX_MONSTERS
+            && party::is_proxy_monster(env.mons[mon->foe])
+            && !env.mons[mon->foe].props.exists("party_downed_ghost"));
     if (was_unaware && allow_shout
-        && mon->foe == MHITYOU && !mon->wont_attack())
+        && foe_is_any_player && !mon->wont_attack())
     {
+        const int fslot = (mon->foe == MHITYOU)
+                          ? party::active_slot()
+                          : party::proxy_slot(env.mons[mon->foe]);
+        party::scoped_player_context ctx(fslot, true);
         if (!vampire_mesmerism_check(*mon))
             monster_consider_shouting(*mon);
     }
@@ -1582,6 +1734,12 @@ bool monster_los_is_valid(const monster* mons, const coord_def &p)
 
     if (!monster_needs_los(mons))
         return true;
+
+    if (party::is_enabled())
+    {
+        return party::any_player_sees_cell(mons->pos(), true)
+               && party::any_player_sees_cell(p, true);
+    }
 
     return you.see_cell_no_trans(mons->pos()) && you.see_cell_no_trans(p);
 }

@@ -1,0 +1,10 @@
+{
+  "activity_pump.py": {
+    "baseline": "342787ba185a4ed1b1fa9826a501a0b4fc02ef772a30fec3d2ceaa3b4d6fbc62",
+    "candidate": "676e369d630a6c7871bf93bec16acb805c8253af3e9e1950ae6098575c8b8b62"
+  },
+  "process_handler.py": {
+    "baseline": "82f9a5cf28b8db9a1c88a4fe147269671cd1f48ae2a7756f0878cfb24858b8aa",
+    "candidate": "48b4a1f59a661ab4a2830afdfac89a718f07c8eb6f7b815add11d75313b15226"
+  }
+}

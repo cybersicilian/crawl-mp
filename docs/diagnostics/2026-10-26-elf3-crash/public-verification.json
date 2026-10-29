@@ -1,0 +1,23 @@
+{
+  "health": {
+    "ok": true,
+    "checked_at": "2026-10-26T23:11:24.911258+00:00",
+    "application": true,
+    "disk": true
+  },
+  "version": {
+    "webtiles": "0.33-coop",
+    "tornado": "6.4",
+    "python": "3.12.3",
+    "python_supported": true
+  },
+  "game": {
+    "id": "819cea1b-55e8-4c89-a28c-4e360aff7efe",
+    "owner": "JediJosh",
+    "status": "saved",
+    "loadable": true,
+    "saved_at": "2026-10-26T22:16:45Z"
+  },
+  "passed": true,
+  "tls_verification": "macOS system curl certificate verification"
+}

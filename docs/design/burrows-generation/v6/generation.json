@@ -1,0 +1,669 @@
+{
+  "seed": 20261024,
+  "ordinaryVaults": {
+    "Bur": 20,
+    "Worm": 20,
+    "Hive": 20
+  },
+  "nativeBinarySha256": "656e330d468694404f5a8f1e2ed27cb72234899a7ec64e2fb7e953bc81510a77",
+  "levels": [
+    {
+      "id": "bur-1",
+      "title": "Bur:1",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_burrows and bur_bone_cache"
+    },
+    {
+      "id": "bur-2",
+      "title": "Bur:2",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_burrows, hive_entry_comb, bur_flooded_roots and bur_paired_dens"
+    },
+    {
+      "id": "bur-3",
+      "title": "Bur:3",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_burrows, bur_side_den, bur_shale_cut and bur_paired_dens"
+    },
+    {
+      "id": "bur-4",
+      "title": "Bur:4",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "bur_end_troll_cairn, bur_bent_gallery, bur_shale_cut and bur_beetle_burrow"
+    },
+    {
+      "id": "bur_abandoned_tunnels",
+      "title": "Abandoned Tunnels",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_abandoned_tunnels"
+    },
+    {
+      "id": "bur_animal_den",
+      "title": "Animal Den",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_animal_den"
+    },
+    {
+      "id": "bur_beetle_burrow",
+      "title": "Beetle Burrow",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_beetle_burrow"
+    },
+    {
+      "id": "bur_bent_gallery",
+      "title": "Bent Gallery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_bent_gallery"
+    },
+    {
+      "id": "bur_bone_cache",
+      "title": "Bone Cache",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_bone_cache"
+    },
+    {
+      "id": "bur_claw_through",
+      "title": "Claw Through",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_claw_through"
+    },
+    {
+      "id": "bur_delver_workshop",
+      "title": "Delver Workshop",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_delver_workshop"
+    },
+    {
+      "id": "bur_drake_overlook",
+      "title": "Drake Overlook",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_drake_overlook"
+    },
+    {
+      "id": "bur_end_old_warren",
+      "title": "Old Warren",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "bur_end_old_warren"
+    },
+    {
+      "id": "bur_end_split_delve",
+      "title": "Split Delve",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "bur_end_split_delve"
+    },
+    {
+      "id": "bur_end_troll_cairn",
+      "title": "Troll Cairn",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "bur_end_troll_cairn"
+    },
+    {
+      "id": "bur_end_worldworm",
+      "title": "Worldworm",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "bur_end_worldworm"
+    },
+    {
+      "id": "bur_entry_cairn",
+      "title": "Entry Cairn",
+      "mode": "native placed entrance vault",
+      "seed": 20261024,
+      "vaults": "bur_entry_cairn"
+    },
+    {
+      "id": "bur_entry_root_mouth",
+      "title": "Entry Root Mouth",
+      "mode": "native placed entrance vault",
+      "seed": 20261024,
+      "vaults": "bur_entry_root_mouth"
+    },
+    {
+      "id": "bur_flooded_roots",
+      "title": "Flooded Roots",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_flooded_roots"
+    },
+    {
+      "id": "bur_mineral_cavern",
+      "title": "Mineral Cavern",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_mineral_cavern"
+    },
+    {
+      "id": "bur_old_crossing",
+      "title": "Old Crossing",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_old_crossing"
+    },
+    {
+      "id": "bur_old_hoard",
+      "title": "Old Hoard",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_old_hoard"
+    },
+    {
+      "id": "bur_paired_dens",
+      "title": "Paired Dens",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_paired_dens"
+    },
+    {
+      "id": "bur_root_pocket",
+      "title": "Root Pocket",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_root_pocket"
+    },
+    {
+      "id": "bur_shale_cut",
+      "title": "Shale Cut",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_shale_cut"
+    },
+    {
+      "id": "bur_side_den",
+      "title": "Side Den",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_side_den"
+    },
+    {
+      "id": "bur_split_passage",
+      "title": "Split Passage",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_split_passage"
+    },
+    {
+      "id": "bur_troll_shelter",
+      "title": "Troll Shelter",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_troll_shelter"
+    },
+    {
+      "id": "bur_troll_store",
+      "title": "Troll Store",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_troll_store"
+    },
+    {
+      "id": "bur_winding_tunnel",
+      "title": "Winding Tunnel",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "bur_winding_tunnel"
+    },
+    {
+      "id": "depths-1",
+      "title": "Depths:1",
+      "mode": "native generated connection floor",
+      "seed": 20261024,
+      "vaults": "layout_cave_pools, tekkud_enter_ziggurat_h, hellmouth_2, dungeon_decor, minmay_hedge_maze, serial_bayou_pond_d, nicolae_zin_silver_trinity, nicolae_shop_firing_range, evilmike_butchery, minmay_crystal_room, nicolae_sif_muna_condensation, darby_harvest_season, minmay_shoptagon and uniq_enchantress"
+    },
+    {
+      "id": "hive-1",
+      "title": "Hive:1",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_hive, hive_abandoned_cells and hive_wax_island"
+    },
+    {
+      "id": "hive-2",
+      "title": "Hive:2",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "hive_end_amber_brood"
+    },
+    {
+      "id": "hive-seed-20261025",
+      "title": "Hive:1 / 20261025",
+      "mode": "native generated seed variant",
+      "seed": 20261025,
+      "vaults": "layout_hive and hive_flight_lane"
+    },
+    {
+      "id": "hive-seed-20261026",
+      "title": "Hive:1 / 20261026",
+      "mode": "native generated seed variant",
+      "seed": 20261026,
+      "vaults": "layout_hive, hive_pollen_pockets and hive_guard_line"
+    },
+    {
+      "id": "hive_abandoned_cells",
+      "title": "Abandoned Cells",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_abandoned_cells"
+    },
+    {
+      "id": "hive_amber_jewels",
+      "title": "Amber Jewels",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_amber_jewels"
+    },
+    {
+      "id": "hive_amber_store",
+      "title": "Amber Store",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_amber_store"
+    },
+    {
+      "id": "hive_beetle_gate",
+      "title": "Beetle Gate",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_beetle_gate"
+    },
+    {
+      "id": "hive_end_amber_brood",
+      "title": "Amber Brood",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "hive_end_amber_brood"
+    },
+    {
+      "id": "hive_end_hollow_heart",
+      "title": "Hollow Heart",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "hive_end_hollow_heart"
+    },
+    {
+      "id": "hive_end_inner_combs",
+      "title": "Inner Combs",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "hive_end_inner_combs"
+    },
+    {
+      "id": "hive_entry_comb",
+      "title": "Entry Comb",
+      "mode": "native placed entrance vault",
+      "seed": 20261024,
+      "vaults": "hive_entry_comb"
+    },
+    {
+      "id": "hive_flight_lane",
+      "title": "Flight Lane",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_flight_lane"
+    },
+    {
+      "id": "hive_guard_line",
+      "title": "Guard Line",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_guard_line"
+    },
+    {
+      "id": "hive_lost_apothecary",
+      "title": "Lost Apothecary",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_lost_apothecary"
+    },
+    {
+      "id": "hive_meliai_cache",
+      "title": "Meliai Cache",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_meliai_cache"
+    },
+    {
+      "id": "hive_meliai_shelter",
+      "title": "Meliai Shelter",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_meliai_shelter"
+    },
+    {
+      "id": "hive_outer_cells",
+      "title": "Outer Cells",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_outer_cells"
+    },
+    {
+      "id": "hive_pollen_pockets",
+      "title": "Pollen Pockets",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_pollen_pockets"
+    },
+    {
+      "id": "hive_queen_cell",
+      "title": "Queen Cell",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_queen_cell"
+    },
+    {
+      "id": "hive_queen_gallery",
+      "title": "Queen Gallery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_queen_gallery"
+    },
+    {
+      "id": "hive_raided_satchel",
+      "title": "Raided Satchel",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_raided_satchel"
+    },
+    {
+      "id": "hive_spark_crossing",
+      "title": "Spark Crossing",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_spark_crossing"
+    },
+    {
+      "id": "hive_split_brood",
+      "title": "Split Brood",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_split_brood"
+    },
+    {
+      "id": "hive_torn_comb",
+      "title": "Torn Comb",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_torn_comb"
+    },
+    {
+      "id": "hive_wasp_roost",
+      "title": "Wasp Roost",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_wasp_roost"
+    },
+    {
+      "id": "hive_wax_island",
+      "title": "Wax Island",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_wax_island"
+    },
+    {
+      "id": "hive_winged_hunt",
+      "title": "Winged Hunt",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "hive_winged_hunt"
+    },
+    {
+      "id": "lair-5",
+      "title": "Lair:5",
+      "mode": "native generated connection floor",
+      "seed": 20261024,
+      "vaults": "cheibrodos_lair_end_hotspot, layout_big_grid, bur_entry_root_mouth, nicolae_volcano_entry_s_turn, regret_index_lairdec_budding, st_stairs_5 and grunt_megastairs_2"
+    },
+    {
+      "id": "uniq_old_coil",
+      "title": "Old Coil",
+      "mode": "native placed unique vault",
+      "seed": 20261024,
+      "vaults": "uniq_old_coil"
+    },
+    {
+      "id": "uniq_vespara",
+      "title": "Vespara",
+      "mode": "native placed unique vault",
+      "seed": 20261024,
+      "vaults": "uniq_vespara"
+    },
+    {
+      "id": "worm-1",
+      "title": "Worm:1",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_wormlands, worm_fungal_nursery and worm_shed_coils"
+    },
+    {
+      "id": "worm-2",
+      "title": "Worm:2",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_wormlands and worm_cross_gallery"
+    },
+    {
+      "id": "worm-3",
+      "title": "Worm:3",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "layout_wormlands and worm_shed_coils"
+    },
+    {
+      "id": "worm-4",
+      "title": "Worm:4",
+      "mode": "native generated floor",
+      "seed": 20261024,
+      "vaults": "worm_end_dragon_cavern"
+    },
+    {
+      "id": "worm-seed-20261025",
+      "title": "Worm:2 / 20261025",
+      "mode": "native generated seed variant",
+      "seed": 20261025,
+      "vaults": "layout_wormlands, worm_shed_coils and worm_mineral_seam"
+    },
+    {
+      "id": "worm-seed-20261026",
+      "title": "Worm:2 / 20261026",
+      "mode": "native generated seed variant",
+      "seed": 20261026,
+      "vaults": "layout_wormlands and worm_fungal_nursery"
+    },
+    {
+      "id": "worm_blind_bend",
+      "title": "Blind Bend",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_blind_bend"
+    },
+    {
+      "id": "worm_buried_armoury",
+      "title": "Buried Armoury",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_buried_armoury"
+    },
+    {
+      "id": "worm_capstone_ring",
+      "title": "Capstone Ring",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_capstone_ring"
+    },
+    {
+      "id": "worm_coiled_hoard",
+      "title": "Coiled Hoard",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_coiled_hoard"
+    },
+    {
+      "id": "worm_corroded_gallery",
+      "title": "Corroded Gallery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_corroded_gallery"
+    },
+    {
+      "id": "worm_cross_gallery",
+      "title": "Cross Gallery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_cross_gallery"
+    },
+    {
+      "id": "worm_deathcap_hollow",
+      "title": "Deathcap Hollow",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_deathcap_hollow"
+    },
+    {
+      "id": "worm_delvers_cache",
+      "title": "Delvers Cache",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_delvers_cache"
+    },
+    {
+      "id": "worm_double_mouth",
+      "title": "Double Mouth",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_double_mouth"
+    },
+    {
+      "id": "worm_end_coiled_galleries",
+      "title": "Coiled Galleries",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "worm_end_coiled_galleries"
+    },
+    {
+      "id": "worm_end_dragon_cavern",
+      "title": "Dragon Cavern",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "worm_end_dragon_cavern"
+    },
+    {
+      "id": "worm_end_fungal_heart",
+      "title": "Fungal Heart",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "worm_end_fungal_heart"
+    },
+    {
+      "id": "worm_end_troll_mine",
+      "title": "Troll Mine",
+      "mode": "native placed ending vault",
+      "seed": 20261024,
+      "vaults": "worm_end_troll_mine"
+    },
+    {
+      "id": "worm_entry_fault",
+      "title": "Entry Fault",
+      "mode": "native placed entrance vault",
+      "seed": 20261024,
+      "vaults": "worm_entry_fault"
+    },
+    {
+      "id": "worm_fungal_nursery",
+      "title": "Fungal Nursery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_fungal_nursery"
+    },
+    {
+      "id": "worm_mineral_seam",
+      "title": "Mineral Seam",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_mineral_seam"
+    },
+    {
+      "id": "worm_mushroom_grove",
+      "title": "Mushroom Grove",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_mushroom_grove"
+    },
+    {
+      "id": "worm_rootbound_pool",
+      "title": "Rootbound Pool",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_rootbound_pool"
+    },
+    {
+      "id": "worm_rotten_pack",
+      "title": "Rotten Pack",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_rotten_pack"
+    },
+    {
+      "id": "worm_seeping_vein",
+      "title": "Seeping Vein",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_seeping_vein"
+    },
+    {
+      "id": "worm_shale_shelf",
+      "title": "Shale Shelf",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_shale_shelf"
+    },
+    {
+      "id": "worm_shed_coils",
+      "title": "Shed Coils",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_shed_coils"
+    },
+    {
+      "id": "worm_spore_gallery",
+      "title": "Spore Gallery",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_spore_gallery"
+    },
+    {
+      "id": "worm_troll_cache",
+      "title": "Troll Cache",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_troll_cache"
+    },
+    {
+      "id": "worm_troll_cut",
+      "title": "Troll Cut",
+      "mode": "native placed ordinary vault",
+      "seed": 20261024,
+      "vaults": "worm_troll_cut"
+    }
+  ],
+  "closeUpBounds": [
+    27,
+    32,
+    51,
+    48
+  ],
+  "preview": "Native geometry/occupants with offline classic atlas composition; no gameplay fog or client shading."
+}

@@ -1,0 +1,6 @@
+{"passed":false,"phase":"staged","engine":"chromium","checks":["All six exact optimization assets loaded in the native game","Enhanced dungeon and cached fog edges render at Retina resolution","Help opens in one click, contains focus, and closes without spending a turn"],"errors":[],"test_game_saved":true}
+page.waitForFunction: Timeout 45000ms exceeded.
+    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs:106:20 {
+  log: [],
+  name: 'TimeoutError'
+}

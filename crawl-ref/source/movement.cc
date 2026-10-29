@@ -9,6 +9,9 @@
 #include <sstream>
 
 #include "AppHdr.h"
+#include "eldritch.h"
+#include "shell.h"
+#include "auras.h"
 
 #include "movement.h"
 
@@ -57,6 +60,7 @@
 #include "travel-open-doors-type.h"
 #include "transform.h"
 #include "unwind.h"
+#include "party.h"
 #include "viewchar.h"
 #include "xom.h" // XOM_CLOUD_TRAIL_TYPE_KEY
 
@@ -93,6 +97,8 @@ void player_displace_monster(monster* mons, const coord_def &loc)
     }
 
     mons->move_to(loc, MV_ALLOW_OVERLAP, true);
+    if (party::is_proxy_monster(*mons))
+        party::sync_proxy_to_player(party::proxy_slot(*mons));
 }
 
 // Check squares adjacent to player for given feature and return how
@@ -933,7 +939,7 @@ static bool _handle_player_step(const coord_def& targ, int& delay, const int del
             if (you.duration[DUR_STAMPEDE] && !you.confused() && first_step
                 && _try_stampede(targ))
             {
-                if (you_worship(GOD_WU_JIAN))
+                if (you_worship(GOD_WU_JIAN) || eldritch::has(GOD_WU_JIAN))
                     did_attack |= wu_jian_post_move_effects(false, initial_pos, false);
 
                 // Accumulate cost of moving across terrain, then average it.
@@ -942,7 +948,7 @@ static bool _handle_player_step(const coord_def& targ, int& delay, const int del
                 if (you.pos() == targ && _try_stampede(you.pos() + (targ - initial_pos)))
                 {
                     stampede_delay = div_rand_round(stampede_delay + player_movement_speed(true, true, delay_scale), 2);
-                    if (you_worship(GOD_WU_JIAN))
+                    if (you_worship(GOD_WU_JIAN) || eldritch::has(GOD_WU_JIAN))
                         did_attack |= wu_jian_post_move_effects(false, initial_pos, false);
                 }
                 did_move = true;
@@ -953,6 +959,7 @@ static bool _handle_player_step(const coord_def& targ, int& delay, const int del
                 if (invalid_monster(mon) || (mon->pos() - you.pos()) != (targ - initial_pos))
                     return false;
             }
+            shell::emerge();
             if (!player_fight(mon, rampaging && !first_step))
             {
                 stop_running();
@@ -991,6 +998,7 @@ static bool _handle_player_step(const coord_def& targ, int& delay, const int del
         if (Options.travel_open_doors == travel_open_doors_type::open
             || !you.running)
         {
+            shell::emerge();
             open_door_action(targ - you.pos());
 
             // Used to not interrupt travel, even if we didn't 'move' this turn.
@@ -1097,7 +1105,7 @@ static bool _handle_player_step(const coord_def& targ, int& delay, const int del
     if (running)
         env.travel_trail.push_back(you.pos());
 
-    if (you_worship(GOD_WU_JIAN))
+    if (you_worship(GOD_WU_JIAN) || eldritch::has(GOD_WU_JIAN))
         did_attack |= wu_jian_post_move_effects(false, initial_pos);
 
     you.finalise_movement();
@@ -1251,6 +1259,11 @@ void move_player_action(coord_def move)
     {
         you.time_taken = div_rand_round(player_speed(delay_scale) * delay,
                                         BASELINE_DELAY * delay_scale * delay_scale * steps_taken);
+        if (!did_attack)
+        {
+            const int discount = auras::movement_discount(initial_pos, you.pos());
+            you.time_taken = max(1, div_rand_round(you.time_taken * (100 - discount), 100));
+        }
         you.turn_is_over = true;
     }
 

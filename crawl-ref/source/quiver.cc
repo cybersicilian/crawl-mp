@@ -1037,6 +1037,12 @@ namespace quiver
             || spell == SPELL_FOXFIRE; // not a direct attack, but has sensible autofight behavior
     }
 
+    bool can_quick_cast(spell_type spell)
+    {
+        return is_valid_spell(spell) && is_autofight_combat_spell(spell)
+            && !_spell_needs_manual_targeting(spell);
+    }
+
     struct spell_action : public action
     {
         spell_action(spell_type s = SPELL_NO_SPELL)
@@ -1305,7 +1311,9 @@ namespace quiver
         if (get_dist_to_nearest_monster() > ability_range(abil)
             && (get_ability_flags(abil) & abflag::targeting_mask)
             // Wants friendly targets, not hostile ones.
-            && abil != ABIL_ELYVILON_DIVINE_ALMS)
+            && abil != ABIL_ELYVILON_DIVINE_ALMS
+            // A mobility action can launch without a nearby enemy.
+            && abil != ABIL_SHELL_DASH)
 
         {
             if (!quiet)
@@ -1344,7 +1352,8 @@ namespace quiver
 
     struct ability_action : public action
     {
-        ability_action(ability_type a = ABIL_NON_ABILITY) : ability(a) { };
+        ability_action(ability_type a = ABIL_NON_ABILITY)
+            : ability(restored_dithmenos_ability(a)) { };
         void save(CrawlHashTable &save_target) const override; // defined below
 
         bool equals(const action &other) const override
@@ -1391,6 +1400,7 @@ namespace quiver
             switch (ability)
             {
             case ABIL_HOP:
+            case ABIL_SHELL_DASH:
             case ABIL_BLINKBOLT:
             case ABIL_COMBUSTION_BREATH:
             case ABIL_GLACIAL_BREATH:
@@ -1460,7 +1470,7 @@ namespace quiver
             }
 
             set_target(t);
-            if (ability != ABIL_HOP) // find_target will fail for ABIL_HOP
+            if (ability != ABIL_HOP && ability != ABIL_SHELL_DASH)
                 target.find_target = true; // TODO: does this break lua targeting?
             if (autofight_check())
                 return;
@@ -1560,14 +1570,10 @@ namespace quiver
             if (!is_valid())
                 return false;
             const item_def& c = you.inv[item_slot];
+            if (c.base_type == OBJ_POTIONS)
+                return can_throw_potion() && !god_forbids_item(c);
             if (!item_type_known(c))
                 return false;
-            else if (c.base_type == OBJ_POTIONS)
-            {
-                ASSERT(get_potion_effect(static_cast<potion_type>(c.sub_type)));
-                return you.can_drink(true) && !you.berserk()
-                    && get_potion_effect(static_cast<potion_type>(c.sub_type))->can_quaff();
-            }
             else if (c.base_type == OBJ_SCROLLS)
             {
                 return cannot_read_item_reason(&c).empty()
@@ -1580,12 +1586,12 @@ namespace quiver
 
         bool is_targeted() const override
         {
-            // only pot that might conceivably need a targeter is attraction?
-            if (!is_valid() || you.inv[item_slot].base_type == OBJ_POTIONS
-                || !item_type_known(you.inv[item_slot]))
-            {
+            if (!is_valid())
                 return false;
-            }
+            if (you.inv[item_slot].base_type == OBJ_POTIONS)
+                return !you.confused();
+            if (!item_type_known(you.inv[item_slot]))
+                return false;
             return scroll_has_targeter(
                         static_cast<scroll_type>(you.inv[item_slot].sub_type));
         }
@@ -1595,7 +1601,7 @@ namespace quiver
             if (!is_valid())
                 return "Buggy";
             return you.inv[item_slot].base_type == OBJ_SCROLLS ? "Read"
-                                                               : "Drink";
+                                                               : "Throw";
         }
 
         bool use_autofight_targeting() const override { return false; }
@@ -1607,17 +1613,19 @@ namespace quiver
 
             set_target(t);
 
-            // enable autofire triggering for everything but blinking
-            if (you.inv[item_slot].sub_type != SCR_BLINKING)
-                target.target = you.pos();
-
-
             item_def& c = you.inv[item_slot];
             if (c.base_type == OBJ_POTIONS)
-                drink(&c);
-            else if (c.base_type == OBJ_SCROLLS)
-                read(&c, &target);
+            {
+                throw_potion(c, &target);
+                return;
+            }
 
+            // enable autofire triggering for everything but blinking
+            if (c.sub_type != SCR_BLINKING)
+                target.target = you.pos();
+
+            if (c.base_type == OBJ_SCROLLS)
+                read(&c, &target);
         }
 
         vector<shared_ptr<action>> get_fire_order(

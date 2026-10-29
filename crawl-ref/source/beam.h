@@ -114,6 +114,7 @@ struct player_beam_tracer : beam_tracer
     void player_hit(bool was_friendly) noexcept override;
     void monster_hit(const bolt& bolt, const monster& mon) override;
     bool has_any_warnings() noexcept;
+    string describe_attack_targets() const;
 };
 
 // Used to check if casting a spell might be useful
@@ -167,6 +168,9 @@ struct bolt
     coord_def   source = {0,0};           // beam origin
     coord_def   target = {0,0};           // intended target
     dice_def    damage = dice_def(0,0);
+    int damage_percent = 100;
+    int effect_duration_percent = 100;
+    int roll_damage() const { return damage.roll() * damage_percent / 100; }
     int         ench_power = 0, hit = 0;
     killer_type thrower = KILL_NON_ACTOR;   // what kind of thing threw this?
     int         ex_size = 0;           // explosion radius (0==none)

@@ -1,0 +1,7 @@
+{
+  "reservationId": "1f469305-b568-4f95-a28d-41566e9e74a7",
+  "owner": "codex/01a17a3a-4a0c-79c3-ab41-79bd3aa07976",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-26-elf3-crash/native-phase-2.json",
+  "result": "harness_api_name_and_nil_assertion_errors_before_drawing_checks"
+}

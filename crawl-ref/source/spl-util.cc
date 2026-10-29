@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
+#include "bloodcraft.h"
 
 #include "spl-util.h"
 
@@ -220,7 +222,7 @@ spschool school_by_name(string name)
 
     lowercase(name);
 
-    for (int i = 0; i <= (int)spschool::random; i++)
+    for (int i = 0; i <= SPSCHOOL_LAST_EXPONENT + 1; ++i)
     {
         const auto type = spschools_type::exponent(i);
 
@@ -306,6 +308,9 @@ spell_type get_spell_by_letter(char letter)
 
 bool add_spell_to_memory(spell_type spell)
 {
+    if (!coop_content::spell_available(spell))
+        return false;
+
     if (vehumet_is_offering(spell))
         library_add_spells({ spell });
 
@@ -429,6 +434,7 @@ bool del_spell_from_memory_by_slot(int slot)
 
     mprf("Your memory of %s unravels.", spell_title(you.spells[slot]));
 
+    bloodcraft::forget_spell(you.spells[slot]);
     you.spells[slot] = SPELL_NO_SPELL;
 
     for (int j = 0; j < 52; j++)
@@ -551,7 +557,7 @@ int spell_mana(spell_type which_spell, bool real_spell)
         if (you.duration[DUR_ENKINDLED] && spell_can_be_enkindled(which_spell)
             && !you.divine_exegesis)
         {
-            return 0;
+            return bloodcraft::extra_mp(which_spell);
         }
 
         int cost = level;
@@ -564,9 +570,20 @@ int spell_mana(spell_type which_spell, bool real_spell)
         if (you.duration[DUR_BRILLIANCE] || you.unrand_equipped(UNRAND_FOLLY))
             cost = cost/2 + cost%2; // round up
 
-        return cost;
+        if (you.species == SP_FAERIE_DRAGON)
+            cost = max(0, cost - 1);
+
+        return cost + bloodcraft::extra_mp(which_spell);
     }
     return level;
+}
+
+int spell_additional_hp(spell_type spell, int mana)
+{
+    if (you.species != SP_IRIT)
+        return 0;
+    return bloodcraft::is_rite(spell) || bloodcraft::is_curse(spell)
+        ? (mana + 1) / 2 : mana;
 }
 
 // applied in naughties (more difficult = higher level knowledge = worse)
@@ -891,6 +908,8 @@ const char* spelltype_short_name(spschool which_spelltype)
         return "Conj";
     case spschool::hexes:
         return "Hex";
+    case spschool::auramancy:
+        return "Aura";
     case spschool::fire:
         return "Fire";
     case spschool::ice:
@@ -924,6 +943,8 @@ const char* spelltype_long_name(spschool which_spelltype)
         return "Conjuration";
     case spschool::hexes:
         return "Hexes";
+    case spschool::auramancy:
+        return "Auramancy";
     case spschool::fire:
         return "Fire";
     case spschool::ice:
@@ -955,6 +976,7 @@ skill_type spell_type2skill(spschool spelltype)
     {
     case spschool::conjuration:    return SK_CONJURATIONS;
     case spschool::hexes:          return SK_HEXES;
+    case spschool::auramancy:      return SK_AURAMANCY;
     case spschool::fire:           return SK_FIRE_MAGIC;
     case spschool::ice:            return SK_ICE_MAGIC;
     case spschool::necromancy:     return SK_NECROMANCY;
@@ -979,6 +1001,7 @@ spschool skill2spell_type(skill_type spell_skill)
     {
     case SK_CONJURATIONS:    return spschool::conjuration;
     case SK_HEXES:           return spschool::hexes;
+    case SK_AURAMANCY:       return spschool::auramancy;
     case SK_FIRE_MAGIC:      return spschool::fire;
     case SK_ICE_MAGIC:       return spschool::ice;
     case SK_NECROMANCY:      return spschool::necromancy;
@@ -1065,6 +1088,9 @@ int spell_range(spell_type spell, const actor* caster, int pow,
 int calc_spell_range(spell_type spell, int pow,
                      bool allow_veh_bonus, bool ignore_los_reductions)
 {
+    if (bloodcraft::is_curse(spell))
+        return min<int>(bloodcraft::curse_range(pow), ignore_los_reductions
+            ? you.normal_vision : you.current_vision);
     int minrange = _seekspell(spell)->min_range;
     int maxrange = _seekspell(spell)->max_range;
 
@@ -1133,6 +1159,7 @@ int spell_effect_noise(spell_type spell)
     switch (spell)
     {
     case SPELL_MEPHITIC_CLOUD:
+    case SPELL_EVAPORATE:
     case SPELL_FIREBALL:
     case SPELL_VIOLENT_UNRAVELLING:
     case SPELL_IGNITION:
@@ -1194,6 +1221,11 @@ string casting_uselessness_reason(spell_type spell, bool temp, bool *god_forbids
         *god_forbids = false;
     if (temp)
     {
+        if (you.species == SP_SPARKBORN && you.in_water())
+            return "your magic is discharged by the water.";
+        const string blood_reason = bloodcraft::casting_reason(spell);
+        if (!blood_reason.empty())
+            return blood_reason;
         if (you.duration[DUR_CONF] > 0)
             return "you're too confused to cast spells.";
 
@@ -1210,6 +1242,17 @@ string casting_uselessness_reason(spell_type spell, bool temp, bool *god_forbids
         }
         else if (!enough_mp(spell_mana(spell), true, false))
             return "you don't have enough magic to cast this spell.";
+
+        const int additional_hp = spell_additional_hp(spell, spell_mana(spell));
+        if (additional_hp)
+        {
+            if (you.duration[DUR_DEATHS_DOOR])
+                return "you cannot pay life while functionally dead.";
+            const int primary_hp = you.has_mutation(MUT_HP_CASTING)
+                ? spell_mana(spell) : 0;
+            if (!enough_hp(primary_hp + additional_hp, true, false))
+                return "you don't have enough health to cast this spell.";
+        }
 
         if (spell == SPELL_SUBLIMATION_OF_BLOOD
             && you.magic_points == you.max_magic_points)
@@ -1316,6 +1359,16 @@ bool spell_is_useless(spell_type spell, bool temp, bool prevent,
 string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
                                 bool skip_casting_checks)
 {
+    if (spell == SPELL_AUTOMATON_LASER && you.species != SP_AUTOMATON)
+        return "only an automaton can engrave this spell.";
+    if (!coop_content::spell_available(spell))
+        return "this spell requires a multiplayer game.";
+    if (temp && coop_content::exclusive_spell(spell)
+        && !coop_content::has_spell_companion())
+    {
+        return "you have no living companion in sight.";
+    }
+
     // prevent all of this logic during excursions / levelgen. This function
     // does get called during character creation, so allow it to run for !temp.
     if (temp && (!in_bounds(you.pos()) || !you.on_current_level))
@@ -1467,6 +1520,25 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
     case SPELL_MEPHITIC_CLOUD:
         if (temp && env.level_state & LSTATE_STILL_WINDS)
             return "the air is too still for clouds to form.";
+        break;
+
+    case SPELL_EVAPORATE:
+        if (temp && env.level_state & LSTATE_STILL_WINDS)
+            return "the air is too still for clouds to form.";
+        if (temp)
+        {
+            for (const item_def &it : you.inv)
+                if (it.defined() && it.base_type == OBJ_POTIONS)
+                    return "";
+            return "you have no potions to evaporate.";
+        }
+        break;
+
+    case SPELL_FULSOME_DISTILLATION:
+        if (have_passive(passive_t::goldify_corpses))
+            return "you cannot distill corpses that have turned to gold.";
+        if (temp && !corpse_in_los())
+            return "there are no corpses in view to distill.";
         break;
 
     case SPELL_GOLUBRIAS_PASSAGE:
@@ -1763,6 +1835,7 @@ bool spell_no_hostile_in_range(spell_type spell)
     {
     // These don't target monsters or can target features.
     case SPELL_APPORTATION:
+    case SPELL_EVAPORATE:
     case SPELL_PASSWALL:
     case SPELL_GOLUBRIAS_PASSAGE:
     case SPELL_FULMINANT_PRISM:
@@ -1944,7 +2017,7 @@ bool spell_no_hostile_in_range(spell_type spell)
     {
         bolt tempbeam;
         bool found = false;
-        beam.source_id = MID_PLAYER;
+        beam.source_id = you.mid;
         beam.range = range;
         beam.source  = you.pos();
         beam.attitude = ATT_FRIENDLY;
@@ -2020,6 +2093,7 @@ static const mutation_type arcana_sacrifice_map[] = {
     MUT_NO_EARTH_MAGIC,
     MUT_NO_AIR_MAGIC,
     MUT_NO_FORGECRAFT_MAGIC,
+    MUT_NO_AURAMANCY_MAGIC,
 };
 
 /**
@@ -2167,10 +2241,7 @@ const set<spell_type> removed_spells =
     SPELL_CHANT_FIRE_STORM,
     SPELL_CIGOTUVIS_DEGENERATION,
     SPELL_CIGOTUVIS_EMBRACE,
-    SPELL_CLOUD_CONE,
     SPELL_CONDENSATION_SHIELD,
-    SPELL_CONJURE_FLAME,
-    SPELL_CONTROLLED_BLINK,
     SPELL_CONTROL_TELEPORT,
     SPELL_CONTROL_UNDEAD,
     SPELL_CONTROL_WINDS,
@@ -2185,7 +2256,6 @@ const set<spell_type> removed_spells =
     SPELL_DRAGON_FORM,
     SPELL_DRAIN_MAGIC,
     SPELL_EPHEMERAL_INFUSION,
-    SPELL_EVAPORATE,
     SPELL_EXCRUCIATING_WOUNDS,
     SPELL_EXPLOSIVE_BOLT,
     SPELL_FAKE_RAKSHASA_SUMMON,
@@ -2196,7 +2266,6 @@ const set<spell_type> removed_spells =
     SPELL_FORCEFUL_DISMISSAL,
     SPELL_FREEZING_AURA,
     SPELL_FRENZY,
-    SPELL_FULSOME_DISTILLATION,
     SPELL_GOAD_BEASTS,
     SPELL_GRAND_AVATAR,
     SPELL_HASTE_PLANTS,
@@ -2222,19 +2291,15 @@ const set<spell_type> removed_spells =
     SPELL_RANDOM_EFFECTS,
     SPELL_REARRANGE_PIECES,
     SPELL_RECALL,
-    SPELL_REGENERATION,
     SPELL_RESURRECT,
     SPELL_RING_OF_FLAMES,
     SPELL_RING_OF_THUNDER,
     SPELL_SACRIFICE,
-    SPELL_SCATTERSHOT,
     SPELL_SEE_INVISIBLE,
     SPELL_SERPENT_OF_HELL_BREATH_REMOVED,
     SPELL_SHAFT_SELF,
-    SPELL_SHROUD_OF_GOLUBRIA,
     SPELL_SILVER_BLAST,
     SPELL_SINGULARITY,
-    SPELL_SONG_OF_SHIELDING,
     SPELL_SPECTRAL_WEAPON,
     SPELL_SPIDER_FORM,
     SPELL_STATUE_FORM,

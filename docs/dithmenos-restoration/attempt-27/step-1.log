@@ -1,0 +1,13 @@
+fatal: not a git repository (or any of the parent directories): .git
+util/art-data.pl
+    Generating art-data.h
+    Generating art-enum.h
+    Generating dc-unrand.txt
+    Generating tiledef-unrand.cc
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    PYTHON config.h
+    PYTHON species-data.h
+    GEN job-groups.h
+    PYTHON rltilesstatus-icon-sizes.h
+make: *** No rule to make target `catch2-tests/test_owned_grid.cc', needed by `catch2-tests/test_owned_grid.o'.  Stop.
+make: *** Waiting for unfinished jobs....

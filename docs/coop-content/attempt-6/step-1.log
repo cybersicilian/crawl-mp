@@ -1,0 +1,24 @@
+fatal: not a git repository (or any of the parent directories): .git
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    GEN job-groups.h
+    PYTHON species-data.h
+    PYTHON rltilesstatus-icon-sizes.h
+    GEN job-type.h
+    GEN species-groups.h
+make: `crawl' is up to date.
+    CXX catch2-tests/test_coop_content.o
+In file included from catch2-tests/test_coop_content.cc:1:
+In file included from catch2-tests/catch_amalgamated.hpp:93:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstddef:39:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+catch2-tests/test_coop_content.cc:288:9: error: 'this' argument to member function 'load' has type 'const map_def', but function is not marked const
+  288 |         definition->load();
+      |         ^~~~~~~~~~
+./mapdef.h:1178:10: note: 'load' declared here
+ 1178 |     void load();
+      |          ^
+1 warning and 1 error generated.
+make: *** [catch2-tests/test_coop_content.o] Error 1

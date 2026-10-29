@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Vorr design review</title>
+  <link rel="stylesheet" href="../../../crawl-ref/source/webserver/game_data/static/styles/party-faith.css">
+  <link rel="stylesheet" href="review.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to design</a>
+  <header class="page-header">
+    <a class="brand" href="#main">Vorr <span>/ the Red Wake</span></a>
+    <nav aria-label="Design sections">
+      <a href="#kit">The kit</a>
+      <a href="#blood">Blood rules</a>
+      <a href="#plinths">Plinths</a>
+      <a href="#assets">Assets</a>
+      <a href="README.md">Full design ↗</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="title">
+      <p class="eyebrow">DCSS · GOD DESIGN DRAFT · 18 OCTOBER 2026</p>
+      <h1>Let the dungeon drink.</h1>
+      <p class="lead">Burst blood-bearing enemies. Fight amid the spill. Spend the battlefield on powerful rites.</p>
+      <p class="scope">Working name: <strong>Vorr the Red Wake</strong>. A local native prototype now includes the rites, blood economy, passive healing, altar and plinth. <a href="implementation-status.md">Implementation and verification ↗</a></p>
+      <figure class="direction">
+        <a href="assets/vorr-altar-concept-v2.png" aria-label="Open the simplified altar study">
+          <img src="assets/vorr-altar-concept-v2.png" alt="Simplified blood altar study: a low stone basin, two front channels, one simple foot, and a suspended drop.">
+        </a>
+        <figcaption>Simplified altar study v2 · Native references guide the silhouette. A true 32-pixel drawing pass is still required. <a href="assets/vorr-art-direction-v1.png">Initial direction board ↗</a></figcaption>
+      </figure>
+    </section>
+    <section id="kit" aria-labelledby="kit-title">
+      <div class="section-heading"><p class="eyebrow">SPARSE PROGRESSION</p><h2 id="kit-title">Three milestones. Three active rites.</h2></div>
+      <p class="section-lead">Red Wake starts the blood economy when you join. Two, four, and six stars add no new feature.</p>
+      <div class="milestones">
+        <article class="milestone">
+          <p class="rank" aria-label="One star">★ <span>ONE STAR</span></p>
+          <h3>Rupture</h3><p class="cost">2 blood · one action</p>
+          <p>Drive spilled blood into an enemy's wound and tear it outward. A killing blow produces a larger burst.</p>
+          <p class="limitation">Requires a blood-bearing target.</p>
+        </article>
+        <article class="milestone">
+          <p class="rank" aria-label="Three stars">★★★ <span>THREE STARS</span></p>
+          <h3>Blood Communion</h3><p class="cost">Passive · no activation</p>
+          <p>Regenerate while standing in potent blood. Steal a little life when your damage removes HP from a blood-bearing enemy.</p>
+          <p class="limitation">One shared healing cap across damage sources.</p>
+          <h3 class="additional-rite">Red Passage</h3><p class="cost">2 blood · one action</p>
+          <p>Sink into blood underfoot and emerge from another visible fresh pool. The landing erupts in a short spray.</p>
+          <p class="limitation">Consumes one unit at each endpoint.</p>
+        </article>
+        <article class="milestone">
+          <p class="rank" aria-label="Five stars">★★★★★ <span>FIVE STARS</span></p>
+          <h3>The Great Letting</h3><p class="cost">8 blood + 5 piety · one action</p>
+          <p>Raise selected pools into inward-striking blades. Each nearby enemy takes one hit, even where several blades overlap.</p>
+          <p class="limitation">Consumes the ground that could sustain you.</p>
+        </article>
+      </div>
+      <p class="footnote">Costs are starting points for a native prototype. Red Passage and Blood Communion share the three-star milestone. The separate armour rite remains outside this kit.</p>
+    </section>
+    <section id="blood" class="rules" aria-labelledby="blood-title">
+      <div>
+        <p class="eyebrow">THE FIGHT CHANGES THE GROUND</p>
+        <h2 id="blood-title">Make the spill matter.</h2>
+        <ol class="loop">
+          <li><strong>Open a wound.</strong><span>Crossing half HP releases a little blood once.</span></li>
+          <li><strong>Break the body.</strong><span>A worthy kill bursts outward and releases the remaining supply.</span></li>
+          <li><strong>Hold or spend.</strong><span>Stay on blood for regeneration, or consume it to power your next rite.</span></li>
+        </ol>
+        <p>Blood stays potent for roughly twelve ordinary turns. Old stains and fountains supply nothing. Fuel is selected automatically from legal visible deposits.</p>
+      </div>
+      <aside class="dry-rule" aria-labelledby="dry-title">
+        <p class="eyebrow">A REAL WEAKNESS</p><h3 id="dry-title">Bloodless means bloodless.</h3>
+        <p>No bleeding. No new fuel. No lifesteal. No bloody death burst. Rupture cannot target them.</p>
+        <p>External blood blades may strike a construct physically. It remains dry and gives nothing back.</p>
+        <p class="quote">Where nothing bleeds,<br>the Red Wake runs dry.</p>
+      </aside>
+    </section>
+    <section id="plinths" aria-labelledby="plinth-title">
+      <p class="eyebrow">PORTRAIT FAITH PLINTHS</p><h2 id="plinth-title">A shrine beneath the portrait.</h2>
+      <p class="section-lead">A collecting trough, split-drop seals, and carved red channels use the existing 60 × 68 frame around the hero. These SVG studies follow the native layer contract; the inset altar is still a reduced concept placeholder.</p>
+      <div id="plinth-gallery" class="plinth-gallery" aria-label="Proposed Vorr favor and exceptional states"></div>
+      <p class="footnote">Shown at 2× for inspection. Decoration can reflect all six favor ranks; powers unlock only at one, three, and five stars. Fuel quantity never changes favor decoration. Each altar links directly to the proposed abilities.</p>
+    </section>
+    <section id="assets" aria-labelledby="assets-title">
+      <div class="section-heading"><p class="eyebrow">CONCEPT ASSETS</p><h2 id="assets-title">One coherent visual language.</h2></div>
+      <p class="section-lead">Transparent PNG source masters, with small-size previews to expose the cleanup still required. These are concepts; native game tiles are 32 × 32.</p>
+      <div class="native-reference-grid" aria-label="Native altar comparison">
+        <figure><img src="assets/reference-trog.png" alt="Native Trog altar enlarged four times"><figcaption>Trog · native 32 px</figcaption></figure>
+        <figure><img src="assets/reference-makhleb.png" alt="Native Makhleb altar enlarged four times"><figcaption>Makhleb · native 32 px</figcaption></figure>
+        <figure><img src="assets/reference-uskayaw.png" alt="Native Uskayaw altar enlarged four times"><figcaption>Uskayaw · native 32 px</figcaption></figure>
+        <figure><img src="assets/vorr-altar-concept-v2.png" alt="Vorr concept reduced for comparison"><figcaption>Vorr v2 · concept preview</figcaption></figure>
+      </div>
+      <p class="footnote">Reference sprites are shown at 4× with nearest-neighbor scaling. Vorr remains a concept master; this comparison exposes the remaining simplification work.</p>
+      <div class="asset-grid">
+        <article class="asset-card">
+          <a class="asset-image" href="assets/vorr-altar-concept-v2.png" aria-label="Open transparent altar concept">
+            <img src="assets/vorr-altar-concept-v2.png" alt="A low blood basin with a simple rim, two channels, a small base, and one hanging drop.">
+          </a>
+          <div class="asset-copy"><h3>The collecting basin</h3><p>One low foot, a clear rim, two channels, and a hanging drop. Continue simplifying at the actual drawing grid.</p>
+            <div class="size-review"><img width="32" height="32" src="assets/vorr-altar-concept-v2.png" alt="Altar master reduced to 32 pixels for review"><span>32 px preview · cleanup required</span></div>
+          </div>
+        </article>
+        <article class="asset-card">
+          <a class="asset-image" href="assets/vorr-sigil-concept-v1.png" aria-label="Open transparent split-drop concept">
+            <img src="assets/vorr-sigil-concept-v1.png" alt="A crimson blood drop split by a dark cleft, with three detached outward spatters.">
+          </a>
+          <div class="asset-copy"><h3>The opened drop</h3><p>A simple split silhouette. Preserve the cleft and outward spatters when reducing internal shading.</p>
+            <div class="size-review"><img width="32" height="32" src="assets/vorr-sigil-concept-v1.png" alt="Split-drop master reduced to 32 pixels for review"><span>32 px preview · cleanup required</span></div>
+          </div>
+        </article>
+      </div>
+      <div class="palette" aria-label="Vorr colour palette">
+        <div><span style="--swatch:#151116"></span><strong>Soot</strong><code>#151116</code></div>
+        <div><span style="--swatch:#383238"></span><strong>Basalt</strong><code>#383238</code></div>
+        <div><span style="--swatch:#4b1721"></span><strong>Dry blood</strong><code>#4b1721</code></div>
+        <div><span style="--swatch:#8d1d32"></span><strong>Deep blood</strong><code>#8d1d32</code></div>
+        <div><span style="--swatch:#d94950"></span><strong>Fresh blood</strong><code>#d94950</code></div>
+        <div><span style="--swatch:#e6d9bb"></span><strong>Worn rim</strong><code>#e6d9bb</code></div>
+      </div>
+      <p class="footnote">Freshness also uses glints and a broken contour. Colour alone never decides whether blood is usable.</p>
+    </section>
+    <section class="next" aria-labelledby="next-title">
+      <div><p class="eyebrow">NEXT DESIGN CHECK</p><h2 id="next-title">Prove the blood economy.</h2><p>Compare a normal pack, an isolated durable foe, a mixed encounter, a wholly bloodless room, and a watery branch. Then tune the blood budget and healing before adding more powers.</p></div>
+      <div class="document-links">
+        <a href="README.md">Complete mechanics draft ↗</a>
+        <a href="art-direction.md">Asset specifications ↗</a>
+        <a href="implementation-notes.md">Native contracts and playtests ↗</a>
+        <a href="assets.json">Asset inventory and provenance ↗</a>
+        <a href="/Users/iancaltabiano/Documents/Projects/__DESIGN/dcss/2026-10-18-vorr-aesthetic-review/brief.html">Aesthetic and plinth critique ↗</a>
+      </div>
+    </section>
+  </main>
+  <footer>Vorr design package · Concepts generated with built-in imagegen · Native prototype integrated; balance and sprite polish remain open.</footer>
+  <script type="application/json" id="vorr-plinth-theme">
+{
+  "name": "Vorr",
+  "status": "proposed theme for the existing portrait faith renderer",
+  "envelope": [60, 68],
+  "portrait": [42, 50],
+  "accent": "#b76b77",
+  "arch": "M8 55V25L12 17V11L22 8H38L48 11V17L52 25V55",
+  "base": "M5 55H25L28 58H32L35 55H55L52 60V65L48 67H12L8 65V60Z",
+  "seal": "M0-5Q-5 0-3 3L-1 5V-2M1-2V5L3 3Q5 0 0-5",
+  "sides": "M4 51V29L7 26M4 39H7L8 44V51M56 51V29L53 26M56 39H53L52 44V51",
+  "crown": "M12 17V11L20 6H25M48 17V11L40 6H35M28 5L30 2L32 5",
+  "setting": "M-10-4L-7-6H7L10-4L8 4L4 7H-4L-8 4Z",
+  "inset": "assets/vorr-altar-concept-v2.png",
+  "inset_status": "reduced concept placeholder pending native altar pixels",
+  "hero_reference": "../../../crawl-ref/source/rltiles/player/base/human_m.png",
+  "mote": "M0-2Q2.5 1 0 2Q-2.5 1 0-2Z",
+  "layers": [
+    { "name": "fittings", "tier": 2, "className": "faith-fitting", "path": "M8 54L10 52L12 54L10 56ZM48 54L50 52L52 54L50 56Z" },
+    { "name": "devotion", "tier": 3, "className": "faith-deity-ornament", "themePath": "sides" },
+    { "name": "crown", "tier": 4, "className": "faith-deity-crown", "themePath": "crown" },
+    { "name": "sanctuary", "tier": 5, "className": "faith-inner-arch", "path": "M11 50V27Q11 13 24 11M49 50V27Q49 13 36 11" },
+    { "name": "glory", "tier": 6, "className": "faith-halo", "path": "M2 54V26Q1 17 7 11M58 54V26Q59 17 53 11" }
+  ],
+  "gameplay_milestones": { "1": "Rupture", "3": "Blood Communion and Red Passage", "5": "The Great Letting" },
+  "state_policy": {
+    "penance": "dim inlays and fracture the pedestal; no motes",
+    "unknown": "uncertain arch without invented favor or motes",
+    "blood_supply": "separate from favor decoration"
+  }
+}
+  </script>
+  <script src="plinth-study.js"></script>
+</body>
+</html>

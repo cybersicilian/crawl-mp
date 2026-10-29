@@ -1,0 +1,45 @@
+{
+  "label": "DCSS calibrated Burrows ending and Hive population build",
+  "cwd": "/private/tmp/dcss-burrows-playtest-20261027",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "command": [
+    "make",
+    "-j2",
+    "-o",
+    ".contrib-libs",
+    "WEBTILES=y",
+    "NO_OPTIMIZE=y",
+    "STDFLAG=-std=c++17",
+    "PYTHON=/usr/local/bin/python3",
+    "TEST_OBJECTS=catch2-tests/test_burrows.o catch2-tests/test_branch_population.o catch2-tests/test_honey.o catch2-tests/test_ng-init-branches.o catch2-tests/test_player_fixture.o",
+    "crawl",
+    "catch2-tests-executable"
+  ],
+  "inputs": {
+    "/private/tmp/dcss-burrows-playtest-20261027/branch-population.h": "3836309c6689811212dd767f89aa5be30dae4d87550f01b5ecd00e9a4e4bbf59",
+    "/private/tmp/dcss-burrows-playtest-20261027/dungeon.cc": "0253dafe8ecf57ac81622b1272929bd7944d7ec73249961dad32af207aa2cdcc",
+    "/private/tmp/dcss-burrows-playtest-20261027/dungeon-feature-type.h": "f64014e9099d7238f8601ed639976e7fe9991bbc5bde5f880eead2c91e88b2d6",
+    "/private/tmp/dcss-burrows-playtest-20261027/feature-data.h": "2183388af72cb4d3a436f8a0b0134571158bad241ee89b4a5caff1aa32a662a8",
+    "/private/tmp/dcss-burrows-playtest-20261027/tag-version.h": "edfbf9ea9983f9fce049e4dacdd361693ee4e995c827333fbf619890c065b028",
+    "/private/tmp/dcss-burrows-playtest-20261027/terrain.h": "ab0c220fab5fafa1a11e1576e9e5d214db0e248be220753c4326166ec6407743",
+    "/private/tmp/dcss-burrows-playtest-20261027/terrain.cc": "b0c89aea160a2d320c6cd2cb8c1219c1fc531e5436880f15d8078ba647216e46",
+    "/private/tmp/dcss-burrows-playtest-20261027/player.cc": "3583c181c77a2081897801810c965b6d1c73eb26df0567d0b753f38333daaf5c",
+    "/private/tmp/dcss-burrows-playtest-20261027/monster.cc": "988f42b5bddfd4b47125156fbacf8dbd86d9b60f9a2230cae14738633dd5dd99",
+    "/private/tmp/dcss-burrows-playtest-20261027/tilepick.cc": "022026f58dc04d2ca905e2f9963c36c1a864c9b9be42434868b057db8e627701",
+    "/private/tmp/dcss-burrows-playtest-20261027/rltiles/dc-floor.txt": "2ad4f87c785a45bd4a7c3f38720dae3654864a38d812c58dd64fee7103734d7e",
+    "/private/tmp/dcss-burrows-playtest-20261027/dat/descript/features.txt": "a44c29d0455324a84bdeef7f8e0d543b34cdfe84164321122bad6d1bd9676b17",
+    "/private/tmp/dcss-burrows-playtest-20261027/dat/dlua/layout/hive.lua": "785a180ba7d0361e9775f6fd93bbcddeb2388dcc14cd70eff51244dd4f409d2a",
+    "/private/tmp/dcss-burrows-playtest-20261027/catch2-tests/test_honey.cc": "83fe70ef32f6be28ebfda57720d75ffcf137b766b7b90149c116679d7222933b",
+    "/private/tmp/dcss-burrows-playtest-20261027/catch2-tests/test_branch_population.cc": "eb7db230696cd746d98a5c6f62b26a646a7ecea76175f73fbaa41f2e9bee7976",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/phase.py": "03845b06b803978aedeaff6d880c68f6669e78845d6677ea3543590b048d0db6",
+    "/private/tmp/dcss-burrows-playtest-20261027/Makefile": "8246e001f440f799f2944e80ae5a047746ad98f49a7b17c45652deb3bb7df906",
+    "/private/tmp/dcss-burrows-playtest-20261027/Makefile.obj": "e8d63c308f90d87f09a57b31b236d18cf288491da483cd30ef9780b1fe1f4691",
+    "/private/tmp/dcss-burrows-playtest-20261027/.cflags": "15ede59e9060bed2a90d1f9677bffac9fa404a98eae88361bf14e0e232d2d5c6",
+    "/private/tmp/dcss-burrows-playtest-20261027/mon-pick-data.h": "9a1ff9f1422d16aecd537bbc63ce862620d48da6ef56f6a8d343330b8a154257"
+  },
+  "resources": {
+    "compileJobs": 2,
+    "phases": "one incremental native build",
+    "existingSavesUsed": false
+  }
+}

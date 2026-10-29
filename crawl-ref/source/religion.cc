@@ -4,8 +4,12 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vellum.h"
+#include "god-pakellas.h"
+#include "god-vorr.h"
 
 #include "religion.h"
+#include "ronin.h"
 
 #include <algorithm>
 #include <cmath>
@@ -16,6 +20,7 @@
 #include <sstream>
 
 #include "ability.h"
+#include "archaeologist.h"
 #include "acquire.h"
 #include "act-iter.h"
 #include "areas.h"
@@ -61,6 +66,7 @@
 #include "nearby-danger.h"
 #include "notes.h"
 #include "output.h"
+#include "party.h"
 #include "piety-info.h"
 #include "player-equip.h"
 #include "player-stats.h"
@@ -336,17 +342,19 @@ const vector<vector<god_power>> & get_all_god_powers()
         },
 
         // Dithmenos
-        {   { 1, "Dithmenos quiets all noise in your surroundings.",
-                 "Dithmenos no longer quiets all noise in your surroundings."},
-            { 2, "Your shadow now sometimes tangibly mimics your actions.",
+        {   { 1, "You are now surrounded by an umbra.",
+                 "Your umbra disappears.",
+                 "Your umbra grows with your piety, improving stealth and hindering enemy attacks." },
+            { 2, ABIL_DITHMENOS_SHADOW_STEP,
+                 "step into the shadows of nearby creatures" },
+            { 3, "You will now sometimes bleed smoke when heavily injured by enemies.",
+                 "You will no longer bleed smoke.",
+                 "You sometimes bleed smoke when heavily injured by enemies." },
+            { 4, "Your shadow now sometimes tangibly mimics your actions.",
                  "Your shadow no longer tangibly mimics your actions.",
                  "Your shadow sometimes tangibly mimics your actions." },
-            { 3, ABIL_DITHMENOS_SHADOWSLIP,
-                 "mislead enemies by swapping places with your shadow" },
-            { 4, ABIL_DITHMENOS_APHOTIC_MARIONETTE,
-                 "unleash an enemy's spells as if they were a marionette"},
-            { 5, ABIL_DITHMENOS_PRIMORDIAL_NIGHTFALL,
-                 "surround yourself with impenetrable night"},
+            { 5, ABIL_DITHMENOS_SHADOW_FORM,
+                 "transform into a swirling mass of shadows" },
         },
 
         // Gozag
@@ -392,7 +400,11 @@ const vector<vector<god_power>> & get_all_god_powers()
 #if TAG_MAJOR_VERSION == 34
         // Pakellas
         {
-            { 0, "gain magical power from killing" },
+            { 0, ABIL_PAKELLAS_FIELD_KIT, "choose a Field Kit" },
+            { 1, ABIL_PAKELLAS_QUICK_CHARGE, "designate a Prototype" },
+            { 1, ABIL_PAKELLAS_EVOKE_PROTOTYPE, "evoke your Prototype" },
+            { 3, ABIL_PAKELLAS_DEVICE_SURGE, "Overclock a device" },
+            { 5, ABIL_PAKELLAS_SUPERCHARGE, "force a Breakthrough on credit" },
         },
 #endif
 
@@ -444,6 +456,19 @@ const vector<vector<god_power>> & get_all_god_powers()
             { 1, ABIL_IGNIS_FIERY_ARMOUR, "armour yourself in flame" },
             { 1, ABIL_IGNIS_FOXFIRE, "call a swarm of foxfires against your foes" },
             { 7, ABIL_IGNIS_RISING_FLAME, "rocket upward and away, once" },
+        },
+        // Vellum is appended after Vorr to preserve saved god IDs.
+        // Vorr
+        {
+            { 0, "make worthy foes burst and spill fresh ritual blood" },
+            { 1, ABIL_VORR_RUPTURE, "rupture a blood-bearing foe" },
+            { 3, "draw life from blood-bearing foes, regenerate in fresh blood and attack and move faster near it" },
+            { 3, ABIL_VORR_RED_PASSAGE, "pass between fresh blood deposits" },
+            { 5, ABIL_VORR_GREAT_LETTING, "raise spilled blood into deadly blades" },
+        },
+        // Vellum: the menu enforces earned milestones and exact personal costs.
+        {
+            { 0, ABIL_VELLUM_WEAVE, "weave enchantments within your personal binding capacity" },
         },
     };
     static bool god_powers_init = false;
@@ -522,10 +547,12 @@ static void _place_delayed_monsters();
 bool is_evil_god(god_type god)
 {
     return god == GOD_KIKUBAAQUDGHA
+           || god == GOD_VORR
            || god == GOD_MAKHLEB
            || god == GOD_YREDELEMNUL
            || god == GOD_BEOGH
-           || god == GOD_LUGONU;
+           || god == GOD_LUGONU
+           || god == GOD_DITHMENOS;
 }
 
 bool is_good_god(god_type god)
@@ -554,11 +581,6 @@ static bool _is_disabled_god(god_type god)
 {
     switch (god)
     {
-#if TAG_MAJOR_VERSION == 34
-    // Disabled, pending a rework.
-    case GOD_PAKELLAS:
-        return true;
-#endif
     default:
         return false;
     }
@@ -651,6 +673,7 @@ bool active_penance(god_type god)
            && god != GOD_ASHENZARI
            && god != GOD_GOZAG
            && god != GOD_RU
+           && god != GOD_VELLUM
            && god != GOD_HEPLIAKLQANA
 #if TAG_MAJOR_VERSION == 34
            && god != GOD_PAKELLAS
@@ -789,6 +812,8 @@ void dec_penance(god_type god, int val)
     }
 
     maybe_clear_traitor(god);
+    if (god == GOD_VELLUM)
+        vellum::refresh();
 
     if (it)
         return;
@@ -1027,6 +1052,8 @@ static void _inc_penance(god_type god, int val)
     }
 
     set_penance_xp_timeout();
+    if (god == GOD_VELLUM)
+        vellum::refresh();
 }
 
 static void _inc_penance(int val)
@@ -1037,6 +1064,8 @@ static void _inc_penance(int val)
 static void _set_penance(god_type god, int val)
 {
     you.penance[god] = val;
+    if (god == GOD_VELLUM)
+        vellum::refresh();
 }
 
 static void _set_wrath_penance(god_type god)
@@ -1606,6 +1635,8 @@ static bool _handle_veh_gift(bool forced)
                 }
                 prompt += spell_title(*it);
                 _add_to_old_gifts(*it);
+                if (party::is_enabled())
+                    you.spell_library.set(*it, true);
                 take_note(Note(NOTE_OFFERED_SPELL, *it));
             }
             prompt += ".";
@@ -2108,11 +2139,29 @@ bool do_god_gift(bool forced)
         case GOD_VEHUMET:
             success = _handle_veh_gift(forced);
             break;
+
+        case GOD_SHINING_ONE:
+            if (party::is_enabled() && piety_rank() >= 1 && one_chance_in(8))
+            {
+                party::apply_party_aura_buff(
+                    coinflip() ? DUR_DIVINE_SHIELD : DUR_HASTE,
+                    coinflip() ? 5 : 10, LOS_RADIUS, false,
+                    GOD_SHINING_ONE);
+            }
+            break;
         }                       // switch (you.religion)
     }                           // End of gift giving.
 
     if (success)
+    {
         stop_running(false);
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(party::active_slot(),
+                                                 you.religion,
+                                                 "divine gift");
+        }
+    }
 
 #if defined(DEBUG_DIAGNOSTICS) || defined(DEBUG_GIFTS)
     if (old_num_current_gifts < you.num_current_gifts[you.religion])
@@ -2177,6 +2226,8 @@ string god_name(god_type which_god, bool long_name)
     case GOD_HEPLIAKLQANA:  return "Hepliaklqana";
     case GOD_WU_JIAN:       return "Wu Jian";
     case GOD_IGNIS:         return "Ignis";
+    case GOD_VORR:          return "Vorr";
+    case GOD_VELLUM:        return "Vellum";
     case GOD_JIYVA: // This is handled at the beginning of the function
     case GOD_ECUMENICAL:    return "an unknown god";
     case NUM_GODS:          return "Buggy";
@@ -2896,6 +2947,8 @@ void excommunication(bool voluntary, god_type new_god)
 
     you.num_current_gifts[old_god] = 0;
 
+    if (old_god == GOD_VORR)
+        vorr::abandon();
     you.religion = GOD_NO_GOD;
 
     you.piety_info.register_excommunication();
@@ -3078,6 +3131,8 @@ void excommunication(bool voluntary, god_type new_god)
         break;
 
     case GOD_DITHMENOS:
+        if (you.form == transformation::shadow)
+            untransform();
         break;
 
     case GOD_GOZAG:
@@ -3188,7 +3243,10 @@ void excommunication(bool voluntary, god_type new_god)
         break;
     }
 
-    _set_wrath_penance(old_god);
+    if (old_god != GOD_VELLUM)
+        _set_wrath_penance(old_god);
+    if (old_god == GOD_VELLUM)
+        vellum::refresh();
 
 #ifdef USE_TILE_LOCAL
     tiles.layout_statcol();
@@ -3301,6 +3359,9 @@ int gozag_service_fee()
     const int gold = you.attribute[ATTR_GOLD_GENERATED];
     int fee = (int)(gold - gold / log10(gold + 10.0))/2;
 
+    if (ronin_first_faith())
+        fee /= 2;
+
     dprf("found %d gold, fee %d", gold, fee);
     return fee;
 }
@@ -3336,6 +3397,8 @@ static bool _god_rejects_loveless(god_type god)
 string cannot_join_god_reason(god_type which_god, bool include_temp, bool check_gear)
 {
     const string god = god_speaker(which_god);
+    if (which_god == GOD_PAKELLAS && you.has_mutation(MUT_NO_ARTIFICE))
+        return god + " requires the ability to use magical devices.";
 
     // Only check permanent statuses here, as we will have more specific
     // messages for e.g. temporary forms further down.
@@ -3703,6 +3766,7 @@ static void _set_initial_god_piety()
         gain_piety(30, 1, false);
 
     _apply_monk_bonus();
+    apply_ronin_first_faith();
     _transfer_good_god_piety();
 }
 
@@ -3717,6 +3781,8 @@ static void _join_gozag()
         mprf(MSGCH_GOD, "You pay a service fee of %d gold.", fee);
         you.gold -= fee;
         you.attribute[ATTR_GOZAG_GOLD_USED] += fee;
+        if (party::is_enabled())
+            party::sync_shared_state_from_active();
     }
     else
         simple_god_message(" waives the service fee.");
@@ -3769,11 +3835,20 @@ static void _join_ru()
     _make_empty_vec(you.props[ARCANA_SAC_KEY], SV_INT);
 }
 
+void prepare_starting_ru()
+{
+    _join_ru();
+    you.props[RU_SACRIFICE_PROGRESS_KEY] = 0;
+    you.props[RU_SACRIFICE_DELAY_KEY] = 50;
+    you.props[RU_SACRIFICE_PENALTY_KEY] = 0;
+}
+
 /// Setup for joining the furious barbarians of Trog.
 void join_trog_skills()
 {
     if (!you.has_mutation(MUT_DISTRIBUTED_TRAINING))
         set_magic_training(TRAINING_DISABLED);
+    archaeologist::reconcile_training();
 }
 
 // Setup for joining the orderly ascetics of Zin.
@@ -3791,7 +3866,9 @@ static void _join_zin()
         // rich. In that case, you have to donate again more... That the poor
         // widow is not spared doesn't mean the rich can't be milked for more.
         lucre.props[ACQUIRE_KEY] = 0;
-        you.gold -= zin_tithe(lucre, lucre.quantity, true);
+        you.del_gold(zin_tithe(lucre, lucre.quantity, true));
+        if (party::is_enabled())
+            party::sync_shared_state_from_active();
     }
 
     if (you.props.exists(ORCIFICATION_LEVEL_KEY))
@@ -3969,6 +4046,11 @@ void join_religion(god_type which_god)
             if (power.rank <= 0)
                 power.display(true, "You can now %s.");
 
+    if (you_worship(GOD_PAKELLAS))
+        pakellas::joined();
+    if (you_worship(GOD_VELLUM))
+        vellum::refresh();
+
     // Vehumet gifts a level one spell immediately.
     if (you_worship(GOD_VEHUMET))
         do_god_gift();
@@ -3988,6 +4070,9 @@ void join_religion(god_type which_god)
     redraw_screen();
     update_screen();
 #endif
+
+    if (party::is_enabled())
+        party::on_player_join_god(party::active_slot(), which_god, old_god);
 
     learned_something_new(HINT_CONVERT);
 }
@@ -4174,7 +4259,7 @@ bool god_protects_from_harm()
     return false;
 }
 
-void handle_god_time(int /*time_delta*/)
+static void _handle_god_time_for_active_player()
 {
     if (you.attribute[ATTR_GOD_WRATH_COUNT] > 0)
     {
@@ -4250,6 +4335,24 @@ void handle_god_time(int /*time_delta*/)
         makhleb_handle_crucible_of_flesh();
 }
 
+void handle_god_time(int /*time_delta*/)
+{
+    if (!party::is_enabled())
+    {
+        _handle_god_time_for_active_player();
+        return;
+    }
+
+    const int count = party::player_count();
+    for (int i = 0; i < count; ++i)
+    {
+        if (!party::slot_is_alive(i) || !party::slot_is_on_current_floor(i))
+            continue;
+        party::scoped_player_context ctx(i);
+        _handle_god_time_for_active_player();
+    }
+}
+
 int god_colour(god_type god) // mv - added
 {
     switch (god)
@@ -4269,6 +4372,7 @@ int god_colour(god_type god) // mv - added
     case GOD_LUGONU:
     case GOD_ASHENZARI:
     case GOD_WU_JIAN:
+    case GOD_VORR:
         return LIGHTRED;
 
     case GOD_GOZAG:
@@ -4277,6 +4381,7 @@ int god_colour(god_type god) // mv - added
         return YELLOW;
 
     case GOD_NEMELEX_XOBEH:
+    case GOD_VELLUM:
         return LIGHTMAGENTA;
 
     case GOD_SIF_MUNA:
@@ -4363,6 +4468,7 @@ colour_t god_message_altar_colour(god_type god)
         return RED;
 
     case GOD_NEMELEX_XOBEH:
+    case GOD_VELLUM:
         return LIGHTMAGENTA;
 
     case GOD_SIF_MUNA:
@@ -4370,6 +4476,7 @@ colour_t god_message_altar_colour(god_type god)
 
     case GOD_LUGONU:
     case GOD_WU_JIAN:
+    case GOD_VORR:
         return LIGHTRED;
 
     case GOD_CHEIBRIADOS:

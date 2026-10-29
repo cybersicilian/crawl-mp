@@ -53,7 +53,7 @@
 #define DREAMSHARD_KEY "dreamshard"
 #define DESCENT_DEBT_KEY "descent_debt"
 #define DESCENT_WATER_BRANCH_KEY "descent_water_branch"
-#define DESCENT_POIS_BRANCH_KEY "descent_poison_branch"
+#define DESCENT_POIS_BRANCH_KEY "descent_poison_branch" // Selected land branch.
 #define BLIND_COLOUR_KEY "blind_colour"
 #define TRICKSTER_POW_KEY "trickster_power"
 #define CACOPHONY_XP_KEY "cacophony_xp"
@@ -76,6 +76,8 @@ constexpr int ENKINDLE_CHARGE_COST = 40;
 #define SOLAR_EMBER_REVIVAL_KEY "solar_ember_revival"
 
 #define PYROMANIA_TRIGGERED_KEY "pyromania_triggered"
+#define AEGIS_SH_BONUS_KEY "aegis_standard_sh_bonus"
+#define AEGIS_ANCHOR_SLOT_KEY "aegis_standard_anchor_slot"
 
 // display/messaging breakpoints for penalties from Ru's MUT_HORROR
 #define HORROR_LVL_EXTREME  3
@@ -124,6 +126,7 @@ enum reprisal_type
 {
     REPRISAL_HEADBUTT,  // Minotaur retaliatory headbutt
     REPRISAL_FENCER,    // Fencer's Glove riposte
+    REPRISAL_BITE,      // Snapping retaliation
 };
 
 enum player_trigger_type
@@ -137,11 +140,9 @@ enum player_trigger_type
     NUM_PLAYER_TRIGGER_TYPES,
 };
 
-// needed for assert in is_player()
-#ifdef DEBUG_GLOBALS
+// Multiplayer / Party context-switchable `you` pointer indirection
+extern player *real_you;
 #define you (*real_you)
-#endif
-extern player you;
 
 typedef FixedVector<int, NUM_DURATIONS> durations_t;
 
@@ -653,7 +654,7 @@ public:
     bool is_fiery() const override;
     bool is_skeletal() const override;
 
-    int heads() const override { return 1; }
+    int heads() const override;
 
     bool spellcasting_unholy() const;
 
@@ -707,9 +708,6 @@ public:
     int get_max_xl() const;
     bool is_player() const override
     {
-#ifndef DEBUG_GLOBALS
-        ASSERT(this == (actor*)&you); // there can be only one
-#endif
         return true;
     }
     monster* as_monster() override { return nullptr; }
@@ -1172,6 +1170,7 @@ int player_icemail_armour_class();
 int player_condensation_shield_class();
 int sanguine_armour_bonus();
 int stone_body_armour_bonus();
+int armoured_shell_bonus();
 
 int player_wizardry();
 int player_channelling_chance(bool max = false);
@@ -1294,7 +1293,7 @@ void dec_max_hp(int hp_loss);
 
 void set_hp(int new_amount);
 
-int get_real_hp(bool trans, bool drained = true);
+int get_real_hp(bool trans, bool drained = true, bool include_reservation = true);
 int get_real_mp(bool include_items);
 
 bool player_harmful_contamination();

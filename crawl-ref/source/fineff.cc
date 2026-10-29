@@ -5,6 +5,7 @@
 **/
 
 #include "AppHdr.h"
+#include "oozle-memory-effects.h"
 
 #include "fineff.h"
 
@@ -37,10 +38,12 @@
 #include "mon-behv.h"
 #include "mon-cast.h"
 #include "mon-death.h"
+#include "mon-explode.h"
 #include "mon-place.h"
 #include "mon-util.h"
 #include "monster.h"
 #include "movement.h"
+#include "party.h"
 #include "ouch.h"
 #include "religion.h"
 #include "spl-damage.h"
@@ -461,13 +464,14 @@ public:
 
     spectral_weapon_fineff(const actor& attack, const actor& defend,
         item_def* wpn)
-        : final_effect(&attack, &defend, coord_def()), weapon(wpn)
+        : final_effect(&attack, &defend, coord_def()), weapon(wpn), memory_id(oozle::effect_source_id(wpn))
     {
     }
 protected:
     bool mergeable(const final_effect&) const override { return false; }
 
     item_def* weapon;
+    int memory_id;
 };
 
 class lugonu_meddle_fineff : public final_effect
@@ -681,6 +685,23 @@ static void _schedule_final_effect(final_effect *eff)
         }
     }
     _final_effects.push_back(eff);
+}
+
+class function_fineff : public final_effect
+{
+public:
+    explicit function_fineff(std::function<void()> effect)
+        : final_effect(nullptr, nullptr, coord_def()), callback(std::move(effect)) {}
+    void fire() override { callback(); }
+protected:
+    bool mergeable(const final_effect&) const override { return false; }
+private:
+    std::function<void()> callback;
+};
+
+void schedule_function_fineff(std::function<void()> effect)
+{
+    _schedule_final_effect(new function_fineff(std::move(effect)));
 }
 
 void schedule_mirror_damage_fineff(const actor* attack, const actor* defend,
@@ -1422,6 +1443,28 @@ void shock_discharge_fineff::fire()
 
 void explosion_fineff::fire()
 {
+    unique_ptr<party::scoped_player_context> owner_context;
+    if (typ == EXPLOSION_FINEFF_AUTOMATON_CONCUSSION)
+    {
+        const int slot = party::slot_for_mid(beam.source_id);
+        if (slot < 0 || (party::is_enabled() && !party::slot_is_alive(slot)))
+            return;
+        owner_context = make_unique<party::scoped_player_context>(slot);
+        if (automaton_blazeheart::protected_near(beam.target))
+        {
+            if (you.see_cell(beam.target))
+                mpr("The blastmotes disperse harmlessly.");
+            return;
+        }
+    }
+    if (typ == EXPLOSION_FINEFF_AUTOMATON_BLAZEHEART
+        && automaton_blazeheart::protected_near(beam.target))
+    {
+        if (you.see_cell(beam.target))
+            mpr("The blazeheart core cools harmlessly before it can explode.");
+        return;
+    }
+
     if (is_sanctuary(beam.target))
     {
         if (you.see_cell(beam.target))
@@ -1431,7 +1474,9 @@ void explosion_fineff::fire()
 
     if (you.see_cell(beam.target))
     {
-        if (typ == EXPLOSION_FINEFF_CONCUSSION || typ == EXPLOSION_FINEFF_PYROMANIA)
+        if (typ == EXPLOSION_FINEFF_CONCUSSION
+            || typ == EXPLOSION_FINEFF_AUTOMATON_CONCUSSION
+            || typ == EXPLOSION_FINEFF_PYROMANIA)
             mpr(boom_message);
         else
             mprf(MSGCH_MONSTER_DAMAGE, MDAM_DEAD, "%s", boom_message.c_str());
@@ -1439,7 +1484,7 @@ void explosion_fineff::fire()
 
     beam.explode(true, typ == EXPLOSION_FINEFF_PYROMANIA);
 
-    if (typ == EXPLOSION_FINEFF_CONCUSSION)
+    if (typ == EXPLOSION_FINEFF_CONCUSSION || typ == EXPLOSION_FINEFF_AUTOMATON_CONCUSSION)
     {
         for (fair_adjacent_iterator ai(beam.target); ai; ++ai)
         {
@@ -1452,7 +1497,9 @@ void explosion_fineff::fire()
             }
 
             const coord_def newpos = (*ai - beam.target) + *ai;
-            if (newpos == *ai || actor_at(newpos) || !act->is_habitable(newpos))
+            if (newpos == *ai || actor_at(newpos) || !act->is_habitable(newpos)
+                || (typ == EXPLOSION_FINEFF_AUTOMATON_CONCUSSION
+                    && party::player_at(newpos)))
                 continue;
 
             act->move_to(newpos, MV_DEFAULT, true);
@@ -1658,6 +1705,7 @@ void summon_dismissal_fineff::fire()
 
 void spectral_weapon_fineff::fire()
 {
+    if (memory_id) weapon = oozle::effect_source_by_id(memory_id);
     actor *atkr = attacker();
     actor *defend = defender();
     if (!defend || !atkr || !defend->alive() || !atkr->alive())
@@ -1668,7 +1716,7 @@ void spectral_weapon_fineff::fire()
 
     // Don't animate a weapon that has been dropped in the meantime.
     if (atkr->is_monster() ? weapon->holding_monster() != atkr->as_monster()
-                           : !item_is_equipped(*weapon))
+                           : !item_is_equipped(*weapon) && !oozle::is_effect_source(weapon))
     {
         return;
     }

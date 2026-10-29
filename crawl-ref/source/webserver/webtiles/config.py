@@ -72,6 +72,9 @@ defaults = {
     'recording_term_size': (80, 24),
     'max_connections': 100,
     'connection_timeout': 10 * 60,
+    'websocket_ping_interval': 20,
+    'websocket_ping_timeout': 20,
+    'reconnect_grace_period': 30,
     'max_idle_time': 5 * 60 * 60,
     'max_lobby_idle_time': 3 * 60 * 60,
     'use_gzip': True,
@@ -97,9 +100,10 @@ defaults = {
     'templates': collections.OrderedDict([]),
     'use_game_yaml': None, # default: load games.d if games is empty
     'banned': [],
+    'disabled_accounts': [],
     'bot_accounts': False,
     'wizard_accounts': False,
-    'allow_anon_spectate': True,
+    'allow_anon_spectate': False,
     'enable_ttyrecs': True,
     'max_chat_length': 1000,
 }

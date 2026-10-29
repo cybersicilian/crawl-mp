@@ -45,7 +45,11 @@ public:
 
 const PotionEffect* get_potion_effect(potion_type pot);
 
+class dist;
+
 bool quaff_potion(item_def &potion, bool force);
+bool can_throw_potion(string *reason = nullptr);
+bool throw_potion(item_def &potion, dist *pre_target = nullptr);
 void potionlike_effect(potion_type effect, int pow, bool was_known = true);
 
 bool mons_benefits_from_potion(const monster& mon, potion_type potion);

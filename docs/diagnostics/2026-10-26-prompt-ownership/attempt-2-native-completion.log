@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/native-command-completion.py", line 191, in <module>
+    verify(arguments.source.resolve(), arguments.output.resolve(), arguments.expect_missing)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/native-command-completion.py", line 163, in verify
+    assert probe.turns()[0] == before[0] + 2, "Completion arrived before buffered macro finished"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Completion arrived before buffered macro finished

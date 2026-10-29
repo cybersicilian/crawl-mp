@@ -31,7 +31,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
 
     function is_excluded(monster)
     {
-        return (monster.typedata.no_exp &&
+        return (monster.typedata && monster.typedata.no_exp &&
                 !(monster.name == "active ballistomycete"
                   || monster.name.match(/tentacle$/)));
     }
@@ -44,9 +44,11 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         else if (m1.att > m2.att)
             return 1;
 
-        if (m1.typedata.avghp > m2.typedata.avghp)
+        var hp1 = m1.typedata && m1.typedata.avghp;
+        var hp2 = m2.typedata && m2.typedata.avghp;
+        if (Number.isFinite(hp1) && Number.isFinite(hp2) && hp1 > hp2)
             return -1;
-        else if (m1.typedata.avghp < m2.typedata.avghp)
+        else if (Number.isFinite(hp1) && Number.isFinite(hp2) && hp1 < hp2)
             return 1;
 
         if (m1.type < m2.type)
@@ -83,6 +85,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         for (var loc in monsters)
         {
             if (is_excluded(monsters[loc].mon)) continue;
+            if (is_party_projection(monsters[loc])) continue;
             monster_list.push(monsters[loc]);
         }
 
@@ -110,6 +113,30 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         return new_monster_groups;
     }
 
+    function is_party_projection(entry)
+    {
+        var party = window.crawl_party && window.crawl_party.state;
+        // Friendly map actors at reported party positions duplicate the cards.
+        // Unknown floor/position facts must never hide an unrelated creature.
+        return entry.mon.att === 4 && party && Array.isArray(party.members)
+            && party.members.some(function (hero) {
+                return hero.on_same_level === true && hero.alive === true && !hero.ghost_haunting && hero.pos
+                    && hero.pos.x === entry.loc.x && hero.pos.y === entry.loc.y;
+            });
+    }
+
+    function contacts()
+    {
+        return Object.keys(monsters || {}).map(function (key) { return monsters[key]; })
+            .filter(function (entry) { return !is_party_projection(entry); })
+            .map(function (entry) {
+                return { id: entry.mon.id, contact_key: "map:" + (entry.mon.id || entry.loc.x + "," + entry.loc.y),
+                    name: entry.mon.name, type: entry.mon.type,
+                    x: entry.loc.x, y: entry.loc.y, att: entry.mon.att,
+                    non_threatening: Boolean(is_excluded(entry.mon)), perception: "visible" };
+            });
+    }
+
     // These need to be updated when the respective enums change
     var attitude_classes = [
         "hostile",
@@ -128,7 +155,11 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
 
     function update(show_inv)
     {
-        var grouped_monsters = group_monsters();
+        $(document).trigger("nearby_creatures_changed");
+        var rail = document.getElementById("enemy_initiative_rail");
+        // The grouped rail owns visible contacts. Do not paint a second hidden
+        // roster on every map update; unknown-location warnings still live here.
+        var grouped_monsters = rail && rail.dataset.creatureGroups === "true" ? [] : group_monsters();
 
         var rows = Math.min(grouped_monsters.length, max_rows);
         if (show_inv)
@@ -178,6 +209,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
                 group.monsters = monsters;
             }
 
+            group.node.toggleClass("is-unseen-warning", Boolean(show_inv && i === 0));
             // Print unknown invisible monsters as the first entry of the list.
             if (show_inv && i == 0)
             {
@@ -273,6 +305,12 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
             monster_groups[i].node.remove();
         }
         monster_groups = monster_groups.slice(0, rows);
+        var party = window.crawl_party && window.crawl_party.state;
+        var party_present = party && Array.isArray(party.members) && party.members.length;
+        var has_encounter = grouped_monsters.some(function (group) { return group[0].mon.att !== 4; });
+        // Friendly-only actors are already represented on the map and cards.
+        // Keep threats, neutral creatures and unseen warnings directly visible.
+        $list.toggle(Boolean(rows) && (!party_present || Boolean(show_inv) || has_encounter));
     }
 
     function set_max_rows(x)
@@ -285,6 +323,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         $list.empty();
         monster_groups = [];
         monsters = {};
+        $(document).trigger("nearby_creatures_changed");
     }
 
     options.add_listener(function ()
@@ -310,6 +349,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         update: update,
         set_max_rows: set_max_rows,
         clear: clear,
+        contacts: contacts,
         get: function () { return monster_groups; }
     };
 });

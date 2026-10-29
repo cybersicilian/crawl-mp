@@ -1,0 +1,234 @@
+/* Wider character folios share the in-game character sheet's materials. */
+#lobby.has-chapter-index #party_lobby_panel { border-top: 3px solid var(--tt-folio-crimson); }
+#lobby.has-chapter-index #party_slots_grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 20px;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-box {
+    padding: 22px;
+    gap: 13px;
+    border-color: var(--tt-folio-rule);
+    border-top-color: var(--slot-accent);
+    background: var(--tt-folio-raised);
+}
+#lobby.has-chapter-index #party_slots_grid .slot-state-open { background: #f1ead9; }
+#lobby.has-chapter-index #party_slots_grid .slot-state-closed { background: #ede5d5; opacity: 1; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-color: var(--tt-folio-rule);
+}
+.party-slot-monogram {
+    display: grid;
+    place-items: center;
+    flex: 0 0 76px;
+    height: 94px;
+    border: 1px solid var(--slot-accent);
+    border-radius: 4px 4px 20px 20px;
+    color: var(--tt-folio-crimson);
+    background: #b7965420;
+    font: 600 15px/1 var(--tt-font-title);
+    letter-spacing: -.02em;
+}
+.native-player-tile { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; width: 72px; height: 72px; background: #2d2922; border: 1px solid #b89864; border-radius: 4px; }
+.native-player-tile :is(img, canvas) { width: 64px; height: 64px; object-fit: contain; image-rendering: pixelated; }
+.starting-combat-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.party-slot-monogram .native-player-tile { width: 64px; height: 64px; border: 0; background: #2d2922; }
+.party-slot-abbreviation { font: 600 11px/1.4 var(--tt-font-ui); padding-bottom: 3px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { flex-wrap: wrap; gap: 8px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-combo-summary { margin-right: auto; }
+#lobby :is(.party-starting-sheet, .party-edit-hero) { min-height: 38px; padding: 8px 12px; color: var(--tt-folio-crimson); border: 1px solid #b99973; border-radius: 4px; background: #fffaf0; font: 600 12px/1.4 var(--tt-font-ui); cursor: pointer; }
+#lobby :is(.party-starting-sheet, .party-edit-hero):hover:not(:disabled) { background: #ecdfc7; border-color: #92684d; }
+.starting-sheet-banner { display: flex; align-items: center; gap: 18px; }
+.starting-sheet-combination { margin: 0; color: var(--tt-folio-crimson); font: 600 23px/1.3 var(--tt-font-title); }
+.starting-sheet-boundary { margin: 18px 0 0; padding: 11px 13px; color: var(--tt-folio-muted); background: #e8ddc755; border-left: 2px solid #af9166; font: 12px/1.6 var(--tt-font-ui); }
+.character-guide-numbers small { display: block; margin-top: 5px; color: var(--tt-folio-muted); font-size: 10px; line-height: 1.5; }
+.party-seasonings-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin: 0 0 14px;
+    padding: 10px 14px;
+    background: #efe5cf;
+    border: 1px dashed #c7b18c;
+    border-radius: 7px;
+}
+.party-seasonings-label { font: 700 10px/1.3 var(--tt-font-ui); text-transform: uppercase; letter-spacing: 0.12em; color: #7a4427; margin-right: 4px; }
+.party-seasoning-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 32px;
+    padding: 5px 10px;
+    border: 1px solid #c5b18e;
+    border-radius: 999px;
+    background: #fffdf7;
+    color: #4f4332;
+    font: 600 11px/1.3 var(--tt-font-ui);
+    cursor: pointer;
+}
+.party-seasoning-chip:hover:not(:disabled) { border-color: #b5652d; background: #f8ecd4; }
+.party-seasoning-chip[aria-pressed="true"] { background: #943824; border-color: #7c2b19; color: #fffaf0; }
+.party-seasoning-bonus { font: 600 10px/1 var(--tt-font-mono); opacity: 0.85; }
+.party-builder-views { display: flex; gap: 6px; margin: 0 0 20px; border-bottom: 1px dashed var(--tt-folio-rule); }
+#lobby .party-builder-views button { min-height: 44px; padding: 10px 18px; border: 0; border-bottom: 3px solid transparent; color: var(--tt-folio-muted); background: transparent; font: 600 13px/1.5 var(--tt-font-ui); cursor: pointer; }
+#lobby .party-builder-views button[aria-selected="true"] { border-bottom-color: var(--tt-folio-crimson); color: var(--tt-folio-crimson); background: #ede1cc; }
+.party-composition-header { margin-bottom: 20px; }
+#lobby .party-composition-header h3 { color: var(--tt-folio-crimson); font: 600 27px/1.2 var(--tt-font-title); margin: 0 0 8px; }
+.party-composition-header p, .party-composition-note { color: var(--tt-folio-muted); font: 13px/1.6 var(--tt-font-ui); margin: 0; }
+.party-composition-roster { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.party-composition-hero { display: flex; align-items: start; gap: 16px; flex-wrap: wrap; padding: 20px; background: var(--tt-folio-raised); border: 1px solid var(--tt-folio-rule); border-radius: 5px; }
+.party-composition-hero.is-inactive { background: #ece5d6; border-style: dashed; }
+.party-composition-copy { flex: 1; min-width: 120px; }
+#lobby .party-composition-copy h4 { margin: 5px 0; color: var(--tt-folio-crimson); font: 600 24px/1.2 var(--tt-font-title); overflow-wrap: anywhere; }
+.party-composition-copy p { margin: 4px 0; color: var(--tt-folio-ink); font: 12px/1.5 var(--tt-font-ui); }
+.party-composition-copy small { color: var(--tt-folio-muted); font: 11px/1.5 var(--tt-font-ui); }
+.party-composition-actions { display: flex; gap: 8px; flex-basis: 100%; flex-wrap: wrap; }
+.party-composition-note { margin-top: 18px; }
+.party-slot-identity { display: grid; gap: 4px; min-width: 0; }
+.party-slot-identity .party-starting-sheet { justify-self: start; margin-top: 5px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-title {
+    color: var(--tt-folio-muted);
+    font: 600 10px/1.4 var(--tt-font-ui);
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-hero-name {
+    margin: 0;
+    color: var(--tt-folio-crimson);
+    font: 600 27px/1.15 var(--tt-font-title);
+    overflow-wrap: anywhere;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-occupant {
+    color: var(--tt-folio-muted) !important;
+    font: 11px/1.45 var(--tt-font-ui);
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-modes { min-height: 40px; gap: 5px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-modes > span {
+    display: flex;
+    align-items: center;
+    color: var(--tt-folio-muted) !important;
+    font: 12px/1.5 var(--tt-font-ui) !important;
+}
+#lobby.has-chapter-index #party_slots_grid .party-mode-btn {
+    min-height: 40px;
+    padding: 8px;
+    color: #62513f;
+    border-color: #c7b18c80;
+    font: 500 12px/1.4 var(--tt-font-ui);
+}
+#lobby.has-chapter-index #party_slots_grid .party-mode-btn.active {
+    color: var(--tt-folio-crimson);
+    border-color: #9e6c5c;
+    background: #e9dac4;
+    box-shadow: inset 0 -2px #9e6c5c;
+}
+#lobby.has-chapter-index .party-slot-state-note {
+    margin: -4px 0 0;
+    color: var(--tt-folio-muted);
+    font: 12px/1.5 var(--tt-font-ui);
+}
+.party-character-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.party-character-fields > div { min-width: 0; }
+.party-character-fields :is(.party-name-row, .party-weapon-row) { grid-column: 1 / -1; }
+#lobby.has-chapter-index #party_slots_grid .party-field-row { gap: 6px; }
+#lobby.has-chapter-index #party_slots_grid .party-field-label {
+    color: #65513b;
+    font: 600 12px/1.4 var(--tt-font-ui);
+}
+#lobby.has-chapter-index #party_slots_grid :is(input, select) {
+    min-height: 42px;
+    width: 100%;
+    max-width: 100%;
+    color: var(--tt-folio-ink);
+    border-color: #bca98a;
+    background: #fffdf7;
+    font-size: 13px;
+}
+#lobby.has-chapter-index #party_slots_grid option:disabled { color: #897c6d; }
+#lobby.has-chapter-index #party_slots_grid .character-choice-note { grid-template-columns: 1fr; gap: 5px; }
+#lobby.has-chapter-index #party_slots_grid .character-choice-copy {
+    min-height: 54px;
+    color: #6b5944;
+    font: 12px/1.5 var(--tt-font-ui);
+    -webkit-line-clamp: 3;
+}
+#lobby.has-chapter-index #party_slots_grid .character-choice-details {
+    justify-self: start;
+    min-height: 36px;
+    padding: 6px 10px;
+    color: var(--tt-folio-crimson);
+    font-size: 11px;
+}
+#lobby.has-chapter-index #party_slots_grid .party-weapon-row > span {
+    color: var(--tt-folio-muted);
+    font: 11px/1.5 var(--tt-font-ui);
+}
+#lobby.has-chapter-index #party_slots_grid .party-archetype-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding-top: 14px;
+    margin-top: auto;
+    border-top: 1px dashed #c7b18c80;
+}
+.party-presets-label { grid-column: 1 / -1; color: var(--tt-folio-muted); font-size: 11px; }
+#lobby.has-chapter-index #party_slots_grid .party-archetype-btn {
+    min-height: 44px;
+    padding: 7px;
+    color: #68523d;
+    background: transparent;
+    border-color: #c7b18c80;
+    font: 11px/1.45 var(--tt-font-ui);
+    white-space: normal;
+}
+#lobby.has-chapter-index #party_slots_grid .party-archetype-btn[aria-pressed="true"] {
+    color: var(--tt-folio-crimson);
+    border-color: #9e6c5c;
+    background: #e9dac4;
+    box-shadow: inset 0 -2px #9e6c5c;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { margin-top: 0; border-color: var(--tt-folio-rule); }
+#lobby.has-chapter-index #party_slots_grid .party-slot-combo-summary { color: #6b5944 !important; font-size: 12px !important; }
+#lobby.has-chapter-index #party_slots_grid .party-ready-badge { min-height: 36px; padding: 7px 11px; font-size: 11px; }
+#lobby.has-chapter-index #party_slots_grid .party-ready-badge:disabled { cursor: default; opacity: 1; transform: none; }
+#lobby.has-chapter-index .party-builder-intro { color: var(--tt-folio-muted); margin: 0 0 16px; font: 13px/1.65 var(--tt-font-ui); }
+#lobby.has-chapter-index #party_room_footer {
+    position: sticky;
+    top: var(--lobby-navigation-height, 88px);
+    z-index: 25;
+    padding: 13px 0;
+    background: var(--tt-folio-paper);
+    border-color: var(--tt-folio-rule);
+}
+#lobby.has-chapter-index #party_room_footer > div:first-child { flex: 1; gap: 10px 18px !important; }
+#lobby.has-chapter-index #party_room_status_hint { max-width: 420px; color: var(--tt-folio-muted) !important; }
+html .character-guide-dialog { background: var(--tt-folio-paper); color: var(--tt-folio-ink); border-top: 3px solid var(--tt-folio-crimson); }
+.character-guide-dialog :is(h2, .character-guide-section h3) { color: var(--tt-folio-crimson); }
+@media (max-width: 900px) {
+    .party-character-fields { grid-template-columns: 1fr; }
+    #lobby.has-chapter-index #party_slots_grid .character-choice-copy { min-height: 0; }
+    #lobby.has-chapter-index #party_slots_grid .party-archetype-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+    #lobby.has-chapter-index #party_slots_grid { grid-template-columns: 1fr; gap: 16px; }
+    #lobby.has-chapter-index #party_slots_grid .party-slot-box { padding: 17px; }
+    #lobby.has-chapter-index #party_room_footer { position: static; }
+    #lobby.has-chapter-index #party_slots_grid .party-slot-hero-name { font-size: 25px; }
+    #lobby.has-chapter-index #party_slots_grid :is(input, select) { font-size: 16px; }
+    .party-composition-roster { grid-template-columns: 1fr; }
+    #lobby .party-builder-views button { padding: 10px 11px; font-size: 12px; }
+    .starting-sheet-banner { gap: 12px; }
+    .starting-sheet-combination { font-size: 20px; }
+    .starting-combat-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (forced-colors: active) {
+    #lobby.has-chapter-index #party_slots_grid :is(.party-mode-btn.active, .party-archetype-btn[aria-pressed="true"]) { outline: 2px solid Highlight; }
+}

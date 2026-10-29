@@ -1,0 +1,3224 @@
+{
+  "build": "melee",
+  "seed": "2026102701",
+  "start": "Worm:1",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "hp": 187,
+      "honey": 0,
+      "tag": "enter",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "4 potions of might",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of haste",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:1",
+      "monsters": [
+        {
+          "xp": 315,
+          "x": 29,
+          "name": "wandering mushroom",
+          "y": 24
+        },
+        {
+          "xp": 316,
+          "x": 27,
+          "name": "wandering mushroom",
+          "y": 26
+        },
+        {
+          "xp": 952,
+          "x": 29,
+          "name": "coil worm",
+          "y": 28
+        },
+        {
+          "xp": 1073,
+          "x": 34,
+          "name": "gallery worm",
+          "y": 32
+        },
+        {
+          "xp": 313,
+          "x": 30,
+          "name": "wandering mushroom",
+          "y": 33
+        },
+        {
+          "xp": 932,
+          "x": 43,
+          "name": "coil worm",
+          "y": 35
+        },
+        {
+          "xp": 630,
+          "x": 76,
+          "name": "lindwurm",
+          "y": 38
+        },
+        {
+          "xp": 322,
+          "x": 74,
+          "name": "wandering mushroom",
+          "y": 39
+        },
+        {
+          "xp": 313,
+          "x": 52,
+          "name": "wandering mushroom",
+          "y": 41
+        },
+        {
+          "xp": 961,
+          "x": 71,
+          "name": "coil worm",
+          "y": 43
+        },
+        {
+          "xp": 945,
+          "x": 88,
+          "name": "coil worm",
+          "y": 44
+        },
+        {
+          "xp": 1050,
+          "x": 70,
+          "name": "gallery worm",
+          "y": 45
+        },
+        {
+          "xp": 954,
+          "x": 59,
+          "name": "coil worm",
+          "y": 52
+        },
+        {
+          "xp": 950,
+          "x": 67,
+          "name": "coil worm",
+          "y": 53
+        },
+        {
+          "xp": 315,
+          "x": 39,
+          "name": "wandering mushroom",
+          "y": 56
+        },
+        {
+          "xp": 630,
+          "x": 90,
+          "name": "lindwurm",
+          "y": 56
+        },
+        {
+          "xp": 665,
+          "x": 34,
+          "name": "lindwurm",
+          "y": 59
+        },
+        {
+          "xp": 1050,
+          "x": 82,
+          "name": "gallery worm",
+          "y": 59
+        },
+        {
+          "xp": 1088,
+          "x": 36,
+          "name": "stone giant",
+          "y": 62
+        },
+        {
+          "xp": 1035,
+          "x": 35,
+          "name": "gallery worm",
+          "y": 70
+        },
+        {
+          "xp": 309,
+          "x": 76,
+          "name": "wandering mushroom",
+          "y": 72
+        },
+        {
+          "xp": 870,
+          "x": 56,
+          "name": "great orb of eyes",
+          "y": 79
+        }
+      ],
+      "vaults": "layout_wormlands and worm_mushroom_grove",
+      "maxhp": 187,
+      "gold": 0,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 60,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 28
+        },
+        {
+          "artefact": false,
+          "quantity": 22,
+          "x": 28,
+          "class": "gold",
+          "name": "22 gold pieces",
+          "y": 29
+        },
+        {
+          "artefact": false,
+          "quantity": 19,
+          "x": 85,
+          "class": "gold",
+          "name": "19 gold pieces",
+          "y": 30
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 80,
+          "class": "weapon",
+          "name": "giant spiked club",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 32,
+          "class": "potion",
+          "name": "potion of might",
+          "y": 32
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 44,
+          "class": "potion",
+          "name": "potion of mutation",
+          "y": 32
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 83,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 61,
+          "class": "scroll",
+          "name": "scroll of torment",
+          "y": 45
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 72,
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "y": 53
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 53,
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "y": 54
+        },
+        {
+          "artefact": false,
+          "quantity": 19,
+          "x": 43,
+          "class": "gold",
+          "name": "19 gold pieces",
+          "y": 55
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 37,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 26,
+          "x": 38,
+          "class": "gold",
+          "name": "26 gold pieces",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 3,
+          "x": 88,
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 94,
+          "class": "armour",
+          "name": "robe",
+          "y": 66
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 95,
+          "class": "potion",
+          "name": "potion of moonshine",
+          "y": 69
+        }
+      ],
+      "turn": 59,
+      "xp": 15988,
+      "progress": 0
+    },
+    {
+      "hp": 187,
+      "honey": 0,
+      "tag": "explored",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "4 potions of might",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "potion of haste",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "5 potions of curing",
+          "quantity": 5
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:1",
+      "monsters": [],
+      "vaults": "layout_wormlands and worm_mushroom_grove",
+      "maxhp": 187,
+      "gold": 86,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 60,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 28
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 80,
+          "class": "weapon",
+          "name": "giant spiked club",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 83,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 84,
+          "class": "corpse",
+          "name": "lindwurm skeleton",
+          "y": 54
+        },
+        {
+          "artefact": false,
+          "quantity": 4,
+          "x": 78,
+          "class": "missile",
+          "name": "4 large rocks",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 79,
+          "class": "corpse",
+          "name": "lindwurm skeleton",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 37,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 94,
+          "class": "armour",
+          "name": "robe",
+          "y": 66
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 95,
+          "class": "potion",
+          "name": "potion of moonshine",
+          "y": 69
+        }
+      ],
+      "turn": 1098,
+      "xp": 0,
+      "progress": 14
+    },
+    {
+      "hp": 187,
+      "honey": 0,
+      "tag": "exit",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "4 potions of might",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "potion of haste",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "5 potions of curing",
+          "quantity": 5
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:1",
+      "monsters": [],
+      "vaults": "layout_wormlands and worm_mushroom_grove",
+      "maxhp": 187,
+      "gold": 86,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 60,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 28
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 80,
+          "class": "weapon",
+          "name": "giant spiked club",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 83,
+          "class": "armour",
+          "name": "leather armour",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 84,
+          "class": "corpse",
+          "name": "lindwurm skeleton",
+          "y": 54
+        },
+        {
+          "artefact": false,
+          "quantity": 4,
+          "x": 78,
+          "class": "missile",
+          "name": "4 large rocks",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 79,
+          "class": "corpse",
+          "name": "lindwurm skeleton",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 37,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 94,
+          "class": "armour",
+          "name": "robe",
+          "y": 66
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 95,
+          "class": "potion",
+          "name": "potion of moonshine",
+          "y": 69
+        }
+      ],
+      "turn": 1122,
+      "xp": 0,
+      "progress": 14
+    },
+    {
+      "hp": 187,
+      "honey": 0,
+      "tag": "enter",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "4 potions of might",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fear",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "potion of haste",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "5 potions of curing",
+          "quantity": 5
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:2",
+      "monsters": [
+        {
+          "xp": 1058,
+          "x": 67,
+          "name": "gallery worm",
+          "y": 29
+        },
+        {
+          "xp": 967,
+          "x": 62,
+          "name": "coil worm",
+          "y": 30
+        },
+        {
+          "xp": 929,
+          "x": 50,
+          "name": "coil worm",
+          "y": 36
+        },
+        {
+          "xp": 5,
+          "x": 69,
+          "name": "deathcap",
+          "y": 37
+        },
+        {
+          "xp": 802,
+          "x": 61,
+          "name": "caustic worm",
+          "y": 38
+        },
+        {
+          "xp": 936,
+          "x": 37,
+          "name": "coil worm",
+          "y": 42
+        },
+        {
+          "xp": 725,
+          "x": 76,
+          "name": "deep troll",
+          "y": 42
+        },
+        {
+          "xp": 719,
+          "x": 75,
+          "name": "deep troll",
+          "y": 43
+        },
+        {
+          "xp": 722,
+          "x": 79,
+          "name": "deep troll",
+          "y": 43
+        },
+        {
+          "xp": 725,
+          "x": 76,
+          "name": "deep troll",
+          "y": 44
+        },
+        {
+          "xp": 798,
+          "x": 76,
+          "name": "deep troll earth mage",
+          "y": 45
+        },
+        {
+          "xp": 322,
+          "x": 48,
+          "name": "wandering mushroom",
+          "y": 47
+        },
+        {
+          "xp": 950,
+          "x": 49,
+          "name": "coil worm",
+          "y": 48
+        },
+        {
+          "xp": 83,
+          "x": 76,
+          "name": "earth elemental",
+          "y": 50
+        },
+        {
+          "xp": 649,
+          "x": 81,
+          "name": "lindwurm",
+          "y": 51
+        },
+        {
+          "xp": 810,
+          "x": 65,
+          "name": "caustic worm",
+          "y": 57
+        },
+        {
+          "xp": 791,
+          "x": 35,
+          "name": "caustic worm",
+          "y": 58
+        },
+        {
+          "xp": 963,
+          "x": 78,
+          "name": "coil worm",
+          "y": 58
+        },
+        {
+          "xp": 958,
+          "x": 33,
+          "name": "coil worm",
+          "y": 61
+        },
+        {
+          "xp": 1071,
+          "x": 80,
+          "name": "gallery worm",
+          "y": 61
+        },
+        {
+          "xp": 316,
+          "x": 44,
+          "name": "wandering mushroom",
+          "y": 70
+        }
+      ],
+      "vaults": "layout_wormlands, worm_corroded_gallery and worm_shale_shelf",
+      "maxhp": 187,
+      "gold": 86,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 71,
+          "class": "book",
+          "name": "parchment of Permafrost Eruption",
+          "y": 28
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 50,
+          "class": "potion",
+          "name": "potion of invisibility",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 2,
+          "x": 59,
+          "class": "scroll",
+          "name": "2 scrolls of identify",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "book",
+          "name": "parchment of Anguish",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 19,
+          "x": 61,
+          "class": "gold",
+          "name": "19 gold pieces",
+          "y": 38
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 35,
+          "class": "scroll",
+          "name": "scroll of fear",
+          "y": 40
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "magical staff",
+          "name": "staff of earth",
+          "y": 40
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 44,
+          "class": "armour",
+          "name": "chain mail",
+          "y": 42
+        },
+        {
+          "artefact": false,
+          "quantity": 2,
+          "x": 76,
+          "class": "potion",
+          "name": "2 potions of enlightenment",
+          "y": 43
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 40,
+          "class": "potion",
+          "name": "potion of curing",
+          "y": 44
+        },
+        {
+          "artefact": false,
+          "quantity": 20,
+          "x": 76,
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 55
+        },
+        {
+          "artefact": false,
+          "quantity": 4,
+          "x": 58,
+          "class": "missile",
+          "name": "4 silver javelins",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 12,
+          "x": 82,
+          "class": "gold",
+          "name": "12 gold pieces",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 42,
+          "class": "weapon",
+          "name": "rapier",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 28,
+          "class": "armour",
+          "name": "buckler",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "misc",
+          "name": "phantom mirror",
+          "y": 61
+        },
+        {
+          "artefact": false,
+          "quantity": 17,
+          "x": 84,
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 66
+        }
+      ],
+      "turn": 1124,
+      "xp": 15299,
+      "progress": 14
+    },
+    {
+      "hp": 189,
+      "honey": 0,
+      "tag": "explored",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "4 scrolls of fear",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of enlightenment",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of invisibility",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:2",
+      "monsters": [],
+      "vaults": "layout_wormlands, worm_corroded_gallery and worm_shale_shelf",
+      "maxhp": 189,
+      "gold": 154,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 2,
+          "x": 59,
+          "class": "scroll",
+          "name": "2 scrolls of identify",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "armour",
+          "name": "+0 troll leather armour",
+          "y": 35
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 35
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "armour",
+          "name": "+0 troll leather armour",
+          "y": 37
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 37
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 38
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "magical staff",
+          "name": "staff of earth",
+          "y": 40
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 44,
+          "class": "armour",
+          "name": "chain mail",
+          "y": 42
+        },
+        {
+          "artefact": false,
+          "quantity": 4,
+          "x": 58,
+          "class": "missile",
+          "name": "4 silver javelins",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 42,
+          "class": "weapon",
+          "name": "+0 rapier",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 28,
+          "class": "armour",
+          "name": "buckler",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "misc",
+          "name": "phantom mirror",
+          "y": 61
+        }
+      ],
+      "turn": 2162,
+      "xp": 0,
+      "progress": 28
+    },
+    {
+      "hp": 189,
+      "honey": 0,
+      "tag": "exit",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "4 scrolls of fear",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of enlightenment",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of invisibility",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:2",
+      "monsters": [],
+      "vaults": "layout_wormlands, worm_corroded_gallery and worm_shale_shelf",
+      "maxhp": 189,
+      "gold": 154,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 2,
+          "x": 59,
+          "class": "scroll",
+          "name": "2 scrolls of identify",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "armour",
+          "name": "+0 troll leather armour",
+          "y": 35
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 35
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "armour",
+          "name": "+0 troll leather armour",
+          "y": 37
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 37
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 68,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "y": 38
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "magical staff",
+          "name": "staff of earth",
+          "y": 40
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 44,
+          "class": "armour",
+          "name": "chain mail",
+          "y": 42
+        },
+        {
+          "artefact": false,
+          "quantity": 4,
+          "x": 58,
+          "class": "missile",
+          "name": "4 silver javelins",
+          "y": 56
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 42,
+          "class": "weapon",
+          "name": "+0 rapier",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 28,
+          "class": "armour",
+          "name": "buckler",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 63,
+          "class": "misc",
+          "name": "phantom mirror",
+          "y": 61
+        }
+      ],
+      "turn": 2168,
+      "xp": 0,
+      "progress": 28
+    },
+    {
+      "hp": 189,
+      "honey": 0,
+      "tag": "enter",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of might",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "4 scrolls of fear",
+          "quantity": 4
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of blinking",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of enlightenment",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of heal wounds",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of invisibility",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:3",
+      "monsters": [
+        {
+          "xp": 310,
+          "x": 41,
+          "name": "wandering mushroom",
+          "y": 28
+        },
+        {
+          "xp": 1216,
+          "x": 67,
+          "name": "iron dragon",
+          "y": 29
+        },
+        {
+          "xp": 1043,
+          "x": 89,
+          "name": "gallery worm",
+          "y": 30
+        },
+        {
+          "xp": 320,
+          "x": 34,
+          "name": "wandering mushroom",
+          "y": 31
+        },
+        {
+          "xp": 950,
+          "x": 40,
+          "name": "coil worm",
+          "y": 31
+        },
+        {
+          "xp": 1056,
+          "x": 45,
+          "name": "gallery worm",
+          "y": 32
+        },
+        {
+          "xp": 748,
+          "x": 88,
+          "name": "iron troll",
+          "y": 33
+        },
+        {
+          "xp": 768,
+          "x": 40,
+          "name": "iron troll",
+          "y": 34
+        },
+        {
+          "xp": 941,
+          "x": 42,
+          "name": "coil worm",
+          "y": 34
+        },
+        {
+          "xp": 1018,
+          "x": 48,
+          "name": "gallery worm",
+          "y": 34
+        },
+        {
+          "xp": 5,
+          "x": 69,
+          "name": "deathcap",
+          "y": 34
+        },
+        {
+          "xp": 1041,
+          "x": 85,
+          "name": "gallery worm",
+          "y": 34
+        },
+        {
+          "xp": 1066,
+          "x": 47,
+          "name": "gallery worm",
+          "y": 35
+        },
+        {
+          "xp": 925,
+          "x": 54,
+          "name": "coil worm",
+          "y": 36
+        },
+        {
+          "xp": 814,
+          "x": 66,
+          "name": "caustic worm",
+          "y": 36
+        },
+        {
+          "xp": 1058,
+          "x": 77,
+          "name": "gallery worm",
+          "y": 36
+        },
+        {
+          "xp": 315,
+          "x": 86,
+          "name": "wandering mushroom",
+          "y": 36
+        },
+        {
+          "xp": 1054,
+          "x": 71,
+          "name": "gallery worm",
+          "y": 37
+        },
+        {
+          "xp": 943,
+          "x": 86,
+          "name": "coil worm",
+          "y": 37
+        },
+        {
+          "xp": 316,
+          "x": 80,
+          "name": "wandering mushroom",
+          "y": 39
+        },
+        {
+          "xp": 84,
+          "x": 81,
+          "name": "earth elemental",
+          "y": 41
+        },
+        {
+          "xp": 797,
+          "x": 60,
+          "name": "caustic worm",
+          "y": 42
+        },
+        {
+          "xp": 6,
+          "x": 69,
+          "name": "deathcap",
+          "y": 43
+        },
+        {
+          "xp": 6,
+          "x": 74,
+          "name": "deathcap",
+          "y": 43
+        },
+        {
+          "xp": 636,
+          "x": 32,
+          "name": "lindwurm",
+          "y": 46
+        },
+        {
+          "xp": 1033,
+          "x": 73,
+          "name": "gallery worm",
+          "y": 46
+        },
+        {
+          "xp": 6,
+          "x": 52,
+          "name": "deathcap",
+          "y": 49
+        },
+        {
+          "xp": 1071,
+          "x": 60,
+          "name": "gallery worm",
+          "y": 49
+        },
+        {
+          "xp": 954,
+          "x": 27,
+          "name": "coil worm",
+          "y": 50
+        },
+        {
+          "xp": 963,
+          "x": 38,
+          "name": "coil worm",
+          "y": 50
+        },
+        {
+          "xp": 810,
+          "x": 75,
+          "name": "caustic worm",
+          "y": 50
+        },
+        {
+          "xp": 967,
+          "x": 57,
+          "name": "coil worm",
+          "y": 52
+        },
+        {
+          "xp": 312,
+          "x": 40,
+          "name": "wandering mushroom",
+          "y": 53
+        },
+        {
+          "xp": 6,
+          "x": 46,
+          "name": "deathcap",
+          "y": 53
+        },
+        {
+          "xp": 83,
+          "x": 45,
+          "name": "earth elemental",
+          "y": 55
+        },
+        {
+          "xp": 961,
+          "x": 55,
+          "name": "coil worm",
+          "y": 55
+        },
+        {
+          "xp": 929,
+          "x": 63,
+          "name": "coil worm",
+          "y": 55
+        },
+        {
+          "xp": 1029,
+          "x": 51,
+          "name": "gallery worm",
+          "y": 56
+        },
+        {
+          "xp": 1041,
+          "x": 47,
+          "name": "gallery worm",
+          "y": 60
+        },
+        {
+          "xp": 5,
+          "x": 68,
+          "name": "deathcap",
+          "y": 63
+        },
+        {
+          "xp": 319,
+          "x": 48,
+          "name": "wandering mushroom",
+          "y": 64
+        },
+        {
+          "xp": 1060,
+          "x": 74,
+          "name": "gallery worm",
+          "y": 65
+        },
+        {
+          "xp": 1071,
+          "x": 71,
+          "name": "gallery worm",
+          "y": 67
+        },
+        {
+          "xp": 936,
+          "x": 42,
+          "name": "coil worm",
+          "y": 68
+        },
+        {
+          "xp": 85,
+          "x": 53,
+          "name": "earth elemental",
+          "y": 70
+        },
+        {
+          "xp": 1026,
+          "x": 68,
+          "name": "gallery worm",
+          "y": 70
+        },
+        {
+          "xp": 5,
+          "x": 65,
+          "name": "deathcap",
+          "y": 71
+        },
+        {
+          "xp": 317,
+          "x": 48,
+          "name": "wandering mushroom",
+          "y": 72
+        },
+        {
+          "xp": 758,
+          "x": 58,
+          "name": "iron troll",
+          "y": 72
+        },
+        {
+          "xp": 1056,
+          "x": 66,
+          "name": "gallery worm",
+          "y": 72
+        },
+        {
+          "xp": 938,
+          "x": 76,
+          "name": "coil worm",
+          "y": 72
+        },
+        {
+          "xp": 5,
+          "x": 57,
+          "name": "deathcap",
+          "y": 73
+        },
+        {
+          "xp": 808,
+          "x": 82,
+          "name": "caustic worm",
+          "y": 74
+        },
+        {
+          "xp": 932,
+          "x": 83,
+          "name": "coil worm",
+          "y": 74
+        },
+        {
+          "xp": 885,
+          "x": 51,
+          "name": "great orb of eyes",
+          "y": 75
+        },
+        {
+          "xp": 651,
+          "x": 33,
+          "name": "lindwurm",
+          "y": 76
+        },
+        {
+          "xp": 6,
+          "x": 84,
+          "name": "deathcap",
+          "y": 77
+        },
+        {
+          "xp": 1062,
+          "x": 39,
+          "name": "gallery worm",
+          "y": 78
+        },
+        {
+          "xp": 309,
+          "x": 54,
+          "name": "wandering mushroom",
+          "y": 79
+        },
+        {
+          "xp": 776,
+          "x": 54,
+          "name": "caustic worm",
+          "y": 80
+        }
+      ],
+      "vaults": "layout_wormlands and worm_cross_gallery",
+      "maxhp": 189,
+      "gold": 154,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 3,
+          "x": 73,
+          "class": "missile",
+          "name": "3 large rocks",
+          "y": 29
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 45,
+          "class": "scroll",
+          "name": "scroll of fog",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "scroll",
+          "name": "scroll of silence",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 23,
+          "x": 71,
+          "class": "gold",
+          "name": "23 gold pieces",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 74,
+          "class": "weapon",
+          "name": "spear",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 87,
+          "class": "weapon",
+          "name": "mace",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 28,
+          "class": "potion",
+          "name": "potion of curing",
+          "y": 44
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 58,
+          "class": "book",
+          "name": "parchment of Teleport Other",
+          "y": 48
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 29,
+          "class": "weapon",
+          "name": "runed rapier",
+          "y": 49
+        },
+        {
+          "artefact": false,
+          "quantity": 20,
+          "x": 59,
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 49
+        },
+        {
+          "artefact": false,
+          "quantity": 33,
+          "x": 48,
+          "class": "gold",
+          "name": "33 gold pieces",
+          "y": 55
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 39,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 57
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 42,
+          "class": "book",
+          "name": "Great Wizards, Vol. VII",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 76,
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 55,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 17,
+          "x": 56,
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 61
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 74,
+          "class": "book",
+          "name": "parchment of Sticky Flame",
+          "y": 63
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 37,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 69
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 56,
+          "class": "weapon",
+          "name": "battleaxe",
+          "y": 69
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 38,
+          "class": "book",
+          "name": "parchment of Manifold Assault",
+          "y": 71
+        },
+        {
+          "artefact": false,
+          "quantity": 23,
+          "x": 39,
+          "class": "gold",
+          "name": "23 gold pieces",
+          "y": 71
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 51,
+          "class": "book",
+          "name": "parchment of Scorch",
+          "y": 72
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 57,
+          "class": "book",
+          "name": "parchment of Sticky Flame",
+          "y": 73
+        },
+        {
+          "artefact": false,
+          "quantity": 3,
+          "x": 48,
+          "class": "missile",
+          "name": "3 boomerangs",
+          "y": 76
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 77,
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "y": 77
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 78,
+          "class": "weapon",
+          "name": "hammer",
+          "y": 78
+        },
+        {
+          "artefact": false,
+          "quantity": 10,
+          "x": 79,
+          "class": "gold",
+          "name": "10 gold pieces",
+          "y": 80
+        }
+      ],
+      "turn": 2170,
+      "xp": 40611,
+      "progress": 28
+    },
+    {
+      "hp": -10,
+      "honey": 0,
+      "tag": "death",
+      "maxmp": 25,
+      "inventory": [
+        {
+          "class": "weapon",
+          "name": "+0 war axe",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 scale mail",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 buckler",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of poison resistance",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of boots",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 pair of gloves",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 cloak of stealth",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+0 helmet",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+1 kite shield",
+          "quantity": 1
+        },
+        {
+          "class": "armour",
+          "name": "+2 plate armour",
+          "quantity": 1
+        },
+        {
+          "class": "weapon",
+          "name": "+3 broad axe",
+          "quantity": 1
+        },
+        {
+          "class": "jewellery",
+          "name": "ring of resist corrosion",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of might",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "3 scrolls of fog",
+          "quantity": 3
+        },
+        {
+          "class": "scroll",
+          "name": "2 scrolls of teleportation",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of magic",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "2 potions of enlightenment",
+          "quantity": 2
+        },
+        {
+          "class": "potion",
+          "name": "6 potions of curing",
+          "quantity": 6
+        },
+        {
+          "class": "potion",
+          "name": "3 potions of cancellation",
+          "quantity": 3
+        },
+        {
+          "class": "wand",
+          "name": "wand of iceblast (5)",
+          "quantity": 1
+        },
+        {
+          "class": "scroll",
+          "name": "scroll of torment",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of mutation",
+          "quantity": 1
+        },
+        {
+          "class": "potion",
+          "name": "potion of invisibility",
+          "quantity": 1
+        }
+      ],
+      "mp": 25,
+      "where": "Worm:3",
+      "monsters": [
+        {
+          "xp": 310,
+          "x": 41,
+          "name": "wandering mushroom",
+          "y": 28
+        },
+        {
+          "xp": 1216,
+          "x": 67,
+          "name": "iron dragon",
+          "y": 29
+        },
+        {
+          "xp": 941,
+          "x": 41,
+          "name": "coil worm",
+          "y": 30
+        },
+        {
+          "xp": 1043,
+          "x": 89,
+          "name": "gallery worm",
+          "y": 30
+        },
+        {
+          "xp": 1056,
+          "x": 45,
+          "name": "gallery worm",
+          "y": 32
+        },
+        {
+          "xp": 748,
+          "x": 88,
+          "name": "iron troll",
+          "y": 33
+        },
+        {
+          "xp": 768,
+          "x": 40,
+          "name": "iron troll",
+          "y": 34
+        },
+        {
+          "xp": 1018,
+          "x": 48,
+          "name": "gallery worm",
+          "y": 34
+        },
+        {
+          "xp": 5,
+          "x": 69,
+          "name": "deathcap",
+          "y": 34
+        },
+        {
+          "xp": 1041,
+          "x": 85,
+          "name": "gallery worm",
+          "y": 34
+        },
+        {
+          "xp": 1066,
+          "x": 42,
+          "name": "gallery worm",
+          "y": 35
+        },
+        {
+          "xp": 925,
+          "x": 54,
+          "name": "coil worm",
+          "y": 36
+        },
+        {
+          "xp": 814,
+          "x": 66,
+          "name": "caustic worm",
+          "y": 36
+        },
+        {
+          "xp": 1058,
+          "x": 77,
+          "name": "gallery worm",
+          "y": 36
+        },
+        {
+          "xp": 315,
+          "x": 86,
+          "name": "wandering mushroom",
+          "y": 36
+        },
+        {
+          "xp": 797,
+          "x": 37,
+          "name": "caustic worm",
+          "y": 37
+        },
+        {
+          "xp": 1054,
+          "x": 71,
+          "name": "gallery worm",
+          "y": 37
+        },
+        {
+          "xp": 943,
+          "x": 86,
+          "name": "coil worm",
+          "y": 37
+        },
+        {
+          "xp": 316,
+          "x": 80,
+          "name": "wandering mushroom",
+          "y": 39
+        },
+        {
+          "xp": 84,
+          "x": 81,
+          "name": "earth elemental",
+          "y": 41
+        },
+        {
+          "xp": 950,
+          "x": 39,
+          "name": "coil worm",
+          "y": 42
+        },
+        {
+          "xp": 6,
+          "x": 69,
+          "name": "deathcap",
+          "y": 43
+        },
+        {
+          "xp": 6,
+          "x": 74,
+          "name": "deathcap",
+          "y": 43
+        },
+        {
+          "xp": 320,
+          "x": 44,
+          "name": "wandering mushroom",
+          "y": 44
+        },
+        {
+          "xp": 636,
+          "x": 32,
+          "name": "lindwurm",
+          "y": 46
+        },
+        {
+          "xp": 1033,
+          "x": 73,
+          "name": "gallery worm",
+          "y": 46
+        },
+        {
+          "xp": 6,
+          "x": 52,
+          "name": "deathcap",
+          "y": 49
+        },
+        {
+          "xp": 1071,
+          "x": 60,
+          "name": "gallery worm",
+          "y": 49
+        },
+        {
+          "xp": 954,
+          "x": 27,
+          "name": "coil worm",
+          "y": 50
+        },
+        {
+          "xp": 963,
+          "x": 38,
+          "name": "coil worm",
+          "y": 50
+        },
+        {
+          "xp": 810,
+          "x": 75,
+          "name": "caustic worm",
+          "y": 50
+        },
+        {
+          "xp": 967,
+          "x": 57,
+          "name": "coil worm",
+          "y": 52
+        },
+        {
+          "xp": 312,
+          "x": 40,
+          "name": "wandering mushroom",
+          "y": 53
+        },
+        {
+          "xp": 6,
+          "x": 46,
+          "name": "deathcap",
+          "y": 53
+        },
+        {
+          "xp": 83,
+          "x": 45,
+          "name": "earth elemental",
+          "y": 55
+        },
+        {
+          "xp": 961,
+          "x": 55,
+          "name": "coil worm",
+          "y": 55
+        },
+        {
+          "xp": 929,
+          "x": 63,
+          "name": "coil worm",
+          "y": 55
+        },
+        {
+          "xp": 1029,
+          "x": 51,
+          "name": "gallery worm",
+          "y": 56
+        },
+        {
+          "xp": 1041,
+          "x": 47,
+          "name": "gallery worm",
+          "y": 60
+        },
+        {
+          "xp": 932,
+          "x": 76,
+          "name": "coil worm",
+          "y": 63
+        },
+        {
+          "xp": 319,
+          "x": 48,
+          "name": "wandering mushroom",
+          "y": 64
+        },
+        {
+          "xp": 938,
+          "x": 74,
+          "name": "coil worm",
+          "y": 64
+        },
+        {
+          "xp": 1056,
+          "x": 75,
+          "name": "gallery worm",
+          "y": 64
+        },
+        {
+          "xp": 5,
+          "x": 72,
+          "name": "deathcap",
+          "y": 65
+        },
+        {
+          "xp": 808,
+          "x": 74,
+          "name": "caustic worm",
+          "y": 66
+        },
+        {
+          "xp": 5,
+          "x": 71,
+          "name": "deathcap",
+          "y": 67
+        },
+        {
+          "xp": 85,
+          "x": 53,
+          "name": "earth elemental",
+          "y": 70
+        },
+        {
+          "xp": 6,
+          "x": 74,
+          "name": "deathcap",
+          "y": 70
+        },
+        {
+          "xp": 1062,
+          "x": 39,
+          "name": "gallery worm",
+          "y": 72
+        },
+        {
+          "xp": 317,
+          "x": 48,
+          "name": "wandering mushroom",
+          "y": 72
+        },
+        {
+          "xp": 758,
+          "x": 58,
+          "name": "iron troll",
+          "y": 72
+        },
+        {
+          "xp": 936,
+          "x": 40,
+          "name": "coil worm",
+          "y": 73
+        },
+        {
+          "xp": 5,
+          "x": 57,
+          "name": "deathcap",
+          "y": 73
+        },
+        {
+          "xp": 885,
+          "x": 51,
+          "name": "great orb of eyes",
+          "y": 75
+        },
+        {
+          "xp": 651,
+          "x": 33,
+          "name": "lindwurm",
+          "y": 76
+        },
+        {
+          "xp": 309,
+          "x": 54,
+          "name": "wandering mushroom",
+          "y": 79
+        },
+        {
+          "xp": 776,
+          "x": 54,
+          "name": "caustic worm",
+          "y": 80
+        }
+      ],
+      "vaults": "layout_wormlands and worm_cross_gallery",
+      "maxhp": 189,
+      "gold": 154,
+      "xl": 20,
+      "items": [
+        {
+          "artefact": false,
+          "quantity": 3,
+          "x": 73,
+          "class": "missile",
+          "name": "3 large rocks",
+          "y": 29
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 45,
+          "class": "scroll",
+          "name": "scroll of fog",
+          "y": 31
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 69,
+          "class": "scroll",
+          "name": "scroll of silence",
+          "y": 33
+        },
+        {
+          "artefact": false,
+          "quantity": 23,
+          "x": 71,
+          "class": "gold",
+          "name": "23 gold pieces",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 74,
+          "class": "weapon",
+          "name": "spear",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 87,
+          "class": "weapon",
+          "name": "mace",
+          "y": 36
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 28,
+          "class": "potion",
+          "name": "potion of curing",
+          "y": 44
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 58,
+          "class": "book",
+          "name": "parchment of Teleport Other",
+          "y": 48
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 29,
+          "class": "weapon",
+          "name": "runed rapier",
+          "y": 49
+        },
+        {
+          "artefact": false,
+          "quantity": 20,
+          "x": 59,
+          "class": "gold",
+          "name": "20 gold pieces",
+          "y": 49
+        },
+        {
+          "artefact": false,
+          "quantity": 33,
+          "x": 48,
+          "class": "gold",
+          "name": "33 gold pieces",
+          "y": 55
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 39,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 57
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 42,
+          "class": "book",
+          "name": "Great Wizards, Vol. VII",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 76,
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "y": 59
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 55,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 60
+        },
+        {
+          "artefact": false,
+          "quantity": 17,
+          "x": 56,
+          "class": "gold",
+          "name": "17 gold pieces",
+          "y": 61
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 74,
+          "class": "book",
+          "name": "parchment of Sticky Flame",
+          "y": 63
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 37,
+          "class": "scroll",
+          "name": "scroll of identify",
+          "y": 69
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 56,
+          "class": "weapon",
+          "name": "battleaxe",
+          "y": 69
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 38,
+          "class": "book",
+          "name": "parchment of Manifold Assault",
+          "y": 71
+        },
+        {
+          "artefact": false,
+          "quantity": 23,
+          "x": 39,
+          "class": "gold",
+          "name": "23 gold pieces",
+          "y": 71
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 51,
+          "class": "book",
+          "name": "parchment of Scorch",
+          "y": 72
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 57,
+          "class": "book",
+          "name": "parchment of Sticky Flame",
+          "y": 73
+        },
+        {
+          "artefact": false,
+          "quantity": 3,
+          "x": 48,
+          "class": "missile",
+          "name": "3 boomerangs",
+          "y": 76
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 77,
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "y": 77
+        },
+        {
+          "artefact": false,
+          "quantity": 1,
+          "x": 78,
+          "class": "weapon",
+          "name": "hammer",
+          "y": 78
+        },
+        {
+          "artefact": false,
+          "quantity": 10,
+          "x": 79,
+          "class": "gold",
+          "name": "10 gold pieces",
+          "y": 80
+        }
+      ],
+      "turn": 2212,
+      "xp": 37454,
+      "progress": 30
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "inventory +0 war axe",
+    "inventory +0 scale mail",
+    "inventory +0 buckler",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak of stealth",
+    "inventory +0 helmet",
+    "inventory +1 kite shield",
+    "inventory +2 plate armour",
+    "inventory +3 broad axe",
+    "inventory 4 potions of might",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start melee AC=25 EV=11 SH=14",
+    "ability Heroism turn=59",
+    "ability Heroism turn=125",
+    "ability Heroism turn=234",
+    "ability Heroism turn=321",
+    "use haste turn=336 place=Worm:1",
+    "use might turn=337 place=Worm:1",
+    "ability Heroism turn=652",
+    "ability Heroism turn=669",
+    "ability Heroism turn=951",
+    "use curing turn=964 place=Worm:1",
+    "leave Worm:1",
+    "ability Heroism turn=1270",
+    "ability Heroism turn=1303",
+    "use haste turn=1309 place=Worm:2",
+    "use might turn=1310 place=Worm:2",
+    "ability Heroism turn=1342",
+    "ability Heroism turn=1612",
+    "ability Heroism turn=1787",
+    "ability Heroism turn=1968",
+    "use might turn=1982 place=Worm:2",
+    "leave Worm:2",
+    "ability Heroism turn=2170",
+    "use might turn=2181 place=Worm:3",
+    "use fear turn=2182 place=Worm:3",
+    "use fear turn=2183 place=Worm:3",
+    "use fear turn=2184 place=Worm:3",
+    "use fear turn=2185 place=Worm:3",
+    "use heal wounds turn=2188 place=Worm:3",
+    "use heal wounds turn=2189 place=Worm:3",
+    "use heal wounds turn=2196 place=Worm:3",
+    "use heal wounds turn=2201 place=Worm:3",
+    "use heal wounds turn=2202 place=Worm:3",
+    "use heal wounds turn=2203 place=Worm:3",
+    "use blinking turn=2204 place=Worm:3",
+    "use blinking turn=2205 place=Worm:3",
+    "death Worm:3"
+  ],
+  "nativeSha256": "dd4cdf6e3629ffc8fb9ba022729234fcde03c818302a198739c32577176ec39e",
+  "startVerified": true,
+  "routeFloorsExplored": [
+    "Worm:1",
+    "Worm:2"
+  ],
+  "fullRoute": false
+}

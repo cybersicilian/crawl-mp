@@ -1,0 +1,11 @@
+{
+  "deities": 28,
+  "tiers": 7,
+  "nativeArt": 198,
+  "maxParticles": 6,
+  "phasePreserved": true,
+  "integratedAltars": true,
+  "reducedMotion": true,
+  "errors": [],
+  "note": "Controlled presentation fixture; no gameplay or piety changes executed."
+}

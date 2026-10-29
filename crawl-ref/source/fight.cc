@@ -4,6 +4,10 @@
  */
 
 #include "AppHdr.h"
+#include "automaton.h"
+#include "oozle-memory-effects.h"
+#include "oozle-memory.h"
+#include "bloodcraft.h"
 
 #include "fight.h"
 
@@ -55,6 +59,7 @@
 #include "terrain.h"
 #include "throw.h"
 #include "transform.h"
+#include "party.h"
 #include "traps.h"
 #include "travel.h"
 
@@ -462,6 +467,7 @@ static void _knight_pinning_attack(monster* mon)
 bool player_fight(monster* defender, bool is_rampage,
                   bool *did_hit, bool simu)
 {
+    const coord_def attack_target = defender->pos();
     if (!simu && you.weapon() && !you.confused())
     {
         if (Options.auto_switch && _autoswitch_to_melee())
@@ -477,11 +483,13 @@ bool player_fight(monster* defender, bool is_rampage,
             }
 
             defender->sense_if_invisible();
+            bloodcraft::weapon_action blood_action(true);
             if (do_west_wind_shot())
                 return true;
             else if (do_player_ranged_attack(defender->pos()))
             {
                 you.time_taken = you.attack_delay().roll();
+                blood_action.finish(you.time_taken);
                 you.turn_is_over = true;
                 return true;
             }
@@ -516,11 +524,20 @@ bool player_fight(monster* defender, bool is_rampage,
             attk.dmg_mult = (move_delay * 100 / attack_delay) - 100;
     }
 
+    bloodcraft::weapon_action blood_action(!simu);
     const bool success = attk.launch_attack_set();
     if (attk.cancel_attack)
         you.turn_is_over = false;
     else
         you.time_taken = you.melee_attack_delay().roll();
+
+    if (success && !attk.cancel_attack)
+    {
+        if (!simu)
+            automaton::mark_combat(you);
+        blood_action.finish(is_rampage
+            ? player_overall_move_delay(BASELINE_DELAY) / BASELINE_DELAY : you.time_taken);
+    }
 
     if (!success)
         return !attk.cancel_attack;
@@ -529,6 +546,8 @@ bool player_fight(monster* defender, bool is_rampage,
         *did_hit = attk.did_hit;
 
     count_action(CACT_ATTACK, ATTACK_NORMAL);
+    if (!simu)
+        automaton::trigger_attack(attack_target);
 
     return true;
 }
@@ -554,6 +573,15 @@ bool mons_fight(monster *attacker, actor *defender, bool *did_hit, bool simu)
 {
     ASSERT(attacker); // XXX: change to actor &attacker
     ASSERT(defender); // XXX: change to actor &defender
+
+    if (defender->is_monster() && party::is_proxy_monster(*defender->as_monster()))
+    {
+        if (defender->as_monster()->props.exists("party_downed_ghost"))
+            return false;
+        int slot = party::proxy_slot(*defender->as_monster());
+        party::scoped_player_context ctx(slot);
+        return mons_fight(attacker, &you, did_hit, simu);
+    }
 
     // A dead defender would result in us returning true without actually
     // taking an action. But allow just passing our turn if we try to attack a
@@ -727,7 +755,7 @@ stab_type find_player_stab_type(const monster &victim)
     // invisible
     if (!you.visible_to(&victim))
     {
-        if (victim.has_ench(ENCH_BLIND))
+        if (victim.blinded())
             return STAB_BLIND;
         else
             return STAB_INVISIBLE;
@@ -1037,6 +1065,9 @@ bool wielded_weapon_check(string attack_verb)
     if (!primary_bad && !offhand_bad && !_missing_weapon(weapon, offhand))
         return true;
 
+    if (automaton::casting_automatically())
+        return false;
+
     string wpn_desc = _describe_weapons(weapon, offhand);
 
     string prompt;
@@ -1065,8 +1096,8 @@ bool player_unrand_bad_attempt(const item_def &weapon,
     const monster* defending_monster = defender ? defender->as_monster() :
         nullptr;
 
-    if (is_unrandom_artefact(weapon, UNRAND_VARIABILITY)
-             || is_unrandom_artefact(weapon, UNRAND_SINGING_SWORD)
+    if (has_unrand_effect(weapon, UNRAND_VARIABILITY)
+             || has_unrand_effect(weapon, UNRAND_SINGING_SWORD)
                 && !silenced(you.pos()))
     {
         targeter_radius hitfunc(&you, LOS_NO_TRANS);
@@ -1075,7 +1106,7 @@ bool player_unrand_bad_attempt(const item_def &weapon,
                                nullptr, nullptr, defending_monster,
                                check_only);
     }
-    if (is_unrandom_artefact(weapon, UNRAND_TORMENT))
+    if (has_unrand_effect(weapon, UNRAND_TORMENT))
     {
         targeter_radius hitfunc(&you, LOS_NO_TRANS);
 
@@ -1099,8 +1130,11 @@ bool player_unrand_bad_attempt(const item_def *weapon,
     const actor *defender,
     bool check_only)
 {
-    return weapon && ::player_unrand_bad_attempt(*weapon, defender, check_only)
-        || offhand && ::player_unrand_bad_attempt(*offhand, defender, check_only);
+    if ((weapon && ::player_unrand_bad_attempt(*weapon, defender, check_only))
+        || (offhand && ::player_unrand_bad_attempt(*offhand, defender, check_only))) return true;
+    for (const auto* source : oozle::effect_sources())
+        if (::player_unrand_bad_attempt(*source, defender, check_only)) return true;
+    return false;
 }
 
 bool player_unrand_bad_target(const item_def &weapon,
@@ -1109,7 +1143,7 @@ bool player_unrand_bad_target(const item_def &weapon,
 {
     const monster* defending_monster = defender.as_monster();
 
-    if (is_unrandom_artefact(weapon, UNRAND_DEVASTATOR))
+    if (has_unrand_effect(weapon, UNRAND_DEVASTATOR))
     {
         targeter_smite hitfunc(&you, LOS_RADIUS, 1, 1);
         hitfunc.set_aim(defender.pos());
@@ -1118,7 +1152,7 @@ bool player_unrand_bad_target(const item_def &weapon,
                                   nullptr, nullptr, defending_monster,
                                   check_only);
     }
-    if (is_unrandom_artefact(weapon, UNRAND_ARC_BLADE))
+    if (has_unrand_effect(weapon, UNRAND_ARC_BLADE))
     {
         if (you.pos().distance_from(defender.pos()) <= 1)
             return !safe_discharge(you.pos(), check_only, true, true);
@@ -1147,8 +1181,21 @@ bool player_unrand_bad_target(const item_def *weapon,
  */
 bool should_cleave_into(const actor &attacker, const actor &defender)
 {
+    if (defender.is_monster()
+        && defender.as_monster()->props.exists("party_downed_ghost"))
+    {
+        return false;
+    }
+
+    if (attacker.is_player() && defender.is_monster()
+        && party::is_proxy_monster(*defender.as_monster()))
+    {
+        return false;
+    }
+
     // The player should only cleave into neutrals if they're frenzied.
-    if (attacker.is_player() && defender.attitude() == ATT_NEUTRAL
+    if (attacker.is_player() && defender.is_monster()
+        && defender.attitude() == ATT_NEUTRAL
         && !defender.as_monster()->has_ench(ENCH_FRENZIED))
     {
         return false;
@@ -1191,7 +1238,7 @@ bool force_player_cleave(coord_def target)
 bool attack_cleaves(const actor &attacker, const item_def *weap, int attack_num)
 {
     if (attacker.is_player()
-        && (you.form == transformation::storm || you.duration[DUR_CLEAVE]))
+        && (oozle::inherited_cleaving(weap) || you.form == transformation::storm || you.duration[DUR_CLEAVE]))
     {
         return true;
     }
@@ -1214,14 +1261,14 @@ bool attack_cleaves(const actor &attacker, const item_def *weap, int attack_num)
 bool weapon_cleaves(const item_def &weap)
 {
     return item_attack_skill(weap) == SK_AXES
-           || is_unrandom_artefact(weap, UNRAND_LOCHABER_AXE);
+           || has_unrand_effect(weap, UNRAND_LOCHABER_AXE);
 }
 
 int weapon_hits_per_swing(const item_def &weap)
 {
     if (!weap.is_type(OBJ_WEAPONS, WPN_QUICK_BLADE))
         return 1;
-    if (is_unrandom_artefact(weap, UNRAND_GYRE))
+    if (has_unrand_effect(weap, UNRAND_GYRE))
         return 4;
     return 2;
 }
@@ -1248,13 +1295,14 @@ vector<actor*> get_player_cleave_targets(const coord_def& aim)
     if (wpns.empty())
     {
         if (attack_cleaves(you))
-            get_cleave_targets(you, aim, cleave_targets);
+            get_cleave_targets(you, aim, cleave_targets, oozle::inherited_reach());
     }
     else
     {
         for (const item_def* wpn : wpns)
             if (attack_cleaves(you, wpn))
-                get_cleave_targets(you, aim, cleave_targets, weapon_reach(*wpn));
+                get_cleave_targets(you, aim, cleave_targets,
+                                  max(weapon_reach(*wpn), oozle::inherited_reach(wpn)));
     }
     return cleave_targets;
 }
@@ -1319,7 +1367,7 @@ int weapon_min_delay_skill(const item_def &weapon)
 int weapon_min_delay(const item_def &weapon, bool check_speed)
 {
     const int base = property(weapon, PWPN_SPEED);
-    if (is_unrandom_artefact(weapon, UNRAND_WOODCUTTERS_AXE))
+    if (has_unrand_effect(weapon, UNRAND_WOODCUTTERS_AXE))
         return base;
 
     int min_delay = base/2;
@@ -1456,7 +1504,7 @@ bool stop_attack_prompt(const monster* mon, bool beam_attack,
     if (prompted)
         *prompted = false;
 
-    if (crawl_state.disables[DIS_CONFIRMATIONS])
+    if (crawl_state.disables[DIS_CONFIRMATIONS] && !automaton::casting_automatically())
         return false;
 
     // The player is ordinarily given a different prompt before this if confused,
@@ -1470,7 +1518,7 @@ bool stop_attack_prompt(const monster* mon, bool beam_attack,
         return false;
 
     // We have already determined this attack *would* prompt, so stop here
-    if (check_only)
+    if (check_only || automaton::casting_automatically())
         return true;
 
     // Listed in the form: "your rat", "Blorkula the orcula".
@@ -1515,10 +1563,10 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
                         bool *prompted, const monster *defender,
                         bool check_only, bool include_player)
 {
-    if (crawl_state.disables[DIS_CONFIRMATIONS])
+    if (crawl_state.disables[DIS_CONFIRMATIONS] && !automaton::casting_automatically())
         return false;
 
-    if (crawl_state.which_god_acting() == GOD_XOM)
+    if (crawl_state.which_god_acting() == GOD_XOM && !automaton::casting_automatically())
         return false;
 
     // The player is ordinarily given a different prompt before this if confused,
@@ -1528,6 +1576,7 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
         return false;
 
     attacked_monster_list victims;
+    vector<string> party_victims;
     bool defender_ok = true;
     for (distance_iterator di(hitfunc.origin, false, true, LOS_RADIUS); di; ++di)
     {
@@ -1535,10 +1584,31 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
             continue;
 
         const monster* mon = monster_at(*di);
-        if (!mon || !you.can_see(*mon))
+        if (!mon)
             continue;
 
         if (affects && !affects(mon))
+            continue;
+
+        // Party members are represented by monster proxies on the map.
+        // Describe the actual player, and do not reveal an invisible ally.
+        if (party::is_proxy_monster(*mon))
+        {
+            const int slot = party::proxy_slot(*mon);
+            if (slot >= 0 && slot < party::player_count()
+                && !mon->props.exists("party_downed_ghost"))
+            {
+                const player& companion = party::get_player(slot);
+                if (you.can_see(companion))
+                {
+                    party_victims.push_back("your ally " + companion.your_name);
+                    if (defender == mon)
+                        defender_ok = false;
+                }
+            }
+            continue;
+        }
+        if (!you.can_see(*mon))
             continue;
 
         string adj, suffix;
@@ -1554,16 +1624,23 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
 
     const bool hits_player = include_player && hitfunc.is_affected(you.pos()) && affects(&you);
 
-    if (victims.empty() && !hits_player)
+    if (victims.empty() && party_victims.empty() && !hits_player)
         return false;
 
     // We have already determined that this attack *would* prompt, so stop here
-    if (check_only)
+    if (check_only || automaton::casting_automatically())
         return true;
 
     // Listed in the form: "your rat", "Blorkula the orcula".
     string mon_name = !victims.empty() ? victims.describe() : "";
     const bool penance = victims.penance();
+
+    if (!party_victims.empty())
+    {
+        const string companions = comma_separated_line(party_victims.begin(),
+                                                        party_victims.end());
+        mon_name = mon_name.empty() ? companions : mon_name + " and " + companions;
+    }
 
     if (hits_player)
     {
@@ -1644,6 +1721,8 @@ bool warn_about_bad_targets(const char* source_name, vector<coord_def> targets,
 
     if (bad_targets.empty())
         return false;
+    if (automaton::casting_automatically())
+        return true;
 
     const monster* ex_mon = bad_targets.back();
     string adj, suffix;
@@ -1683,6 +1762,8 @@ bool warn_about_bad_targets(const char* source_name, vector<coord_def> targets,
 bool stop_summoning_prompt(resists_t resists, monclass_flags_t flags,
                            string verb)
 {
+    if (automaton::casting_automatically())
+        return !stop_summoning_reason(resists, flags).empty();
     if (crawl_state.disables[DIS_CONFIRMATIONS]
         || crawl_state.which_god_acting() == GOD_XOM)
     {

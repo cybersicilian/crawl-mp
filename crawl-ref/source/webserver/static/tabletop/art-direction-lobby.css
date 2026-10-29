@@ -1,0 +1,119 @@
+/* The tavern and roster share the expedition journal's cover and paper. */
+body:has(#lobby:not([style*="display: none"])) {
+    background: radial-gradient(ellipse at 65% 0, #35443b44, transparent 65%), var(--art-night);
+    color: var(--art-ivory);
+}
+#lobby.has-chapter-index {
+    --workspace-ink: var(--art-ink);
+    --workspace-muted: var(--art-ink-muted);
+    --workspace-paper: var(--art-paper);
+    --workspace-rule: #b8b29b;
+}
+#lobby_navigation {
+    background: #111615f5;
+    border-bottom: 1px solid var(--art-rule);
+    color: var(--art-ivory);
+    box-shadow: 0 8px 20px #0002;
+}
+#lobby_navigation .lobby-book-brand { color: var(--art-ivory); }
+.lobby-book-emblem { background: var(--art-brass-light); }
+#lobby .lobby-home { border-color: var(--art-brass-dim); border-radius: 3px; background: var(--art-frame); box-shadow: var(--art-shadow); }
+#lobby .lobby-home-copy { background: radial-gradient(ellipse at 15% 0, #b9a1730d, transparent 70%); }
+#lobby .lobby-home-art {
+    background: linear-gradient(90deg, var(--art-frame), #1a211f00 45%),
+        linear-gradient(0deg, #111615bb, transparent 75%), var(--art-cover) 77% center / auto 145% no-repeat;
+}
+#lobby .lobby-home-art span { color: var(--art-brass-light); font-weight: 400; }
+#lobby #lobby_home h1 { color: var(--art-ivory); font-weight: 400; letter-spacing: -.035em; }
+#lobby .lobby-home-eyebrow { color: var(--art-teal); }
+#lobby .lobby-home-board { background: var(--tt-paper); border-color: var(--art-rule); }
+#lobby .lobby-recent h2 { color: var(--art-teal-ink); font-weight: 400; }
+#lobby .lobby-daily-broth { background: #788c6e0a; border-color: #b8b29b; }
+#lobby #lobby_home .lobby-home-primary { background: var(--art-brass-light); color: #252c20; border-color: var(--art-brass-light); border-radius: 2px; box-shadow: none; }
+#lobby_navigation .lobby-chapters :is(a, button) { border-radius: 2px; }
+#lobby_navigation .lobby-chapters :is([aria-current="page"], [aria-selected="true"], .active) {
+    color: var(--art-brass-light);
+    background: #b9a17312;
+    border-color: var(--art-brass-dim);
+    box-shadow: inset 0 -2px 0 var(--art-brass);
+}
+.welcome-entry {
+    --welcome-gold: var(--art-brass-light);
+    --welcome-copper: var(--art-ember);
+    --welcome-sage: var(--art-teal);
+    --welcome-rule: var(--art-rule);
+    border: 1px solid var(--art-brass-dim);
+    border-radius: 4px;
+    background: linear-gradient(90deg, #111615f5, #111615d9 32%, #11161524 72%),
+        linear-gradient(0deg, #111615ef, transparent 55%),
+        var(--art-cover) 68% center / cover no-repeat, var(--art-night);
+    box-shadow: var(--art-shadow), var(--art-line);
+}
+.welcome-entry::before { border: 1px solid #b9a17325; border-radius: 1px; }
+.welcome-brand-mark { border-radius: 2px; background: #b9a1730c; border-color: #b9a17355; box-shadow: none; }
+.welcome-brand strong { color: var(--art-brass-light); }
+.welcome-eyebrow { color: var(--art-teal); }
+#lobby .welcome-intro h1 { color: var(--art-ivory); font-family: var(--art-title); font-weight: 400; }
+.welcome-intro h1 em { color: var(--art-brass-light); }
+.welcome-intro > p { color: #d1d2c0; }
+.welcome-features { color: var(--art-teal); }
+.welcome-features span { background: #172a2480; border-color: #86b9ad40; border-radius: 2px; }
+.welcome-features span::before { color: var(--art-brass); }
+.welcome-entry #login { background: #111915e8; border-color: var(--art-brass-dim); border-radius: 3px; box-shadow: var(--art-shadow); }
+.welcome-account-heading h2 { color: var(--art-ivory); }
+.welcome-entry #login_form .text { border-color: #686d55; border-radius: 2px; background: #0e1511dd; color: var(--art-ivory); box-shadow: none; }
+.welcome-entry #submit { border-radius: 2px; background: var(--art-brass-light); border-color: var(--art-brass-light); color: #24281f; box-shadow: none; text-shadow: none; }
+#loader.sourcebook-loading { background: radial-gradient(ellipse at 60% 20%, #31423955, transparent 70%), var(--art-night); }
+.loading-folio { border-color: var(--art-brass-dim); border-radius: 3px; background: var(--tt-paper); box-shadow: var(--art-shadow); }
+.loading-folio-art { background: linear-gradient(0deg, #11161533, transparent 60%), var(--art-cover) 77% center / auto 120%; border-color: var(--art-brass-dim); }
+.loading-folio-title { color: var(--art-teal-ink); font-weight: 400; font-variant-caps: normal; }
+.loading-folio-kicker, .loading-folio-detail { color: var(--art-ink-muted); }
+.loading-return { background: var(--art-frame); border-color: var(--art-brass-dim); border-radius: 2px; }
+.connection-quality { background: var(--art-frame); color: var(--art-ivory); border-color: var(--art-brass-dim); border-radius: 2px; }
+#connection_status { color: var(--art-ivory); background: #19231bf2; border: 1px solid var(--art-brass-dim); border-radius: 2px; }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now) {
+    border: 1px solid var(--art-brass-dim);
+    border-radius: 3px;
+    background: var(--tt-paper);
+    box-shadow: var(--art-shadow);
+}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title {
+    color: var(--art-ink);
+    font-weight: 400;
+    letter-spacing: -.025em;
+}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) > .party-hall-header {
+    border-bottom-style: solid;
+}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel) .dcss-btn {
+    color: var(--art-ink);
+    border-color: #a6a58e;
+    border-radius: 2px;
+    background: #f6f1e6a8;
+}
+#lobby :is(#btn_launch_party_room, [data-lobby-create], .dcss-btn-primary) {
+    color: var(--art-paper-light);
+    background: var(--art-teal-ink);
+    border-color: var(--art-teal-ink);
+    box-shadow: inset 0 1px 0 #ffffff1a;
+}
+#lobby .party-slot-box {
+    border: 1px solid #aba990;
+    border-radius: 3px;
+    background: var(--art-paper-light);
+    box-shadow: inset 0 3px 0 #77876a;
+}
+#lobby .party-slot-identity { border-bottom-color: #b8b29b; }
+#lobby .party-slot-title { color: var(--art-teal-ink); font-weight: 400; letter-spacing: -.025em; }
+#lobby .party-slot-portrait { border: 1px solid #8b8f77; border-radius: 2px; background: #252e25; }
+#lobby .party-slot-box :is(input, select, .choice-select-trigger) { border-radius: 2px; border-color: #a6a58e; background: #fffdf6; }
+#lobby .party-slot-box :is(.party-preset-chip, [data-mode]) { border-radius: 2px; }
+.choice-picker { background: var(--art-paper-light); border-color: #8b8f77; border-top-color: var(--art-teal-ink); border-radius: 3px; box-shadow: var(--art-shadow); }
+.choice-picker-option:is(:hover, .is-highlighted) { background: #dce2d1; outline-color: #a1b096; }
+#lobby :is(button, a, input, select, summary):focus-visible { outline: 2px solid var(--art-teal-ink); outline-offset: 3px; }
+#lobby_navigation :is(button, a, summary):focus-visible,
+.welcome-entry :is(button, a, input):focus-visible { outline-color: var(--art-brass-light); }
+@media (max-width: 600px) {
+    .welcome-entry { background-position: center, center, 72% center; }
+    #lobby_navigation { box-shadow: none; }
+}

@@ -1,0 +1,30 @@
+[Unit]
+Description=DCSS Co-op WebTiles
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/dcss
+
+[Service]
+Type=simple
+User=dcss
+Group=dcss
+WorkingDirectory=/opt/dcss/current/crawl-ref/source
+Environment=PYTHONUNBUFFERED=1
+Environment=CRAWL_LIBRARY_DIR=/var/lib/dcss/rcs/library
+ExecStart=/usr/bin/python3 webserver/server.py --no-daemon --no-pidfile --logfile -
+Restart=on-failure
+RestartSec=3
+KillMode=mixed
+TimeoutStopSec=60
+RuntimeDirectory=dcss
+RuntimeDirectoryMode=0750
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/dcss /run/dcss
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,1050 @@
+{
+  "build": "ranged",
+  "seed": "2026102701",
+  "start": "Bur:1",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "mp": 22,
+      "where": "Bur:1",
+      "turn": 53,
+      "maxmp": 22,
+      "hp": 133,
+      "gold": 0,
+      "vaults": "layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket",
+      "maxhp": 133,
+      "tag": "enter",
+      "xp": 16169,
+      "items": [
+        {
+          "name": "parchment of Detonation Catalyst",
+          "class": "book",
+          "y": 25,
+          "x": 37,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "long sword",
+          "class": "weapon",
+          "y": 27,
+          "x": 47,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "battleaxe",
+          "class": "weapon",
+          "y": 28,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "12 gold pieces",
+          "class": "gold",
+          "y": 29,
+          "x": 47,
+          "artefact": false,
+          "quantity": 12
+        },
+        {
+          "name": "9 gold pieces",
+          "class": "gold",
+          "y": 29,
+          "x": 63,
+          "artefact": false,
+          "quantity": 9
+        },
+        {
+          "name": "16 gold pieces",
+          "class": "gold",
+          "y": 31,
+          "x": 42,
+          "artefact": false,
+          "quantity": 16
+        },
+        {
+          "name": "potion of curing",
+          "class": "potion",
+          "y": 34,
+          "x": 52,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of noise",
+          "class": "scroll",
+          "y": 39,
+          "x": 81,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of teleportation",
+          "class": "scroll",
+          "y": 42,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Leda's Liquefaction",
+          "class": "book",
+          "y": 43,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "short sword",
+          "class": "weapon",
+          "y": 44,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "dagger",
+          "class": "weapon",
+          "y": 44,
+          "x": 63,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Shock",
+          "class": "book",
+          "y": 45,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of vulnerability",
+          "class": "scroll",
+          "y": 47,
+          "x": 71,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "26 gold pieces",
+          "class": "gold",
+          "y": 47,
+          "x": 73,
+          "artefact": false,
+          "quantity": 26
+        },
+        {
+          "name": "embroidered hat",
+          "class": "armour",
+          "y": 47,
+          "x": 77,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "amulet of wildshape",
+          "class": "jewellery",
+          "y": 52,
+          "x": 44,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "robe",
+          "class": "armour",
+          "y": 52,
+          "x": 82,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "potion of curing",
+          "class": "potion",
+          "y": 61,
+          "x": 78,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Martyr's Knell",
+          "class": "book",
+          "y": 62,
+          "x": 53,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "15 gold pieces",
+          "class": "gold",
+          "y": 63,
+          "x": 69,
+          "artefact": false,
+          "quantity": 15
+        },
+        {
+          "name": "scale mail",
+          "class": "armour",
+          "y": 63,
+          "x": 74,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "20 gold pieces",
+          "class": "gold",
+          "y": 66,
+          "x": 69,
+          "artefact": false,
+          "quantity": 20
+        },
+        {
+          "name": "chain mail",
+          "class": "armour",
+          "y": 73,
+          "x": 67,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "rapier",
+          "class": "weapon",
+          "y": 74,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "7 gold pieces",
+          "class": "gold",
+          "y": 74,
+          "x": 69,
+          "artefact": false,
+          "quantity": 7
+        },
+        {
+          "name": "scroll of identify",
+          "class": "scroll",
+          "y": 77,
+          "x": 41,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "leather armour",
+          "class": "armour",
+          "y": 78,
+          "x": 53,
+          "artefact": false,
+          "quantity": 1
+        }
+      ],
+      "honey": 0,
+      "xl": 16,
+      "inventory": [
+        {
+          "name": "+0 shortbow",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 pair of boots",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 ring mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 orcbow",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fear",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of blinking",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of haste",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of heal wounds",
+          "quantity": 6,
+          "class": "potion"
+        }
+      ],
+      "progress": 0,
+      "monsters": [
+        {
+          "name": "burrowing beast",
+          "x": 49,
+          "xp": 603,
+          "y": 20
+        },
+        {
+          "name": "crag boar",
+          "x": 68,
+          "xp": 550,
+          "y": 23
+        },
+        {
+          "name": "boulder beetle",
+          "x": 51,
+          "xp": 841,
+          "y": 24
+        },
+        {
+          "name": "boulder beetle",
+          "x": 67,
+          "xp": 828,
+          "y": 25
+        },
+        {
+          "name": "crag boar",
+          "x": 66,
+          "xp": 547,
+          "y": 27
+        },
+        {
+          "name": "crag boar",
+          "x": 70,
+          "xp": 554,
+          "y": 27
+        },
+        {
+          "name": "crag boar",
+          "x": 55,
+          "xp": 545,
+          "y": 28
+        },
+        {
+          "name": "burrowing beast",
+          "x": 61,
+          "xp": 591,
+          "y": 28
+        },
+        {
+          "name": "crag boar",
+          "x": 49,
+          "xp": 554,
+          "y": 29
+        },
+        {
+          "name": "burrowing beast",
+          "x": 43,
+          "xp": 600,
+          "y": 30
+        },
+        {
+          "name": "shale drake",
+          "x": 84,
+          "xp": 600,
+          "y": 33
+        },
+        {
+          "name": "shale drake",
+          "x": 42,
+          "xp": 602,
+          "y": 44
+        },
+        {
+          "name": "boulder beetle",
+          "x": 59,
+          "xp": 849,
+          "y": 45
+        },
+        {
+          "name": "crag boar",
+          "x": 65,
+          "xp": 554,
+          "y": 46
+        },
+        {
+          "name": "crag boar",
+          "x": 51,
+          "xp": 551,
+          "y": 54
+        },
+        {
+          "name": "burrowing beast",
+          "x": 72,
+          "xp": 588,
+          "y": 58
+        },
+        {
+          "name": "komodo dragon",
+          "x": 78,
+          "xp": 365,
+          "y": 58
+        },
+        {
+          "name": "komodo dragon",
+          "x": 80,
+          "xp": 367,
+          "y": 58
+        },
+        {
+          "name": "burrowing beast",
+          "x": 55,
+          "xp": 608,
+          "y": 59
+        },
+        {
+          "name": "crag boar",
+          "x": 48,
+          "xp": 555,
+          "y": 61
+        },
+        {
+          "name": "crag boar",
+          "x": 40,
+          "xp": 548,
+          "y": 62
+        },
+        {
+          "name": "shale drake",
+          "x": 37,
+          "xp": 597,
+          "y": 65
+        },
+        {
+          "name": "earth elemental",
+          "x": 44,
+          "xp": 83,
+          "y": 76
+        },
+        {
+          "name": "boulder beetle",
+          "x": 48,
+          "xp": 834,
+          "y": 76
+        },
+        {
+          "name": "burrowing beast",
+          "x": 77,
+          "xp": 606,
+          "y": 76
+        },
+        {
+          "name": "crag boar",
+          "x": 36,
+          "xp": 555,
+          "y": 77
+        },
+        {
+          "name": "crag boar",
+          "x": 72,
+          "xp": 550,
+          "y": 77
+        },
+        {
+          "name": "crag boar",
+          "x": 41,
+          "xp": 544,
+          "y": 78
+        }
+      ]
+    },
+    {
+      "mp": 17,
+      "where": "Bur:1",
+      "turn": 312,
+      "maxmp": 22,
+      "hp": -9,
+      "gold": 0,
+      "vaults": "layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket",
+      "maxhp": 133,
+      "tag": "death",
+      "xp": 9956,
+      "items": [
+        {
+          "name": "parchment of Detonation Catalyst",
+          "class": "book",
+          "y": 25,
+          "x": 37,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "boulder beetle corpse",
+          "class": "corpse",
+          "y": 25,
+          "x": 50,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "long sword",
+          "class": "weapon",
+          "y": 27,
+          "x": 47,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "burrowing beast corpse",
+          "class": "corpse",
+          "y": 27,
+          "x": 50,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "boulder beetle corpse",
+          "class": "corpse",
+          "y": 28,
+          "x": 50,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "battleaxe",
+          "class": "weapon",
+          "y": 28,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "12 gold pieces",
+          "class": "gold",
+          "y": 29,
+          "x": 47,
+          "artefact": false,
+          "quantity": 12
+        },
+        {
+          "name": "crag boar corpse",
+          "class": "corpse",
+          "y": 29,
+          "x": 51,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "burrowing beast corpse",
+          "class": "corpse",
+          "y": 29,
+          "x": 51,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "9 gold pieces",
+          "class": "gold",
+          "y": 29,
+          "x": 63,
+          "artefact": false,
+          "quantity": 9
+        },
+        {
+          "name": "16 gold pieces",
+          "class": "gold",
+          "y": 31,
+          "x": 42,
+          "artefact": false,
+          "quantity": 16
+        },
+        {
+          "name": "crag boar corpse",
+          "class": "corpse",
+          "y": 32,
+          "x": 52,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "potion of curing",
+          "class": "potion",
+          "y": 34,
+          "x": 52,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of noise",
+          "class": "scroll",
+          "y": 39,
+          "x": 81,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of teleportation",
+          "class": "scroll",
+          "y": 42,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Leda's Liquefaction",
+          "class": "book",
+          "y": 43,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "short sword",
+          "class": "weapon",
+          "y": 44,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "dagger",
+          "class": "weapon",
+          "y": 44,
+          "x": 63,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Shock",
+          "class": "book",
+          "y": 45,
+          "x": 40,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "scroll of vulnerability",
+          "class": "scroll",
+          "y": 47,
+          "x": 71,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "26 gold pieces",
+          "class": "gold",
+          "y": 47,
+          "x": 73,
+          "artefact": false,
+          "quantity": 26
+        },
+        {
+          "name": "embroidered hat",
+          "class": "armour",
+          "y": 47,
+          "x": 77,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "amulet of wildshape",
+          "class": "jewellery",
+          "y": 52,
+          "x": 44,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "robe",
+          "class": "armour",
+          "y": 52,
+          "x": 82,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "potion of curing",
+          "class": "potion",
+          "y": 61,
+          "x": 78,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "parchment of Martyr's Knell",
+          "class": "book",
+          "y": 62,
+          "x": 53,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "15 gold pieces",
+          "class": "gold",
+          "y": 63,
+          "x": 69,
+          "artefact": false,
+          "quantity": 15
+        },
+        {
+          "name": "scale mail",
+          "class": "armour",
+          "y": 63,
+          "x": 74,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "20 gold pieces",
+          "class": "gold",
+          "y": 66,
+          "x": 69,
+          "artefact": false,
+          "quantity": 20
+        },
+        {
+          "name": "chain mail",
+          "class": "armour",
+          "y": 73,
+          "x": 67,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "rapier",
+          "class": "weapon",
+          "y": 74,
+          "x": 54,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "7 gold pieces",
+          "class": "gold",
+          "y": 74,
+          "x": 69,
+          "artefact": false,
+          "quantity": 7
+        },
+        {
+          "name": "scroll of identify",
+          "class": "scroll",
+          "y": 77,
+          "x": 41,
+          "artefact": false,
+          "quantity": 1
+        },
+        {
+          "name": "leather armour",
+          "class": "armour",
+          "y": 78,
+          "x": 53,
+          "artefact": false,
+          "quantity": 1
+        }
+      ],
+      "honey": 0,
+      "xl": 16,
+      "inventory": [
+        {
+          "name": "+0 shortbow",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "+0 leather armour",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "ring of poison resistance",
+          "quantity": 1,
+          "class": "jewellery"
+        },
+        {
+          "name": "+0 pair of boots",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 pair of gloves",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 cloak",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+0 helmet",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+2 ring mail",
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "name": "+3 orcbow",
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "name": "scroll of butterflies",
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "name": "3 scrolls of fog",
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "name": "2 scrolls of teleportation",
+          "quantity": 2,
+          "class": "scroll"
+        },
+        {
+          "name": "2 potions of magic",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "2 potions of might",
+          "quantity": 2,
+          "class": "potion"
+        },
+        {
+          "name": "6 potions of curing",
+          "quantity": 6,
+          "class": "potion"
+        }
+      ],
+      "progress": 11,
+      "monsters": [
+        {
+          "name": "burrowing beast",
+          "x": 50,
+          "xp": 608,
+          "y": 21
+        },
+        {
+          "name": "crag boar",
+          "x": 49,
+          "xp": 555,
+          "y": 22
+        },
+        {
+          "name": "crag boar",
+          "x": 50,
+          "xp": 551,
+          "y": 22
+        },
+        {
+          "name": "shale drake",
+          "x": 49,
+          "xp": 602,
+          "y": 23
+        },
+        {
+          "name": "crag boar",
+          "x": 49,
+          "xp": 548,
+          "y": 24
+        },
+        {
+          "name": "crag boar",
+          "x": 65,
+          "xp": 554,
+          "y": 26
+        },
+        {
+          "name": "boulder beetle",
+          "x": 49,
+          "xp": 849,
+          "y": 27
+        },
+        {
+          "name": "crag boar",
+          "x": 49,
+          "xp": 555,
+          "y": 29
+        },
+        {
+          "name": "shale drake",
+          "x": 51,
+          "xp": 600,
+          "y": 32
+        },
+        {
+          "name": "shale drake",
+          "x": 52,
+          "xp": 597,
+          "y": 32
+        },
+        {
+          "name": "komodo dragon",
+          "x": 53,
+          "xp": 367,
+          "y": 34
+        },
+        {
+          "name": "burrowing beast",
+          "x": 72,
+          "xp": 588,
+          "y": 58
+        },
+        {
+          "name": "komodo dragon",
+          "x": 78,
+          "xp": 365,
+          "y": 58
+        },
+        {
+          "name": "earth elemental",
+          "x": 44,
+          "xp": 83,
+          "y": 76
+        },
+        {
+          "name": "boulder beetle",
+          "x": 48,
+          "xp": 834,
+          "y": 76
+        },
+        {
+          "name": "burrowing beast",
+          "x": 77,
+          "xp": 606,
+          "y": 76
+        },
+        {
+          "name": "crag boar",
+          "x": 72,
+          "xp": 550,
+          "y": 77
+        },
+        {
+          "name": "crag boar",
+          "x": 41,
+          "xp": 544,
+          "y": 78
+        }
+      ]
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "inventory +0 shortbow",
+    "inventory +0 leather armour",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +2 ring mail",
+    "inventory +3 orcbow",
+    "inventory scroll of butterflies",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of might",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start ranged AC=14 EV=21 SH=0",
+    "ability Heroism turn=53",
+    "use haste turn=61 place=Bur:1",
+    "use fear turn=62 place=Bur:1",
+    "use fear turn=63 place=Bur:1",
+    "use fear turn=64 place=Bur:1",
+    "ability Heroism turn=92",
+    "use heal wounds turn=103 place=Bur:1",
+    "use haste turn=120 place=Bur:1",
+    "ability Heroism turn=268",
+    "use heal wounds turn=286 place=Bur:1",
+    "use heal wounds turn=287 place=Bur:1",
+    "use heal wounds turn=289 place=Bur:1",
+    "use heal wounds turn=290 place=Bur:1",
+    "use heal wounds turn=291 place=Bur:1",
+    "use blinking turn=295 place=Bur:1",
+    "use blinking turn=296 place=Bur:1",
+    "ability Finesse turn=312",
+    "death Bur:1"
+  ],
+  "nativeSha256": "e373dc0e1068ba504c29766dba4477944670864d16617c33cb1459bc07083465",
+  "startVerified": true,
+  "routeFloorsExplored": [],
+  "fullRoute": false
+}

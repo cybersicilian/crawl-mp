@@ -1,0 +1,670 @@
+=Route_caster the Digger           *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 11Int: 19SH:  0Dex: 15XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)-) Nothing wieldedCast: Sandblast♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Sneak 3/30ROUTE_EVENT setup 2
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  3/3========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  1 Next: 33900Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 15/15     ========================Magic:  4/4========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  2 Next: 16949Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 19/19     ========================Magic:  5/5========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  3 Next: 84743Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 24/24     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  4 Next: 47929Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 28/28     ========================Magic:  7/7========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  5 Next: 25782Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 32/32     ========================Magic:  8/8========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  6 Next: 13396Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 36/36     ========================Magic:  9/9========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  7 Next: 68379Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 41/41     ========================Magic:  10/10     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  8 Next: 34487Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 45/45     ========================Magic:  11/11     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  9 Next: 17288Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 50/50     ========================Magic:  12/12     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 10 Next: 8614%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 54/54     ========================Magic:  13/13     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 11 Next: 4263%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 59/59     ========================Magic:  14/14     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 12 Next: 2797%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 63/63     ========================Magic:  15/15     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 13 Next: 1651%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 68/68     ========================Magic:  16/16     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 14 Next: 1067%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 72/72     ========================Magic:  17/17     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 15 Next: 737% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 76/76     ========================Magic:  18/18     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 16 Next: 515% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 80/80     ========================Magic:  19/19     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 17 Next: 348% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 85/85     ========================Magic:  20/20     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 18 Next: 213% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 89/89     ========================Magic:  21/21     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 19 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 94/942/2220 0% ROUTE_EVENT setup 3
+
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 8 28 148284ROUTE_EVENT setup 4
+Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 94/94     ========================Magic:  22/22     ========================AC:  2 (19%)Str: 8EV: 10Int: 28SH:  0Dex: 14XL: 20 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+new experience level: Experience level set to 20.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+ Vehumet welcomes you!Vehumet offers you knowledge of Kiss of Death. of Vehumet ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 6
+
+_Increased Evocations to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 14127/127ROUTE_EVENT setup 7
+
+_Increased Fighting to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Translocations
+ Translocations
+ To what level? (current = 0.0) 12ROUTE_EVENT setup 8
+
+_Increased Translocations to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Spellcasting
+ Spellcasting
+ To what level? (current = 0.0) 1822/44------------ROUTE_EVENT setup 9
+
+_Increased Spellcasting to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Earth Magic
+ Earth Magic
+ To what level? (current = 0.0) 18ROUTE_EVENT setup 10
+
+_Increased Earth Magic to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Conjurations
+ Conjurations
+ To what level? (current = 0.0) 18ROUTE_EVENT setup 11
+
+_Increased Conjurations to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 8ROUTE_EVENT setup 12
+
+_Increased Shields to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 169ROUTE_EVENT setup 13
+
+_Increased Dodging to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fire Magic
+ Fire Magic
+ To what level? (current = 0.0) 14ROUTE_EVENT setup 14
+
+_Increased Fire Magic to skill level 14.0.
+ Enter Wizard Command (? - help): Memorise which spell? Stone ArrowROUTE_EVENT setup 15
+_Memorise which spell? Enter Wizard Command (? - help): FireballROUTE_EVENT setup 16
+_Memorise which spell? Enter Wizard Command (? - help): Iskenderun's Mystic BlastROUTE_EVENT setup 17
+_Memorise which spell? Enter Wizard Command (? - help): Bombard
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): Memorise which spell? 
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog23------------2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking4=4
+_
+_g - 3 potions of magic (gained 2)5
+_
+_m - 2 potions of might5=6
+_
+_h - 2 potions of haste6=7
+_
+_c - 6 potions of curing8
+_
+_w - 6 potions of heal wounds7=9
+_
+_b - a ring of poison resistance10.0 (1.0)
+_
+_c - a +0 pair of boots8=1
+_
+_d - a +0 pair of gloves2
+_
+_e - a +0 cloak9=3
+_
+_f - a +0 helmet30=4
+_
+_g - a +0 buckler5
+_
+_h - a +2 robe1=6
+_
+_i - a +2 devious dagger7
+_
+ You feel a baleful cunning.
+_i - a +2 devious dagger (weapon)2=5 (0.5i) +2 dagger (devious)
+_08.5 (13==9.5 (220.5 (34=1.5 (45=2.5 (5
+0 (0%) 
+_You start removing your armour. You continue removing your +0 robe. x5
+ You finish removing your +0 robe.3.5 (66=4.5 (75.5 (87=6.5 (97.5 (10.0)
+4 (22%)
+_You start putting on your armour. You continue putting on your +2 robe. x5
+_You finish putting on your +2 robe.0.0)
+_
+ You start putting on your armour.8=8.5 (19=9.5 (230.5 (340=1.5 (42.5 (5
+86
+_You continue putting on your +0 buckler. x5
+_You finish putting on your +0 buckler.0
+_1=3.5 (12=4.5 (25.5 (33=6.5 (47.5 (5
+5 (23
+_You start putting on your armour. You continue putting on your +0 helmet. x5
+_You finish putting on your +0 helmet.0
+_
+ You start putting on your armour. You continue putting on your +0 cloak.4==8.5 (1
+_Magic restored.9.5 (240.5 (31.5 (4=2.5 (5
+6 (25
+_You continue putting on your +0 cloak. x4
+_You finish putting on your +0 cloak.0
+_
+ You start putting on your armour.3.5 (14.5 (25.5 (36.5 (47.5 (5
+7 (26
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.8.5 (19.5 (250.5 (31.5 (42.5 (5
+8
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_b - a ring of poison resistance (worn)3.0 (0.5
+_ROUTE_EVENT inventory +0 robe
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +0 buckler
+ROUTE_EVENT inventory +2 robe
+ROUTE_EVENT inventory +2 devious dagger
+ROUTE_EVENT inventory 3 potions of magic
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of might
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_caster the True Ascetic     *WIZARD*Deep Elf of Vehumet ****..Health: 127/127   ========================#.....#Magic:  44/44     ========================#.....#AC:  8 (26%)Str: 8#.....#EV: 18Int: 28#.....#SH:  6Dex: 14#.....#XL: 20 Next:  0%  Place: Tomb:1#.....#Noise:  0 ------  Time: 53.0 (0.0)#.....#i) +2 dagger (devious)#@....#Cast: Sandblast#.....##.....##.....##.....##.....##.....##.....#
+_b - a ring of poison resistance (worn)
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Tomb of the Ancients? (default 1, ? - help) 1ROUTE_AUDIT {"monsters":[{"name":"mummy","x":49,"xp":18,"y":23},{"name":"guardian mummy","x":72,"xp":328,"y":25},{"name":"zombie","x":49,"xp":307,"y":28},{"name":"mummy","x":59,"xp":18,"y":28},{"name":"royal mummy","x":42,"xp":3505,"y":32},{"name":"royal mummy","x":47,"xp":3491,"y":32},{"name":"draugr","x":52,"xp":279,"y":32},{"name":"royal mummy","x":57,"xp":3462,"y":32},{"name":"royal mummy","x":54,"xp":3412,"y":33},{"name":"ushabti","x":68,"xp":207,"y":35},{"name":"mummy priest","x":72,"xp":891,"y":35},{"name":"guardian mummy","x":68,"xp":326,"y":36},{"name":"mummy","x":77,"xp":18,"y":36},{"name":"guardian mummy","x":71,"xp":320,"y":38},{"name":"mummy","x":79,"xp":18,"y":38},{"name":"mummy","x":47,"xp":17,"y":40},{"name":"revenant soulmonger","x":50,"xp":1361,"y":41},{"name":"mummy priest","x":52,"xp":936,"y":41},{"name":"royal mummy","x":65,"xp":3505,"y":41},{"name":"guardian mummy","x":48,"xp":332,"y":43},{"name":"mummy priest","x":54,"xp":936,"y":43},{"name":"guardian mummy","x":59,"xp":330,"y":43},{"name":"mummy priest","x":48,"xp":925,"y":44},{"name":"mummy","x":82,"xp":18,"y":44},{"name":"lich","x":59,"xp":1797,"y":47},{"name":"guardian sphinx","x":77,"xp":1783,"y":47},{"name":"guardian sphinx","x":84,"xp":1680,"y":47},{"name":"mummy","x":63,"xp":18,"y":49},{"name":"skeletal warrior","x":69,"xp":754,"y":49},{"name":"guardian sphinx","x":75,"xp":1703,"y":49},{"name":"royal mummy","x":39,"xp":3434,"y":50},{"name":"mummy priest","x":42,"xp":925,"y":51},{"name":"ancient champion","x":51,"xp":1483,"y":51},{"name":"guardian mummy","x":40,"xp":320,"y":52},{"name":"guardian mummy","x":56,"xp":329,"y":52},{"name":"guardian mummy","x":66,"xp":322,"y":53},{"name":"guardian mummy","x":69,"xp":329,"y":53},{"name":"guardian sphinx","x":75,"xp":1729,"y":53},{"name":"guardian sphinx","x":77,"xp":1725,"y":53},{"name":"guardian sphinx","x":82,"xp":1722,"y":53},{"name":"mummy","x":46,"xp":18,"y":54},{"name":"mummy","x":47,"xp":18,"y":55},{"name":"mummy","x":55,"xp":18,"y":55},{"name":"guardian sphinx","x":80,"xp":1700,"y":55},{"name":"guardian sphinx","x":84,"xp":1703,"y":55},{"name":"mummy priest","x":48,"xp":905,"y":58},{"name":"royal mummy","x":51,"xp":3391,"y":58},{"name":"guardian mummy","x":54,"xp":341,"y":58},{"name":"mummy priest","x":83,"xp":934,"y":58},{"name":"royal mummy","x":39,"xp":3526,"y":59},{"name":"guardian mummy","x":48,"xp":328,"y":59},{"name":"mummy priest","x":50,"xp":939,"y":61},{"name":"mummy","x":39,"xp":17,"y":62},{"name":"royal mummy","x":40,"xp":3548,"y":63},{"name":"revenant soulmonger","x":53,"xp":1348,"y":66},{"name":"royal mummy","x":66,"xp":3501,"y":66},{"name":"guardian mummy","x":67,"xp":332,"y":66},{"name":"royal mummy","x":70,"xp":3594,"y":66},{"name":"mummy priest","x":72,"xp":925,"y":67},{"name":"royal mummy","x":41,"xp":3519,"y":69},{"name":"royal mummy","x":70,"xp":3501,"y":69},{"name":"guardian mummy","x":42,"xp":322,"y":70},{"name":"draugr","x":80,"xp":211,"y":72},{"name":"draugr","x":56,"xp":211,"y":73},{"name":"ushabti","x":80,"xp":210,"y":73},{"name":"zombie","x":68,"xp":114,"y":74},{"name":"mummy","x":62,"xp":18,"y":75},{"name":"mummy","x":66,"xp":18,"y":77},{"name":"ushabti","x":54,"xp":205,"y":79}],"mp":44,"progress":0,"items":[{"artefact":false,"y":21,"name":"scroll of identify","x":49,"class":"scroll","quantity":1},{"artefact":false,"y":21,"name":"book of the Grave","x":70,"class":"book","quantity":1},{"artefact":false,"y":23,"name":"potion of enlightenment","x":56,"class":"potion","quantity":1},{"artefact":false,"y":24,"name":"16 gold pieces","x":73,"class":"gold","quantity":16},{"artefact":false,"y":26,"name":"parchment of Frozen Ramparts","x":41,"class":"book","quantity":1},{"artefact":false,"y":26,"name":"dyed leather armour","x":59,"class":"armour","quantity":1},{"artefact":false,"y":32,"name":"wand of light (5)","x":41,"class":"wand","quantity":1},{"artefact":false,"y":33,"name":"parchment of Confusing Touch","x":40,"class":"book","quantity":1},{"artefact":false,"y":36,"name":"ice dragon scales","x":44,"class":"armour","quantity":1},{"artefact":false,"y":36,"name":"16 gold pieces","x":76,"class":"gold","quantity":16},{"artefact":false,"y":43,"name":"shiny plate armour","x":51,"class":"armour","quantity":1},{"artefact":false,"y":47,"name":"15 gold pieces","x":43,"class":"gold","quantity":15},{"artefact":false,"y":47,"name":"15 gold pieces","x":50,"class":"gold","quantity":15},{"artefact":false,"y":48,"name":"2 scrolls of enchant armour","x":78,"class":"scroll","quantity":2},{"artefact":false,"y":50,"name":"18 gold pieces","x":49,"class":"gold","quantity":18},{"artefact":false,"y":54,"name":"trident","x":68,"class":"weapon","quantity":1},{"artefact":false,"y":55,"name":"28 gold pieces","x":81,"class":"gold","quantity":28},{"artefact":false,"y":59,"name":"trident","x":50,"class":"weapon","quantity":1},{"artefact":false,"y":66,"name":"scroll of acquirement","x":35,"class":"scroll","quantity":1},{"artefact":false,"y":67,"name":"scroll of identify","x":77,"class":"scroll","quantity":1},{"artefact":false,"y":68,"name":"leather armour","x":76,"class":"armour","quantity":1},{"artefact":false,"y":70,"name":"scroll of noise","x":84,"class":"scroll","quantity":1},{"artefact":false,"y":75,"name":"battleaxe","x":48,"class":"weapon","quantity":1},{"artefact":false,"y":76,"name":"throwing net","x":45,"class":"missile","quantity":1}],"where":"Tomb:1","maxmp":44,"honey":0,"hp":127,"tag":"enter","xp":80428,"maxhp":127,"vaults":"tomb_1 [tomb_1_centre_grunt_layered, tomb_1_hall_stairs_nicolae_galleries]","xl":20,"inventory":[{"name":"+0 robe","class":"armour","quantity":1},{"name":"ring of poison resistance","class":"jewellery","quantity":1},{"name":"+0 pair of boots","class":"armour","quantity":1},{"name":"+0 pair of gloves","class":"armour","quantity":1},{"name":"+0 cloak","class":"armour","quantity":1},{"name":"+0 helmet","class":"armour","quantity":1},{"name":"+0 buckler","class":"armour","quantity":1},{"name":"+2 robe","class":"armour","quantity":1},{"name":"+2 devious dagger","class":"weapon","quantity":1},{"name":"3 potions of magic","class":"potion","quantity":3},{"name":"3 scrolls of fear","class":"scroll","quantity":3},{"name":"3 scrolls of fog","class":"scroll","quantity":3},{"name":"2 scrolls of teleportation","class":"scroll","quantity":2},{"name":"2 scrolls of blinking","class":"scroll","quantity":2},{"name":"2 potions of might","class":"potion","quantity":2},{"name":"2 potions of haste","class":"potion","quantity":2},{"name":"6 potions of curing","class":"potion","quantity":6},{"name":"6 potions of heal wounds","class":"potion","quantity":6}],"turn":60,"gold":0}
+ROUTE_EVENT start caster AC=8 EV=18 SH=6
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.
+ Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Tomb of the Ancients? (default 1, ? - help) 
+_Found a staircase back to the Crypt.
+_
+##################.................#.................#.................#.................#.................#.........@.......#.................#.................#.................#.....#############.....##.....##.....##.....##.....##.....#You pick up a parchment of Frozen Ramparts and begin reading...830.0)4.0 (31
+_You add the spell Frozen Ramparts to your library.
+ You encounter an iron dragon zombie and a mummy.##.?#.#.M#.#.#.#.#.Z#.M   mummy (dormant)#.....#Z   iron dragon zombie (trample, dormant)#.....##.....#
+0.0)5.0 (1
+.M
+_Found a scroll of identify.
+ The fireball explodes!
+ The fireball engulfs the iron dragon zombie!!!
+_The iron dragon zombie is moderately damaged.Z.Mwandering)Z  )39---13 ====-- 6
+_
+ The fireball explodes!
+ The fireball engulfs the iron dragon zombie!
+_The iron dragon zombie is moderately damaged.5-----14 =====- 7
+_
+.M
+ The fireball explodes!
+ The fireball engulfs the iron dragon zombie!!!
+_The iron dragon zombie is severely damaged.Z.M 1-----12 ====-- 8Sandblast
+_
+M.The fireball explodes!
+ The fireball engulfs the iron dragon zombie but does no damage.
+_The iron dragon zombie is severely damaged.Z.26-----14 =====- 9
+_. but does no damage.
+_The iron dragon zombie is severely damaged.!! 
+ ngulfs the mummy!! The mummy is burned terribly!
+ You destroy the mummy!
+ Vehumet accepts your kill.
+Z   iron dragon zombie (trample)
+_You feel your power returning.3----690
+_
+Z.The stone arrow hits the iron dragon zombie!
+_The iron dragon zombie is almost destroyed. 20---- 9 ===--- 1
+_
+Z.The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.-- 6 ==---- 2.5 (1.5
+_
+Z.The blast of sand hits the iron dragon zombie!
+_The iron dragon zombie is almost destroyed.4 ==-4.0
+_
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.55.5
+_
+ # #.? #. #. #. #. #.Z...... #. #. #. #.....# #.....# #.....#
+      #.....#
+      #.....#
+      #.....#
+      #.....#The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.You block the iron dragon zombie's attack.Z.18--7.0
+_The iron dragon zombie misses you. The iron dragon zombie tramples you! You stumble backwards!
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.5---68.5
+_The iron dragon zombie bites you. The iron dragon zombie misses you. x2
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.The iron dragon zombie bites you! The iron dragon zombie misses you.02---5100.0 (1.5)
+ # #.? #. #. #. #. #.Z. #.. #.. #. #.....## #.....# #.....# #.....#
+ #.....#
+ #.....#
+ #.....#
+_The iron dragon zombie closely misses you.The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.The iron dragon zombie misses you.The iron dragon zombie claws you but does no damage.Z.88/127 -----19 7 ===--- 1.5
+_The iron dragon zombie tramples you! You stumble backwards!
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.9--- 6 ==---- 3.0
+M
+_The iron dragon zombie misses you. x3
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.The iron dragon zombie bites you!
+ The iron dragon zombie claws you but does no damage.
+M   mummyZ   iron dragon zombie (trample)
+ The iron dragon zombie barely misses you.78---4.5ROUTE_EVENT use haste turn=107 place=Tomb:1
+Route_caster the True Ascetic     *WIZARD*Deep Elf of Vehumet ****..Health: 78/127    ==============----------Magic:  19/44     ==========--------------##################AC:  8 (26%)Str: 8#.................?EV: 18Int: 28#..................SH:  6Dex: 14#..................XL: 20 Next:  0%  Place: Tomb:1#..................Noise:  6 ==----  Time: 104.5 (0.0)#..................i) +2 dagger (devious)#........@Z.....M..Cast: Sandblast#..................#..................#..................M   mummy#.....#############Z   iron dragon zombie (trample)#.....##.....##.....##.....##.....##.....#The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.
+_The iron dragon zombie misses you. x3
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.The iron dragon zombie bites you!
+ The iron dragon zombie claws you but does no damage.
+ The iron dragon zombie barely misses you.
+_You encounter a mummy.Eclecticist 9200 --5.5 (1Fast 
+_The iron dragon zombie is almost destroyed.
+_The iron dragon zombie misses you. x3
+ The blast of sand hits the iron dragon zombie but does no damage.
+_The iron dragon zombie is almost destroyed.bites you!
+ The iron dragon zombie claws you but does no damage.
+ The iron dragon zombie barely misses you.
+_You encounter a mummy.
+_You feel yourself speed up.
+M.You erupt in a blast of force!
+ The mystic blast hits the iron dragon zombie.
+ The iron dragon zombie is almost destroyed.
+_The iron dragon zombie is knocked back by the mystic blast.....Z16-- 9 ===--- 6.1 (0.6
+_.mystic blast hits the iron dragon zombie.
+ The iron dragon zombie is almost destroyed.
+_The iron dragon zombie is knocked back by the mystic blast.
+ The fireball explodes!
+ The fireball engulfs the iron dragon zombie.
+ The iron dragon zombie is almost destroyed.fireball engulfs the mummy!! The mummy is burned terribly!
+ You destroy the mummy!
+ Vehumet accepts your kill.
+Z   iron dragon zombie (trample)
+_You feel your power returning.2----15 =====- 7
+_
+.The stone arrow hits the iron dragon zombie!!
+ You destroy the iron dragon zombie!Vehumet accepts your kill.
+
+_You feel your power returning.80=5== 6 ==---- 7.4 (0.7Sandblast
+_6==1=7=8=29=320=41=2==5=23=6=4=75=6=87=98=9=90=30=91=1=2=
+_You start resting.20 -----36.3 (28.9)--7.0 (29.6Fast 
+_Your extra speed is starting to run out.3==34=
+_You start resting.45=41.0 (4.0)6 (4.6
+_You feel yourself slow down.6=57=6=8=9=7=40=81=2=93=100/127
+_You start resting.Magic restored.56.6 (15.0)4==7.6 (16
+_1=2==3456=7=891012=3=4567=8=92012=3=456
+_You start resting.HP restored.221.6 (647=2.6 (65
+_=
+########################  
+.........?  
+........  
+.........  
+........
+........
+........[....
+........................
+........................
+........................
+########################
+42.6 (203.6 (21
+_e - a potion of enlightenment########################
+.......?................
+.........................[
+########################
+......?..................5.0)6.6 (3
+_You see here a +2 leather armour of poison resistance.
+_
+ You encounter a guardian mummy.
+?......:M[M   guardian mummy (dormant)51.6 (52.6 (6
+_
+.:..$M.[.
+ You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+_Found 16 gold pieces.3.6 (1
+_:..$.M.[.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x24Sandblast
+_
+#.:.......$..M...[....M  #The iron shot hits the guardian mummy!!
+ The guardian mummy is severely damaged.
+_The blast sends you backwards.39---11 ====-- 5Sandblast
+_ :....   $. M.. [.     
+M.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) 0 ------ 6Sandblast
+_
+.The stone arrow hits the guardian mummy!!
+ You destroy the guardian mummy!
+
+_Vehumet accepts your kill.You feel extremely nervous for a moment...P: 122/122 (127)P: 37/44    ---- 7 ===--- 7SandblastDrain
+_You are engulfed in negative energy! You feel drained.8-9=40=1=2=3=
+_You start resting.Magic restored. 0 ------ 68.6 (11.0)4==---9.6 (12
+_=
+
+########################.$
+........................
+.....[..................
+........................
+........................
+........................
+#####################.....You pick up a book of the Grave and begin reading...74.6 (5.0)5.6 (6
+_You add the spells Grave Claw, Animate Dead and Borgnjor's Vile Clutch to your library.
+_You now have 16 gold pieces.
+ You encounter a mummy.
+########################
+........................
+........................
+........................
+........................
+........................
+[.......................
+........................
+........................
+################ # #....M   mummy (dormant) # # # #.$M
+83.6 (84.6 (9
+#######################
+.......................  
+.############### #.#.#.#.#.#.$M#....
+_Found 16 gold pieces.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x25.6 (1
+_
+..............................
+###############M  2 mummies (dormant)#....M....
+M1 dormant)M
+ You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+_You encounter a mummy.6Sandblast
+_
+.The fireball explodes! The fireball engulfs the mummy!!! The mummy is burned terribly!
+ You destroy the mummy!Vehumet accepts your kill.Vehumet offers you knowledge of Scorch.
+   mummyM
+_You feel your power returning.0---13 ====-- 7Sandblast
+  ...
+############## #.#.#.#.#.#.$#...#....M#......
+_You hear a shout!
+#..........
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x21=-- 0 ------ 8Sandblast
+_
+.The iron shot hits the mummy!!
+ You destroy the mummy!
+M .....
+..............
+##############..........#..........You destroy the mummy!Vehumet accepts your kill.
+_The blast sends you backwards.35---11 ====-- 9Sandblast
+_6---7=8=9=40=
+_You start resting.1= 0 ------ M   mummy (wandering)M97.6 (8----8.6 (9
+ ..
+############# #.#.#.#.#.#.$#...#....M#......
+_You encounter a mummy.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x29.6 (1
+_
+......
+#############$#...........
+Þ
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2M.
+#...........Þ   guardian sphinx (wandering)M   mummy2=300Sandblast.The blast sends you backwards.
+_You start resting.
+_You encounter a mummy.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+_You encounter a guardian sphinx.
+ The fireball explodes! The fireball engulfs the mummy!! The mummy is burned terribly!
+ You destroy the mummy!
+ Vehumet accepts your kill.
+Þ
+_You feel your power returning.
+Þ.The guardian sphinx shouts! You hear a shout! x2
+ÞÞ  2 guardian sphinxes
+ You encounter a guardian sphinx. It is wearing a +0 cloak of air.38--14 =====- 1
+Þ.
+_You hear a shout!
+ The fireball explodes!
+ The fireball engulfs the guardian sphinx!!
+_The guardian sphinx is moderately wounded.
+Þ.The guardian sphinx mutters an ancient curse at you.13--4----2
+Þ.The fireball engulfs the guardian sphinx!!The guardian sphinx is moderately wounded.The guardian sphinx mutters an ancient curse at you.Something smites you! 
+ heavi
+ The fireball engulfs the guardian sphinx!!
+_The guardian sphinx is moderately wounded.Þ.0----3M 
+ heavi
+ The fireball engulfs the guardian sphinx!!
+_The guardian sphinx is moderately wounded.
+_You hear a shout!!
+_The guardian sphinx is severely wounded.You hear a shout!
+ The guardian sphinx mumbles some strange words.You resist with some effort.
+ The guardian sphinx casts a spell.4--25-----54
+Þ.
+_You resist with some effort.
+ The fireball explodes!
+ The fireball engulfs the guardian sphinx!
+_The guardian sphinx is almost dead.Þ.Þ
+Þ.You hear a shout! x2Þ  3 guardian sphinxes21-----65
+_You encounter a guardian sphinx.
+ÞYou erupt in a blast of force!
+ The mystic blast hits the guardian sphinx.
+ The guardian sphinx is moderately wounded.The mystic blast hits the guardian sphinx!
+_The guardian sphinx is almost dead.
+ÞÞ  4 guardian sphinxes (1 wandering)You encounter a guardian sphinx.
+Þ.The guardian sphinx casts a spell.Þ.Þ.
+                              ...............         ...............         ..............         .............         #...........          #...........          #...........          #...@.......          #....Þ......          #...........          #.$.Þ.......         Þ #...........          #...........          #....ÞÞ.....          #...........         You suddenly lose the ability to move!
+517----           2              0           9 ===--- 6Para Drain
+_The guardian sphinx shouts!
+Þ.The guardian sphinx casts a spell.
+Þ.You resist with some effort.
+ The guardian sphinx mutters an ancient curse at you.
+Þ.Something smites you!The guardian sphinx mutters an ancient curse at you.
+93/122 (127) ----8--8 ===--7.6 (2
+_Something smites you!Þ.Þ.Þ.70--------- 5 ==---- 8.6 (3                              ...............         ...............         ..............         .............         #...........          #...........          #...........          #...@.......          #....Þ......          #...Þ....... #.$.Þ.......          #....Þ...... #........... #........... #...........
+ Something smites you!
+ The guardian sphinx mutters an ancient curse at you.Something smites you!
+_The guardian sphinx bites you! The guardian sphinx claws you. The guardian sphinx claws you!
+ The guardian sphinx bites you! The guardian sphinx claws you!
+ The guardian sphinx claws you but does no damage.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!
+ * * * LOW HITPOINT WARNING * * *30-------------9=18  6           8 ===--- 9.1 (3.5DrainROUTE_EVENT use heal wounds turn=330 place=Tomb:1
+......................Route_caster the Eclecticist      *WIZARD*
+.......................Deep Elf of Vehumet ****..
+........................HP: 30/122 (127)  =====-------------------
+........................MP: 19/44==========--------------
+........................AC:  8 (26%)Str: 8
+........................EV: 18Int: 28
+........................SH:  6Dex: 14
+#############...........XL: 20 Next:  0%  Place: Tomb:1#...........Noise:  8 ===---  Time: 309.1 (0.0)#...........i) +2 dagger (devious)#...@.......Cast: Sandblast#....Þ......Drain#...Þ.......#.$.Þ.......ÞÞÞÞ  4 guardian sphinxes#....Þ......#...........#...........#...........The guardian sphinx mutters an ancient curse at you.
+_Something smites you!
+_The guardian sphinx bites you! The guardian sphinx claws you. The guardian sphinx claws you!
+ The guardian sphinx bites you! The guardian sphinx claws you!
+ The guardian sphinx claws you but does no damage.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!* * * LOW HITPOINT WARNING * * *
+_You can act again.Þ
+Þ.Something smites you!
+_. The guardian sphinx claws you!bites you! The guardian sphinx claws you!
+ The guardian sphinx claws you but does no damage.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!
+ * * * LOW HITPOINT WARNING * * *
+_You can act again.You feel much better.Þ.
+Þ.You encounter a guardian sphinx.The guardian sphinx mutters an ancient curse at you.
+#...........Þ.Þ.Þ  5 guardian sphinxes7==610.1 (1ROUTE_EVENT use heal wounds turn=331 place=Tomb:1
+......................Route_caster the Eclecticist      *WIZARD*
+.......................Deep Elf of Vehumet ****..
+........................HP: 37/122 (127)  =======-----------------
+........................MP: 19/44==========--------------
+........................AC:  8 (26%)Str: 8
+........................EV: 18Int: 28
+........................SH:  6Dex: 14
+#############...........XL: 20 Next:  0%  Place: Tomb:1#...........Noise:  6 ===---  Time: 310.1 (0.0)#...........i) +2 dagger (devious)#..Þ@.......Cast: Sandblast#...ÞÞ......Drain#...........#.$.Þ.......ÞÞÞÞÞ  5 guardian sphinxes#...........#...........#....Þ......#...........The guardian sphinx claws you but does no damage.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!* * * LOW HITPOINT WARNING * * *
+_You can act again.You feel much better.
+ You encounter a guardian sphinx.The guardian sphinx mutters an ancient curse at you.
+_Something smites you!Þ.Þ.
+Þ.The guardian sphinx mutters an ancient curse at you.Something smites you!
+ * * * LOW HITPOINT WARNING * * *
+_You can act again.
+ You feel much better.
+ You encounter a guardian sphinx.
+ The guardian sphinx mutters an ancient curse at you.
+_Something smites you!You feel much better. The guardian sphinx barely misses you. The guardian sphinx closely misses you. The guardian sphinx barely misses you.60====20 6 ==---- 1.1 (1ROUTE_EVENT use haste turn=332 place=Tomb:1
+......................Route_caster the Eclecticist      *WIZARD*
+.......................Deep Elf of Vehumet ****..
+........................HP: 60/122 (127)  ===========-------------
+........................MP: 20/44==========--------------
+........................AC:  8 (26%)Str: 8
+........................EV: 18Int: 28
+........................SH:  6Dex: 14
+#############...........XL: 20 Next:  0%  Place: Tomb:1#...........Noise:  6 ==----  Time: 311.1 (0.0)#...........i) +2 dagger (devious)#..Þ@Þ......Cast: Sandblast#....Þ......Drain#...Þ.......#.$.........ÞÞÞÞÞ  5 guardian sphinxes#...........#...Þ.......#...........#...........Something smites you!* * * LOW HITPOINT WARNING * * *
+_You can act again.You feel much better.
+ You encounter a guardian sphinx.The guardian sphinx mutters an ancient curse at you.
+_Something smites you!You feel much better. The guardian sphinx barely misses you. The guardian sphinx closely misses you. The guardian sphinx barely misses you.
+_The guardian sphinx closely misses you. You block the guardian sphinx's attack. The guardian sphinx barely misses you.
+M
+_You can act again.
+ You feel much better.
+ You encounter a guardian sphinx.
+ The guardian sphinx mutters an ancient curse at you.
+_Something smites you!
+ You feel much better. The guardian sphinx barely misses you. The guardian sphinx closely misses you. The guardian sphinx barely misses you.
+_The guardian sphinx closely misses you. You block the guardian sphinx's attack. The guardian sphinx barely misses you.You feel yourself speed up.
+ The guardian sphinx mutters an ancient curse at you.
+Þ.Something smites you!Þ.
+M   mummy priestYou encounter a mummy priest.You block the guardian sphinx's attack. The guardian sphinx claws you! You block the guardian sphinx's attack.
+ The guardian sphinx casts a spell.39---- 8 ===--- 2.1 (1Fast DrainROUTE_EVENT use heal wounds turn=333 place=Tomb:1
+......................Route_caster the Eclecticist      *WIZARD*
+.......................Deep Elf of Vehumet ****..
+........................HP: 39/122 (127)  =======-----------------
+........................MP: 20/44==========--------------
+........................AC:  8 (26%)Str: 8
+........................EV: 18Int: 28
+........................SH:  6Dex: 14
+#############...........XL: 20 Next:  0%  Place: Tomb:1#...........Noise:  8 ===---  Time: 312.1 (0.0)#...........i) +2 dagger (devious)#..Þ@Þ......Cast: Sandblast#...ÞÞ......Fast Drain#...........#.$.........ÞÞÞÞÞ  5 guardian sphinxes#...Þ.......M   mummy priest#...........#...........#....M......You feel much better. The guardian sphinx barely misses you. The guardian sphinx closely misses you. The guardian sphinx barely misses you.
+_The guardian sphinx closely misses you. You block the guardian sphinx's attack. The guardian sphinx barely misses you.You feel yourself speed up.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!You encounter a mummy priest.You block the guardian sphinx's attack. The guardian sphinx claws you! You block the guardian sphinx's attack.
+ The guardian sphinx casts a spell.
+_You resist with some effort.
+_The guardian sphinx closely misses you. You block the guardian sphinx's attack. The guardian sphinx barely misses you.You feel yourself speed up.
+ The guardian sphinx mutters an ancient curse at you.Something smites you!
+ You encounter a mummy priest.
+ You block the guardian sphinx's attack. The guardian sphinx claws you! You block the guardian sphinx's attack.
+ The guardian sphinx casts a spell.
+_You resist with some effort.
+ You feel much better.
+Þ.The guardian sphinx mumbles some strange words.                              ...............         ...............         ..............         .............         #...........          #...........          #...........          #..Þ@Þ......          #...ÞÞ......          #...........          #.$.Þ.......          #...........          #...........          #...........          #....M......         suddenly lose the ability to move! The guardian sphinx bites you! The guardian sphinx claws you! x2; The guardian sphinx bites you.
+ * * * LOW HITPOINT WARNING * * *
+ The guardian sphinx claws you but does no damage. x2
+ The mummy priest prays to its god.The guardian sphinx bites you!
+ * * * LOW HITPOINT WARNING * * *
+ The guardian sphinx claws you!
+ * * * LOW HITPOINT WARNING * * *The guardian sphinx claws you.
+15-----1=           2              0          77 (0.6Para Fast Drain
+_* * * LOW HITPOINT WARNING * * *ROUTE_AUDIT {"monsters":[{"name":"royal mummy","x":42,"xp":3505,"y":32},{"name":"royal mummy","x":47,"xp":3491,"y":32},{"name":"draugr","x":52,"xp":279,"y":32},{"name":"royal mummy","x":57,"xp":3462,"y":32},{"name":"royal mummy","x":54,"xp":3412,"y":33},{"name":"guardian sphinx","x":77,"xp":1703,"y":33},{"name":"guardian sphinx","x":79,"xp":1729,"y":33},{"name":"guardian sphinx","x":78,"xp":1783,"y":34},{"name":"guardian sphinx","x":79,"xp":1680,"y":34},{"name":"mummy priest","x":72,"xp":891,"y":35},{"name":"guardian mummy","x":68,"xp":326,"y":36},{"name":"guardian sphinx","x":78,"xp":1700,"y":36},{"name":"guardian mummy","x":71,"xp":320,"y":38},{"name":"mummy","x":47,"xp":17,"y":40},{"name":"mummy priest","x":79,"xp":934,"y":40},{"name":"revenant soulmonger","x":50,"xp":1361,"y":41},{"name":"mummy priest","x":52,"xp":936,"y":41},{"name":"royal mummy","x":65,"xp":3505,"y":41},{"name":"ushabti","x":66,"xp":207,"y":41},{"name":"phantasmal warrior","x":77,"xp":643,"y":41},{"name":"zombie","x":80,"xp":279,"y":41},{"name":"guardian mummy","x":40,"xp":322,"y":43},{"name":"guardian mummy","x":48,"xp":332,"y":43},{"name":"mummy priest","x":54,"xp":936,"y":43},{"name":"guardian mummy","x":59,"xp":330,"y":43},{"name":"mummy priest","x":48,"xp":925,"y":44},{"name":"skeletal warrior","x":79,"xp":754,"y":46},{"name":"guardian mummy","x":80,"xp":329,"y":46},{"name":"lich","x":59,"xp":1797,"y":47},{"name":"guardian sphinx","x":84,"xp":1725,"y":48},{"name":"guardian mummy","x":68,"xp":322,"y":49},{"name":"mummy","x":69,"xp":18,"y":49},{"name":"guardian sphinx","x":74,"xp":1722,"y":49},{"name":"royal mummy","x":39,"xp":3434,"y":50},{"name":"mummy priest","x":42,"xp":925,"y":51},{"name":"ancient champion","x":51,"xp":1483,"y":51},{"name":"guardian mummy","x":40,"xp":320,"y":52},{"name":"guardian mummy","x":56,"xp":329,"y":52},{"name":"draugr","x":36,"xp":211,"y":54},{"name":"mummy","x":46,"xp":18,"y":54},{"name":"mummy","x":47,"xp":18,"y":55},{"name":"mummy","x":55,"xp":18,"y":55},{"name":"mummy","x":39,"xp":17,"y":56},{"name":"mummy priest","x":48,"xp":905,"y":58},{"name":"royal mummy","x":51,"xp":3391,"y":58},{"name":"guardian mummy","x":54,"xp":341,"y":58},{"name":"royal mummy","x":39,"xp":3526,"y":59},{"name":"guardian mummy","x":48,"xp":328,"y":59},{"name":"guardian sphinx","x":83,"xp":1703,"y":59},{"name":"mummy priest","x":50,"xp":939,"y":61},{"name":"royal mummy","x":40,"xp":3548,"y":63},{"name":"guardian mummy","x":66,"xp":332,"y":65},{"name":"revenant soulmonger","x":53,"xp":1348,"y":66},{"name":"royal mummy","x":66,"xp":3501,"y":66},{"name":"royal mummy","x":70,"xp":3594,"y":66},{"name":"mummy priest","x":72,"xp":925,"y":67},{"name":"royal mummy","x":41,"xp":3519,"y":69},{"name":"royal mummy","x":70,"xp":3501,"y":69},{"name":"draugr","x":80,"xp":211,"y":72},{"name":"ushabti","x":80,"xp":210,"y":73},{"name":"zombie","x":68,"xp":114,"y":74},{"name":"mummy","x":62,"xp":18,"y":75},{"name":"mummy","x":66,"xp":18,"y":77},{"name":"ushabti","x":54,"xp":205,"y":79}],"mp":21,"progress":0,"items":[{"artefact":false,"y":21,"name":"scroll of identify","x":49,"class":"scroll","quantity":1},{"artefact":false,"y":26,"name":"+2 leather armour of poison resistance","x":59,"class":"armour","quantity":1},{"artefact":false,"y":32,"name":"wand of light (5)","x":41,"class":"wand","quantity":1},{"artefact":false,"y":33,"name":"parchment of Confusing Touch","x":40,"class":"book","quantity":1},{"artefact":false,"y":36,"name":"ice dragon scales","x":44,"class":"armour","quantity":1},{"artefact":false,"y":36,"name":"16 gold pieces","x":76,"class":"gold","quantity":16},{"artefact":false,"y":43,"name":"shiny plate armour","x":51,"class":"armour","quantity":1},{"artefact":false,"y":47,"name":"15 gold pieces","x":43,"class":"gold","quantity":15},{"artefact":false,"y":47,"name":"15 gold pieces","x":50,"class":"gold","quantity":15},{"artefact":false,"y":48,"name":"2 scrolls of enchant armour","x":78,"class":"scroll","quantity":2},{"artefact":false,"y":50,"name":"18 gold pieces","x":49,"class":"gold","quantity":18},{"artefact":false,"y":54,"name":"trident","x":68,"class":"weapon","quantity":1},{"artefact":false,"y":59,"name":"trident","x":50,"class":"weapon","quantity":1},{"artefact":false,"y":66,"name":"scroll of acquirement","x":35,"class":"scroll","quantity":1},{"artefact":false,"y":67,"name":"scroll of identify","x":77,"class":"scroll","quantity":1},{"artefact":false,"y":68,"name":"leather armour","x":76,"class":"armour","quantity":1},{"artefact":false,"y":70,"name":"scroll of noise","x":84,"class":"scroll","quantity":1},{"artefact":false,"y":75,"name":"battleaxe","x":48,"class":"weapon","quantity":1},{"artefact":false,"y":76,"name":"throwing net","x":45,"class":"missile","quantity":1}],"where":"Tomb:1","maxmp":44,"honey":0,"hp":-1,"tag":"death","xp":80625,"maxhp":122,"vaults":"tomb_1 [tomb_1_centre_grunt_layered, tomb_1_hall_stairs_nicolae_galleries]","xl":20,"inventory":[{"name":"+0 robe","class":"armour","quantity":1},{"name":"ring of poison resistance","class":"jewellery","quantity":1},{"name":"+0 pair of boots","class":"armour","quantity":1},{"name":"+0 pair of gloves","class":"armour","quantity":1},{"name":"+0 cloak","class":"armour","quantity":1},{"name":"+0 helmet","class":"armour","quantity":1},{"name":"+0 buckler","class":"armour","quantity":1},{"name":"+2 robe","class":"armour","quantity":1},{"name":"+2 devious dagger","class":"weapon","quantity":1},{"name":"3 potions of magic","class":"potion","quantity":3},{"name":"3 scrolls of fear","class":"scroll","quantity":3},{"name":"3 scrolls of fog","class":"scroll","quantity":3},{"name":"2 scrolls of teleportation","class":"scroll","quantity":2},{"name":"2 scrolls of blinking","class":"scroll","quantity":2},{"name":"2 potions of might","class":"potion","quantity":2},{"name":"6 potions of curing","class":"potion","quantity":6},{"name":"3 potions of heal wounds","class":"potion","quantity":3},{"name":"potion of enlightenment","class":"potion","quantity":1}],"turn":334,"gold":16}
+ROUTE_EVENT death Tomb:1
+
+ The guardian sphinx barely misses you. The guardian sphinx claws you!
+ * * * LOW HITPOINT WARNING * * *The guardian sphinx claws you!
+ You die...Gear: 9/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ i - a +2 devious dagger (weapon)
+Armour         (go to first with [)
+ c - a +0 pair of boots (worn)
+ d - a +0 pair of gloves (worn)
+ e - a +0 cloak (worn)
+ f - a +0 helmet (worn)
+ g - a +0 buckler (worn)
+ h - a +2 robe (worn)a - a +0 robe
+Jewellery      (go to first with "=)
+ b - a ring of poison resistance (worn)
+ i - a +2 devious dagger (weapon)
+Goodbye, Route_caster.265131 Route_caster the Eclecticist (level 20, -1/122 (127) HPs) *WIZ*Began as a Deep Elf Earth Elementalist on Oct 27, 2026.Was an Elder of Vehumet.Slain by a guardian sphinx (10 damage)... while paralysed by a guardian sphinx... on level 1 of the Tomb of the Ancients.The game lasted 00:00:01 (334 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/late-wormlands/games/caster-202610270
+>

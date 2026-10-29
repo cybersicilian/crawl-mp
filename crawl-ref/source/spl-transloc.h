@@ -16,6 +16,7 @@ void disjunction_spell();
 spret cast_blink(int pow, bool fail = false);
 void uncontrolled_blink(bool override_stasis = false, int max_dist = LOS_RADIUS);
 spret controlled_blink(bool safe_cancel = true, dist *target = nullptr);
+spret sparkborn_blinkbolt();
 void wizard_blink();
 spret spider_jump();
 
@@ -58,7 +59,7 @@ spret cast_golubrias_passage(int pow, const coord_def& where, bool fail);
 spret cast_dispersal(int pow, bool fail);
 
 int gravitas_radius(int pow);
-spret cast_gravitas(int pow, const coord_def& where, bool fail);
+spret cast_gravitas(int pow, const coord_def& where, bool fail, int damage_percent = 100);
 void pull_monsters_inward(const coord_def& center, int radius);
 
 bool can_beckon(const actor& beckoned);

@@ -1,0 +1,5 @@
+{"type":"party_comp","player_count":1,"friendly_fire":true,"seed":"2026102701","place":"D:1","party_spec":"Route_melee:Minotaur/Fighter/war axe","members":[{"slot":0,"name":"Route_melee","species":"Minotaur","job":"Fighter","weapon":"war axe","xl":1}]}
+{"type":"cool_item","item_name":"a +0 cloak of stealth","category":"ego_gear","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"D:1","value_score":100}
+{"type":"cool_item","item_name":"a +2 plate armour","category":"ego_gear","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"D:1","value_score":120}
+{"type":"cool_item","item_name":"a +3 broad axe","category":"ego_gear","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"D:1","value_score":130}
+{"type":"ghost","hero_name":"Route_melee","slot":0,"species":"Minotaur","job":"Fighter","xl":20,"god":"Okawaru","place":"Worm:4","killer":"gallery worm (7)","hp_max":189,"ac":15,"ev":31,"sh":0,"weapon":"unarmed","down_type":"permadeath_ghost","bones_saved":true}

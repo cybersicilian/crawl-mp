@@ -1,0 +1,18 @@
+{
+  "owner": "codex/01a16b6d-f723-7503-b137-767be6599e33",
+  "runnerSha256": "c802651c08bcb9f0f99fabef35c46e26cd7908deca2c56e8082e89c086b5ba47",
+  "verifierSha256": "425e022936074af3960b5eba9c414acc79217e191529913d9769435dbb0870eb",
+  "helperSha256": "08b3ac94c4eb2b7a50fed4c73dea7b1c0638f19a5657c86b5fc346ab140911f7",
+  "patchManifestSha256": "99444e1bff8909b0a9e2f51561537514dd90e1957f30221c23767055a0e50f8b",
+  "loadingUITest": true,
+  "resources": {
+    "browsers": 1,
+    "engine": "webkit",
+    "unit": "dcss-eldritch-render-01a16b6d-qa4.service",
+    "nativeSha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+    "localBuild": false,
+    "accounts": "isolated QA only"
+  },
+  "atlasFault": true,
+  "species": "Eldritch,Human,Eldritch"
+}

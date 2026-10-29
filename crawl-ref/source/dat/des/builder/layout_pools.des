@@ -110,7 +110,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
 
     -- without a starting floor patch, spotty_map will crash
     mapgrd[gxm/2][gym/2] = '.'
-    spotty_map { boxy = false, iterations = 1000 }
+    spotty_map { boxy = false, iterations = math.floor(1000 * (gxm * gym) / (80 * 70)) }
     remove_isolated_glyphs { find = "x", percent = 100 }
 
     local pool_contents = {}
@@ -165,7 +165,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
 
     make_circle { x = gxm/2, y = gym/2, radius = 10 }
     mapgrd[gxm/2][gym/2] = '.'
-    spotty_map { boxy = true, iterations = 1500 }
+    spotty_map { boxy = true, iterations = math.floor(1500 * (gxm * gym) / (80 * 70)) }
     widen_paths { find = "x", percent = 50 }
     remove_isolated_glyphs { find = "x", percent = 100 }
 
@@ -425,7 +425,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
     extend_map{width = gxm, height = gym, fill = 'x'}
 
     local DIVISION_SPACING = 15
-    local PATH_SPACING = (gym * 2) / 7
+    local PATH_SPACING = math.floor((gym * 2) / 7)
 
     local STAIRS_X_UP   = STAIRS_FROM_MAP_EDGE
     local STAIRS_X_UP23 = STAIRS_FROM_MAP_EDGE + STAIRS_SPACING_X

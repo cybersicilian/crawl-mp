@@ -1,0 +1,32 @@
+{
+  "passed": false,
+  "url": "https://dcss.iancaltabiano.com",
+  "nativeGameStarted": false,
+  "newAccounts": 0,
+  "checks": [
+    "Authenticated settings menu: 131 controls, seven categories, live base defaults and no raw RC editor",
+    "Number, boolean and multiline-list changes saved with authoritative acknowledgement",
+    "Saved choices persist after reload; reset and undo work without changing the saved configuration"
+  ],
+  "assets": {
+    "webserver/static/styles/rc-settings.css": {
+      "sha256": "481ed4c83e531061d992a2f61f2085b4574f2f4fa9f50185ac9884233c08a327",
+      "status": 200
+    },
+    "webserver/static/scripts/client.js": {
+      "sha256": "d890e2d008f9505d5a696a522f11dd27944d02ae7f0473efa16a603fe531cfcb",
+      "status": 200
+    },
+    "webserver/static/scripts/client-lobby.js": {
+      "sha256": "6bf710fa8a3dc084dff0c64231252a342dab16d48126be290fe4f98c757cc592",
+      "status": 200
+    },
+    "webserver/static/scripts/rc-settings.js": {
+      "sha256": "94c615517923f37c496947e14af02391d0c2f408821e98b441327d1b47fb9032",
+      "status": 200
+    }
+  },
+  "errors": [],
+  "failure": "The expression evaluated to a falsy value:\n\n  assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))\n",
+  "qaPreferencesRestored": true
+}

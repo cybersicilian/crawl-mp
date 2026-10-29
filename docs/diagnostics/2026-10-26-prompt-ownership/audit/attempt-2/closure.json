@@ -1,0 +1,21 @@
+{
+  "gate": {
+    "runId": "7bb99d79-1771-4316-80a3-13b4efb2fcf8",
+    "owner": "codex/01a17b3b-e474-7e71-b44c-78b20124ab32",
+    "label": "DCSS audit and evidence based recovery validation",
+    "requestedAt": 1793077255.761394,
+    "supervisorPid": 28736,
+    "status": "failed_held",
+    "reservation": true,
+    "requestId": "dc3a9dfb5770cc99b561ec8d1d172ac579c1b03db13cbd9d10f6745486da7d59",
+    "startedAt": 1793077255.761918,
+    "workerPid": 28737,
+    "processGroup": 28737,
+    "exitCode": 1,
+    "finishedAt": 1793077306.969682,
+    "supervisedProcessGroupGone": true
+  },
+  "native_processes_exited": true,
+  "allOwnedProcessesGone": true,
+  "failure": "Fixture assumed inventory changes mouse mode; this inventory uses a native menu event and NORMAL mouse mode."
+}

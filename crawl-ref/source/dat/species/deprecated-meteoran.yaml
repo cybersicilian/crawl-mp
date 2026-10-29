@@ -4,7 +4,7 @@ monster: MONS_METEORAN
 name: Meteoran
 short_name: Me
 adjective: Meteoric
-difficulty: False
+difficulty: Advanced
 aptitudes:
   xp: 2
   hp: 1
@@ -53,5 +53,20 @@ mutations:
     MUT_PASSIVE_MAPPING: 1
   9:
     MUT_PASSIVE_MAPPING: 1
+recommended_jobs:
+  - fighter
+  - berserker
+  - monk
+  - cinder acolyte
+  - conjurer
+  - fire elementalist
+  - earth elementalist
+  - summoner
+recommended_weapons:
+  - maces and flails
+  - long blades
+  - axes
+  - polearms
+  - staves
 
 orc_name: Meteorc

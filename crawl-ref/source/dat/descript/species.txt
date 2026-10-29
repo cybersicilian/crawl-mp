@@ -1,4 +1,91 @@
 %%%%
+Meliai
+
+Meliai are the winged bee-folk of the Hive. Swift but frail, they are deeply
+faithful and can call down a smite at the cost of temporary maximum health.
+Their sting is venomous, but they are vulnerable to poison themselves.
+%%%%
+Kitsune
+
+Kitsune are nimble fox-folk with an affinity for subtle magic. They can
+charm hostile minds in sight, but must recover from the effort before doing so
+again. Their fox ears prevent them from wearing headgear. Rin the nine-tailed
+is a renowned Kitsune whose power is spoken of
+among her people.
+%%%%
+Automaton
+
+Automata are magical constructs whose spells are engraved into their bodies.
+Their mechanisms build heat as they unleash magic automatically.
+Mutagenic effects and magical contamination corrode their bodies instead of
+changing them or causing magical glow.
+Each spell's description explains its automatic trigger. Some spells have no
+automatic trigger and will not fire when engraved.
+At experience level 5, automata discover Engraved Laser in their spell library.
+They can learn this level 6 pattern from experience level 6, after which it can
+fire automatically.
+%%%%
+Wight
+
+Wights are ancient warriors animated by negative energy. As they gain
+experience their melee attacks drain living enemies, and they can bind their
+memories to a weapon to strengthen it, temporarily draining their maximum
+health until they gain more experience.
+%%%%
+Sparkborn
+
+Sparkborn are distant kin of raiju, with living lightning coursing through
+their bodies. They are immune to electricity, but water attacks drain their
+magic and grounded water prevents spellcasting. Injury can release a blinkbolt,
+letting them choose a nearby destination and shock creatures along the way.
+Suppressing this reaction causes magical contamination.
+%%%%
+Irit
+
+Irits are armoured spellcasters who spend their own health as well as magic to
+cast. Armour and shields impede their lower-level spells less, and their
+bloodcraft requires less life. A magical shield shares incoming damage between
+their health and magic reserves.
+%%%%
+Hermit Crab
+
+Hermit Crabs are clever crustaceans who shelter in shells that grow with them.
+When a shell breaks, they can escape and find a smaller one. Their molting and
+sideways movement reflect their crustacean heritage.
+%%%%
+Ent
+
+Ents are ancient, slow-moving treefolk protected by thickening bark. Their
+branches can wield most two-handed weapons alongside a shield, and they can
+pass through walls and trees. Their rooted bodies cannot wear body armour or boots and
+cannot change form.
+%%%%
+Faerie Dragon
+
+Faerie Dragons are small winged spellcasters. Their spells cost less magic,
+and their bright scales provide armour and shielding as they grow, at the cost
+of stealth. While flying, they gain 10% evasion, with a minimum bonus of 1 EV.
+Their wings prevent them from wearing body armour.
+%%%%
+Protean
+
+Proteans are amoeboid people whose acquired mutations increase their health.
+Their maximum health determines their size, and their protean flesh cannot
+change form. They begin too small to wield weapons or wear most armour, but
+can use larger equipment as their bodies grow.
+%%%%
+Hydra
+
+Hydras grow heads as they gain experience. They gain a bite against their
+chosen target and an amulet slot at one head, and another of each at four,
+seven, ten heads, and so on. Their remaining heads may bite adjacent foes.
+Their bodies cannot wield weapons or carry shields.
+%%%%
+Two-Headed Ogre
+
+Two-headed ogres are powerful, noisy fighters. Each head can wear an amulet,
+and their two hands can wield weapons together, but they cannot use shields.
+%%%%
 Barachi
 
 Barachim are slow-moving, amphibious humanoids who can hop long distances.
@@ -103,6 +190,21 @@ Octopode
 Octopodes are a species of amphibious cephalopods. They can wear eight rings,
 but almost no armour fits them.
 %%%%
+Oozle
+
+Oozles are living, translucent oozes with amber nuclei and temporary pseudopods.
+Their gelatinous bodies grow more protective with experience, resist poison
+and corrosion, and slip through nets, webs and constricting coils. They can
+wear hats and scarves, hold weapons and shields, and suspend ordinary jewellery
+within their gel. Their light bodies have reduced health and are vulnerable
+to fire. They deliberately assimilate carried equipment, preserving extracted
+property bundles in random empty memory slots. Worn gear never dissolves
+passively. All absorbed properties strengthen the ooze itself,
+independently of equipped items. Weapon memories can improve natural unarmed
+attacks, including cleaving. Shapeshifting
+increases the strength of numeric memory bonuses. They are especially adept
+at Alchemy, but learn all manufactured-weapon skills poorly.
+%%%%
 Oni
 
 Large, robust, and extremely fond of drinking, Oni make capable brawlers and
@@ -123,6 +225,17 @@ Spriggan
 Very small, very frail and very fast, Spriggans are highly competent stabbers
 and spellcasters.
 %%%%
+Tortle
+
+Large, cold-blooded turtle folk with heavy shells that grow tougher as they
+mature. They move slowly and fit into little conventional armour, but excel
+with shields and can swim through deep water without gaining speed or agility.
+They can retract into their shells, then launch themselves in a direction
+until blocked. Shell impacts grow stronger with level, Unarmed Combat, and
+distance travelled.
+When struck in melee, they may reflexively bite their attacker, with damage
+that grows with level and Unarmed Combat.
+%%%%
 Troll
 
 Trolls are monstrous creatures with powerful claws. They regenerate health
@@ -133,3 +246,87 @@ Vine Stalker
 Frail symbionts, Vine Stalkers cannot regain health from potions. Their magical
 reserves absorb damage, and they pack a magic-restoring bite.
 %%%%
+Meteoran
+
+Star-born beings of immense talent who burn brightly and briefly. They excel at
+almost all skills and regenerate by exploring new territory, though the Zot
+clock ticks faster for them.
+%%%%
+Halfling
+
+Small, nimble folk who excel with short blades, slings, and ranged weapons.
+They are naturally resistant to mutagenic effects.
+%%%%
+Hill Orc
+
+Stout, hardy warriors with an affinity for axes, heavy armour, and divine
+invocations.
+%%%%
+High Elf
+
+High Elves cannot train most skills below one third of their experience level.
+These graceful elves excel with blades, bows, and air magic. The training
+threshold is rounded down; Fighting, Spellcasting and Invocations are exempt.
+%%%%
+Sludge Elf
+
+Adaptable elves attuned to primal magic, shapeshifting, and unarmed combat.
+%%%%
+Centaur
+
+Swift four-legged equines with natural toughness and mastery of ranged weapons.
+%%%%
+Deep Dwarf
+
+Subterranean dwarves who do not regenerate health naturally, but shrug off
+damage and can mend their own and adjacent allies' wounds by channeling magic.
+%%%%
+Ghoul
+
+Undead horrors with vicious claws and resilience to negative energy and torment.
+They mend their wounds by devouring the life force of slain foes.
+%%%%
+Armataur
+
+Large, heavily-plated mammals that wear barding and gain momentum as they roll
+toward their foes.
+%%%%
+Mayflytaur
+
+Winged, ephemeral beings gifted with extraordinary skill aptitudes and passive
+mapping, driven ever onward by their brief lifespan.
+%%%%
+Lava Orc
+
+Volcanic orcs whose molten scales harden as they grow and whose searing blood
+splashes magma onto foes in melee while warming nearby party members with cold
+resistance (rC+).
+%%%%
+%%%%
+Chain Devil
+
+Chain Devils bear living iron in their flesh. Their chains strike a foe at a distance, tether it, draw it close at XL7 and fasten it to the dungeon at XL13. A devil maintains one chain at a time and must recover after releasing it. The chains neither silence nor constrict their quarry. Ordinary weapons, armour and magic remain available, while demonic nature bars worship of the good gods.
+%%%%
+Eldritch
+
+Eldritch worship no god. Instead they can profane up to three gods' own altars, permanently stealing one benefit from each and enduring its wrath. Their shared Defiance is replenished by ordinary combat experience. Elder Rites at XL9, XL15 and XL21 strengthen those same benefits through short fights with unrewarding trial monsters. They are living, blood-bearing humanoids who use ordinary equipment and receive ordinary stat growth.
+%%%%
+Mummy trait
+
+A deathless body bound by an ancient curse. Mummies resist cold, negative
+energy, poison and torment, but are vulnerable to fire and cannot drink
+potions. Their innate faith aids worship, and their Necromancy is enhanced,
+with a further enhancement at experience level 13.
+%%%%
+Zombie trait
+
+An animated dead body retains its species' anatomy and equipment, but cannot
+heal naturally while threatened by nearby enemies. Zombies resist cold,
+negative energy, poison and torment.
+%%%%
+Ghost trait
+
+A spectral remnant retains the abilities and equipment of its host species.
+Its insubstantial body resists certain hazards, and it resists negative energy,
+poison and torment. It does not inherit the Poltergeist's equipment-haunting
+abilities.

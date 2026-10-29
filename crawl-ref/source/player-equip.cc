@@ -1,4 +1,8 @@
 #include "AppHdr.h"
+#include "elemental-weapon.h"
+#include "god-vellum.h"
+#include "coop-content.h"
+#include "hydra-physiology.h"
 
 #include "player-equip.h"
 
@@ -84,13 +88,17 @@ int count = 0;
     {
 
     case SLOT_WEAPON:
-        if (you.has_mutation(MUT_NO_GRASPING))
+        if (you.species == SP_HYDRA)
+            NO_SLOT("You can't wield weapons.")
+        else if (you.has_mutation(MUT_NO_GRASPING))
             NO_SLOT("You can't wield any weapon.")
         else
             return 1;
 
     case SLOT_OFFHAND:
-        if (you.has_mutation(MUT_MISSING_HAND))
+        if (you.species == SP_HYDRA)
+            NO_SLOT("You can't hold a shield or orb.")
+        else if (you.has_mutation(MUT_MISSING_HAND))
         {
             if (you.has_innate_mutation(MUT_TENTACLE_ARMS))
                 NO_SLOT("You need the rest of your tentacles for walking.")
@@ -109,12 +117,18 @@ int count = 0;
         return 1;
 
     case SLOT_WEAPON_OR_OFFHAND:
-        if (you.has_mutation(MUT_WIELD_OFFHAND))
+        if (you.species != SP_HYDRA && you.has_mutation(MUT_WIELD_OFFHAND))
             return 1;
 
         return 0;
 
     case SLOT_BODY_ARMOUR:
+        if (you.species == SP_ENT)
+            NO_SLOT("Your bark prevents you from wearing body armour.")
+        if (you.species == SP_HERMIT_CRAB)
+            NO_SLOT("Your shell prevents you from wearing body armour.")
+        if (you.species == SP_FAERIE_DRAGON && you.has_mutation(MUT_BIG_WINGS))
+            NO_SLOT("Your wings prevent you from wearing body armour.")
         if (you.has_mutation(MUT_FORMLESS))
             NO_SLOT("You can't haunt something so large.")
         if (species::is_draconian(you.species))
@@ -123,7 +137,8 @@ int count = 0;
                                     you.has_mutation(MUT_BIG_WINGS)
                                     ? "" : ", even vestigial as they are,"))
         }
-        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR))
+        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR)
+                 || you.has_mutation(MUT_SOFT_EQUIPMENT))
             NO_SLOT("You can't wear armour!");
 
         return 1;
@@ -131,6 +146,8 @@ int count = 0;
     // Hats versus helmets is handled elsewhere. If you can wear at least a hat,
     // this should be non-zero.
     case SLOT_HELMET:
+        if (you.species == SP_KITSUNE)
+            NO_SLOT("Your fox ears prevent you from wearing headgear.")
         if (_use_slots(UNRAND_SKULL_OF_ZONGULDROK, count_melded_unrands, count_items))
             ++count;
 
@@ -162,7 +179,8 @@ int count = 0;
             NO_SLOT(make_stringf("Those are too big for your %s.", you.hand_name(true).c_str()))
         else if (player_size >= SIZE_LARGE)
             NO_SLOT(make_stringf("Those are too small for your %s.", you.hand_name(true).c_str()))
-        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR))
+        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR)
+                 || you.has_mutation(MUT_SOFT_EQUIPMENT))
             NO_SLOT(make_stringf("Those can't fit on your %s.", you.hand_name(true).c_str()))
         else if (you.get_mutation_level(MUT_CLAWS, false) >= 3)
             NO_SLOT(make_stringf("Those can't fit over your huge %s.", you.hand_name(true).c_str()))
@@ -174,13 +192,18 @@ int count = 0;
         return count;
 
     case SLOT_BOOTS:
+        if (you.species == SP_MELIAI)
+            NO_SLOT("You have no feet for boots.")
+        if (you.species == SP_ENT)
+            NO_SLOT("Your roots cannot wear boots.")
         if (species::wears_barding(you.species) || you.has_mutation(MUT_FORMLESS))
             NO_SLOT("You don't have any feet!")
         else if (player_size <= SIZE_LITTLE)
             NO_SLOT(make_stringf("Those are too big for your %s.", you.foot_name(true).c_str()))
         else if (player_size >= SIZE_LARGE)
             NO_SLOT(make_stringf("Those are too small for your %s.", you.foot_name(true).c_str()))
-        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR))
+        else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR)
+                 || you.has_mutation(MUT_SOFT_EQUIPMENT))
             NO_SLOT("You can't wear boots.")
         else if (you.get_mutation_level(MUT_HOOVES, false) >= 3)
             NO_SLOT("Your hooves can't fit into boots.")
@@ -201,6 +224,8 @@ int count = 0;
         NO_SLOT("You can't fit into that!")
 
     case SLOT_CLOAK:
+        if (you.species == SP_HERMIT_CRAB)
+            NO_SLOT("Your shell prevents you from wearing a cloak.")
         // If octopodes are allowed to wear bardings, then surely they can also
         // get a cloak, too.
         if (you.form == transformation::sphinx && !you.has_mutation(MUT_NO_ARMOUR))
@@ -220,11 +245,11 @@ int count = 0;
         if (you.has_mutation(MUT_NO_JEWELLERY))
             NO_SLOT("You can't wear any rings.")
 
-        int ring_count = 2;
+        int ring_count = you.species == SP_HYDRA ? 0 : 2;
         if (you.species == SP_OCTOPODE)
             ring_count = 8;
 
-        if (you.has_mutation(MUT_MISSING_HAND))
+        if (ring_count && you.has_mutation(MUT_MISSING_HAND))
             ring_count -= 1;
 
         if (_use_slots(UNRAND_FINGER_AMULET, count_melded_unrands, count_items))
@@ -233,6 +258,8 @@ int count = 0;
         if (_use_slots(UNRAND_VAINGLORY, count_melded_unrands, count_items))
             ring_count += 2;
 
+        if (!ring_count)
+            NO_SLOT("You have no fingers for rings.")
         return ring_count;
     }
 
@@ -240,10 +267,10 @@ int count = 0;
         if (you.has_mutation(MUT_NO_JEWELLERY))
             NO_SLOT("You can't wear amulets.")
 
-        if (_use_slots(UNRAND_JUSTICARS_REGALIA, count_melded_unrands, count_items))
-            return 2;
-
-        return 1;
+        return (you.species == SP_HYDRA ? hydra::amulet_slots(you.heads())
+                : you.species == SP_TWO_HEADED_OGRE ? 2 : 1)
+               + (_use_slots(UNRAND_JUSTICARS_REGALIA, count_melded_unrands,
+                             count_items) ? 1 : 0);
 
     case SLOT_GIZMO:
         if (you.species != SP_COGLIN)
@@ -477,6 +504,17 @@ bool can_equip_item(const item_def& item, bool temp, string* veto_reason,
     if (!item_type_is_equipment(item.base_type))
         NO_EQUIP("That isn't an equippable item.")
 
+    if (you.species == SP_TWO_HEADED_OGRE && is_shield(item))
+        NO_EQUIP("Your two weapon hands cannot carry a shield.")
+
+    if (!coop_content::enabled()
+        && (coop_content::exclusive_item(item.base_type, item.sub_type)
+            || (is_unrandom_artefact(item)
+                && coop_content::exclusive_unrand(item.unrand_idx))))
+    {
+        NO_EQUIP("This equipment requires a multiplayer game.")
+    }
+
     // Your god won't let you make use of gear they abhor.
     if (god_forbids_item(item, temp))
     {
@@ -525,6 +563,12 @@ bool can_equip_item(const item_def& item, bool temp, string* veto_reason,
     {
         const size_type player_size = you.body_size(PSIZE_TORSO, !temp);
         const equipment_slot slot = get_armour_slot(static_cast<armour_type>(item.sub_type));
+        if (you.has_mutation(MUT_SOFT_EQUIPMENT, temp)
+            && slot != SLOT_OFFHAND && item.sub_type != ARM_HAT
+            && item.sub_type != ARM_SCARF)
+        {
+            NO_EQUIP("Only hats and scarves can rest on your soft body.")
+        }
         if (slot == SLOT_BODY_ARMOUR || slot == SLOT_OFFHAND)
         {
             int bad_size = fit_armour_size(item, player_size);
@@ -575,6 +619,8 @@ bool can_equip_item(const item_def& item, bool temp, string* veto_reason,
 void player_equip_set::update()
 {
     unrand_active.reset();
+    unrand_equipped.reset();
+    do_unrand_reacts = do_unrand_death_effects = 0;
     artprop_cache.init(0);
     armour_egos.init(0);
     gizmo_egos.init(false);
@@ -610,8 +656,11 @@ void player_equip_set::update()
 
         if (is_artefact(item))
         {
-            if (is_unrandom_artefact(item))
+            if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
             {
+                const auto* script = get_unrand_entry(item.unrand_idx);
+                do_unrand_reacts += script->world_reacts_func != nullptr;
+                do_unrand_death_effects += script->death_effects != nullptr;
                 unrand_equipped.set(item.unrand_idx - UNRAND_START);
                 if (!entry.melded)
                     unrand_active.set(item.unrand_idx - UNRAND_START);
@@ -1012,7 +1061,7 @@ void player_equip_set::add(item_def& item, equipment_slot slot)
         }
     }
 
-    if (is_unrandom_artefact(item))
+    if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
     {
         const unrandart_entry *entry = get_unrand_entry(item.unrand_idx);
 
@@ -1032,7 +1081,7 @@ void player_equip_set::remove(const item_def& item)
             items.erase(items.begin() + i);
     }
 
-    if (is_unrandom_artefact(item))
+    if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
     {
         const unrandart_entry *entry = get_unrand_entry(item.unrand_idx);
 
@@ -1639,6 +1688,8 @@ bool unequip_item(item_def& item, bool msg, bool skip_effects,
     you.equipment.remove(item);
     you.equipment.update();
 
+    if (you.props.exists("vellum_bindings"))
+        you.props["vellum_applied_mp"] = vellum::bonus(you, ARTP_MAGICAL_POWER);
     if (!skip_effects)
         unequip_effect(item_slot, false, msg, was_melded, maybe_destroy);
 
@@ -1700,6 +1751,8 @@ void equip_effect(int item_slot, bool unmeld, bool msg)
 
     if (!unmeld && item_gives_equip_slots(item))
         ash_check_bondage();
+    if (you.props.exists("vellum_bindings"))
+        vellum::refresh();
 }
 
 static void _unequip_maybe_destroy_item(item_def& item, bool quiet)
@@ -1711,6 +1764,7 @@ static void _unequip_maybe_destroy_item(item_def& item, bool quiet)
         if (item.summoned() && !quiet)
             mprf("%s crumbles into nothing.", item.name(DESC_YOUR).c_str());
 
+        vellum::on_destroyed(item);
         dec_inv_item_quantity(item.link, 1);
     }
 }
@@ -1720,7 +1774,11 @@ void unequip_effect(int item_slot, bool meld, bool msg, bool was_melded,
 {
     item_def& item = you.inv[item_slot];
 
+    elemental_weapon::on_unequip(item);
+
     const interrupt_block block_meld_interrupts(meld);
+    if (you.props.exists("vellum_bindings"))
+        you.props["vellum_applied_mp"] = vellum::bonus(you, ARTP_MAGICAL_POWER);
 
     if (is_artefact(item))
         unequip_artefact_effect(item, &msg, meld, was_melded);
@@ -1737,6 +1795,8 @@ void unequip_effect(int item_slot, bool meld, bool msg, bool was_melded,
 
     if (!meld && maybe_destroy)
         _unequip_maybe_destroy_item(item, !msg);
+    if (you.props.exists("vellum_bindings"))
+        vellum::refresh();
 }
 
 ///////////////////////////////////////////////////////////
@@ -1749,7 +1809,7 @@ void equip_artefact_effect(item_def &item, bool *show_msgs, bool unmeld)
 
     // Call unrandart equip function first, so that it can modify the
     // artefact's properties before they're applied.
-    if (is_unrandom_artefact(item))
+    if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
     {
         const unrandart_entry *entry = get_unrand_entry(item.unrand_idx);
 
@@ -1760,7 +1820,7 @@ void equip_artefact_effect(item_def &item, bool *show_msgs, bool unmeld)
     const bool msg          = !show_msgs || *show_msgs;
 
     artefact_properties_t  proprt;
-    artefact_properties(item, proprt);
+    effective_artefact_properties(item, proprt);
 
     if (proprt[ARTP_AC] || proprt[ARTP_SHIELDING])
         you.redraw_armour_class = true;
@@ -1817,7 +1877,7 @@ void unequip_artefact_effect(item_def &item,  bool *show_msgs, bool meld,
     ASSERT(is_artefact(item));
 
     artefact_properties_t proprt;
-    artefact_properties(item, proprt);
+    effective_artefact_properties(item, proprt);
     const bool msg = !show_msgs || *show_msgs;
 
     // Almost all effects should trigger exactly once if this function is
@@ -1866,7 +1926,7 @@ void unequip_artefact_effect(item_def &item,  bool *show_msgs, bool meld,
         if (proprt[ARTP_SEE_INVISIBLE])
             _mark_unseen_monsters();
 
-        if (is_unrandom_artefact(item))
+        if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
         {
             const unrandart_entry *entry = get_unrand_entry(item.unrand_idx);
 
@@ -2586,7 +2646,8 @@ static void _change_wildshape_status()
 
 static void _handle_regen_item_equip(const item_def& item)
 {
-    const bool regen_hp = is_regen_item(item);
+    const bool regen_hp = is_regen_item(item)
+        || vellum::item_bonus(you, item, ARTP_REGENERATION);
     const bool regen_mp = is_mana_regen_item(item);
 
     if (!regen_hp && !regen_mp)
@@ -2751,6 +2812,19 @@ static void _equip_jewellery_effect(item_def &item, bool unmeld)
         _spirit_shield_message(unmeld);
         break;
 
+    case RING_CAMARADERIE:
+        if (!unmeld)
+            mpr("You feel attuned to the movements of your companions.");
+        you.redraw_evasion = true;
+        you.wield_change = true;
+        break;
+
+    case AMU_VANGUARD:
+        if (!unmeld)
+            mpr("A protective bloodbond links you to your allies.");
+        you.redraw_armour_class = true;
+        break;
+
     // Regeneration and Magic Regeneration amulets handled elsewhere.
     }
 
@@ -2778,6 +2852,17 @@ static void _unequip_jewellery_effect(item_def &item, bool meld, bool was_melded
     case RING_SLAYING:
     case RING_STEALTH:
     case RING_WIZARDRY:
+        break;
+
+    case RING_CAMARADERIE:
+        you.redraw_evasion = true;
+        you.wield_change = true;
+        break;
+
+    case AMU_VANGUARD:
+        if (!meld)
+            mpr("Your protective bloodbond fades.");
+        you.redraw_armour_class = true;
         break;
 
     case RING_SEE_INVISIBLE:

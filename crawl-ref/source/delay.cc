@@ -14,6 +14,7 @@
 #include "ability.h"
 #include "areas.h"
 #include "artefact.h"
+#include "automaton.h"
 #include "bloodspatter.h"
 #include "clua.h"
 #include "command.h"
@@ -766,11 +767,18 @@ void MemoriseDelay::finish()
     quiver::on_actions_changed();
 }
 
-void PasswallDelay::finish()
+void PasswallDelay::complete_passage()
 {
     // No interrupt message if our destination causes this delay to be
     // interrupted
     const interrupt_block block_double_message;
+    if (automatic && !automaton::safe_passwall_destination(dest))
+    {
+        you.props.erase(PASSWALL_ARMOUR_KEY);
+        you.redraw_armour_class = true;
+        mpr("Your escape route is no longer clear. You turn back.");
+        return;
+    }
     mpr("You finish merging with the rock.");
     // included in default force_more_message
 

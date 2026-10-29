@@ -98,6 +98,9 @@ ssl_port = 8443
 # logging.getLogger('asyncio').setLevel(logging.DEBUG)
 
 password_db = "./webserver/passwd.db3"
+# Retire the old shared quick-start identities without deleting their records.
+disabled_accounts = ["Host", "Player2", "Player3", "Player4"]
+allow_anon_spectate = False
 # Uncomment and change if you want this db somewhere separate from the
 # password_db location.
 #settings_db = "./webserver/user_settings.db3"
@@ -264,6 +267,13 @@ init_player_program = "./util/webtiles-init-player.sh"
 # on how often a connection is checked for basic life, as well as the following
 # two idle timer settings.
 # connection_timeout = 10 * 60
+
+# Protocol keepalives run independently of browser JavaScript and idle limits.
+# Set the interval to zero to disable them. Timeout must not exceed interval.
+# websocket_ping_interval = 20
+# websocket_ping_timeout = 20
+# Keep an authenticated host's engine alive briefly after an unexpected drop.
+# reconnect_grace_period = 30
 
 # the maximum allowed idle time while playing. This timer is checked in
 # intervals determined by `connection_timout`, so values will essentially be

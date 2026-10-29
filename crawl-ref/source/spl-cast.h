@@ -6,6 +6,7 @@
 #pragma once
 
 #include <vector>
+#include "evocation.h"
 #include <memory>
 #include <functional>
 
@@ -126,7 +127,8 @@ desc_filter targeter_addl_desc(spell_type spell, int powc, spell_flags flags,
                                        targeter *hitfunc);
 spret your_spells(spell_type spell, int powc = 0, bool actual_spell = true,
                   const item_def* const evoked_item = nullptr,
-                  dist *_target = nullptr, bool force_failure = false);
+                  dist *_target = nullptr, bool force_failure = false,
+                  const evocation& activation = {});
 
 void do_post_spellcast_effects(spell_type spell);
 

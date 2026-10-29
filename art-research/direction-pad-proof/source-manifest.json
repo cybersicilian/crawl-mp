@@ -1,0 +1,20 @@
+{
+  "game_data/static/direction-pad.js": {
+    "tested_sha256": "8afe0808a86933664393118aef98a1d5a5cea462234b8aae91bf28166f4009e9",
+    "current_matches_tested": true
+  },
+  "game_data/static/styles/direction-pad.css": {
+    "tested_sha256": "153ab1030c518061a181aa498a4fc4bbdbf425b32a162822ffc4a1ebf427d74b",
+    "current_matches_tested": true
+  },
+  "game_data/static/game.js": {
+    "tested_sha256": "f9b1dd0386937ae30d853df78ab62e64b6eca91b84127f46b8539e3b0a1f7f13",
+    "current_matches_tested": true
+  },
+  "game_data/static/style.css": {
+    "tested_sha256": "b76ea73e2dbf7b9b77c70ad5ea149a265bea1e42fbfba1b4c4cda087cc858959",
+    "current_matches_tested": true
+  },
+  "native_executable_sha256": "19158ea86e7599dfed049450063261f7973b55a80968a8c4b861f6cd8b227173",
+  "url": "http://127.0.0.1:18987"
+}

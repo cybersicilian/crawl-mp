@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "god-vorr.h"
 
 #include "tileview.h"
 
@@ -170,6 +171,21 @@ void tile_default_flv(branch_type br, tile_flavour &flv)
     case BRANCH_ORC:
         flv.wall  = TILE_WALL_ORC;
         flv.floor = TILE_FLOOR_ORC;
+        return;
+
+    case BRANCH_WORMLANDS:
+        flv.wall = TILE_WALL_LAB_ROCK;
+        flv.floor = TILE_FLOOR_MOSS;
+        return;
+
+    case BRANCH_HIVE:
+        flv.wall = TILE_WALL_WAX;
+        flv.floor = TILE_FLOOR_ROUGH_YELLOW;
+        return;
+
+    case BRANCH_BURROWS:
+        flv.wall  = TILE_WALL_BURROWS;
+        flv.floor = TILE_FLOOR_BURROWS;
         return;
 
     case BRANCH_LAIR:
@@ -1012,7 +1028,7 @@ static void _tile_place_monster(const coord_def &gc, const monster_info& mon)
     tileidx_t t0 = t.tile();
 
     if (mons_class_is_stationary(mon.type)
-        && mon.type != MONS_TRAINING_DUMMY)
+        && mon.type != MONS_TRAINING_DUMMY && mon.type != MONS_FALSE_IMAGE)
     {
         // If necessary add item brand.
         if (env.map_knowledge(gc).item())
@@ -1249,6 +1265,7 @@ void tile_apply_properties(const coord_def &gc, packed_cell &cell)
 
     const map_cell& mc = env.map_knowledge(gc);
 
+    cell.ritual_blood = vorr::blood_visual(gc);
     bool print_blood = true;
     if (mc.flags & MAP_HALOED)
     {

@@ -1,0 +1,41 @@
+/* Dark binding around the world; matte materials keep the actors in front. */
+#normal {
+    --hud-surface: var(--art-frame);
+    --hud-raised: var(--art-raised);
+    --hud-rule: var(--art-rule);
+    --hud-metal: var(--art-brass);
+    --hud-metal-bright: var(--art-brass-light);
+    --hud-metal-dim: var(--art-brass-dim);
+    --hud-ink: var(--art-ivory);
+    --hud-quiet: var(--art-muted);
+    --hud-recess: var(--art-recess);
+    --hud-button: linear-gradient(180deg, #2d362e, #212a24);
+    --hud-inset: inset 0 1px 0 #f4e7b80c;
+    --hud-panel: linear-gradient(135deg, #252e27, #19211c);
+    color: var(--art-ivory);
+}
+#normal #right_column { background: var(--art-night); border-left-color: var(--art-brass-dim); box-shadow: -5px 0 20px #0004; }
+#normal #hud_sidebar_scroll { scrollbar-color: #706e55 var(--art-night); }
+#normal :is(.party-member-card, #hud_inventory, #hud_powers, #stats) { box-shadow: var(--art-line); }
+#normal .party-member-card { border-radius: 2px; background: var(--hud-panel); border-color: #777c5c55; }
+#normal .party-member-card.is-controlled-card { border-color: #b9a17388; background: linear-gradient(135deg, #30392b, #1c271f); box-shadow: inset 3px 0 0 var(--art-brass); }
+#normal .party-portrait { border-radius: 2px; border-color: var(--art-brass-dim); background: radial-gradient(ellipse at 50% 90%, #53614466, transparent 70%), var(--art-recess); }
+#normal .party-member-name { font-family: var(--art-title); color: var(--art-brass-light); text-shadow: none; }
+#normal .party-member-state { border-color: #8b8f6770; border-radius: 1px; background: #111a13; }
+#normal .party-xp-fill { background: linear-gradient(90deg, #3f5144, #617756); }
+#normal .party-member-level { color: var(--art-brass-light); }
+#normal :is(.party-mini-btn, .dcss-dock-btn, .hud-icon-button, .party-ping-btn, .hud-power-button) { border-radius: 2px; box-shadow: var(--art-line); }
+#normal :is(.party-mini-btn, .dcss-dock-btn, .hud-icon-button, .party-ping-btn, .hud-power-button):hover:not(:disabled) {
+    color: #fff2d3; border-color: var(--art-brass); background: #35402f; box-shadow: var(--art-line);
+}
+#normal :is(button, summary, a):focus-visible { outline-color: var(--art-brass-light); }
+#normal :is([aria-pressed="true"], [aria-selected="true"], .party-ping-btn.armed) { border-color: var(--art-brass); }
+#normal .hud-item-slot { border-radius: 2px; border-color: #75805e66; background: radial-gradient(ellipse at 50% 25%, #37442f, #152018 85%); box-shadow: inset 0 0 0 1px #080e0a66; }
+#normal .hud-item-slot:hover { border-color: var(--art-brass); box-shadow: inset 0 0 0 1px #b9a17333; }
+#normal .hud-equipped-mark { background: var(--art-brass-light); box-shadow: none; }
+#normal .party-bars .party-bar-wrap { border-radius: 1px; border-color: #141b14; box-shadow: inset 0 1px 2px #0007; }
+#normal :is(#message_pane, #hud_bottom_row) { background: #101710; border-color: var(--art-rule); }
+#normal #dcss_quick_dock { border-color: var(--art-brass-dim); background: linear-gradient(180deg, #293326, #182119); box-shadow: inset 0 1px 0 #e9dbb511; }
+#normal :is(.hud-panel-heading, .hud-panel-title) { color: var(--art-brass-light); font-family: var(--art-title); letter-spacing: .015em; }
+#normal .hud-action-bank { border-color: var(--art-rule); }
+.workflow-context-menu, #party_inspector_modal { border-color: var(--art-brass-dim); border-radius: 3px; background: var(--art-frame); color: var(--art-ivory); }

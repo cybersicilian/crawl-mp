@@ -1,0 +1,24 @@
+@import url("/static/styles/graphics-settings.css");
+* { box-sizing: border-box; }
+:root { color-scheme: dark; }
+body { margin: 0; background: var(--art-night); color: var(--art-ivory); font: 16px/1.6 var(--art-copy); }
+main { max-width: 960px; padding: clamp(20px, 5vw, 60px); margin: auto; }
+a { color: var(--art-brass-light); text-underline-offset: 4px; }
+header { margin: 40px 0 28px; }
+h1 { font: 44px/1.15 var(--art-title); margin: 6px 0; color: var(--art-brass-light); overflow-wrap: anywhere; }
+p { color: var(--art-muted); }
+.eyebrow { color: var(--art-teal); font-size: 12px; letter-spacing: 2px; }
+section { background: var(--art-frame); border: 1px solid var(--art-brass-dim); border-radius: 8px; padding: clamp(18px, 4vw, 32px); }
+fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
+legend { font: 28px var(--art-title); padding: 0; color: var(--art-ivory); }
+.texture-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+.texture-choice { display: flex; align-items: flex-start; gap: 12px; padding: 20px; border: 1px solid var(--art-brass-dim); border-radius: 6px; cursor: pointer; background: var(--art-recess); }
+.texture-choice:has(input:checked) { border-color: var(--art-teal); background: #21342e; box-shadow: inset 0 0 0 1px var(--art-teal); }
+.texture-choice input { flex: 0 0 auto; margin: 6px 0 0; width: 18px; height: 18px; accent-color: var(--art-teal); }
+.texture-choice strong { display: block; font: 23px var(--art-title); margin-bottom: 8px; }
+.texture-choice span span { display: block; color: var(--art-muted); font-size: 14px; }
+.texture-choice:focus-within { outline: 3px solid var(--art-brass-light); outline-offset: 4px; }
+.profile-save-status { min-height: 3.2em; color: var(--art-teal); margin-bottom: 0; }
+.profile-note { font-size: 13px; margin-bottom: 0; }
+@media (max-width: 540px) { .texture-choices { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
+@media (forced-colors: active) { .texture-choice:has(input:checked) { border: 3px solid Highlight; } }

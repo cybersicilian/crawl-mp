@@ -1,0 +1,17 @@
+{
+  "complete": true,
+  "passed": true,
+  "requestId": "53510a5f1a5f27c1fc7b638ccec0e7a5b9c88500d6e7b095f5737292fe2aaa63",
+  "results": [
+    {
+      "command": [
+        "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+        "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/verify_browser.py"
+      ],
+      "exitCode": 0,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/merged-validation-7/step-1.log",
+      "seconds": 26.55
+    }
+  ],
+  "source": "/private/tmp/dcss-release-merged-01a16a0f"
+}

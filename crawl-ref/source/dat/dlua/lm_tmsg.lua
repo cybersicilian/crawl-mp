@@ -36,6 +36,11 @@ end
 function TimedMessaging:init(tmarker, cm, verbose)
   self.entity = self.entity or tmarker.props.entity or tmarker.props.desc
 
+  local pcount = (you and you.player_count and you.player_count()) or 1
+  local extra = math.max(0, pcount - 1)
+  local time_scale = (100 + extra * 35) / 100
+  local dist_scale = (100 + extra * 17) / 100
+
   if not self.ranges and not self.visible and not self.messages then
     self.ranges = {
       { 5000, 'stately ' }, { 4000, '' },
@@ -44,12 +49,19 @@ function TimedMessaging:init(tmarker, cm, verbose)
     }
   end
 
+  if self.ranges and not self._ranges_scaled then
+    for _, r in ipairs(self.ranges) do
+      r[1] = math.floor(r[1] * time_scale)
+    end
+    self._ranges_scaled = true
+  end
+
   if not self.range_adjectives then
     self.range_adjectives = {
-      { 28, 'very distant' },
-      { 21, 'distant' },
-      { 14, '$F nearby' },
-      { 7,  '$F very nearby' },
+      { math.floor(28 * dist_scale), 'very distant' },
+      { math.floor(21 * dist_scale), 'distant' },
+      { math.floor(14 * dist_scale), '$F nearby' },
+      { math.floor(7 * dist_scale),  '$F very nearby' },
       { 0,  '$F' }
     }
   end
@@ -61,11 +73,15 @@ function TimedMessaging:init(tmarker, cm, verbose)
 
   if self.messages then
     for _, message in ipairs(self.messages) do
+      if not self._messages_scaled then
+        message[1] = math.floor(message[1] * time_scale)
+      end
       local mes = message[2]
       if string.find(mes, "$F") then
         mes = util.expand_entity(self.entity, mes)
       end
     end
+    self._messages_scaled = true
   end
 
   -- This variable gates the messages, to make sure we don't fire one too

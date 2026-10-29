@@ -1,0 +1,35 @@
+enum: SP_PROTEAN
+monster: MONS_SLIME_CREATURE
+name: Protean
+short_name: Pr
+genus: Slime
+difficulty: Simple
+difficulty_priority: 40
+species_flags:
+  - no_hair
+aptitudes:
+  xp: 0
+  hp: 0
+  mp_mod: 0
+  wl: 3
+  fighting: 1
+  stealth: 1
+size: tiny
+str: 8
+int: 8
+dex: 5
+levelup_stat_frequency: 4
+mutations:
+  1:
+    MUT_EVOLUTION: 2
+fake_mutations:
+  - long: Your non-innate mutations increase your maximum health and size.
+    short: mutations increase health and size
+  - long: You begin too small for weapons and most armour, but can use them as you grow.
+    short: begin too small for weapons and most armour
+  - long: Your protean body cannot change form.
+    short: cannot change form
+recommended_jobs:
+  - SKALD
+  - CHAOS_KNIGHT
+  - CONJURER

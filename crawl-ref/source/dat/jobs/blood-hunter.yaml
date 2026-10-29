@@ -1,0 +1,34 @@
+enum: JOB_BLOOD_HUNTER # Preserve the existing saved-job ID.
+name: "Blood Liturgist"
+short_name: BL
+category: Zealot
+category_priority: 68
+str: 4
+int: 5
+dex: 3
+spells:
+  - SPELL_KINDLED_VEINS
+  - SPELL_WINTERS_DUE
+  - SPELL_BORROWED_THUNDER
+  - SPELL_SCARLET_FETTERS
+  - SPELL_STOLEN_SIGHT
+equipment:
+  - "leather armour"
+  - "potion of curing"
+  - "scroll of fog"
+weapon_choice: plain
+recommended_species:
+  - human
+  - demonspawn
+  - gnoll
+  - mountain dwarf
+  - draconian
+  - tengu
+skills:
+  fighting: 2
+  weapon: 2
+  dodging: 2
+  spellcasting: 2
+  necromancy: 2
+  hexes: 2
+create_enum: false

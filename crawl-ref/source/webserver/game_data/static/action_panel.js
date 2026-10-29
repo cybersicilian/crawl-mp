@@ -1,9 +1,9 @@
 define(["jquery", "comm", "client",
         "./cell_renderer", "./enums", "./options", "./player",
         "./tileinfo-icons", "./tileinfo-gui", "./tileinfo-main",
-        "./util", "./focus-trap", "./ui"],
+        "./util", "./focus-trap", "./ui", "./game-context", "./nested-tips", "./tip-placement", "tooltip-policy"],
 function ($, comm, client, cr, enums, options, player, icons, gui, main,
-          util, focus_trap, ui) {
+          util, focus_trap, ui, game, nested, placement, tip_policy) {
     "use strict";
 
     var filtered_inv;
@@ -12,6 +12,9 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
     var minimized;
     var settings_visible;
     var tooltip_timeout = null;
+    var tip_host = nested.host("actions", function () {
+        return document.getElementById("action-panel-tooltip");
+    }, hide_tooltip);
     // Options
     var panel_disabled;
     var scale, orientation, font_family, font_size;
@@ -145,7 +148,8 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
     {
         if (tooltip_timeout)
             clearTimeout(tooltip_timeout);
-        $tooltip.hide();
+        tip_host.hidden();
+        if ($tooltip) $tooltip.hide();
     }
 
     function show_tooltip(x, y, slot)
@@ -179,6 +183,9 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
             }
         }
         $tooltip.show();
+        tip_host.shown(null, { passive: true });
+        placement.place($tooltip[0], { left: x - 10, right: x + 10, top: y - 10, bottom: y + 10,
+            width: 20, height: 20 });
     }
 
     // Initial setup for the panel and its settings menu.
@@ -188,6 +195,11 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
         $canvas = $("#action-panel");
         $settings = $("#action-panel-settings");
         $tooltip = $("#action-panel-tooltip");
+        $settings.find("button").attr("tabindex", 0);
+        $settings.on("keydown.shortcuts keypress.shortcuts", function (event) {
+            event.stopPropagation();
+            if (event.key === "Escape") { event.preventDefault(); hide_settings(); }
+        });
         if (client.is_watching())
         {
             $canvas.addClass("hidden");
@@ -304,7 +316,7 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
                     {
                         show_tooltip(ev.pageX, ev.pageY,
                                      selected - NUM_RESERVED_BUTTONS);
-                    }, 500);
+                    }, tip_policy.hover_ms);
                 }
             }
             else if (ev.type === "mousedown" && ev.which == 1)
@@ -559,4 +571,9 @@ function ($, comm, client, cr, enums, options, player, icons, gui, main,
             update();
         }
     });
+    return { open_settings: function (anchor) {
+        if (!renderer) return;
+        var rect = anchor.getBoundingClientRect();
+        show_settings({ pageX: Math.max(4, rect.left - 240), pageY: Math.max(4, rect.top - 250) });
+    } };
 });

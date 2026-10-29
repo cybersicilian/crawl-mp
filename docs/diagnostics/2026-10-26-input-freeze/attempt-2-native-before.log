@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/private/tmp/dcss-input-freeze-01a17b3b/crawl-ref/source/webserver/tests/native-command-completion.py", line 176, in <module>
+    verify(arguments.source.resolve(), arguments.output.resolve(), arguments.expect_missing)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dcss-input-freeze-01a17b3b/crawl-ref/source/webserver/tests/native-command-completion.py", line 129, in verify
+    assert probe.until(lambda: probe.mode == 1 and len(probe.party) == 2, 40), "Dungeon startup"
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dcss-input-freeze-01a17b3b/crawl-ref/source/webserver/tests/native-command-completion.py", line 103, in until
+    raise AssertionError("Native engine exited: " + self.terminal.decode(errors="replace")[-3000:])
+AssertionError: Native engine exited: [?1051l[?1052l[?1060l[?1061h[?1049h[1;40r(B[m[4l[?7h[?1h=[?1034h[39;49m[39;49m[37m[40m(B[m[39;49m[37m[40m[H[2J[?25lASSERT(item.base_type != OBJ_WEAPONS || subtype < get_max_subtype(item.base_type)) in 'item-prop.cc' at line 2166 failed.
+[39;49m[40d[K[40;1H[?12l[?25h[?1049l[?1l>[?1051l[?1052l[?1060l[?1061l
+ASSERT(item.base_type != OBJ_WEAPONS || subtype < get_max_subtype(item.base_type)) in 'item-prop.cc' at line 2166 failed.
+
+We crashed! This is likely due to a bug in Crawl.
+Please submit a bug report to:
+    https://github.com/crawl/crawl/issues
+and include at least:
+- The crash report: /tmp/dcss-token-spywep9c/morgue/crash-TokenProbe-20261026-205407.txt
+- Your save file: /tmp/dcss-token-spywep9c/saves/TokenProbe.cs
+- Information about your computer and game version: Dungeon Crawl Stone Soup 0.33-a0 (Console/Webtiles)
+- A description of what you were doing when this crash occurred.
+
+

@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
+#include "level-time.h"
 
 #include "mon-place.h"
 #include "mgen-data.h"
@@ -40,6 +42,7 @@
 #include "mon-pick.h"
 #include "mon-poly.h"
 #include "mon-tentacle.h"
+#include "party.h"
 #include "player-notices.h"
 #include "random.h"
 #include "religion.h"
@@ -76,7 +79,7 @@ static vector<bool> vault_mon_bands;
 #define VAULT_MON_BANDS_KEY   "vault_mon_bands"
 #endif
 
-#define BIG_BAND        20
+#define BIG_BAND        40
 
 static monster_type _band_member(band_type band, int which,
                                  level_id parent_place, bool allow_ood);
@@ -202,8 +205,9 @@ bool has_non_solid_adjacent(coord_def pos)
 
 static int _ood_fuzzspan(level_id &place)
 {
+    const int bonus = party::extra_player_count() / 2;
     if (place.branch != BRANCH_DUNGEON || place.depth >= 5)
-        return 5;
+        return 5 + bonus;
 
     // Literally any OOD is too nasty for D:1.
     if (place.depth == 1)
@@ -211,8 +215,7 @@ static int _ood_fuzzspan(level_id &place)
 
     // In early D, since player and enemy strength scale so rapidly
     // with depth, spawn OODs from much closer depths.
-    // Only up to D:4 on D:2, up to D:6 on D:3, and D:8 on D:4.
-    return place.depth;
+    return place.depth + bonus;
 }
 
 static void _apply_ood(level_id &place)
@@ -232,12 +235,10 @@ static void _apply_ood(level_id &place)
 #endif
 
     const int fuzzspan = _ood_fuzzspan(place);
-    if (fuzzspan && x_chance_in_y(14, 100))
+    const int extra = party::extra_player_count();
+    if (fuzzspan && x_chance_in_y(25 + extra * 12, 200))
     {
-        // We want a left-weighted distribution; slight fuzzing should be much
-        // more common than the full depth fuzz. This does mean that OODs are closer
-        // to a 6% chance than the 14% implied above, which is a bit silly.
-        const int fuzz = random_range(-fuzzspan, fuzzspan, 2);
+        const int fuzz = random_range(1, fuzzspan, 2);
         if (fuzz > 0)
         {
             place.depth += fuzz;
@@ -254,13 +255,17 @@ static void _apply_ood(level_id &place)
  */
 static int _get_monster_spawn_rate()
 {
+    const int extra = party::extra_player_count();
     if (player_in_branch(BRANCH_ABYSS))
-        return 5 * (have_passive(passive_t::slow_abyss) ? 2 : 1);
+        return max(3, 5 - (extra + 1) / 2) * (have_passive(passive_t::slow_abyss) ? 2 : 1);
 
     if (player_on_orb_run())
-        return have_passive(passive_t::slow_orb_run) ? 36 : 18;
+    {
+        const int base = max(10, 18 - extra * 3);
+        return have_passive(passive_t::slow_orb_run) ? base * 2 : base;
+    }
 
-    return 50;
+    return max(25, 50 - extra * 8);
 }
 
 //#define DEBUG_MON_CREATION
@@ -664,6 +669,9 @@ monster* place_monster(mgen_data mg, bool force_pos, bool dont_place)
     if (want_band)
         mg.flags |= MG_PERMIT_BANDS;
 
+    if (!coop_content::enabled() && coop_content::exclusive_monster(mg.cls))
+        return nullptr;
+
     if (mg.cls == MONS_NO_MONSTER || mg.cls == MONS_PROGRAM_BUG)
         return 0;
 
@@ -672,7 +680,7 @@ monster* place_monster(mgen_data mg, bool force_pos, bool dont_place)
     // disable band generation. This applies only to randomly picked monsters
     // -- chose_ood_monster will never be set true for explicitly specified
     // monsters in vaults and other places.
-    if (chose_ood_monster && env.absdepth0 < 12)
+    if (chose_ood_monster && env.absdepth0 < max(5, 12 - party::extra_player_count() * 2))
     {
         dprf(DIAG_MONPLACE,
              "Chose monster with OOD roll: %s, disabling band generation",
@@ -1158,7 +1166,7 @@ static monster* _place_monster_aux(const mgen_data &mg, const monster *leader,
 
     if (mg.cls == MONS_TWISTER || mg.cls == MONS_DIAMOND_OBELISK)
     {
-        mon->props[POLAR_VORTEX_KEY].get_int() = you.elapsed_time;
+        mon->props[POLAR_VORTEX_KEY].get_int() = level_elapsed_time(*mon);
         mon->add_ench(mon_enchant(ENCH_POLAR_VORTEX, mon, INFINITE_DURATION));
     }
 
@@ -1308,6 +1316,24 @@ static monster* _place_monster_aux(const mgen_data &mg, const monster *leader,
         }
 
         mon->behaviour = BEH_WANDER;
+    }
+
+    // Boost hostile monster HP and HD for larger, harder multiplayer dungeons.
+    const int extra = party::extra_player_count();
+    if (extra > 0
+        && mon->base_attitude == ATT_HOSTILE
+        && !mon->is_firewood()
+        && !crawl_state.game_is_arena())
+    {
+        const bool is_uniq = mons_is_unique(mon->type);
+        const int hp_mult_pct = 100 + extra * (is_uniq ? 50 : 30);
+        mon->max_hit_points = min(max(1, mon->max_hit_points * hp_mult_pct / 100),
+                                  MAX_MONSTER_HP);
+        mon->hit_points = mon->max_hit_points;
+
+        const int hd = mon->get_experience_level();
+        if (hd > 1)
+            mon->set_hit_dice(hd + max(extra, (hd * extra) / 10));
     }
 
     // Set pos and link monster into monster grid.
@@ -2330,6 +2356,17 @@ static band_type _choose_band(monster_type mon_type, int *band_size_p,
 
     if (band != BAND_NO_BAND && band_size == 0)
         band = BAND_NO_BAND;
+
+    if (band != BAND_NO_BAND && band_size > 0)
+    {
+        const int extra = party::extra_player_count();
+        if (extra > 0)
+        {
+            band_size = min(BIG_BAND - 1,
+                            max(band_size + extra,
+                                band_size * (4 + extra) / 4));
+        }
+    }
 
     if (band_size >= BIG_BAND)
         band_size = BIG_BAND - 1;

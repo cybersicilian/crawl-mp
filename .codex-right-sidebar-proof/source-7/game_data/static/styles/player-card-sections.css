@@ -1,0 +1,102 @@
+/* The active hero, native actions, and carried items form one scrolling card. */
+/* Readings fill the space beside the portrait; the utility rails use both columns. */
+#normal .party-card.is-controlled-card { align-content: start; }
+#normal .is-controlled-card > .party-portrait { grid-row: 1 / span 3; }
+#normal .is-controlled-card > .party-member-meta {
+    grid-column: 2; grid-row: 1; align-items: center; margin: 0;
+}
+#normal .is-controlled-card .party-def-badges { display: none; }
+#normal .is-controlled-card .party-member-timing { margin-top: 0; }
+#normal .is-controlled-card > .party-bars { grid-column: 2; grid-row: 2; }
+#normal .is-controlled-card > .party-self-details {
+    grid-column: 2; grid-row: 3; margin: 1px 0 0; padding: 0; border: 0;
+}
+#normal .is-controlled-card > .party-member-top { grid-column: 1 / -1; grid-row: 4; }
+#normal .is-controlled-card .party-member-identity { flex-wrap: wrap; gap: 4px; min-height: 0; }
+#normal .is-controlled-card .party-member-identity .party-card-status { flex: 0 1 auto; }
+#normal .is-controlled-card .party-member-identity .party-passive-strip {
+    margin: 0; padding: 0; border: 0;
+}
+#normal .is-controlled-card .party-member-equipment {
+    grid-column: 1 / -1; grid-row: 5; white-space: normal; overflow-wrap: anywhere;
+}
+#normal .is-controlled-card .party-card-toolbar { grid-column: 1 / -1; grid-row: 6; }
+#normal .is-controlled-card .personal-stat-context { flex-wrap: wrap; }
+#normal .is-controlled-card #stats_noise { min-width: 48px; }
+/* Companion identity and vital signs share the portrait's height. */
+#normal .party-card:not(.is-controlled-card) > .party-portrait { height: 68px; grid-row: 1 / span 4; }
+#normal .party-card:not(.is-controlled-card) > .party-member-top { grid-row: 1; }
+#normal .party-card:not(.is-controlled-card) .party-member-identity { min-height: 16px; align-items: center; }
+#normal .party-card:not(.is-controlled-card) .party-member-name { font-size: 12px; line-height: 16px; }
+#normal .party-card:not(.is-controlled-card) .party-member-timing { margin-top: 0; }
+#normal .party-card:not(.is-controlled-card) > .party-member-meta { grid-row: 2; margin: 0; }
+#normal .party-card:not(.is-controlled-card) > .party-bars { grid-row: 3; }
+#normal .party-card:not(.is-controlled-card) .party-member-equipment { grid-row: 4; }
+#normal .party-card:not(.is-controlled-card) .party-member-effects {
+    grid-column: 1 / -1; grid-row: 5; display: flex; align-items: center; flex-wrap: wrap; gap: 4px;
+}
+#normal .party-member-effects .party-passive-strip { margin: 0; padding: 0; border: 0; }
+#normal .party-card:not(.is-controlled-card) .party-card-toolbar { grid-column: 1 / -1; grid-row: 6; }
+.workflow-compact-roster #normal .party-card:not(.is-controlled-card) > .party-portrait { grid-row: 1 / span 3; }
+.workflow-compact-roster #normal .party-card:not(.is-controlled-card) > .party-bars { grid-row: 2; }
+.workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-card-toolbar { grid-column: 2; grid-row: 3; }
+.workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-member-effects { grid-row: 4; }
+.workflow-compact-roster #normal .party-member-effects:not(:has(.party-effect)) { display: none; }
+@media (pointer: coarse) {
+    #normal .party-card:not(.is-controlled-card) > .party-portrait { height: 78px; }
+    .workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-card-toolbar {
+        grid-column: 2; grid-row: 3; grid-template-columns: minmax(0, 1fr); row-gap: 4px;
+    }
+    .workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-card-actions::after { display: none; }
+}
+#normal #right_column { overflow: hidden; }
+#normal #hud_sidebar_scroll { min-height: 0; overflow-x: hidden; overflow-y: auto; }
+#normal .party-card-sections { grid-column: 1 / -1; min-width: 0; margin: 3px -7px -9px; }
+#normal .party-card-sections :is(#hud_powers, #hud_inventory) {
+    position: relative; display: block; width: auto !important; height: auto !important;
+    min-width: 0; min-height: 0; max-height: none; margin: 0; overflow: visible;
+    border: 0; border-top: 1px solid #b4975c35; border-radius: 0;
+    box-shadow: none; background: #11171b30;
+}
+#normal .party-card-sections #hud_inventory { border-radius: 0 0 3px 3px; }
+#normal .party-card-sections .hud-panel-heading {
+    min-height: 28px; gap: 5px; padding: 5px 7px; flex-wrap: nowrap;
+}
+#normal .party-card-sections .hud-panel-heading > .tt-icon { width: 16px; height: 16px; flex-shrink: 0; }
+#normal .party-card-sections .hud-panel-heading strong { font: 600 10px/1.2 var(--tt-font-ui); white-space: nowrap; }
+#normal .party-card-sections .hud-panel-context { margin-left: auto; font-size: 9px; white-space: nowrap; }
+#normal .party-card-sections .hud-inventory-tools { gap: 2px; padding: 0; margin-left: 1px; }
+#normal .party-card-sections .hud-inventory-tools .hud-icon-button {
+    width: 22px; min-width: 22px; height: 22px; min-height: 22px; padding: 2px;
+}
+#normal .party-card-sections .hud-inventory-tools .tt-icon { width: 16px; height: 16px; }
+#normal .party-card-sections :is(.hud-panel-body, .hud-item-grid) {
+    min-height: 0; max-height: none; overflow: visible; scrollbar-width: auto;
+}
+#normal .party-card-sections #hud_powers > .hud-panel-body,
+#normal .party-card-sections .hud-item-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+    align-items: start; align-content: start; gap: 4px; padding: 1px 7px 7px;
+    background: transparent; border: 0;
+}
+#normal .party-card-sections .hud-empty { grid-column: 1 / -1; min-height: 0; padding: 2px 0; font-size: 10px; line-height: 1.3; }
+#normal .party-card-sections :is(.hud-item-slot, .hud-power-button) {
+    display: inline-flex; align-items: center; justify-content: center; position: relative;
+    box-sizing: border-box; width: 100%; min-width: 0; height: 38px; min-height: 38px;
+    padding: 2px; border-radius: 3px;
+}
+#normal .party-card-sections .hud-power-button { border-color: #786881; background: linear-gradient(#2c2c37, #1a2028); }
+#normal .party-card-sections .hud-power-button[data-power-kind='ability'] { border-color: #7c7957; background: linear-gradient(#30332b, #1d2525); }
+#normal .party-card-sections .hud-power-button > .power-art { width: 32px; height: 32px; flex: 0 0 32px; image-rendering: pixelated; }
+#normal .party-card-sections .hud-power-button > .power-art-fallback { width: 16px; height: 16px; flex-basis: 16px; }
+#normal .party-card-sections .hud-power-button :is(.hud-power-key, .hud-power-cost) {
+    position: absolute; z-index: 1; padding: 0 1px; margin: 0; border: 0; border-radius: 1px;
+    font: 8px/1.2 var(--tt-font-ui); color: #f0e7cd; text-shadow: 0 1px 2px #000; background: #11151bc9;
+}
+#normal .party-card-sections .hud-power-key { left: 2px; top: 2px; }
+#normal .party-card-sections .hud-power-cost { right: 2px; bottom: 2px; color: #c4ddff; }
+#normal .party-card-sections .hud-power-button:focus-visible { outline: 2px solid #e9ca80; outline-offset: 1px; }
+@media (pointer: coarse) {
+    #normal .party-card-sections .hud-inventory-tools .hud-icon-button { width: 28px; min-width: 28px; height: 28px; }
+    #normal .party-card-sections :is(.hud-item-slot, .hud-power-button) { height: 42px; min-height: 42px; }
+}

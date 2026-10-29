@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/three-player-input-native.py", line 163, in <module>
+    verify(args.source.resolve(), args.output.resolve(), args.expect_failure)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/three-player-input-native.py", line 121, in verify
+    expect_turns(before, [0, 0, 1])
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/three-player-input-native.py", line 66, in expect_turns
+    assert probe.until(lambda: settled() and probe.turns() == expected, 10), {
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'expected': [3, 3, 2], 'actual': [3, 3, 1], 'inflight': True, 'owner': 0, 'prompt': True, 'queued_inputs': 1, 'sent': [{'keycode': 105, 'player_id': 0, 'activity_id': 2}, {'keycode': 27, 'player_id': 0, 'prompt_activity_id': 2}, {'keycode': 46, 'player_id': 1, 'activity_id': 3}, {'keycode': 46, 'player_id': 0, 'activity_id': 4}, {'keycode': 46, 'player_id': 0, 'activity_id': 5}, {'keycode': 46, 'player_id': 1, 'activity_id': 6}, {'keycode': 46, 'player_id': 2, 'activity_id': 7}, {'keycode': 105, 'player_id': 0, 'activity_id': 8}, {'keycode': 27, 'player_id': 0, 'prompt_activity_id': 8}, {'keycode': 46, 'player_id': 1, 'activity_id': 9}, {'slot': 0, 'expected_slot': 0, 'expected_name': '+0 robe', 'player_id': 0, 'activity_id': 10}, {'keycode': 27, 'player_id': 0, 'prompt_activity_id': 10}]}

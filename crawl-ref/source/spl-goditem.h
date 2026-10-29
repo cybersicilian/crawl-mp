@@ -90,7 +90,8 @@ int detect_creatures(int pow, bool telepathic = false);
 spret cast_tomb(int pow, actor* victim, int source, bool fail);
 
 dice_def beogh_smiting_dice(int pow, bool allow_random = true);
-spret cast_smiting(int pow, monster* mons, bool fail);
+spret cast_smiting(int pow, monster* mons, bool fail, int damage_percent = 100,
+                   bool beogh_smite = true);
 
 string unpacifiable_reason(const monster& mon);
 string unpacifiable_reason(const monster_info& mi);

@@ -2,6 +2,10 @@
 
 #include "AppHdr.h"
 #include "branch.h"
+#include "mon-book.h"
+#include "mon-info.h"
+#include "mon-pick.h"
+#include "mon-util.h"
 #include "ng-init-branches.h"
 
 TEST_CASE( "create_brentry_validity", "[single-file]" ) {
@@ -21,7 +25,27 @@ TEST_CASE( "create_brentry_validity", "[single-file]" ) {
     }
 }
 
-TEST_CASE( "disable_exactly_one_of_each_lair_branch", "[single-file]" ) {
+TEST_CASE("greenwood witch joins the Forest with its original spell kit",
+          "[greenwood-witch]")
+{
+    init_monsters();
+    const monsterentry* witch = get_monster_data(MONS_GREENWOOD_WITCH);
+    REQUIRE(witch != nullptr);
+    CHECK(string(witch->name) == "greenwood witch");
+    CHECK(witch->sec == MST_GREENWOOD_WITCH);
+    CHECK(witch->speed == 13);
+#if TAG_MAJOR_VERSION == 34
+    CHECK(monster_in_population(BRANCH_FOREST, MONS_GREENWOOD_WITCH));
+#endif
+    const auto info = monster_info(MONS_GREENWOOD_WITCH, MONS_GREENWOOD_WITCH);
+    const auto spells = get_unique_spells(info);
+    for (spell_type wanted : {SPELL_SLEEP, SPELL_POLYMORPH, SPELL_BOLT_OF_DRAINING})
+        CHECK(std::any_of(spells.begin(), spells.end(),
+                          [wanted](const mon_spell_slot& slot)
+                          { return slot.spell == wanted; }));
+}
+
+TEST_CASE( "select_exactly_one_of_each_lair_group", "[single-file]" ) {
     FixedVector<level_id, NUM_BRANCHES> candidate_brentry;
 
     for (int i=0; i < 100; i++)
@@ -33,7 +57,8 @@ TEST_CASE( "disable_exactly_one_of_each_lair_branch", "[single-file]" ) {
         REQUIRE(candidate_brentry[BRANCH_SWAMP].is_valid()
                 != candidate_brentry[BRANCH_SHOALS].is_valid());
 
-        REQUIRE(candidate_brentry[BRANCH_SPIDER].is_valid()
-                != candidate_brentry[BRANCH_SNAKE].is_valid());
+        const int land_branches = candidate_brentry[BRANCH_SPIDER].is_valid()
+                                + candidate_brentry[BRANCH_SNAKE].is_valid();
+        REQUIRE(land_branches == 1);
     }
 }

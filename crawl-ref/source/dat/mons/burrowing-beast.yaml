@@ -1,0 +1,17 @@
+name: "burrowing beast"
+glyph: {char: "a", colour: lightgray}
+flags: [warm_blood, burrows]
+exp: 700
+will: 40
+attacks:
+ - {type: bite, damage: 28}
+hd: 10
+hp_10x: 700
+ac: 8
+ev: 7
+has_corpse: true
+shout: growl
+intelligence: animal
+size: large
+shape: quadruped_tailless
+tile: burrowing_beast

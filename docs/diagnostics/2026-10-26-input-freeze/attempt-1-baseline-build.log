@@ -1,0 +1,30 @@
+cat: util/release_ver: No such file or directory
+fatal: not a git repository (or any of the parent directories): .git
+util/art-data.pl
+    * rebuilding crawl: new build flags or prefix
+TRACK_CFLAGS = gcc -arch arm64 -mmacosx-version-min=10.7 g++ -arch arm64 -mmacosx-version-min=10.7 -stdlib=libc++ -O2 -pipe -DUSE_TILE -DUSE_TILE_WEB -Wall -Wformat-security -Wundef -Wextra -Wno-missing-field-initializers -Wno-implicit-fallthrough -Wno-type-limits -Wno-uninitialized -Wno-array-bounds -Wno-format-zero-length -Wmissing-declarations -Wredundant-decls -Wno-tautological-unsigned-enum-zero-compare -Wno-parentheses -Wwrite-strings -Wshadow -pedantic -Wuninitialized -Iutil -I. -isystem contrib/install/arm64-apple-darwin27.0.0/include -isystem /usr/local/include -DWIZARD -DASSERTS -DCLUA_BINDINGS -isystem /usr/include/ncurses #EOL
+OLD_CFLAGS   =  #EOL
+    PYTHON mon-data.h
+    Generating art-data.h
+    Generating art-enum.h
+    Generating dc-unrand.txt
+    Generating tiledef-unrand.cc
+    PYTHON species-data.h
+    PYTHON job-data.h
+    PYTHON form-data.h
+    PYTHON rltilesstatus-icon-sizes.h
+    GEN mi-enum.h
+    GEN cmd-name.h
+    YACC levcomp.tab.cc
+    GEN dat/dlua/tags.lua
+    * Need to build contribs: libpng zlib lua/src sqlite
+**********************************************************
+
+The 'zlib' directory is missing. Have you run
+   'git submodule update --init'?
+(It's probably better to install all native dependencies instead.)
+
+**********************************************************
+make[1]: *** [zlib] Error 1
+make: *** [.contrib-libs] Error 2
+make: *** Waiting for unfinished jobs....

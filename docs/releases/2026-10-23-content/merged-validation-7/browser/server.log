@@ -1,0 +1,27 @@
+{"runtime": "/private/tmp/dcss-content-qa-01a16a0f-7", "source": "/private/tmp/dcss-release-merged-01a16a0f", "build": "/private/tmp/dcss-release-merged-01a16a0f", "url": "http://127.0.0.1:18987", "binary_sha256": "4b1279e074b6346638611797f0a2b0c4bcf9802a3c07b2f05af272a1dfa6f236", "client_revision": "cd56b1e6642532f30ee3", "lobby_revision": "b2e2a0cba615662e9be6", "native_discovery_defaults": {"CRAWL_DIR": "/private/tmp/dcss-content-qa-01a16a0f-7/native-defaults", "CRAWL_RC": "/private/tmp/dcss-content-qa-01a16a0f-7/native-defaults/init.txt", "CRAWL_SAVE_DIR": "/private/tmp/dcss-content-qa-01a16a0f-7/native-defaults/saves"}}
+2026-10-23 14:00:45,915 INFO: Loaded server configuration from: /private/tmp/dcss-release-merged-01a16a0f/webserver/config.py
+2026-10-23 14:00:45,916 INFO: Starting in live-debug mode.
+2026-10-23 14:00:45,916 INFO: Using command-line supplied logfile: '<stdout>'
+2026-10-23 14:00:45,916 INFO: Command line override for daemonize: False
+2026-10-23 14:00:45,916 INFO: Reading 2 templates from base config
+2026-10-23 14:00:45,916 INFO: Reading 8 games from base config
+2026-10-23 14:00:45,916 WARN: Skipping game definitions in `games.d/` based on config
+2026-10-23 14:00:45,978 INFO: Listening on http://127.0.0.1:18987
+2026-10-23 14:00:45,979 WARN: User database '/private/tmp/dcss-content-qa-01a16a0f-7/accounts.db3' didn't exist; creating it now.
+2026-10-23 14:00:45,983 WARN: User settings database didn't exist at '/private/tmp/dcss-content-qa-01a16a0f-7/settings.db3'; creating it now.
+2026-10-23 14:00:45,992 INFO: DCSS Webtiles server started! (PID: 55416)
+2026-10-23 14:00:45,992 INFO: Webtiles (0.33-a0) running with Tornado 6.5.10 and Python 3.13.13
+2026-10-23 14:00:47,412 INFO: #0     Socket opened from ip 127.0.0.1 (fd15, compression: native permessage-deflate).
+2026-10-23 14:00:47,676 INFO: #0     [Account] Registered user MultiHmvlea9xz (IP: 127.0.0.1, email: ).
+2026-10-23 14:00:48,056 INFO: #1     Socket opened from ip 127.0.0.1 (fd17, compression: native permessage-deflate).
+2026-10-23 14:00:48,279 INFO: #1     [Account] Registered user MultiGmvlea9xz (IP: 127.0.0.1, email: ).
+2026-10-23 14:00:48,761 INFO: #0     P1     Starting coop-2p-web-trunk.
+2026-10-23 14:00:48,775 INFO: #1     MultiGmvlea9xz started watching MultiHmvlea9xz (1).
+2026-10-23 14:01:08,121 INFO: #1     MultiGmvlea9xz stopped watching MultiHmvlea9xz.
+2026-10-23 14:01:08,194 INFO: #0     P2     Starting coop-2p-web-trunk.
+2026-10-23 14:01:08,202 INFO: #1     MultiGmvlea9xz started watching MultiHmvlea9xz (2).
+2026-10-23 14:01:10,155 INFO: #1     MultiGmvlea9xz stopped watching MultiHmvlea9xz.
+2026-10-23 14:01:10,244 INFO: #1     Socket closed. (436.5 kilobytes sent, compression ratio 0.0%)
+2026-10-23 14:01:10,274 INFO: #0     Socket closed. (532.7 kilobytes sent, compression ratio 0.0%)
+2026-10-23 14:01:10,962 INFO: Received signal 15, beginning shutdown.
+2026-10-23 14:01:10,963 INFO: Bye!

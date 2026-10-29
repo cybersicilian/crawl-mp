@@ -1,0 +1,100 @@
+{
+  "archives": {
+    "full-live-source.tar.gz": "7a3385f4219aac910a7b147691a654b12681a981ce2c246711351e813e78a851",
+    "live-build-aux.tar.gz": "951ca242ed3a1465831781bf16fa3ae315e628107a8c346b4d334dc9b7098e31",
+    "live-manifest.json": "95a694b71f666b40ef0bf3beebcf9570d7c709eac5d6e45baaa1f1813b6c5e66",
+    "overlay-manifest.json": "c59a0f5de197c10f2a76343cd973ee69b5610599f34e535be258230a6525261f",
+    "overlay.tar.gz": "d8a6cfee068cae2281580a56c657f001d070037567d69b598d97cf248f134aa8",
+    "verify_creation.py": "2ec167441f5d0fdc418178aa171b762315af3b92268c3636a1edd8f361bb6252"
+  },
+  "commands": [
+    [
+      "make",
+      "-k",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "crawl",
+      "catch2-tests-executable"
+    ],
+    [
+      "./crawl",
+      "--builddb",
+      "--reset-cache"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[new-species]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum],[pakellas],[vorr],[bloodcraft],[shell],[party-session],[party-trade],[save-compatibility]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "make",
+      "-k",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "webserver"
+    ],
+    [
+      "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+      "webserver/util/generate_character_catalog.py",
+      "--binary",
+      "/private/tmp/dcss-release-merged-01a16a0f/crawl"
+    ],
+    [
+      "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+      "webserver/tests/native-character-preview.py",
+      "--binary",
+      "/private/tmp/dcss-release-merged-01a16a0f/crawl"
+    ],
+    [
+      "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+      "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/verify_creation.py",
+      "/private/tmp/dcss-release-merged-01a16a0f/crawl"
+    ],
+    [
+      "/Users/iancaltabiano/Documents/Projects/dcss/.venv/bin/python",
+      "-m",
+      "unittest",
+      "webtiles.character_preview_test",
+      "webtiles.gameplay_protocol_test",
+      "webtiles.party_control_test",
+      "webtiles.skill_training_test",
+      "webtiles.save_lifecycle_test"
+    ],
+    [
+      "node",
+      "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/party-status.cjs"
+    ]
+  ],
+  "createdAt": 1792784728.425119,
+  "dependencyCache": "/private/tmp/dcss-content-afd682036c668a2c/crawl-ref/source/contrib",
+  "dependencyCacheSha256": "0846f42995c08bfa80085cbbd81cdc433a65a1c3a8cc3641b24f340eb37c793a",
+  "gateScript": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/host_heavy.py",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "notClaimed": [
+    "Linux build",
+    "browser gameplay",
+    "production deployment"
+  ],
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "resourceBinding": {
+    "makeJobs": 2,
+    "phases": "sequential"
+  },
+  "runnerSha256": "4b669d944f51887ce1c98d0c2c3617ba3e520c3b92cc89158ee16aa1f434c4e9",
+  "scope": "Exact deployed public source plus scoped overlay; private local build and contracts only",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy",
+  "target": "/private/tmp/dcss-release-merged-01a16a0f"
+}

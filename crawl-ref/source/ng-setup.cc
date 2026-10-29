@@ -1,12 +1,18 @@
 #include "AppHdr.h"
+#include "archaeologist.h"
 
 #include "ng-setup.h"
 
+#include "account-start.h"
+#include "art-enum.h"
+#include "artefact.h"
+#include "character-trait.h"
 #include "adjust.h"
 #include "dungeon.h"
 #include "end.h"
 #include "files.h"
 #include "god-companions.h"
+#include "god-abil.h"
 #include "hints.h"
 #include "invent.h"
 #include "item-name.h"
@@ -14,25 +20,34 @@
 #include "items.h"
 #include "item-use.h"
 #include "jobs.h"
+#include "makeitem.h"
 #include "message.h"
 #include "mutation.h"
 #include "ng-init.h"
 #include "ng-wanderer.h"
+#include <cstdio>
 #include "options.h"
+#include "party.h"
 #include "piety-info.h"
+#include "place.h"
 #include "prompt.h"
 #include "religion.h"
 #include "shopping.h"
 #include "skills.h"
+#include "species.h"
 #include "spl-book.h"
 #include "spl-damage.h"
 #include "spl-summoning.h"
 #include "spl-util.h"
 #include "state.h"
+#include "stringutil.h"
 #include "tag-version.h"
 #include "throw.h"
 #include "transform.h"
 #include "unwind.h"
+#ifdef USE_TILE
+#include "tilepick-p.h"
+#endif
 
 #define MIN_START_STAT       3
 
@@ -40,6 +55,30 @@ static void _init_player()
 {
     you = player();
     dlua.callfn("dgn_clear_persistant_data", "");
+}
+
+// These backgrounds inherit a single existing artefact, not a second copy of
+// it for every player. If another party member (including an Archaeologist)
+// has reserved it, the ordinary starting item remains in its place.
+static void _give_starting_unrand(int subtype, unrand_type unrand)
+{
+    if (get_unique_item_status(unrand) != UNIQ_NOT_EXISTS)
+        return;
+    for (item_def& item : you.inv)
+    {
+        if (!item.is_type(OBJ_ARMOUR, subtype) || is_artefact(item))
+            continue;
+        if (!make_item_unrandart(item, unrand))
+            return;
+        item_colour(item);
+        item_set_appearance(item);
+        you.equipment.update();
+        const auto status = get_unique_item_status(unrand);
+        if (party::is_enabled())
+            for (int slot = 0; slot < party::player_count(); ++slot)
+                party::get_player(slot).unique_items[unrand - UNRAND_START] = status;
+        return;
+    }
 }
 
 // Make sure no stats are unacceptably low
@@ -108,6 +147,9 @@ item_def* newgame_make_item(object_class_type base,
     // character creation
     if (sub_type == WPN_UNARMED || sub_type == WPN_UNKNOWN)
         return nullptr;
+
+    if (you.species == SP_IRIT && base == OBJ_ARMOUR && sub_type == ARM_ROBE)
+        sub_type = ARM_LEATHER_ARMOUR;
 
     inventory_category category = inventory_category_for(base);
     int slot;
@@ -215,11 +257,14 @@ static void _give_job_spells(job_type job)
 
     library_add_spells(spells, true);
 
-    const spell_type first_spell = spells[0];
-    if (!spell_is_useless(first_spell, false, true)
-        && spell_difficulty(first_spell) <= 1)
+    for (spell_type s : spells)
     {
-        add_spell_to_memory(first_spell);
+        if (!spell_is_useless(s, false, true)
+            && spell_difficulty(s) <= 1
+            && (job != JOB_BLOOD_HUNTER || s == SPELL_KINDLED_VEINS))
+        {
+            add_spell_to_memory(s);
+        }
     }
 }
 
@@ -235,6 +280,34 @@ static void _give_offhand_weapon()
     }
     else
         newgame_make_item(OBJ_WEAPONS, WPN_DAGGER);
+}
+
+// The old Librarian received a random fixed book. Modern starts put those
+// spells directly in the library instead of requiring a physical book.
+static void _give_sage_library()
+{
+    vector<spell_type> chosen;
+    int seen = 0;
+    for (int i = 0; i < BOOK_ANNIHILATIONS; ++i)
+    {
+        const book_type book = static_cast<book_type>(i);
+        if (!book_exists(book))
+            continue;
+        vector<spell_type> spells = spellbook_template(book);
+        if (spells.empty())
+            continue;
+        if (one_chance_in(++seen))
+            chosen = std::move(spells);
+    }
+    if (you.has_mutation(MUT_INNATE_CASTER))
+    {
+        for (spell_type spell : chosen)
+            if (you.spell_no < MAX_DJINN_SPELLS
+                && !you.has_spell(spell) && !spell_is_useless(spell, false))
+                add_spell_to_memory(spell);
+    }
+    else
+        library_add_spells(chosen, true);
 }
 
 void give_items_skills(const newgame_def& ng)
@@ -289,6 +362,69 @@ void give_items_skills(const newgame_def& ng)
         you.raw_piety = 150;
         break;
 
+    case JOB_BLOOD_HUNTER:
+        you.religion = GOD_VORR;
+        you.raw_piety = 35;
+        break;
+
+    case JOB_HEALER:
+        you.religion = GOD_ELYVILON;
+        you.raw_piety = 45;
+        break;
+
+    case JOB_PREACHER:
+        you.religion = GOD_ZIN;
+        you.raw_piety = 35;
+        break;
+
+    case JOB_SAGE:
+        you.religion = GOD_SIF_MUNA;
+        you.raw_piety = 35;
+        break;
+
+    case JOB_HERMIT:
+        you.religion = GOD_RU;
+        you.raw_piety = 10;
+        break;
+
+    case JOB_SLIME_PRIEST:
+        you.religion = GOD_JIYVA;
+        you.raw_piety = 5;
+        break;
+
+#if TAG_MAJOR_VERSION == 34
+    case JOB_DEATH_KNIGHT:
+        you.religion = GOD_YREDELEMNUL;
+        you.raw_piety = 38;
+        break;
+
+    case JOB_PRIEST:
+        you.religion = GOD_SHINING_ONE;
+        you.raw_piety = 50;
+        break;
+
+    case JOB_ABYSSAL_KNIGHT:
+        you.religion = GOD_LUGONU;
+        you.raw_piety = 38;
+        break;
+
+    case JOB_JESTER:
+    {
+        you.religion = GOD_XOM;
+        you.raw_piety = 100;
+        int timeout_rnd = random2(40);
+        timeout_rnd += random2(40);
+        you.gift_timeout = max(5, timeout_rnd);
+        break;
+    }
+#endif
+
+    case JOB_PALADIN:
+        you.religion = GOD_SHINING_ONE;
+        you.raw_piety = 45;
+        you.props["paladin_aura"] = true;
+        break;
+
     default:
         break;
     }
@@ -297,22 +433,58 @@ void give_items_skills(const newgame_def& ng)
         newgame_make_item(OBJ_WEAPONS, ng.weapon, 1, 0, SPWPN_CHAOS);
     else if (you.char_class == JOB_CINDER_ACOLYTE)
         newgame_make_item(OBJ_WEAPONS, ng.weapon, 1, -1, SPWPN_FLAMING);
+    else if (you.char_class == JOB_BLOOD_HUNTER)
+        newgame_make_item(OBJ_WEAPONS, ng.weapon, 1, 0, SPWPN_VAMPIRISM);
     else if (job_has_weapon_choice(you.char_class))
         newgame_make_item(OBJ_WEAPONS, ng.weapon);
 
     give_job_equipment(you.char_class);
+    switch (you.char_class)
+    {
+    case JOB_FENCER:
+        _give_starting_unrand(ARM_GLOVES, UNRAND_FENCERS);
+        break;
+    case JOB_APOTHECARY:
+        _give_starting_unrand(ARM_HAT, UNRAND_ALCHEMIST);
+        break;
+    case JOB_PHILOSOPHER:
+        _give_starting_unrand(ARM_HAT, UNRAND_PONDERING);
+        break;
+    case JOB_BILLIONAIRE:
+    {
+        // Gold is shared in a party: grant the fortune once, even if a
+        // second Billionaire joins after some of it has been spent.
+        player& owner = party::is_enabled() ? party::get_player(0) : you;
+        const char* const key = "billionaire_starting_fortune";
+        if (!owner.props.exists(key))
+        {
+            owner.props[key] = true;
+            you.gold += 1000000;
+            if (party::is_enabled())
+                party::sync_shared_gold(you.gold);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    account_start::give_items();
     give_job_skills(you.char_class);
     _give_job_spells(you.char_class);
+    if (you.char_class == JOB_ARCHAEOLOGIST)
+        archaeologist::start_quest();
+    if (you.char_class == JOB_SAGE)
+        _give_sage_library();
     if (you.char_class == JOB_GLADIATOR)
         give_throwing_ammo(1);
 
     if (you.has_mutation(MUT_NO_GRASPING)) // i.e. felids
         you.skills[SK_THROWING] = 0;
 
-    if (you.has_mutation(MUT_NO_ARMOUR)) // i.e. felids
-        you.skills[SK_SHIELDS] = 0; // i.e. FeFi
+    if (is_useless_skill(SK_SHIELDS))
+        you.skills[SK_SHIELDS] = 0;
 
-    if (species::undead_type(you.species) == US_UNDEAD)
+    if (you.undead_state(false) == US_UNDEAD)
         you.skills[SK_SHAPESHIFTING] = 0; // Undead mystics
 
     if (you.has_mutation(MUT_WIELD_OFFHAND))
@@ -339,6 +511,32 @@ void give_items_skills(const newgame_def& ng)
 
     if (crawl_state.game_is_descent())
         you.attribute[ATTR_VOUCHER] = 1;
+}
+
+void apply_starting_background_effects()
+{
+    static const char *const applied_key = "starting_background_effects_applied";
+    if (you.props.exists(applied_key))
+        return;
+    if (you.char_class == JOB_HERMIT)
+    {
+        prepare_starting_ru();
+        if (!ru_starting_health_sacrifice())
+            die("Unable to apply the Hermit's starting sacrifice.");
+    }
+    else if (you.char_class == JOB_SLIME_PRIEST)
+    {
+        int gained = 0;
+        for (int attempts = 0; gained < 3 && attempts < 500; ++attempts)
+            if (mutate(RANDOM_SLIME_MUTATION, "Jiyva's starting gift",
+                       false, false, true))
+                ++gained;
+        if (gained < 3)
+            die("Unable to apply the Slime Priest's starting mutations.");
+    }
+    else
+        return;
+    you.props[applied_key] = true;
 }
 
 static void _setup_tutorial_miscs()
@@ -373,6 +571,101 @@ static void _give_basic_knowledge()
 
 static void _setup_generic(const newgame_def& ng,
                           bool normal_dungeon_setup /*for catch2-tests*/);
+
+static string _ng_json_escape(const string &s)
+{
+    string out;
+    out.reserve(s.size() + 8);
+    for (unsigned char c : s)
+    {
+        if (c == '"')
+            out += "\\\"";
+        else if (c == '\\')
+            out += "\\\\";
+        else if (c == '\n')
+            out += "\\n";
+        else if (c == '\r')
+            out += "\\r";
+        else if (c == '\t')
+            out += "\\t";
+        else if (c >= 0x20)
+            out += static_cast<char>(c);
+    }
+    return out;
+}
+
+static void _append_chronicle_party_comp()
+{
+    if (crawl_state.game_is_tutorial() || crawl_state.game_is_arena())
+        return;
+
+    string path = Options.save_dir.empty()
+                  ? string("./rcs/coop_chronicle.jsonl")
+                  : Options.save_dir + "coop_chronicle.jsonl";
+    FILE *fp = fopen(path.c_str(), "a");
+    if (!fp && path != "./rcs/coop_chronicle.jsonl")
+        fp = fopen("./rcs/coop_chronicle.jsonl", "a");
+    if (!fp)
+        return;
+
+    const int pcount = max(1, party::player_count());
+    const bool ff = party::friendly_fire_enabled();
+    const string seed_str = make_stringf("%llu", (unsigned long long)you.game_seed);
+    const string place_str = _ng_json_escape(level_id::current().describe());
+
+    string party_spec;
+    string members_json = "[";
+    for (int i = 0; i < pcount; ++i)
+    {
+        player &p = (i == party::active_slot()) ? you : party::get_player(i);
+        // Equipment access resolves inventory through the current player context.
+        unwind_var<player*> unwind_you(real_you, &p);
+        const string p_name = p.your_name.empty()
+                              ? make_stringf("Player%d", i + 1)
+                              : p.your_name;
+        const string sp_str = species::name(p.species);
+        const string jb_str = get_job_name(p.char_class);
+        const int xl = max(1, p.experience_level);
+        string weapon;
+        if (job_has_weapon_choice(p.char_class) || p.species == SP_HYDRA
+            || species::mutation_level(p.species, MUT_NO_GRASPING))
+        {
+            const item_def *wpn = p.weapon();
+            weapon = wpn ? weapon_base_name(static_cast<weapon_type>(wpn->sub_type))
+                         : "unarmed";
+        }
+
+        if (i > 0)
+        {
+            party_spec += ",";
+            members_json += ",";
+        }
+        party_spec += p_name + ":" + sp_str + "/" + jb_str;
+        if (!weapon.empty())
+            party_spec += "/" + weapon;
+        members_json += make_stringf(
+            "{\"slot\":%d,\"name\":\"%s\",\"species\":\"%s\",\"job\":\"%s\",\"weapon\":\"%s\",\"xl\":%d}",
+            i,
+            _ng_json_escape(p_name).c_str(),
+            _ng_json_escape(sp_str).c_str(),
+            _ng_json_escape(jb_str).c_str(),
+            _ng_json_escape(weapon).c_str(),
+            xl);
+    }
+    members_json += "]";
+
+    fprintf(fp,
+            "{\"type\":\"party_comp\",\"player_count\":%d,\"friendly_fire\":%s,"
+            "\"seed\":\"%s\",\"place\":\"%s\",\"party_spec\":\"%s\","
+            "\"members\":%s}\n",
+            pcount,
+            ff ? "true" : "false",
+            _ng_json_escape(seed_str).c_str(),
+            place_str.c_str(),
+            _ng_json_escape(party_spec).c_str(),
+            members_json.c_str());
+    fclose(fp);
+}
 
 // Initialise a game based on the choice stored in ng.
 void setup_game(const newgame_def& ng,
@@ -417,6 +710,9 @@ void setup_game(const newgame_def& ng,
     }
 
     _setup_generic(ng, normal_dungeon_setup);
+    party::setup_party_members_on_new_game();
+    if (normal_dungeon_setup)
+        _append_chronicle_party_comp();
 }
 
 static bool _spell_triggered_by(spell_type to_trigger, spell_type trigger)
@@ -516,7 +812,7 @@ void initial_dungeon_setup()
 static void _set_starting_form(transformation form)
 {
     // Undead mystics are allowed (if mediocre), but obviously can't start in a form.
-    if (species::undead_type(you.species) == US_UNDEAD)
+    if (you.undead_state(false) == US_UNDEAD)
         return;
 
     const talisman_type tal_type = talisman_for_form(form);
@@ -545,6 +841,7 @@ static void _setup_generic(const newgame_def& ng,
 
     rng::reset(); // initialize rng from Options.seed
     _init_player();
+    party::apply_starting_campaign_modifiers(you);
     you.game_seed = crawl_state.seed;
     you.deterministic_levelgen =
                             Options.pregen_dungeon != level_gen_type::classic;
@@ -567,7 +864,18 @@ static void _setup_generic(const newgame_def& ng,
     you.species    = ng.species;
     you.char_class = ng.job;
 
+    if (set_character_trait(you, party::starting_member(0).trait)
+        != trait_restriction::allowed)
+    {
+        die("Incompatible character trait in party setup");
+    }
+
     you.chr_class_name = get_job_name(you.char_class);
+
+    std::unique_ptr<rng::subgenerator> creation_rng;
+    const uint64_t starting_seed = party::starting_member(0).starting_seed;
+    if (starting_seed)
+        creation_rng.reset(new rng::subgenerator(starting_seed, STARTING_CHARACTER_SEQUENCE));
 
     species_stat_init(you.species);     // must be down here {dlb}
 
@@ -580,6 +888,7 @@ static void _setup_generic(const newgame_def& ng,
     _unfocus_stats();
 
     give_basic_mutations(you.species);
+    give_basic_trait_mutations();
 
     // This function depends on stats and mutations being finalised.
     give_items_skills(ng);
@@ -599,7 +908,7 @@ static void _setup_generic(const newgame_def& ng,
 
     // intentionally create the subgenerator either way, so that this has the
     // same impact on the current main rng for all chars.
-    rng::subgenerator dj_rng;
+    std::unique_ptr<rng::subgenerator> dj_rng(new rng::subgenerator);
     if (you.has_mutation(MUT_INNATE_CASTER))
         _setup_innate_spells();
 
@@ -666,6 +975,19 @@ static void _setup_generic(const newgame_def& ng,
     // Make sure the starting player is fully charged up.
     set_hp(you.hp_max);
     set_mp(you.max_magic_points);
+    apply_starting_background_effects();
+    set_hp(you.hp_max);
+    set_mp(you.max_magic_points);
+
+#ifdef USE_TILE
+    if (starting_seed)
+        randomize_doll_base();
+#endif
+    // Unwind the nested stream before releasing its parent. Otherwise its
+    // destructor would restore a dangling pointer after creation finishes.
+    if (starting_seed)
+        dj_rng.reset();
+    creation_rng.reset();
 
     if (normal_dungeon_setup)
         initial_dungeon_setup();

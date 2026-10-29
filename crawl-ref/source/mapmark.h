@@ -335,6 +335,22 @@ public:
     map_marker *clone() const override;
     static map_marker *read(reader &, map_marker_type);
 
+    // Spike launcher powers are ordinarily nonnegative. New automatic
+    // launchers encode power as -(power + 1), preserving the existing save
+    // layout while distinguishing their stricter target policy.
+    static int encoded_spike_power(int raw_power, bool automatic)
+    {
+        return automatic ? -raw_power - 1 : raw_power;
+    }
+    bool automatic_spike() const
+    {
+        return feat == DNGN_SPIKE_LAUNCHER && power < 0;
+    }
+    int spike_power() const
+    {
+        return automatic_spike() ? -power - 1 : power;
+    }
+
 private:
     bool run_spike_launcher(int time);
     bool run_mould_patch(int time);

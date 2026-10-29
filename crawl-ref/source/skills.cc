@@ -4,6 +4,9 @@
 **/
 
 #include "AppHdr.h"
+#include "archaeologist.h"
+#include "oozle-memory.h"
+#include "player-stats.h"
 
 #include "skills.h"
 
@@ -123,6 +126,7 @@ static const char *skill_titles[NUM_SKILLS][7] =
     {"Invocations",    "Unbeliever",    "Agnostic",        "Dissident",       "Heretic",        "Apostate",     "Invo"},
     {"Evocations",     "Charlatan",     "Prestidigitator", "Fetichist",       "Evocator",       "Ex Machina",  "Evo"},
     {"Shapeshifting",  "Changeling",    "Mimic",           "Metamorph",       "Skinwalker",     "Shapeless @Genus@", "Shft"},
+    {"Auramancy",      "Attendant",     "Standard-Bearer", "Concordant",      "Heart of the Host", "Living Constellation", "Aura"},
 };
 
 static const char *martial_arts_titles[6] =
@@ -229,7 +233,7 @@ void cleanup_innate_magic_skills()
 {
     unsigned int magic_xp = 0;
     unsigned int n_skills = 0;
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; sk++)
+    for (skill_type sk : magic_skills())
     {
         if (is_useless_skill(sk, false))
             continue;
@@ -243,7 +247,7 @@ void cleanup_innate_magic_skills()
     while (xp_per > skill_exp_needed(lvl + 1, SK_SPELLCASTING))
         ++lvl;
 
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; sk++)
+    for (skill_type sk : magic_skills())
     {
         if (is_useless_skill(sk, false))
             continue;
@@ -331,7 +335,7 @@ void reassess_starting_skills(bool balance_djinn)
 static void _change_skill_level(skill_type exsk, int n)
 {
     ASSERT(n != 0);
-    bool need_reset = false;
+    bool need_reset = you.species == SP_HIGH_ELF && n < 0;
 
     you.skills[exsk] = max(0, you.skills[exsk] + n);
 
@@ -387,10 +391,16 @@ static void _change_skill_level(skill_type exsk, int n)
 void redraw_skill(skill_type exsk, skill_type old_best_skill, bool recalculate_order)
 {
     const bool trained_form = exsk == SK_SHAPESHIFTING && you.form != transformation::none;
-    if (exsk == SK_FIGHTING || trained_form)
+    const bool trained_absorption = exsk == SK_SHAPESHIFTING && oozle::has_memory();
+    if (trained_absorption)
+    {
+        notify_stat_change();
+        you.redraw_armour_class = you.redraw_evasion = you.wield_change = true;
+    }
+    if (exsk == SK_FIGHTING || trained_form || trained_absorption)
         calc_hp(true);
 
-    if (exsk == SK_INVOCATIONS || exsk == SK_SPELLCASTING
+    if (trained_absorption || exsk == SK_INVOCATIONS || exsk == SK_SPELLCASTING
         || exsk == SK_SHAPESHIFTING && you.form == transformation::walking_scroll)
     {
         calc_mp();
@@ -492,6 +502,8 @@ static bool _skill_always_shown(skill_type sk)
 
     switch (sk)
     {
+    case SK_SHAPESHIFTING:
+        return oozle::has_memory() && !is_useless_skill(sk);
     case SK_FIGHTING:
     case SK_ARMOUR:
     case SK_DODGING:
@@ -551,7 +563,7 @@ skill_set default_shown_skills()
     if (you.has_mutation(MUT_INNATE_CASTER)
         && any_of(begin(shown), end(shown), is_magic_skill))
     {
-        for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+        for (skill_type sk : magic_skills())
             if (!is_useless_skill(sk))
                 shown.insert(sk);
     }
@@ -744,7 +756,7 @@ static void _balance_magic_training()
 
     int n_skills = 0;
     int train_total = 0;
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_skills())
     {
         if (is_removed_skill(sk) || you.skills[sk] >= MAX_SKILL_LEVEL)
         {
@@ -761,9 +773,22 @@ static void _balance_magic_training()
     // Total training for all magic skills should be the base average,
     // divided between each skill.
     const int to_train = max(train_total / n_skills, 1);
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_skills())
         if (!is_removed_skill(sk) && you.skills[sk] < MAX_SKILL_LEVEL)
             you.training[sk] = to_train;
+}
+
+// Each mode retains its own selection, just as in the native skill menu.
+void set_training_mode(bool automatic)
+{
+    if (you.auto_training == automatic
+        || you.has_mutation(MUT_DISTRIBUTED_TRAINING))
+    {
+        return;
+    }
+    you.auto_training = automatic;
+    std::swap(you.train, you.train_alt);
+    reset_training();
 }
 
 /**
@@ -836,7 +861,7 @@ void reset_training()
         // Focused skills get at least 20% training.
         for (int sk = 0; sk < NUM_SKILLS; ++sk)
             if (you.train[sk] == 2 && you.training[sk] < 20
-                && !is_useless_skill((skill_type) sk))
+                && skill_trained(sk))
             {
                 you.training[sk] += 5 * (5 - you.training[sk] / 4);
             }
@@ -891,6 +916,7 @@ static bool _level_up_check(skill_type sk, bool simu)
         {
             you.train[sk] = TRAINING_DISABLED;
             you.train_alt[sk] = TRAINING_DISABLED;
+            archaeologist::on_skill_maxed(sk);
         }
         return true;
     }
@@ -905,14 +931,39 @@ bool is_mundane_skill(skill_type sk)
 
 bool is_magic_skill(skill_type sk)
 {
-    return sk > SK_LAST_MUNDANE && sk <= SK_LAST_MAGIC;
+    return (sk > SK_LAST_MUNDANE && sk <= SK_LAST_MAGIC) || sk == SK_AURAMANCY;
+}
+
+// Magic schools need not occupy contiguous save IDs. Append new skills safely.
+const vector<skill_type>& magic_skills()
+{
+    static const vector<skill_type> result = [] {
+        vector<skill_type> skills;
+        for (skill_type sk = SK_FIRST_SKILL; sk < NUM_SKILLS; ++sk)
+            if (is_magic_skill(sk))
+                skills.push_back(sk);
+        return skills;
+    }();
+    return result;
+}
+
+const vector<skill_type>& magic_school_skills()
+{
+    static const vector<skill_type> result = [] {
+        vector<skill_type> skills = magic_skills();
+        erase_if(skills, [](skill_type skill) {
+            return skill == SK_SPELLCASTING || is_removed_skill(skill);
+        });
+        return skills;
+    }();
+    return result;
 }
 
 int _gnoll_total_skill_cost();
 
 static int _magic_training()
 {
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_skills())
         if (you.training[sk])
             return you.training[sk];
     return 0;
@@ -945,7 +996,7 @@ static int _min_points_to_raise_all(int min_training)
     // waste skill point(s) on that skill.
     const int magic_training = _magic_training();
     if (magic_training)
-        for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+        for (skill_type sk : magic_skills())
             if (_is_sacrificed_skill(sk))
                 points += magic_training / min_training;
 
@@ -980,7 +1031,7 @@ static bool _xp_available_for_skill_points(int points)
 static int _innate_casting_magic_max_spend_for_target()
 {
     int max_training = INT_MAX;
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_skills())
     {
         if (!you.training[sk])
             continue;
@@ -1031,7 +1082,7 @@ static void _train_with_innate_casting(bool simu)
         const int magic_training = _magic_training();
         if (magic_training)
         {
-            for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+            for (skill_type sk : magic_skills())
             {
                 if (!_is_sacrificed_skill(sk))
                     continue;
@@ -1242,9 +1293,29 @@ static void _train_skills(int exp, const int cost, const bool simu)
         magic_gain = sprint_modify_exp_inverse(magic_gain);
 }
 
+bool high_elf_skill_locked(const player& p, skill_type sk)
+{
+    if (p.species != SP_HIGH_ELF || sk == SK_FIGHTING
+        || sk == SK_SPELLCASTING || sk == SK_INVOCATIONS)
+    {
+        return false;
+    }
+    return p.skills[sk] < p.experience_level / 3;
+}
+
+string high_elf_skill_lock_reason(const player& p, skill_type sk)
+{
+    if (!high_elf_skill_locked(p, sk))
+        return "";
+    return make_stringf("High Elves cannot train this skill below level %d at XL %d.",
+                        p.experience_level / 3, p.experience_level);
+}
+
 bool skill_trained(int i)
 {
-    return !is_useless_skill((skill_type) i) && you.train[i];
+    return !is_useless_skill((skill_type) i)
+           && !high_elf_skill_locked(you, static_cast<skill_type>(i))
+           && you.train[i];
 }
 
 /**
@@ -1447,6 +1518,7 @@ static wind_skill_type _skill_to_wind(skill_type sk)
         case SK_CONJURATIONS:
         case SK_TRANSLOCATIONS:
         case SK_HEXES:
+        case SK_AURAMANCY:
             return WIND_MAGIC;
 
         default:
@@ -1652,6 +1724,8 @@ static int _train(skill_type exsk, int &max_exp, bool simu, bool check_targets)
         const int bonus = min<int>(bonus_left, you.skill_manual_points[exsk]);
         skill_inc += bonus;
         you.skill_manual_points[exsk] -= bonus;
+        if (!simu && !crawl_state.simulating_xp_gain)
+            archaeologist::on_manual_training(exsk, bonus);
         if (!you.skill_manual_points[exsk] && !simu && !crawl_state.simulating_xp_gain)
         {
             mprf("You have finished your manual of %s and %stoss it away.",
@@ -2540,6 +2614,7 @@ static map<skill_type, mutation_type> skill_sac_muts = {
     { SK_ICE_MAGIC,      MUT_NO_ICE_MAGIC },
     { SK_ALCHEMY,        MUT_NO_ALCHEMY_MAGIC },
     { SK_HEXES,          MUT_NO_HEXES_MAGIC },
+    { SK_AURAMANCY,      MUT_NO_AURAMANCY_MAGIC },
     { SK_TRANSLOCATIONS, MUT_NO_TRANSLOCATION_MAGIC },
     { SK_CONJURATIONS,   MUT_NO_CONJURATION_MAGIC },
     { SK_NECROMANCY,     MUT_NO_NECROMANCY_MAGIC },
@@ -2563,6 +2638,8 @@ bool can_sacrifice_skill(mutation_type mut)
 
 static bool _is_sacrificed_skill(skill_type skill)
 {
+    if (skill == SK_SHAPESHIFTING && oozle::has_memory())
+        return false; // Losing forms does not remove the body's absorption skill.
     auto mut = skill_sac_muts.find(skill);
     if (mut != skill_sac_muts.end() && you.has_mutation(mut->second))
         return true;
@@ -2721,6 +2798,17 @@ int get_crosstrain_points(skill_type sk)
 
 }
 
+/** Level bonus from cross-training alone, excluding other skill modifiers. */
+int get_crosstrain_bonus(skill_type sk, int scale)
+{
+    const unsigned int points = min(you.skill_points[sk]
+                                   + get_crosstrain_points(sk),
+                                   skill_exp_needed(MAX_SKILL_LEVEL, sk));
+    const int level = calc_skill_level_change(sk, you.skills[sk], points);
+    return level * scale + get_skill_progress(sk, level, points, scale)
+           - you.skill(sk, scale, true);
+}
+
 void dump_skills(string &text)
 {
     for (uint8_t i = 0; i < NUM_SKILLS; i++)
@@ -2859,12 +2947,15 @@ bool can_enable_skill(skill_type sk)
 {
     // TODO: should this check you.skill_points or you.skills?
     return !you.has_mutation(MUT_DISTRIBUTED_TRAINING)
+       && !high_elf_skill_locked(you, sk)
        && you.skills[sk] < MAX_SKILL_LEVEL
        && !is_useless_skill(sk);
 }
 
 void set_training_status(skill_type sk, training_status st)
 {
+    if (st != TRAINING_DISABLED && high_elf_skill_locked(you, sk))
+        return;
     if (you.has_mutation(MUT_INNATE_CASTER) && is_magic_skill(sk))
         set_magic_training(st);
     else
@@ -2873,7 +2964,7 @@ void set_training_status(skill_type sk, training_status st)
 
 void set_magic_training(training_status st)
 {
-    for (skill_type sk = SK_SPELLCASTING; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_skills())
     {
         if (is_removed_skill(sk))
             continue;

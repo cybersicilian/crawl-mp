@@ -1,0 +1,22 @@
+{
+  "startedAt": 1792538744.118829,
+  "finishedAt": 1792538746.2461498,
+  "results": [
+    {
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "STDFLAG=-std=c++14",
+        "PYTHON=/usr/local/bin/python3",
+        "catch2-tests-executable",
+        "crawl"
+      ],
+      "exitCode": 2,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/coop-content/step-1.log"
+    }
+  ],
+  "snapshotMatchesRequest": true,
+  "workingSourceChangedDuringBuild": [],
+  "passed": false
+}

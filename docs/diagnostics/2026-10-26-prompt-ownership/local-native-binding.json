@@ -1,0 +1,20 @@
+{
+  "runner_sha256": "40bdef7dc7dabf195a5624f957b083af675ed3877e44227e46f6cfc48b3f57ae",
+  "native_sha256": "ea8a08847a770953a0c3258c23e3e4d76d035fe086e745dfddc6cf839bc14d5d",
+  "runtime": {
+    "tileweb.cc": "6a82d83546a48c7596bab3eb05fd36af648b0c2d258e50d80c092c3cc151e105",
+    "webserver/webtiles/activity_pump.py": "c237ac08dcc3d7ea1ff9db4dcf35e901a8af234d4d8713aaaf011a65bd333e67",
+    "webserver/webtiles/process_handler.py": "8e3d6cdabbdd321daddeb5e7dbb8c1b213787970ab9977b2abc0ef18f86d3c0e"
+  },
+  "overlays": {
+    "tileweb.cc": "835330d30238d2c3fc7db4044ea031a7a7108b74afd354c3349d2d299d25e7ac",
+    "webserver/webtiles/activity_pump.py": "c237ac08dcc3d7ea1ff9db4dcf35e901a8af234d4d8713aaaf011a65bd333e67",
+    "webserver/webtiles/process_handler.py": "8e3d6cdabbdd321daddeb5e7dbb8c1b213787970ab9977b2abc0ef18f86d3c0e"
+  },
+  "tests": {
+    "native-command-completion.py": "824278146a927bbbb41c14f7a06b3545a40172dd19e43cfb060c37c7108cb99b",
+    "three-player-input-native.py": "0976d3e9cfc7c02a3d11f129281ffb86af44188d237f1ba760b06c7a533147af"
+  },
+  "existing_saves_used": false,
+  "production_mutation": false
+}

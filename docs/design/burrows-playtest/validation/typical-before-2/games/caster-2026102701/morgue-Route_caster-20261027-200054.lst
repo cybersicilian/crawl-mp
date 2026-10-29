@@ -1,0 +1,125 @@
+Route_caster
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(7, -51, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(9, -32, Bur:1)
+  a +0 buckler
+(9, -17, Bur:1)
+  a +0 plate armour
+  a scroll of identify
+(10, -17, Bur:1)
+  a shale drake skeleton
+(14, -29, Bur:1)
+  a crag boar skeleton
+(14, -28, Bur:1)
+  a +0 quarterstaff
+  a burrowing beast skeleton
+(27, -32, Bur:1)
+  a komodo dragon corpse (skeletalised by now)
+(28, -50, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(30, -2, Bur:1)
+  a +0 quarterstaff
+(41, -32, Bur:1)
+  a komodo dragon corpse (skeletalised by now)
+
+Level 2 of the Burrows
+(7, -23, Bur:2)
+  a +0 scale mail
+(9, -4, Bur:2)
+  a +3 chain mail
+(13, -22, Bur:2)
+  a crag boar skeleton
+(18, 2, Bur:2)
+  a scroll of noise
+(30, 2, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(32, -37, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(32, -20, Bur:2)
+  a crag boar skeleton
+(35, -15, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(42, -36, Bur:2)
+  a staff of conjuration
+(42, -26, Bur:2)
+  a +0 robe
+(43, 0, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(44, -20, Bur:2)
+  a +0 chain mail
+(45, -16, Bur:2)
+  a shale drake corpse (skeletalised by now)
+(47, -9, Bur:2)
+  a +0 helmet
+(47, 12, Bur:2)
+  a +0 leather armour
+
+Level 1 of the Hive
+(0, 25, Hive:1)
+  a scroll of identify
+(3, 0, Hive:1)
+  a +0 hand axe
+  a +0 robe
+(4, -4, Hive:1)
+  a +0 war axe
+  a +0 leather armour
+(4, -2, Hive:1)
+  a +0 hand axe of pain
+  a +0 leather armour
+(18, 22, Hive:1)
+  a scroll of identify
+(26, 19, Hive:1)
+  a +1 short sword of draining
+(27, 2, Hive:1)
+  a +0 rapier
+(31, 21, Hive:1)
+  the +5 battleaxe of War {drain, Str+3 Int+4}
+    Str+3:     It affects your strength (+3).
+    Int+4:     It affects your intelligence (+4).
+    
+    It cannot be enchanted further.
+(37, -9, Hive:1)
+  a blade talisman
+(37, -3, Hive:1)
+  a +0 hand axe
+(39, -3, Hive:1)
+  4 poisoned darts
+(42, -12, Hive:1)
+  a +0 long sword
+(60, 29, Hive:1)
+  a +0 glaive
+
+Level 2 of the Hive
+(30, -16, Hive:2)
+  a hornet corpse
+(31, -19, Hive:2)
+  a +0 hand axe
+  a +0 robe
+  a +0 hand axe
+  a +0 leather armour
+  a meliai corpse
+(31, -17, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+  a +0 hand axe
+  a +0 robe
+  a meliai corpse
+(32, -21, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+(32, -20, Hive:2)
+  a +0 broad axe of electrocution (still there?)
+  a +0 robe (still there?)
+  a meliai corpse (still there?)
+(32, -19, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+(32, -17, Hive:2)
+  a +0 war axe
+  a +0 leather armour
+  a meliai corpse
+

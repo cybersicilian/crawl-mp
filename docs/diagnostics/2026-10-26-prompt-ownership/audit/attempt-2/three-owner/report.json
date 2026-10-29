@@ -1,0 +1,19 @@
+{
+  "passed": false,
+  "existing_saves_used": false,
+  "checks": [
+    "A rapid wait/inventory sequence retains the prompt owner while a peer waits",
+    "Rapid input from three owners is serialized with one token per command",
+    "A buffered owner response closes its native inventory prompt before a peer acts",
+    "An inline native item dialog cannot complete before its control handler returns",
+    "A rejected action inside a COMMAND-mode dialog retains its token and queued peer",
+    "Reconnect restores the real prompt without replaying the old connection's queued keys",
+    "Escape removes only its owner's deferred input while the other owners continue",
+    "Raw multi-character input retains separate command ownership",
+    "A stale prompt response spends no turn and does not strand the next owner",
+    "A rejected command completes once without a turn and the next owner progresses",
+    "A dropped completion and tactical acknowledgement self-heal without replaying a turn"
+  ],
+  "expect_failure": false,
+  "owned_process_exited": true
+}

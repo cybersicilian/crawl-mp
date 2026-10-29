@@ -1,12 +1,20 @@
 define(["jquery", "comm", "./map_knowledge", "./view_data", "./monster_list",
-        "./minimap", "./dungeon_renderer"],
+        "./minimap", "./dungeon_renderer", "game-loading"],
 function ($, comm, map_knowledge, view_data, monster_list, minimap,
-          dungeon_renderer) {
+          dungeon_renderer, loading) {
     "use strict";
 
     // Message indicating any invisible monsters nearby whose location was
     // never known to the player.
     var inv_mons_msg;
+    var pending_frame = null;
+
+    function cancel_frame()
+    {
+        if (pending_frame !== null)
+            window.cancelAnimationFrame(pending_frame);
+        pending_frame = null;
+    }
 
     function invalidate(minimap_too)
     {
@@ -26,8 +34,33 @@ function ($, comm, map_knowledge, view_data, monster_list, minimap,
         }
     }
 
+    function invalidate_positions(locs)
+    {
+        if (!locs || !map_knowledge.bounds())
+            return;
+        for (var i = 0; i < locs.length; i++)
+        {
+            var loc = locs[i];
+            if (!loc || loc.x === undefined || loc.y === undefined)
+                continue;
+            map_knowledge.touch(loc.x, loc.y);
+            map_knowledge.touch(loc.x, loc.y - 1);
+            map_knowledge.touch(loc.x - 1, loc.y);
+            map_knowledge.touch(loc.x - 1, loc.y - 1);
+        }
+    }
+
     function display()
     {
+        // Player, party, camera and map packets describe the same native update.
+        // Paint their latest state together before the next browser paint.
+        if (pending_frame === null)
+            pending_frame = window.requestAnimationFrame(render);
+    }
+
+    function render()
+    {
+        pending_frame = null;
         // Update the display.
         if (!map_knowledge.bounds())
             return;
@@ -44,14 +77,16 @@ function ($, comm, map_knowledge, view_data, monster_list, minimap,
             var cell = map_knowledge.get(loc.x, loc.y);
             cell.dirty = false;
             monster_list.update_loc(loc);
-            dungeon_renderer.render_loc(loc.x, loc.y, cell);
             minimap.update(loc.x, loc.y, cell);
         }
         map_knowledge.reset_dirty();
 
-        dungeon_renderer.animate();
+        dungeon_renderer.render_view(dirty_locs);
 
         monster_list.update(inv_mons_msg);
+
+        if (dungeon_renderer.cols > 0 && dungeon_renderer.rows > 0)
+            loading.mark("map");
 
         var render_time = (new Date() - t1);
         if (!window.render_times)
@@ -63,9 +98,11 @@ function ($, comm, map_knowledge, view_data, monster_list, minimap,
 
     function clear_map()
     {
+        cancel_frame();
         map_knowledge.clear();
 
         dungeon_renderer.clear();
+        dungeon_renderer.paint_signature = null;
 
         minimap.clear();
 
@@ -83,38 +120,24 @@ function ($, comm, map_knowledge, view_data, monster_list, minimap,
         if (data.player_on_level != null)
             map_knowledge.set_player_on_level(data.player_on_level);
 
-        if (data.vgrdc)
-            minimap.do_view_center_update(data.vgrdc.x, data.vgrdc.y);
-
         if (data.cells)
             map_knowledge.merge(data.cells);
+
+        if (data.vgrdc)
+            minimap.do_view_center_update(data.vgrdc.x, data.vgrdc.y);
 
         if ("invis_mon_desc" in data)
             inv_mons_msg = data.invis_mon_desc;
 
-        // Mark cells overlapped by dirty cells as dirty
-        $.each(map_knowledge.dirty().slice(), function (i, loc) {
-            var cell = map_knowledge.get(loc.x, loc.y);
-            // high cell
-            if (cell.t && cell.t.sy && cell.t.sy < 0)
-                map_knowledge.touch(loc.x, loc.y - 1);
-            // left overlap
-            if (cell.t && cell.t.left_overlap && cell.t.left_overlap < 0)
-            {
-                map_knowledge.touch(loc.x - 1, loc.y);
-                // If we overlap at both top *and* left, we may additionally
-                // overlap diagonally.
-                if (cell.t.sy && cell.t.sy < 0)
-                    map_knowledge.touch(loc.x - 1, loc.y - 1);
-            }
-        });
-
+        dungeon_renderer.animate();
         display();
     }
 
-    function handle_vgrdc(data)
-    {
-    }
+    $(document).on("game_camera_changed.display", function () {
+        display();
+    }).on("dungeon_tiles_changed.display", display)
+        .on("art_materials_ready.display texture_pack_changed.display visual_presentation_changed.display", function () { invalidate(false); display(); })
+        .on("game_preinit.display game_cleanup.display", cancel_frame);
 
     comm.register_handlers({
         "map": handle_map_message,
@@ -122,6 +145,7 @@ function ($, comm, map_knowledge, view_data, monster_list, minimap,
 
     return {
         invalidate: invalidate,
+        invalidate_positions: invalidate_positions,
         display: display,
     };
 });

@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "direction": "Illustrated dark fantasy",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a159af-557f-7b82-b6c3-0d5fc2984231/exec-27a6d387-e1c2-4030-adcb-63249fb2f03a.png",
+  "sha256": "da56ca657fdaa66308ef7fdb1a9ffe002c26039953c6dc629d9750eb60525dbb",
+  "layout": {
+    "columns": 3,
+    "rows": 2,
+    "width": 1536,
+    "height": 1024
+  },
+  "materials": [
+    "limestone floor",
+    "mossy limestone floor",
+    "charcoal slate floor",
+    "limestone masonry",
+    "mossy masonry",
+    "charcoal brick"
+  ],
+  "transparent_background": false,
+  "prompt": "Create a production-ready material texture sheet for an illustrated dark fantasy dungeon game. Wide landscape canvas, exactly 3 columns and 2 rows, SIX equally sized square texture cells, edge to edge, no gutters, no border lines, no labels or lettering. Each cell is a completely flat top-down orthographic seamless surface sample. Top row left: worn warm gray limestone flagstone floor with broad irregular slabs and quiet dark mortar joints. Top row middle: the same ancient flagstone with restrained patches of deep desaturated moss-green in the joints. Top row right: dark charcoal slate and rubble walkable floor with broad shallow flat stones. Bottom row left: chipped ancient limestone block masonry, horizontal staggered courses, cool gray shaded recesses and muted bone highlights. Bottom row middle: ancient block masonry with restrained moss-green edges, broad readable blocks. Bottom row right: dark charcoal brick masonry in horizontal staggered courses. Art direction: hand-painted gouache, subtly engraved edges, matte soot and umber shadows, warm limestone ivory midtones, restrained antique brass warmth, almost no saturation. Strong simple readable shapes that survive reduction to tiny 32-pixel tiles; very sparse texture, no fine noisy details. Floor cells should have subdued even lighting and shallower contrast than wall cells. Stone, moss, and brick should feel like one coordinated artist painted them for a dark fantasy expedition journal. Absolutely no isometric perspective, no visible three-dimensional room, no props, no people, no symbols, no plants other than subtle moss, no water, no lava, no interface, no text. The whole image must be an exact 3-by-2 regular grid of six material swatches, filling the canvas."
+}

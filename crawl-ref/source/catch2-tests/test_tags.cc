@@ -4,9 +4,34 @@
 
 #include "AppHdr.h"
 
+#include "ability-type.h"
 #include "map-cell.h"
 #include "random.h"
 #include "tags.h"
+
+TEST_CASE("Saved wizard hotkeys remain loadable without wizard commands", "[save-compatibility]")
+{
+#ifdef WIZARD
+    STATIC_REQUIRE(ABIL_WIZ_BUILD_TERRAIN == 10000);
+    STATIC_REQUIRE(ABIL_WIZ_SET_TERRAIN == 10001);
+    STATIC_REQUIRE(ABIL_WIZ_CLEAR_TERRAIN == 10002);
+#endif
+    for (const int ability : {int(ABIL_NON_ABILITY), int(ABIL_PAKELLAS_FIELD_KIT),
+                             int(ABIL_PALADIN_INTERVENE), 9999, 10000, 10001, 10002, 10003})
+    {
+        vector<unsigned char> bytes;
+        writer output(&bytes);
+        marshallShort(output, ability);
+        reader input(bytes);
+        int expected = ability;
+#ifndef WIZARD
+        if (ability == 10000 || ability == 10001 || ability == 10002)
+            expected = ABIL_NON_ABILITY;
+#endif
+        REQUIRE(unmarshall_player_ability_binding(input) == expected);
+        REQUIRE_FALSE(input.valid());
+    }
+}
 
 TEST_CASE( "Vehumet gifts can be decoded", "[single-file]" ) {
 

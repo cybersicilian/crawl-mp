@@ -13,6 +13,7 @@
 #include "monster.h"
 #include "mon-lurk.h"
 #include "shopping.h"
+#include "owned-grid.h"
 
 using std::vector;
 
@@ -23,7 +24,7 @@ typedef set<string> string_set;
 struct vault_placement;
 typedef vector<unique_ptr<vault_placement>> vault_placement_refv;
 
-typedef FixedArray< map_cell, GXM, GYM > MapKnowledge;
+typedef owned_grid<map_cell, GXM, GYM> MapKnowledge;
 
 struct crawl_environment
 {
@@ -88,8 +89,8 @@ struct crawl_environment
     // Sort of like player::attribute
     CrawlHashTable properties;
 
-    // Time when level was saved (hence we write out you.elapsed_time
-    // (but load it back to env.elapsed_time); used during level load
+    // Solo: time when saved, for off-level catchup. Multiplayer: this floor's
+    // live clock; only actions processed on this floor advance it.
     int elapsed_time;
 
     // Which point did the player leave the level from?

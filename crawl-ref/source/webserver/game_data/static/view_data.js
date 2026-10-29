@@ -63,6 +63,7 @@ define(["jquery", "comm"], function ($, comm) {
             rerender.push(loc);
 
         $("#dungeon").trigger("update_cells", [rerender]);
+        $(document).trigger("map_cursor_changed", [{ type: type, loc: loc }]);
     }
 
     exports.place_cursor = place_cursor;

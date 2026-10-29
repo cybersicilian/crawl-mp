@@ -1,0 +1,51 @@
+{
+  "referencedThreadId": "01a182a9-4f73-7ba2-b45a-20b0022a438a",
+  "referencedThreadTitle": "Port curated fork content",
+  "portSnapshot": "/Users/iancaltabiano/.codex/visualizations/2026/10/28/01a182a9-4f73-7ba2-b45a-20b0022a438a/step1-validation/source",
+  "portNativeSha256": "7941fe60811f4592a179a9a4e75d902ede8785c8ef43a0ef0ebeb9e86fbb9dbc",
+  "encounterNativeSha256": "113e582a9838266a8fd40a78eb59b14e657faf6ffd51d73aebefeaf07e829f2d",
+  "allEightEncounterFilesIncluded": true,
+  "files": [
+    {
+      "path": "branch-population.h",
+      "sha256": "a8677d5bb5b3fd230b07a8335979457aff57e25bc4a8c7eed8b81b6d7ed241ea",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "catch2-tests/test_burrows.cc",
+      "sha256": "65659fe495fa47cc65da34703b68d439e7a725a3b6a03983d3d30ce7c8009274",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "dat/dlua/layout/chamber_graph.lua",
+      "sha256": "67ef1f0a2dcc6b74696329cfd8a1112f0a441fa3bf8fe0e49380ddf948154cf8",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "dat/dlua/layout/hive.lua",
+      "sha256": "904855ec8c06ad2c270e613e13d9bf6a344ffb61d222f7a9aadc1db286ba0488",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "dat/dlua/layout/wormlands.lua",
+      "sha256": "b058442f93bc2900cb27a43c9bb418201aa1d11afa073d58102df277deb2ed0e",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "dat/mons/burrowing-beast.yaml",
+      "sha256": "c09b374260801ea9332908a49163a7f9e0aa91460a97eceacc6aec93f718dc71",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "dat/mons/crag-boar.yaml",
+      "sha256": "af33f79083ca12c6233898d2bfca7af3719e4ebeb712c048bf9647a2babe753c",
+      "sourcePredatesBuild": true
+    },
+    {
+      "path": "mon-pick-data.h",
+      "sha256": "5a8bb3e02130611537d28b6c22ee3e5aae192a019b9e67fa9fd3f0503a9f8cd5",
+      "sourcePredatesBuild": true
+    }
+  ],
+  "sourceScope": "Existing shared working tree already contains both changes; no frozen port snapshot modified."
+}

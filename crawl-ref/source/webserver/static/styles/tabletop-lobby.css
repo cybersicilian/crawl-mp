@@ -1,0 +1,117 @@
+#lobby {
+    color: var(--tt-text);
+    background: radial-gradient(ellipse at 40% 0, #74432630, transparent 60%), #140d09;
+    font: 13px/1.4 var(--tt-font-mono);
+    padding: 14px 20px 20px;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+#lobby a { color: var(--tt-brass-light); }
+#lobby a:hover { color: var(--tt-vellum-light); }
+#lobby h1, #lobby h2, #lobby h3 { font-family: var(--tt-font-title); color: var(--tt-brass-light); }
+#lobby input, #lobby select, #lobby button { font-family: var(--tt-font-mono); }
+:is(#coop_quick_login, #coop_quick_bar) { padding: 12px 16px; margin: 8px 0 12px; }
+.coop-quick-title { font: bold 16px/1.3 var(--tt-font-title); color: var(--tt-brass-light); letter-spacing: 0.03em; }
+.coop-quick-title { padding-left: 8px; }
+.coop-quick-sub { color: var(--tt-muted); font: 12px/1.4 var(--tt-font-copy); }
+.coop-quick-controls { gap: 6px; }
+.coop-preset-btn { padding: 6px 10px; }
+.coop-preset-btn.p1 { color: var(--tt-brass-light); border-color: var(--tt-brass); }
+.coop-preset-btn.p2 { color: #b4ced7; border-color: #688e9d; }
+.coop-preset-btn.p3 { color: #c3d0aa; border-color: #7e9464; }
+.coop-preset-btn.p4 { color: #d3b5db; border-color: #94759f; }
+:is(#party_lobby_panel, #coop_chronicle_panel) { padding: 14px 16px; margin: 0 0 12px; }
+:is(.party-hall-header, .party-lobby-header, .chronicle-header) { border-bottom: 1px solid var(--tt-rule); padding-bottom: 9px; margin-bottom: 10px; }
+:is(.party-hall-title, .party-lobby-title, .chronicle-header) { font: bold 18px/1.3 var(--tt-font-title); color: var(--tt-brass-light); letter-spacing: 0.03em; }
+:is(.party-hall-title, .party-lobby-title) {
+    background: var(--tt-guild-mark) left center / 23px 27px no-repeat;
+    padding: 4px 0 4px 32px;
+}
+:is(.party-hall-controls, .party-lobby-actions) { gap: 6px; }
+.dcss-btn { padding: 5px 9px; font-size: 11px; }
+:is(.dcss-btn-primary, .dcss-btn-gold) {
+    background: var(--tt-metal);
+    color: var(--tt-ink);
+    border-color: var(--tt-brass-light);
+    text-shadow: 0 1px 0 #fff5;
+    box-shadow: inset 0 1px 0 #fff6, 0 2px 3px #00000090;
+}
+:is(.dcss-btn-primary, .dcss-btn-gold):hover { background: linear-gradient(135deg, #b68a43, #f3d78b, #b68a43); color: #28180b; }
+.dcss-btn-danger { background: linear-gradient(180deg, #71322c, #421c1b); border-color: #a96851; color: #f0c0aa; }
+.dcss-btn-danger:hover { background: #87372e; color: #ffe8d2; border-color: #e3a18b; }
+.dcss-badge-pacing { background: #23302c; border-color: #6e8d77; color: #c0d3bc; box-shadow: inset 0 1px 0 #ffffff14; }
+.dcss-badge-pacing:hover { transform: none; border-color: var(--tt-brass); }
+.party-empty-notice { color: var(--tt-muted); }
+.party-room-banner { background: #120c0966; border: 1px solid var(--tt-rule); padding: 8px 10px; color: var(--tt-vellum); }
+:is(#party_slots_grid, .party-slots-grid) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+:is(.party-slot-box, .party-slot-card) {
+    background: var(--tt-hide);
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 3px;
+    padding: 9px 10px;
+    min-width: 0;
+    gap: 6px;
+    box-shadow: var(--tt-recess), 0 3px 6px #00000050;
+    transform: none;
+}
+:is(.party-slot-box, .party-slot-card):hover { background: var(--tt-hide); border-color: var(--tt-brass); transform: none; box-shadow: var(--tt-recess); }
+:is(.party-slot-card.is-active-slot, .party-slot-box.slot-p0, .party-slot-card.slot-p0) { border-top: 2px solid var(--tt-brass); }
+:is(.party-slot-box.slot-p1, .party-slot-card.slot-p1) { border-top: 2px solid #83b8c7; }
+:is(.party-slot-box.slot-p2, .party-slot-card.slot-p2) { border-top: 2px solid #a1b984; }
+:is(.party-slot-box.slot-p3, .party-slot-card.slot-p3) { border-top: 2px solid #bd9cc8; }
+.party-slot-card.is-companion-slot { border-left-color: #83b8c7; }
+:is(.party-slot-card.is-open-slot, .party-slot-box.slot-state-open, .party-slot-card.slot-state-open) { background: #1b120d; border-style: dashed; opacity: 1; }
+:is(.party-slot-box.slot-state-closed, .party-slot-card.slot-state-closed) { background: #160f0c; opacity: 0.72; }
+.party-slot-top { border-bottom-color: var(--tt-rule); padding-bottom: 5px; }
+.party-slot-title { color: var(--tt-brass-light); font-family: var(--tt-font-title); font-size: 14px; }
+:is(.party-slot-occupant, .party-field-label) { color: var(--tt-muted); }
+.party-mode-btn { padding: 3px 6px; }
+.party-mode-btn.active { background: #654a2b; border-color: var(--tt-brass); color: var(--tt-vellum-light); }
+.party-slot-input, .party-slot-select { min-width: 0; padding: 4px 5px; }
+:is(.party-archetype-btn, .slot-preset-btn) { padding: 3px 6px; }
+:is(.party-ready-badge, .slot-status-badge) {
+    border-radius: 3px 3px 7px 7px;
+    background: linear-gradient(180deg, #ffffff12, #00000030), #283727;
+    border: 1px solid #73845d;
+    color: #d0ddba;
+    box-shadow: inset 0 1px 0 #ffffff20, 0 1px 2px #000;
+    padding: 2px 6px;
+    font-size: 10px;
+}
+.party-ready-badge.waiting { background: #513425; color: #e4c58c; border-color: #a47f43; }
+.party-ready-badge.closed { background: #282019; color: var(--tt-muted); border-color: #786145; }
+#party_room_footer { border-top-color: var(--tt-rule); padding-top: 8px; }
+:is(#party_rooms_table, #player_list) { border-collapse: collapse; }
+:is(#party_rooms_table, #player_list) th { color: var(--tt-vellum-aged); border-bottom-color: var(--tt-brass-shadow); }
+:is(#party_rooms_table, #player_list) td { color: var(--tt-text); border-bottom-color: var(--tt-rule); }
+#player_list tr:hover { background: #d9b15f0d; }
+#play_now a, .coop-join-table-btn { background: var(--tt-hide); border-color: var(--tt-brass-shadow); color: var(--tt-brass-light); }
+#play_now a:hover, .coop-join-table-btn:hover { background: #513722; border-color: var(--tt-brass); transform: none; }
+/* Journal dividers and warm paper records inside the leather-bound hall. */
+:is(#coop_chronicle_grid, .chronicle-grid) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+:is(.chronicle-box, .chronicle-col) { background: #170f0b99; border: 1px solid var(--tt-brass-shadow); padding: 9px; border-radius: 3px; box-shadow: inset 0 2px 8px #00000080; }
+:is(.chronicle-box, .chronicle-col):hover { border-color: var(--tt-brass); box-shadow: inset 0 2px 8px #00000080; }
+.chronicle-box-header { font: bold 13px/1.4 var(--tt-font-title); color: var(--tt-brass-light); border-bottom-color: var(--tt-rule); padding-bottom: 6px; }
+.chronicle-count { color: var(--tt-muted); font: 10px var(--tt-font-mono); }
+.chronicle-list { max-height: 165px; }
+:is(.chronicle-entry, .chronicle-card) { background: var(--tt-paper); color: var(--tt-ink); border: 1px solid #a98951; border-radius: 2px; box-shadow: inset 0 0 8px #8c652822; padding: 6px 8px; transform: none; }
+:is(.chronicle-entry, .chronicle-card):hover { border-color: var(--tt-brass-light); box-shadow: 0 2px 6px #00000080; transform: none; }
+.chronicle-entry-title { color: var(--tt-ink); font-family: var(--tt-font-copy); font-size: 13px; }
+/* These three legacy fields receive inline terminal colours from client.js. */
+.chronicle-entry-title { color: var(--tt-ink) !important; }
+#chronicle_ghosts_list .chronicle-entry-title { color: var(--tt-ink-danger) !important; }
+.chronicle-entry > span:last-child { color: var(--tt-ink-arcane) !important; }
+.btn-load-chronicle-comp { white-space: nowrap; flex-shrink: 0; }
+.chronicle-entry-sub { color: var(--tt-ink-soft); font-size: 10px; }
+#footer { color: var(--tt-muted); font: 11px/1.5 var(--tt-font-copy); }
+#chat, #chat_hidden { background: var(--tt-hide); border-color: var(--tt-brass-shadow); color: var(--tt-text); }
+#prompt > div { background: var(--tt-hide); border-color: var(--tt-brass); color: var(--tt-text); }
+@media (max-width: 1000px) {
+    :is(#party_slots_grid, .party-slots-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    :is(#coop_chronicle_grid, .chronicle-grid) { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+    #lobby { padding: 8px; }
+    :is(#party_slots_grid, .party-slots-grid) { grid-template-columns: 1fr; }
+    :is(#coop_quick_login, #coop_quick_bar, #party_lobby_panel, #coop_chronicle_panel) { padding: 10px; }
+}

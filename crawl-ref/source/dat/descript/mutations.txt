@@ -758,6 +758,16 @@ one pair and a shield with the other, as well as wear a second pair of gloves.
 You can even wield extremely large weapons like giant clubs, though this takes
 both arm-pairs.
 %%%%
+snapping retaliation mutation
+
+When a visible, adjacent foe hits you in melee, you have a one-in-three chance
+to automatically bite back without spending a turn. You can retaliate against
+each foe at most once per player action. The bite deals physical damage that
+grows with experience level and Unarmed Combat, and is reduced by armour.
+You cannot retaliate while incapacitated, confused, or retracted into a shell.
+Body-changing forms suppress this anatomy mutation. Missed or shield-blocked
+attacks do not trigger it, but hits fully absorbed by armour can.
+%%%%
 retaliatory headbutt mutation
 
 When a foe misses you in melee, you may reflexively retaliate, attempting to
@@ -1248,6 +1258,25 @@ tiles behind your target. If they are allowed to grow for several turns, they
 will explode in a burst of spores that damages nearby enemies and can briefly
 daze them.
 %%%%
+amorphous body mutation
+
+Your body has no fixed shape. You can slip through nets and webs, and cannot
+be constricted or bound by bolas. Shatter normally rolls one damage die against
+you instead of three; petrification and stone bodies take precedence. Forms
+which change your anatomy or substance suppress this mutation, though a form
+may have its own amorphous body.
+%%%%
+heavy shell mutation
+
+Your heavy shell grants natural armour which grows with your experience, from
++6 AC at XL1 to +18 AC at XL27. It makes movement take 30% longer, without
+changing the time needed for attacks, spells, or other actions. Both effects
+are suppressed by transformations which change your body's shape.
+You can retract into your shell for 50% more shell armour and half evasion,
+at half movement speed, then use Shell Dash to roll in a compass direction
+until blocked and automatically emerge. The first creature struck takes
+physical damage based on your level, Unarmed Combat, and distance travelled.
+%%%%
 armoured shell mutation
 
 Your body armour is fused into your shell, multiplying its base AC by a factor
@@ -1555,6 +1584,10 @@ no hexes magic mutation
 
 Your Hexes skill is 0 and you cannot train the skill.
 %%%%
+no auramancy magic mutation
+
+You have sacrificed your ability to study or cast Auramancy spells to Ru.
+%%%%
 no ice magic mutation
 
 Your Ice Magic skill is 0 and you cannot train the skill.
@@ -1658,3 +1691,14 @@ than 14, will additionally be slow. At higher XL, multiple reapers may appear at
 once.
 
 When this bane is lifted, all reapers summoned this way will immediately vanish.
+
+%%%%
+soft equipment only mutation
+
+Only hats and scarves can rest on your soft body. You can still hold weapons
+and shields and wear jewellery.
+%%%%
+acidic touch mutation
+
+Your unarmed attacks splash enemies with acid, using the same corrosive attack
+as a jelly. Transformations which replace your body suppress this mutation.

@@ -1,0 +1,30 @@
+{"runId": "51769731-3d14-4d78-a940-d04e4672eba2", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final calibrated economy and full native route playtests", "requestId": "b2e29df7ef65dd56b44f0cca1cb201e0ed3f4a784bfa6d43f95d62b54d7cc38b", "status": "reserved", "reservedAt": 1793156278.455613}
+ 
+{"runId": "51769731-3d14-4d78-a940-d04e4672eba2", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final calibrated economy and full native route playtests", "requestedAt": 1793156278.4834769, "supervisorPid": 94608, "status": "running", "reservation": true, "requestId": "b2e29df7ef65dd56b44f0cca1cb201e0ed3f4a784bfa6d43f95d62b54d7cc38b", "startedAt": 1793156278.483775, "workerPid": 94609, "processGroup": 94609}
+contracts exit 0
+economy exit 0
+comparison exit 0
+previews exit 0
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/balance-final/verify.py", line 22, in <module>
+    run(component)
+    ~~~^^^^^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/balance-final/verify.py", line 14, in run
+    result=subprocess.run(step['command'],cwd=step['cwd'],stdout=log,stderr=subprocess.STDOUT)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1214, in communicate
+    self.wait()
+    ~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1280, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2085, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2043, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+{"runId": "51769731-3d14-4d78-a940-d04e4672eba2", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final calibrated economy and full native route playtests", "requestedAt": 1793156278.4834769, "supervisorPid": 94608, "status": "released", "reservation": true, "requestId": "b2e29df7ef65dd56b44f0cca1cb201e0ed3f4a784bfa6d43f95d62b54d7cc38b", "startedAt": 1793156278.483775, "workerPid": 94609, "processGroup": 94609, "exitCode": -2, "finishedAt": 1793156806.570435, "supervisedProcessGroupGone": true, "releasedAt": 1793156806.6058822, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/balance-final/closure.json", "releaseEvidenceSha256": "9c3e99fe97451f834211799dd4f5f6c90f5fec4c14013409090b086389123567"}

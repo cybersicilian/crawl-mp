@@ -52,6 +52,7 @@ class TerminalRecorder(object):
         self.error_buffer = b""
 
         self.logger = logger
+        self._exit_poll = None
 
     def start(self, ttyrec_filename, id_header):
         if ttyrec_filename:
@@ -98,11 +99,7 @@ class TerminalRecorder(object):
 
             # Make sure not to retain any files from the parent
             max_fd = resource.getrlimit(resource.RLIMIT_NOFILE)[0]
-            for i in range(3, max_fd):
-                try:
-                    os.close(i)
-                except OSError:
-                    pass
+            os.closerange(3, max_fd)
 
             # And exec
             env            = dict(os.environ)
@@ -136,7 +133,7 @@ class TerminalRecorder(object):
                 with util.SlowWarning("Slow IO: os.read (session '%s')" % self.desc):
                     buf = os.read(fd, BUFSIZ)
             except (OSError, IOError):
-                self.poll() # fd probably closed?
+                self._poll_after_eof()
                 return
 
             if len(buf) > 0:
@@ -152,10 +149,13 @@ class TerminalRecorder(object):
                 self.output_buffer += buf
                 self._do_output_callback()
 
-            self.poll()
+            if buf:
+                self.poll()
+            else:
+                self._poll_after_eof()
 
         if events & IOLoop.ERROR:
-            self.poll()
+            self._poll_after_eof()
 
     def _handle_err_read(self, fd, events):
         if events & IOLoop.READ:
@@ -166,7 +166,20 @@ class TerminalRecorder(object):
                 self.error_buffer += buf
                 self._log_error_output()
 
-            self.poll()
+            if buf:
+                self.poll()
+            else:
+                self._poll_after_eof()
+
+    def _poll_after_eof(self):
+        # macOS can deliver the final EOF before waitpid reports the exit.
+        # A closed stream may never wake the selector again.
+        if self.returncode is None and self.poll() is None and self._exit_poll is None:
+            self._exit_poll = IOLoop.current().call_later(0.05, self._check_exit)
+
+    def _check_exit(self):
+        self._exit_poll = None
+        self._poll_after_eof()
 
     def write_ttyrec_header(self, sec, usec, l):
         if self.ttyrec is None:
@@ -238,6 +251,9 @@ class TerminalRecorder(object):
                     raise RuntimeError("Unknown child exit status!")
 
             if self.returncode is not None:
+                if self._exit_poll is not None:
+                    IOLoop.current().remove_timeout(self._exit_poll)
+                    self._exit_poll = None
                 IOLoop.current().remove_handler(self.child_fd)
                 IOLoop.current().remove_handler(self.errpipe_read)
 

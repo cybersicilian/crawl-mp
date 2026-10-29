@@ -1,0 +1,7 @@
+webkit {"before":289,"after":9,"firstTimerBefore":293,"firstTimerAfter":10}
+page.waitForFunction: Timeout 90000ms exceeded.
+    at module.exports (/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/native-candidate.cjs:54:24)
+    at async /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/catchup-browser.cjs:74:53 {
+  log: [],
+  name: 'TimeoutError'
+}

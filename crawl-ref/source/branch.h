@@ -106,12 +106,24 @@ extern FixedVector<int, NUM_BRANCHES> brdepth;
 extern FixedVector<int, NUM_BRANCHES> branch_bribe;
 extern branch_type root_branch;
 
+// Additional, reversible links between fixed levels. The normal branch tree
+// remains authoritative for branch entry, overview and parent travel.
+struct branch_connection
+{
+    level_id from, to;
+    dungeon_feature_type downstairs, upstairs;
+};
+extern const vector<branch_connection> branch_connections;
+level_id branch_connection_destination(dungeon_feature_type feat, level_id from);
+dungeon_feature_type branch_connection_return(dungeon_feature_type feat);
+
 const Branch& your_branch();
 
 bool at_branch_bottom();
 bool is_hell_subbranch(branch_type branch);
 bool is_hell_branch(branch_type branch);
 bool is_random_subbranch(branch_type branch);
+bool branches_are_mutually_exclusive(branch_type first, branch_type second);
 bool is_connected_branch(const Branch *branch);
 bool is_connected_branch(branch_type branch);
 bool is_connected_branch(level_id place);

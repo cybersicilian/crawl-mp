@@ -1,0 +1,310 @@
+name = Route_ranged
+species = Human
+background = Hunter
+weapon = shortbow
+restart_after_game = false
+show_more = false
+autofight_stop = 0
+pregen_dungeon = false
+prompt_menu = false
+save_dir = /Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/baseline/route/ranged-2026102701/saves/
+morgue_dir = /Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/baseline/route/ranged-2026102701/
+travel_delay = -1
+explore_delay = -1
+rest_delay = -1
+view_delay = 0
+use_animations = 
+easy_confirm = all
+default_manual_training = true
+tile_skip_title = true
+dump_on_save = true
+Lua{
+ROUTE_START="Bur:1"
+ROUTE_START_KEYS="&1"
+ROUTE_SURVEY=false
+ROUTE_KIND="ranged"
+ROUTE_BUILD={["species"]="Human",["background"]="Hunter",["weapon"]="shortbow",["stats"]={14,10,24},["gain"]="d",["skills"]={["Fighting"]=14,["Ranged Weapons"]=18,["Dodging"]=15,["Armour"]=9,["Stealth"]=7,["Evocations"]=8,["Invocations"]=8},["gear"]={"+3 orcbow","+2 ring mail","+0 helmet","+0 cloak","+0 gloves","+0 boots","ring of poison resistance"},["train"]={"Fighting","Ranged Weapons","Dodging","Invocations"},["xl"]=16,["god"]="Okawaru"}
+ROUTE_LIMIT=2000
+-- Public monster information and ordinary movement only; no dungeon telemetry.
+route_tactics = {}
+local previous_retreat=-10
+local priorities={['deathcap']=7,['deep troll shaman']=6,['deep troll earth mage']=5,
+    ['meliai']=6,['queen bee']=4,['Vespara']=5,['great orb of eyes']=5}
+function route_tactics.target(enemies)
+    local best,score=enemies[1],-100
+    for _,e in ipairs(enemies) do
+        local value=(priorities[e.m:mname()] or 0)-e.d*.5
+        if e.m:is_constricting_you() then value=value+12 end
+        if value>score then best,score=e,value end
+    end
+    return best
+end
+function route_tactics.adjacent(enemies)
+    local n=0
+    for _,e in ipairs(enemies) do if e.d<=1 then n=n+1 end end
+    return n
+end
+function route_tactics.cluster(target,enemies)
+    local n=0
+    for _,e in ipairs(enemies) do
+        if math.max(math.abs(e.x-target.x),math.abs(e.y-target.y))<=1
+            and e.m:res_fire()<=0 then n=n+1 end
+    end
+    return n
+end
+function route_tactics.retreat(enemies)
+    if you.turns()-previous_retreat<2 then return false end
+    local best,score=nil,enemies[1].d
+    local directions={{-1,-1,'y'},{0,-1,'k'},{1,-1,'u'},{-1,0,'h'},
+        {1,0,'l'},{-1,1,'b'},{0,1,'j'},{1,1,'n'}}
+    for _,step in ipairs(directions) do
+        local x,y=step[1],step[2]
+        local feature=view.feature_at(x,y)
+        if view.is_safe_square(x,y) and you.see_cell_no_trans(x,y)
+            and travel.feature_traversable(feature) and not monster.get_monster_at(x,y)
+            and feature~='shallow_honey' and feature~='shallow_water' then
+            local distance=20
+            for _,e in ipairs(enemies) do
+                distance=math.min(distance,math.max(math.abs(e.x-x),math.abs(e.y-y)))
+            end
+            if distance>score then best,score=step[3],distance end
+        end
+    end
+    if best then previous_retreat=you.turns();crawl.sendkeys(best);return true end
+    return false
+end
+
+-- Bounded native gameplay policy. Configuration is supplied by run_routes.py.
+local phase,setup,stage,lastwhere="setup",{},1,""
+local startturn,lastturn,idle,minhp=0,-1,0,1
+local hive_done=false
+local explored={}
+local navigating=false
+local consumed={}
+local keymap={['-1,-1']='y',['0,-1']='k',['1,-1']='u',['-1,0']='h',
+    ['1,0']='l',['-1,1']='b',['0,1']='j',['1,1']='n'}
+local function dlua(code) return crawl.call_dlua(code) end
+local function say(text) crawl.stderr("ROUTE_EVENT "..text) end
+local function audit(tag) return dlua("return route_audit.snapshot("..string.format('%q',tag)..")") end
+local function stop(reason)
+    audit(reason);say(reason.." turn="..you.turns().." minimumHp="..minhp)
+    phase="done";crawl.sendkeys(string.char(17).."quit\r")
+end
+function choose_stat_gain() return ROUTE_BUILD.gain end
+function c_answer_prompt(prompt)
+    if prompt=="Die?" then
+        audit("death");say("death "..you.where());return true
+    end
+    if prompt:find("Really quit") or prompt:find("Really quaff") or prompt:find("Really read") then return true end
+    if prompt:find("Memorise ") then return true end
+end
+local function prepare()
+    local esc=string.char(27)
+    setup={"&A0\r","&l"..(ROUTE_BUILD.xl or 14).."\r","&@"..table.concat(ROUTE_BUILD.stats," ").."\r"}
+    if ROUTE_BUILD.god then setup[#setup+1]='&_'..ROUTE_BUILD.god..'\r' end
+    for name,value in pairs(ROUTE_BUILD.skills) do setup[#setup+1]="&S"..name.."\r"..value.."\r" end
+    for _,spell in ipairs(ROUTE_BUILD.spells or {}) do setup[#setup+1]="&!"..spell.."\r" end
+    dlua("debug.disable('mon_act');crawl_require('dlua/route_audit.lua')")
+    for _,spec in ipairs(ROUTE_BUILD.gear) do
+        local plus,name=spec:match('^%+(%d+) (.+)$')
+        if name=='gloves' or name=='boots' then name='pair of '..name end
+        local item=name and (name..' plus:'..plus) or spec
+        dlua("dgn.create_item(you.x_pos(),you.y_pos(),"..string.format('%q',item.." pre_id")..")")
+    end
+    for _,spec in ipairs({"potion of heal wounds q:6","potion of curing q:6","potion of haste q:2",
+        "potion of might q:2","potion of magic q:2","scroll of blinking q:2",
+        "scroll of teleportation q:2","scroll of fog q:3","scroll of fear q:3"}) do
+        dlua("dgn.create_item(you.x_pos(),you.y_pos(),"..string.format('%q',spec.." pre_id")..")")
+    end
+    crawl.sendkeys(esc)
+end
+local function use(name,command)
+    for _,item in ipairs(items.inventory()) do
+        if item.name():find(name,1,true) then
+            consumed[name]=(consumed[name] or 0)+1
+            say("use "..name.." turn="..you.turns().." place="..you.where())
+            crawl.sendkeys(command..items.index_to_letter(item.slot));return true
+        end
+    end
+    return false
+end
+local function foes()
+    local list={}
+    for y=-8,8 do for x=-8,8 do
+        local m=monster.get_monster_at(x,y)
+        if m and m:attitude()==0 and you.see_cell_no_trans(x,y) then list[#list+1]={x=x,y=y,m=m,d=math.max(math.abs(x),math.abs(y))} end
+    end end
+    table.sort(list,function(a,b) return a.d<b.d end)
+    return list
+end
+local function combat(enemies)
+    local hp,maxhp=you.hp();local mp=you.mp();local nearest=enemies[1]
+    local t=route_tactics.target(enemies)
+    local adjacent=route_tactics.adjacent(enemies)
+    if (you.confused() or you.poisoned() and hp<maxhp*.7) and use("curing","q") then return end
+    if hp<maxhp*.45 and use("heal wounds","q") then return end
+    if ROUTE_BUILD.god=='Okawaru' and mp>=2 and (adjacent>=2 or #enemies>=3 or t.m:threat()>=2)
+        and not you.status():lower():find('hero',1,true) then
+        for _,ability in ipairs(you.ability_info('Heroism') or {}) do
+            if ability[2] and you.activate_ability('Heroism',0,0) then
+                say('ability Heroism turn='..you.turns());return
+            end
+        end
+    end
+    if ROUTE_BUILD.god=='Okawaru' and mp>=5 and (adjacent>=2 or #enemies>=3) and hp<maxhp*.85
+        and not you.status():lower():find('finesse',1,true) then
+        for _,ability in ipairs(you.ability_info('Finesse') or {}) do
+            if ability[2] and you.activate_ability('Finesse',0,0) then
+                say('ability Finesse turn='..you.turns());return
+            end
+        end
+    end
+    if hp<maxhp*.65 and #enemies>=2 and not you.hasted() and use("haste","q") then return end
+    if ROUTE_KIND=="melee" and hp<maxhp*.65 and not you.mighty() and use("might","q") then return end
+    if hp<maxhp*.6 and #enemies>=3 and not you.teleporting()
+        and use('teleportation','r') then return end
+    if hp<maxhp*.6 and adjacent==0 and #enemies>=2 and not view.cloud_at(0,0)
+        and use('fog','r') then return end
+    if hp<maxhp*.55 and #enemies>=2 and use("fear","r") then crawl.sendkeys('f');return end
+    if hp<maxhp*.3 then
+        local best,score=nil,-1
+        for y=-6,6 do for x=-6,6 do
+            if (x~=0 or y~=0) and view.is_safe_square(x,y) and you.see_cell_no_trans(x,y)
+                and travel.feature_traversable(view.feature_at(x,y)) and not monster.get_monster_at(x,y) then
+                local distance=20
+                for _,enemy in ipairs(enemies) do distance=math.min(distance,math.max(math.abs(x-enemy.x),math.abs(y-enemy.y))) end
+                if distance>score then best={x,y};score=distance end
+            end
+        end end
+        if best and score>=3 and score>nearest.d and use("blinking","r") then
+            local keys=''
+            for i=1,math.abs(best[1]) do keys=keys..(best[1]<0 and 'h' or 'l') end
+            for i=1,math.abs(best[2]) do keys=keys..(best[2]<0 and 'k' or 'j') end
+            crawl.sendkeys('r'..keys..'.');return
+        end
+    end
+    if (ROUTE_KIND~='melee' and nearest.d<=2
+        or you.transform()~='' or adjacent>=3 and hp<maxhp*.75)
+        and route_tactics.retreat(enemies) then return end
+    if ROUTE_KIND=="caster" then
+        if #enemies>=2 and t.d<=3 and mp>=4 and spells.cast("Iskenderun's Mystic Blast",t.x,t.y) then return end
+        if t.d>=3 and t.m:res_fire()<=0 and route_tactics.cluster(t,enemies)>=2 and mp>=5 and spells.cast("Fireball",t.x,t.y) then return end
+        if t.d<=3 and mp>=2 and spells.memorised('Sandblast') and t.m:ac()<=1 and (mp<6 or t.m:damage_level()>=3)
+            and spells.cast('Sandblast',t.x,t.y) then return end
+        if mp>=6 and (t.m:ac()>=2 or t.m:damage_level()<2) and spells.memorised('Bombard')
+            and spells.cast('Bombard',t.x,t.y) then return end
+        if mp>=3 and spells.cast("Stone Arrow",t.x,t.y) then return end
+        if mp<3 and use("magic","q") then return end
+    end
+    if ROUTE_KIND=='ranged' then
+        crawl.do_targeted_command('CMD_PRIMARY_ATTACK',t.x,t.y,true);return
+    end
+    hit_closest()
+end
+local function destination()
+    local b,d=you.branch(),you.depth()
+    if b=='Bur' or b=='Worm' or b=='Snake' or b=='Spider' then
+        local sb,sd=ROUTE_START:match('([^:]+):(%d+)')
+        local lowest=b==sb and tonumber(sd) or 1
+        for lower=lowest,d-1 do
+            if not explored[b..':'..lower] then return 'stone_stairs_up_i','<' end
+        end
+    end
+    if b=='Snake' or b=='Spider' then return 'stone_stairs_down_i','>' end
+    if b=="Hive" then
+        if d==1 and not hive_done then return "stone_stairs_down_i",">" end
+        if d==2 then hive_done=true;return "stone_stairs_up_i","<" end
+        return "exit_hive","<"
+    end
+    if b=="Bur" then
+        if d>2 and not hive_done then return 'stone_stairs_up_i','<' end
+        if d==2 and not hive_done then return "enter_hive",">" end
+        if d==4 then return "enter_wormlands",">" end
+        return "stone_stairs_down_i",">"
+    end
+    if b=="Worm" then
+        if d==4 then return "wormlands_to_depths",">" end
+        return "stone_stairs_down_i",">"
+    end
+end
+function ready()
+    crawl.enable_more(false)
+    if phase=="done" then return end
+    if ROUTE_SURVEY then
+        phase='done';dlua("crawl_require('dlua/route_economy.lua')")
+        say('survey-complete');crawl.sendkeys(string.char(17)..'quit\r');return
+    end
+    if phase=="setup" then
+        if #setup==0 then prepare();return end
+        if stage<=#setup then say("setup "..stage);crawl.sendkeys(setup[stage]);stage=stage+1;return end
+        if dlua("return #dgn.items_at(you.x_pos(),you.y_pos())")>0 then
+            dlua("items.pickup(dgn.items_at(you.x_pos(),you.y_pos())[1])");return
+        end
+        phase="equip"
+    end
+    if phase=="equip" then
+        for _,spec in ipairs(ROUTE_BUILD.gear) do
+            local base=spec:gsub('^%+%d+ ','')
+            if base=='gloves' or base=='boots' then base='pair of '..base end
+            local plus=tonumber(spec:match('^%+(%d+) '))
+            for _,it in ipairs(items.inventory()) do
+                if it.name():find(base,1,true) and (not plus or it.plus==plus) and not it.equipped then
+                    if it.equip() then return end
+                end
+            end
+        end
+        if ROUTE_BUILD.god then dlua('you.piety(100)') end
+        for _,sk in ipairs({"Fighting","Axes","Armour","Shields","Dodging","Spellcasting",
+            "Conjurations","Earth Magic","Fire Magic","Translocations","Ranged Weapons","Stealth","Evocations","Invocations"}) do
+            if you.can_train_skill(sk) then you.train_skill(sk,0) end
+        end
+        for _,sk in ipairs(ROUTE_BUILD.train) do you.train_skill(sk,1) end
+        dlua("wiz.identify_all_items();debug.disable('mon_act',false)")
+        for _,it in ipairs(items.inventory()) do say("inventory "..it.name()) end
+        crawl.sendkeys("&h&~"..ROUTE_START_KEYS.."\r")
+        phase="play";return
+    end
+    local hp,maxhp=you.hp()
+    minhp=math.min(minhp,hp/maxhp)
+    if lastwhere=='' and you.where()~=ROUTE_START then stop('wrong-start');return end
+    if you.where()~=lastwhere then
+        if lastwhere~="" then say("leave "..lastwhere) end
+        lastwhere=you.where();audit("enter");idle=0;navigating=false
+        if startturn==0 then startturn=you.turns();say("start "..ROUTE_KIND.." AC="..you.ac().." EV="..you.ev().." SH="..you.sh()) end
+        if you.branch()=="Depths" then stop("complete");return end
+    end
+    if you.turns()-startturn>ROUTE_LIMIT then stop("turn-limit");return end
+    if you.turns()==lastturn then idle=idle+1 else idle=0 end
+    lastturn=you.turns()
+    local enemies=foes()
+    if view.cloud_at(0,0) and not view.is_safe_square(0,0) then
+        for key,direction in pairs(keymap) do
+            local x,y=key:match('([^,]+),([^,]+)');x,y=tonumber(x),tonumber(y)
+            if view.is_safe_square(x,y) and travel.feature_traversable(view.feature_at(x,y))
+                and not monster.get_monster_at(x,y) then crawl.sendkeys(direction);return end
+        end
+        crawl.sendkeys('.');return
+    end
+    if #enemies>0 then
+        navigating=false
+        if idle>12 then stop("combat-stalled");return end
+        combat(enemies);return
+    end
+    local mp,maxmp=you.mp()
+    if hp<maxhp or mp<maxmp then crawl.sendkeys(idle>1 and "." or "5");return end
+    if not navigating and idle<3 then crawl.sendkeys("o");return end
+    if not navigating then audit("explored");explored[you.where()]=true;navigating=true end
+    if (you.branch()=='Snake' or you.branch()=='Spider') and you.depth()==4 then stop('complete');return end
+    local feature,command=destination()
+    if not feature then stop("unexpected-place");return end
+    local step=dlua("return route_audit.step("..string.format('%q',feature)..")")
+    local direction,confirm=step:match('^(.-)|(.+)$')
+    if step=="arrived" then audit("exit");crawl.sendkeys(command)
+    elseif keymap[direction or step] then
+        local x,y=(direction or step):match('([^,]+),([^,]+)');x,y=tonumber(x),tonumber(y)
+        if view.cloud_at(x,y) and not view.is_safe_square(x,y) then crawl.sendkeys('.')
+        else crawl.sendkeys(keymap[direction or step]..(confirm and 'yes\r' or '')) end
+    else stop("missing-stair-"..feature) end
+end
+
+}

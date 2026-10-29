@@ -7,6 +7,9 @@
 #include <unordered_map>
 
 #include "AppHdr.h"
+#include "eldritch.h"
+#include "god-vorr.h"
+#include "level-time.h"
 
 #include "mon-death.h"
 
@@ -60,6 +63,7 @@
 #include "mutation.h"
 #include "nearby-danger.h"
 #include "notes.h"
+#include "party.h"
 #include "religion.h"
 #include "shout.h"
 #include "spl-damage.h"
@@ -266,12 +270,14 @@ static int _calc_player_experience(const monster* mons)
 
 static void _give_player_experience(int experience, killer_type killer,
                                     bool pet_kill, bool was_visible,
-                                    xp_tracking_type xp_tracking)
+                                    xp_tracking_type xp_tracking, bool ordinary_kill = false)
 {
     if (experience <= 0 || crawl_state.game_is_arena())
         return;
 
     const unsigned int exp_gain = gain_exp(experience);
+    if (exp_gain && ordinary_kill)
+        eldritch::credited_kill();
 
     kill_category kc =
             (killer == KILL_YOU || killer == KILL_YOU_MISSILE) ? KC_YOU :
@@ -312,6 +318,21 @@ static void _give_player_experience(int experience, killer_type killer,
     // Give a message for monsters dying out of sight.
     if (exp_gain > 0 && !was_visible)
         mpr("You feel a bit more experienced.");
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == active || party::is_player_downed(slot))
+                continue;
+            party::scoped_player_context ctx(slot);
+            const auto credited = gain_exp(experience);
+            if (credited && ordinary_kill)
+                eldritch::credited_kill();
+            apply_exp();
+        }
+    }
 }
 
 /**
@@ -339,18 +360,39 @@ static void _gold_pile(item_def &corpse, monster_type corpse_class)
     corpse.quantity = base_gold / 2 + random2avg(base_gold, 2);
     item_colour(corpse);
 
-    // Apply the gold aura effect to the player.
+    // Apply the gold aura effect to the player (or Gozag party member on floor).
     const int dur = 6 + random2avg(14, 2);
-    if (dur > you.duration[DUR_GOZAG_GOLD_AURA])
-        you.set_duration(DUR_GOZAG_GOLD_AURA, dur);
+    if (party::is_enabled())
+    {
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (party::is_player_downed(i))
+                continue;
+            player &p = party::get_player(i);
+            if (p.where_are_you != you.where_are_you || p.depth != you.depth)
+                continue;
+            if (p.religion == GOD_GOZAG)
+            {
+                if (dur > p.duration[DUR_GOZAG_GOLD_AURA])
+                    p.duration[DUR_GOZAG_GOLD_AURA] = dur * BASELINE_DELAY;
+                if (p.props[GOZAG_GOLD_AURA_KEY].get_int() < GOZAG_GOLD_AURA_MAX)
+                    ++p.props[GOZAG_GOLD_AURA_KEY].get_int();
+            }
+        }
+    }
+    else
+    {
+        if (dur > you.duration[DUR_GOZAG_GOLD_AURA])
+            you.set_duration(DUR_GOZAG_GOLD_AURA, dur);
+        if (you.props[GOZAG_GOLD_AURA_KEY].get_int() < GOZAG_GOLD_AURA_MAX)
+            ++you.props[GOZAG_GOLD_AURA_KEY].get_int();
+    }
 
     // In sprint, increase the amount of gold from corpses (but not
     // the gold aura duration!)
     if (crawl_state.game_is_sprint())
         corpse.quantity *= SPRINT_MULTIPLIER;
 
-    if (you.props[GOZAG_GOLD_AURA_KEY].get_int() < GOZAG_GOLD_AURA_MAX)
-        ++you.props[GOZAG_GOLD_AURA_KEY].get_int();
     you.redraw_title = true;
 }
 
@@ -952,7 +994,7 @@ static bool _blorkula_bat_split(monster& blorkula, killer_type ktype)
     }
 
     const int num_bats = random_range(4, 5);
-    const int revive_timer = you.elapsed_time + random_range(150, 190);
+    const int revival_delay = random_range(150, 190);
     {
         // Suppress messages about status effects wearing off
         msg::suppress msg;
@@ -991,7 +1033,7 @@ static bool _blorkula_bat_split(monster& blorkula, killer_type ktype)
 
         if (bat)
         {
-            bat->props[BLORKULA_REVIVAL_TIMER_KEY] = revive_timer;
+            bat->props[BLORKULA_REVIVAL_TIMER_KEY] = level_elapsed_time(*bat) + revival_delay;
 #ifdef USE_TILE
             bat->props[MONSTER_TILE_KEY] = (int)bat_colours[i];
 #endif
@@ -1081,7 +1123,7 @@ static void _blorkula_bat_death(monster& bat, killer_type killer, int killer_ind
 void blorkula_bat_merge(monster& bat)
 {
     if (!bat.props.exists(BLORKULA_REVIVAL_TIMER_KEY)
-        || bat.props[BLORKULA_REVIVAL_TIMER_KEY].get_int() > you.elapsed_time)
+        || bat.props[BLORKULA_REVIVAL_TIMER_KEY].get_int() > level_elapsed_time(bat))
     {
         return;
     }
@@ -2145,6 +2187,9 @@ static void _fire_kill_conducts(const monster &mons, killer_type killer,
     // Cheibriados hates fast monsters.
     if (cheibriados_thinks_mons_is_fast(mons))
         did_kill_conduct(DID_KILL_FAST, mons);
+
+    if (party::is_enabled())
+        party::broadcast_party_kill_conducts(mons, killer, killer_index, maybe_good_kill);
 }
 
 item_def* monster_die(monster& mons, const actor *killer, bool silent, bool mount_death)
@@ -2213,7 +2258,23 @@ bool mons_will_goldify(const monster &mons)
     // Under Gozag, monsters turn into gold on death.
     // Temporary Tukima's Dance weapons stay as weapons (no free gold),
     // permanent dancing weapons turn to gold like other monsters.
-    return have_passive(passive_t::goldify_corpses) && mons_gives_xp(mons, you);
+    if (!mons_gives_xp(mons, you))
+        return false;
+    if (have_passive(passive_t::goldify_corpses))
+        return true;
+    if (party::is_enabled()
+        && party::any_party_member_on_floor_has_passive(passive_t::goldify_corpses))
+    {
+        // Political tug-of-war: if the active killer worships Yredelemnul or
+        // Kikubaaqudgha, their necromantic god contests Gozag's claim half the time!
+        if ((you_worship(GOD_YREDELEMNUL) || you_worship(GOD_KIKUBAAQUDGHA))
+            && coinflip())
+        {
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 void handle_monster_dies_lua(monster& mons, killer_type killer)
@@ -2263,6 +2324,8 @@ static void _maybe_set_monster_foe(monster& mons, int killer_index)
 static void _player_on_kill_effects(monster& mons, killer_type killer,
                                     bool gives_player_xp, bool pet_kill)
 {
+    vorr::on_kill(mons, killer, gives_player_xp, pet_kill);
+
     // Various sources of heal-on-kill
     if ((YOU_KILL(killer) || pet_kill) && gives_player_xp)
     {
@@ -2298,14 +2361,58 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
             if (can_divine_heal && have_passive(passive_t::mp_on_kill))
                 mp_heal += 1 + random2(mons.get_experience_level() / 2);
 
-#if TAG_MAJOR_VERSION == 34
-            if (you.has_mutation(MUT_DEVOUR_ON_KILL)
-                && mons.holiness() & (MH_NATURAL | MH_PLANT)
-                && coinflip())
+            // Share divine on-kill HP/MP restoration with nearby Covenant/Concordat allies
+            if (party::is_enabled() && (hp_heal > 0 || mp_heal > 0))
             {
-                hp_heal += 1 + random2avg(1 + you.experience_level, 3);
+                for (int i = 0; i < party::player_count(); ++i)
+                {
+                    if (i == party::active_slot() || party::is_player_downed(i))
+                        continue;
+                    player &ally = party::get_player(i);
+                    if (ally.where_are_you != you.where_are_you
+                        || ally.depth != you.depth
+                        || grid_distance(ally.pos(), you.pos()) > 4)
+                    {
+                        continue;
+                    }
+                    if (party::are_gods_concordant(you.religion, ally.religion))
+                    {
+                        if (hp_heal > 1)
+                            party::heal_or_buff_party_member(i, hp_heal / 2);
+                        if (mp_heal > 1 && ally.religion != GOD_TROG)
+                        {
+                            ally.magic_points = min(ally.max_magic_points,
+                                                    ally.magic_points + mp_heal / 2);
+                        }
+                    }
+
+                }
             }
-#endif
+        }
+
+        if (you.has_mutation(MUT_DEVOUR_ON_KILL))
+        {
+            const int devour_heal = 3 + random2(max(1, mons.get_experience_level()));
+            hp_heal += devour_heal;
+            if (party::is_enabled())
+            {
+                const int ally_heal = max(1, devour_heal / 2);
+                for (int i = 0; i < party::player_count(); ++i)
+                {
+                    if (i == party::active_slot() || party::is_player_downed(i))
+                        continue;
+                    player &member = party::get_player(i);
+                    if (member.where_are_you == you.where_are_you
+                        && member.depth == you.depth
+                        && grid_distance(member.pos(), you.pos()) <= 3)
+                    {
+                        party::heal_or_buff_party_member(i, ally_heal,
+                                                         NUM_DURATIONS, 0, false);
+                        mprf(MSGCH_RECOVERY, "Co-op Blood Feast! %s shares in the feast!",
+                             member.your_name.c_str());
+                    }
+                }
+            }
         }
 
         if (you.has_mutation(MUT_FEED_OFF_SUFFERING)
@@ -2350,7 +2457,7 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
     }
 
     // Various sources of berserk extension on kills.
-    if (killer == KILL_YOU && you.berserk())
+    if (killer == KILL_YOU && you.berserk() && !you.props.exists("eldritch_rage"))
     {
         if (have_passive(passive_t::extend_berserk)
             && min((int)you.piety(), piety_breakpoint(5)) > random2(800))
@@ -2732,7 +2839,9 @@ item_def* monster_die(monster& mons, killer_type killer,
     else if (mons.type == MONS_BLAZEHEART_GOLEM && real_death && !timeout)
     {
         // Only blow up if non-dormant
-        if (grid_distance(mons.pos(), you.pos()) <= 1)
+        if (automaton_blazeheart::marked(mons)
+            ? automaton_blazeheart::owner_adjacent(mons)
+            : grid_distance(mons.pos(), you.pos()) <= 1)
         {
             mprf(MSGCH_WARN, "%s falls apart, revealing its core!",
                  mons.name(DESC_YOUR).c_str());
@@ -3555,6 +3664,8 @@ item_def* monster_die(monster& mons, killer_type killer,
 
     const unsigned int player_xp = gives_player_xp
         ? _calc_player_experience(&mons) : 0;
+    const bool ordinary_kill = gives_player_xp && !mons.is_summoned()
+        && !mons.is_unrewarding() && !party::is_proxy_monster(mons);
 
     if (!crawl_state.game_is_arena() && count_kill && !in_transit)
         you.kills.record_kill(&mons, killer, pet_kill);
@@ -3562,7 +3673,7 @@ item_def* monster_die(monster& mons, killer_type killer,
     if (mount_death)
     {
         _give_player_experience(player_xp, killer, pet_kill,
-                                was_visible, mons.xp_tracking);
+                                was_visible, mons.xp_tracking, ordinary_kill);
         crawl_state.dec_mon_acting(&mons);
 
         return corpse;
@@ -3657,6 +3768,7 @@ item_def* monster_die(monster& mons, killer_type killer,
     }
 
     crawl_state.dec_mon_acting(&mons);
+    eldritch::record_trial_defeat(mons, killer);
     monster_cleanup(&mons, reset);
 
     // Force redraw for monsters that die.
@@ -3668,7 +3780,7 @@ item_def* monster_die(monster& mons, killer_type killer,
     }
 
     _give_player_experience(player_xp, killer, pet_kill, was_visible,
-                            mons.xp_tracking);
+                            mons.xp_tracking, ordinary_kill);
     return corpse;
 }
 

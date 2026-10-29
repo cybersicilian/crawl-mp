@@ -1,0 +1,108 @@
+###############################################################################
+# forest.des: Entries, thematic vaults, and branch endings for the
+#             Enchanted Forest (revived branch).
+###############################################################################
+
+: crawl_require("dlua/dungeon.lua")
+: crawl_require("dlua/vault.lua")
+
+###############################################################################
+# Forest entries (placed in Vaults:2-3)
+###############################################################################
+
+NAME:   forest_entry_archway
+TAGS:   forest_entry transparent
+DEPTH:  Vaults:2-3
+MONS:   spriggan rider, spriggan druid, shambling mangrove
+KMONS:  P = plant / bush
+KFEAT:  O = enter_forest
+NSUBST: 1 = 2:1 / 1:2 / *:.
+MAP
+  ttt.ttt
+ ttP...Ptt
+tt..1.1..tt
+t..P...P..t
+...1.O.1...
+t..P...P..t
+tt..1.3..tt
+ ttP...Ptt
+  ttt.ttt
+ENDMAP
+
+NAME:   forest_entry_faerie_ring
+TAGS:   forest_entry transparent
+DEPTH:  Vaults:2-3
+MONS:   satyr, faun, dryad
+KMONS:  P = bush
+KFEAT:  O = enter_forest
+MAP
+  .P.P.
+ P.2.2.P
+.2..t..2.
+P.t.O.t.P
+.2..3..2.
+ P.2.1.P
+  .P.P.
+ENDMAP
+
+###############################################################################
+# Forest mid-branch encounters
+###############################################################################
+
+NAME:   forest_elder_glade
+TAGS:   transparent
+DEPTH:  Forest:1-3
+MONS:   spriggan air mage, spriggan berserker / greenwood witch, thorn hunter, wind drake
+KMONS:  P = plant
+KFEAT:  f = cache_of_fruit
+MAP
+  ttttttttt
+ ttP..f..Ptt
+tt..1...2..tt
+t.P...W...P.t
+t...WWWWW...t
+t.3.W.4.W.3.t
+t...WWWWW...t
+t.P...W...P.t
+tt..2...1..tt
+ ttP.....Ptt
+  tttt.tttt
+ENDMAP
+
+###############################################################################
+# Forest:$ branch end vault (awards the mossy rune of Zot)
+###############################################################################
+
+NAME:   forest_heart_of_arcadia
+TAGS:   no_monster_gen no_trap_gen transparent
+PLACE:  Forest:$
+ORIENT: float
+MONS:   spriggan defender, spriggan air mage, spriggan druid
+MONS:   shambling mangrove, thorn hunter, satyr, silver star
+KMONS:  E = Enchantress / spriggan defender
+KMONS:  O = alderking / shambling mangrove
+KITEM:  O = mossy rune of Zot, any good_item
+KITEM:  * = star_item
+KFEAT:  ~ = closed_door
+# Keep a walkable opening in each pond's tree ring. Shallow water counts as
+# traversable terrain, so enclosing it creates stairless regions and vetoes
+# every attempt to generate Forest:4.
+MAP
+      ttttttttttttttt
+   ttttccccccccccccctttt
+  ttcccc*..c...c..*cccctt
+ ttcc..1...c.O.c...1..cctt
+ttc...2....c...c....2...ctt
+tc..3......cc~cc......3..ct
+tc....ttt.........ttt....ct
+tc...ttWtt..1E1..ttWtt...ct
+tc...tWWWt.......tWWWt...ct
+tc...ttWtt.2...2.ttWtt...ct
+tc....t.t....4....t.t....ct
+ttc..5.......6.......5..ctt
+ ttcc...4.........4...cctt
+  ttcccc....5.5....cccctt
+   ttttccccc+++ccccctttt
+      tttttt...tttttt
+          tt.@.tt
+ENDMAP

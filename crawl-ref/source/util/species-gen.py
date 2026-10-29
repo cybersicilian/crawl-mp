@@ -180,7 +180,7 @@ ALL_APTITUDES = ('fighting', 'short_blades', 'long_blades', 'axes',
     'spellcasting', 'conjurations', 'hexes', 'summoning',
     'necromancy', 'forgecraft', 'translocations', 'fire_magic',
     'ice_magic', 'air_magic', 'earth_magic', 'alchemy', 'invocations',
-    'evocations', 'shapeshifting')
+    'evocations', 'shapeshifting', 'auramancy')
 UNDEAD_TYPES = ('alive', 'undead', 'semi_undead')
 SIZES = ('SIZE_TINY', 'SIZE_LITTLE', 'SIZE_SMALL', 'SIZE_MEDIUM', 'SIZE_LARGE',
     'SIZE_GIANT')
@@ -219,7 +219,8 @@ def species_flags(flags):
         out.add(enumify(f, SPECIES_FLAG_ENUM))
     if not out:
         out.add('SPF_NONE')
-    return ' | '.join(out)
+    # Keep generated headers stable across Python hash seeds.
+    return ' | '.join(sorted(out))
 
 
 def undead_type(type):
@@ -303,6 +304,9 @@ def generate_aptitudes_data(s, template):
     # Note: We have to differentiate between 0 and 'False' aptitudes specified
     # in YAML. The latter is UNUSABLE_SKILL.
     aptitudes = {apt: 0 for apt in ALL_APTITUDES}
+    # New schools inherit general magical aptitude unless explicitly overridden.
+    aptitudes['auramancy'] = ('UNUSABLE_SKILL' if s['aptitudes'].get('spellcasting') is False
+                             else s['aptitudes'].get('spellcasting', 0))
     for apt, val in s['aptitudes'].items():
         if apt in ('xp', 'hp', 'mp_mod', 'wl'):
             continue
@@ -408,37 +412,38 @@ def main():
     aptitude_template = load_template(args.templatedir, 'aptitude-species.txt')
     species_groups = SPECIES_GROUPS_TEMPLATE
 
-    # Determine hard-coded enum order from species-type-header.txt
+    # Preserve conditional enum positions when the same species has a legacy
+    # save ID in one major version and a newly appended ID in another.
     enum_order = []
-    header_lines = species_type_out_text.splitlines()
-    for ln in header_lines:
-        #print(ln)
-        trimmed = ln.lstrip()
-        if trimmed.startswith("SP_"):
+    guards = []
+    for line in species_type_out_text.splitlines():
+        trimmed = line.strip()
+        if trimmed.startswith('#if '):
+            guards.append(trimmed)
+        elif trimmed == '#endif':
+            guards.pop()
+        elif trimmed.startswith('SP_'):
             enum_name = re.split(',|/s+', trimmed)[0]
-            if enum_name == "SP_FIRST_NONBASE_DRACONIAN" or enum_name == "SP_LAST_NONBASE_DRACONIAN":
+            if enum_name in ('SP_FIRST_NONBASE_DRACONIAN', 'SP_LAST_NONBASE_DRACONIAN'):
                 continue
-            enum_order.append(enum_name)
-            #print(enum_name)
+            enum_order.append((enum_name, tuple(guards)))
 
-    sorted_species = []
-    for enum_name in enum_order:
-        for species in all_species:
-            if species['enum'] == enum_name:
-                sorted_species.append(species)
-                #print("Appended " + enum_name)
-                break
-
-    for species in sorted_species:
-        # species-data.h
-        species_data_out_text += species_data_template.format(**species)
-        # aptitudes.h
-        aptitudes_out_text += generate_aptitudes_data(species,
-                                                            aptitude_template)
-        # species-type.h
-        species_type_out_text += generate_species_type_data(species)
-        # species-groups.h
-        species_groups = update_species_group(species_groups, species)
+    counts = collections.Counter(name for name, _ in enum_order)
+    grouped = set()
+    for enum_name, enum_guards in enum_order:
+        species = next((s for s in all_species if s['enum'] == enum_name), None)
+        if species is None:
+            continue
+        # Normal entries retain their existing YAML version guards. Only
+        # duplicated enum positions need the header's mutually exclusive guards.
+        prefix = ''.join(guard + '\n' for guard in enum_guards) if counts[enum_name] > 1 else ''
+        suffix = '#endif\n' * len(enum_guards) if counts[enum_name] > 1 else ''
+        species_data_out_text += prefix + species_data_template.format(**species) + suffix
+        aptitudes_out_text += prefix + generate_aptitudes_data(species, aptitude_template) + suffix
+        if enum_name not in grouped:
+            species_type_out_text += generate_species_type_data(species)
+            species_groups = update_species_group(species_groups, species)
+            grouped.add(enum_name)
 
     species_data_out_text += load_template(args.templatedir,
                                         'species-data-footer.txt')

@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vorr.h"
 
 #include "god-wrath.h"
 
@@ -100,6 +101,8 @@ static const char *_god_wrath_adjectives[] =
     "memory",           // Hepliaklqana (unused)
     "rancor",           // Wu Jian
     "fiery vengeance",  // Ignis
+    "red reckoning",    // Vorr
+    "unbinding",        // Vellum (no active wrath)
 };
 COMPILE_CHECK(ARRAYSZ(_god_wrath_adjectives) == NUM_GODS);
 
@@ -1776,6 +1779,7 @@ bool divine_retribution(god_type god, bool no_bonus, bool force)
     case GOD_USKAYAW:       do_more = _uskayaw_retribution(); break;
     case GOD_WU_JIAN:       do_more = _wu_jian_retribution(); break;
     case GOD_IGNIS:         do_more = _ignis_retribution(); break;
+    case GOD_VORR:          vorr::wrath(); break;
 
     case GOD_ASHENZARI:
     case GOD_ELYVILON:

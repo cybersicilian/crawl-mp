@@ -1,0 +1,51 @@
+{
+  "status": "deployed_and_verified_publicly",
+  "production_deployed": true,
+  "existing_saves_used": false,
+  "native_rebuilt": false,
+  "source_manifest": "changed-source.json",
+  "patch": "changes.patch",
+  "browser_acceptance": "candidate3-result.json",
+  "sidebar_acceptance": "candidate2-sidebar/evidence.json",
+  "profile_comparison": "profile-comparison.json",
+  "focused_checks": {
+    "sprite_extent_checks": {
+      "passed": true,
+      "viewport_cells": 1333,
+      "single_changed_sprite_queries": 1,
+      "old_sprite_erasure_and_camera_coverage": true
+    },
+    "visibility_masks": {
+      "passed": true,
+      "patterns": 512,
+      "pixel_exact": true,
+      "world_queries_per_cell": 9,
+      "maximum_cached_masks": 511
+    },
+    "sidebar": {
+      "unchanged": 0,
+      "afterResize": 9
+    }
+  },
+  "syntax_checks": "syntax-checks.json",
+  "verification": {
+    "browser_engines": [
+      "Chrome",
+      "WebKit"
+    ],
+    "device_scale_factor": 2,
+    "viewport": [
+      1728,
+      1080
+    ],
+    "native_actions": 48,
+    "sidebar_viewports": 5,
+    "all_changed_code_under_600_lines": true,
+    "full_visibility_pattern_pixel_parity": 512
+  },
+  "runtime_note": "The current browser/backend source was exercised against the previously verified October 26 local native engine at /private/tmp/dcss-prompt-ownership-01a17b3b/source. The checkout native binary is older; it was not rebuilt. This is not production or physical-device acceptance.",
+  "remaining_limitation": "Cold premium-graphics setup can still produce an isolated long frame. End-to-end input timing varied by browser and run; this patch reduces unnecessary browser rendering work.",
+  "deployment_receipt": "active-verification.json",
+  "public_acceptance": "public-browser-result.json",
+  "production_scope": "Six rendering JavaScript files applied to exact live baseline; native and backend preserved."
+}

@@ -1,0 +1,28 @@
+{
+  "ready": true,
+  "baseline": "/opt/dcss/releases/render-smoothness-01a1801a",
+  "release": "/opt/dcss/releases/autoexplore-release-01a1801a",
+  "runtime_files": {
+    "crawl": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    ".cflags": "074a81e760aaec07167b491e35cbbc5fc90e96f2aa953bbbf91c8484201925db",
+    "compflag.h": "76842d213e53fc171cd1143b4192fa8e5c338cbc76b4ee32968451a6c34b83b1",
+    "webserver/webtiles/activity_pump.py": "676e369d630a6c7871bf93bec16acb805c8253af3e9e1950ae6098575c8b8b62",
+    "webserver/webtiles/process_handler.py": "48b4a1f59a661ab4a2830afdfac89a718f07c8eb6f7b815add11d75313b15226"
+  },
+  "preserved_runtime": {
+    "webserver/game_data/static/party-sidebar.js": "e787c4fd54b04a3b6e58aad9c8f8c1f717378e76c9b6d5e00d4d5b13df0859e2",
+    "webserver/game_data/static/party.js": "6f69945030bfcd193386612d89b9e47245ca314ae03ac6f54d8545ae3463d8a4",
+    "webserver/game_data/static/dungeon_renderer.js": "ca235bf39bde2e2049e08bec126e656e46b0933268b47ee5300d0dc302664e5c",
+    "webserver/game_data/static/party-navigation.js": "cbbcbc8833a1a898393c3476d3b6b76510f71ce5b2ab7b50f84d68181d3da318",
+    "webserver/game_data/static/party-card-readings.js": "bb45453e2b28af715f84f1cb88f137e9bdbfae7a13a00d5a892d7c37ae351217",
+    "webserver/static/scripts/visibility-feather.js": "647001da1bf6a0d4aa1c1f6ecd9d9f177cf7d8775ed569b54db57a631acd4838",
+    "webserver/webtiles/player_stream.py": "a7c2382667ffb608403157f843816f7ba6d8b965726af3314ae896ea6313b940",
+    "webserver/webtiles/player_update.py": "e66fd391d534bdf38ca5273168253df6bcdd2d68676ea2791dec32887135952e",
+    "webserver/webtiles/state_transport.py": "c45a3364e3c63ea92c1499ebd8fe5f65e732ce4a97a41f4110a8e1bfc4fd3768"
+  },
+  "unchanged_existing_files": 12732,
+  "native_test_passed": true,
+  "backend_tests_passed": true,
+  "native_rebuilt": true,
+  "source_manifest_sha256": "537f4667db1e5fad3f881c210d3f568c58ae0f29c738c7e11ee067a301b33a2d"
+}

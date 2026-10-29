@@ -19,8 +19,10 @@
 #include "message.h"
 #include "notes.h" // NOTE_MESSAGE
 #include "options.h" // UA_PICKUP, more_gem_info
+#include "party.h"
 #include "state.h"
 #include "stringutil.h" // make_stringf
+#include "unwind.h"
 #include "view.h" // flash_view_delay
 
 #if TAG_MAJOR_VERSION == 34
@@ -37,9 +39,9 @@ static int _old_zot_clock(const string& branch_name) {
 #endif
 
 // Returns -1 if the player hasn't been in this branch before.
-static int& _zot_clock_for(branch_type br)
+static int& _zot_clock_for_player(player &p, branch_type br)
 {
-    CrawlHashTable &branch_clock = you.props["ZOT_AUTS"];
+    CrawlHashTable &branch_clock = p.props["ZOT_AUTS"];
     const string branch_name = is_hell_branch(br) ? "Hells" : branches[br].abbrevname;
     // When entering a new branch, start with an empty clock.
     // (You'll get the usual time when you finish entering.)
@@ -47,7 +49,7 @@ static int& _zot_clock_for(branch_type br)
     {
 #if TAG_MAJOR_VERSION == 34
         // The old clock was measured in turns (deca-auts), not aut.
-        const int old_clock = _old_zot_clock(branch_name);
+        const int old_clock = (&p == &you) ? _old_zot_clock(branch_name) : -1;
         if (old_clock != -1)
             branch_clock[branch_name].get_int() = old_clock;
         else
@@ -57,9 +59,31 @@ static int& _zot_clock_for(branch_type br)
     return branch_clock[branch_name].get_int();
 }
 
+static int& _zot_clock_for(branch_type br)
+{
+    return _zot_clock_for_player(you, br);
+}
+
 static int& _zot_clock()
 {
     return _zot_clock_for(you.where_are_you);
+}
+
+int zot_clock_scale_pct()
+{
+    return 100 + party::extra_player_count() * 35;
+}
+
+int zot_clock_per_floor()
+{
+    return (ZOT_CLOCK_PER_FLOOR * zot_clock_scale_pct() / 100)
+           / (party::has_seasoning_fast_boil() ? 2 : 1);
+}
+
+int max_zot_clock()
+{
+    return (MAX_ZOT_CLOCK * zot_clock_scale_pct() / 100)
+           / (party::has_seasoning_fast_boil() ? 2 : 1);
 }
 
 static bool _zot_clock_active_in(branch_type br)
@@ -79,23 +103,71 @@ bool zot_immune()
     return player_has_orb() || you.zigs_completed;
 }
 
+int zot_short_lifespan_count()
+{
+    int count = 0;
+    for (int slot = 0; slot < party::player_count(); ++slot)
+        // Legacy mutation accessors read global `you`, even on another player.
+        // This persistent drawback counts the owning hero's stored trait.
+        if (party::get_player(slot).mutation[MUT_SHORT_LIFESPAN] > 0)
+            ++count;
+    return count;
+}
+
+int zot_lifespan_divisor()
+{
+    // Each short lifespan adds the same ninefold pressure. The first retains
+    // the native tenfold penalty; ordinary companions add no pressure.
+    return 1 + 9 * zot_short_lifespan_count();
+}
+
+static int _native_lifespan_div_for_player(player &p, branch_type br)
+{
+    // Preserve each saved clock's native units. Remember them so gaining or
+    // losing the trait later changes the deadline rather than its storage scale.
+    CrawlHashTable &scales = p.props["ZOT_LIFESPAN_DIVISORS"];
+    const string key = is_hell_branch(br) ? "Hells" : branches[br].abbrevname;
+    if (!scales.exists(key))
+        scales[key].get_int() = p.mutation[MUT_SHORT_LIFESPAN] > 0 ? 10 : 1;
+    return scales[key].get_int();
+}
+
+static int _native_lifespan_div_in(branch_type br)
+{
+    return _native_lifespan_div_for_player(you, br);
+}
+
+static int _zot_remaining_aut(branch_type br)
+{
+    int aut = (max_zot_clock() - _zot_clock_for(br))
+              * _native_lifespan_div_in(br);
+    if (have_passive(passive_t::slow_zot))
+        aut = aut * 3 / 2;
+    return aut / zot_lifespan_divisor();
+}
+
+int zot_clock_remaining_aut()
+{
+    return _zot_remaining_aut(you.where_are_you);
+}
+
+int zot_clock_capacity_aut()
+{
+    int aut = max_zot_clock() * _native_lifespan_div_in(you.where_are_you);
+    if (have_passive(passive_t::slow_zot))
+        aut = aut * 3 / 2;
+    return aut / zot_lifespan_divisor();
+}
+
 int turns_until_zot_in(branch_type br)
 {
-    const int aut = (MAX_ZOT_CLOCK - _zot_clock_for(br));
-    if (have_passive(passive_t::slow_zot))
-        return aut * 3 / (2 * BASELINE_DELAY);
-    return aut / BASELINE_DELAY;
+    return _zot_remaining_aut(br) / BASELINE_DELAY;
 }
 
 // How many turns (deca-auts) does the player have until Zot finds them?
 int turns_until_zot()
 {
     return turns_until_zot_in(you.where_are_you);
-}
-
-static int _zot_lifespan_div()
-{
-    return you.has_mutation(MUT_SHORT_LIFESPAN) ? 10 : 1;
 }
 
 // A scale from 0 to 3 of how much danger the player is in of
@@ -105,7 +177,7 @@ int bezotting_level_in(branch_type br)
     if (!_zot_clock_active_in(br))
         return 0;
 
-    const int remaining_turns = turns_until_zot_in(br) * _zot_lifespan_div();
+    const int remaining_turns = turns_until_zot_in(br) * zot_lifespan_divisor();
     if (remaining_turns < 100)
         return 3;
     if (remaining_turns < 500)
@@ -145,26 +217,41 @@ void decr_zot_clock(bool extra_life)
 {
     if (!zot_clock_active())
         return;
-    int &zot = _zot_clock();
 
-    const int div = _zot_lifespan_div();
-    if (zot == -1)
+    const branch_type br = you.where_are_you;
+    int &zot = _zot_clock_for(br);
+    if (zot != -1 && bezotted())
     {
-        // new branch
-        zot = MAX_ZOT_CLOCK - ZOT_CLOCK_PER_FLOOR / div;
+        if (extra_life)
+            mpr("As you die, Zot loses track of you.");
+        else
+            mpr("As you enter the new level, Zot loses track of you.");
+    }
+
+    auto apply_to_player = [&](player &p)
+    {
+        int &pzot = _zot_clock_for_player(p, br);
+        const int div = _native_lifespan_div_for_player(p, br);
+        if (pzot == -1)
+        {
+            // new branch
+            pzot = max_zot_clock() - zot_clock_per_floor() / div;
+        }
+        else
+        {
+            // old branch, new floor
+            pzot = max(0, pzot - zot_clock_per_floor() / div);
+        }
+    };
+
+    if (!extra_life && party::is_enabled())
+    {
+        for (int slot = 0; slot < party::player_count(); ++slot)
+            apply_to_player(party::get_player(slot));
     }
     else
-    {
-        // old branch, new floor
-        if (bezotted())
-        {
-            if (extra_life)
-                mpr("As you die, Zot loses track of you.");
-            else
-                mpr("As you enter the new level, Zot loses track of you.");
-        }
-        zot = max(0, zot - ZOT_CLOCK_PER_FLOOR / div);
-    }
+        apply_to_player(you);
+
 #if TAG_MAJOR_VERSION == 34
     if (you.species == SP_METEORAN)
         update_vision_range();
@@ -173,9 +260,37 @@ void decr_zot_clock(bool extra_life)
 
 static int _added_zot_time()
 {
+    int numerator = you.time_taken * zot_lifespan_divisor();
+    int denominator = _native_lifespan_div_in(you.where_are_you);
     if (have_passive(passive_t::slow_zot))
-        return div_rand_round(you.time_taken * 2, 3);
-    return you.time_taken;
+    {
+        numerator *= 2;
+        denominator *= 3;
+    }
+    return div_rand_round(numerator, denominator);
+}
+
+void incr_party_zot_clocks(int elapsed)
+{
+    if (elapsed <= 0)
+        return;
+
+    const int actor = party::active_slot();
+    unwind_var<int> action_time(you.time_taken, elapsed);
+    // The shared gem ledger receives this interval once, in the acting branch.
+    incr_gem_clock();
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (party::is_player_downed(slot) || party::get_player(slot).hp <= 0
+            || (!party::multiplayer_enabled() && !party::same_region(actor, slot)))
+        {
+            continue;
+        }
+        party::scoped_player_context ctx(slot);
+        unwind_var<int> member_time(you.time_taken, elapsed);
+        // Each hero retains native branch immunity, lifespan and god modifiers.
+        incr_zot_clock();
+    }
 }
 
 void incr_zot_clock()
@@ -188,7 +303,7 @@ void incr_zot_clock()
     if (!bezotted())
         return;
 
-    if (_zot_clock() >= MAX_ZOT_CLOCK)
+    if (_zot_clock() >= max_zot_clock())
     {
         mpr("Zot's power touches on you...");
         // Use your 'base' MHP (excluding forms, berserk, artefacts...)
@@ -205,7 +320,9 @@ void incr_zot_clock()
         dec_max_hp(loss);
         interrupt_activity(activity_interrupt::force);
 
-        set_turns_until_zot(you.has_mutation(MUT_SHORT_LIFESPAN) ? 200 : 1000);
+        const int respite = you.has_mutation(MUT_SHORT_LIFESPAN) ? 200 : 1000;
+        set_turns_until_zot(respite * _native_lifespan_div_in(you.where_are_you)
+                            / zot_lifespan_divisor());
     }
 
     const int lvl = bezotting_level();
@@ -239,11 +356,18 @@ void incr_zot_clock()
 
 void set_turns_until_zot(int turns_left)
 {
-    if (turns_left < 0 || turns_left > MAX_ZOT_CLOCK / BASELINE_DELAY)
+    if (turns_left < 0 || turns_left > zot_clock_capacity_aut() / BASELINE_DELAY)
         return;
 
     int &clock = _zot_clock();
-    clock = MAX_ZOT_CLOCK - turns_left * BASELINE_DELAY;
+    int aut = turns_left * BASELINE_DELAY * zot_lifespan_divisor();
+    int divisor = _native_lifespan_div_in(you.where_are_you);
+    if (have_passive(passive_t::slow_zot))
+    {
+        aut *= 2;
+        divisor *= 3;
+    }
+    clock = max_zot_clock() - aut / divisor;
 #if TAG_MAJOR_VERSION == 34
     if (you.species == SP_METEORAN)
         update_vision_range();

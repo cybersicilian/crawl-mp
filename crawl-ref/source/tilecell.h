@@ -47,6 +47,7 @@ struct packed_cell
     // Note: placed here to pack better
     uint8_t orb_glow;
     char blood_rotation;
+    uint8_t ritual_blood; // low two bits: units; bit 2: fading
     uint8_t travel_trail;
     uint8_t disjunct;
 
@@ -65,7 +66,7 @@ struct packed_cell
                     is_blasphemy(false), is_liquefied(false),
                     mangrove_water(false), awakened_forest(false),
                     has_bfb_corpse(false), orb_glow(0), blood_rotation(0),
-                    travel_trail(0), disjunct(false), fg(0), bg(0), cloud(0)
+                    ritual_blood(0), travel_trail(0), disjunct(false), fg(0), bg(0), cloud(0)
                     {
                         dngn_overlay.fill(0);
                     }
@@ -87,6 +88,7 @@ struct packed_cell
                                         has_bfb_corpse(c->has_bfb_corpse),
                                         orb_glow(c->orb_glow),
                                         blood_rotation(c->blood_rotation),
+                                        ritual_blood(c->ritual_blood),
                                         travel_trail(c->travel_trail),
                                         disjunct(c->disjunct),
                                         flv(c->flv),

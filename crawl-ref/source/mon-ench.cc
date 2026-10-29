@@ -942,6 +942,11 @@ void monster::remove_enchantment_effect(const mon_enchant &me, bool quiet)
 
         break;
 
+    case ENCH_SHACKLE:
+        if (!quiet)
+            simple_monster_message(*this, "'s shackles fade away.");
+        break;
+
     case ENCH_BULLSEYE_TARGET:
         // We check that this is the 'real' target before removing the status
         // from the player on death, since the status can be transiently created
@@ -1438,6 +1443,7 @@ void monster::apply_enchantment(const mon_enchant &me)
     case ENCH_PHASE_SHIFT:
     case ENCH_DIVINE_SHIELD:
     case ENCH_INSUBSTANTIAL:
+    case ENCH_SHACKLE:
         decay_enchantment(en);
         break;
 
@@ -2199,7 +2205,7 @@ static const char *enchant_names[] =
     "diminished_spells", "orb_cooldown", "sunder_charge",
     "exposed", "briar_cooldown", "stampeding",
     "preparing_to_lurk", "phase_shift", "divine_shield",
-    "insubstantial",
+    "insubstantial", "shackle",
     "buggy", // NUM_ENCHANTMENTS
 };
 

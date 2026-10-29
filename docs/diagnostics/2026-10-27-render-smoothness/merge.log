@@ -1,0 +1,6 @@
+patching file 'crawl-ref/source/webserver/game_data/static/party-sidebar.js'
+patching file 'crawl-ref/source/webserver/game_data/static/party.js'
+patching file 'crawl-ref/source/webserver/game_data/static/dungeon_renderer.js'
+patching file 'crawl-ref/source/webserver/game_data/static/party-navigation.js'
+patching file 'crawl-ref/source/webserver/game_data/static/party-card-readings.js'
+patching file 'crawl-ref/source/webserver/static/scripts/visibility-feather.js'

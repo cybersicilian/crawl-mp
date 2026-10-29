@@ -11,11 +11,14 @@
 #include "mon-util.h"
 #include "mutant-beast.h"
 #include "options.h"
+#include "party.h"
+#include "player.h"
 #include "tile-flags.h"
 #include "rltiles/tiledef-player.h"
 #include "tiledoll.h"
 #include "tilepick.h"
 #include "tilepick-p.h"
+#include "unwind.h"
 
 mcache_manager mcache;
 
@@ -93,6 +96,7 @@ public:
 
 protected:
     dolls_data m_doll;
+    bool m_transparent = true;
 };
 
 class mcache_demon : public mcache_entry
@@ -1531,6 +1535,32 @@ mcache_ghost::mcache_ghost(const monster_info& mon)
 {
     ASSERT(mcache_ghost::valid(mon));
 
+    if (mon.type == MONS_FALSE_IMAGE && mon.props.exists("false_image_owner"))
+    {
+        const auto owner = static_cast<mid_t>(mon.props["false_image_owner"].get_int());
+        const int slot = party::slot_for_mid(owner);
+        if (slot >= 0 && slot < party::player_count())
+        {
+            unwind_var<player*> unwind_you(real_you, &party::get_player(slot));
+            fill_player_equipment_doll(m_doll);
+            m_transparent = true;
+            return;
+        }
+    }
+
+    if (mon.props.exists("party_player_slot"))
+    {
+        const int slot = mon.props["party_player_slot"].get_int();
+        m_transparent = mon.props.exists("party_downed_ghost")
+                        || (mon.type == MONS_PLAYER_GHOST);
+        if (slot >= 0 && slot < party::player_count())
+        {
+            unwind_var<player*> unwind_you(real_you, &party::get_player(slot));
+            fill_player_equipment_doll(m_doll);
+            return;
+        }
+    }
+
     uint32_t data[] =
     {
         (uint32_t)mon.i_ghost.species,
@@ -1687,12 +1717,12 @@ const dolls_data *mcache_ghost::doll() const
 
 bool mcache_ghost::valid(const monster_info& mon)
 {
-    return mons_is_pghost(mon.type);
+    return mon.type == MONS_FALSE_IMAGE || mons_is_pghost(mon.type);
 }
 
 bool mcache_ghost::transparent() const
 {
-    return true;
+    return m_transparent;
 }
 
 /////////////////////////////////////////////////////////////////////////////

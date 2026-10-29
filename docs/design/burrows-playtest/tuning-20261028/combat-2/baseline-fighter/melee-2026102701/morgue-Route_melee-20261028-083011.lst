@@ -1,0 +1,138 @@
+Route_melee
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(0, 0, Bur:1)
+  a shale drake corpse (skeletalised by now)
+(4, 9, Bur:1)
+  a scroll of identify
+(10, -41, Bur:1)
+  a +0 long sword
+(13, -40, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(14, -39, Bur:1)
+  a crag boar skeleton
+(14, -15, Bur:1)
+  a crag boar skeleton
+(16, -43, Bur:1)
+  a burrowing beast skeleton
+(16, -6, Bur:1)
+  a parchment of Martyr's Knell
+(16, 10, Bur:1)
+  a +0 leather armour
+(17, -42, Bur:1)
+  a crag boar skeleton
+(17, -40, Bur:1)
+  a +0 battleaxe
+(17, -24, Bur:1)
+  a +0 short sword
+(17, 6, Bur:1)
+  a +0 rapier
+(26, -24, Bur:1)
+  a +0 dagger
+(30, 5, Bur:1)
+  a +0 chain mail
+(31, -9, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(37, -5, Bur:1)
+  a +0 scale mail
+(44, -29, Bur:1)
+  a scroll of noise
+(45, -16, Bur:1)
+  a +0 robe
+
+Level 2 of the Burrows
+(0, 0, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(1, -18, Bur:2)
+  a +0 chain mail
+(1, 0, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(2, 12, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(8, 33, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(9, -14, Bur:2)
+  a wand of charming (5)
+(11, -12, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(15, -14, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(15, -13, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(15, -12, Bur:2)
+  a shale drake corpse (skeletalised by now)
+(22, -1, Bur:2)
+  a crag boar skeleton
+(24, 17, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(24, 20, Bur:2)
+  a scroll of identify
+(25, 8, Bur:2)
+  a crag boar skeleton
+(25, 9, Bur:2)
+  a crag boar skeleton
+(25, 10, Bur:2)
+  a crag boar skeleton
+  a burrowing beast skeleton
+(26, 10, Bur:2)
+  a burrowing beast skeleton
+(27, 9, Bur:2)
+  a crag boar skeleton
+(31, 26, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(35, -11, Bur:2)
+  a burrowing beast skeleton
+(42, 1, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(44, 33, Bur:2)
+  a +0 dagger
+(45, 6, Bur:2)
+  5 poisoned darts
+
+Level 1 of the Hive
+(20, 6, Hive:1)
+  a +2 vampiric dagger
+(21, -1, Hive:1)
+  a +0 broad axe
+(24, -3, Hive:1)
+  a +0 pair of gloves
+(33, 18, Hive:1)
+  a +0 leather armour
+(34, 37, Hive:1)
+  a +0 hand axe
+  a +0 robe
+  a +0 hand axe
+  a +0 leather armour
+  a +0 hand axe
+  a +0 leather armour
+(38, 12, Hive:1)
+  a +0 hand axe
+  a +0 robe
+  a +0 hand axe
+  a +0 leather armour
+(39, 11, Hive:1)
+  a +0 leather armour
+(39, 12, Hive:1)
+  a +0 war axe
+  a +0 robe
+(52, 12, Hive:1)
+  the mist talisman of Kyvopren {rPois Int-3 Dex+2}
+    [mist talisman]
+    rPois:     It protects you from poison.
+    Int-3:     It affects your intelligence (-3).
+    Dex+2:     It affects your dexterity (+2).
+(54, 5, Hive:1)
+  a +1 cutlass of holy wrath
+(55, 44, Hive:1)
+  3 poisoned darts
+
+Level 2 of the Hive
+(0, 0, Hive:2)
+  a killer bee corpse
+(1, 0, Hive:2)
+  a killer bee corpse
+(7, 3, Hive:2)
+  a +1 antimagic orcbow
+

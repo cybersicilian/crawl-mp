@@ -1,0 +1,35 @@
+enum: SP_HERMIT_CRAB
+monster: MONS_FIRE_CRAB
+name: Hermit Crab
+short_name: Hc
+adjective: crabby
+genus: crustacean
+difficulty: Intermediate
+difficulty_priority: 40
+aptitudes:
+  xp: 0
+  hp: 0
+  mp_mod: 0
+  wl: 3
+  armour: False
+str: 8
+int: 8
+dex: 8
+levelup_stat_frequency: 4
+fake_mutations:
+  - long: Your shell prevents you from wearing body armour and cloaks.
+    short: shell prevents body armour and cloaks
+  - long: Your shell can break to save you, leaving you in a smaller shell.
+    short: breakable shell
+  - long: You gain a molting opportunity at each new experience level.
+    short: molting opportunities
+  - long: After escaping a broken shell, you can Crab Walk for ten turns.
+    short: Crab Walk after shell escape
+walking_verb: scuttl
+altar_action: rest your weary claws in front of
+recommended_jobs:
+  - gladiator
+  - fighter
+recommended_weapons:
+  - axes
+  - maces and flails

@@ -1,0 +1,14 @@
+{
+  "native_save_verified": true,
+  "forced_kill": false,
+  "game_id": "1d5cd1cb-59ba-43e8-917d-9c1cdce5bff6",
+  "record_status_at_checkpoint": "saved",
+  "prior_checkpoint_backup": "/var/lib/dcss/recovery/multiplayer-performance-01a17ea4-ui-pre-quiesce",
+  "save_packages": {
+    "/var/lib/dcss/rcs/library/saves/1d5cd1cb-59ba-43e8-917d-9c1cdce5bff6/JediJosh.cs": "bacb7a0fda416df70cfc87fed6a17bf7a70ccf447075c12eaac86a795ed94a8a"
+  },
+  "backup_verified": true,
+  "backup": "/var/lib/dcss/recovery/multiplayer-performance-01a17ea4-ui",
+  "preserved_save_file_count": 10054,
+  "database_backup_count": 328
+}

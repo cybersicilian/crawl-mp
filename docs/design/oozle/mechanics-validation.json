@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-10-19T18:54:55.326576+00:00",
+  "evidenceLevel": "Updated source; focused Python scheduling and JavaScript syntax checks; no native or browser acceptance",
+  "pythonActivityPump": {
+    "passed": 11,
+    "scope": "Mocked owner/peer scheduling; no native gameplay claim"
+  },
+  "javaScriptSyntax": {
+    "passed": 5,
+    "previewInlineScripts": 3,
+    "previewRelativeReferences": "all resolve"
+  },
+  "newOrModifiedWebFilesUnder600Lines": true,
+  "nativeCasesAuthored": {
+    "catch2-tests/test_equipment_memory.cc": 11,
+    "catch2-tests/test_oozle.cc": 8,
+    "catch2-tests/test_oozle_memory.cc": 7,
+    "catch2-tests/test_cooperative_delay.cc": 4
+  },
+  "nativeCasesTotal": 30,
+  "nativeCompile": "not dispatched: current host policy assigns other exact frozen phases before later readiness handoffs",
+  "nativeGameplay": "not run",
+  "browserRendering": "not observed: browser URL policy denied acquiring the local file:// tab; no workaround attempted",
+  "saveReloadGameplay": "not run",
+  "runtimeAdapters": "authored: all extracted properties per bundle, original stored values, dynamic numeric scaling, intrinsic armour AC on body, native cleaving/brands for unarmed, attack wear and deferred dissolution; axe inheritance also preserves native chopping damage type",
+  "sourceManifestSha256": "b1077d9f5f505eb6bd20a0c8fad1dbd10536bdfbccd367bc2a71fd7928cd9a7a",
+  "resourceBinding": {
+    "policyPath": "/Users/iancaltabiano/Documents/Codex/work/host-heavy/policy.json",
+    "policySha256": "e6039b57c3f1adf01f26d28f35342c62a1178d06d7d91493b2bda81c4c1d4cba",
+    "gateScript": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/host_heavy.py",
+    "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+    "gateHashMatches": true,
+    "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy",
+    "observedReservation": {
+      "runId": "8ea9e3af-e0e9-4e79-9a9a-8231fcb80de3",
+      "owner": "codex/01a15527-2a04-7e82-9cd9-f35b5fc79bd7",
+      "label": "Pakellas native-1 fresh build and focused native tests",
+      "status": "released",
+      "requestId": "8cbdcca2ffbbb54fc37299275f87173761f212b564e58f75e9b2196708295ba1"
+    },
+    "dispatchRule": "Preserve current actualMCB3881/5969388e nonpreemptively through fullownedclosure/release. Then ONE corrected frozen no-build UId731 turn FIRST (same two cases, prior24second runtime, expected around one minute); AFTER its fullownedclosure/release, Pakellasnative8cbd max2jobs/1800second buildbound NEXT. This same-priority one-time ordering completes short UI feedback before the long build without starving it: any further UI retry goes BEHIND Pakellas. No preemption of any phase already actually held. Other ready top requests require later explicit handoff; MCEco successors remain secondary.",
+    "nativeCommandLaunched": false
+  },
+  "sourceWhitespace": "pass on new mechanics/UI/tests; scoped tracked diff also passed"
+}

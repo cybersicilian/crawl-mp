@@ -402,6 +402,7 @@ public:
     bool res_petrify(bool /*include_temp*/ = true) const override;
     bool res_constrict() const override;
     int res_blind()  const override;
+    bool blinded() const;
     resists_t all_resists() const;
     int willpower() const override;
     bool no_tele(bool blink = false, bool /*include_temp*/ = true) const override;

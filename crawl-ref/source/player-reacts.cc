@@ -4,6 +4,9 @@
  **/
 
 #include "AppHdr.h"
+#include "chain-devil.h"
+#include "eldritch.h"
+#include "god-vellum.h"
 
 #include "player-reacts.h"
 
@@ -29,6 +32,7 @@
 #include "act-iter.h"
 #include "areas.h"
 #include "artefact.h"
+#include "automaton.h"
 #include "beam.h"
 #include "cloud.h"
 #include "clua.h"
@@ -69,6 +73,7 @@
 #include "nearby-danger.h"
 #include "ouch.h"
 #include "output.h"
+#include "party.h"
 #include "player.h"
 #include "player-stats.h"
 #include "random.h"
@@ -701,6 +706,11 @@ static void _decrement_transform_duration(int delay)
     if (you.form == you.default_form || you.form == transformation::flux)
         return;
 
+    if (you.form == transformation::scorpion
+        && you.has_spell(SPELL_SCORPION_FORM)
+        && calc_spell_power(SPELL_SCORPION_FORM) >= 75)
+        return;
+
     // FIXME: [ds] Remove this once we've ensured durations can never go < 0?
     if (you.duration[DUR_TRANSFORMATION] <= 0
         && you.form != transformation::none)
@@ -774,6 +784,8 @@ static void _decrement_durations()
         dec_sticky_flame_player(delay);
 
     const bool melted = you.props.exists(MELT_ARMOUR_KEY);
+    if (you.duration[DUR_STEAM_BARRIER])
+        maintain_steam_barrier();
     if (_decrement_a_duration(DUR_ICY_ARMOUR, delay,
                               "Your icy armour evaporates.",
                               melted ? 0 : coinflip(),
@@ -968,6 +980,7 @@ static void _decrement_durations()
             you.duration[DUR_FLAYED] += div_rand_round(delay, 2);
     }
 
+    automaton::protect_toxic_engraving();
     if (you.duration[DUR_TOXIC_RADIANCE])
         toxic_radiance_effect(&you, min(delay, you.duration[DUR_TOXIC_RADIANCE]));
 
@@ -1161,14 +1174,16 @@ static void _maybe_attune_regen_items()
         if (entry.melded || entry.attuned || entry.is_overflow)
             continue;
         const item_def &arm = entry.get_item();
+        const bool regen_hp = is_regen_item(arm)
+            || vellum::item_bonus(you, arm, ARTP_REGENERATION);
 
-        if ((attune_regen && is_regen_item(arm)
+        if ((attune_regen && regen_hp
              && (you.magic_points == you.max_magic_points || !is_mana_regen_item(arm)))
             || (attune_mana_regen && is_mana_regen_item(arm)
-                && (you.hp == you.hp_max || !is_regen_item(arm))))
+                && (you.hp == you.hp_max || !regen_hp)))
         {
             // Track which properties we should notify the player they have gained.
-            if (!gained_regen && is_regen_item(arm))
+            if (!gained_regen && regen_hp)
                 gained_regen = true;
             if (arm.is_type(OBJ_JEWELLERY, AMU_CHEMISTRY))
                 gained_chemistry = true;
@@ -1322,6 +1337,9 @@ void player_reacts()
     if (crawl_state.game_is_descent() && !env.properties.exists(DESCENT_STAIRS_KEY))
         return;
 
+    automaton::advance_bee_engraving();
+
+
     if (you.did_east_wind > 0)
         --you.did_east_wind;
 
@@ -1329,6 +1347,8 @@ void player_reacts()
     if (you_worship(GOD_BEOGH))
         beogh_ally_healing();
 
+    chains::refresh();
+    eldritch::tick();
     unrand_reacts();
 
     if (you.form == transformation::eel_hands && one_chance_in(500))
@@ -1431,8 +1451,11 @@ void player_reacts()
 
     player_update_auras();
 
-    incr_gem_clock();
-    incr_zot_clock();
+    if (!party::is_enabled())
+    {
+        incr_gem_clock();
+        incr_zot_clock();
+    }
 }
 
 void extract_barbs(const char* endmsg)

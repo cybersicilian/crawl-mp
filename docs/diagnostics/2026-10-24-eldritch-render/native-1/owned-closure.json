@@ -1,0 +1,11 @@
+{
+  "unit": "dcss-eldritch-render-01a16b6d-qa.service",
+  "tunnelGroup": 58488,
+  "browserExit": 1,
+  "tunnelRemaining": [],
+  "remoteStop": {
+    "exit": 0,
+    "stdout": "MainPID=0\nActiveState=inactive\nSubState=dead\n",
+    "stderr": "Existing host keys found in /Users/iancaltabiano/.ssh/google_compute_known_hosts\nWARNING: \n\nTo increase the performance of the tunnel, consider installing NumPy. For instructions,\nplease see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth\n\n"
+  }
+}

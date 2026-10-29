@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "existing_saves_used": false,
+  "unit_exit_code": 0,
+  "baseline": {
+    "exit_code": 0
+  },
+  "candidate": {
+    "exit_code": 0
+  }
+}

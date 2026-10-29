@@ -1,0 +1,55 @@
+{
+  "passed": false,
+  "original_bounds_failure_observed": true,
+  "binary_sha256": "8ebb34ded213c797c97995a4a72791881bab367b09d086299960a96342432117",
+  "map_set": [
+    "branches/elf.des",
+    "branches/zot.des",
+    "branches/snake.des",
+    "branches/swamp.des",
+    "branches/spider.des",
+    "branches/slime.des",
+    "branches/vaults.des",
+    "branches/tomb.des",
+    "branches/coc.des",
+    "branches/tar.des",
+    "branches/dis.des",
+    "branches/geh.des",
+    "builder/layout_geoelf.des",
+    "builder/layout_geoelf_castle.des"
+  ],
+  "reused_runtime": "/private/tmp/dcss-elf3-native-01a17a3a-1/native",
+  "production_runtime_tested": false,
+  "player_saves_accessed": false,
+  "processes_completed": true,
+  "phases": [
+    {
+      "phase": "original-guarded",
+      "exit_code": 1,
+      "seconds": 0.27160245800041594,
+      "stdout": "",
+      "stderr": "BUILDER 80x70\nPRIMARY 95,119,0,39\nELF_LAYOUT_OUT_OF_BOUNDS\nFatal lua error in seed 11437096116346730075: /private/tmp/dcss-elf3-native-01a17a3a-1/native/dat/des/builder/layout_geoelf_castle.des:139 (map layout_geoelf_castle): ELF_LAYOUT_OUT_OF_BOUNDS\n\n[C], function error, line -1\n[string \"dlmain\"], function fill_area, line 15\n[string \"dlmain\"], function (null), line 794\ndungeon.lua, function (null), line 260\n[C], function place_map, line -1\nelf3-probe.lua, function (null), line 14\n\nscript error: ...css-elf3-native-01a17a3a-1/native/scripts/elf3-probe.lua:14: Elf:3: Vault placement failure for 'layout_geoelf_castle'. /private/tmp/dcss-elf3-native-01a17a3a-1/native/dat/des/builder/layout_geoelf_castle.des:139 (map layout_geoelf_castle): ELF_LAYOUT_OUT_OF_BOUNDS\n"
+    },
+    {
+      "phase": "coordinates",
+      "exit_code": 0,
+      "seconds": 0.29835437500150874,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "phase": "patched-placement",
+      "exit_code": 0,
+      "seconds": 0.12744512500648852,
+      "stdout": "",
+      "stderr": "BUILDER 80x70\nPRIMARY 95,119,0,39\nPASS: Elf:3 castle placement\n"
+    },
+    {
+      "phase": "patched-generation",
+      "exit_code": 1,
+      "seconds": 0.26966933300718665,
+      "stdout": "",
+      "stderr": "script error: ...tmp/dcss-elf3-native-01a17a3a-1/native/dat/dlua/test.lua:23: Elf:3 has no return stairs for seed 11437096116346730075 (map dumped to level-fail.map)\n"
+    }
+  ]
+}

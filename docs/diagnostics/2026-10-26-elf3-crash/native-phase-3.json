@@ -1,0 +1,16 @@
+{
+  "runId": "2602fbef-761e-4ba2-95ec-0626e8f560f8",
+  "owner": "codex/01a17a3a-4a0c-79c3-ab41-79bd3aa07976",
+  "label": "DCSS Elf3 native regression checks",
+  "requestedAt": 1793053187.607241,
+  "supervisorPid": 70726,
+  "status": "failed_held",
+  "reservation": true,
+  "requestId": "34ba5ebc8fe22fa2892c67112241c91d781bfceb798a070888a1248934b2e2b2",
+  "startedAt": 1793053187.793656,
+  "workerPid": 71181,
+  "processGroup": 71181,
+  "exitCode": 1,
+  "finishedAt": 1793053195.433172,
+  "supervisedProcessGroupGone": true
+}

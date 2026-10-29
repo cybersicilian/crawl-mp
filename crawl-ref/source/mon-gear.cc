@@ -664,6 +664,8 @@ int make_mons_weapon(monster_type type, int level, bool melee_only)
         }, {}, {}, 1 } },
         { MONS_TENGU_REAVER,            ORC_WARLORD_WSPEC },
         { MONS_VAULT_WARDEN,            ORC_WARLORD_WSPEC },
+        { MONS_CHAIN_WARDEN,            ORC_WARLORD_WSPEC },
+        { MONS_DEEP_DWARF,              { ORC_WEAPONS } },
         { MONS_ORC_WARLORD,             ORC_WARLORD_WSPEC },
         { MONS_SAINT_ROKA,              ORC_WARLORD_WSPEC },
         { MONS_DRACONIAN_KNIGHT,        ORC_WARLORD_WSPEC },

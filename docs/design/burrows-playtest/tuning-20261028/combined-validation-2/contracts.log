@@ -1,0 +1,5 @@
+Filters: [burrows],[character-trait],[game-modifiers],"select_exactly_one_of_each_lair_group","create_brentry_validity"
+Randomness seeded to: 2401576806
+===============================================================================
+All tests passed (1345 assertions in 26 test cases)
+

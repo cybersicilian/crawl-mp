@@ -40,3 +40,4 @@ breathe_rust ABILITY_BREATHE_RUST
 wiz_build_terrain ABILITY_WIZ_BUILD_TERRAIN
 wiz_set_terrain ABILITY_WIZ_SET_TERRAIN
 wiz_clear_terrain ABILITY_WIZ_CLEAR_TERRAIN
+assimilate ABILITY_ASSIMILATE

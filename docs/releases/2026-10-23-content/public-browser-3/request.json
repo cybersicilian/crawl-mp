@@ -1,0 +1,23 @@
+{
+  "artPixelsSha256": "a257574bc0d5895b9eb2f366c6d630ccb7bc874d42b4f3b4a8a4db6fbd908c52",
+  "artVerifierSha256": "ca21d263fc2fe801f7e32f09ff958fd2b229033d7d50efa6c0cc23e35e7e1e0a",
+  "browserScriptSha256": "a5883d72cd14f01d88931e4b17ed0a5ce6da84bbd03081a2b4cf8632c7caeacc",
+  "createdAt": 1792797957.873787,
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "helperSha256": "c1360f376e864a540862210e5c14af62d95f34b95e43930317956cf4233c7ac3",
+  "native_sha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+  "overlayManifestSha256": "e0688b2daba7eb077cf0b5c7ca421a75fb957b32efda29a79f0372caa930431f",
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "phase": "public",
+  "readyPath": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/activation.json",
+  "readySha256": "8d301f257425341f0b6632b70ab4cc9e5bdee45b3a8170f31150eebc4c7f92ec",
+  "release": "/opt/dcss/releases/20261023T220119Z-content",
+  "resourceBinding": {
+    "browsers": 1,
+    "contexts": 2,
+    "localNativeBuild": false
+  },
+  "runnerSha256": "1956ff60f32e3b5284722f17915be9f6f413a8cdc2d0e9a5fcaa3468e6995953",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy",
+  "url": "https://dcss.iancaltabiano.com"
+}

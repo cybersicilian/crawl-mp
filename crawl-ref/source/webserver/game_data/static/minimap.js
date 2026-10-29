@@ -1,8 +1,8 @@
 define(["jquery", "./map_knowledge", "./dungeon_renderer", "./view_data",
         "./tileinfo-player", "./tileinfo-main", "./tileinfo-dngn", "./enums",
-        "./player", "./options", "./util"],
+        "./player", "./options", "./util", "./game-context", "client"],
 function ($, map_knowledge, dungeon_renderer, view_data,
-          tileinfo_player, main, dngn, enums, player, options, util) {
+          tileinfo_player, main, dngn, enums, player, options, util, game, client) {
     "use strict";
 
     var minimap_colours;
@@ -21,6 +21,8 @@ function ($, map_knowledge, dungeon_renderer, view_data,
 
     function update_overlay()
     {
+        if (!overlay_ctx || !overlay || !options.ready())
+            return;
         // Update the minimap overlay
         var view = dungeon_renderer.view;
         overlay_ctx.clearRect(0, 0, overlay.width, overlay.height);
@@ -30,10 +32,52 @@ function ($, map_knowledge, dungeon_renderer, view_data,
                                display_y + (view.y - cell_y) * cell_h + 0.5,
                                dungeon_renderer.cols * cell_w - 1,
                                dungeon_renderer.rows * cell_h - 1);
+
+        if (window.crawl_party)
+        {
+            var slot_colours = ["#fce94f", "#44ddff", "#8ae234", "#ff80ff"];
+            var state = window.crawl_party.state;
+            if (state && state.members)
+            {
+                for (var i = 0; i < state.members.length; ++i)
+                {
+                    var m = state.members[i];
+                    if (m.on_same_level === false || !m.pos)
+                        continue;
+                    var mx = display_x + (m.pos.x - cell_x) * cell_w;
+                    var my = display_y + (m.pos.y - cell_y) * cell_h;
+                    overlay_ctx.fillStyle = slot_colours[m.slot % slot_colours.length];
+                    overlay_ctx.fillRect(mx, my, Math.max(2, cell_w), Math.max(2, cell_h));
+                }
+            }
+            var pings = window.crawl_party.pings;
+            if (pings && pings.length > 0)
+            {
+                var now = Date.now();
+                for (var j = 0; j < pings.length; ++j)
+                {
+                    var p = pings[j];
+                    if (p.expires <= now)
+                        continue;
+                    var px = display_x + (p.x - cell_x + 0.5) * cell_w;
+                    var py = display_y + (p.y - cell_y + 0.5) * cell_h;
+                    var phase = ((now - p.created) % 800) / 800.0;
+                    var r = Math.max(3, cell_w * (1.2 + 2.5 * phase));
+                    overlay_ctx.save();
+                    overlay_ctx.strokeStyle = (p.kind === "danger") ? "#ff4444" : "#33e6ff";
+                    overlay_ctx.lineWidth = 1.5;
+                    overlay_ctx.beginPath();
+                    overlay_ctx.arc(px, py, r, 0, 2 * Math.PI);
+                    overlay_ctx.stroke();
+                    overlay_ctx.restore();
+                }
+            }
+        }
     }
 
     function fit_to(width)
     {
+        if (!options.ready()) return;
         var gxm = enums.gxm;
         var gym = enums.gym;
         var display = $("#minimap").css("display");
@@ -43,11 +87,36 @@ function ($, map_knowledge, dungeon_renderer, view_data,
         var canvas = $("#minimap")[0];
         if (!canvas) return;
 
+        var pixels = Math.max(1, Math.floor(width / gxm));
+        if (options.get("tile_map_pixels") > 0)
+            pixels = Math.min(pixels, options.get("tile_map_pixels"));
+        var bottom = document.getElementById("hud_bottom_map");
+        if (bottom) {
+            var budget = Math.max(1, bottom.clientHeight - $("#hud_map_tools").outerHeight(true) - 8);
+            pixels = Math.max(1, Math.min(pixels, Math.floor(budget / gym)));
+            width = gxm * pixels;
+        }
+        // The same cell size drives drawing and hit testing in either host.
+        else if ($("#party_hud").is(":visible"))
+        {
+            var reserved = $("#stats").outerHeight(true)
+                + $("#party_hud").outerHeight(true)
+                + Math.min($("#monster_list").outerHeight(true) || 96, 96) + 16;
+            pixels = Math.max(1, Math.min(pixels,
+                Math.floor((window.innerHeight - reserved) / gym)));
+            var monster_space = window.innerHeight - $("#stats").outerHeight(true)
+                - $("#party_hud").outerHeight(true) - gym * pixels - 16;
+            $("#monster_list").css("max-height", Math.max(36, Math.min(96, monster_space)));
+        }
+        if (canvas.width === Math.floor(width) && canvas.height === gym * pixels
+            && cell_w === pixels && cell_h === pixels)
+        {
+            $("#minimap, #minimap_overlay").css("display", display);
+            return;
+        }
         block.width(width);
         canvas.width = width;
-        cell_w = cell_h = Math.floor(width / gxm);
-        if (options.get("tile_map_pixels") > 0)
-            cell_w = cell_h = Math.min(cell_w, options.get("tile_map_pixels"));
+        cell_w = cell_h = pixels;
         block.height(gym * cell_h);
         canvas.height = gym * cell_h;
         ctx = canvas.getContext("2d");
@@ -173,6 +242,37 @@ function ($, map_knowledge, dungeon_renderer, view_data,
     }
 
     // Minimap controls ------------------------------------------------------------
+    var followed_hero;
+    function controlled_view()
+    {
+        // Native targeting and full-map navigation own their camera. Spectators
+        // and older snapshots continue using the native viewpoint as well.
+        var state = window.crawl_party && window.crawl_party.state;
+        if (dungeon_renderer.ui_state !== enums.ui.NORMAL
+            || !game.get_input_mode || game.get_input_mode() !== enums.mouse_mode.COMMAND
+            || !state || !Number.isInteger(state.controlled_slot))
+            return;
+        var member = (state.members || []).find(function (hero) {
+            return hero.slot === state.controlled_slot;
+        });
+        if (!member || member.on_same_level === false || !member.pos
+            || !Number.isFinite(member.pos.x) || !Number.isFinite(member.pos.y))
+            return;
+        return { slot: member.slot, place: member.place, x: member.pos.x, y: member.pos.y };
+    }
+
+    function follow_controlled(force)
+    {
+        var target = controlled_view();
+        if (!target) { followed_hero = undefined; return; }
+        // A manual center remains useful until the hero moves, control changes,
+        // or the engine requests a new viewpoint.
+        if (force || !followed_hero || target.slot !== followed_hero.slot
+            || target.place !== followed_hero.place
+            || target.x !== followed_hero.x || target.y !== followed_hero.y)
+            do_view_center_update(target.x, target.y);
+    }
+
     function vgrdc(x, y)
     {
         dungeon_renderer.set_view_center(x, y);
@@ -182,6 +282,9 @@ function ($, map_knowledge, dungeon_renderer, view_data,
 
     function do_view_center_update(x, y)
     {
+        var target = controlled_view();
+        followed_hero = target;
+        if (target) { x = target.x; y = target.y; }
         // Update the viewpoint, unless the user is currently
         // right-clicking on the map
         if (farview_old_vc)
@@ -196,11 +299,47 @@ function ($, map_knowledge, dungeon_renderer, view_data,
     }
 
     var farview_old_vc;
+    function minimap_cell(ev)
+    {
+        var canvas = $("#minimap")[0];
+        if (!canvas || !(cell_w > 0) || !(cell_h > 0)) return;
+        var rect = canvas.getBoundingClientRect();
+        if (!(rect.width > 0) || !(rect.height > 0)) return;
+        var x = (ev.clientX - rect.left) * canvas.width / rect.width;
+        var y = (ev.clientY - rect.top) * canvas.height / rect.height;
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+        return { x: Math.floor((x - display_x) / cell_w) + cell_x,
+                 y: Math.floor((y - display_y) / cell_h) + cell_y };
+    }
+
+    function minimap_mousedown(ev)
+    {
+        if (ev.which !== 1 || ev.ctrlKey || ev.metaKey)
+        {
+            minimap_farview(ev);
+            return;
+        }
+        if (client.is_watching() || dungeon_renderer.ui_state !== enums.ui.NORMAL
+            || !game.get_input_mode || game.get_input_mode() !== enums.mouse_mode.COMMAND)
+            return;
+        var loc = minimap_cell(ev), bounds = map_knowledge.bounds();
+        if (!loc || !bounds || loc.x < bounds.left || loc.x > bounds.right
+            || loc.y < bounds.top || loc.y > bounds.bottom) return;
+        var cell = map_knowledge.get(loc.x, loc.y);
+        if (!cell || !cell.mf || cell.mf === enums.MF_UNSEEN) return;
+        stop_minimap_farview();
+        // Share dungeon input so travel, pings and exclusion selection retain
+        // their native route, ownership, danger and interruption rules.
+        $("#dungeon").trigger($.extend({}, ev, { type: "cell_click", cell: loc }));
+        ev.preventDefault();
+    }
+
     function minimap_farview(ev)
     {
         if (ev.which == 3 || farview_old_vc)
         {
-            var offset = $("#minimap").offset();
+            var loc = minimap_cell(ev);
+            if (!loc) return;
             if (farview_old_vc === undefined)
             {
                 farview_old_vc = {
@@ -208,11 +347,8 @@ function ($, map_knowledge, dungeon_renderer, view_data,
                     y: dungeon_renderer.view_center.y
                 }
             }
-            var x = Math.round((ev.pageX - display_x - offset.left)
-                               / cell_w + cell_x - 0.5);
-            var y = Math.round((ev.pageY - display_y - offset.top)
-                               / cell_h + cell_y - 0.5);
-            vgrdc(x, y);
+            vgrdc(loc.x, loc.y);
+            ev.preventDefault();
         }
     }
 
@@ -226,12 +362,23 @@ function ($, map_knowledge, dungeon_renderer, view_data,
     }
 
     $(document).bind("game_init", function () {
+        followed_hero = farview_old_vc = undefined;
         cell_x = cell_y = display_x = display_y = 0;
 
         $("#minimap_overlay")
-            .mousedown(minimap_farview)
-            .mousemove(minimap_farview)
-            .mouseup(stop_minimap_farview)
+            .off(".minimap")
+            .on("mousedown.minimap", minimap_mousedown)
+            .on("mousemove.minimap", minimap_farview);
+    });
+
+    $(document).on("mouseup.minimap", stop_minimap_farview);
+
+    $(document).on("party_state_rendered.cameraFollow", function () {
+        follow_controlled(false);
+    }).on("game_input_changed.cameraFollow", function (event, mode) {
+        if (mode === enums.mouse_mode.COMMAND) follow_controlled(true);
+    }).on("game_cleanup.cameraFollow", function () {
+        followed_hero = farview_old_vc = undefined;
     });
 
     return {

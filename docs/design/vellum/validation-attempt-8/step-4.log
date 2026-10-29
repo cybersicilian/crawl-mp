@@ -1,0 +1,23 @@
+Filters: [vellum-balance]
+Randomness seeded to: 4171374227
+VELLUM_COMPARISON,{"god":"No God","xl":8,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":40,"attack_delay":12,"piety":50}
+VELLUM_COMPARISON,{"god":"No God","xl":15,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":70,"attack_delay":10.5,"piety":120}
+VELLUM_COMPARISON,{"god":"No God","xl":25,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":120,"attack_delay":8,"piety":200}
+VELLUM_COMPARISON,{"god":"Vellum","xl":8,"str":15,"int":10,"dex":15,"rF":1,"rC":1,"weapon_skill_tenths":40,"attack_delay":12,"piety":40}
+VELLUM_COMPARISON,{"god":"Vellum","xl":15,"str":15,"int":10,"dex":15,"rF":1,"rC":1,"weapon_skill_tenths":70,"attack_delay":10.5,"piety":100}
+VELLUM_COMPARISON,{"god":"Vellum","xl":25,"str":15,"int":10,"dex":15,"rF":1,"rC":1,"weapon_skill_tenths":120,"attack_delay":8,"piety":180}
+VELLUM_COMPARISON,{"god":"Cheibriados","xl":8,"str":15,"int":14,"dex":19,"rF":0,"rC":1,"weapon_skill_tenths":40,"attack_delay":12,"piety":50}
+VELLUM_COMPARISON,{"god":"Cheibriados","xl":15,"str":22,"int":21,"dex":26,"rF":0,"rC":1,"weapon_skill_tenths":70,"attack_delay":10.5,"piety":120}
+VELLUM_COMPARISON,{"god":"Cheibriados","xl":25,"str":26,"int":25,"dex":30,"rF":0,"rC":1,"weapon_skill_tenths":120,"attack_delay":8,"piety":200}
+VELLUM_COMPARISON,{"god":"Okawaru","xl":8,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":90,"attack_delay":4.75,"piety":50}
+VELLUM_COMPARISON,{"god":"Okawaru","xl":15,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":120,"attack_delay":4,"piety":120}
+VELLUM_COMPARISON,{"god":"Okawaru","xl":25,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":170,"attack_delay":3.5,"piety":200}
+VELLUM_COMPARISON,{"god":"Ashenzari","xl":8,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":77,"attack_delay":10.15,"piety":86}
+VELLUM_COMPARISON,{"god":"Ashenzari","xl":15,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":112,"attack_delay":8.4,"piety":86}
+VELLUM_COMPARISON,{"god":"Ashenzari","xl":25,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":161,"attack_delay":7,"piety":86}
+VELLUM_COMPARISON,{"god":"Pakellas","xl":8,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":40,"attack_delay":12,"piety":50}
+VELLUM_COMPARISON,{"god":"Pakellas","xl":15,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":70,"attack_delay":10.5,"piety":120}
+VELLUM_COMPARISON,{"god":"Pakellas","xl":25,"str":11,"int":10,"dex":15,"rF":0,"rC":1,"weapon_skill_tenths":120,"attack_delay":8,"piety":200}
+===============================================================================
+All tests passed (153 assertions in 1 test case)
+

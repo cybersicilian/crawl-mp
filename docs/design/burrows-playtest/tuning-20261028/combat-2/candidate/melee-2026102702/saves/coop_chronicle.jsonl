@@ -1,0 +1,6 @@
+{"type":"party_comp","player_count":1,"friendly_fire":true,"seed":"2026102702","place":"D:1","party_spec":"Route_melee:Minotaur/Fighter/war axe","members":[{"slot":0,"name":"Route_melee","species":"Minotaur","job":"Fighter","weapon":"war axe","xl":1}]}
+{"type":"cool_item","item_name":"a +2 plate armour","category":"ego_gear","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"D:1","value_score":120}
+{"type":"cool_item","item_name":"a +3 broad axe","category":"ego_gear","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"D:1","value_score":130}
+{"type":"cool_item","item_name":"the ring of Violets {rC+ rN+ Str+5}","category":"randart","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"Hive:2","value_score":250}
+{"type":"cool_item","item_name":"the amulet \"Bommikh\" {Wildshape ^Drain +Blink rPois Int+4}","category":"randart","finder_name":"Route_melee","finder_species":"Minotaur","finder_job":"Fighter","slot":0,"place":"Bur:4","value_score":250}
+{"type":"ghost","hero_name":"Route_melee","slot":0,"species":"Minotaur","job":"Fighter","xl":18,"god":"Okawaru","place":"Worm:3","killer":"iron dragon (7)","hp_max":176,"ac":24,"ev":10,"sh":30,"weapon":"+3 broad axe","down_type":"permadeath_ghost","bones_saved":true}

@@ -1,0 +1,10 @@
+fatal: not a git repository (or any of the parent directories): .git
+util/art-data.pl
+    Generating art-data.h
+    Generating art-enum.h
+    Generating dc-unrand.txt
+    Generating tiledef-unrand.cc
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    PYTHON job-data.h
+    PYTHON rltilesstatus-icon-sizes.h
+make: `catch2-tests-executable' is up to date.

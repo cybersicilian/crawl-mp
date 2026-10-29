@@ -254,6 +254,7 @@ define(function() {
             98: CK_SHIFT_DOWN,
             99: CK_SHIFT_PGDN,
             100: CK_SHIFT_LEFT,
+            101: CK_SHIFT_CLEAR,
             102: CK_SHIFT_RIGHT,
             103: CK_SHIFT_HOME,
             104: CK_SHIFT_UP,
@@ -284,6 +285,7 @@ define(function() {
             98: CK_CTRL_DOWN,
             99: CK_CTRL_PGDN,
             100: CK_CTRL_LEFT,
+            101: CK_CTRL_CLEAR,
             102: CK_CTRL_RIGHT,
             103: CK_CTRL_HOME,
             104: CK_CTRL_UP,
@@ -314,6 +316,7 @@ define(function() {
             98: CK_CTRL_SHIFT_DOWN,
             99: CK_CTRL_SHIFT_PGDN,
             100: CK_CTRL_SHIFT_LEFT,
+            101: CK_CTRL_SHIFT_CLEAR,
             102: CK_CTRL_SHIFT_RIGHT,
             103: CK_CTRL_SHIFT_HOME,
             104: CK_CTRL_SHIFT_UP,
@@ -331,7 +334,7 @@ define(function() {
 
     var captured_control_keys = [
         "O", "Q", "F", "P", "W", "A", "T", "X", "S", "G", "I", "D", "E",
-        "H", "J", "K", "L", "Y", "U", "B", "N", "C", "M",
+        "H", "J", "K", "L", "Y", "U", "B", "N", "C", "M", "R", "V", "Z",
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
     ];
 

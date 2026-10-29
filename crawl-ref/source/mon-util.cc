@@ -73,6 +73,7 @@
 #include "timed-effects.h"
 #include "transform.h"
 #include "traps.h"
+#include "party.h"
 #include "unicode.h"
 #include "unwind.h"
 
@@ -2149,7 +2150,20 @@ mon_attack_def mons_attack_spec(const monster& m, int attk_number,
     if (mon.type == MONS_SLIME_CREATURE && mon.blob_size > 1)
         attk.damage *= mon.blob_size;
 
-    return zombified ? _downscale_zombie_attack(mon, attk) : attk;
+    attk = zombified ? _downscale_zombie_attack(mon, attk) : attk;
+
+    const int extra = party::extra_player_count();
+    if (extra > 0
+        && attk.damage > 0
+        && !mon.wont_attack()
+        && !mon.is_firewood()
+        && !crawl_state.game_is_arena())
+    {
+        const int dmg_mult_pct = 100 + extra * 10;
+        attk.damage = max(attk.damage + 1, attk.damage * dmg_mult_pct / 100);
+    }
+
+    return attk;
 }
 
 static int _mons_damage(monster_type mc, int rt)
@@ -4946,6 +4960,8 @@ bool monster_nearby()
 
 actor *actor_by_mid(mid_t m, bool require_valid, bool allow_dead)
 {
+    if (party::is_party_mid(m))
+        return party::player_by_mid(m);
     if (m == MID_PLAYER)
         return &you;
     return monster_by_mid(m, require_valid, allow_dead);
@@ -5823,8 +5839,18 @@ bool shoot_through_actor(const actor* agent, const actor* target, bool announce)
 
     // Projectiles can be shot through by anyone.
     const monster* mon = target->as_monster();
-    if (mon && mons_is_projectile(*mon))
+    if (mon && (mons_is_projectile(*mon) || mon->props.exists("party_downed_ghost")))
         return true;
+
+    if (party::is_enabled() && !party::friendly_fire_enabled() && agent)
+    {
+        const bool agent_in_party = agent->is_player()
+            || (agent->is_monster() && party::is_proxy_monster(*agent->as_monster()));
+        const bool target_in_party = target->is_player()
+            || (mon && party::is_proxy_monster(*mon));
+        if (agent_in_party && target_in_party)
+            return true;
+    }
 
     // But all the other checks require an aligned agent.
     if (!agent || !mons_aligned(agent, mon))

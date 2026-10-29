@@ -3,6 +3,13 @@
 #include "colour.h"
 #include "tag-version.h"
 
+static constexpr int BURROWS_LEVELS = 4;
+static constexpr int BURROWS_ABSDEPTH = 15;
+static constexpr int DEPTHS_ABSDEPTH = 22;
+// One floor for each step of effective depth from Bur:$ to Depths:1.
+static constexpr int WORMLANDS_LEVELS =
+    DEPTHS_ABSDEPTH - (BURROWS_ABSDEPTH + BURROWS_LEVELS - 1);
+
 // The order of these entries must match the order of the branch-type enum.
 const Branch branches[NUM_BRANCHES] =
 {
@@ -50,7 +57,7 @@ const Branch branches[NUM_BRANCHES] =
       nullptr,
       WHITE, ETC_ELVEN_BRICK,
       'E', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
-      {BRANCH_SWAMP, BRANCH_SNAKE, BRANCH_SHOALS, BRANCH_SPIDER } },
+      {BRANCH_SWAMP, BRANCH_SNAKE, BRANCH_SHOALS, BRANCH_SPIDER} },
 #if TAG_MAJOR_VERSION == 34
 
     { BRANCH_DWARF, BRANCH_ELF, -1, -1, 0, 17,
@@ -127,7 +134,7 @@ const Branch branches[NUM_BRANCHES] =
       {BRANCH_ELF, BRANCH_CRYPT } },
 #if TAG_MAJOR_VERSION == 34
 
-    { BRANCH_BLADE, BRANCH_VAULTS, 3, 4, 1, 21,
+    { BRANCH_BLADE, BRANCH_VAULTS, 2, 4, 1, 15,
       brflag::no_items,
       DNGN_ENTER_BLADE, DNGN_EXIT_BLADE, NUM_FEATURES,
       "Hall of Blades", "the Hall of Blades", "Blade",
@@ -144,7 +151,7 @@ const Branch branches[NUM_BRANCHES] =
       nullptr,
       LIGHTGREY, BROWN,
       'C', {}, branch_noise::quiet, 10,
-      {BRANCH_SWAMP, BRANCH_SNAKE, BRANCH_SHOALS, BRANCH_SPIDER }},
+      {BRANCH_SWAMP, BRANCH_SNAKE, BRANCH_SHOALS, BRANCH_SPIDER}},
 
     { BRANCH_TOMB, BRANCH_CRYPT, 3, 3, 3, 21,
       brflag::islanded | brflag::dangerous_end | brflag::no_shafts,
@@ -156,14 +163,14 @@ const Branch branches[NUM_BRANCHES] =
       {} },
 #if TAG_MAJOR_VERSION > 34
 
-    { BRANCH_DEPTHS, BRANCH_DUNGEON, 15, 15, 4, 22,
+    { BRANCH_DEPTHS, BRANCH_DUNGEON, 15, 15, 4, DEPTHS_ABSDEPTH,
       brflag::none,
       DNGN_ENTER_DEPTHS, DNGN_EXIT_DEPTHS, NUM_FEATURES,
       "Depths", "the Depths", "Depths",
       nullptr,
       LIGHTGREY, BROWN,
       'U', {}, branch_noise::normal, 10,
-      {BRANCH_DUNGEON, BRANCH_VAULTS, BRANCH_SLIME } },
+      {BRANCH_DUNGEON, BRANCH_VAULTS, BRANCH_SLIME, BRANCH_WORMLANDS } },
 #endif
 
     { BRANCH_VESTIBULE, NUM_BRANCHES, 27, 27, 1, 27,
@@ -222,14 +229,14 @@ const Branch branches[NUM_BRANCHES] =
       {BRANCH_DEPTHS} },
 #if TAG_MAJOR_VERSION == 34
 
-    { BRANCH_FOREST, BRANCH_VAULTS, 2, 3, 5, 19,
-      brflag::spotty,
+    { BRANCH_FOREST, BRANCH_VAULTS, 2, 3, 4, 19,
+      brflag::spotty | brflag::dangerous_end,
       DNGN_ENTER_FOREST, DNGN_EXIT_FOREST, NUM_FEATURES,
       "Forest", "the Enchanted Forest", "Forest",
-      nullptr,
-      BROWN, BROWN,
-      'F', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
-      {} },
+      "You enter the Enchanted Forest, where ancient boughs whisper in the wind.",
+      GREEN, BROWN,
+      'F', { RUNE_FOREST }, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
+      {BRANCH_VAULTS} },
 #endif
 
     { BRANCH_ABYSS, NUM_BRANCHES, -1, -1, 7, 24,
@@ -374,14 +381,14 @@ const Branch branches[NUM_BRANCHES] =
 #endif
 #if TAG_MAJOR_VERSION == 34
 
-    { BRANCH_DEPTHS, BRANCH_DUNGEON, 15, 15, 4, 22,
+    { BRANCH_DEPTHS, BRANCH_DUNGEON, 15, 15, 4, DEPTHS_ABSDEPTH,
       brflag::none,
       DNGN_ENTER_DEPTHS, DNGN_EXIT_DEPTHS, NUM_FEATURES,
       "Depths", "the Depths", "Depths",
       nullptr,
       LIGHTGREY, BROWN,
       'U', {}, branch_noise::normal, 10,
-      {BRANCH_VAULTS, BRANCH_SLIME} },
+      {BRANCH_VAULTS, BRANCH_SLIME, BRANCH_WORMLANDS} },
 #endif
 
     { BRANCH_DESOLATION, NUM_BRANCHES, -1, -1, 1, 20,
@@ -454,6 +461,31 @@ const Branch branches[NUM_BRANCHES] =
       {}
     },
 
+    { BRANCH_BURROWS, BRANCH_LAIR, 5, 5, BURROWS_LEVELS, BURROWS_ABSDEPTH,
+      brflag::dangerous_end,
+      DNGN_ENTER_BURROWS, DNGN_EXIT_BURROWS, NUM_FEATURES,
+      "Burrows", "the Burrows", "Bur",
+      nullptr,
+      BROWN, BROWN,
+      '&', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
+      {BRANCH_LAIR} },
+
+    { BRANCH_WORMLANDS, BRANCH_BURROWS, BURROWS_LEVELS, BURROWS_LEVELS,
+      WORMLANDS_LEVELS, BURROWS_ABSDEPTH + BURROWS_LEVELS,
+      brflag::dangerous_end,
+      DNGN_ENTER_WORMLANDS, DNGN_EXIT_WORMLANDS, NUM_FEATURES,
+      "Wormlands", "the Wormlands", "Worm", nullptr,
+      LIGHTGREY, BROWN,
+      '(', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
+      {BRANCH_BURROWS} },
+
+    { BRANCH_HIVE, BRANCH_BURROWS, 2, 2, 2, 17,
+      brflag::dangerous_end,
+      DNGN_ENTER_HIVE, DNGN_EXIT_HIVE, NUM_FEATURES,
+      "Hive", "the Hive", "Hive", nullptr,
+      YELLOW, BROWN,
+      ')', {}, branch_noise::normal, 8,
+      {BRANCH_BURROWS} },
 };
 
 /*

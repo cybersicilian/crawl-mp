@@ -1,0 +1,24 @@
+enum: JOB_PREACHER
+name: Preacher
+short_name: Pc
+category: Zealot
+category_priority: 70
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "robe"
+  - "javelin ego:silver q:3"
+weapon_choice: plain
+recommended_species:
+  - human
+  - gnoll
+  - spriggan
+  - formicid
+skills:
+  fighting: 1
+  invocations: 2
+  dodging: 1
+  stealth: 4
+  weapon: 2
+create_enum: false

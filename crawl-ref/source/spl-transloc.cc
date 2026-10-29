@@ -18,6 +18,7 @@
 #include "areas.h"
 #include "art-enum.h"
 #include "artefact.h"
+#include "beam.h"
 #include "cloud.h"
 #include "coordit.h"
 #include "delay.h"
@@ -877,8 +878,86 @@ spret electric_charge(actor& agent, int powc, bool fail, const coord_def &target
  * @return              Whether the blink succeeded, aborted, or had to be
  *                      cancelled due to hups.
  */
+spret sparkborn_blinkbolt()
+{
+    if (you.no_tele(true))
+    {
+        canned_msg(MSG_STRANGE_STASIS);
+        return spret::abort;
+    }
+
+    dist target;
+    targeter_smite area(&you, 3);
+    area.obeys_mesmerise = true;
+    const coord_def start = you.pos();
+    const int power = 8 + 3 * (you.experience_level / 9)
+        + random2(2 * (you.experience_level / 3));
+    for (;;)
+    {
+        const spret result = _find_cblink_target(target, true, "blinkbolt", &area);
+        if (result == spret::seen_hups)
+            return result;
+        if (result != spret::success)
+        {
+            if (yesno("Suppress the blinkbolt and gain magical contamination?", false, 'n'))
+            {
+                contaminate_player(2000 + random2(1000), true);
+                mprf(MSGCH_WARN, "You suppress your inner lightning.");
+                return spret::abort;
+            }
+            target = dist();
+            continue;
+        }
+
+        bolt beam;
+        beam.source = start;
+        beam.target = target.target;
+        beam.range = grid_distance(start, target.target);
+        beam.aimed_at_spot = true;
+        const bool had_turn_ended = you.turn_is_over;
+        const bool safe = player_tracer(ZAP_LIGHTNING_BOLT, power, beam, beam.range);
+        you.turn_is_over = had_turn_ended;
+        if (!safe)
+        {
+            target = dist();
+            continue;
+        }
+
+        if (monster_at(target.target))
+        {
+            mpr("Something blocks your blinkbolt!");
+            uncontrolled_blink();
+        }
+        else
+        {
+            you.stop_being_constricted(false, "blink");
+            _place_tloc_cloud(start);
+            you.move_to(target.target, MV_DELIBERATE | MV_TRANSLOCATION);
+        }
+        you.duration[DUR_BLINKBOLT_COOLDOWN] = random_range(100, 190);
+        beam.name = "electrical discharge";
+        beam.damage = dice_def(power, 1);
+        beam.hit = AUTOMATIC_HIT;
+        beam.flavour = BEAM_ELECTRICITY;
+        beam.colour = LIGHTBLUE;
+        beam.attitude = ATT_FRIENDLY;
+        beam.thrower = KILL_YOU_MISSILE;
+        beam.pierce = true;
+        beam.aimed_at_spot = true;
+        beam.safe_to_user = true;
+        beam.fire();
+        return spret::success;
+    }
+}
+
 spret controlled_blink(bool safe_cancel, dist *target)
 {
+    if (you.duration[DUR_BLINK_COOLDOWN])
+    {
+        mpr("You are still too unstable to blink.");
+        return spret::abort;
+    }
+
     if (crawl_state.is_replaying_keys())
     {
         crawl_state.cancel_cmd_all("You can't repeat controlled blinks.");
@@ -1501,7 +1580,7 @@ spret cast_manifold_assault(actor& agent, int pow, bool fail, bool real,
 
     if ((agent.is_player() || you.can_see(agent)) && !katana_defender)
     {
-        if (weapon && is_unrandom_artefact(*weapon, UNRAND_AUTUMN_KATANA))
+        if (weapon && has_unrand_effect(*weapon, UNRAND_AUTUMN_KATANA))
             mprf("Space folds impossibly around %s blade!", agent.name(DESC_ITS).c_str());
         else if (!(agent.is_monster() && agent.as_monster()->has_ench(ENCH_PARADOX_TOUCHED)))
             mpr("Space momentarily warps into an impossible shape!");
@@ -1535,7 +1614,7 @@ spret cast_manifold_assault(actor& agent, int pow, bool fail, bool real,
         atk.is_projected = true;
         if (katana_defender)
         {
-            if (offhand && is_unrandom_artefact(*offhand, UNRAND_AUTUMN_KATANA))
+            if (offhand && has_unrand_effect(*offhand, UNRAND_AUTUMN_KATANA))
                 atk.set_weapon(offhand);
             // Only the katana can attack through space!
             atk.attack();
@@ -1832,7 +1911,7 @@ int gravitas_radius(int pow)
     return 2 + (pow / 48);
 }
 
-spret cast_gravitas(int pow, const coord_def& where, bool fail)
+spret cast_gravitas(int pow, const coord_def& where, bool fail, int damage_percent)
 {
     fail_check();
 
@@ -1866,7 +1945,7 @@ spret cast_gravitas(int pow, const coord_def& where, bool fail)
             if (mon->wont_attack() || mons_is_projectile(*mon))
                 continue;
 
-            int dmg = zap_damage(ZAP_GRAVITAS, pow, false).roll();
+            int dmg = zap_damage(ZAP_GRAVITAS, pow, false).roll() * damage_percent / 100;
             dmg = mon->apply_ac(dmg);
 
             if (you.can_see(*mon))

@@ -1,0 +1,137 @@
+Route_melee
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(0, 0, Bur:1)
+  a shale drake skeleton
+(2, -35, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(4, -16, Bur:1)
+  a +0 buckler
+(4, -1, Bur:1)
+  a +0 plate armour
+  a scroll of identify
+(9, -12, Bur:1)
+  a +0 quarterstaff
+(10, -10, Bur:1)
+  a crag boar skeleton
+(10, -7, Bur:1)
+  a crag boar skeleton
+(12, -33, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(25, 14, Bur:1)
+  a +0 quarterstaff
+(26, 0, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+
+Level 2 of the Burrows
+(0, 21, Bur:2)
+  a parchment of Tukima's Dance
+(1, 1, Bur:2)
+  a parchment of Force Lance
+
+Level 3 of the Burrows
+(2, -46, Bur:3)
+  a burrowing beast corpse (skeletalised by now)
+(5, -12, Bur:3)
+  a deep troll skeleton
+(9, -34, Bur:3)
+  a scroll of identify
+(10, -34, Bur:3)
+  a +0 kite shield
+(16, -5, Bur:3)
+  a crag boar skeleton
+  a shale drake skeleton
+(19, -16, Bur:3)
+  a scroll of noise
+(19, 2, Bur:3)
+  a +0 pair of boots
+(29, -50, Bur:3)
+  a +0 rapier
+(29, -17, Bur:3)
+  a burrowing beast skeleton
+(43, -27, Bur:3)
+  a burrowing beast corpse (skeletalised by now)
+(43, -14, Bur:3)
+  a +0 scimitar
+
+Level 4 of the Burrows
+(0, 0, Bur:4)
+  a shale drake skeleton
+(16, -2, Bur:4)
+  a +0 leather armour
+  a crag boar skeleton
+(21, -19, Bur:4)
+  a burrowing beast skeleton
+(34, -29, Bur:4)
+  a parchment of Cause Fear
+(37, -27, Bur:4)
+  a burrowing beast skeleton
+(44, -6, Bur:4)
+  a catoblepas corpse (skeletalised by now)
+(47, -12, Bur:4)
+  a +1 ring mail of fire resistance
+(47, 21, Bur:4)
+  a +0 falchion
+(50, 7, Bur:4)
+  2 poisoned darts
+(55, -13, Bur:4)
+  a crag boar corpse (skeletalised by now)
+(55, -12, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+(55, 4, Bur:4)
+  a shale drake skeleton
+(55, 20, Bur:4)
+  a death yak skeleton
+(59, -13, Bur:4)
+  a +0 ring mail
+(61, 16, Bur:4)
+  the wellspring talisman of the Bruised Things {rElec Dex+3}
+    [wellspring talisman]
+    rElec:     It insulates you from electricity.
+    Dex+3:     It affects your dexterity (+3).
+
+Level 1 of the Wormlands
+(22, 50, Worm:1)
+  a lindwurm corpse (skeletalised by now)
+(26, 46, Worm:1)
+  4 large rocks
+(27, 1, Worm:1)
+  3 atropa-tipped darts
+(50, 9, Worm:1)
+  a +0 leather armour
+(57, 42, Worm:1)
+  a lindwurm skeleton
+(61, 39, Worm:1)
+  a +0 robe
+(62, 42, Worm:1)
+  a potion of moonshine
+
+Level 2 of the Wormlands
+(0, 0, Worm:2)
+  a +0 helmet of ice
+(10, -17, Worm:2)
+  a deep troll skeleton
+(12, -16, Worm:2)
+  a +2 spear of venom
+(14, -1, Worm:2)
+  a +0 rapier
+(16, -18, Worm:2)
+  a +0 chain mail
+(30, -18, Worm:2)
+  a +0 troll leather armour
+  a deep troll skeleton
+(36, -31, Worm:2)
+  a lindwurm corpse (skeletalised by now)
+(58, -8, Worm:2)
+  2 scrolls of identify
+
+Level 3 of the Wormlands
+(3, -5, Worm:3)
+  32 gold pieces
+(8, 1, Worm:3)
+  a parchment of Silence
+(9, -8, Worm:3)
+  3 scrolls of enchant weapon
+

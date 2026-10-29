@@ -1,0 +1,24 @@
+{
+  "reservationId": "95301df2-91fd-4e44-aa79-7bb4af8fb517",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "95301df2-91fd-4e44-aa79-7bb4af8fb517",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS navigation contracts and final late Wormlands gameplay coverage",
+      "requestedAt": 1793155824.187787,
+      "supervisorPid": 88133,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "1b8c13a7985539d510cfcbc7343213d11f7e20e719e989e4508af478fa75c4a1",
+      "startedAt": 1793155824.1882272,
+      "workerPid": 88135,
+      "processGroup": 88135,
+      "exitCode": 0,
+      "finishedAt": 1793155861.85672,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "1b8c13a7985539d510cfcbc7343213d11f7e20e719e989e4508af478fa75c4a1"
+  }
+}

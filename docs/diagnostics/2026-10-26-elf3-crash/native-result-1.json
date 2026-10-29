@@ -1,0 +1,43 @@
+{
+  "passed": false,
+  "original_bounds_failure_observed": false,
+  "binary_sha256": "8ebb34ded213c797c97995a4a72791881bab367b09d086299960a96342432117",
+  "map_set": [
+    "branches/elf.des",
+    "builder/layout_geoelf.des",
+    "builder/layout_geoelf_castle.des"
+  ],
+  "production_runtime_tested": false,
+  "player_saves_accessed": false,
+  "processes_completed": true,
+  "phases": [
+    {
+      "phase": "original-guarded",
+      "exit_code": 1,
+      "seconds": 7.957042167006875,
+      "stdout": "",
+      "stderr": "Lua execfile error (dlua/sanity.lua): ...p/dcss-elf3-native-01a17a3a-1/native/dat/dlua/sanity.lua:4: No map found for Zot:$\n\n"
+    },
+    {
+      "phase": "coordinates",
+      "exit_code": 1,
+      "seconds": 0.1929257079900708,
+      "stdout": "",
+      "stderr": "Lua execfile error (dlua/sanity.lua): ...p/dcss-elf3-native-01a17a3a-1/native/dat/dlua/sanity.lua:4: No map found for Zot:$\n\n"
+    },
+    {
+      "phase": "patched-placement",
+      "exit_code": 1,
+      "seconds": 0.0806899169983808,
+      "stdout": "",
+      "stderr": "Lua execfile error (dlua/sanity.lua): ...p/dcss-elf3-native-01a17a3a-1/native/dat/dlua/sanity.lua:4: No map found for Zot:$\n\n"
+    },
+    {
+      "phase": "patched-generation",
+      "exit_code": 1,
+      "seconds": 0.08103774998744484,
+      "stdout": "",
+      "stderr": "Lua execfile error (dlua/sanity.lua): ...p/dcss-elf3-native-01a17a3a-1/native/dat/dlua/sanity.lua:4: No map found for Zot:$\n\n"
+    }
+  ]
+}

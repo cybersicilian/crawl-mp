@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "hydra-physiology.h"
 
 #ifdef USE_TILE
 #include "tilepick-p.h"
@@ -62,6 +63,14 @@ tileidx_t tilep_equ_weapon(const item_def &item)
     case WPN_CLUB:
         tile = TILEP_HAND1_CLUB_SLANT;
         break;
+#if TAG_MAJOR_VERSION == 34
+    case WPN_HAMMER:
+        tile = TILEP_HAND1_HAMMER;
+        break;
+    case WPN_SPIKED_FLAIL:
+        tile = TILEP_HAND1_SPIKED_FLAIL;
+        break;
+#endif
     case WPN_MACE:
         tile = TILEP_HAND1_MACE;
         break;
@@ -103,6 +112,28 @@ tileidx_t tilep_equ_weapon(const item_def &item)
     case WPN_SHORT_SWORD:
         tile = TILEP_HAND1_SHORT_SWORD_SLANT;
         break;
+#if TAG_MAJOR_VERSION == 34
+    // Retained save subtypes share the corresponding blade's appearance.
+    case WPN_BLESSED_LONG_SWORD:
+        tile = TILEP_HAND1_LONG_SWORD_SLANT;
+        break;
+    case WPN_BLESSED_GREAT_SWORD:
+        tile = TILEP_HAND1_GREAT_SWORD;
+        break;
+    case WPN_BLESSED_SCIMITAR:
+        tile = TILEP_HAND1_SCIMITAR;
+        break;
+    case WPN_CUTLASS:
+    case WPN_BLESSED_FALCHION:
+        tile = TILEP_HAND1_FALCHION;
+        break;
+    case WPN_BLESSED_DOUBLE_SWORD:
+        tile = TILEP_HAND1_DOUBLE_SWORD;
+        break;
+    case WPN_BLESSED_TRIPLE_SWORD:
+        tile = TILEP_HAND1_TRIPLE_SWORD;
+        break;
+#endif
     case WPN_LONG_SWORD:
         tile = TILEP_HAND1_LONG_SWORD_SLANT;
         break;
@@ -167,6 +198,11 @@ tileidx_t tilep_equ_weapon(const item_def &item)
     case WPN_HALBERD:
         tile = TILEP_HAND1_HALBERD;
         break;
+#if TAG_MAJOR_VERSION == 34
+    case WPN_SCYTHE:
+        tile = TILEP_HAND1_SCYTHE;
+        break;
+#endif
     case WPN_GLAIVE:
         tile = TILEP_HAND1_GLAIVE;
         break;
@@ -199,6 +235,11 @@ tileidx_t tilep_equ_weapon(const item_def &item)
     case WPN_SLING:
         tile = TILEP_HAND1_SLING;
         break;
+#if TAG_MAJOR_VERSION == 34
+    case WPN_FUSTIBALUS:
+        tile = TILEP_HAND1_FUSTIBALUS;
+        break;
+#endif
     case WPN_SHORTBOW:
         tile = TILEP_HAND1_SHORTBOW;
         break;
@@ -219,6 +260,8 @@ tileidx_t tilep_equ_weapon(const item_def &item)
         break;
 #if TAG_MAJOR_VERSION == 34
     case WPN_BLOWGUN:
+        tile = TILEP_HAND1_BLOWGUN_ASSASSIN;
+        break;
 #endif
     default: tile = 0;
     }
@@ -413,6 +456,11 @@ tileidx_t tilep_equ_boots(const item_def &item)
     case ARM_BARDING:
         tile = TILEP_BOOTS_BARDING;
         break;
+#if TAG_MAJOR_VERSION == 34
+    case ARM_CENTAUR_BARDING:
+        tile = TILEP_BOOTS_CENTAUR_BARDING;
+        break;
+#endif
     case ARM_BOOTS:
         tile = TILEP_BOOTS_NORMAL;
         break;
@@ -486,6 +534,9 @@ static int _draconian_colour(int race, int level)
     case SP_PALE_DRACONIAN:    return 5;
     case SP_PURPLE_DRACONIAN:  return 6;
     case SP_RED_DRACONIAN:     return 7;
+#if TAG_MAJOR_VERSION == 34
+    case SP_MOTTLED_DRACONIAN: return 6;
+#endif
     case SP_WHITE_DRACONIAN:   return 8;
     }
     return 0;
@@ -496,17 +547,22 @@ tileidx_t tilep_species_to_base_tile(int sp, int level)
     switch (sp)
     {
     case SP_HUMAN:
+    case SP_IRIT:
         return TILEP_BASE_HUMAN;
-#if TAG_MAJOR_VERSION == 34
     case SP_HIGH_ELF:
+        return TILEP_BASE_ELF;
+#if TAG_MAJOR_VERSION == 34
     case SP_SLUDGE_ELF:
 #endif
     case SP_DEEP_ELF:
         return TILEP_BASE_DEEP_ELF;
 #if TAG_MAJOR_VERSION == 34
+    case SP_DEEP_DWARF:
+        return TILEP_BASE_DWARF;
     case SP_HALFLING:
         return TILEP_BASE_HALFLING;
     case SP_HILL_ORC:
+    case SP_LAVA_ORC:
         return TILEP_BASE_ORC;
 #endif
     case SP_KOBOLD:
@@ -519,8 +575,30 @@ tileidx_t tilep_species_to_base_tile(int sp, int level)
         return TILEP_BASE_ONI;
     case SP_TROLL:
         return TILEP_BASE_TROLL;
+    case SP_TWO_HEADED_OGRE:
+        return TILEP_BASE_TWO_HEADED_OGRE;
+    case SP_HYDRA:
+        return TILEP_BASE_HYDRA + min(sp == you.species && level == you.experience_level
+                                      ? you.heads() : hydra::heads_for_level(level), 9) - 1;
+    case SP_HERMIT_CRAB:
+        return TILEP_BASE_HERMIT_CRAB;
+    case SP_PROTEAN:
+        return TILEP_BASE_PROTEAN;
+    case SP_FAERIE_DRAGON:
+        return TILEP_BASE_FAERIE_DRAGON;
+    case SP_ENT:
+        return TILEP_BASE_ENT;
+    case SP_SPARKBORN:
+        return TILEP_BASE_SPARKBORN;
+    case SP_WIGHT:
+        return TILEP_BASE_WIGHT;
+    case SP_MELIAI:
+        return TILEP_BASE_MELIAI;
     case SP_BASE_DRACONIAN:
     case SP_RED_DRACONIAN:
+#if TAG_MAJOR_VERSION == 34
+    case SP_MOTTLED_DRACONIAN:
+#endif
     case SP_WHITE_DRACONIAN:
     case SP_GREEN_DRACONIAN:
     case SP_YELLOW_DRACONIAN:
@@ -541,6 +619,10 @@ tileidx_t tilep_species_to_base_tile(int sp, int level)
         return TILEP_BASE_MINOTAUR;
     case SP_DEMONSPAWN:
         return TILEP_BASE_DEMONSPAWN;
+    case SP_CHAIN_DEVIL:
+        return TILEP_BASE_CHAIN_DEVIL;
+    case SP_ELDRITCH:
+        return TILEP_BASE_ELDRITCH;
 #if TAG_MAJOR_VERSION == 34
     case SP_GHOUL:
         return TILEP_BASE_GHOUL;
@@ -572,11 +654,18 @@ tileidx_t tilep_species_to_base_tile(int sp, int level)
         return TILEP_BASE_POLTERGEIST;
     case SP_REVENANT:
         return TILEP_BASE_REVENANT;
+    case SP_AUTOMATON:
+        return TILEP_BASE_AUTOMATON;
 #if TAG_MAJOR_VERSION == 34
     case SP_CENTAUR:
+    case SP_ARMATAUR:
 #endif
     case SP_GALE_CENTAUR:
         return TILEP_BASE_GALE_CENTAUR;
+    case SP_TORTLE:
+        return TILEP_BASE_TORTLE;
+    case SP_OOZLE:
+        return TILEP_BASE_OOZLE;
     default:
         return TILEP_BASE_HUMAN;
     }
@@ -594,6 +683,11 @@ static const string DOLL_BASE_KEY = "doll_base";
 
 void randomize_doll_base()
 {
+    if (you.species == SP_HYDRA)
+    {
+        you.props.erase(DOLL_BASE_KEY);
+        return;
+    }
     const tileidx_t base = tilep_species_to_base_tile(you.species,
                                                       you.experience_level);
     const int count = tile_player_count(base);
@@ -609,7 +703,7 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
     tileidx_t *parts = doll->parts;
 
     tileidx_t result = tilep_species_to_base_tile(sp, level);
-    if (level == you.experience_level && you.props.exists(DOLL_BASE_KEY))
+    if (sp != SP_HYDRA && level == you.experience_level && you.props.exists(DOLL_BASE_KEY))
     {
         const int rand_doll = you.props[DOLL_BASE_KEY].get_int();
 #if TAG_MAJOR_VERSION == 34
@@ -628,10 +722,16 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
 
     switch (sp)
     {
-#if TAG_MAJOR_VERSION == 34
         case SP_HIGH_ELF:
+#if TAG_MAJOR_VERSION == 34
         case SP_SLUDGE_ELF:
+#endif
             hair = TILEP_HAIR_ELF_YELLOW;
+            break;
+#if TAG_MAJOR_VERSION == 34
+        case SP_DEEP_DWARF:
+            hair = TILEP_HAIR_SHORT_WHITE;
+            beard = TILEP_BEARD_FULL_WHITE;
             break;
 #endif
         case SP_DEEP_ELF:
@@ -642,6 +742,9 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
             break;
         case SP_BASE_DRACONIAN:
         case SP_RED_DRACONIAN:
+#if TAG_MAJOR_VERSION == 34
+        case SP_MOTTLED_DRACONIAN:
+#endif
         case SP_WHITE_DRACONIAN:
         case SP_GREEN_DRACONIAN:
         case SP_YELLOW_DRACONIAN:
@@ -669,9 +772,13 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
             break;
 #if TAG_MAJOR_VERSION == 34
         case SP_HILL_ORC:
+        case SP_LAVA_ORC:
         case SP_GHOUL:
+        case SP_ARMATAUR:
 #endif
         case SP_MINOTAUR:
+        case SP_CHAIN_DEVIL:
+        case SP_ELDRITCH:
         case SP_DEMONSPAWN:
         case SP_KOBOLD:
         case SP_MUMMY:
@@ -680,6 +787,18 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
         case SP_GNOLL:
         case SP_GARGOYLE:
         case SP_VINE_STALKER:
+        case SP_TORTLE:
+        case SP_OOZLE:
+        case SP_TWO_HEADED_OGRE:
+        case SP_HYDRA:
+        case SP_HERMIT_CRAB:
+        case SP_PROTEAN:
+        case SP_FAERIE_DRAGON:
+        case SP_ENT:
+        case SP_SPARKBORN:
+        case SP_WIGHT:
+        case SP_MELIAI:
+        case SP_AUTOMATON:
             hair = 0;
             break;
         default:
@@ -729,6 +848,20 @@ void tilep_job_default(int job, dolls_data *doll)
             parts[TILEP_PART_BOOTS] = TILEP_BOOTS_MIDDLE_GRAY;
             parts[TILEP_PART_CLOAK] = TILEP_CLOAK_BLUE;
             break;
+
+        case JOB_DEATH_KNIGHT:
+            parts[TILEP_PART_BODY]  = TILEP_BODY_PLATE_BLACK;
+            parts[TILEP_PART_LEG]   = TILEP_LEG_METAL_GRAY;
+            parts[TILEP_PART_CLOAK] = TILEP_CLOAK_BLACK;
+            parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_BROWN;
+            break;
+
+        case JOB_JESTER:
+            parts[TILEP_PART_BODY]  = TILEP_BODY_ROBE_JESTER;
+            parts[TILEP_PART_HELM]  = TILEP_HELM_JESTER;
+            parts[TILEP_PART_HAND1] = TILEP_HAND1_QUARTERSTAFF_JESTER;
+            parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_RED;
+            break;
 #endif
 
         case JOB_CHAOS_KNIGHT:
@@ -744,6 +877,14 @@ void tilep_job_default(int job, dolls_data *doll)
             parts[TILEP_PART_HELM]  = TILEP_HELM_FHELM_PLUME;
             break;
 #endif
+
+        case JOB_PALADIN:
+            parts[TILEP_PART_BODY]  = TILEP_BODY_PLATE;
+            parts[TILEP_PART_LEG]   = TILEP_LEG_METAL_SILVER;
+            parts[TILEP_PART_HELM]  = TILEP_HELM_FHELM_PLUME;
+            parts[TILEP_PART_CLOAK] = TILEP_CLOAK_YELLOW;
+            parts[TILEP_PART_BOOTS] = TILEP_BOOTS_MIDDLE_GRAY;
+            break;
 
         case JOB_BERSERKER:
             parts[TILEP_PART_BODY]  = TILEP_BODY_ANIMAL_SKIN;
@@ -785,6 +926,7 @@ void tilep_job_default(int job, dolls_data *doll)
             parts[TILEP_PART_ARM]   = TILEP_ARM_GLOVE_WHITE;
             parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_BROWN;
             break;
+#endif
 
         case JOB_HEALER:
             parts[TILEP_PART_BODY]  = TILEP_BODY_ROBE_WHITE;
@@ -793,7 +935,19 @@ void tilep_job_default(int job, dolls_data *doll)
             parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_BROWN;
             parts[TILEP_PART_HELM]  = TILEP_HELM_FHELM_HEALER;
             break;
-#endif
+
+        case JOB_PREACHER:
+            parts[TILEP_PART_BODY]  = TILEP_BODY_ROBE_WHITE;
+            parts[TILEP_PART_ARM]   = TILEP_ARM_GLOVE_WHITE;
+            parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_BROWN;
+            break;
+
+        case JOB_SAGE:
+            parts[TILEP_PART_BODY]  = TILEP_BODY_ROBE_BLUE;
+            parts[TILEP_PART_HAND1] = TILEP_HAND1_DAGGER;
+            parts[TILEP_PART_HAND2] = TILEP_HAND2_BOOK_CYAN_DIM;
+            parts[TILEP_PART_BOOTS] = TILEP_BOOTS_SHORT_BROWN;
+            break;
 
         case JOB_NECROMANCER:
             parts[TILEP_PART_BODY]  = TILEP_BODY_ROBE_BLACK;
@@ -1003,6 +1157,17 @@ void tilep_calc_flags(const dolls_data &doll, int flag[])
             flag[TILEP_PART_BEARD] = TILEP_FLAG_HIDE;
         flag[TILEP_PART_SHADOW]= TILEP_FLAG_HIDE;
         flag[TILEP_PART_DRCWING]=TILEP_FLAG_HIDE;
+    }
+    else if (is_player_tile(doll.parts[TILEP_PART_BASE], TILEP_BASE_OOZLE))
+    {
+        // Keep held equipment, hats and scarves visible over the ooze base.
+        for (const auto part : { TILEP_PART_BOOTS,
+             TILEP_PART_LEG, TILEP_PART_BODY, TILEP_PART_ARM,
+             TILEP_PART_HAIR, TILEP_PART_BEARD, TILEP_PART_SHADOW,
+             TILEP_PART_DRCWING })
+        {
+            flag[part] = TILEP_FLAG_HIDE;
+        }
     }
     else if (is_player_tile(doll.parts[TILEP_PART_BASE], TILEP_BASE_POLTERGEIST))
     {
@@ -1235,6 +1400,7 @@ void tilep_print_parts(char *fbuf, const dolls_data &doll)
 bool player_uses_monster_tile()
 {
     return Options.tile_use_monster != MONS_0
+            || you.form == transformation::shadow
             || you.duration[DUR_EXECUTION]
             || you.form == transformation::fortress_crab
             || (you.may_pruneify() && you.helpless());

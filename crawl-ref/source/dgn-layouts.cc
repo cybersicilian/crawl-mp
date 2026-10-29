@@ -49,10 +49,15 @@ static void _build_lake(dungeon_feature_type lake_type);
 void dgn_build_basic_level()
 {
     int level_number = env.absdepth0;
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const int area_num = bx * by;
+    const int area_den = 80 * 70;
 
     int corrlength = 2 + random2(14);
-    int no_corr = (one_chance_in(100) ? 500 + random2(500)
-                                      : 30 + random2(200));
+    int no_corr = (one_chance_in(100) ? 1000 + random2(1000)
+                                      : 70 + random2(450));
     int intersect_chance = (one_chance_in(20) ? 400 : random2(20));
 
     coord_def begin;
@@ -60,8 +65,8 @@ void dgn_build_basic_level()
 
     vector<coord_def> upstairs;
 
-    _make_trail(35, 30, 35, 20, corrlength, intersect_chance, no_corr,
-                 begin, end);
+    _make_trail(tl.x + bx * 35 / 80, bx * 30 / 80, tl.y + by * 35 / 70, by * 20 / 70,
+                corrlength, intersect_chance, no_corr, begin, end);
 
     if (!begin.origin() && !end.origin())
     {
@@ -72,8 +77,8 @@ void dgn_build_basic_level()
 
     begin.reset(); end.reset();
 
-    _make_trail(10, 15, 10, 15, corrlength, intersect_chance, no_corr,
-                 begin, end);
+    _make_trail(tl.x + 10, bx * 15 / 80, tl.y + 10, by * 15 / 70, corrlength,
+                intersect_chance, no_corr, begin, end);
 
     if (!begin.origin() && !end.origin())
     {
@@ -84,14 +89,24 @@ void dgn_build_basic_level()
 
     begin.reset(); end.reset();
 
-    _make_trail(50, 20, 10, 15, corrlength, intersect_chance, no_corr,
-                 begin, end);
+    _make_trail(tl.x + bx * 50 / 80, bx * 20 / 80, tl.y + 10, by * 15 / 70, corrlength,
+                intersect_chance, no_corr, begin, end);
 
     if (!begin.origin() && !end.origin())
     {
         env.grid(begin) = DNGN_STONE_STAIRS_DOWN_III;
         env.grid(end)   = DNGN_STONE_STAIRS_UP_III;
         upstairs.push_back(begin);
+    }
+
+    if (bx > 80)
+    {
+        // Extra trail in the lower half so large maps are fully explored by corridors.
+        coord_def extra_begin, extra_end;
+        _make_trail(tl.x + 15, bx - 35, tl.y + by / 2, by / 2 - 15, corrlength,
+                    intersect_chance, no_corr, extra_begin, extra_end);
+        if (!extra_begin.origin())
+            upstairs.push_back(extra_begin);
     }
 
     for (auto pathstart = upstairs.begin();
@@ -103,7 +118,7 @@ void dgn_build_basic_level()
             join_the_dots(*pathstart, *pathend, MMT_VAULT);
     }
 
-    if (level_number > 1 && one_chance_in(16))
+    if (level_number > 1 && one_chance_in(bx > 80 ? 12 : 16))
         _big_room(level_number);
 
     if (random2(level_number) > 6 && one_chance_in(3))
@@ -114,20 +129,24 @@ void dgn_build_basic_level()
     int roomsize  = 4 + random2(5);
     roomsize += random2(6); // force a sequence point between random calls
 
-    int no_rooms = random_choose_weighted(636, (5 + random2avg(29, 2)),
-                                          49, 100,
-                                          15, 1);
+    int no_rooms = random_choose_weighted(636, (5 + random2avg(29, 2)) * area_num / area_den,
+                                          49, 100 * area_num / area_den,
+                                          15, max(1, 1 * area_num / area_den));
 
-    _make_random_rooms(no_rooms, 2 + random2(8), doorlevel, 50, 40, roomsize);
+    _make_random_rooms(no_rooms, 2 + random2(8), doorlevel,
+                       bx - 30, by - 30, roomsize);
 
-    _make_random_rooms(1 + random2(3), 1, doorlevel, 55, 45, 6);
+    _make_random_rooms((1 + random2(3)) * area_num / area_den, 1, doorlevel,
+                       bx - 25, by - 25, 6);
 
     _builder_extras(level_number);
 }
 
 void dgn_build_bigger_room_level()
 {
-    for (rectangle_iterator ri(10); ri; ++ri)
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+    for (rectangle_iterator ri(tl + coord_def(10, 10), br - coord_def(10, 10)); ri; ++ri)
         if (env.grid(*ri) == DNGN_ROCK_WALL
             && !map_masked(*ri, MMT_VAULT))
         {
@@ -161,12 +180,18 @@ void dgn_build_chaotic_city_level(dungeon_feature_type force_wall)
         force_wall == NUM_FEATURES ? "any" : dungeon_feature_name(force_wall));
 
     dungeon_feature_type drawing = DNGN_ROCK_WALL;
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+    const int area_num = bx * by;
+    const int area_den = 80 * 70;
 
-    int number_boxes = random_choose_weighted(32, 4000,
-                                              24, 3000,
-                                              16, 5000,
-                                              8, 2000,
-                                              1, 1000);
+    int number_boxes = random_choose_weighted(32, 4000 * area_num / area_den,
+                                              24, 3000 * area_num / area_den,
+                                              16, 5000 * area_num / area_den,
+                                              8, 2000 * area_num / area_den,
+                                              1, 1000 * area_num / area_den);
 
     if (force_wall != NUM_FEATURES)
         drawing = force_wall;
@@ -177,7 +202,7 @@ void dgn_build_chaotic_city_level(dungeon_feature_type force_wall)
                                          3, DNGN_METAL_WALL);
     }
 
-    dgn_replace_area(10, 10, (GXM - 10), (GYM - 10), DNGN_ROCK_WALL,
+    dgn_replace_area(tl.x + 10, tl.y + 10, br.x - 9, br.y - 9, DNGN_ROCK_WALL,
                      DNGN_FLOOR, MMT_VAULT);
 
     // replace_area can also be used to fill in:
@@ -189,8 +214,8 @@ void dgn_build_chaotic_city_level(dungeon_feature_type force_wall)
         int room_height = 3 + random2(7);
         room_height += random2(5); // ditto
 
-        b1x = 11 + random2(GXM - 21 - room_width);
-        b1y = 11 + random2(GYM - 21 - room_height);
+        b1x = tl.x + 11 + random2(max(1, bx - 21 - room_width));
+        b1y = tl.y + 11 + random2(max(1, by - 21 - room_height));
 
         b2x = b1x + room_width;
         b2y = b1y + room_height;
@@ -218,7 +243,8 @@ void dgn_build_chaotic_city_level(dungeon_feature_type force_wall)
         }
     }
 
-    dgn_region room = dgn_region::absolute(25, 25, 55, 45);
+    dgn_region room = dgn_region::absolute(GXM / 2 - 15, GYM / 2 - 10,
+                                           GXM / 2 + 15, GYM / 2 + 10);
 
     // A market square.
     if (!_find_forbidden_in_area(room, MMT_VAULT) && one_chance_in(4))
@@ -294,13 +320,18 @@ static void _make_trail(int xs, int xr, int ys, int yr, int corrlength,
     int length = 0;
     int tries = 200;
 
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+
     coord_def pos;
     coord_def dir(0, 0);
 
     do
     {
-        pos.x = xs + random2(xr);
-        pos.y = ys + random2(yr);
+        pos.x = xs + random2(max(1, xr));
+        pos.y = ys + random2(max(1, yr));
     }
     while (!_viable_trail_start_location(pos) && tries-- > 0);
 
@@ -321,9 +352,9 @@ static void _make_trail(int xs, int xr, int ys, int yr, int corrlength,
 
         // Put something in to make it go to parts of map it isn't in now.
         if (coinflip())
-            dir.x = _trail_random_dir(pos.x, GXM, 15);
+            dir.x = _trail_random_dir(pos.x - tl.x, bx, 15);
         else
-            dir.y = _trail_random_dir(pos.y, GYM, 15);
+            dir.y = _trail_random_dir(pos.y - tl.y, by, 15);
 
         if (dir.origin() || map_masked(pos + dir, MMT_VAULT))
             continue;
@@ -334,16 +365,16 @@ static void _make_trail(int xs, int xr, int ys, int yr, int corrlength,
 
         for (int bi = 0; bi < length; bi++)
         {
-            if (pos.x < X_BOUND_1 + 4)
+            if (pos.x < tl.x + 4)
                 dir.set(1, 0);
 
-            if (pos.x > (X_BOUND_2 - 4))
+            if (pos.x > br.x - 4)
                 dir.set(-1, 0);
 
-            if (pos.y < Y_BOUND_1 + 4)
+            if (pos.y < tl.y + 4)
                 dir.set(0, 1);
 
-            if (pos.y > (Y_BOUND_2 - 4))
+            if (pos.y > br.y - 4)
                 dir.set(0, -1);
 
             if (map_masked(pos + dir, MMT_VAULT))
@@ -679,6 +710,10 @@ static void _big_room(int level_number)
     dungeon_feature_type type_floor = DNGN_FLOOR;
     dungeon_feature_type type_2 = DNGN_FLOOR;
 
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+
     dgn_region region;
 
     int overlap_tries = 200;
@@ -689,10 +724,10 @@ static void _big_room(int level_number)
 
         do
         {
-            const int left = 8 + random2(30);
-            const int top = 8 + random2(22);
-            const int width = 21 + random2(10);
-            const int height = 21 + random2(8);
+            const int left = tl.x + 8 + random2(max(1, bx - 50));
+            const int top = tl.y + 8 + random2(max(1, by - 48));
+            const int width = 21 + random2(bx > 80 ? 16 : 10);
+            const int height = 21 + random2(by > 70 ? 14 : 8);
             region = dgn_region(left, top, width, height);
         }
         while (_find_forbidden_in_area(region, MMT_VAULT)
@@ -726,10 +761,10 @@ static void _big_room(int level_number)
     do
     {
         // TODO: code duplication with above
-        const int left = 8 + random2(30);
-        const int top = 8 + random2(22);
-        const int width = 21 + random2(10);
-        const int height = 21 + random2(8);
+        const int left = tl.x + 8 + random2(max(1, bx - 50));
+        const int top = tl.y + 8 + random2(max(1, by - 48));
+        const int width = 21 + random2(bx > 80 ? 16 : 10);
+        const int height = 21 + random2(by > 70 ? 14 : 8);
 
         region = dgn_region(left, top, width, height);
     }
@@ -794,7 +829,10 @@ static void _big_room(int level_number)
 
 static void _diamond_rooms(int level_number)
 {
-    int numb_diam = 1 + random2(10);
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    int numb_diam = (1 + random2(10)) * (bx * by) / (80 * 70);
     dungeon_feature_type type_floor = DNGN_DEEP_WATER;
     int runthru = 0;
     int i, oblique_max;
@@ -829,8 +867,8 @@ static void _diamond_rooms(int level_number)
         dgn_region room;
         do
         {
-            const int left = 8 + random2(43);
-            const int top = 8 + random2(35);
+            const int left = tl.x + 8 + random2(max(1, bx - 37));
+            const int top = tl.y + 8 + random2(max(1, by - 35));
             const int width = 6 + random2(15);
             const int height = 6 + random2(10);
             room = dgn_region(left, top, width, height);
@@ -955,6 +993,7 @@ static void _make_random_rooms(int num, int max_doors, int door_level,
                                int max_x, int max_y, int max_room_size)
 {
     int i, sx, sy, ex, ey, time_run = 0;
+    const coord_def tl = dgn_builder_tl();
     dgn_region room;
 
     for (i = 0; i < num; i++)
@@ -962,8 +1001,8 @@ static void _make_random_rooms(int num, int max_doors, int door_level,
         int overlap_tries = 200;
         do
         {
-            sx = 8 + random2(max_x);
-            sy = 8 + random2(max_y);
+            sx = tl.x + 8 + random2(max(1, max_x));
+            sy = tl.y + 8 + random2(max(1, max_y));
             ex = sx + 2 + random2(max_room_size);
             ey = sy + 2 + random2(max_room_size);
             room = dgn_region::absolute(sx, sy, ex, ey);
@@ -1050,7 +1089,11 @@ static void _many_pools(dungeon_feature_type pool_type)
     else if (player_in_branch(BRANCH_CRYPT))
         return;
 
-    const int num_pools = 20 + random2avg(9, 2);
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+    const int num_pools = (20 + random2avg(9, 2)) * (bx * by) / (80 * 70);
     int pools = 0;
 
         // TODO: Attach this information to the vault name string
@@ -1060,8 +1103,8 @@ static void _many_pools(dungeon_feature_type pool_type)
 
     for (int timeout = 0; pools < num_pools && timeout < 30000; ++timeout)
     {
-        const int i = random_range(X_BOUND_1 + 1, X_BOUND_2 - 21);
-        const int j = random_range(Y_BOUND_1 + 1, Y_BOUND_2 - 21);
+        const int i = random_range(tl.x + 2, br.x - 21);
+        const int j = random_range(tl.y + 2, br.y - 21);
         const int k = i + 2 + roll_dice(2, 9);
         const int l = j + 2 + roll_dice(2, 9);
         dgn_region room = dgn_region::absolute(i, j, k, l);
@@ -1109,11 +1152,15 @@ static void _build_river(dungeon_feature_type river_type) //mv
     env.level_build_method += make_stringf(" river [%s]",
                                            dungeon_feature_name(river_type));
 
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+
     // Made rivers less wide... min width five rivers were too annoying. -- bwr
     int width = 3 + random2(4);
-    int y = 10 - width + random2avg(GYM-10, 3);
+    int y = tl.y + 10 - width + random2avg(by - 10, 3);
 
-    for (int i = 5; i < (GXM - 5); i++)
+    for (int i = tl.x + 5; i <= br.x - 5; i++)
     {
         if (one_chance_in(3))
             y++;
@@ -1130,7 +1177,7 @@ static void _build_river(dungeon_feature_type river_type) //mv
             width = 6;
 
         for (int j = y; j < y+width ; j++)
-            if (j >= 5 && j <= GYM - 5)
+            if (j >= tl.y + 5 && j <= br.y - 5)
             {
                 // Note that vaults might have been created in this area!
                 // So we'll avoid the silliness of orcs/Royal Jelly on
@@ -1165,8 +1212,13 @@ static void _build_lake(dungeon_feature_type lake_type) //mv
     env.level_build_method += make_stringf(" lake [%s]",
                                            dungeon_feature_name(lake_type));
 
-    x1 = 5 + random2(GXM - 30);
-    y1 = 5 + random2(GYM - 30);
+    const int bx = dgn_builder_x();
+    const int by = dgn_builder_y();
+    const coord_def tl = dgn_builder_tl();
+    const coord_def br = dgn_builder_br();
+
+    x1 = tl.x + 5 + random2(max(1, bx - 30));
+    y1 = tl.y + 5 + random2(max(1, by - 30));
     x2 = x1 + 4 + random2(16);
     y2 = y1 + 8 + random2(12);
 
@@ -1193,7 +1245,7 @@ static void _build_lake(dungeon_feature_type lake_type) //mv
         }
 
         for (i = x1; i < x2 ; i++)
-            if (j >= 5 && j <= GYM - 5 && i >= 5 && i <= GXM - 5)
+            if (j >= tl.y + 5 && j <= br.y - 5 && i >= tl.x + 5 && i <= br.x - 5)
             {
                 // Note that vaults might have been created in this area!
                 // So we'll avoid the silliness of monsters and items

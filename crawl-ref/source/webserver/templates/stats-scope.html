@@ -1,0 +1,53 @@
+  <form class="stats-filters" method="get" action="" aria-label="Filter gameplay statistics">
+    <p class="stats-filter-heading">Server records <span>Filters change recorded gameplay; game mechanics stay visible.</span></p>
+    {% if data.get('search') %}<input type="hidden" name="q" value="{{ data['search']['query'] }}">{% end %}
+    {% if data.get('impact_search') and data['section'] == 'impacts' and not data['key'] %}
+      <input type="hidden" name="q" value="{{ data['impact_search']['query'] }}">
+      <input type="hidden" name="compare" value="{{ data['impact_search']['compare'] }}">
+    {% end %}
+    <div class="stats-field">
+      <label for="stats_account">Account or hero</label>
+      <input id="stats_account" name="account" type="search" value="{{ f['account'] }}" placeholder="Any" autocomplete="off">
+    </div>
+    <div class="stats-field">
+      <label for="stats_mode">Mode</label>
+      <select id="stats_mode" name="mode">
+        <option value="" {% if not f['mode'] %}selected{% end %}>Solo &amp; party</option>
+        <option value="solo" {% if f['mode'] == 'solo' %}selected{% end %}>Solo only</option>
+        <option value="party" {% if f['mode'] == 'party' %}selected{% end %}>Party only</option>
+      </select>
+    </div>
+    {% if data.get('impact_search') or data.get('has_analysis') or data['section'] == 'impacts' %}
+    <div class="stats-field stats-stage-field"{% if data.get('has_table_views') and not data['key'] %} data-stage-conditional{% end %}>
+      <label for="stats_stage">Impact snapshot stage</label>
+      <select id="stats_stage" name="stage" aria-describedby="stats_stage_hint">
+        {% for stage, label in data['impact_stages'] %}<option value="{{ stage }}" {% if f['stage'] == stage %}selected{% end %}>{{ label }}</option>{% end %}
+      </select>
+      <small id="stats_stage_hint">For acquired features. Starting choices use all finished games.</small>
+    </div>
+    {% else %}<input type="hidden" name="stage" value="{{ f['stage'] }}">{% end %}
+    <details class="stats-advanced"{% if f['since'] or f['until'] or f['include_wizmode'] %} open{% end %}>
+    <summary>Date &amp; advanced{% if f['since'] or f['until'] or f['include_wizmode'] %} · active{% end %}</summary>
+    <div class="stats-advanced-fields">
+    <div class="stats-field">
+      <label for="stats_since">From</label>
+      <input id="stats_since" name="since" type="date" value="{{ f['since'] }}">
+    </div>
+    <div class="stats-field">
+      <label for="stats_until">To</label>
+      <input id="stats_until" name="until" type="date" value="{{ f['until'] }}">
+    </div>
+    <div class="stats-field stats-check">
+      <input id="stats_wiz" name="include_wizmode" type="checkbox" value="1" {% if f['include_wizmode'] %}checked{% end %}>
+      <label for="stats_wiz">Include wizard-mode games</label>
+    </div>
+    </div>
+    </details>
+    <div class="stats-filter-actions">
+      <button type="submit" class="library-action library-action-primary">Apply</button>
+      {% if qs %}<a class="library-action" href="{% if data.get('search') %}/stats/search?q={{ url_escape(data['search']['query']) }}{% elif data.get('impact_search') and data['section'] == 'impacts' and not data['key'] %}/stats/impacts?q={{ url_escape(data['impact_search']['query']) }}&amp;compare={{ url_escape(data['impact_search']['compare']) }}{% else %}?{% end %}">Clear filters</a>{% end %}
+    </div>
+    <p class="stats-filter-status" role="status">
+      {{ data['counts']['games'] }} of {{ data['counts']['all_games'] }} recorded {{ 'game' if data['counts']['all_games'] == 1 else 'games' }} match{% if not f['include_wizmode'] and data['counts']['excluded_wizmode'] %} · {{ data['counts']['excluded_wizmode'] }} wizard-mode {{ 'game' if data['counts']['excluded_wizmode'] == 1 else 'games' }} hidden{% end %}.
+    </p>
+  </form>

@@ -1,0 +1,12 @@
+{
+  "reservationId": "5b6d9a00-ac06-4279-b0e2-7e076010ce99",
+  "owner": "codex/01a160b4-b4fc-79b3-98dd-cf71c2f05445",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "status": "failed_held",
+    "group": 88831,
+    "killpgZero": "ProcessLookupError",
+    "result": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/result.json",
+    "time": 1792632573.611521
+  }
+}

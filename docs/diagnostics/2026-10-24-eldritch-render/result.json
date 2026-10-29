@@ -1,0 +1,55 @@
+{
+  "status": "deployed_and_native_verified",
+  "completed_utc": "2026-10-24T17:10:49.663856+00:00",
+  "release": "/opt/dcss/releases/20261024T170515Z-render-assets",
+  "preserved_release": "/opt/dcss/releases/20261024T163456Z-chain-devil",
+  "native_sha256": "16ab04953766d3c53f34c1139d4b22f62f5eda89b91b603f3139d50939d35ca4",
+  "changed_runtime_files": [
+    "crawl-ref/source/webserver/static/scripts/asset-readiness.js",
+    "crawl-ref/source/webserver/static/scripts/client-transport.js",
+    "crawl-ref/source/webserver/static/scripts/game-loading.js",
+    "crawl-ref/source/webserver/static/scripts/loading-ui.js"
+  ],
+  "saved_packages_hash_preserved": 66,
+  "fix": [
+    "Wait for actual DOM image success and decoding, plus stylesheet readiness before native scene layout.",
+    "Retry failed or stalled resources twice with bounded timeouts and distinct retry URLs.",
+    "Cancel stale resource work when changing clients; keep failure recovery available without drawing a partial scene."
+  ],
+  "verification": {
+    "focused_asset_contract": "passed",
+    "transport_ordering_legacy_and_loading_barriers": "passed",
+    "loading_recovery_ui": "native-9b/loading-ui.log",
+    "webkit_native": {
+      "evidence": "native-12/evidence.json",
+      "scenes": 12,
+      "races": "Eldritch, Human, Eldritch",
+      "failed_requests_injected": 18,
+      "zoom": "150 percent",
+      "dpr": 2
+    },
+    "installed_chromium_native": {
+      "evidence": "native-13/evidence.json",
+      "scenes": 4,
+      "race": "Eldritch",
+      "zoom": "150 percent"
+    },
+    "public_https_file_hashes": "public-verification.json",
+    "runtime_and_owned_processes": "final-runtime-audit.json"
+  },
+  "all_owned_heavy_phases_released": true,
+  "all_owned_qa_services_closed": true,
+  "human_accounts_or_preferences_modified": false,
+  "limits": [
+    "The original save was unavailable. A species-exclusive healthy-asset failure was not reproduced.",
+    "Failed atlas loads reproduce incomplete native-client rendering. The patched client recovers in real native games.",
+    "Native gameplay ran in isolated QA accounts using the installed binary/client; public HTTPS bytes and health were verified separately."
+  ],
+  "prior_invalid_or_partial_runs": {
+    "native-2,3,5,6": "Temporary Unix socket path exceeded Linux pathname length; not rendering evidence.",
+    "native-4,9": "Host reservation was refused; browser did not run.",
+    "native-8": "Detected stylesheet readiness race on native resume; fixed before final runs.",
+    "native-9b,10": "Eldritch scenes passed; race-loop test navigation needed correction.",
+    "native-7": "Original client fails on injected atlas errors; native player and map handlers attempted to draw broken images."
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deployed": true,
+  "release": "/opt/dcss/releases/autoexplore-release-01a1801a",
+  "previous": "/opt/dcss/releases/render-smoothness-01a1801a",
+  "runtime_files": {
+    "crawl": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    ".cflags": "074a81e760aaec07167b491e35cbbc5fc90e96f2aa953bbbf91c8484201925db",
+    "compflag.h": "76842d213e53fc171cd1143b4192fa8e5c338cbc76b4ee32968451a6c34b83b1",
+    "webserver/webtiles/activity_pump.py": "676e369d630a6c7871bf93bec16acb805c8253af3e9e1950ae6098575c8b8b62",
+    "webserver/webtiles/process_handler.py": "48b4a1f59a661ab4a2830afdfac89a718f07c8eb6f7b815add11d75313b15226"
+  },
+  "health": true,
+  "backup": "/var/lib/dcss/recovery/autoexplore-release-01a1801a",
+  "native_packages_preserved": 5,
+  "all_save_directory_files_preserved": true,
+  "save_files_never_replaced": true,
+  "activated_at": "2026-10-28T04:13:46.798240+00:00"
+}

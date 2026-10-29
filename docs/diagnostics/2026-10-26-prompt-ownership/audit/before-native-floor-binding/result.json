@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "binding_sha256": "460f6e406dca55ede035f111a5e1036956025e388377952fcf7cb0ad977cd3a6",
+  "existing_saves_used": false,
+  "production_mutation": false,
+  "checks": [
+    "13 backend lifecycle/transport/save modules",
+    "Minimal production Python overlay lifecycle regressions",
+    "Six browser queue/transport/recovery/planner suites",
+    {
+      "request": 1,
+      "command": "menu_action",
+      "completed": true
+    },
+    {
+      "request": 2,
+      "command": "target_cursor",
+      "completed": true
+    },
+    {
+      "request": 3,
+      "command": "inv_item_action",
+      "completed": true
+    },
+    {
+      "request": 4,
+      "command": "key",
+      "completed": true
+    },
+    {
+      "macro_turns": 2,
+      "completed_after_entire_macro": true
+    },
+    {
+      "alternating_actions": 3,
+      "actor_ownership_preserved": true
+    },
+    "A rapid wait/inventory sequence retains the prompt owner while a peer waits",
+    "Rapid input from three owners is serialized with one token per command",
+    "A buffered owner response closes its native inventory prompt before a peer acts",
+    "An inline native item dialog cannot complete before its control handler returns",
+    "A rejected action inside a COMMAND-mode dialog retains its token and queued peer",
+    "Reconnect restores the real prompt without replaying the old connection's queued keys",
+    "Escape removes only its owner's deferred input while the other owners continue",
+    "Raw multi-character input retains separate command ownership",
+    "A stale prompt response spends no turn and does not strand the next owner",
+    "A rejected command completes once without a turn and the next owner progresses",
+    "A dropped completion and tactical acknowledgement self-heal without replaying a turn",
+    "A missed prompt and incorrect router owner self-heal from the native token and restored UI",
+    "96 burst commands across three owners complete with exact per-owner turn counts"
+  ],
+  "native_sha256": "fc1ba99a9a83bff4fb6ab662c982db39c2eae3568514baf2765c175e5346d7e5",
+  "elapsed_seconds": 46.51663504099997
+}

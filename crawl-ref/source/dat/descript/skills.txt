@@ -137,6 +137,25 @@ spells in this school. Many spells belong to a combination of several schools,
 in which case spellcasting success and power will depend on the average skill
 in these schools.
 %%%%
+Auramancy
+
+Auramancy is the art of carrying an enchantment between companions. Its spells
+turn a moving formation into shelter, a rallying point, a healing circle or a
+shared burden. The oldest auramancers marched with caravans: they learned that
+the light which reaches another traveller is more useful than the brightest
+light kept to oneself.
+
+Training Auramancy improves the success rate and power of every aura spell.
+Power strengthens each aura's distinct effect and extends its duration from
+12 to 32 turns. Projection starts at a radius of 2 tiles, increasing to 3, 4,
+5 and 6 tiles at base skill levels 6, 12, 18 and 24. Walls and opaque barriers still
+block it. Secondary spell schools contribute to casting and power normally.
+
+Each caster projects one aura at a time. Different auras from several casters
+combine; copies of one aura use only the strongest eligible source. Auras reach
+living companions on the same floor, and end when their caster falls or the
+spell expires. Changing stance replaces the previous aura.
+%%%%
 Hexes
 
 Hexes try to bestow various enchantments on nearby things. While none do direct
@@ -277,3 +296,7 @@ Shapeshifting enables the use of magical talismans to change oneself into other
 forms. Sufficient skill allows one to use more powerful forms without gravely
 damaging one's health. Being skilled in Shapeshifting also makes most forms
 somewhat stronger, in ways which vary between forms.
+
+Oozles also use Shapeshifting to strengthen absorbed item properties, from 35%
+numeric strength at skill 0 to 100% at skill 27. They can train it without a
+talisman or form, and exercise it during combat through their absorptive bodies.

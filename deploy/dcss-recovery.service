@@ -1,0 +1,10 @@
+[Unit]
+Description=Create verified DCSS SQLite recovery copies
+RequiresMountsFor=/var/lib/dcss
+
+[Service]
+Type=oneshot
+User=dcss
+UMask=0077
+ExecStart=/usr/bin/python3 /opt/dcss/current/deploy/recovery_copy.py
+NoNewPrivileges=true

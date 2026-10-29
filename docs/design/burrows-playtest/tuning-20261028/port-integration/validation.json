@@ -1,0 +1,15 @@
+{
+  "combinedNativeSha256": "7941fe60811f4592a179a9a4e75d902ede8785c8ef43a0ef0ebeb9e86fbb9dbc",
+  "registeredContractCases": 26,
+  "registeredContractAssertions": 1345,
+  "exactEconomyMatchFloors": 300,
+  "encounterSourceFilesMatchingRoot": 8,
+  "honeyAndPopulationTestsRegistered": true,
+  "rootAdditionalTestRegistration": "test_two_headed_ogre.o was added by the continuing port after this snapshot; preserved, not included in this validation.",
+  "allTenFloorMeansWithin25Percent": true,
+  "fullRouteClears": 0,
+  "finalRouteAttempts": 6,
+  "freshEndingClears": 0,
+  "freshEndingAttempts": 3,
+  "liveDeployment": false
+}

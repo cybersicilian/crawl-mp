@@ -1,0 +1,12 @@
+{
+  "branch-population.h": "0f952a7612417ddddbbcd8a4e4197319556a0a6459495e10fcb9f66847d79eac",
+  "dungeon.cc": "d0a78307e337d6391eccbed81739b4771675dd00d1a72714f250a087624d815b",
+  "mon-pick-data.h": "a907344e72de2143ba5f19fda361d4d2bb3217a4ed471e35451605b68d61c964",
+  "catch2-tests/test_branch_population.cc": "eb7db230696cd746d98a5c6f62b26a646a7ecea76175f73fbaa41f2e9bee7976",
+  "catch2-tests/test_burrows.cc": "59006e4e587cdaccf7446cd2abe67b785e76f6c2391823c9b05f107ab1c76b30",
+  "catch2-tests/test_ng-init-branches.cc": "d59987364704b1fe931ffea4077d3c2564c3eb4e72524fc94e81d6571c2dda08",
+  "dat/des/branches/wormlands.des": "1026bb305820e900fb94dacf195c76eed6fb3dda5942ddef13ed0910e4554f43",
+  "dat/des/branches/wormlands_groves.des": "f0756665ceec27f992141e53cc12bd4bb1f7e06def0b7bdce51147bbddc199a9",
+  "dat/des/branches/hive.des": "c9890adf2afda341b3f5336660cb1921dc7c2535cd906c4e2d7763f5203901b2",
+  "dat/des/branches/hive_extra.des": "2f9382cb87ddddd1e66d3b95a49b4e193e5d0533a832be90cf855e2e4b50826b"
+}

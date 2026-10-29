@@ -1,0 +1,258 @@
+{
+  "generationNativeSha256": "7941fe60811f4592a179a9a4e75d902ede8785c8ef43a0ef0ebeb9e86fbb9dbc",
+  "renderingBuildNativeSha256": "7941fe60811f4592a179a9a4e75d902ede8785c8ef43a0ef0ebeb9e86fbb9dbc",
+  "floors": [
+    {
+      "floor": "Bur:1",
+      "seed": 2026102701,
+      "walkable": 1157,
+      "honey": 0,
+      "monsters": 25,
+      "items": 17,
+      "vaults": [
+        {
+          "height": 15,
+          "name": "bur_flooded_roots",
+          "width": 9,
+          "x": 40,
+          "y": 19
+        },
+        {
+          "height": 9,
+          "name": "bur_side_den",
+          "width": 13,
+          "x": 64,
+          "y": 54
+        },
+        {
+          "height": 7,
+          "name": "bur_root_pocket",
+          "width": 12,
+          "x": 32,
+          "y": 48
+        }
+      ]
+    },
+    {
+      "floor": "Bur:2",
+      "seed": 2026102701,
+      "walkable": 1346,
+      "honey": 0,
+      "monsters": 43,
+      "items": 19,
+      "vaults": [
+        {
+          "height": 11,
+          "name": "hive_entry_comb",
+          "width": 5,
+          "x": 75,
+          "y": 28
+        },
+        {
+          "height": 9,
+          "name": "bur_troll_store",
+          "width": 13,
+          "x": 44,
+          "y": 47
+        },
+        {
+          "height": 9,
+          "name": "bur_bent_gallery",
+          "width": 19,
+          "x": 78,
+          "y": 64
+        },
+        {
+          "height": 9,
+          "name": "bur_shale_cut",
+          "width": 19,
+          "x": 35,
+          "y": 66
+        },
+        {
+          "height": 11,
+          "name": "bur_paired_dens",
+          "width": 20,
+          "x": 66,
+          "y": 44
+        },
+        {
+          "height": 17,
+          "name": "bur_split_passage",
+          "width": 12,
+          "x": 55,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "floor": "Bur:3",
+      "seed": 2026102701,
+      "walkable": 1206,
+      "honey": 0,
+      "monsters": 40,
+      "items": 9,
+      "vaults": [
+        {
+          "height": 17,
+          "name": "bur_beetle_burrow",
+          "width": 9,
+          "x": 80,
+          "y": 26
+        }
+      ]
+    },
+    {
+      "floor": "Bur:4",
+      "seed": 2026102701,
+      "walkable": 1607,
+      "honey": 0,
+      "monsters": 45,
+      "items": 23,
+      "vaults": [
+        {
+          "height": 43,
+          "name": "bur_end_worldworm",
+          "width": 28,
+          "x": 23,
+          "y": 37
+        },
+        {
+          "height": 14,
+          "name": "bur_old_crossing",
+          "width": 19,
+          "x": 48,
+          "y": 46
+        },
+        {
+          "height": 14,
+          "name": "bur_troll_shelter",
+          "width": 23,
+          "x": 62,
+          "y": 66
+        }
+      ]
+    },
+    {
+      "floor": "Hive:1",
+      "seed": 2026102701,
+      "walkable": 1895,
+      "honey": 30,
+      "monsters": 43,
+      "items": 27,
+      "vaults": [
+        {
+          "height": 15,
+          "name": "hive_pollen_pockets",
+          "width": 10,
+          "x": 87,
+          "y": 22
+        },
+        {
+          "height": 17,
+          "name": "hive_lost_apothecary",
+          "width": 10,
+          "x": 69,
+          "y": 24
+        }
+      ]
+    },
+    {
+      "floor": "Hive:2",
+      "seed": 2026102701,
+      "walkable": 1753,
+      "honey": 29,
+      "monsters": 40,
+      "items": 25,
+      "vaults": [
+        {
+          "height": 70,
+          "name": "hive_end_inner_combs",
+          "width": 80,
+          "x": 20,
+          "y": 17
+        }
+      ]
+    },
+    {
+      "floor": "Worm:1",
+      "seed": 2026102701,
+      "walkable": 1661,
+      "honey": 0,
+      "monsters": 22,
+      "items": 16,
+      "vaults": [
+        {
+          "height": 9,
+          "name": "worm_mushroom_grove",
+          "width": 18,
+          "x": 22,
+          "y": 22
+        }
+      ]
+    },
+    {
+      "floor": "Worm:2",
+      "seed": 2026102701,
+      "walkable": 1648,
+      "honey": 0,
+      "monsters": 17,
+      "items": 17,
+      "vaults": [
+        {
+          "height": 8,
+          "name": "worm_corroded_gallery",
+          "width": 16,
+          "x": 29,
+          "y": 56
+        },
+        {
+          "height": 8,
+          "name": "worm_shale_shelf",
+          "width": 15,
+          "x": 71,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "floor": "Worm:3",
+      "seed": 2026102701,
+      "walkable": 1967,
+      "honey": 0,
+      "monsters": 60,
+      "items": 27,
+      "vaults": [
+        {
+          "height": 18,
+          "name": "worm_cross_gallery",
+          "width": 9,
+          "x": 24,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "floor": "Worm:4",
+      "seed": 2026102701,
+      "walkable": 1572,
+      "honey": 0,
+      "monsters": 64,
+      "items": 19,
+      "vaults": [
+        {
+          "height": 70,
+          "name": "worm_end_coiled_galleries",
+          "width": 80,
+          "x": 20,
+          "y": 17
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Fully revealed offline native exports.",
+    "Generic item class icons.",
+    "No client lighting or live gameplay screenshot."
+  ]
+}

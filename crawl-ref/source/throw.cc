@@ -4,6 +4,11 @@
 **/
 
 #include "AppHdr.h"
+#include "automaton.h"
+#include "god-vellum.h"
+#include "oozle-memory-effects.h"
+#include "oozle-memory.h"
+#include "bloodcraft.h"
 
 #include "throw.h"
 
@@ -62,7 +67,7 @@ bool is_penetrating_attack(const item_def& weapon)
 {
     return weapon.is_type(OBJ_MISSILES, MI_JAVELIN)
             || get_weapon_brand(weapon) == SPWPN_PENETRATION
-            || is_unrandom_artefact(weapon, UNRAND_STORM_BOW);
+            || has_unrand_effect(weapon, UNRAND_STORM_BOW);
 }
 
 class fire_target_behaviour : public targeting_behaviour
@@ -483,16 +488,19 @@ void ranged_attack_beam::initialise_beam(actor &agent, item_def &item)
     beam.source_id    = agent.mid;
     beam.source       = agent.pos();
     beam.flavour      = BEAM_MISSILE;
-    beam.pierce       = is_penetrating_attack(item);
+    beam.pierce       = is_penetrating_attack(item)
+        || (agent.is_player() && (oozle::effective_brand(agent, &item) == SPWPN_PENETRATION
+                                 || oozle::absorbed_unrand(you, UNRAND_STORM_BOW)));
     beam.aux_source.clear();
 
     beam.name = launched_projectile_name(item);
 
-    const unrandart_entry* entry = is_unrandom_artefact(item)
+    const unrandart_entry* entry = (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
         ? get_unrand_entry(item.unrand_idx) : nullptr;
 
     if (entry && entry->launch)
         entry->launch(&beam);
+    if (agent.is_player()) oozle::launch_effects(beam, &item);
 }
 
 static void _handle_cannon_fx(actor &act, const item_def &weapon, coord_def targ)
@@ -505,7 +513,7 @@ static void _handle_cannon_fx(actor &act, const item_def &weapon, coord_def targ
         if (place_cloud(CLOUD_MAGIC_TRAIL, *ai, random_range(3, 6), &act))
             break;
 
-    if (!is_unrandom_artefact(weapon, UNRAND_MULE))
+    if (!has_unrand_effect(weapon, UNRAND_MULE))
         return;
 
     // knock back
@@ -531,6 +539,7 @@ static void _throw_noise(actor* act, const item_def &ammo)
     switch (launcher->sub_type)
     {
     case WPN_SLING:
+    case WPN_FUSTIBALUS:
         msg   = "You hear a sling whirr.";
         break;
     case WPN_SHORTBOW:
@@ -599,7 +608,7 @@ static bool _trace_player_ranged_attacks(vector<ranged_attack_beam>& atks, bool 
         atks[i].beam.fire(tracer);
         if (atks[i].beam.friendly_past_target)
             atks[i].beam.aimed_at_spot = true;
-        using_mule |= is_unrandom_artefact(*atks[i].atk.weapon, UNRAND_MULE);
+        using_mule |= has_unrand_effect(*atks[i].atk.weapon, UNRAND_MULE);
     }
 
     if (no_harm_allies && tracer.has_any_warnings())
@@ -705,7 +714,11 @@ void aim_player_ranged_attack(quiver::action &a)
 
     // Actually perform the attack and spend time.
     you.time_taken = you.attack_delay(item).roll();
+    bloodcraft::weapon_action blood_action(!throwing);
     _fire_player_ranged_attacks(atks);
+    automaton::mark_combat(you);
+    blood_action.finish(you.time_taken);
+    automaton::trigger_attack(a.target.target, true);
     you.turn_is_over = true;
 }
 
@@ -715,6 +728,7 @@ bool do_player_ranged_attack(const coord_def& targ, item_def* thrown_projectile,
                              const ranged_attack* prototype, bool no_harm_allies,
                              bool allow_salvo)
 {
+    const coord_def attack_target = targ;
     vector<ranged_attack_beam> atks = _construct_player_ranged_beams(thrown_projectile);
     for (ranged_attack_beam& atk : atks)
     {
@@ -725,6 +739,8 @@ bool do_player_ranged_attack(const coord_def& targ, item_def* thrown_projectile,
     if (_trace_player_ranged_attacks(atks, no_harm_allies))
         return false;
     _fire_player_ranged_attacks(atks, allow_salvo);
+    automaton::mark_combat(you);
+    automaton::trigger_attack(attack_target, true);
     return true;
 }
 
@@ -740,7 +756,7 @@ static bool _salvo_shot_tracer(coord_def source, coord_def target, bool pierce,
     tracer.attitude = ATT_FRIENDLY;
     tracer.source = source;
     tracer.target = target;
-    tracer.source_id = MID_PLAYER;
+    tracer.source_id = you.mid;
     tracer.stop_at_allies = true;
     tracer.damage = dice_def(100, 1);
     tracer.pierce = pierce;
@@ -857,7 +873,7 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
 
     const bool do_salvo = allow_salvo
                             && (you.duration[DUR_SALVO] && is_range_weapon(item)
-                                || is_unrandom_artefact(item, UNRAND_ZEPHYR));
+                                || oozle::has_equipment_effect(you, &item, UNRAND_ZEPHYR));
     const string proj_name = do_salvo ? make_stringf("a salvo of %ss", pbolt.atk.projectile_name().c_str())
                                       : article_a(pbolt.atk.projectile_name()).c_str();
 
@@ -901,7 +917,7 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
         if (do_salvo)
         {
             _fire_salvo(pbolt);
-            if (!is_unrandom_artefact(item, UNRAND_ZEPHYR))
+            if (!oozle::has_equipment_effect(you, &item, UNRAND_ZEPHYR))
             {
                 if (--you.props[SALVO_KEY] == 0)
                     you.duration[DUR_SALVO] = 0;
@@ -923,6 +939,7 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
     _throw_noise(&you, item);
 
     _handle_cannon_fx(you, item, target);
+    for (const auto* source : oozle::effect_sources()) _handle_cannon_fx(you, *source, target);
 
     if (pbolt.beam.special_explosion != nullptr)
         delete pbolt.beam.special_explosion;

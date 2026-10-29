@@ -1,0 +1,20 @@
+{"runId": "87787464-8a7e-4c61-8ff4-f3274e995b58", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS tuned encounter contracts and 300 floor XP parity survey", "requestId": "7b0bc347c782770fc46fe6b76939cd17adf56d5e825b6bb0b31c5d218480c445", "status": "reserved", "reservedAt": 1793196611.8514152}
+ 
+{"runId": "87787464-8a7e-4c61-8ff4-f3274e995b58", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS tuned encounter contracts and 300 floor XP parity survey", "requestedAt": 1793196611.8803682, "supervisorPid": 83088, "status": "running", "reservation": true, "requestId": "7b0bc347c782770fc46fe6b76939cd17adf56d5e825b6bb0b31c5d218480c445", "startedAt": 1793196611.8806899, "workerPid": 83089, "processGroup": 83089}
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/analyse_economy.py", line 71, in <module>
+    main()
+    ~~~~^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/analyse_economy.py", line 45, in main
+    assert r[key]==old[r['seed']][key],(place,r['seed'],key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('Depths:2', 2026102707, 'xp')
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-1/run.py", line 14, in <module>
+    subprocess.run(['/usr/local/bin/python3',str(base/'analyse_economy.py'),str(before),str(after),str(out/'results')],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/usr/local/bin/python3', '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/analyse_economy.py', '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/economy-after-3/games/melee-2026102701/economy.json', '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-1/survey/melee-2026102701/economy.json', '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-1/results']' returned non-zero exit status 1.
+{"runId": "87787464-8a7e-4c61-8ff4-f3274e995b58", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS tuned encounter contracts and 300 floor XP parity survey", "requestedAt": 1793196611.8803682, "supervisorPid": 83088, "status": "released", "reservation": true, "requestId": "7b0bc347c782770fc46fe6b76939cd17adf56d5e825b6bb0b31c5d218480c445", "startedAt": 1793196611.8806899, "workerPid": 83089, "processGroup": 83089, "exitCode": 1, "finishedAt": 1793196658.61494, "supervisedProcessGroupGone": true, "releasedAt": 1793196658.6460621, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-1/closure.json", "releaseEvidenceSha256": "49a56d69acef745473321fe031321631b1291b26b3bde0573a28c42d928cda16"}

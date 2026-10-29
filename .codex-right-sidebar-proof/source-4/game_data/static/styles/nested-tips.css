@@ -1,0 +1,84 @@
+/* Nested tooltips (nested-tips.js). Card material comes from the shared
+   tooltip rules in tabletop/materials.css and typography.css. */
+
+/* Hoverable glossary terms: in the message log, text scrollers,
+   description popups, and inside tooltips themselves. */
+.dcss-term {
+    text-decoration: underline dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+    cursor: help;
+    border-radius: 2px;
+}
+.dcss-term:hover, .dcss-term.is-open {
+    text-decoration-style: solid;
+    text-decoration-color: currentColor;
+    background: color-mix(in srgb, currentColor 12%, transparent);
+}
+:is(#dcss_rich_tooltip, #tooltip, .dcss-nested-tip) .dcss-term {
+    color: #6b3d0f;
+    font-weight: 600;
+}
+:is(#dcss_rich_tooltip, #tooltip, .dcss-nested-tip) .item-property.is-open {
+    outline: 1px solid var(--tt-brass-shadow);
+}
+
+/* Child cards are interactive from the start and stack above everything.
+   The shared material rule is an :is() list containing ids, so it carries id
+   specificity; the :is(#tooltip, ...) prefix here matches it. */
+:is(#tooltip, .dcss-nested-tip).dcss-nested-tip {
+    position: fixed;
+    pointer-events: auto;
+    max-width: min(320px, calc(100vw - 16px));
+    min-width: min(200px, calc(100vw - 16px));
+    box-shadow: inset 0 0 16px #8c652833, 0 10px 28px #000000d0;
+    animation: dcss-nested-in 90ms ease-out;
+}
+.dcss-nested-tip .dcss-tip-body { max-height: min(320px, calc(100vh - 80px)); overflow: auto; }
+@keyframes dcss-nested-in {
+    from { opacity: 0; transform: translateY(-2px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Keep every card inside the viewport, including its reading controls. */
+:is(#dcss_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    max-height: calc(100vh - 16px);
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+:is(#dcss_rich_tooltip, #tooltip, .dcss-nested-tip).is-tip-suspended {
+    visibility: hidden;
+    pointer-events: none;
+}
+.dcss-tip-back { display: block; margin-bottom: 6px; max-width: 100%; white-space: normal; }
+#action-panel-tooltip {
+    position: fixed;
+    right: auto;
+    max-width: min(320px, calc(100vw - 16px));
+    overflow: auto;
+    pointer-events: none;
+    z-index: 99999;
+    box-sizing: border-box;
+}
+#dcss_rich_tooltip .dcss-tip-body { max-height: min(360px, 50vh); overflow: auto; }
+.dcss-tip-lockbar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, var(--tt-brass-shadow), var(--tt-brass));
+    border-radius: 0 1px 1px 0;
+    pointer-events: none;
+}
+:is(#dcss_rich_tooltip, #tooltip).is-locked {
+    pointer-events: auto;
+    border-color: var(--tt-brass);
+    box-shadow: inset 0 0 16px #8c652833, 0 0 0 1px #d9b15f66, 0 8px 24px #000000c0;
+}
+#tooltip.is-locked .dcss-tip-body { overflow: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+    :is(#tooltip, .dcss-nested-tip).dcss-nested-tip { animation: none; }
+}

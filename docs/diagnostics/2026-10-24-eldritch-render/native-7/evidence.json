@@ -1,0 +1,1763 @@
+{
+  "url": "http://127.0.0.1:18888",
+  "engine": "webkit",
+  "atlasFault": true,
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Error in message: {msg: player, name: ERd84c6865, title: the Shield-Bearer, wizard: 0, explore: 0}",
+    "The HTMLImageElement provided is in the 'broken' state.",
+    "drawImage@[native code]\ndraw_tile@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell-renderer-textures.js:93:31\n@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/action_panel.js:370:35\nforEach@[native code]\ndraw_action@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/action_panel.js:369:26\n@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/action_panel.js:497:24\nforEach@[native code]\nupdate@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/action_panel.js:489:49\ndispatch@http://127.0.0.1:18888/static/scripts/contrib/jquery.js:2:38012\nh@http://127.0.0.1:18888/static/scripts/contrib/jquery.js:2:33873\ntrigger@http://127.0.0.1:18888/static/scripts/contrib/jquery.js:2:36606\ntriggerHandler@http://127.0.0.1:18888/static/scripts/contrib/jquery.js:2:44455\nhandle_player_message@http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player.js:79:46\nhandle_message@http://127.0.0.1:18888/static/scripts/comm.js:47:16\n@\nhandle_message@http://127.0.0.1:18888/static/scripts/client-transport.js:33:36\nhandle_message_backlog@http://127.0.0.1:18888/static/scripts/client-transport.js:96:43\nenqueue_messages@http://127.0.0.1:18888/static/scripts/client-transport.js:73:35\ndeliver@http://127.0.0.1:18888/static/scripts/client-connection.js:21:39\nmessage@http://127.0.0.1:18888/static/scripts/client-connection.js:73:48\n@http://127.0.0.1:18888/static/scripts/socket-lifecycle.js:74:38",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[4757,0],\"base\":0,\"bg\":[1048579,0],\"doll\":null,\"mcache\":null,\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -6/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -5/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":5,\"s\":199},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":7,\"s\":51},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -1/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":7,\"s\":109},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 0/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":8,\"s\":229},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 1/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":101},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 7/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -6/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -5/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -4/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":4,\"s\":168},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 0/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":4},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":3,\"s\":43},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 3/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[4238,0],\"base\":0,\"bg\":[1048580,0],\"doll\":null,\"mcache\":null,\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 5/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 6/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":7,\"s\":230},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 7/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":5,\"s\":134},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -4/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -2/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[532047,0],\"bg\":[3099,0],\"flv\":{\"f\":8,\"s\":80},\"doll\":[[8068,32],[8067,32],[8133,32],[8264,32],[8605,32],[8970,32]],\"mcache\":null,\"trans\":false,\"cloud\":[0,0],\"icons\":[]} at 0/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[8,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 2/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 3/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":8,\"s\":131},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 5/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":8,\"s\":52},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -4/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":253},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 0/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":7,\"s\":94},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[134220830,0],\"flv\":{\"f\":8,\"s\":85},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 3/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 5/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":59},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 6/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":3,\"s\":119},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":6,\"s\":11},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 0/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":207},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":2,\"s\":212},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 5/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":6,\"s\":117},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 6/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":3,\"s\":20},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":5},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -1/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":5,\"s\":73},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 1/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":3,\"s\":49},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[4757,0],\"base\":0,\"bg\":[1048579,0],\"doll\":null,\"mcache\":null,\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -6/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -5/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":5,\"s\":199},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":7,\"s\":51},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -1/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":7,\"s\":109},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 0/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":8,\"s\":229},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 1/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":101},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 7/-2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -7/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -6/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -5/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -4/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":4,\"s\":168},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 0/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":4},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":3,\"s\":43},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 3/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[4238,0],\"base\":0,\"bg\":[1048580,0],\"doll\":null,\"mcache\":null,\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 5/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 6/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":7,\"s\":230},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 7/-1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":5,\"s\":134},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -4/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -2/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"fg\":[532047,0],\"bg\":[3099,0],\"flv\":{\"f\":8,\"s\":80},\"doll\":[[8068,32],[8067,32],[8133,32],[8264,32],[8605,32],[8970,32]],\"mcache\":null,\"trans\":false,\"cloud\":[0,0],\"icons\":[]} at 0/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[8,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 2/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 3/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2761,0],\"flv\":{\"f\":8,\"s\":131},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 5/0: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":8,\"s\":52},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -4/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[5,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -3/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":253},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 0/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[6,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":7,\"s\":94},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[134220830,0],\"flv\":{\"f\":8,\"s\":85},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 3/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 4/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[7,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 5/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":59},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 6/1: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":3,\"s\":119},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[4,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at -1/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":6,\"s\":11},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 0/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[3,0],\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[],\"flv\":{\"f\":0,\"s\":0}} at 1/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":4,\"s\":207},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":2,\"s\":212},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 5/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2759,0],\"flv\":{\"f\":6,\"s\":117},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 6/2: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":3,\"s\":20},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -2/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2758,0],\"flv\":{\"f\":5,\"s\":5},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at -1/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2760,0],\"flv\":{\"f\":5,\"s\":73},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 1/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state.",
+    "Error while drawing cell {\"bg\":[2762,0],\"flv\":{\"f\":3,\"s\":49},\"fg\":[0,0],\"cloud\":[0,0],\"icons\":[]} at 2/3: InvalidStateError: The HTMLImageElement provided is in the 'broken' state."
+  ],
+  "requestFailures": [],
+  "scenes": [],
+  "assetRequests": [
+    {
+      "url": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player.png",
+      "status": 503
+    }
+  ],
+  "loadedCode": [
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/loading-ui.js?v=985d799d142a3eac92a9",
+      "sha256": "58a8437442f010be544f07c172340715e350f6dd8c38c00f22dd7499066a35e4"
+    },
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/game-loading.js?v=985d799d142a3eac92a9",
+      "sha256": "6dbd5628f4d4135424c1606a1b99722a001ed5e95305a4f4b6f17796557c0248"
+    },
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/client-transport.js?v=985d799d142a3eac92a9",
+      "sha256": "e02691977e16ffc572919f1ec1607163c5049f6c211c5faf11ffb4bd36edcb5d"
+    }
+  ],
+  "injectedFaults": [
+    "/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/floor.png",
+    "/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/main.png",
+    "/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player.png"
+  ],
+  "failure": "page.waitForFunction: Timeout 120000ms exceeded.\n    at ready (/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-24-eldritch-render/verify-native.cjs:24:16)\n    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-24-eldritch-render/verify-native.cjs:134:19",
+  "stalledState": {
+    "party": {
+      "msg": "party_state",
+      "enabled": false,
+      "multiplayer": false,
+      "multiplayer_protocol": 1,
+      "floor": "D:1",
+      "player_count": 1,
+      "max_players": 4,
+      "active_slot": 0,
+      "gold": 0,
+      "combat_locked": false,
+      "friendly_fire": true,
+      "simultaneous_turns": true,
+      "world_aut_clock": 0,
+      "global_time": 0,
+      "floor_time": 0,
+      "snapshot_version": 2,
+      "inventory_use": true,
+      "inventory_secondary": true,
+      "party_trade": true,
+      "floor_item_actions": true,
+      "tile_exclusions": true,
+      "plan_acknowledgements": true,
+      "enemy_initiative": [],
+      "members": [
+        {
+          "slot": 0,
+          "activity": "",
+          "trade_targets": [],
+          "zot_clock": {
+            "active": true,
+            "immune": false,
+            "remaining_aut": 60000,
+            "capacity_aut": 270000,
+            "reference_aut": 270000,
+            "warning": 0,
+            "lifespan_divisor": 1,
+            "short_lifespans": 0
+          },
+          "player_id": "d60b0a23-d6f7-4b0d-83c4-b1b15c98a14b",
+          "name": "ERd84c6865",
+          "title": "the Shield-Bearer",
+          "species": "Eldritch",
+          "job": "Fighter",
+          "god": "",
+          "defiance": 0,
+          "elder_rites": 0,
+          "elder_summary": "Defiance 0/100; Elder Rites 0/3.",
+          "weapon": "+0 war axe",
+          "xl": 1,
+          "xl_next": 0,
+          "hp": 18,
+          "hp_max": 18,
+          "real_hp_max": 18,
+          "poison_survival": 18,
+          "mp": 1,
+          "mp_max": 1,
+          "spell_resource": "mp",
+          "ac": 6,
+          "ev": 7,
+          "sh": 4,
+          "str": 16,
+          "str_max": 16,
+          "intel": 8,
+          "int_max": 8,
+          "dex": 12,
+          "dex_max": 12,
+          "gold": 0,
+          "piety": 0,
+          "piety_rank": 0,
+          "ritual_blood": 0,
+          "penance": 0,
+          "god_relation": "",
+          "god_politics": "",
+          "aut_clock": 0,
+          "aut_lead": 0,
+          "last_action_aut": 0,
+          "region_id": 0,
+          "region_aut_clock": 0,
+          "region_combat": false,
+          "same_region": true,
+          "can_act": true,
+          "move_aut": 10,
+          "move_delay_aut": 10,
+          "atk_aut": 14,
+          "speed_stat": 10,
+          "adjusted_noise": 0,
+          "turns": 0,
+          "elapsed_aut": 0,
+          "slaying": 0,
+          "hp_regen": 23,
+          "mp_regen": 7,
+          "spell_levels_left": 0,
+          "spell_levels_total": 0,
+          "spell_library": {
+            "total": 0,
+            "memorisable": 0
+          },
+          "exp_pool": 0,
+          "place": "D:1",
+          "on_same_level": true,
+          "stairs": "up",
+          "ghost_haunting": false,
+          "pos": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true,
+          "active": true,
+          "runes": [],
+          "gems": [],
+          "resists": {
+            "rFire": 0,
+            "rCold": 0,
+            "rElec": 0,
+            "rPois": 0,
+            "rNeg": 0,
+            "rCorr": 0,
+            "Will": 3,
+            "Stlth": 0,
+            "SeeInvis": false,
+            "Fly": false
+          },
+          "statuses": [],
+          "abilities": [
+            {
+              "id": 1520,
+              "tile": 10621,
+              "hotkey": "f",
+              "name": "Profane Altar",
+              "desc": "At an available god's own altar, permanently steal its single offered benefit and accept its wrath. Choose at most three distinct gods. The first theft supplies forty Defiance once; later thefts never refill it. Duplicate and ecumenical altars grant nothing. Profanation does not consume the altar or prevent an ally from worshipping there.\n\nDefiance 0/100; Elder Rites 0/3.\nRange: N/A\n\nThis ability costs: nothing.",
+              "cost": "None",
+              "fail": "0%",
+              "is_god": false,
+              "blocked_reason": "Stand on an available god's own altar to profane it."
+            },
+            {
+              "id": 1521,
+              "tile": 10622,
+              "hotkey": "g",
+              "name": "Invoke Elder Rites",
+              "desc": "At XL9, XL15 and XL21, complete one short two-wave encounter to strengthen all your stolen benefits. Begin on safe open ground. The second wave arrives after four standard turns without waiting for the first wave to die. Trial actors grant no rewards. Killing or permanently banishing every trial actor wins; pacification, conversion and dismissal do not. Leaving the floor abandons the attempt, preserving completed rites. Only one party rite can be active on a floor.\n\nDefiance 0/100; Elder Rites 0/3.\nRange: N/A\n\nThis ability costs: nothing.",
+              "cost": "None",
+              "fail": "0%",
+              "is_god": false,
+              "blocked_reason": "Profane your first altar before undertaking an Elder Rite."
+            }
+          ],
+          "spells": [],
+          "mutations": [
+            {
+              "name": "forlorn",
+              "level": 1,
+              "innate": true,
+              "temp": false,
+              "desc": "You shall have no god before yourself."
+            }
+          ],
+          "training_supported": true,
+          "auto_training": true,
+          "training_locked": "",
+          "skills": [
+            {
+              "id": 0,
+              "name": "Fighting",
+              "level": "3.0",
+              "base_level": "3.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 31,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 1,
+              "name": "Short Blades",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": [
+                  {
+                    "id": 2,
+                    "name": "Long Blades",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 2,
+              "name": "Long Blades",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": [
+                  {
+                    "id": 1,
+                    "name": "Short Blades",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 3,
+              "name": "Axes",
+              "level": "2.0",
+              "base_level": "2.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": [
+                  {
+                    "id": 5,
+                    "name": "Polearms",
+                    "points": 0
+                  },
+                  {
+                    "id": 4,
+                    "name": "Maces & Flails",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 8,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 4,
+              "name": "Maces & Flails",
+              "level": "1.1",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "1.1",
+                "points": 60,
+                "sources": [
+                  {
+                    "id": 3,
+                    "name": "Axes",
+                    "points": 60
+                  },
+                  {
+                    "id": 6,
+                    "name": "Staves",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 5,
+              "name": "Polearms",
+              "level": "1.1",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "1.1",
+                "points": 60,
+                "sources": [
+                  {
+                    "id": 3,
+                    "name": "Axes",
+                    "points": 60
+                  },
+                  {
+                    "id": 6,
+                    "name": "Staves",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 6,
+              "name": "Staves",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": [
+                  {
+                    "id": 5,
+                    "name": "Polearms",
+                    "points": 0
+                  },
+                  {
+                    "id": 4,
+                    "name": "Maces & Flails",
+                    "points": 0
+                  }
+                ]
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 8,
+              "name": "Ranged Weapons",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 10,
+              "name": "Throwing",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 11,
+              "name": "Armour",
+              "level": "3.0",
+              "base_level": "3.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 31,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 12,
+              "name": "Dodging",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 13,
+              "name": "Stealth",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 15,
+              "name": "Shields",
+              "level": "3.0",
+              "base_level": "3.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 30,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 17,
+              "name": "Unarmed Combat",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 18,
+              "name": "Spellcasting",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 19,
+              "name": "Conjurations",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 20,
+              "name": "Hexes",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 22,
+              "name": "Summonings",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 23,
+              "name": "Necromancy",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 24,
+              "name": "Translocations",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 25,
+              "name": "Forgecraft",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 26,
+              "name": "Fire Magic",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 27,
+              "name": "Ice Magic",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 28,
+              "name": "Air Magic",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 29,
+              "name": "Earth Magic",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 30,
+              "name": "Alchemy",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 31,
+              "name": "Invocations",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 32,
+              "name": "Evocations",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 33,
+              "name": "Shapeshifting",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            },
+            {
+              "id": 34,
+              "name": "Auramancy",
+              "level": "0.0",
+              "base_level": "0.0",
+              "cross_training": {
+                "bonus": "0.0",
+                "points": 0,
+                "sources": []
+              },
+              "apt": 0,
+              "train": 1,
+              "training": 0,
+              "can_train": true,
+              "target": 0,
+              "target_base": false
+            }
+          ],
+          "floor_items_known": true,
+          "floor_items": [],
+          "inventory_known": true,
+          "inventory": [
+            {
+              "slot": 0,
+              "letter": "a",
+              "name": "+0 war axe",
+              "description": "A military axe with a long haft and a single-bladed head.\n",
+              "qty": 1,
+              "equipped": true,
+              "base_type": 0,
+              "kind_name": "Hand Weapons",
+              "training": [
+                {
+                  "skill": 3,
+                  "target": 160
+                }
+              ]
+            },
+            {
+              "slot": 1,
+              "letter": "b",
+              "name": "+0 scale mail",
+              "description": "A leather suit covered with metal plates attached to each other in overlapping rows to provide full protection, but at the cost of reduced freedom of movement.\n",
+              "qty": 1,
+              "equipped": true,
+              "base_type": 2,
+              "kind_name": "Armour",
+              "training": [
+                {
+                  "skill": 11,
+                  "target": 0
+                }
+              ]
+            },
+            {
+              "slot": 2,
+              "letter": "c",
+              "name": "+0 buckler",
+              "description": "A small piece of wood and metal, to be strapped on one arm for defence.\n",
+              "qty": 1,
+              "equipped": true,
+              "base_type": 2,
+              "kind_name": "Armour",
+              "training": [
+                {
+                  "skill": 15,
+                  "target": 0
+                }
+              ]
+            },
+            {
+              "slot": 52,
+              "letter": "m",
+              "name": "2 potions of might",
+              "description": "A potion which greatly increases the power of the drinker's melee attacks.\n",
+              "qty": 2,
+              "equipped": false,
+              "base_type": 7,
+              "kind_name": "Potions",
+              "training": []
+            }
+          ],
+          "equipment_profile": {
+            "version": 1,
+            "species": "Eldritch",
+            "size": "medium",
+            "form": "",
+            "hands": "hands",
+            "feet": "feet",
+            "unarmed_attack": "Unarmed",
+            "portrait": {
+              "texture": "player",
+              "layers": [
+                {
+                  "sx": 82,
+                  "sy": 2275,
+                  "w": 15,
+                  "h": 9,
+                  "ox": 13,
+                  "oy": 23,
+                  "ymax": 32
+                },
+                {
+                  "sx": 62,
+                  "sy": 2275,
+                  "w": 20,
+                  "h": 28,
+                  "ox": 6,
+                  "oy": 4,
+                  "ymax": 32
+                },
+                {
+                  "sx": 734,
+                  "sy": 2275,
+                  "w": 10,
+                  "h": 9,
+                  "ox": 11,
+                  "oy": 16,
+                  "ymax": 32
+                },
+                {
+                  "sx": 397,
+                  "sy": 2334,
+                  "w": 16,
+                  "h": 17,
+                  "ox": 8,
+                  "oy": 8,
+                  "ymax": 32
+                },
+                {
+                  "sx": 760,
+                  "sy": 2419,
+                  "w": 10,
+                  "h": 20,
+                  "ox": 0,
+                  "oy": 2,
+                  "ymax": 32
+                },
+                {
+                  "sx": 762,
+                  "sy": 2515,
+                  "w": 8,
+                  "h": 9,
+                  "ox": 21,
+                  "oy": 13,
+                  "ymax": 32
+                }
+              ]
+            },
+            "slots": [
+              {
+                "type": "weapon",
+                "key": "weapon:0",
+                "label": "Weapon",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "inv_slot": 0,
+                "name": "+0 war axe",
+                "shared": false,
+                "state": "equipped",
+                "reason": ""
+              },
+              {
+                "type": "offhand",
+                "key": "offhand:0",
+                "label": "Offhand",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "inv_slot": 2,
+                "name": "+0 buckler",
+                "shared": false,
+                "state": "equipped",
+                "reason": ""
+              },
+              {
+                "type": "body",
+                "key": "body:0",
+                "label": "Body Armour",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "inv_slot": 1,
+                "name": "+0 scale mail",
+                "shared": false,
+                "state": "equipped",
+                "reason": ""
+              },
+              {
+                "type": "head",
+                "key": "head:0",
+                "label": "Helmet",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "hands",
+                "key": "hands:0",
+                "label": "Gloves",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "feet",
+                "key": "feet:0",
+                "label": "Boots",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "barding",
+                "key": "barding:0",
+                "label": "Barding",
+                "capacity": 0,
+                "support_only": false,
+                "alternatives": [],
+                "state": "unavailable",
+                "reason": "You can't fit into that!"
+              },
+              {
+                "type": "cloak",
+                "key": "cloak:0",
+                "label": "Cloak",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "ring",
+                "key": "ring:0",
+                "label": "Ring 1",
+                "capacity": 2,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "ring",
+                "key": "ring:1",
+                "label": "Ring 2",
+                "capacity": 2,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "amulet",
+                "key": "amulet:0",
+                "label": "Amulet",
+                "capacity": 1,
+                "support_only": false,
+                "alternatives": [],
+                "state": "empty",
+                "reason": ""
+              },
+              {
+                "type": "gizmo",
+                "key": "gizmo:0",
+                "label": "Gizmo",
+                "capacity": 0,
+                "support_only": false,
+                "alternatives": [],
+                "state": "unavailable",
+                "reason": "You lack an exoframe to install that in."
+              },
+              {
+                "type": "weapon_offhand",
+                "key": "weapon_offhand:0",
+                "label": "Offhand weapon / shield",
+                "capacity": 0,
+                "support_only": false,
+                "alternatives": [
+                  "weapon",
+                  "offhand"
+                ],
+                "state": "unavailable",
+                "reason": ""
+              },
+              {
+                "type": "haunted_armour",
+                "key": "haunted_armour:0",
+                "label": "Haunted armour",
+                "capacity": 0,
+                "support_only": false,
+                "alternatives": [
+                  "head",
+                  "hands",
+                  "feet",
+                  "cloak"
+                ],
+                "state": "unavailable",
+                "reason": ""
+              },
+              {
+                "type": "twohander",
+                "key": "twohander:0",
+                "label": "Two-handed weapon support",
+                "capacity": 0,
+                "support_only": true,
+                "alternatives": [],
+                "state": "unavailable",
+                "reason": ""
+              }
+            ],
+            "items": [
+              {
+                "inv_slot": 0,
+                "equipment": true,
+                "art": {
+                  "texture": "main",
+                  "layers": [
+                    {
+                      "sx": 503,
+                      "sy": 1411,
+                      "w": 28,
+                      "h": 28,
+                      "ox": 2,
+                      "oy": 2,
+                      "ymax": 32
+                    },
+                    {
+                      "sx": 871,
+                      "sy": 192,
+                      "w": 29,
+                      "h": 25,
+                      "ox": 2,
+                      "oy": 3,
+                      "ymax": 32
+                    }
+                  ]
+                },
+                "fits": true,
+                "reason": "",
+                "hands": 1,
+                "slot_types": [
+                  "weapon",
+                  "weapon_offhand"
+                ],
+                "required_slots": [
+                  [
+                    "weapon",
+                    "weapon_offhand"
+                  ]
+                ]
+              },
+              {
+                "inv_slot": 1,
+                "equipment": true,
+                "art": {
+                  "texture": "main",
+                  "layers": [
+                    {
+                      "sx": 503,
+                      "sy": 1411,
+                      "w": 28,
+                      "h": 28,
+                      "ox": 2,
+                      "oy": 2,
+                      "ymax": 32
+                    },
+                    {
+                      "sx": 513,
+                      "sy": 352,
+                      "w": 27,
+                      "h": 27,
+                      "ox": 3,
+                      "oy": 4,
+                      "ymax": 32
+                    }
+                  ]
+                },
+                "fits": true,
+                "reason": "",
+                "slot_types": [
+                  "body"
+                ],
+                "required_slots": [
+                  [
+                    "body"
+                  ]
+                ]
+              },
+              {
+                "inv_slot": 2,
+                "equipment": true,
+                "art": {
+                  "texture": "main",
+                  "layers": [
+                    {
+                      "sx": 503,
+                      "sy": 1411,
+                      "w": 28,
+                      "h": 28,
+                      "ox": 2,
+                      "oy": 2,
+                      "ymax": 32
+                    },
+                    {
+                      "sx": 120,
+                      "sy": 415,
+                      "w": 23,
+                      "h": 19,
+                      "ox": 6,
+                      "oy": 7,
+                      "ymax": 32
+                    }
+                  ]
+                },
+                "fits": true,
+                "reason": "",
+                "slot_types": [
+                  "offhand",
+                  "weapon_offhand"
+                ],
+                "required_slots": [
+                  [
+                    "offhand",
+                    "weapon_offhand"
+                  ]
+                ]
+              },
+              {
+                "inv_slot": 52,
+                "equipment": false,
+                "art": {
+                  "texture": "main",
+                  "layers": [
+                    {
+                      "sx": 586,
+                      "sy": 602,
+                      "w": 25,
+                      "h": 27,
+                      "ox": 7,
+                      "oy": 2,
+                      "ymax": 32
+                    },
+                    {
+                      "sx": 154,
+                      "sy": 634,
+                      "w": 18,
+                      "h": 24,
+                      "ox": 13,
+                      "oy": 7,
+                      "ymax": 32
+                    }
+                  ]
+                }
+              }
+            ],
+            "restrictions": []
+          },
+          "equipment_slots": [
+            {
+              "slot_name": "Weapon",
+              "empty": false,
+              "inv_slot": 0,
+              "letter": "a",
+              "name": "+0 war axe",
+              "base_key": "war_axe",
+              "melded": false
+            },
+            {
+              "slot_name": "Offhand",
+              "empty": false,
+              "inv_slot": 2,
+              "letter": "c",
+              "name": "+0 buckler",
+              "base_key": "buckler",
+              "melded": false
+            },
+            {
+              "slot_name": "Body Armour",
+              "empty": false,
+              "inv_slot": 1,
+              "letter": "b",
+              "name": "+0 scale mail",
+              "base_key": "scale_mail",
+              "melded": false
+            },
+            {
+              "slot_name": "Helmet",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Gloves",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Boots",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Cloak",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Ring 1",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Ring 2",
+              "empty": true,
+              "name": "(empty)"
+            },
+            {
+              "slot_name": "Amulet",
+              "empty": true,
+              "name": "(empty)"
+            }
+          ],
+          "kill_total": 0,
+          "ally_kill_total": 0,
+          "kills_top": [],
+          "actions": [],
+          "abilities_known": true,
+          "spells_known": true,
+          "skills_known": true,
+          "mutations_known": true,
+          "statuses_known": true,
+          "equipment_slots_known": true,
+          "kills_top_known": true,
+          "actions_known": true,
+          "runes_known": true,
+          "gems_known": true
+        }
+      ],
+      "controlled_slot": 0,
+      "controllable_slots": [
+        0
+      ]
+    },
+    "blocking": true,
+    "messages": {
+      "html": 1,
+      "set_game_links": 1,
+      "login_cookie": 1,
+      "party_rooms_list": 10,
+      "coop_chronicle": 10,
+      "go_lobby": 1,
+      "game_client": 1,
+      "party_hover_reset": 2,
+      "update_spectators": 1,
+      "game_started": 1,
+      "chat": 1,
+      "version": 1,
+      "options": 2,
+      "layout": 2,
+      "ui_state": 1,
+      "record_identity": 2,
+      "player": 1,
+      "state_frame": 1,
+      "party_state": 1,
+      "msgs": 2,
+      "map": 2,
+      "cursor": 1,
+      "input_mode": 1
+    },
+    "barriers": [
+      {
+        "key": "inhibit_messages",
+        "at": 7181
+      },
+      {
+        "key": "uninhibit_messages",
+        "at": 19880
+      }
+    ],
+    "images": [
+      {
+        "id": "",
+        "src": "http://127.0.0.1:18888/static/player-tiles/eldritch-2be16138f9fa.png",
+        "complete": true,
+        "width": 32
+      },
+      {
+        "id": "floor",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/floor.png",
+        "complete": true,
+        "width": 0
+      },
+      {
+        "id": "wall",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/wall.png",
+        "complete": true,
+        "width": 1024
+      },
+      {
+        "id": "feat",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/feat.png",
+        "complete": true,
+        "width": 1024
+      },
+      {
+        "id": "main",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/main.png",
+        "complete": true,
+        "width": 0
+      },
+      {
+        "id": "player",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player.png",
+        "complete": true,
+        "width": 0
+      },
+      {
+        "id": "icons",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/icons.png",
+        "complete": true,
+        "width": 1024
+      },
+      {
+        "id": "gui",
+        "src": "http://127.0.0.1:18888/gamedata/be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/gui.png",
+        "complete": true,
+        "width": 1024
+      }
+    ],
+    "modules": [
+      "/static/scripts/app.js?v=a2e9387f172de0560d62704c1931e3bb0847842b078e107d00bac69427ec20ad51163c94bf6a02cc3e247564fdbe58f9c602b39527c508e556dad7f43082cb1b",
+      "jquery",
+      "interface-polish",
+      "item-properties",
+      "item-display",
+      "client",
+      "expedition-url",
+      "workspace-views",
+      "lobby-browser",
+      "lobby-overview",
+      "lobby-discovery",
+      "lobby-navigation",
+      "game-loading",
+      "loading-ui",
+      "key_conversion",
+      "character-name",
+      "contrib/jquery.waitforimages",
+      "contrib/jquery.tablesorter",
+      "contrib/jquery.json",
+      "comm",
+      "library-ui",
+      "client-account",
+      "client-chronicle",
+      "contrib/jquery.cookie",
+      "scrollback",
+      "state-stream",
+      "mode-catalogue",
+      "lobby-modes",
+      "client-lobby",
+      "tooltip-layout",
+      "tooltip-source",
+      "tooltip-policy",
+      "socket-lifecycle",
+      "latency-monitor",
+      "connection-quality",
+      "client-connection",
+      "client-transport",
+      "graphics-settings-model",
+      "graphics-preferences",
+      "searchable-select",
+      "client-staging-weapons",
+      "character-catalog",
+      "client-staging-data",
+      "character-stat-help",
+      "marked",
+      "rich-text",
+      "tooltip-content",
+      "client-tooltips",
+      "contrib/ba-linkify.min",
+      "linkify",
+      "chat-items",
+      "chat",
+      "client-input",
+      "client-dialogs",
+      "client-auth",
+      "native-start",
+      "player-doll",
+      "spell-cost",
+      "starting-entry-help",
+      "starting-sheet",
+      "character-guide",
+      "character-builder",
+      "client-staging",
+      "party-composition",
+      "client-staging-controls",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/game",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/enums",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/options",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/game-context",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hud-layout",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/text",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/view_data",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/util",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/map_knowledge",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/shell-animation",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/traversal-effects",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/chunked-view",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/inspection-dialog",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/context-menu",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-ping",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-rpg-stats",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-hover",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/workflow-actions",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/dungeon-context-menu",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/status-icons",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-navigation",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player-card-details",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-selection-controls",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/focus-trap",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tip-placement",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hover-cards",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/encyclopedia",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/panel-workspace",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hud-polish",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/viewport-zoom",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/frame-update",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/direction-pad",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/chain-view",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hud-iconography",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell-renderer-overlays",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-floor",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-wall",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-feat",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-dngn",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-main",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-player",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-gui",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfo-icons",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell-renderer-layers",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tileinfos",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/sprite-reach",
+      "visual-presentation",
+      "sprite-motion",
+      "sprite-motion-layer",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/map-effect-layer",
+      "footstep-paint",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-effect-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-region-model",
+      "region-field",
+      "pixel-sampling",
+      "aura-distortion",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tooltip-glossary",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/message-references",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/persistent-help",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/nested-tips",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player-interactions",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/route-plan",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/tactical-planner",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/planned-route",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-status-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/portrait-status",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-initiative",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-faith",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-card-status",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-doom-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-doom",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-trade-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/native-tile-art",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-trade",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-card-readings",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-power-cards",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-skill-training",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-keyboard",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/folio-keyboard",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-actions",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/simplebar",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/scroller",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player-stat-tips",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player-hud",
+      "share-link",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/item-context-menu",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/quickbar-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/quickbar-commands",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-progress-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/equipment-memory-ui",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/assimilation-panel",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/status-icon-sizes",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell-renderer-textures",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/environment-art",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/terrain-materials",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-terrain-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-movement",
+      "tile-lighting",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-light-field",
+      "liquid-field",
+      "light-field-sampling",
+      "vapour-field",
+      "effect-shading",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-effects",
+      "depth-shading",
+      "terrain-blend",
+      "wall-surface",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/equipment-paperdoll",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/shell-dash-art",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/power-art",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/power-picker",
+      "text-columns",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-search",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-columns",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-presentation",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/popup-controls",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/ui",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/textinput",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/messages",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/chat-context",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/folio-equipment",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-inspector-render",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-inspector",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hud-inventory",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/quickbar",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/floor-items",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-sidebar",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/player-card-sections",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell-renderer-glyphs",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/cell_renderer",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/action_panel",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-items",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/ui-layout-format",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu-navigation",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/menu",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/ui-scroller-layouts",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/ui-description-layouts",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/ui-layouts",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/enemy-banner-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/indexed-paint",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/creature-roster-model",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/collapsible-roster",
+      "graphics-controls",
+      "graphics-dialog",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/session-menu",
+      "tile-atmosphere",
+      "visibility-feather",
+      "tile-edges",
+      "terrain-topology",
+      "shoreline-paint",
+      "material-response",
+      "light-emission",
+      "surface-lighting",
+      "transparent-surface",
+      "light-map-paint",
+      "flame-field",
+      "emissive-surface",
+      "surface-reflections",
+      "emissive-paint",
+      "tile-lighting-paint",
+      "shader-atlas",
+      "liquid-shader",
+      "fluid-surface",
+      "terrain-finish",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-terrain",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-regions",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/mouse_control",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/dungeon_renderer",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/minimap",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/gameplay-controls",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/hud-bottom-strip",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/monster_list",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/display",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/enemy-initiative",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-progress",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party-controls",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/party",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/premium-dungeon",
+      "game-be3bd3739d6324ca5fe96e060caf0b9ca14e43b3/adventure-ui"
+    ]
+  },
+  "body": "0\nD:1\n0\n107 ms\noExplore\nTabAuto-fight\n5Rest\ngPick up\nMenu\nEsc\n↖\ny · 7\n↑\nk · 8\n↗\nu · 9\n←\nh · 4\n→\nl · 6\n↙\nb · 1\n↓\nj · 2\n↘\nn · 3\nDungeon zoom 150%\nCenter camera\n Welcome, ERd84c6865 the Eldritch Fighter.\n Game seed: 10219438576718897615 (custom seed)\n \n Press ? for a list of commands and other information.\n Found a scroll labelled OCZIGO MUMECU and 14 gold pieces.\n_Found a staircase leading out of the dungeon.\n Found an escape hatch in the floor.\nOn this tile\nPick up g\n\nNothing to pick up here.\n\nZOT\n6.0kt\n×1\nP1\nERd84c6865\n1\nD:1\n\nHP 18/18\nMP 1/1\n0\n1.0\nDefiance 0/100 · Rites 0/3\nInspect\nCenter camera\n0%\n0\n0\n0\n0\n0\n0\n3\n0\nAbilities & spells\n2 known\nSpell library\n0 spells · 0 can memorize\nf\ng\nInventory\n4 / 52\na◆\nb◆\nc◆\nm2\nLook\nDanger\nLoot\nStairs\nPlan\nGo\nWait +\nClear · Esc\nShift-click a route, or Plan actions\n\nBEYOND THE THRESHOLD\n\nA new chapter awaits\nStill preparing your expedition.\n\nYou can keep waiting, or return to the party hall.\n\n←\nReturn to party hall"
+}

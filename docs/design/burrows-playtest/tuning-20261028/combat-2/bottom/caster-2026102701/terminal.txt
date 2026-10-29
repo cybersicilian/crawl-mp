@@ -1,0 +1,574 @@
+=Route_caster the Digger           *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 11Int: 19SH:  0Dex: 15XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)-) Nothing wieldedCast: Sandblast♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Sneak 3/30ROUTE_EVENT setup 2
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  3/3========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  1 Next: 33900Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 15/15     ========================Magic:  4/4========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  2 Next: 16949Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 19/19     ========================Magic:  5/5========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  3 Next: 84743Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 24/24     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  4 Next: 47929Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 28/28     ========================Magic:  7/7========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  5 Next: 25782Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 32/32     ========================Magic:  8/8========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  6 Next: 13396Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 36/36     ========================Magic:  9/9========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  7 Next: 68379Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 41/41     ========================Magic:  10/10     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  8 Next: 34487Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 45/45     ========================Magic:  11/11     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  9 Next: 17288Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 50/50     ========================Magic:  12/12     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 10 Next: 8614%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 54/54     ========================Magic:  13/13     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 11 Next: 4263%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 59/59     ========================Magic:  14/14     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 12 Next: 2797%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 63/63     ========================Magic:  15/15     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 13 Next: 1651%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 68/68     ========================Magic:  16/16     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 14 Next: 1067%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 72/72     ========================Magic:  17/17     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 15 Next: 737% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 76/76     ========================Magic:  18/18     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 16 Next: 515% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 80/80     ========================Magic:  19/19     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 17 Next: 348% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 85/85     ========================Magic:  20/20     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 18 Next: 213% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 89/89     ========================Magic:  21/21     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 19 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 94/942/2220 0% ROUTE_EVENT setup 3
+
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 8 28 148284ROUTE_EVENT setup 4
+Route_caster the True Ascetic     *WIZARD*Deep ElfHealth: 94/94     ========================Magic:  22/22     ========================AC:  2 (19%)Str: 8EV: 10Int: 28SH:  0Dex: 14XL: 20 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+new experience level: Experience level set to 20.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+ Vehumet welcomes you!Vehumet offers you knowledge of Kiss of Death. of Vehumet ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Earth Magic
+ Earth Magic
+ To what level? (current = 0.0) 18ROUTE_EVENT setup 6
+
+_Increased Earth Magic to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 14127/127ROUTE_EVENT setup 7
+
+_Increased Fighting to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fire Magic
+ Fire Magic
+ To what level? (current = 0.0) 14ROUTE_EVENT setup 8
+
+_Increased Fire Magic to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 9
+
+_Increased Evocations to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 169ROUTE_EVENT setup 10
+
+_Increased Dodging to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Translocations
+ Translocations
+ To what level? (current = 0.0) 12ROUTE_EVENT setup 11
+
+_Increased Translocations to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 8ROUTE_EVENT setup 12
+
+_Increased Shields to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Conjurations
+ Conjurations
+ To what level? (current = 0.0) 18ROUTE_EVENT setup 13
+
+_Increased Conjurations to skill level 18.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Spellcasting
+ Spellcasting
+ To what level? (current = 0.0) 1822/44------------ROUTE_EVENT setup 14
+
+_Increased Spellcasting to skill level 18.0.
+ Enter Wizard Command (? - help): Memorise which spell? Stone ArrowROUTE_EVENT setup 15
+_Memorise which spell? Enter Wizard Command (? - help): FireballROUTE_EVENT setup 16
+_Memorise which spell? Enter Wizard Command (? - help): Iskenderun's Mystic BlastROUTE_EVENT setup 17
+_Memorise which spell? Enter Wizard Command (? - help): Bombard
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): Memorise which spell? 
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog23------------2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking4=4
+_
+_g - 3 potions of magic (gained 2)5
+_
+_m - 2 potions of might5=6
+_
+_h - 2 potions of haste6=7
+_
+_c - 6 potions of curing8
+_
+_w - 6 potions of heal wounds7=9
+_
+_b - a ring of poison resistance10.0 (1.0)
+_
+_c - a +0 pair of boots8=1
+_
+_d - a +0 pair of gloves2
+_
+_e - a +0 cloak9=3
+_
+_f - a +0 helmet30=4
+_
+_g - a +0 buckler5
+_
+_h - a +2 robe1=6
+_
+_i - a +2 devious dagger7
+_
+ You feel a baleful cunning.
+_i - a +2 devious dagger (weapon)2=5 (0.5i) +2 dagger (devious)
+_08.5 (13==9.5 (220.5 (34=1.5 (45=2.5 (5
+0 (0%) 
+_You start removing your armour. You continue removing your +0 robe. x5
+ You finish removing your +0 robe.3.5 (66=4.5 (75.5 (87=6.5 (97.5 (10.0)
+4 (22%)
+_You start putting on your armour. You continue putting on your +2 robe. x5
+_You finish putting on your +2 robe.0.0)
+_
+ You start putting on your armour.8=8.5 (19=9.5 (230.5 (340=1.5 (42.5 (5
+86
+_You continue putting on your +0 buckler. x5
+_You finish putting on your +0 buckler.0
+_1=3.5 (12=4.5 (25.5 (33=6.5 (47.5 (5
+5 (23
+_You start putting on your armour. You continue putting on your +0 helmet. x5
+_You finish putting on your +0 helmet.0
+_
+ You start putting on your armour. You continue putting on your +0 cloak.4==8.5 (1
+_Magic restored.9.5 (240.5 (31.5 (4=2.5 (5
+6 (25
+_You continue putting on your +0 cloak. x4
+_You finish putting on your +0 cloak.0
+_
+ You start putting on your armour.3.5 (14.5 (25.5 (36.5 (47.5 (5
+7 (26
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.8.5 (19.5 (250.5 (31.5 (42.5 (5
+8
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_b - a ring of poison resistance (worn)3.0 (0.5
+_ROUTE_EVENT inventory +0 robe
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +0 buckler
+ROUTE_EVENT inventory +2 robe
+ROUTE_EVENT inventory +2 devious dagger
+ROUTE_EVENT inventory 3 potions of magic
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of might
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_caster the True Ascetic     *WIZARD*Deep Elf of Vehumet ****..Health: 127/127   ========================##.....##Magic:  44/44     ========================##.......##AC:  8 (26%)Str: 8#.........#EV: 18Int: 28##.........#SH:  6Dex: 14##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 53.0 (0.0)##...........#i) +2 dagger (devious).......@.....#Cast: Sandblast#............##............##...........##...........###.........####...##########
+_b - a ring of poison resistance (worn)
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) 4ROUTE_AUDIT {"items":[{"y":29,"class":"wand","quantity":1,"x":31,"name":"wand of light (6)","artefact":false},{"y":29,"class":"magical staff","quantity":1,"x":32,"name":"staff of earth","artefact":false},{"y":29,"class":"weapon","quantity":1,"x":33,"name":"glowing great sword","artefact":false},{"y":29,"class":"gold","quantity":23,"x":73,"name":"23 gold pieces","artefact":false},{"y":29,"class":"armour","quantity":1,"x":74,"name":"pair of gloves","artefact":false},{"y":30,"class":"gold","quantity":29,"x":47,"name":"29 gold pieces","artefact":false},{"y":31,"class":"gold","quantity":15,"x":76,"name":"15 gold pieces","artefact":false},{"y":32,"class":"gold","quantity":29,"x":26,"name":"29 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":17,"x":31,"name":"17 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":21,"x":32,"name":"21 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":17,"x":33,"name":"17 gold pieces","artefact":false},{"y":41,"class":"book","quantity":1,"x":74,"name":"parchment of Dispersal","artefact":false},{"y":41,"class":"gold","quantity":20,"x":80,"name":"20 gold pieces","artefact":false},{"y":42,"class":"weapon","quantity":1,"x":40,"name":"great mace","artefact":false},{"y":42,"class":"potion","quantity":1,"x":78,"name":"potion of moonshine","artefact":false},{"y":44,"class":"weapon","quantity":1,"x":30,"name":"trident","artefact":false},{"y":46,"class":"misc","quantity":1,"x":39,"name":"box of beasts","artefact":false},{"y":58,"class":"weapon","quantity":1,"x":69,"name":"club","artefact":false},{"y":59,"class":"scroll","quantity":1,"x":29,"name":"scroll of teleportation","artefact":false},{"y":60,"class":"weapon","quantity":1,"x":79,"name":"bloodstained bardiche","artefact":true},{"y":61,"class":"potion","quantity":1,"x":73,"name":"potion of curing","artefact":false},{"y":67,"class":"scroll","quantity":1,"x":32,"name":"scroll of vulnerability","artefact":false},{"y":69,"class":"gold","quantity":33,"x":37,"name":"33 gold pieces","artefact":false},{"y":69,"class":"gold","quantity":19,"x":38,"name":"19 gold pieces","artefact":false},{"y":71,"class":"gold","quantity":28,"x":54,"name":"28 gold pieces","artefact":false},{"y":72,"class":"scroll","quantity":1,"x":83,"name":"scroll of identify","artefact":false},{"y":73,"class":"scroll","quantity":1,"x":62,"name":"scroll of vulnerability","artefact":false},{"y":75,"class":"gold","quantity":31,"x":84,"name":"31 gold pieces","artefact":false}],"xp":47502,"honey":0,"inventory":[{"quantity":1,"name":"+0 robe","class":"armour"},{"quantity":1,"name":"ring of poison resistance","class":"jewellery"},{"quantity":1,"name":"+0 pair of boots","class":"armour"},{"quantity":1,"name":"+0 pair of gloves","class":"armour"},{"quantity":1,"name":"+0 cloak","class":"armour"},{"quantity":1,"name":"+0 helmet","class":"armour"},{"quantity":1,"name":"+0 buckler","class":"armour"},{"quantity":1,"name":"+2 robe","class":"armour"},{"quantity":1,"name":"+2 devious dagger","class":"weapon"},{"quantity":3,"name":"3 potions of magic","class":"potion"},{"quantity":3,"name":"3 scrolls of fear","class":"scroll"},{"quantity":3,"name":"3 scrolls of fog","class":"scroll"},{"quantity":2,"name":"2 scrolls of teleportation","class":"scroll"},{"quantity":2,"name":"2 scrolls of blinking","class":"scroll"},{"quantity":2,"name":"2 potions of might","class":"potion"},{"quantity":2,"name":"2 potions of haste","class":"potion"},{"quantity":6,"name":"6 potions of curing","class":"potion"},{"quantity":6,"name":"6 potions of heal wounds","class":"potion"}],"xl":20,"progress":0,"gold":0,"where":"Worm:4","maxmp":44,"hp":127,"maxhp":127,"vaults":"worm_end_dragon_cavern","monsters":[{"y":25,"xp":1035,"name":"gallery worm","x":29},{"y":26,"xp":310,"name":"wandering mushroom","x":29},{"y":27,"xp":738,"name":"deep troll","x":36},{"y":28,"xp":961,"name":"coil worm","x":38},{"y":30,"xp":746,"name":"iron troll","x":38},{"y":30,"xp":1235,"name":"iron dragon","x":42},{"y":30,"xp":945,"name":"coil worm","x":45},{"y":31,"xp":1031,"name":"gallery worm","x":32},{"y":31,"xp":646,"name":"lindwurm","x":38},{"y":32,"xp":954,"name":"coil worm","x":34},{"y":32,"xp":719,"name":"deep troll","x":39},{"y":33,"xp":781,"name":"iron troll","x":38},{"y":33,"xp":739,"name":"iron troll","x":40},{"y":33,"xp":1054,"name":"gallery worm","x":73},{"y":34,"xp":1037,"name":"gallery worm","x":27},{"y":34,"xp":641,"name":"lindwurm","x":34},{"y":35,"xp":765,"name":"iron troll","x":28},{"y":35,"xp":768,"name":"iron troll","x":32},{"y":35,"xp":1101,"name":"stone giant","x":33},{"y":35,"xp":950,"name":"coil worm","x":73},{"y":35,"xp":738,"name":"deep troll","x":75},{"y":36,"xp":84,"name":"earth elemental","x":36},{"y":37,"xp":1043,"name":"gallery worm","x":36},{"y":39,"xp":1056,"name":"gallery worm","x":33},{"y":39,"xp":84,"name":"earth elemental","x":47},{"y":40,"xp":651,"name":"lindwurm","x":68},{"y":41,"xp":760,"name":"iron troll","x":37},{"y":41,"xp":972,"name":"coil worm","x":68},{"y":41,"xp":317,"name":"wandering mushroom","x":70},{"y":42,"xp":1043,"name":"gallery worm","x":65},{"y":44,"xp":6,"name":"deathcap","x":37},{"y":46,"xp":1016,"name":"gallery worm","x":45},{"y":47,"xp":767,"name":"iron troll","x":61},{"y":56,"xp":823,"name":"caustic worm","x":61},{"y":57,"xp":1045,"name":"gallery worm","x":32},{"y":58,"xp":748,"name":"iron troll","x":59},{"y":58,"xp":315,"name":"wandering mushroom","x":69},{"y":59,"xp":1031,"name":"gallery worm","x":32},{"y":59,"xp":1033,"name":"gallery worm","x":36},{"y":60,"xp":963,"name":"coil worm","x":59},{"y":61,"xp":320,"name":"wandering mushroom","x":29},{"y":61,"xp":763,"name":"iron troll","x":32},{"y":61,"xp":6,"name":"deathcap","x":39},{"y":64,"xp":309,"name":"wandering mushroom","x":37},{"y":65,"xp":6,"name":"deathcap","x":39},{"y":65,"xp":961,"name":"coil worm","x":43},{"y":65,"xp":644,"name":"lindwurm","x":73},{"y":66,"xp":644,"name":"lindwurm","x":36},{"y":66,"xp":735,"name":"deep troll","x":37},{"y":66,"xp":756,"name":"iron troll","x":65},{"y":67,"xp":1050,"name":"gallery worm","x":34},{"y":68,"xp":1031,"name":"gallery worm","x":42},{"y":68,"xp":925,"name":"coil worm","x":73},{"y":69,"xp":1054,"name":"gallery worm","x":52},{"y":69,"xp":1050,"name":"gallery worm","x":54},{"y":69,"xp":654,"name":"lindwurm","x":64},{"y":69,"xp":763,"name":"iron troll","x":76},{"y":70,"xp":1033,"name":"gallery worm","x":46},{"y":70,"xp":1043,"name":"gallery worm","x":49},{"y":71,"xp":6,"name":"deathcap","x":59},{"y":72,"xp":312,"name":"wandering mushroom","x":75},{"y":74,"xp":1056,"name":"gallery worm","x":78},{"y":76,"xp":730,"name":"deep troll","x":83}],"tag":"enter","mp":44,"turn":60}
+ROUTE_EVENT start caster AC=8 EV=18 SH=6
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.
+ Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) 
+_Found a stone staircase leading up.
+_##.....####.......###.........# ##.........#.   ##....#..  #...#...##...#..<.....#  #...#5.0 (2   #...#   #..##!.##...###.# ##...####    #####
+6.0 (3
+_Found a potion of moonshine. ##.......##  #...# ##..#..  ##..#  ... #..#  ...##..#   ..<.....#.    #............#<..  #..#7.0 (1....$#.##..!..##.....#.### ##...#######     #####
+8.0 (2
+_Found a stone staircase leading up.
+ You encounter a deep troll.  ##.......##  #..#  ##..#.T#.... ##..#....... #..#.......##..#..............<.....#......#..#..<....#..#:.....$#..##..!..##..#..##..####...######    #####T   deep troll (asleep)9.0 (160.0 (2
+ ..##.#.T#.....#.......##..#.##..#........<.....#.#............#<....#.#:.....$##.....!.....@#......#.....####...#########    #####
+_Found a parchment of Dispersal.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x31.0 (1
+_
+ You encounter a coil worm.M##  ##w.T##.......##.............<.....#....<....#..:.....$#.##!.@...........##........#.........##...###   #####w   coil worm (constriction, asleep)T   deep troll (asleep)02.0 (1
+_
+ ..##.#w.T#....#.#.........#.#.##.#..<.....##............#<....#.#:.....$##.....!....@.#.....##.....####...#### ######   #####
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x33
+_
+ A coil worm comes into view.### .#  # w.T#....### .##.# .##.....# .......<.....# .........#.# ....<....#. ..:.....$#......!.@................#.........##.....####...############   #####w   coil worm (constriction, asleep)T   deep troll (asleep).T0.ww)T3 =4.0 (1
+ ..##.#...#....#.#w.T....#.# .........##.# ..<.....# #............# ....<....#.# ..:.....$## ......!.. .......@.#..... ##.....####...####  ######   #####
+_The deep troll shouts!
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x3.T.w0 -5
+_
+fThe fireball explodes! The fireball engulfs the coil worm!!
+ The coil worm is moderately wounded.The fireball engulfs the deep troll!!
+_The deep troll is moderately wounded.
+.TYou hear a roar!wMw   gallery worm (wandering)  f   wandering mushroom (wandering)39---11 ====-- 6Sandblast
+.w
+_You encounter a wandering mushroom. You encounter a gallery worm.The fireball explodes! The fireball engulfs the deep troll!
+ The deep troll is severely wounded.The fireball engulfs the coil worm!
+_The coil worm is heavily wounded.w.T.wfww  2 coil worms (constriction, 1 wandering)f5-----27
+.w
+_You encounter a coil worm.The iron shot hits the coil worm!!
+_The coil worm is almost dead..w.w.Tw)0----- 7 ===-8
+_
+.wYou erupt in a blast of force! The mystic blast hits the deep troll!
+ The deep troll is almost dead.
+_The deep troll is knocked back by the mystic blast..w.wT. 26-----8 ===-9
+_
+<You erupt in a blast of force! The mystic blast hits the coil worm!!
+ You kill the coil worm!Vehumet accepts your kill.
+.T
+_You feel your power returning..w.w<   coil worm 9=-70
+_.wVehumet accepts your kill.
+_You feel your power returning. 
+ The mystic blast hits the gallery worm!!
+ The gallery worm is lightly wounded.
+ The gallery worm is knocked back by the mystic blast.
+ The mystic blast hits the deep troll!
+ The deep troll is almost dead.
+_The deep troll is knocked back by the mystic blast.kMTw.. k   lindwurm5--1
+_You encounter a lindwurm.
+.TYou erupt in a blast of force! The mystic blast hits the coil worm!
+ The coil worm is lightly wounded.
+_The coil worm is knocked back by the mystic blast..w.kwww  2 gallery worms (1 wandering)22---2
+_You encounter a gallery worm.
+.TYou erupt in a blast of force!
+ The mystic blast hits the gallery worm!!
+_The gallery worm is heavily wounded.<w.w.w.kw18----3
+_#.# ##.# ...#....###.# .##.....# .##....# f.......<.....# ...w.....#...# .w..<.T..#..# ..k..w..$#.## ......!.## .#.## #######
+.T.w.w:kf.w.f   wandering mushroom9=-- 0 ------ 4.
+ The mystic blast hits the gallery worm!!
+_The gallery worm is heavily wounded.gallery worm!
+ The gallery worm is heavily wounded.
+ The gallery worm is knocked back by the mystic blast.
+ The mystic blast hits the deep troll!!
+ You kill the deep troll!
+ Vehumet accepts your kill.
+ You feel your power returning.
+.w
+_The troll leather armour is intact enough to wear..k
+w..[!21==1 8 ===--- 5
+_
+.wYou erupt in a blast of force! The mystic blast hits the coil worm!
+_The coil worm is moderately wounded..w.w.k 17--6
+_### .#  # #....###.# .##..# .##...........# ..........<.....# .f.......#.# ....<....#. ..:w..w[$#.....w!..@............k...#.........##.....####...############   #####
+.w.w.w.wf.f   wandering mushroom
+(catching breath)
+ The lindwurm breathes flames at you.82/127 ---------8-- 6 ==---- 7ROUTE_EVENT use haste turn=84 place=Worm:4
+##.......##Route_caster the True Ascetic     *WIZARD*#.........#Deep Elf of Vehumet ****..##.........#Health: 82/127    ===============---------...#....###..........#Magic:  18/44     =========---------------.........##...........#AC:  8 (26%)Str: 8.........##...........#EV: 18Int: 28................<.....#SH:  6Dex: 14.........#............#XL: 20 Next:  1%  Place: Wormlands:4..f.<....#............#Noise:  6 ==----  Time: 77.0 (0.0)..:....[$#...........##i) +2 dagger (devious).....www.@..........##Cast: Sandblast.....k...#.........####.....####...############   #####ww  2 gallery wormsw   coil worm (constriction)k   lindwurm (catching breath)f   wandering mushroom
+ The mystic blast hits the deep troll!!
+ You kill the deep troll!Vehumet accepts your kill.You feel your power returning.
+_The troll leather armour is intact enough to wear.
+ You erupt in a blast of force! The mystic blast hits the coil worm!
+_The coil worm is moderately wounded.The lindwurm breathes flames at you.
+_The blast of flame hits you!!!www!k.Earth Mage  0 --8.0 (1Fast 
+##  ### .#  # .#....#### .........##.# .........##.....# ................<.....# .........#.# ..f.<....#. ..:....w$#.....wkw............#.........##.....####...############   #####k   lindwurm (catching breath)
+ You kill the deep troll!
+ Vehumet accepts your kill.
+ You feel your power returning.
+_The troll leather armour is intact enough to wear.
+ You erupt in a blast of force! The mystic blast hits the coil worm!
+_The coil worm is moderately wounded.
+ The lindwurm breathes flames at you.
+_The blast of flame hits you!!!
+_You feel yourself speed up..w39=--6 (0.6
+!kYou erupt in a blast of force!
+ The mystic blast hits the gallery worm!!
+_The gallery worm is severely wounded..w5-- 8 ===--- 9.2
+_##  ### #..#   .#.    # #....#### .........##.# .........##.....# .........<.....# .........#.# ..f.<....#. ..:....w$#......wkw...........#.........   gallery worm##.....####...############   #####.ww[w   coil worm (constriction) 0 ------ 9 (0.7
+kYou erupt in a blast of force! The mystic blast hits the coil worm!!
+ The coil worm is heavily wounded.The mystic blast hits the gallery worm!!
+_The gallery worm is almost dead.w..w. k   lindwurm42---- 8 ===--- 80.6
+_  ## #.     ### #.     #.#   ..#..   ##.#  ...#....###.# .........##.# .........##...........# .........<.....# .........#.# ..f.<....#..# ..:....[$#w...## ......w..w..## ........k#.........##.....####...############   #####w. 0 ------ 1.3walmost dead.
+ The coil worm is severely wounded.The coil worm is knocked back by the mystic blast.
+ The coil worm slams into the rock wall.
+ The coil worm is severely wounded. but does no damage.
+_w!w  2 gallery worms9/44 ---- 8 ===--- 2.0
+_ ...     ##.. #..    ##..# #..#   #...#  ...#...  ##..#  ...#....###..# .##..# ##...........# .........<.....# .........#.# ....<....#w..# ..:....[w#..##   gallery worm ......f.kw..##w   coil worm (constriction) .........#.........##k   lindwurm.....####...######f   wandering mushroom######   #####w.
+w$The gallery worm attacks as it pursues you! 2 =----- 7
+_You block the gallery worm's attack.
+.
+ You erupt in a blast of force! The mystic blast hits the coil worm!!
+ You kill the coil worm!
+.†#.wk   lindwurmf   wandering mushroom
+ Vehumet accepts your kill.The mystic blast hits the gallery worm.
+ The gallery worm is almost dead.
+_The gallery worm is knocked back by the mystic blast.
+wThe lindwurm breathes flames at you.w  2 gallery worms.(catching breath)66---6---2 8 ===--- 3.4ROUTE_EVENT use teleportation turn=93 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 66/127    ============------------...     ##.....##Magic:  6/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  8 ===---  Time: 83.4 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#............#Fast ....<...†#.w..........#..:....[w#...........##ww  2 gallery worms......f.k...........##k   lindwurm (catching breath).........#.........##f   wandering mushroom##.....####...############   #####
+_You block the gallery worm's attack.
+ You erupt in a blast of force! The mystic blast hits the coil worm!!
+ You kill the coil worm!Vehumet accepts your kill.The mystic blast hits the gallery worm.
+ The gallery worm is almost dead.
+_The gallery worm is knocked back by the mystic blast.
+ The lindwurm breathes flames at you.
+_The blast of flame hits you!!
+k.
+ You erupt in a blast of force! The mystic blast hits the coil worm!!
+ You kill the coil worm!
+ Vehumet accepts your kill.
+ The mystic blast hits the gallery worm.
+ The gallery worm is almost dead.
+_The gallery worm is knocked back by the mystic blast.
+ The lindwurm breathes flames at you.
+_The blast of flame hits you!!
+ As you read the scroll of teleportation, it crumbles to dust.w$w. 0 ------ 4.1 (0.7Tele Fast ROUTE_EVENT use fear turn=94 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 66/127    ============------------...     ##.....##Magic:  6/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 84.1 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#w...........#Tele Fast ....<...w#............#..:....k$#...........##ww  2 gallery worms......f.............##k   lindwurm (catching breath).........#.........##f   wandering mushroom##.....####...############   #####You kill the coil worm!Vehumet accepts your kill.The mystic blast hits the gallery worm.
+ The gallery worm is almost dead.
+_The gallery worm is knocked back by the mystic blast.
+ The lindwurm breathes flames at you.
+_The blast of flame hits you!!
+ As you read the scroll of teleportation, it crumbles to dust.
+_You feel strangely unstable.Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 66/127    ============------------...     ##.....##Magic:  6/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 84.1 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#w...........#Tele Fast ....<...w#............#..:....k$#...........##ww  2 gallery worms (fleeing)......f.............##k   lindwurm (fleeing, catching breath).........#.........##f   wandering mushroom (fleeing)##.....####...############   #####The lindwurm breathes flames at you.
+_The blast of flame hits you!!
+ As you read the scroll of teleportation, it crumbles to dust.
+_You feel strangely unstable.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The gallery worm looks frightened!
+ The wandering mushroom looks frightened!8 (0.7ROUTE_EVENT use fear turn=95 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 66/127    ============------------...     ##.....##Magic:  6/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 84.8 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#w...........#Tele Fast ....<...w#............#..:....k$#...........##ww  2 gallery worms (fleeing)......f.............##k   lindwurm (fleeing, catching breath).........#.........##f   wandering mushroom (fleeing)##.....####...############   #####
+_The blast of flame hits you!!
+ As you read the scroll of teleportation, it crumbles to dust.
+_You feel strangely unstable.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The gallery worm looks frightened!
+ The wandering mushroom looks frightened!
+_The lindwurm looks frightened! The gallery worm looks frightened!Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 66/127    ============------------...     ##.....##Magic:  6/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 84.8 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#w...........#Tele Fast ....<...w#............#..:....[$#...........##ww  2 gallery worms (fleeing)......fk............##k   lindwurm (fleeing, catching breath).........#.........##f   wandering mushroom (fleeing)##.....####...############   #####Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The gallery worm looks frightened!
+ The wandering mushroom looks frightened!
+_The lindwurm looks frightened! The gallery worm looks frightened!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.†w.w775.5 (0.7ROUTE_EVENT use fog turn=96 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 67/127    ============------------...     ##.....##Magic:  7/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 85.5 (0.0).........##...........#i) +2 dagger (devious).........@......<.....#Cast: Sandblast.........#............#Tele Fast ....<...†#.w..........#..:....w$#...........##ww  2 gallery worms (fleeing)......fk............##k   lindwurm (fleeing, catching breath).........#.........##f   wandering mushroom (fleeing)##.....####...############   #####Look: a gallery worm (almost dead, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The gallery worm looks frightened!
+ The wandering mushroom looks frightened!
+_The lindwurm looks frightened! The gallery worm looks frightened!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+_You assume a fearsome visage. Nothing appears to happen..k[w§w§§@§§§#§§....w...   gallery worm.......##6.2 (0.7Cloud ROUTE_EVENT use fear turn=97 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 67/127    ============------------...     ##.....##Magic:  7/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 86.2 (0.0)........§##...........#i) +2 dagger (devious)........§@§.....<.....#Cast: Sandblast.......§§#§§..........#Tele Fast Cloud ....<...†#.§..........#..:....[$#..w........##w   gallery worm (fleeing)......fw............##k   lindwurm (fleeing, catching breath).......k.#.........##f   wandering mushroom (fleeing)##.....####...############   #####As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The gallery worm looks frightened!
+ The wandering mushroom looks frightened!
+_The lindwurm looks frightened! The gallery worm looks frightened!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+_You assume a fearsome visage. Nothing appears to happen.
+_As you read the scroll of fog, it dissolves into smoke.Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 67/127    ============------------...     ##.....##Magic:  7/44===---------------------.  #..    ##.......##AC:  8 (26%)Str: 8.. #..#   #.........#EV: 18Int: 28...#...  ##.........#SH:  6Dex: 14...#....###..........#XL: 20 Next:  2%  Place: Wormlands:4.........##...........#Noise:  0 ------  Time: 86.2 (0.0).......§§##...........#i) +2 dagger (devious).......§§@§§....<.....#Cast: Sandblast.......§§#§§..........#Tele Fast Cloud ....<...†#§§..........#..:....[$#..w........##w   gallery worm (fleeing)......fw............##k   lindwurm (fleeing, catching breath).......k.#.........##f   wandering mushroom (fleeing)##.....####...############   #####
+_The lindwurm looks frightened! The gallery worm looks frightened!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (almost dead, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+_You assume a fearsome visage. Nothing appears to happen.
+_As you read the scroll of fog, it dissolves into smoke.
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.8 (0.6k.
+ The fireball explodes! The fireball engulfs the gallery worm.
+ The gallery worm is lightly wounded.
+ Your attack snaps the gallery worm out of its fear.
+ The fireball engulfs the wandering mushroom!!
+ The wandering mushroom is severely damaged.
+ Your attack snaps the wandering mushroom out of its fear.
+ The fireball engulfs the lindwurm!
+ The lindwurm is moderately wounded.
+_Your attack snaps the lindwurm out of its fear.w.....  #.... #..#..#...#.....§§.§§...w....f.k............#######.3--12 ====-- 7.5 (0.7Sandblast
+_w
+ You start resting.A gallery worm comes into view.8Sandblast[w   gallery worm0 0 ------ 8.1 (0.6
+_....             .   ...     ##...  #..    ##..#... #..##  #.........# ....#...# ##.........#  ...#....###..........# .......§§##...........# ##...........# §§§§....<.....# ......§§§#§.# ....<..§w#§§..# ..:....[$#..w..## f.k..## .........#.........##.....####...############   #####....... w....../|)... .......      ..... T...D.>       w.... k......       ...w..#.T...         $$$....T.T            ....k....#             ..TC...@#              ......Σ##              ......w .......D   iron dragon (trample, asleep) ##.....ww  2 gallery worms (asleep)  ##....TTTT  4 iron trolls (asleep)   .....             C   stone giant (missile, asleep)  ......            w  2 coil worms (constriction, asleep) T   deep troll (asleep)k  2 lindwurms (asleep)Σ   earth elemental (dormant)
+ Your surroundings suddenly seem different.
+ You encounter an iron dragon, a stone giant, a deep troll, 2 gallery worms, an earth elemental, 4 iron trolls, 2 lindwurms and 2 coil worms.Found 55 gold pieces, a glowing great sword, a staff of earth and a wand of light (6).
+T.
+ Found a passage to the Depths.
+ The iron dragon roars deafeningly! The iron troll shouts! The stone giant shouts! The deep troll shouts! The iron troll shouts! x3; The lindwurm roars! x2.TwT...Dw.... kw..#.TTkC..ΣwD)wwTTTTC)w)TkΣ4=- 9 ===--- 7Fast ROUTE_EVENT use teleportation turn=101 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 68/127    ============------------....... w......Magic:  4/44==----------------------./|)... .......AC:  8 (26%)Str: 8....... T...D.>EV: 18Int: 28..w.... k......SH:  6Dex: 14....w..#.T...XL: 20 Next:  2%  Place: Wormlands:4.$$$....TT.Noise:  9 ===---  Time: 88.7 (0.0)....k....#i) +2 dagger (devious)...C...@#Cast: Sandblast...T..Σ##Fast ......w.......D   iron dragon (trample)##.....ww  2 gallery worms##....TTTT  4 iron trolls.....C   stone giant (missile)......w  2 coil worms (constriction)T   deep trollk  2 lindwurmsΣ   earth elemental
+_Your attack snaps the lindwurm out of its fear.
+ You start resting.
+_A gallery worm comes into view.Your surroundings suddenly seem different.
+ You encounter an iron dragon, a stone giant, a deep troll, 2 gallery worms, an earth elemental, 4 iron trolls, 2 lindwurms and 2 coil worms.Found 55 gold pieces, a glowing great sword, a staff of earth and a wand of light (6).
+ Found a passage to the Depths.
+ The iron dragon roars deafeningly! The iron troll shouts! The stone giant shouts! The deep troll shouts! The iron troll shouts! x3; The lindwurm roars! x2
+_You hear a shout! x2
+.D
+ You start resting.
+_A gallery worm comes into view.
+ Your surroundings suddenly seem different.
+ You encounter an iron dragon, a stone giant, a deep troll, 2 gallery worms, an earth elemental, 4 iron trolls, 2 lindwurms and 2 coil worms.55 gold pieces, a glowing great sword, a staff of earth and a wand of light (6).
+ Found a passage to the Depths.
+ The iron dragon roars deafeningly! The iron troll shouts! The stone giant shouts! The deep troll shouts! The iron troll shouts! x3; The lindwurm roars! x2
+_You hear a shout! x2
+ As you read the scroll of teleportation, it crumbles to dust..w.w.kw
+w.
+ You feel strangely unstable.You encounter a coil worm.
+.TYou hear a grinding noise..Cw
+.wThe earth elemental hits you!!.kw........#w  3 gallery worms....5T.......).#340-----89.4 (0.7Tele Fast 
+_You encounter a gallery worm.Found a great mace.ROUTE_EVENT use heal wounds turn=102 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 40/127    =======-----------------....... .......Magic:  4/44==----------------------w/|)... w......AC:  8 (26%)Str: 8....... T.....wEV: 18Int: 28....... ...D...SH:  6Dex: 14...w...#k....XL: 20 Next:  2%  Place: Wormlands:4.$$$.w..TTTNoise:  8 ===---  Time: 89.4 (0.0).........#i) +2 dagger (devious)....Ck.@#Cast: Sandblast...T..Σw#Tele Fast ...................D   iron dragon (trample)##........#www  3 gallery worms##........TTTT  5 iron trolls.....T....C   stone giant (missile).........).#w  3 coil worms (constriction)T   deep trollk  2 lindwurmsΣ   earth elemental
+_You hear a shout! x2
+ As you read the scroll of teleportation, it crumbles to dust.
+ You feel strangely unstable.You encounter a coil worm.You hear a grinding noise.
+ The earth elemental hits you!!
+_You encounter a gallery worm.Found a great mace.
+_You encounter an iron troll..T.TT
+T.
+ As you read the scroll of teleportation, it crumbles to dust.feel strangely unstable.You encounter a coil worm.You hear a grinding noise.
+ The earth elemental hits you!!
+_You encounter a gallery worm.
+ Found a great mace.
+_You encounter an iron troll.You feel much better..T.TT.w>.w.kTf.w.w
+kC
+ You encounter an iron troll. You encounter a deep troll. You encounter a deathcap..D.k.wM6 2 deep trollsf   deathcap6= 4 ==---- 90.0 (0.6ROUTE_EVENT use heal wounds turn=103 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 46/127    ========----------------....... .......Magic:  4/44==----------------------./|)..T .......AC:  8 (26%)Str: 8.w..... w....w>EV: 18Int: 28....... T......SH:  6Dex: 14.......#..D..XL: 20 Next:  2%  Place: Wormlands:4.$$$w..k.T.Noise:  4 ==----  Time: 90.0 (0.0)......wTT#i) +2 dagger (devious)T....C.@#Cast: Sandblast....TkΣw#Tele Fast ...................D   iron dragon (trample)##........#www  3 gallery worms##....T...TTTT  6 iron trolls..........C   stone giant (missile)......f..).#w  3 coil worms (constriction)T  2 deep trollsf   deathcapk  2 lindwurmsΣ   earth elementalYou encounter a coil worm.You hear a grinding noise.
+ The earth elemental hits you!!
+_You encounter a gallery worm.Found a great mace.
+_You encounter an iron troll.You feel much better.
+ You encounter an iron troll. You encounter a deep troll. You encounter a deathcap.
+_The gallery worm bites you!73=====52 =-7 (0.7
+ You hear a grinding noise.
+ The earth elemental hits you!!
+_You encounter a gallery worm.
+ Found a great mace.
+_You encounter an iron troll.You feel much better.
+ You encounter an iron troll. You encounter a deep troll. You encounter a deathcap.
+_The gallery worm bites you!
+_You feel much better. The earth elemental closely misses you..wThe iron troll is knocked back by the mystic blast.iron troll collides with the deep troll.
+ The deep troll is heavily wounded.The mystic blast hits the earth elemental.
+ The earth elemental is lightly damaged.
+ The earth elemental is knocked back by the mystic blast.
+ The mystic blast hits the iron troll but does no damage.
+ The mystic blast hits the coil worm!
+_The coil worm is lightly wounded..w.w.T.T.ww
+T.
+ The coil worm grabs you. The coil worm bites you! The coil worm constricts you!
+D.T...kΣw  4 gallery wormsYou encounter a gallery worm.
+T.
+ The stone giant throws a large rock. The large rock hits you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!!f
+.T* * * LOW HITPOINT WARNING * * *You encounter a wandering mushroom.The iron troll closely misses you. You block the iron troll's attack. The iron troll claws you.ff   wandering mushroom2/127     -------------1--           8              9 ===--- 1.3 (0.6Constr ROUTE_EVENT use heal wounds turn=105 place=Worm:4
+Route_caster the Earth Mage       *WIZARD*Deep Elf of Vehumet ****..Health: 2/127     ------------------------wf..... .......Magic:  1/44------------------------./|)... .......AC:  8 (26%)Str: 8......T ....D.>EV:  8 Int: 28..w.... .w..w..SH:  6Dex: 14.......#T....XL: 20 Next:  2%  Place: Wormlands:4.$$$...kT..Noise:  9 ===---  Time: 91.3 (0.0).....wwTT#i) +2 dagger (devious).T...C.@#Cast: Sandblast...T...w#Tele Fast Constr ....kΣ.............D   iron dragon (trample)##.....T..#wwww  4 gallery worms##........TTT  6 iron trolls..........C   stone giant (missile)......f..).#w  3 coil worms (constriction)T  2 deep trollsf   deathcapk  2 lindwurmsΣ   earth elementalf   wandering mushroom
+ The coil worm grabs you. The coil worm bites you! The coil worm constricts you!You encounter a gallery worm.The stone giant throws a large rock. The large rock hits you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *You encounter a wandering mushroom.The iron troll closely misses you. You block the iron troll's attack. The iron troll claws you.
+_* * * LOW HITPOINT WARNING * * *k.
+.TYou encounter a gallery worm.
+ The stone giant throws a large rock. The large rock hits you!!
+ * * * LOW HITPOINT WARNING * * *The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *
+ You encounter a wandering mushroom.
+ The iron troll closely misses you. You block the iron troll's attack. The iron troll claws you.
+_* * * LOW HITPOINT WARNING * * *You feel much better. The gallery worm bites you!!.wROUTE_AUDIT {"items":[{"y":29,"class":"wand","quantity":1,"x":31,"name":"wand of light (6)","artefact":false},{"y":29,"class":"magical staff","quantity":1,"x":32,"name":"staff of earth","artefact":false},{"y":29,"class":"weapon","quantity":1,"x":33,"name":"glowing great sword","artefact":false},{"y":29,"class":"gold","quantity":23,"x":73,"name":"23 gold pieces","artefact":false},{"y":29,"class":"armour","quantity":1,"x":74,"name":"pair of gloves","artefact":false},{"y":30,"class":"gold","quantity":29,"x":47,"name":"29 gold pieces","artefact":false},{"y":31,"class":"gold","quantity":15,"x":76,"name":"15 gold pieces","artefact":false},{"y":32,"class":"gold","quantity":29,"x":26,"name":"29 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":17,"x":31,"name":"17 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":21,"x":32,"name":"21 gold pieces","artefact":false},{"y":33,"class":"gold","quantity":17,"x":33,"name":"17 gold pieces","artefact":false},{"y":40,"class":"corpse","quantity":1,"x":76,"name":"coil worm corpse","artefact":false},{"y":40,"class":"corpse","quantity":1,"x":80,"name":"coil worm corpse","artefact":false},{"y":41,"class":"book","quantity":1,"x":74,"name":"parchment of Dispersal","artefact":false},{"y":41,"class":"armour","quantity":1,"x":79,"name":"+0 troll leather armour","artefact":false},{"y":41,"class":"corpse","quantity":1,"x":79,"name":"deep troll corpse","artefact":false},{"y":41,"class":"gold","quantity":20,"x":80,"name":"20 gold pieces","artefact":false},{"y":42,"class":"weapon","quantity":1,"x":40,"name":"great mace","artefact":false},{"y":42,"class":"potion","quantity":1,"x":78,"name":"potion of moonshine","artefact":false},{"y":44,"class":"weapon","quantity":1,"x":30,"name":"trident","artefact":false},{"y":46,"class":"misc","quantity":1,"x":39,"name":"box of beasts","artefact":false},{"y":58,"class":"weapon","quantity":1,"x":69,"name":"club","artefact":false},{"y":59,"class":"scroll","quantity":1,"x":29,"name":"scroll of teleportation","artefact":false},{"y":60,"class":"weapon","quantity":1,"x":79,"name":"bloodstained bardiche","artefact":true},{"y":61,"class":"potion","quantity":1,"x":73,"name":"potion of curing","artefact":false},{"y":67,"class":"scroll","quantity":1,"x":32,"name":"scroll of vulnerability","artefact":false},{"y":69,"class":"gold","quantity":33,"x":37,"name":"33 gold pieces","artefact":false},{"y":69,"class":"gold","quantity":19,"x":38,"name":"19 gold pieces","artefact":false},{"y":71,"class":"gold","quantity":28,"x":54,"name":"28 gold pieces","artefact":false},{"y":72,"class":"scroll","quantity":1,"x":83,"name":"scroll of identify","artefact":false},{"y":73,"class":"scroll","quantity":1,"x":62,"name":"scroll of vulnerability","artefact":false},{"y":75,"class":"gold","quantity":31,"x":84,"name":"31 gold pieces","artefact":false}],"xp":44842,"honey":0,"inventory":[{"quantity":1,"name":"+0 robe","class":"armour"},{"quantity":1,"name":"ring of poison resistance","class":"jewellery"},{"quantity":1,"name":"+0 pair of boots","class":"armour"},{"quantity":1,"name":"+0 pair of gloves","class":"armour"},{"quantity":1,"name":"+0 cloak","class":"armour"},{"quantity":1,"name":"+0 helmet","class":"armour"},{"quantity":1,"name":"+0 buckler","class":"armour"},{"quantity":1,"name":"+2 robe","class":"armour"},{"quantity":1,"name":"+2 devious dagger","class":"weapon"},{"quantity":3,"name":"3 potions of magic","class":"potion"},{"quantity":2,"name":"2 scrolls of fog","class":"scroll"},{"quantity":2,"name":"2 scrolls of blinking","class":"scroll"},{"quantity":2,"name":"2 potions of might","class":"potion"},{"quantity":1,"name":"potion of haste","class":"potion"},{"quantity":6,"name":"6 potions of curing","class":"potion"},{"quantity":3,"name":"3 potions of heal wounds","class":"potion"}],"xl":20,"progress":2,"gold":0,"where":"Worm:4","maxmp":44,"hp":-6,"maxhp":127,"vaults":"worm_end_dragon_cavern","monsters":[{"y":20,"xp":84,"name":"earth elemental","x":18},{"y":28,"xp":1035,"name":"gallery worm","x":30},{"y":28,"xp":310,"name":"wandering mushroom","x":31},{"y":30,"xp":1235,"name":"iron dragon","x":42},{"y":31,"xp":1056,"name":"gallery worm","x":33},{"y":31,"xp":738,"name":"deep troll","x":36},{"y":31,"xp":961,"name":"coil worm","x":39},{"y":31,"xp":945,"name":"coil worm","x":42},{"y":32,"xp":746,"name":"iron troll","x":38},{"y":33,"xp":646,"name":"lindwurm","x":37},{"y":33,"xp":719,"name":"deep troll","x":38},{"y":34,"xp":1037,"name":"gallery worm","x":28},{"y":34,"xp":1031,"name":"gallery worm","x":35},{"y":34,"xp":954,"name":"coil worm","x":36},{"y":34,"xp":781,"name":"iron troll","x":37},{"y":34,"xp":739,"name":"iron troll","x":38},{"y":35,"xp":765,"name":"iron troll","x":31},{"y":35,"xp":1101,"name":"stone giant","x":35},{"y":36,"xp":768,"name":"iron troll","x":33},{"y":36,"xp":641,"name":"lindwurm","x":35},{"y":36,"xp":1043,"name":"gallery worm","x":37},{"y":37,"xp":84,"name":"earth elemental","x":35},{"y":38,"xp":651,"name":"lindwurm","x":81},{"y":39,"xp":760,"name":"iron troll","x":37},{"y":39,"xp":1043,"name":"gallery worm","x":78},{"y":39,"xp":317,"name":"wandering mushroom","x":80},{"y":42,"xp":6,"name":"deathcap","x":37},{"y":42,"xp":1054,"name":"gallery worm","x":85},{"y":45,"xp":1016,"name":"gallery worm","x":42},{"y":47,"xp":767,"name":"iron troll","x":61},{"y":56,"xp":823,"name":"caustic worm","x":61},{"y":57,"xp":1045,"name":"gallery worm","x":32},{"y":58,"xp":1050,"name":"gallery worm","x":34},{"y":58,"xp":748,"name":"iron troll","x":59},{"y":58,"xp":315,"name":"wandering mushroom","x":69},{"y":59,"xp":1031,"name":"gallery worm","x":32},{"y":59,"xp":1033,"name":"gallery worm","x":36},{"y":60,"xp":963,"name":"coil worm","x":59},{"y":61,"xp":320,"name":"wandering mushroom","x":29},{"y":61,"xp":763,"name":"iron troll","x":32},{"y":61,"xp":6,"name":"deathcap","x":39},{"y":64,"xp":309,"name":"wandering mushroom","x":37},{"y":65,"xp":6,"name":"deathcap","x":39},{"y":65,"xp":644,"name":"lindwurm","x":73},{"y":66,"xp":644,"name":"lindwurm","x":36},{"y":66,"xp":735,"name":"deep troll","x":37},{"y":66,"xp":756,"name":"iron troll","x":65},{"y":67,"xp":961,"name":"coil worm","x":52},{"y":68,"xp":1031,"name":"gallery worm","x":42},{"y":68,"xp":925,"name":"coil worm","x":73},{"y":69,"xp":1054,"name":"gallery worm","x":52},{"y":69,"xp":1050,"name":"gallery worm","x":54},{"y":69,"xp":654,"name":"lindwurm","x":64},{"y":69,"xp":763,"name":"iron troll","x":76},{"y":70,"xp":1033,"name":"gallery worm","x":46},{"y":70,"xp":1043,"name":"gallery worm","x":49},{"y":71,"xp":6,"name":"deathcap","x":59},{"y":72,"xp":312,"name":"wandering mushroom","x":75},{"y":74,"xp":1056,"name":"gallery worm","x":78},{"y":74,"xp":730,"name":"deep troll","x":82}],"tag":"death","mp":1,"turn":105}
+ROUTE_EVENT death Worm:4
+
+ * * * LOW HITPOINT WARNING * * *The coil worm closely misses you. The coil worm constricts you!You die...Gear: 9/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ i - a +2 devious dagger (weapon)
+Armour         (go to first with [)
+ c - a +0 pair of boots (worn)
+ d - a +0 pair of gloves (worn)
+ e - a +0 cloak (worn)
+ f - a +0 helmet (worn)
+ g - a +0 buckler (worn)
+ h - a +2 robe (worn)a - a +0 robe
+Jewellery      (go to first with "=)
+ b - a ring of poison resistance (worn)
+ i - a +2 devious dagger (weapon)
+Goodbye, Route_caster.265905 Route_caster the Earth Mage (level 20, -6/127 HPs) *WIZ*Began as a Deep Elf Earth Elementalist on Oct 28, 2026.Was an Elder of Vehumet.Constricted to death by a coil worm (7 damage)... on level 4 of the Wormlands.The game lasted 00:00:00 (105 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/combat-2/bottom/caster-202610270
+>

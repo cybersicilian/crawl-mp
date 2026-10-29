@@ -1,0 +1,71 @@
+{
+  "cacheManifest": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/native-attempt-6/cache.json",
+  "cacheSha256": "9427c2993da45856944b2a2861daff9f1a0ebbff8b45a1a67e50c46c9466698f",
+  "commands": [
+    [
+      "make",
+      "-k",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "actor-displacement.o",
+      "chain-devil.o",
+      "eldritch.o",
+      "eldritch-policy.o",
+      "eldritch-powers.o",
+      "eldritch-rites.o",
+      "eldritch-equipment.o",
+      "catch2-tests/test_new_species.o"
+    ],
+    [
+      "make",
+      "-k",
+      "-j2",
+      "WEBTILES=y",
+      "STDFLAG=-std=c++17",
+      "NO_OPTIMIZE=y",
+      "PYTHON=/usr/local/bin/python3",
+      "crawl",
+      "catch2-tests-executable"
+    ],
+    [
+      "./crawl",
+      "--builddb",
+      "--reset-cache"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[new-species]",
+      "--reporter",
+      "console"
+    ],
+    [
+      "./catch2-tests-executable",
+      "[vellum],[pakellas],[vorr],[bloodcraft],[shell],[party-session],[party-trade],[save-compatibility]",
+      "--reporter",
+      "console"
+    ]
+  ],
+  "createdAt": 1792783823.70208,
+  "gateScript": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/host_heavy.py",
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "notClaimed": [
+    "campaign balance",
+    "browser gameplay",
+    "deployment"
+  ],
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "project": "/Users/iancaltabiano/Documents/Projects/dcss",
+  "resourceBinding": {
+    "makeJobs": 2,
+    "phases": "sequential"
+  },
+  "reuseSnapshot": "/private/tmp/dcss-content-afd682036c668a2c",
+  "runnerSha256": "39a29c5ccabc3f6b43f9bf4ca5cc26841d34988004e160bca8a519502996f8a2",
+  "scope": "isolated native build, both species contracts and adjacent god, party and save regressions",
+  "sourceManifest": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/native-attempt-6/source.json",
+  "sourceSha256": "4c6900c3420ff68e6101e3ceb413e2cf1b8bb5f3b6fd93a7735bac20c33b77cf",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy"
+}

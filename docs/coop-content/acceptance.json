@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "nativeEvidence": "attempt-7/validation-result.json",
+  "nativeBuildPassed": true,
+  "nativeCoop": {
+    "testCases": 8,
+    "assertions": 108
+  },
+  "nativeRegression": {
+    "testCases": 42,
+    "assertions": 545,
+    "tags": [
+      "paladin",
+      "party-session",
+      "save-compatibility"
+    ]
+  },
+  "nativePreviews": {
+    "count": 6,
+    "soloAndMultiplayerLeadersAndCompanions": true,
+    "noNativeSaves": true
+  },
+  "previewBackend": {
+    "tests": 10,
+    "passed": true
+  },
+  "powerArtwork": {
+    "spells": 446,
+    "staticAbilities": 172,
+    "passed": true,
+    "initialFailurePreserved": "attempt-7/step-7.log",
+    "correction": "Added native mappings for Passage, Resonance, Assimilate, Retract into Shell and Shell Dash; final pure Node parity passed against isolated and current sources."
+  },
+  "catalogueMerge": {
+    "onlyRenamedStartingSpellsAndNativeModeMetadataChanged": true
+  },
+  "modifiedWebFilesAtMost600Lines": true,
+  "nativeIntegrationBaseline": "Frozen task-start integration source plus owned changes, with unrelated concurrent artwork excluded. Final artwork and catalogue updates are JavaScript/data only; native source is unchanged from the passing native checks.",
+  "productionDeployed": false,
+  "freshBrowserMultiplayerPlaytest": false,
+  "taskSourceHashes": {
+    "Makefile.obj": "76e3ecf29defc6388310fd39204d3afe29fa9578d49394f08bbce15e52beb584",
+    "ability.cc": "dcdc26f1aa86a9fe2ea9358c9360214f1cf37a12cd5e9ba9986f8b26cb39146b",
+    "art-data.txt": "ba616b07b2c067a1295cb63a98c6627b18ee9bbc5a74e1753053f2a338d41d15",
+    "art-func.h": "7fc4ef89fb0e1e620cc89977bece02b6f82a1f8e5cf00580958d14c8a1676738",
+    "artefact.cc": "ffb309c3f20fad1a888c54a8eaed110e397f8d87f1407bffbea57cb99bf4e3e4",
+    "catch2-tests/test_coop_content.cc": "b2f114a117cd9846449ca15855c43aed8ced77ba2037b15718360fda4cc2c60b",
+    "coop-content.cc": "5e8247a004a2da6a05edf342062810e1ab98a04435a89acd2a687b118cf6f28f",
+    "coop-content.h": "3bb463edb00b9cc8001b9cff4fc92597195aabd6afcc67d61dc96a1e76a28ed7",
+    "dat/des/variable/coop_vaults.des": "94a16bf338f83c50d19001618077089b40521b29fd9d4dd081962926bd2d0872",
+    "dat/descript/ability.txt": "a1c28bd97e5d064ac7f11865ed106ab65e7617bbb11c05eaaa1c0466a11b0ca3",
+    "dat/descript/items.txt": "46a2ad4e2519061e2623602ead9560a253c1b2aeeb8977f9022c46d551b70c67",
+    "dat/descript/monsters.txt": "52bb999694a1b7547390f679d92fbaf0b978628cfc2ad12953a794b393120fcd",
+    "dat/descript/spells.txt": "7894c06e0a348b5eb235a71a49c1d4ef0b890e24896324d7ae593d9499c61313",
+    "dat/descript/unrand.txt": "86077656170396b0e39c1ebac4141a76dc3a36641472abc3009b1ccc1c6d7f46",
+    "duration-data.h": "e6717bb7ae2df3a257e0700613c7ae3c96d9978ade4193edbf61d74d8a8cea04",
+    "evoke.cc": "262f082c9250da740d7e10720a83794efbce589a5916c866c30fe65c56f115e0",
+    "fight.cc": "7072956b4edc775f12205b3402b52ad184d00458b93e2d14087ea463c6d3b41f",
+    "god-abil.cc": "dee090fce835307e0fae17d1c69e1d76b0fe9785aea380732377f2dbe05f4d8d",
+    "god-passive.cc": "9b29603fcfd51417819d1ebb3bcb62ad8234dc0521db9d5def70bd49721b708b",
+    "item-prop.cc": "77eca5f11ed167f32dd22089a0a58492719badce486a0d176866f5ab4bbf23a9",
+    "item-use.cc": "84fd5f6bc41d9cdfaf6ebe462cae323deadef02a5f454bd8252f4821e877d011",
+    "l-you.cc": "9f87b7b147b877c4ace86c47c69669b6c2b2302e2bacf1ebe316850b053e35dd",
+    "makeitem.cc": "131af6932f3447d8d0ca383649685c9a5c6bd08d8f4ac17a5b14b4112e41f04d",
+    "mon-death.cc": "d71747dddda965d8f8cd77e0233e0ff2f02b80441598b8fe92e0272837723e06",
+    "mon-pick.cc": "30a4431591bdf5f542e785e834f0981c472d708b2ffb1ce94ede47ff02a70607",
+    "mon-place.cc": "e87f68240aebdfb76da145738f5704e2e5adf69b16ed86227c51bcdd6461fa38",
+    "mon-poly.cc": "301a14f8ebde801ff30d2840a547c3661a55d198d7f4c8dbb8adbb55b3a2855a",
+    "ouch.cc": "281878bfc239be57f083e4f9bfa6af54a1831f156402b079ffc555e07aeb14d7",
+    "party.cc": "11eb6b8197429a8588e95fe21e09bcc42c53649ed46b47b4a017822f367614e5",
+    "party.h": "87b76ed4c1d47924293587589a700953bbb60d42f5a417335ca4e640150d94c9",
+    "playable.cc": "c5e036882ec6c1d94366cea03985b9661bdd7cc1429fb097f9d835be9694e54d",
+    "player-equip.cc": "b5900ea90d79f823a29f71f84fc62356cc2429737a84d663f632e7df62a34e07",
+    "potion.cc": "b677627561bef20f670ffb86097843fdea3e5a5994527c5b794abb6191b06cb2",
+    "randbook.cc": "8cf9c556aabd57b59842a9726cf299f4f58f911c571ea3a51f7348ec7e4dcdec",
+    "spl-book.cc": "cf93a997e783210ab6183cd84cb4ae2fd69d244a698b06b83ab9556b5f46d3a3",
+    "spl-data.h": "960c9613b9d4ee6cf01b7a62a0318aef2dcf7661ad934d8caf67c9f7d7bbc8bc",
+    "spl-selfench.cc": "47a687dd7c838c8485317a2995eb146db686e68bf06d1b33e64a8add30b24ea2",
+    "spl-util.cc": "48a0da12cfc0c1bb4d7fabe1c521320d5029f076c5f0afb74d7fb52c0ca52f58",
+    "tilepick.cc": "08715078ea8d56f1eace3b72845a91c668627a5d40049ef3d099f5c6628a5a03",
+    "webserver/game_data/static/power-art.js": "80599881712457591707a64b90c7828993d673f5ad71d747b8ec15d5563ab686",
+    "webserver/static/scripts/character-catalog.js": "3668c99ae1f23bb3fc04aa14f0af1c1b18811da35d520a3a241f4c7441a117ca",
+    "webserver/static/scripts/character-guide.js": "d1d65ffd6c64dd19b94becac08a73c14158f697046db1792b7192930313e9379",
+    "webserver/static/scripts/client-staging.js": "e8c1cfc81ff53dc2e2294a99aee66ff7664d65088e9f854dc7e33a0458816ccd",
+    "webserver/static/scripts/native-start.js": "57ed5b072c0b8b68bb3693c582f2985a7c7a7286880ce4f38580ce84a94a2e9c",
+    "webserver/static/scripts/starting-sheet.js": "ec8d9ef7aeeb664a6acbcb2859d6d763938a0ae73ad2523b54b795781160eb59",
+    "webserver/util/generate_character_catalog.py": "9196dc81269c0b64f17d4f881982f8f50dd0b573042be285e771d4f415e37600",
+    "webserver/webtiles/character_preview.py": "e05d02bf70ecd699ae9e96d990c359c7269b448959466e450465a217654bf57c",
+    "webserver/webtiles/character_preview_http.py": "1b2256d92bd1523d3b8f211556b686668e9bccccd9bf701daf5740a44d5ee911",
+    "webserver/webtiles/character_preview_test.py": "b2b1795f63a3c510313bc43f178430e85f13983b2dc97a43ab1db854cd4734b2"
+  },
+  "hostReservationReleased": "attempt-7-closure.json"
+}

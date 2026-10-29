@@ -1,0 +1,24 @@
+enum: JOB_APOTHECARY
+name: Apothecary
+short_name: Ap
+category: Adventurer
+category_priority: 75
+str: 2
+int: 5
+dex: 5
+equipment:
+  - "dagger"
+  - "robe"
+  - "hat"
+  - "potion of mutation"
+  - "potion of lignification"
+  - "potion of cancellation"
+  - "potion of brilliance"
+recommended_species:
+  - spriggan
+  - human
+skills:
+  fighting: 2
+  dodging: 4
+  stealth: 3
+create_enum: false

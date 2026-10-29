@@ -1,0 +1,12 @@
+{
+  "raven": {
+    "gap": 31,
+    "metaphor": 40,
+    "direct": 41
+  },
+  "shikashi": {
+    "gap": 34,
+    "direct": 41,
+    "metaphor": 37
+  }
+}

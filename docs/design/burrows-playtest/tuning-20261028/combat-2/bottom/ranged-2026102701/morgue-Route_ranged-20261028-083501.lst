@@ -1,0 +1,39 @@
+Route_ranged
+
+Level 1 of the Dungeon
+
+Level 4 of the Wormlands
+(0, 0, Worm:4)
+  a coil worm corpse
+(3, 3, Worm:4)
+  a +0 troll leather armour
+  an iron troll corpse
+(10, 0, Worm:4)
+  a +0 club
+(14, 3, Worm:4)
+  a potion of curing
+(15, -17, Worm:4)
+  a parchment of Dispersal
+(19, -16, Worm:4)
+  a potion of moonshine
+(20, 2, Worm:4)
+  the +12 bardiche "Laiqo Cyha" {flame, Bane ^Fragile Will+ Str+6}
+    Bane:      It inflicts you with a random bane when you equip it.
+    ^Fragile:  It will be destroyed if unequipped.
+    Will+:     It increases your willpower.
+    Str+6:     It affects your strength (+6).
+    
+    It cannot be enchanted further.
+  (unseen)
+(21, -17, Worm:4)
+  20 gold pieces
+(24, 14, Worm:4)
+  a scroll of identify
+(25, 17, Worm:4)
+  31 gold pieces
+(26, 12, Worm:4)
+  a +0 troll leather armour
+  an iron troll corpse
+(26, 13, Worm:4)
+  a caustic worm corpse
+

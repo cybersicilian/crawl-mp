@@ -1,0 +1,10 @@
+[ 'Missing fixture dependency: ./shell-dash-art' ]
+AssertionError [ERR_ASSERTION]: Module loaded: ./power-art
+    at /Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/party-sidebar.cjs:75:13 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

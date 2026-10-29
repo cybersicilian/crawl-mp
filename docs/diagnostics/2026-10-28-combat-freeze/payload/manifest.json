@@ -1,0 +1,14 @@
+{
+  "activity_pump_test.py": "b08a616a6343cb6cfb8b91d1b92e70d5c78edb1a1166d8a604df858e4cfae616",
+  "crawl-ref/source/tileweb.cc": "f25731daa48a7da3a5b661387dc6fc56592b5d89014f4b1adc694647f2fbc6db",
+  "crawl-ref/source/webserver/webtiles/activity_pump.py": "17e4a8cf4f772ea99e9988035de0c654fa8b2cc5557e9b9499f7627c9801f416",
+  "crawl-ref/source/webserver/webtiles/process_handler.py": "d28043db3460972becd45021ba91e8a5a8250c622d8950933cb7ccf63938253f",
+  "deployment_core.py": "64511a249cb6f1c6d995b9a8f01e04b86ecc82e2ca4b91731c067e13de646f1e",
+  "gameplay_protocol_test.py": "b0f2133f9bd6fd3cc65e38b9b36e8b3685be5e324076c6dfdd7c4573ae190173",
+  "input_lifecycle_test.py": "1e3d32dcd1738407abff38024230c20170daeb8fc2c68424d530dd727bf163a3",
+  "input_recovery_test.py": "30fafa3399ce24743f307db907def69e747a7ba190a65b516fa00cddf0d1e091",
+  "multiplayer_test.py": "381467c2829194a4dd0fb5b5ec87e1860410baf3de049551531d5cff04730f5e",
+  "native-command-completion.py": "824278146a927bbbb41c14f7a06b3545a40172dd19e43cfb060c37c7108cb99b",
+  "prepare_and_deploy.py": "80ded78bfc77e91e9247a8ff6e6d1190abf10e2bea57431d12b6d6322c61301d",
+  "three-player-input-native.py": "708f1c9a718e46b36d2555359958f2d9b491ee7a3e30080ca262002f0fb00504"
+}

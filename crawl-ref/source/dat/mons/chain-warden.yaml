@@ -1,0 +1,22 @@
+name: "chain-warden"
+enum: chain_warden
+glyph: {char: "p", colour: cyan}
+flags: [fighter, see_invis, speaks, warm_blood]
+resists: {fire: 1, cold: 1}
+exp: 1150
+species: human
+will: 80
+attacks:
+ - {type: hit, damage: 30}
+hd: 14
+hp_10x: 920
+ac: 8
+ev: 11
+spells: chain_warden
+has_corpse: false
+shout: shout
+intelligence: human
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: vault_warden

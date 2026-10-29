@@ -23,8 +23,88 @@ struct spell_desc
 
 #include "tag-version.h"
 
+#ifndef SPELL_SONG_OF_SLAYING
+#define SPELL_SONG_OF_SLAYING SPELL_SONG_OF_SHIELDING
+#endif
+
 static const struct spell_desc spelldata[] =
 {
+
+// Curated fork spell ports; IDs are appended for save compatibility.
+{ SPELL_SHACKLE, "Shackle", spschool::hexes,
+  spflag::dir_or_target | spflag::not_self | spflag::WL_check,
+  2, 200, LOS_RADIUS, LOS_RADIUS, 2, TILEG_SHACKLE },
+{ SPELL_FALSE_IMAGE, "False Image", spschool::summoning | spschool::hexes,
+  spflag::target | spflag::not_self | spflag::aim_at_space,
+  3, 100, 2, 2, 2, TILEG_FALSE_IMAGE },
+{ SPELL_MANA_RUPTURE, "Mana Rupture", spschool::conjuration | spschool::hexes,
+  spflag::dir_or_target | spflag::not_self | spflag::needs_tracer | spflag::chaotic,
+  7, 200, 3, 3, 7, TILEG_GRAVITAS },
+{ SPELL_ICICLE_BURST, "Icicle Burst", spschool::conjuration | spschool::ice,
+  spflag::dir_or_target | spflag::not_self | spflag::needs_tracer,
+  7, 200, 5, 5, 9, TILEG_ICICLE_BURST },
+{ SPELL_STEAM_BARRIER, "Steam Barrier", spschool::auramancy | spschool::fire,
+  spflag::selfench | spflag::no_ghost,
+  5, 200, -1, -1, 7, TILEG_STEAM_BARRIER },
+{ SPELL_BLIGHT, "Blight", spschool::necromancy | spschool::alchemy,
+  spflag::dir_or_target | spflag::unholy | spflag::needs_tracer,
+  7, 150, 4, 4, 8, TILEG_BLIGHT },
+{ SPELL_SCORPION_FORM, "Scorpion Form", spschool::alchemy,
+  spflag::helpful | spflag::chaotic | spflag::no_ghost,
+  7, 200, -1, -1, 5, TILEG_SCORPION_FORM },
+{ SPELL_ERINGYAS_ROOTSPIKE, "Eringya's Rootspike", spschool::alchemy | spschool::conjuration,
+  spflag::target | spflag::not_self,
+  5, 200, 3, 6, 2, TILEG_ERINGYAS_ROOTSPIKE },
+{ SPELL_OLGREBS_LAST_MERCY, "Olgreb's Last Mercy", spschool::alchemy,
+  spflag::target | spflag::not_self,
+  7, 200, LOS_RADIUS, LOS_RADIUS, 5, TILEG_OLGREBS_LAST_MERCY },
+{ SPELL_ELEMENTAL_WEAPON, "Elemental Weapon", spschool::auramancy,
+  spflag::helpful | spflag::no_ghost,
+  3, 200, -1, -1, 3, TILEG_ELEMENTAL_WEAPON },
+
+{
+    SPELL_AUTOMATON_LASER, "Engraved Laser",
+    spschool::conjuration,
+    spflag::dir_or_target | spflag::not_self | spflag::needs_tracer
+        | spflag::direct_damage_only,
+    6, 100, LOS_RADIUS, LOS_RADIUS, 6, TILEG_BOLT_OF_LIGHT,
+},
+
+{
+    SPELL_KINDLED_VEINS, "Kindled Veins",
+    spschool::necromancy,
+    spflag::selfench | spflag::no_ghost,
+    1, 200, -1, -1, 0, TILEG_FLAMING_CLOUD,
+},
+
+{
+    SPELL_WINTERS_DUE, "Winter's Due",
+    spschool::necromancy,
+    spflag::selfench | spflag::no_ghost,
+    1, 200, -1, -1, 0, TILEG_FREEZE,
+},
+
+{
+    SPELL_BORROWED_THUNDER, "Borrowed Thunder",
+    spschool::necromancy,
+    spflag::selfench | spflag::no_ghost,
+    1, 200, -1, -1, 0, TILEG_SHOCK,
+},
+
+{
+    SPELL_SCARLET_FETTERS, "Scarlet Fetters",
+    spschool::hexes,
+    spflag::dir_or_target | spflag::not_self | spflag::needs_target | spflag::no_ghost,
+    2, 200, 4, 7, 0, TILEG_SIGIL_OF_BINDING,
+},
+
+{
+    SPELL_STOLEN_SIGHT, "Stolen Sight",
+    spschool::hexes,
+    spflag::dir_or_target | spflag::not_self | spflag::needs_target | spflag::no_ghost,
+    3, 200, 4, 7, 0, TILEG_ENFEEBLE,
+},
+
 
 {
     SPELL_CAUSE_FEAR, "Cause Fear",
@@ -95,7 +175,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_BOLT_OF_FIRE, "Bolt of Fire",
     spschool::conjuration | spschool::fire,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     6,
     200,
     6, 6,
@@ -106,7 +186,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_BOLT_OF_COLD, "Bolt of Cold",
     spschool::conjuration | spschool::ice,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     6,
     200,
     5, 5,
@@ -117,7 +197,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_LIGHTNING_BOLT, "Lightning Bolt",
     spschool::conjuration | spschool::air,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     5,
     200,
     LOS_RADIUS, LOS_RADIUS,
@@ -196,7 +276,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_BOLT_OF_MAGMA, "Bolt of Magma",
     spschool::conjuration | spschool::fire | spschool::earth,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     5,
     200,
     4, 4,
@@ -230,10 +310,10 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_HASTE, "Haste",
     spschool::hexes,
-    spflag::helpful | spflag::hasty | spflag::selfench | spflag::monster,
+    spflag::dir_or_target | spflag::helpful | spflag::hasty | spflag::selfench,
     6,
     200,
-    -1, -1,
+    LOS_RADIUS, LOS_RADIUS,
     0,
     TILEG_HASTE,
 },
@@ -264,10 +344,10 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_INVISIBILITY, "Invisibility",
     spschool::hexes,
-    spflag::helpful | spflag::selfench | spflag::escape | spflag::monster,
+    spflag::dir_or_target | spflag::helpful | spflag::selfench | spflag::escape,
     6,
     200,
-    -1, -1,
+    LOS_RADIUS, LOS_RADIUS,
     0,
     TILEG_INVISIBILITY,
 },
@@ -286,7 +366,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_THROW_FROST, "Throw Frost",
     spschool::conjuration | spschool::ice,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     2,
     50,
     6, 6,
@@ -341,7 +421,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_VENOM_BOLT, "Venom Bolt",
     spschool::conjuration | spschool::alchemy,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     5,
     200,
     5, 5,
@@ -385,7 +465,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_MASS_CONFUSION, "Mass Confusion",
     spschool::hexes,
-    spflag::WL_check | spflag::monster,
+    spflag::WL_check,
     6,
     200,
     -1, -1,
@@ -431,7 +511,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_BOLT_OF_DRAINING, "Bolt of Draining",
     spschool::conjuration | spschool::necromancy,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     5,
     200,
     5, 5,
@@ -610,8 +690,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_PAIN, "Pain",
     spschool::necromancy,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::WL_check
-        | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer | spflag::WL_check,
     1,
     25,
     5, 5,
@@ -744,7 +823,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_DEFLECT_MISSILES, "Deflect Missiles",
     spschool::air,
-    spflag::monster | spflag::selfench,
+    spflag::selfench,
     6,
     50,
     -1, -1,
@@ -777,7 +856,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_POISON_ARROW, "Poison Arrow",
     spschool::conjuration | spschool::alchemy,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     6,
     200,
     6, 6,
@@ -870,7 +949,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_IRON_SHOT, "Iron Shot",
     spschool::conjuration | spschool::earth,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     6,
     200,
     4, 4,
@@ -1040,9 +1119,9 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_SHADOW_CREATURES, "Shadow Creatures",
     spschool::summoning,
-    spflag::mons_abjure | spflag::monster,
+    spflag::mons_abjure,
     6,
-    0,
+    100,
     -1, -1,
     0,
     TILEG_SUMMON_SHADOW_CREATURES,
@@ -2140,7 +2219,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_FORCE_LANCE, "Force Lance",
     spschool::conjuration | spschool::translocation,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer,
     4,
     100,
     3, 3,
@@ -3458,8 +3537,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_AGONY, "Agony",
     spschool::necromancy,
-    spflag::dir_or_target | spflag::needs_tracer
-        | spflag::monster | spflag::WL_check,
+    spflag::dir_or_target | spflag::needs_tracer | spflag::WL_check,
     5,
     200,
     LOS_RADIUS, LOS_RADIUS,
@@ -4697,8 +4775,8 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_PHASE_SHIFT, "Phase Shift",
     spschool::translocation,
-    spflag::helpful | spflag::selfench | spflag::monster,
-    6,
+    spflag::helpful | spflag::selfench,
+    5,
     200,
     -1, -1,
     0,
@@ -4783,6 +4861,138 @@ static const struct spell_desc spelldata[] =
     TILEG_SIROCCO,
 },
 
+{
+    SPELL_FULSOME_DISTILLATION, "Fulsome Distillation",
+    spschool::alchemy | spschool::necromancy,
+    spflag::none,
+    1,
+    50,
+    -1, -1,
+    0,
+    TILEG_FULSOME_DISTILLATION,
+},
+
+{
+    SPELL_EVAPORATE, "Evaporate",
+    spschool::fire | spschool::alchemy,
+    spflag::dir_or_target | spflag::needs_tracer,
+    2,
+    50,
+    LOS_RADIUS, LOS_RADIUS,
+    0,
+    TILEG_EVAPORATE,
+},
+
+{
+    SPELL_AEGIS_LINK, "Linked Ward",
+    spschool::translocation | spschool::auramancy,
+    spflag::helpful | spflag::selfench,
+    4,
+    150,
+    -1, -1,
+    0,
+    TILEG_PASSAGE_OF_GOLUBRIA,
+},
+
+{
+    SPELL_BALLAD_OF_THE_VANGUARD, "Song of Fellowship",
+    spschool::hexes | spschool::auramancy,
+    spflag::helpful | spflag::selfench,
+    4,
+    150,
+    -1, -1,
+    0,
+    TILEG_FUGUE_OF_THE_FALLEN,
+},
+
+{
+    SPELL_SANCTUARY_CHORUS, "Cleansing Mist",
+    spschool::auramancy | spschool::alchemy,
+    spflag::helpful | spflag::selfench | spflag::recovery,
+    5,
+    200,
+    -1, -1,
+    0,
+    TILEG_REGENERATION,
+},
+
+{
+    SPELL_AURA_OF_PROTECTION, "Aura of Protection",
+    spschool::auramancy | spschool::earth,
+    spflag::helpful | spflag::selfench,
+    1,
+    100,
+    -1, -1,
+    0,
+    TILEG_PASSAGE_OF_GOLUBRIA,
+},
+
+{
+    SPELL_AURA_OF_ZEAL, "Aura of Zeal",
+    spschool::auramancy | spschool::fire,
+    spflag::helpful | spflag::selfench,
+    3,
+    100,
+    -1, -1,
+    0,
+    TILEG_FUGUE_OF_THE_FALLEN,
+},
+
+{
+    SPELL_AURA_OF_RIME, "Aura of Rime",
+    spschool::auramancy | spschool::ice,
+    spflag::helpful | spflag::selfench,
+    3,
+    100,
+    -1, -1,
+    0,
+    TILEG_FROZEN_RAMPARTS,
+},
+
+{
+    SPELL_AURA_OF_VITALITY, "Aura of Vitality",
+    spschool::auramancy | spschool::alchemy,
+    spflag::helpful | spflag::selfench | spflag::recovery,
+    3,
+    100,
+    -1, -1,
+    0,
+    TILEG_REGENERATION,
+},
+
+{
+    SPELL_AURA_OF_SANCTUARY, "Aura of Sanctuary",
+    spschool::auramancy,
+    spflag::helpful | spflag::selfench,
+    5,
+    100,
+    -1, -1,
+    0,
+    TILEG_PASSAGE_OF_GOLUBRIA,
+},
+
+{
+    SPELL_AURA_OF_PASSAGE, "Aura of Passage",
+    spschool::auramancy | spschool::translocation,
+    spflag::helpful | spflag::selfench | spflag::hasty,
+    3,
+    100,
+    -1, -1,
+    0,
+    TILEG_SWIFTNESS,
+},
+
+{
+    SPELL_AURA_OF_RESONANCE, "Aura of Resonance",
+    spschool::auramancy | spschool::air,
+    spflag::helpful | spflag::selfench,
+    4,
+    100,
+    -1, -1,
+    0,
+    TILEG_SPELLSPARK_SERVITOR,
+},
+
 #if TAG_MAJOR_VERSION == 34
 #define AXED_SPELL(tag, name) \
     { tag, name, spschool::none, spflag::none, 7, 0, -1, -1, 0, TILEG_ERROR },
@@ -4793,7 +5003,16 @@ AXED_SPELL(SPELL_CHANT_FIRE_STORM, "Chant Fire Storm")
 AXED_SPELL(SPELL_CIGOTUVIS_DEGENERATION, "Cigotuvi's Degeneration")
 AXED_SPELL(SPELL_CIGOTUVIS_EMBRACE, "Cigotuvi's Embrace")
 AXED_SPELL(SPELL_CONDENSATION_SHIELD, "Condensation Shield")
-AXED_SPELL(SPELL_CONTROLLED_BLINK, "Controlled Blink")
+{
+    SPELL_CONTROLLED_BLINK, "Controlled Blink",
+    spschool::translocation,
+    spflag::escape | spflag::selfench,
+    8,
+    100,
+    -1, -1,
+    0,
+    TILEG_BLINK,
+},
 AXED_SPELL(SPELL_CONTROL_TELEPORT, "Control Teleport")
 AXED_SPELL(SPELL_CONTROL_UNDEAD, "Control Undead")
 AXED_SPELL(SPELL_CONTROL_WINDS, "Control Winds")
@@ -4805,7 +5024,6 @@ AXED_SPELL(SPELL_DELAYED_FIREBALL, "Delayed Fireball")
 AXED_SPELL(SPELL_DEMONIC_HORDE, "Demonic Horde")
 AXED_SPELL(SPELL_DRACONIAN_BREATH, "Draconian Breath")
 AXED_SPELL(SPELL_EPHEMERAL_INFUSION, "Ephemeral Infusion")
-AXED_SPELL(SPELL_EVAPORATE, "Evaporate")
 AXED_SPELL(SPELL_EXPLOSIVE_BOLT, "Explosive Bolt")
 AXED_SPELL(SPELL_FAKE_RAKSHASA_SUMMON, "Rakshasa Summon")
 AXED_SPELL(SPELL_FIRE_BRAND, "Fire Brand")
@@ -4813,7 +5031,6 @@ AXED_SPELL(SPELL_FLY, "Flight")
 AXED_SPELL(SPELL_FORCEFUL_DISMISSAL, "Forceful Dismissal")
 AXED_SPELL(SPELL_FREEZING_AURA, "Freezing Aura")
 AXED_SPELL(SPELL_FRENZY, "Frenzy")
-AXED_SPELL(SPELL_FULSOME_DISTILLATION, "Fulsome Distillation")
 AXED_SPELL(SPELL_GRAND_AVATAR, "Grand Avatar")
 AXED_SPELL(SPELL_HASTE_PLANTS, "Haste Plants")
 AXED_SPELL(SPELL_HOLY_LIGHT, "Holy Light")
@@ -4830,14 +5047,41 @@ AXED_SPELL(SPELL_POISON_WEAPON, "Poison Weapon")
 AXED_SPELL(SPELL_RANDOM_BOLT, "Random Bolt")
 AXED_SPELL(SPELL_REARRANGE_PIECES, "Rearrange the Pieces")
 AXED_SPELL(SPELL_RECALL, "Recall")
-AXED_SPELL(SPELL_REGENERATION, "Regeneration")
+{
+    SPELL_REGENERATION, "Regeneration",
+    spschool::necromancy | spschool::alchemy,
+    spflag::helpful | spflag::selfench | spflag::recovery,
+    3,
+    200,
+    -1, -1,
+    0,
+    TILEG_REGENERATION,
+},
 AXED_SPELL(SPELL_RING_OF_FLAMES, "Ring of Flames")
 AXED_SPELL(SPELL_SEE_INVISIBLE, "See Invisible")
 AXED_SPELL(SPELL_SHAFT_SELF, "Shaft Self")
-AXED_SPELL(SPELL_SHROUD_OF_GOLUBRIA, "Shroud of Golubria")
+{
+    SPELL_SHROUD_OF_GOLUBRIA, "Shroud of Golubria",
+    spschool::translocation | spschool::hexes,
+    spflag::helpful | spflag::selfench,
+    2,
+    200,
+    -1, -1,
+    0,
+    TILEG_PASSAGE_OF_GOLUBRIA,
+},
 AXED_SPELL(SPELL_SILVER_BLAST, "Silver Blast")
 AXED_SPELL(SPELL_SINGULARITY, "Singularity")
-AXED_SPELL(SPELL_SONG_OF_SHIELDING, "Song of Shielding")
+{
+    SPELL_SONG_OF_SLAYING, "Song of Slaying",
+    spschool::hexes,
+    spflag::helpful | spflag::selfench,
+    2,
+    100,
+    -1, -1,
+    0,
+    TILEG_FUGUE_OF_THE_FALLEN,
+},
 AXED_SPELL(SPELL_SPECTRAL_WEAPON, "Spectral Weapon")
 AXED_SPELL(SPELL_STONESKIN, "Stoneskin")
 AXED_SPELL(SPELL_SUMMON_BUTTERFLIES, "Summon Butterflies")
@@ -4860,9 +5104,27 @@ AXED_SPELL(SPELL_FIRE_CLOUD, "Fire cloud")
 AXED_SPELL(SPELL_STEAM_CLOUD, "Steam cloud")
 AXED_SPELL(SPELL_HOMUNCULUS, "Homunculus")
 AXED_SPELL(SPELL_SERPENT_OF_HELL_BREATH_REMOVED, "Old serpent of hell breath")
-AXED_SPELL(SPELL_SCATTERSHOT, "Scattershot")
+{
+    SPELL_SCATTERSHOT, "Scattershot",
+    spschool::conjuration | spschool::earth,
+    spflag::dir_or_target | spflag::not_self,
+    6,
+    200,
+    5, 5,
+    8,
+    TILEG_METAL_SPLINTERS,
+},
 AXED_SPELL(SPELL_SUMMON_SWARM, "Summon swarm")
-AXED_SPELL(SPELL_CLOUD_CONE, "Cloud Cone")
+{
+    SPELL_CLOUD_CONE, "Cloud Cone",
+    spschool::conjuration | spschool::alchemy | spschool::air,
+    spflag::target | spflag::not_self | spflag::cloud,
+    6,
+    100,
+    6, 6,
+    0,
+    TILEG_CLOUD_CONE,
+},
 AXED_SPELL(SPELL_RING_OF_THUNDER, "Ring of Thunder")
 AXED_SPELL(SPELL_TWISTED_RESURRECTION, "Twisted Resurrection")
 AXED_SPELL(SPELL_RANDOM_EFFECTS, "Random Effects")
@@ -4872,7 +5134,16 @@ AXED_SPELL(SPELL_GOAD_BEASTS, "Goad Beasts")
 AXED_SPELL(SPELL_TELEPORT_SELF, "Teleport Self")
 AXED_SPELL(SPELL_TOMB_OF_DOROKLOHE, "Tomb of Doroklohe")
 AXED_SPELL(SPELL_EXCRUCIATING_WOUNDS, "Excruciating Wounds")
-AXED_SPELL(SPELL_CONJURE_FLAME, "Conjure Flame")
+{
+    SPELL_CONJURE_FLAME, "Conjure Flame",
+    spschool::conjuration | spschool::fire,
+    spflag::target | spflag::not_self | spflag::cloud,
+    3,
+    100,
+    3, 3,
+    0,
+    TILEG_FLAMING_CLOUD,
+},
 AXED_SPELL(SPELL_CORPSE_ROT, "Corpse Rot")
 AXED_SPELL(SPELL_FLAME_TONGUE, "Flame Tongue")
 AXED_SPELL(SPELL_BEASTLY_APPENDAGE, "Beastly Appendage")

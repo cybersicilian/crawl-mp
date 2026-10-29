@@ -1,0 +1,22 @@
+{
+  "artVerifierSha256": "9cf824ac60f049c5bcb83176e76f2b91539951b15b01d9c5f284cc375cc7f74b",
+  "browserScriptSha256": "205ad1dbf4e8e92329b84ccd9b0e2e3a0942caad2a8fe5993e461720cfc20123",
+  "createdAt": 1792796455.562785,
+  "gateSha256": "f02acd58827cc227882521177b4dd95218db3e554604175395f274af36b928ca",
+  "helperSha256": "259183f34d6ef33b327689254dcdd618d823bf32b90e317fdf8fb69faff000eb",
+  "native_sha256": "ae15b34b915b9fc3cca82818fae0692fc9f6973fe8bc283c335880131da6f25f",
+  "overlayManifestSha256": "e641afdd493ba277c64861ccf280c274169c54e21f61111dc2349a2d5665733a",
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "phase": "linux-private",
+  "readyPath": "/Users/iancaltabiano/Documents/Projects/dcss/docs/releases/2026-10-23-content/linux-prepared.json",
+  "readySha256": "cfc8da39c54f973c95b2d033d4679ee48d5a556a89753b15471a0625ec4fe7bc",
+  "release": "/opt/dcss/releases/20261023T220119Z-content",
+  "resourceBinding": {
+    "browsers": 1,
+    "contexts": 2,
+    "localNativeBuild": false
+  },
+  "runnerSha256": "89a3a6a6526d6b8e2a889c559eecf4dafc9600a6a91b865a31b99eaaabd068da",
+  "stateDirectory": "/Users/iancaltabiano/Documents/Codex/work/host-heavy",
+  "url": "http://127.0.0.1:18887"
+}

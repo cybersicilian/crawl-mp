@@ -5,7 +5,7 @@ name: Sludge Elf
 short_name: SE
 adjective: Elven
 genus: Elf
-difficulty: False
+difficulty: Intermediate
 aptitudes:
   xp: 0
   hp: -1
@@ -40,5 +40,18 @@ levelup_stat_frequency: 4
 levelup_stats:
   - dex
   - int
+recommended_jobs:
+  - shapeshifter
+  - monk
+  - alchemist
+  - summoner
+  - necromancer
+  - earth elementalist
+  - fire elementalist
+  - ice elementalist
+recommended_weapons:
+  - unarmed combat
+  - staves
+  - short blades
 
 orc_name: Sludge Orc

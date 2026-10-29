@@ -6,6 +6,7 @@
 **/
 
 #include "AppHdr.h"
+#include "bloodcraft.h"
 
 #include "mon-info.h"
 
@@ -130,6 +131,7 @@ static map<enchant_type, monster_info_flags> trivial_ench_mb_mappings = {
     { ENCH_ANGUISH,         MB_ANGUISH },
     { ENCH_TP,              MB_TELEPORTING },
     { ENCH_BOUND,           MB_BOUND },
+    { ENCH_SHACKLE,         MB_BOUND },
     { ENCH_BULLSEYE_TARGET, MB_BULLSEYE_TARGET },
     { ENCH_VITRIFIED,       MB_VITRIFIED },
     { ENCH_CURSE_OF_AGONY,  MB_CURSE_OF_AGONY },
@@ -558,6 +560,8 @@ monster_info::monster_info(const monster* m, int milev)
             if (_is_public_key(entry.first))
                 props[entry.first] = entry.second;
     }
+    if (type == MONS_FALSE_IMAGE)
+        props["false_image_owner"] = static_cast<int>(m->summoner);
 
     // Translate references to tentacles into just their locations
     if (mons_is_tentacle_or_tentacle_segment(type))
@@ -724,8 +728,18 @@ monster_info::monster_info(const monster* m, int milev)
     else
         dam = MDAM_OKAY;
 
+    if (m->blinded())
+        mb.set(MB_BLIND);
+    if (bloodcraft::bound(*m))
+        mb.set(MB_BOUND);
+    if (bloodcraft::anchored(*m))
+        mb.set(MB_DIMENSION_ANCHOR);
+    const int sight_penalty = bloodcraft::accuracy_penalty(*m);
+    if (sight_penalty)
+        props["bloodcraft_accuracy_penalty"] = sight_penalty;
+
     // Similarly, don't set invisibility stab UI for firewood.
-    if (!you.visible_to(m) && !m->is_firewood() && !m->has_ench(ENCH_BLIND))
+    if (!you.visible_to(m) && !m->is_firewood() && !m->blinded())
         mb.set(MB_CANT_SEE_YOU);
 
     if (type == MONS_SILENT_SPECTRE)
@@ -774,6 +788,10 @@ monster_info::monster_info(const monster* m, int milev)
         props[KNOWN_MAX_HP_KEY] = (int)ghost.max_hp;
         if (m->props.exists(MIRRORED_GHOST_KEY))
             props[MIRRORED_GHOST_KEY] = m->props[MIRRORED_GHOST_KEY];
+        if (m->props.exists("party_player_slot"))
+            props["party_player_slot"] = m->props["party_player_slot"].get_int();
+        if (m->props.exists("party_downed_ghost"))
+            props["party_downed_ghost"] = m->props["party_downed_ghost"].get_bool();
     }
     // Otherwise the description lies wildly about the average hp of melee pan
     // lords, and an average player will have no idea how durable their canine
@@ -1128,7 +1146,11 @@ string monster_info::_core_name() const
             s = apostrophise(mname) + " ghost";
             break;
         case MONS_PLAYER_ILLUSION:
-            s = apostrophise(mname) + " illusion";
+            // Party member proxies are the real player, not an illusion.
+            if (props.exists("party_player_slot"))
+                s = mname;
+            else
+                s = apostrophise(mname) + " illusion";
             break;
         case MONS_PANDEMONIUM_LORD:
             s = mname;
@@ -1307,6 +1329,13 @@ bool monster_info::has_proper_name() const
 {
     // Some ghost demon monsters (Pan lords, player ghosts, and player
     // illusions) have name overrides.
+    // Living party members are represented by player illusion proxies, but
+    // they should be named as the actual player, not as an illusion.
+    if (!mname.empty() && type == MONS_PLAYER_ILLUSION
+        && props.exists("party_player_slot"))
+    {
+        return true;
+    }
     return !mname.empty()
             && type != MONS_PANDEMONIUM_LORD
             && type != MONS_PLAYER_GHOST
@@ -1568,34 +1597,45 @@ static bool _hide_moninfo_flag(monster_info_flags f)
     return false;
 }
 
-vector<string> monster_info::attributes() const
+vector<monster_condition> monster_info::conditions() const
 {
-    vector<string> v;
-    for (auto& name : monster_info_flag_names)
+    vector<monster_condition> result;
+    if (props.exists("bloodcraft_accuracy_penalty"))
+        result.push_back({NUM_MB_FLAGS, "aim impaired",
+            make_stringf("aim impaired (%d%% accuracy reduction)",
+                         props["bloodcraft_accuracy_penalty"].get_int()),
+            monster_condition_kind::harmful});
+    for (const auto& name : monster_info_flag_names)
     {
         if (is(name.flag) && !_hide_moninfo_flag(name.flag))
         {
-            // Hide this for better flavour messaging
             if (name.flag == MB_PARALYSED && is(MB_FROZEN_IN_TERROR))
                 continue;
-
-            // TODO: just use `do_mon_str_replacements`?
-            v.push_back(replace_all(name.long_singular,
-                                    "@possessive@",
-                                    pronoun(PRONOUN_POSSESSIVE)));
+            const string description = replace_all(name.long_singular,
+                "@possessive@", pronoun(PRONOUN_POSSESSIVE));
+            result.push_back({name.flag,
+                name.short_singular.empty() ? description : name.short_singular,
+                description, name.kind});
         }
     }
-
     if (type == MONS_NAMELESS_REVENANT)
     {
         const int num_memories = props.exists(NOBODY_MEMORIES_KEY)
-                                    ? props[NOBODY_MEMORIES_KEY].get_vector().size()
-                                    : NOBODY_MAX_MEMORIES;
-        v.push_back(make_stringf("%d %s left", num_memories,
-                                               num_memories == 1 ? "memory" : "memories"));
+            ? props[NOBODY_MEMORIES_KEY].get_vector().size() : NOBODY_MAX_MEMORIES;
+        const string description = make_stringf("%d %s left", num_memories,
+            num_memories == 1 ? "memory" : "memories");
+        result.push_back({NUM_MB_FLAGS + 1, description, description,
+                          monster_condition_kind::neutral});
     }
+    return result;
+}
 
-    return v;
+vector<string> monster_info::attributes() const
+{
+    vector<string> result;
+    for (const auto& condition : conditions())
+        result.push_back(condition.description);
+    return result;
 }
 
 string monster_info::wounds_description_sentence() const

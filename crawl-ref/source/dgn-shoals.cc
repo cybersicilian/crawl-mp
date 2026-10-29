@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "dgn-shoals.h"
 
@@ -50,7 +51,7 @@ static const int CALL_TIDE_VELOCITY = 21;
 // The area around the user of a call tide spell that is subject to
 // local tide elevation.
 static const int TIDE_CALL_RADIUS = 8;
-static const int MAX_SHOAL_PLANTS = 180;
+static const int MAX_SHOAL_PLANTS = 100;
 
 static const int _shoals_margin = 6;
 
@@ -155,7 +156,7 @@ static dgn_island_plan _shoals_island_plan()
 
 static void _shoals_init_islands(int depth)
 {
-    const int nislands = 20 - depth * 2;
+    const int nislands = (20 - depth * 2) * (dgn_builder_x() * dgn_builder_y()) / (80 * 70);
     _shoals_islands = _shoals_island_plan();
     _shoals_islands.build(nislands);
 }
@@ -633,7 +634,7 @@ void dgn_shoals_generate_flora()
     const int n_water_clusters = max(0, random_range(-1, 6, 2));
     const int n_wind_clusters = max(0, random_range(-2, 2, 2));
 
-    shoals_plant_quota = MAX_SHOAL_PLANTS;
+    shoals_plant_quota = MAX_SHOAL_PLANTS * (dgn_builder_x() * dgn_builder_y()) / (80 * 70);
 
     if (n_water_clusters)
     {
@@ -1129,7 +1130,7 @@ void shoals_apply_tides(int turns_elapsed, bool force)
     {
         const int last_updated_time =
             props[PROPS_SHOALS_TIDE_UPDATE_TIME].get_int();
-        const int turn_delta = (you.elapsed_time - last_updated_time) / 10;
+        const int turn_delta = (level_elapsed_time() - last_updated_time) / 10;
         turns_elapsed = min(turns_elapsed, turn_delta);
     }
 
@@ -1158,7 +1159,7 @@ void shoals_apply_tides(int turns_elapsed, bool force)
 
     props[PROPS_SHOALS_TIDE_KEY].get_short() = tide;
     props[PROPS_SHOALS_TIDE_VEL].get_short() = acc;
-    props[PROPS_SHOALS_TIDE_UPDATE_TIME].get_int() = you.elapsed_time;
+    props[PROPS_SHOALS_TIDE_UPDATE_TIME].get_int() = level_elapsed_time();
     env.properties[PROPS_SHOALS_TIDE_KEY].get_short() = tide;
 
     if (force

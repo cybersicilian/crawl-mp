@@ -1,0 +1,7 @@
+{
+  "reservationId": "589bf967-9b72-437c-9c72-335118afbd59",
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "Gate reports exit 0 and supervised group gone. Supervisor and worker PIDs are absent. Test awaited browser.close and fixture server exit.",
+  "result": "browser-result.json"
+}

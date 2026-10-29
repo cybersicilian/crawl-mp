@@ -1,0 +1,71 @@
+enum: SP_FAERIE_DRAGON
+monster: MONS_ENCHANTRESS
+name: Faerie Dragon
+short_name: Fd
+genus: Fae
+difficulty: Simple
+difficulty_priority: 40
+species_flags:
+  - no_hair
+aptitudes:
+  xp: 0
+  hp: -1
+  mp_mod: 2
+  wl: 4
+  fighting: -1
+  short_blades: -2
+  long_blades: -2
+  axes: -2
+  maces_and_flails: -1
+  polearms: -2
+  staves: -1
+  ranged weapons: -2
+  throwing: -1
+  armour: false
+  dodging: 3
+  stealth: -2
+  shields: 2
+  spellcasting: 2
+  conjurations: 2
+  hexes: 1
+  summoning: 1
+  necromancy: 1
+  fire_magic: 2
+  ice_magic: 2
+  air_magic: 2
+  earth_magic: 2
+  alchemy: 2
+  evocations: 1
+size: small
+str: 6
+int: 11
+dex: 7
+levelup_stat_frequency: 4
+levelup_stats:
+  - int
+  - dex
+mutations:
+  1:
+    MUT_BIG_WINGS: 1
+fake_mutations:
+  - long: Your spells cost one fewer magic point, to a minimum of zero.
+    short: spells cost one fewer magic point
+  - long: Your bright scales grant armour and shielding, but make you less stealthy.
+    short: bright protective scales, reduced stealth
+  - long: While flying, you gain 10% evasion, with a minimum bonus of 1 EV.
+    short: evasive flight
+  - long: Your wings prevent you from wearing body armour.
+    short: wings prevent body armour
+recommended_jobs:
+  - conjurer
+  - air elementalist
+  - fire elementalist
+  - ice elementalist
+  - earth elementalist
+  - necromancer
+  - hedge wizard
+recommended_weapons:
+  - long blades
+  - maces and flails
+  - staves
+  - ranged weapons

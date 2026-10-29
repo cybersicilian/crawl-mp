@@ -1,0 +1,93 @@
+● dcss-coop.service - DCSS Co-op WebTiles
+     Loaded: loaded (/etc/systemd/system/dcss-coop.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-10-27 19:37:55 UTC; 1min 10s ago
+   Main PID: 367586 (python3)
+      Tasks: 1 (limit: 3915)
+     Memory: 51.2M (peak: 52.6M)
+        CPU: 1.203s
+     CGroup: /system.slice/dcss-coop.service
+             └─367586 /usr/bin/python3 webserver/server.py --no-daemon --no-pidfile --logfile -
+
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Using command-line supplied logfile: '<stdout>'
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Command line override for daemonize: False
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,257 INFO: Reading 2 templates from /opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/games.d/base.yaml
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,257 INFO: Reading 8 games from /opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/games.d/base.yaml
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,313 INFO: Listening on http://127.0.0.1:8080
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,324 INFO: DCSS Webtiles server started! (PID: 367586)
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,324 INFO: Webtiles (0.33-coop) running with Tornado 6.4 and Python 3.12.3
+Oct 27 19:38:22 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:22,088 WARN: Slow IO: render client.html: 0.292s
+Oct 27 19:38:40 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:40,868 INFO: #0     Socket opened from ip 174.45.102.158 (fd28, compression: native permessage-deflate).
+Oct 27 19:38:41 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:41,430 INFO: #0     Socket closed. (18.4 kilobytes sent, compression ratio 0.0%)
+
+● caddy.service - Caddy
+     Loaded: loaded (/usr/lib/systemd/system/caddy.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-10-16 23:16:47 UTC; 1 week 3 days ago
+       Docs: https://caddyserver.com/docs/
+   Main PID: 601 (caddy)
+      Tasks: 11 (limit: 3915)
+     Memory: 73.4M (peak: 115.2M swap: 12.4M swap peak: 13.6M)
+        CPU: 9min 25.651s
+     CGroup: /system.slice/caddy.service
+             └─601 /usr/bin/caddy run --environ --config /etc/caddy/Caddyfile
+
+Oct 27 08:36:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793090206.278546,"logger":"tls.cache.maintenance","msg":"updated and stored ACME renewal information","identifiers":["dcss.iancaltabiano.com"],"cert_hash":"120f538ecfa8ea31db562f0b5e33ab953e37475f87ef2c41b4acd5a8f3a8e8ba","ari_unique_id":"uyDKRwv-1-Wc-Y8JKqOMN0WxvNg.BmawmJV9IN9UKII6h4rS6JoH","cert_expiry":1799964482,"selected_time":1797440046,"next_update":1793108485.2736435,"explanation_url":""}
+Oct 27 09:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793094406.3093886,"logger":"http.acme_client","msg":"got renewal info","names":["api.scrabbleroyale.com"],"window_start":1798083481,"window_end":1798238931,"selected_time":1798198806,"recheck_after":1793119474.3093734,"explanation_url":""}
+Oct 27 09:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793094406.3138258,"logger":"tls.cache.maintenance","msg":"updated and stored ACME renewal information","identifiers":["api.scrabbleroyale.com"],"cert_hash":"bf9fe71499e33ef1cff758951c11af5dec9e19a751fbe3837a2dc14645671d78","ari_unique_id":"uVnyjs8i8IbTN0j_dhQYuoLYVYc.Bs2BZ06PxRuIOQnJ7oAp2ukD","cert_expiry":1800752036,"selected_time":1798228042,"next_update":1793119474.3093734,"explanation_url":""}
+Oct 27 13:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793108806.3342285,"logger":"http.acme_client","msg":"got renewal info","names":["dcss.iancaltabiano.com"],"window_start":1797295927,"window_end":1797451377,"selected_time":1797401587,"recheck_after":1793130036.3340812,"explanation_url":""}
+Oct 27 13:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793108806.3411052,"logger":"tls.cache.maintenance","msg":"updated and stored ACME renewal information","identifiers":["dcss.iancaltabiano.com"],"cert_hash":"120f538ecfa8ea31db562f0b5e33ab953e37475f87ef2c41b4acd5a8f3a8e8ba","ari_unique_id":"uyDKRwv-1-Wc-Y8JKqOMN0WxvNg.BmawmJV9IN9UKII6h4rS6JoH","cert_expiry":1799964482,"selected_time":1797440046,"next_update":1793130036.3340812,"explanation_url":""}
+Oct 27 13:56:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793109406.3108451,"logger":"http.acme_client","msg":"got renewal info","names":["scrabbleroyale.com"],"window_start":1798083481,"window_end":1798238931,"selected_time":1798144558,"recheck_after":1793134291.3108282,"explanation_url":""}
+Oct 27 13:56:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793109406.315164,"logger":"tls.cache.maintenance","msg":"updated and stored ACME renewal information","identifiers":["scrabbleroyale.com"],"cert_hash":"0355e2bfc5b5f55f8d1811bfde5ba8e4afb97f7c0b721fd0dc05524288e128db","ari_unique_id":"uVnyjs8i8IbTN0j_dhQYuoLYVYc.BoKOknvQj_JVk5cceEfTu3sD","cert_expiry":1800752036,"selected_time":1798109254,"next_update":1793134291.3108282,"explanation_url":""}
+Oct 27 16:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793119606.3828413,"logger":"http.acme_client","msg":"got renewal info","names":["api.scrabbleroyale.com"],"window_start":1798083481,"window_end":1798238931,"selected_time":1798179584,"recheck_after":1793137732.3826826,"explanation_url":""}
+Oct 27 16:46:46 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"info","ts":1793119606.3895838,"logger":"tls.cache.maintenance","msg":"updated and stored ACME renewal information","identifiers":["api.scrabbleroyale.com"],"cert_hash":"bf9fe71499e33ef1cff758951c11af5dec9e19a751fbe3837a2dc14645671d78","ari_unique_id":"uVnyjs8i8IbTN0j_dhQYuoLYVYc.Bs2BZ06PxRuIOQnJ7oAp2ukD","cert_expiry":1800752036,"selected_time":1798228042,"next_update":1793137732.3826826,"explanation_url":""}
+Oct 27 19:38:41 dcss-coop-server.us-central1-a.c.chuk-437319.internal caddy[601]: {"level":"warn","ts":1793129921.4217021,"logger":"http.handlers.reverse_proxy","msg":"aborting with incomplete response","upstream":"127.0.0.1:8080","duration":0.025744829,"request":{"remote_ip":"174.45.102.158","remote_port":"52891","client_ip":"174.45.102.158","proto":"HTTP/2.0","method":"GET","host":"dcss.iancaltabiano.com","uri":"/static/tabletop/assets/dungeon-threshold.png","headers":{"Cookie":["REDACTED"],"Priority":["i"],"Sec-Ch-Ua":["\"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"156\", \"Google Chrome\";v=\"156\""],"Accept-Language":["en-US,en;q=0.9"],"X-Forwarded-For":["174.45.102.158"],"Referer":["https://dcss.iancaltabiano.com/static/tabletop/loading.css"],"Sec-Fetch-Site":["same-origin"],"Sec-Ch-Ua-Platform":["\"macOS\""],"X-Forwarded-Host":["dcss.iancaltabiano.com"],"Via":["2.0 Caddy"],"Accept-Encoding":["gzip, deflate, br, zstd"],"Sec-Fetch-Mode":["no-cors"],"Sec-Fetch-Dest":["image"],"X-Forwarded-Proto":["https"],"User-Agent":["Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36"],"Sec-Ch-Ua-Mobile":["?0"],"Accept":["image/jxl,image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"]},"tls":{"resumed":false,"version":772,"cipher_suite":4865,"proto":"h2","server_name":"dcss.iancaltabiano.com","ech":false}},"error":"writing: http2: stream closed"}
+
+○ dcss-health.service - Check DCSS application and disk space
+     Loaded: loaded (/etc/systemd/system/dcss-health.service; static)
+     Active: inactive (dead) since Tue 2026-10-27 19:39:05 UTC; 730ms ago
+TriggeredBy: ● dcss-health.timer
+    Process: 367652 ExecStart=/usr/bin/python3 /opt/dcss/current/deploy/health_check.py (code=exited, status=0/SUCCESS)
+   Main PID: 367652 (code=exited, status=0/SUCCESS)
+        CPU: 113ms
+
+Oct 27 19:39:05 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: Starting dcss-health.service - Check DCSS application and disk space...
+Oct 27 19:39:05 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367652]: {"ok": true, "checked_at": "2026-10-27T19:39:05.947968+00:00", "application": true, "disk": true}
+Oct 27 19:39:05 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: dcss-health.service: Deactivated successfully.
+Oct 27 19:39:05 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: Finished dcss-health.service - Check DCSS application and disk space.
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdb        9.8G  4.5G  4.9G  48% /var/lib/dcss
+{"ok":true,"checked_at":"2026-10-27T19:39:05.947968+00:00","application":true,"disk":true}
+Oct 27 06:22:12 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:12,753 WARN: 404 GET /wp-load.php (195.178.110.159) 0.94ms
+Oct 27 06:22:12 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:12,910 WARN: 404 GET /wp-settings.php (195.178.110.159) 0.52ms
+Oct 27 06:22:13 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:13,038 WARN: 404 GET /wp-blog-header.php (195.178.110.159) 0.43ms
+Oct 27 06:22:13 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:13,215 WARN: 404 GET /administrator/ (195.178.110.159) 0.45ms
+Oct 27 06:22:13 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:13,384 WARN: 404 GET /.htaccess (195.178.110.159) 0.53ms
+Oct 27 06:22:13 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:13,503 WARN: 404 GET /wp-includes/version.php (195.178.110.159) 0.81ms
+Oct 27 06:22:13 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:22:13,608 WARN: 404 GET /wp-content/uploads/ (195.178.110.159) 0.48ms
+Oct 27 06:34:48 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:34:48,058 INFO: #2     Socket closed. (68.3 megabytes sent, compression ratio 0.0%)
+Oct 27 06:49:53 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:49:53,185 INFO: #8     Socket opened from ip 174.45.93.157 (fd9, compression: native permessage-deflate).
+Oct 27 06:49:53 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 06:49:53,233 INFO: #8     Socket closed. (20.7 kilobytes sent, compression ratio 0.0%)
+Oct 27 07:27:23 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 07:27:23,063 INFO: #7     Lobby connection timed out.
+Oct 27 07:27:23 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 07:27:23,162 INFO: #7     Socket closed. (175.0 kilobytes sent, compression ratio 0.0%)
+Oct 27 08:36:30 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 08:36:30,615 WARN: 405 HEAD / (104.30.167.164) 1.00ms
+Oct 27 08:36:30 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 08:36:30,754 WARN: 405 HEAD / (104.30.167.164) 0.42ms
+Oct 27 13:16:01 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 13:16:01,940 WARN: 404 GET /favicon.ico (66.132.195.72) 1.50ms
+Oct 27 15:38:22 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 15:38:22,625 WARN: 404 GET /.git/config (45.138.12.21) 1.48ms
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: Stopping dcss-coop.service - DCSS Co-op WebTiles...
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 19:37:33,306 INFO: Received signal 15, beginning shutdown.
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[362624]: 2026-10-27 19:37:33,312 INFO: Bye!
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: dcss-coop.service: Deactivated successfully.
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: Stopped dcss-coop.service - DCSS Co-op WebTiles.
+Oct 27 19:37:33 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: dcss-coop.service: Consumed 17min 31.676s CPU time, 226.2M memory peak, 0B memory swap peak.
+Oct 27 19:37:55 dcss-coop-server.us-central1-a.c.chuk-437319.internal systemd[1]: Started dcss-coop.service - DCSS Co-op WebTiles.
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Loaded server configuration from: /opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/config.py
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Loading config overrides from: '/opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/config.yml'
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Using command-line supplied logfile: '<stdout>'
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,250 INFO: Command line override for daemonize: False
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,257 INFO: Reading 2 templates from /opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/games.d/base.yaml
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,257 INFO: Reading 8 games from /opt/dcss/releases/multiplayer-performance-01a17ea4/crawl-ref/source/webserver/games.d/base.yaml
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,313 INFO: Listening on http://127.0.0.1:8080
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,324 INFO: DCSS Webtiles server started! (PID: 367586)
+Oct 27 19:37:56 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:37:56,324 INFO: Webtiles (0.33-coop) running with Tornado 6.4 and Python 3.12.3
+Oct 27 19:38:22 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:22,088 WARN: Slow IO: render client.html: 0.292s
+Oct 27 19:38:40 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:40,868 INFO: #0     Socket opened from ip 174.45.102.158 (fd28, compression: native permessage-deflate).
+Oct 27 19:38:41 dcss-coop-server.us-central1-a.c.chuk-437319.internal python3[367586]: 2026-10-27 19:38:41,430 INFO: #0     Socket closed. (18.4 kilobytes sent, compression ratio 0.0%)

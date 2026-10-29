@@ -1,0 +1,31 @@
+<div id="rc_edit" class="floating_dialog" role="dialog" aria-modal="true" aria-labelledby="rc_settings_title" tabindex="-1" style="display: none;">
+  <form action="#" id="rc_edit_form" novalidate>
+    <header class="rc-settings-header">
+      <h2 id="rc_settings_title">Game settings</h2>
+      <p>Choose how you explore, fight and play. Each setting shows its base default. Saved changes apply the next time the game process starts.</p>
+      <p id="rc_settings_warning" hidden></p>
+      <p id="rc_settings_error" role="alert" hidden></p>
+    </header>
+    <div id="rc_settings_workspace" hidden>
+      <div class="rc-settings-toolbar">
+        <label class="rc-search-label" for="rc_settings_search">Find a setting</label>
+        <input id="rc_settings_search" type="search" placeholder="Search every category" autocomplete="off">
+        <label class="rc-changed-filter"><input id="rc_settings_changed" type="checkbox"> Customized only</label>
+        <span id="rc_settings_count" role="status"></span>
+      </div>
+      <div class="rc-settings-body">
+        <nav id="rc_settings_categories" aria-label="Settings categories"></nav>
+        <div class="rc-settings-scroll">
+          <div id="rc_settings_sections"></div>
+          <p id="rc_settings_empty" hidden>No settings match. Try another search or turn off Customized only.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="rc-settings-actions">
+      <span id="rc_settings_status" role="status" aria-live="polite"></span>
+      <button class="button" type="button" id="rc_settings_undo" disabled>Undo changes</button>
+      <button class="button hide_dialog" type="button" id="rc_settings_close">Close</button>
+      <button class="button" type="submit" id="rc_submit" disabled>Save settings</button>
+    </footer>
+  </form>
+</div>

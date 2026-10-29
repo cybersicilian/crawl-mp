@@ -1,0 +1,30 @@
+{
+  "name": "Vorr",
+  "status": "proposed theme for the existing portrait faith renderer",
+  "envelope": [60, 68],
+  "portrait": [42, 50],
+  "accent": "#b76b77",
+  "arch": "M8 55V25L12 17V11L22 8H38L48 11V17L52 25V55",
+  "base": "M5 55H25L28 58H32L35 55H55L52 60V65L48 67H12L8 65V60Z",
+  "seal": "M0-5Q-5 0-3 3L-1 5V-2M1-2V5L3 3Q5 0 0-5",
+  "sides": "M4 51V29L7 26M4 39H7L8 44V51M56 51V29L53 26M56 39H53L52 44V51",
+  "crown": "M12 17V11L20 6H25M48 17V11L40 6H35M28 5L30 2L32 5",
+  "setting": "M-10-4L-7-6H7L10-4L8 4L4 7H-4L-8 4Z",
+  "inset": "assets/vorr-altar-concept-v2.png",
+  "inset_status": "reduced concept placeholder pending native altar pixels",
+  "hero_reference": "../../../crawl-ref/source/rltiles/player/base/human_m.png",
+  "mote": "M0-2Q2.5 1 0 2Q-2.5 1 0-2Z",
+  "layers": [
+    { "name": "fittings", "tier": 2, "className": "faith-fitting", "path": "M8 54L10 52L12 54L10 56ZM48 54L50 52L52 54L50 56Z" },
+    { "name": "devotion", "tier": 3, "className": "faith-deity-ornament", "themePath": "sides" },
+    { "name": "crown", "tier": 4, "className": "faith-deity-crown", "themePath": "crown" },
+    { "name": "sanctuary", "tier": 5, "className": "faith-inner-arch", "path": "M11 50V27Q11 13 24 11M49 50V27Q49 13 36 11" },
+    { "name": "glory", "tier": 6, "className": "faith-halo", "path": "M2 54V26Q1 17 7 11M58 54V26Q59 17 53 11" }
+  ],
+  "gameplay_milestones": { "1": "Rupture", "3": "Blood Communion and Red Passage", "5": "The Great Letting" },
+  "state_policy": {
+    "penance": "dim inlays and fracture the pedestal; no motes",
+    "unknown": "uncertain arch without invented favor or motes",
+    "blood_supply": "separate from favor decoration"
+  }
+}

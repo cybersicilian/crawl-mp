@@ -31,6 +31,7 @@
 #include "mon-place.h"
 #include "mon-poly.h"
 #include "mon-tentacle.h"
+#include "party.h"
 #include "prompt.h"
 #include "religion.h"
 #include "state.h"
@@ -1315,11 +1316,33 @@ static void _monster_apply_noise(monster *mons,
     //
     // behaviour around the old breakpoint for R=8: p(3) = 66, p(4) = 55.
 
-    const int player_distance = grid_distance(apparent_source, you.pos());
+    const actor *alert_src = &you;
+    int player_distance = grid_distance(apparent_source, you.pos());
+    if (party::is_enabled())
+    {
+        player_distance = INT_MAX;
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (!party::is_player_on_current_floor(i) || party::is_player_downed(i))
+                continue;
+            const player &p = party::get_player(i);
+            const int d = grid_distance(apparent_source, p.pos());
+            if (d < player_distance)
+            {
+                player_distance = d;
+                if (i == party::active_slot())
+                    alert_src = &you;
+                else if (monster *proxy = party::get_proxy_monster(i))
+                    alert_src = proxy;
+            }
+        }
+        if (player_distance == INT_MAX)
+            player_distance = grid_distance(apparent_source, you.pos());
+    }
     const int alert_prob = max(player_distance * -90 / LOS_RADIUS + 100, 0);
 
     if (x_chance_in_y(alert_prob, 100))
-        behaviour_event(mons, ME_ALERT, &you, apparent_source); // shout + set you as foe
+        behaviour_event(mons, ME_ALERT, alert_src, apparent_source); // shout + set player as foe
     else
         behaviour_event(mons, ME_DISTURB, 0, apparent_source); // wake
 }

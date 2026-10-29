@@ -1,0 +1,65 @@
+enum: SP_OOZLE
+monster: MONS_JELLY
+name: Oozle
+short_name: Oz
+adjective: Ooziform
+genus: Ooze
+difficulty: Advanced
+difficulty_priority: 45
+species_flags:
+  - no_hair
+  - no_bones
+  - no_feet
+  - no_blood
+  - no_ears
+aptitudes:
+  xp: 0
+  hp: -1
+  mp_mod: 0
+  wl: 3
+  armour: false
+  short_blades: -2
+  long_blades: -2
+  axes: -2
+  maces_and_flails: -2
+  polearms: -2
+  staves: -2
+  ranged weapons: -2
+  throwing: -2
+  unarmed_combat: 1
+  stealth: 2
+  alchemy: 3
+  shapeshifting: 2
+  evocations: 1
+str: 9
+int: 9
+dex: 6
+levelup_stat_frequency: 4
+levelup_stats:
+  - str
+  - int
+mutations:
+  1:
+    MUT_SOFT_EQUIPMENT: 1
+    MUT_ACIDIC_TOUCH: 1
+    MUT_GELATINOUS_BODY: 2
+    MUT_AMORPHOUS_BODY: 1
+    MUT_POISON_RESISTANCE: 1
+    MUT_ACID_RESISTANCE: 1
+    MUT_HEAT_VULNERABILITY: 1
+  13:
+    MUT_GELATINOUS_BODY: 1
+recommended_jobs:
+  - alchemist
+  - monk
+  - fighter
+  - shapeshifter
+recommended_weapons:
+  - unarmed combat
+  - maces and flails
+  - staves
+walking_verb: Slid
+altar_action: spread out before
+child_name: Droplet
+orc_name: Oozorc
+orcification_msg: Your gel darkens, and two tusk-like points rise below your eyes.

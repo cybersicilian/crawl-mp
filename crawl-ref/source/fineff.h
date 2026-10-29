@@ -27,6 +27,8 @@ class monster;
 
 enum explosion_fineff_type : int {
     EXPLOSION_FINEFF_GENERIC,
+    EXPLOSION_FINEFF_AUTOMATON_BLAZEHEART,
+    EXPLOSION_FINEFF_AUTOMATON_CONCUSSION,
     EXPLOSION_FINEFF_CONCUSSION,
     EXPLOSION_FINEFF_PYROMANIA,
 };
@@ -99,4 +101,6 @@ void schedule_hypnogecko_tail_fineff();
 void schedule_ephemeral_weapon_end(item_def& wpn);
 
 void fire_final_effects();
+// A non-merging continuation for effects whose captured state is already fixed.
+void schedule_function_fineff(std::function<void()> effect);
 void clear_final_effects();

@@ -1,0 +1,9 @@
+{"runId": "acfaf0f7-3adc-432c-afee-246e995b5aa4", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native honey, Burrows and population contracts", "requestId": "34144e4e144d1e5cb5e3f06b066deb8737b7553f244973c20904e664590002a6", "status": "reserved", "reservedAt": 1793152329.696558}
+ 
+{"runId": "acfaf0f7-3adc-432c-afee-246e995b5aa4", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native honey, Burrows and population contracts", "requestedAt": 1793152329.775442, "supervisorPid": 52204, "status": "running", "reservation": true, "requestId": "34144e4e144d1e5cb5e3f06b066deb8737b7553f244973c20904e664590002a6", "startedAt": 1793152329.778677, "workerPid": 52207, "processGroup": 52207}
+Filters: [burrows],"select_exactly_one_of_each_lair_group","create_brentry_validity"
+Randomness seeded to: 3762174539
+===============================================================================
+All tests passed (1079 assertions in 14 test cases)
+
+{"runId": "acfaf0f7-3adc-432c-afee-246e995b5aa4", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native honey, Burrows and population contracts", "requestedAt": 1793152329.775442, "supervisorPid": 52204, "status": "released", "reservation": true, "requestId": "34144e4e144d1e5cb5e3f06b066deb8737b7553f244973c20904e664590002a6", "startedAt": 1793152329.778677, "workerPid": 52207, "processGroup": 52207, "exitCode": 0, "finishedAt": 1793152330.7314181, "supervisedProcessGroupGone": true, "releasedAt": 1793152330.816819, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/contracts-after-1/closure.json", "releaseEvidenceSha256": "c3ee4a14c84f9d622fd2afa295af759b21a6488887b5ceefd4c70a4c86ddc88e"}

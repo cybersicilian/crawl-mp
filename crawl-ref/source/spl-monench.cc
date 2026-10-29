@@ -20,6 +20,7 @@
 #include "message.h"
 #include "mon-tentacle.h"
 #include "spl-util.h"
+#include "spl-kimjoy.h"
 #include "stringutil.h" // make_stringf
 #include "terrain.h"
 #include "transform.h"
@@ -233,6 +234,10 @@ bool start_ranged_constriction(actor& caster, actor& target, int duration,
 {
     if (!caster.can_constrict(target, type))
         return false;
+
+    // A fresh set of roots is not necessarily Eringya's rootspike.
+    if (monster* victim = target.as_monster())
+        victim->props.erase(ROOTSPIKE_CONSTRICTION_KEY);
 
     if (you.see_cell(target.pos()))
     {

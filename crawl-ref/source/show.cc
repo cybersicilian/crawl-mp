@@ -21,6 +21,7 @@
 #include "libutil.h"
 #include "map-knowledge.h"
 #include "mon-place.h"
+#include "party.h"
 #include "state.h"
 #include "tag-version.h"
 #include "terrain.h"
@@ -251,9 +252,10 @@ void update_item_at(const coord_def &gp, bool wizard)
 
     item_def eitem;
 
-    if (you.see_cell(gp) || wizard)
+    if (you.see_cell(gp) || (party::is_enabled() && !party::multiplayer_enabled() && party::any_player_sees_cell(gp)) || wizard)
     {
-        const int item_grid = wizard ? env.igrid(gp) : you.visible_igrd(gp);
+        const int item_grid = (wizard || (party::is_enabled() && !you.see_cell(gp)))
+                              ? env.igrid(gp) : you.visible_igrd(gp);
         if (item_grid == NON_ITEM)
             return;
 
@@ -332,7 +334,25 @@ static bool _update_monster(monster* mons)
     _check_monster_pos(mons);
     const coord_def gp = mons->pos();
 
-    if (mons->visible_to(&you))
+    bool seen = mons->visible_to(&you);
+    if (!seen && party::is_enabled() && !party::multiplayer_enabled())
+    {
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == party::active_slot() || party::is_player_downed(slot))
+                continue;
+            const player &p = party::get_player(slot);
+            if (p.on_current_level
+                && p.where_are_you == you.where_are_you && p.depth == you.depth
+                && p.see_cell(gp) && mons->visible_to(&p))
+            {
+                seen = true;
+                break;
+            }
+        }
+    }
+
+    if (seen)
     {
         mons->ensure_has_client_id();
         record_monster_seen_at(gp, *mons);
@@ -358,7 +378,7 @@ static bool _update_monster(monster* mons)
 **/
 void show_update_at(const coord_def &gp, layers_type layers)
 {
-    if (you.see_cell(gp))
+    if (you.see_cell(gp) || (party::is_enabled() && !party::multiplayer_enabled() && party::any_player_sees_cell(gp)))
         env.map_knowledge(gp).clear_data();
     else if (!env.map_knowledge(gp).known())
         return;
@@ -414,6 +434,27 @@ void show_init(layers_type layers)
 
     for (vision_iterator ri(you); ri; ++ri)
         show_update_at(*ri, layers);
+
+    if (party::is_enabled() && !party::multiplayer_enabled())
+    {
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == party::active_slot() || party::is_player_downed(slot))
+                continue;
+            const player &p = party::get_player(slot);
+            if (!p.on_current_level
+                || p.where_are_you != you.where_are_you || p.depth != you.depth
+                || !in_bounds(p.pos()))
+            {
+                continue;
+            }
+            for (radius_iterator ri(p.pos(), LOS_DEFAULT); ri; ++ri)
+            {
+                if (p.see_cell(*ri))
+                    show_update_at(*ri, layers);
+            }
+        }
+    }
 }
 
 // Emphasis may change while off-level. This catches up.

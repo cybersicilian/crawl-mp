@@ -3,6 +3,9 @@
 #include "cloud-type.h"
 #include "spl-cast.h"
 
+spret cast_steam_barrier(int power, bool fail);
+void maintain_steam_barrier();
+
 struct bolt;
 class dist;
 class actor;
@@ -20,3 +23,7 @@ spret cast_freezing_cloud(int pow, const coord_def& target, bool fail);
 void holy_flames(monster* caster, actor* defender);
 
 spret scroll_of_poison(bool unknown);
+
+string get_evaporate_result_list(int potion);
+spret cast_evaporate(int pow, bolt& beem, int pot_idx, bool fail);
+

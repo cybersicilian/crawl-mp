@@ -1,0 +1,21 @@
+name: "Vespara"
+glyph: {char: "y", colour: yellow}
+flags: [unique, female, flies, no_skeleton]
+resists: {poison: -1}
+exp: 1500
+genus: killer_bee
+will: 80
+attacks:
+ - {type: sting, flavour: poison, damage: 28}
+hd: 12
+hp_10x: 1100
+ac: 12
+ev: 16
+spells: queen_bee
+speed: 15
+has_corpse: true
+shout: buzz
+intelligence: animal
+size: large
+shape: insect_winged
+tile: vespara
