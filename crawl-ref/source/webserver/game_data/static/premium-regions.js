@@ -1,15 +1,65 @@
 define(["jquery", "./cell-renderer-layers", "./premium-region-model", "./map_knowledge", "./options",
-        "./game-context", "./enums", "visual-presentation", "region-field", "./premium-terrain", "aura-distortion", "pixel-sampling"],
-function ($, layers, model, map, options, game, enums, presentation, regions, terrain, distortion, sampling) {
+        "./game-context", "./enums", "visual-presentation", "region-field", "./premium-terrain", "aura-distortion", "pixel-sampling", "idle-work"],
+function ($, layers, model, map, options, game, enums, presentation, regions, terrain, distortion, sampling, idle) {
     "use strict";
-    var groups, viewKey, lastRenderer, frames = new Map(), known = new Map(), warps = new Map();
+    var groups, viewKey, lastRenderer, frames = new Map(), known = new Map(), warps = new Map(), circleIndex = new Map(), none = [];
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    function clear() { groups = viewKey = null; frames.clear(); warps.clear(); }
+    function clear() { groups = viewKey = null; frames.clear(); warps.clear(); circleIndex.clear(); paint = null; queue.clear(); }
+    // Feature gates and the animation step are constant across one native
+    // paint; resolve them once per paint clock rather than once per cell.
+    var paint = null;
+    function context(renderer) {
+        var stamp = renderer.frame_time;
+        if (paint && paint.renderer === renderer && stamp !== undefined && paint.stamp === stamp) return paint;
+        var active = Boolean(renderer.view) && presentation.enabled("auras") && options.ready()
+            && options.get("tile_display_mode") === "tiles" && game.get_ui_state() === enums.ui.NORMAL;
+        paint = { renderer: renderer, stamp: stamp, active: active };
+        if (!active) return paint;
+        paint.animated = presentation.animated() && !motion.matches && options.get("tile_realtime_anim") && options.get("tile_misc_anim");
+        var now = Number.isFinite(stamp) ? stamp : window.performance.now();
+        paint.phase = paint.animated ? Math.floor(now / 100) : 0;
+        return paint;
+    }
+    function circleFrame(group, cx, cy, colourPhase) {
+        var key = [group.kind, group.center.x, group.center.y, cx, cy, colourPhase, "circle"].join(":"), image = frames.get(key);
+        if (image) return image;
+        image = document.createElement("canvas"); image.width = image.height = 32;
+        var ctx = image.getContext("2d"); if (!ctx) return null;
+        var pixels = ctx.createImageData(32, 32), profile = model.profiles[group.kind];
+        for (var py = 0; py < 32; py++) for (var px = 0; px < 32; px++) {
+            var sample = regions.circle(group, cx + (px + .5) / 32, cy + (py + .5) / 32, colourPhase / 5, profile);
+            var n = (py * 32 + px) * 4; pixels.data.set(sample.colour, n); pixels.data[n + 3] = sample.alpha * 255;
+        }
+        ctx.putImageData(pixels, 0, 0); bounded(frames, key, image);
+        return image;
+    }
+    // Aura rings for the next colour step are rendered between paints, so the
+    // step change costs a cache lookup per cell like any other frame. The queue
+    // outlives individual paints; later paints only add to it.
+    var queue = new Map(), queued = false;
+    function warm(remaining) {
+        var settings = paint, iterator = queue.entries(), next = iterator.next();
+        var colourPhase = settings ? Math.floor(settings.phase / 2) + 1 : null;
+        while (!next.done && remaining() > 0) {
+            var entry = next.value[1];
+            queue.delete(next.value[0]);
+            if (colourPhase !== null && settings.active)
+                entry.fields.forEach(function (group) { circleFrame(group, entry.cx, entry.cy, colourPhase); });
+            next = iterator.next();
+        }
+        queued = queue.size > 0;
+        return queued;
+    }
+    function bounded(cache, key, value) {
+        cache.set(key, value);
+        if (cache.size > 1024) cache.delete(cache.keys().next().value);
+        return value;
+    }
     function collect(renderer) {
         lastRenderer = renderer;
-        var key = [renderer.view.x, renderer.view.y, renderer.cols, renderer.rows].join(":");
-        if (groups && viewKey === key) return groups;
-        if (viewKey !== key) frames.clear();
+        if (groups && viewKey && viewKey.x === renderer.view.x && viewKey.y === renderer.view.y
+            && viewKey.cols === renderer.cols && viewKey.rows === renderer.rows) return groups;
+        var key = { x: renderer.view.x, y: renderer.view.y, cols: renderer.cols, rows: renderer.rows };
         var cells = [];
         for (var y = renderer.view.y - 2; y < renderer.view.y + renderer.rows + 2; y++)
             for (var x = renderer.view.x - 2; x < renderer.view.x + renderer.cols + 2; x++) {
@@ -18,20 +68,34 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
                 fields.forEach(function (field) { cells.push({ x: x, y: y, kind: field.kind }); });
             }
         groups = regions.create(cells); viewKey = key;
+        // Index circular fields by the cells they cover, so painting each cell
+        // is a lookup rather than a distance test against every field.
+        circleIndex.clear();
+        groups.forEach(function (group) {
+            if (!model.profiles[group.kind].circular) return;
+            var reach = group.radius * 1.27 + .71;
+            for (var cy = Math.floor(group.center.y - reach) - 1; cy <= Math.ceil(group.center.y + reach) + 1; cy++)
+                for (var cx = Math.floor(group.center.x - reach) - 1; cx <= Math.ceil(group.center.x + reach) + 1; cx++) {
+                    if (Math.hypot(cx + .5 - group.center.x, cy + .5 - group.center.y) >= reach) continue;
+                    var id = cx + ":" + cy, list = circleIndex.get(id);
+                    if (!list) circleIndex.set(id, list = []);
+                    list.push(group);
+                }
+        });
         if (known.size > 8192) known.clear();
         return groups;
     }
+    // Frames are cached in world space; a field's identity covers the partial
+    // view of it that a camera position produces.
+    function identity(group) { return [group.center.x, group.center.y, group.cells.size].join(","); }
     function draw(renderer, index, cx, cy, x, y) {
         var kind = model.kind(index);
-        if (!kind || !renderer.view || !presentation.enabled("auras") || !options.ready()
-            || options.get("tile_display_mode") !== "tiles" || game.get_ui_state() !== enums.ui.NORMAL) return false;
+        if (!kind || !context(renderer).active) return false;
         if (model.profiles[kind].circular) return true;
         var group = collect(renderer).find(function (entry) { return entry.kind === kind && entry.cells.has(cx + ":" + cy); });
         if (!group) return false;
-        var animated = presentation.animated() && !motion.matches && options.get("tile_realtime_anim") && options.get("tile_misc_anim");
-        var now = Number.isFinite(renderer.frame_time) ? renderer.frame_time : window.performance.now();
-        var phase = animated ? Math.floor(now / 200) : 0;
-        var key = [kind, cx, cy, phase].join(":"), image = frames.get(key);
+        var phase = Math.floor(paint.phase / 2);
+        var key = [kind, cx, cy, phase, identity(group)].join(":"), image = frames.get(key);
         if (!image) {
             image = document.createElement("canvas"); image.width = image.height = 32;
             var ctx = image.getContext("2d"); if (!ctx) return false;
@@ -41,8 +105,7 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
                 var n = (py * 32 + px) * 4;
                 pixels.data.set(sample.colour, n); pixels.data[n + 3] = sample.alpha * 255;
             }
-            ctx.putImageData(pixels, 0, 0); frames.set(key, image);
-            if (frames.size > 192) frames.delete(frames.keys().next().value);
+            ctx.putImageData(pixels, 0, 0); bounded(frames, key, image);
         }
         var size = renderer.scaled_size(); renderer.ctx.save();
         renderer.ctx.imageSmoothingEnabled = false; renderer.ctx.drawImage(image, x, y, size.width, size.height); renderer.ctx.restore();
@@ -50,9 +113,8 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
     }
     layers.addRegionPainter(draw);
     function circlesAt(renderer, cx, cy) {
-        return collect(renderer).filter(function (group) {
-            return model.profiles[group.kind].circular && Math.hypot(cx + .5 - group.center.x, cy + .5 - group.center.y) < group.radius * 1.27 + .71;
-        });
+        collect(renderer);
+        return circleIndex.get(cx + ":" + cy) || none;
     }
     function ripple(renderer, fields, cx, cy, x, y, phase, animated) {
         if (!animated || !presentation.enabled("distortion") || !fields.length) return;
@@ -88,35 +150,27 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
                 return { x: dx * scale, y: dy * scale };
             }));
             ctx.putImageData(pixels, 0, 0);
-            cached = { image: canvas, source: source }; warps.set(key, cached);
-            if (warps.size > 192) warps.delete(warps.keys().next().value);
+            cached = bounded(warps, key, { image: canvas, source: source });
         }
         var size = renderer.scaled_size(); renderer.ctx.drawImage(cached.image, x, y, size.width, size.height);
     }
     layers.addTerrainPainter(function (renderer, cx, cy, x, y) {
-        if (!renderer.view || !presentation.enabled("auras") || !options.ready() || options.get("tile_display_mode") !== "tiles"
-            || game.get_ui_state() !== enums.ui.NORMAL) return;
+        var settings = context(renderer);
+        if (!settings.active) return;
+        var fields = circlesAt(renderer, cx, cy);
+        if (!fields.length) return;
         var entry = map.get(cx, cy);
         if (!model.visible(entry)) return;
-        var fields = circlesAt(renderer, cx, cy), size = renderer.scaled_size();
-        var now = Number.isFinite(renderer.frame_time) ? renderer.frame_time : window.performance.now();
-        var animated = presentation.animated() && !motion.matches && options.get("tile_realtime_anim") && options.get("tile_misc_anim");
-        var phase = animated ? Math.floor(now / 100) : 0;
+        var size = renderer.scaled_size(), phase = settings.phase, animated = settings.animated;
         ripple(renderer, fields, cx, cy, x, y, phase, animated);
+        if (animated && idle) {
+            queue.set(cx + ":" + cy, { cx: cx, cy: cy, fields: fields });
+            if (!queued) { queued = true; idle.add("premium-regions", warm); }
+        }
+        var colourPhase = Math.floor(phase / 2);
         fields.forEach(function (group) {
-            var colourPhase = Math.floor(phase / 2);
-            var key = [group.kind, group.center.x, group.center.y, cx, cy, colourPhase, "circle"].join(":"), image = frames.get(key);
-            if (!image) {
-                image = document.createElement("canvas"); image.width = image.height = 32;
-                var ctx = image.getContext("2d"); if (!ctx) return;
-                var pixels = ctx.createImageData(32, 32), profile = model.profiles[group.kind];
-                for (var py = 0; py < 32; py++) for (var px = 0; px < 32; px++) {
-                    var sample = regions.circle(group, cx + (px + .5) / 32, cy + (py + .5) / 32, colourPhase / 5, profile);
-                    var n = (py * 32 + px) * 4; pixels.data.set(sample.colour, n); pixels.data[n + 3] = sample.alpha * 255;
-                }
-                ctx.putImageData(pixels, 0, 0); frames.set(key, image);
-                if (frames.size > 192) frames.delete(frames.keys().next().value);
-            }
+            var image = circleFrame(group, cx, cy, colourPhase);
+            if (!image) return;
             renderer.ctx.save(); renderer.ctx.imageSmoothingEnabled = false;
             renderer.ctx.drawImage(image, x, y, size.width, size.height); renderer.ctx.restore();
         });

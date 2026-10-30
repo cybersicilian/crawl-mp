@@ -18,9 +18,14 @@ define([], function () {
         });
         var rectangles = Array.from(chunks.values());
         return { rectangles: rectangles,
+            // Queried once per visible cell per paint; no temporaries.
             includes: function (x, y) {
-                var source = { left: x - reach, top: y - reach, right: x + reach + 1, bottom: y + reach + 1 };
-                return rectangles.some(function (rect) { return intersects(source, rect); });
+                var left = x - reach, top = y - reach, right = x + reach + 1, bottom = y + reach + 1;
+                for (var i = 0; i < rectangles.length; i++) {
+                    var rect = rectangles[i];
+                    if (left < rect.right && right > rect.left && top < rect.bottom && bottom > rect.top) return true;
+                }
+                return false;
             } };
     }
     return { plan: plan };

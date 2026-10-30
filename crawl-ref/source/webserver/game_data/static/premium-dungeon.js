@@ -98,7 +98,18 @@ function ($, renderer, options, enums, presentation, painting, terrain, field, e
     $(document).on("game_init.premiumDungeon", function () { clear(); running = true; })
         .on("game_cleanup.premiumDungeon game_preinit.premiumDungeon game_connection_lost.premiumDungeon", function () {
             running = false; clear();
-        }).on("map_knowledge_changed.premiumDungeon map_knowledge_cleared.premiumDungeon dungeon_tiles_changed.premiumDungeon game_camera_changed.premiumDungeon game_ui_changed.premiumDungeon", invalidate)
+        }).on("map_knowledge_changed.premiumDungeon map_knowledge_cleared.premiumDungeon game_camera_changed.premiumDungeon game_ui_changed.premiumDungeon hud_workspace_changed.premiumDungeon", invalidate)
+        .on("dungeon_tiles_changed.premiumDungeon", function () {
+            // Tile repaints do not move the light field. Only follow the native
+            // canvas when its backing size or placement changed underneath.
+            if (!canvas || !renderer.element) return;
+            var element = renderer.element;
+            if (canvas.width !== element.width || canvas.height !== element.height
+                || canvas.style.left !== (element.style.left || element.offsetLeft + "px")
+                || canvas.style.top !== (element.style.top || element.offsetTop + "px")
+                || canvas.style.width !== (element.style.width || element.clientWidth + "px")
+                || canvas.style.height !== (element.style.height || element.clientHeight + "px")) invalidate();
+        })
         .on("visual_presentation_changed.premiumDungeon", function () { updateButton(); invalidate(); })
         .on("visibilitychange.premiumDungeon", invalidate);
     $(window).on("resize.premiumDungeon", invalidate);

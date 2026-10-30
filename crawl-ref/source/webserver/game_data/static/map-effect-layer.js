@@ -4,13 +4,13 @@ define([], function () {
     // Reusable, bounded transient canvas. Callers supply map visibility and paint;
     // no engine, hero or input rules belong in the layer.
     function create(settings) {
-        var renderer, canvas, context, frame = null, effects = [], enabled = false;
+        var renderer, canvas, context, frame = null, effects = [], enabled = false, placed = null, clipped = null;
         var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
         function clear() {
             if (frame !== null) window.cancelAnimationFrame(frame);
             frame = null; effects = [];
             if (canvas) canvas.remove();
-            canvas = context = null;
+            canvas = context = null; placed = clipped = null;
         }
         function allowed() { return enabled && !document.hidden && !motion.matches; }
         function visible(pos) {
@@ -36,11 +36,18 @@ define([], function () {
             }
             if (canvas.width !== renderer.element.width) canvas.width = renderer.element.width;
             if (canvas.height !== renderer.element.height) canvas.height = renderer.element.height;
-            Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px",
-                width: bounds.width + "px", height: bounds.height + "px" });
+            // Only write placement when it changed: style writes force layout
+            // for every other overlay reading geometry in the same frame.
+            var geometry = [bounds.left, bounds.top, bounds.width, bounds.height].join(":");
+            if (geometry !== placed) {
+                placed = geometry;
+                Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px",
+                    width: bounds.width + "px", height: bounds.height + "px" });
+            }
             var clip = settings.clipBounds && settings.clipBounds();
-            canvas.style.clipPath = clip ? "inset(" + [Math.max(0, clip.top - bounds.top), Math.max(0, bounds.right - clip.right),
+            var inset = clip ? "inset(" + [Math.max(0, clip.top - bounds.top), Math.max(0, bounds.right - clip.right),
                 Math.max(0, bounds.bottom - clip.bottom), Math.max(0, clip.left - bounds.left)].map(function (n) { return n + "px"; }).join(" ") + ")" : "none";
+            if (inset !== clipped) { clipped = inset; canvas.style.clipPath = inset; }
             context.clearRect(0, 0, canvas.width, canvas.height);
             effects.forEach(function (effect) {
                 // Check both ends: trails must not expose a previously hidden origin.

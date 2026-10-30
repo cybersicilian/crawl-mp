@@ -15,21 +15,40 @@ function ($, grading, materials, nativeArt, regions, tiles, sprites, wilds, tree
     }) }));
     var profiles = { floor: floor, wall: terrain, feat: features, main: actors, player: actors };
     var cache = grading.create(), painted = materials.create(), objects = sprites.create();
+    var ids = ["illustrated_materials", environment.ground.id, environment.sprites.id];
+    // The composed atlas for a texture is reused across draws while the
+    // atlas, the painted sheets and the pack stay the same.
+    var memo = {}, sheets = null;
+    function current(sheet, index) { return Boolean(sheet) && sheet.isConnected !== false && sheet.id === ids[index]; }
+    function ready() {
+        if (!sheets || !sheets.every(current)) sheets = ids.map(function (id) { return document.getElementById(id); });
+        var state = 0;
+        for (var i = 0; i < sheets.length; i++)
+            if (sheets[i] && sheets[i].complete && sheets[i].naturalWidth) state |= 1 << i;
+        return state;
+    }
     function image(id, source) {
         if (!texturePack.illustrated()) return source;
+        var loaded = Boolean(source && source.complete), state = ready(), entry = memo[id];
+        if (entry && entry.source === source && entry.loaded === loaded && entry.state === state) return entry.result;
         var graded = cache.image(source, profiles[id]);
-        var stone = regions[id] ? painted.image(graded, document.getElementById("illustrated_materials"), regions[id]) : graded;
-        var ground = wilds[id] ? painted.image(stone, document.getElementById(environment.ground.id), wilds[id]) : stone;
-        return trees[id] ? objects.image(ground, document.getElementById(environment.sprites.id), trees[id]) : ground;
+        var stone = regions[id] ? painted.image(graded, sheets[0], regions[id]) : graded;
+        var ground = wilds[id] ? painted.image(stone, sheets[1], wilds[id]) : stone;
+        var result = trees[id] ? objects.image(ground, sheets[2], trees[id]) : ground;
+        memo[id] = { source: source, loaded: loaded, state: state, result: result };
+        return result;
     }
+    function reset() { memo = {}; sheets = null; }
     $(document).on("game_init.artDirection", function () {
-        ["illustrated_materials", environment.ground.id, environment.sprites.id].forEach(function (id) {
+        reset();
+        ids.forEach(function (id) {
             var sheet = document.getElementById(id);
             if (sheet && !sheet.complete) $(sheet).one("load.artDirection", function () {
                 $(document).trigger("art_materials_ready");
             });
         });
     });
+    $(document).on("texture_pack_changed.artDirection art_materials_ready.artDirection", reset);
     nativeArt.setImageTransform(image);
     return { image: image };
 });

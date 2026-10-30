@@ -1,7 +1,7 @@
 /* Smooth irradiance on a small cached grid. No main-canvas readback or game state. */
 define(["light-field-sampling", "light-emission"], function (sampling, emission) {
     "use strict";
-    var cache = new WeakMap(), resolution = 8;
+    var cache = new WeakMap(), clips = new WeakMap(), resolution = 8;
     function prepare(light) {
         if (cache.has(light)) return cache.get(light);
         if (!light.receivers.length) return null;
@@ -29,15 +29,31 @@ define(["light-field-sampling", "light-emission"], function (sampling, emission)
         var entry = { canvas: canvas, left: left, top: top, cols: right - left, rows: bottom - top };
         cache.set(light, entry); return entry;
     }
+    // A light's receiver clip only changes with the camera or cell size, so
+    // the path is kept per light rather than rebuilt from its cells each frame.
+    function clipTo(ctx, light, coords, key) {
+        if (typeof Path2D !== "function") {
+            ctx.beginPath();
+            light.receivers.forEach(function (cell) { var p = coords(cell.x, cell.y); ctx.rect(p.x, p.y, p.width, p.height); });
+            ctx.clip(); return;
+        }
+        var entry = clips.get(light);
+        if (!entry || entry.key !== key) {
+            entry = { key: key, path: new Path2D() };
+            light.receivers.forEach(function (cell) { var p = coords(cell.x, cell.y); entry.path.rect(p.x, p.y, p.width, p.height); });
+            clips.set(light, entry);
+        }
+        ctx.clip(entry.path);
+    }
     function paint(ctx, lights, coords, now, animated) {
         ctx.save(); ctx.globalCompositeOperation = "screen"; ctx.imageSmoothingEnabled = true;
+        var origin = coords(0, 0) || {}, key = [origin.x, origin.y, origin.width, origin.height].join(":");
         lights.forEach(function (light) {
             var image = prepare(light);
             if (!image) return;
             var point = coords(image.left, image.top);
-            ctx.save(); ctx.beginPath();
-            light.receivers.forEach(function (cell) { var p = coords(cell.x, cell.y); ctx.rect(p.x, p.y, p.width, p.height); });
-            ctx.clip();
+            ctx.save();
+            clipTo(ctx, light, coords, key);
             ctx.globalAlpha = Math.min(1, emission.level(light, now, animated) / 1.12);
             ctx.drawImage(image.canvas, point.x, point.y, point.width * image.cols, point.height * image.rows);
             ctx.restore();
