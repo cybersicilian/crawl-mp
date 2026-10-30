@@ -40,7 +40,7 @@ void player_attempted_attack(bool trigger_effects, bool maintain_statuses = true
 beam_type get_beam_resist_type(beam_type flavour);
 int beam_resistible_fraction(beam_type flavour);
 int resist_adjust_damage(const actor *defender, beam_type flavour,
-                         int rawdamage);
+                         int rawdamage, const actor* attacker = nullptr);
 
 int apply_chunked_AC(int dam, int ac);
 

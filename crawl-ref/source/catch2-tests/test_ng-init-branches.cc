@@ -45,6 +45,26 @@ TEST_CASE("greenwood witch joins the Forest with its original spell kit",
                           { return slot.spell == wanted; }));
 }
 
+TEST_CASE("Orb Demons join Zot with their destructive and mobile spell kit",
+          "[orb-demon]")
+{
+    init_monsters();
+    const monsterentry* demon = get_monster_data(MONS_ORB_DEMON);
+    REQUIRE(demon != nullptr);
+    CHECK(string(demon->name) == "Orb Demon");
+    CHECK(demon->sec == MST_ORB_DEMON);
+    CHECK(demon->attack[0].flavour == AF_BLINK);
+    CHECK(demon->attack[0].damage == 20);
+    CHECK(monster_in_population(BRANCH_ZOT, MONS_ORB_DEMON));
+    const auto info = monster_info(MONS_ORB_DEMON, MONS_ORB_DEMON);
+    const auto spells = get_unique_spells(info);
+    for (spell_type wanted : {SPELL_BOLT_OF_DEVASTATION, SPELL_DEFLECT_MISSILES,
+                              SPELL_IOOD, SPELL_BLINK_RANGE, SPELL_DIG})
+        CHECK(std::any_of(spells.begin(), spells.end(),
+                          [wanted](const mon_spell_slot& slot)
+                          { return slot.spell == wanted; }));
+}
+
 TEST_CASE( "select_exactly_one_of_each_lair_group", "[single-file]" ) {
     FixedVector<level_id, NUM_BRANCHES> candidate_brentry;
 

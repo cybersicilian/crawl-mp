@@ -1,4 +1,4 @@
-define(["item-properties"], function (properties) {
+define(["item-properties", "./effect-icon-art"], function (properties, effects) {
     "use strict";
 
     var rules = [
@@ -54,7 +54,7 @@ define(["item-properties"], function (properties) {
         if (options.glyph) {
             var current = element.querySelector(":scope > .tt-icon");
             if (!current || current.getAttribute("data-ui-icon") !== options.glyph) {
-                var glyph = properties.icon(options.glyph);
+                var glyph = icon(options.glyph);
                 if (current) current.replaceWith(glyph);
                 else element.insertBefore(glyph, element.firstChild);
             }
@@ -88,7 +88,15 @@ define(["item-properties"], function (properties) {
         element.setAttribute("data-tip-body", view.description || "");
         element.setAttribute("data-tip-meta", meta);
         element.setAttribute("data-effect-key", view.key);
-        return frame(element, { glyph: view.key === "unknown" ? "question" : resolve(view.name),
+        if (Number.isFinite(view.duration) && view.duration > 0) {
+            var timer = document.createElement("span");
+            timer.className = "status-icon-duration";
+            timer.setAttribute("aria-hidden", "true");
+            timer.textContent = Math.ceil(view.duration) + "t";
+            element.classList.add("has-duration");
+            element.appendChild(timer);
+        }
+        return frame(element, { glyph: effects.resolve(view) || "question",
             tone: tone, expiring: view.expiring });
     }
 
@@ -99,7 +107,8 @@ define(["item-properties"], function (properties) {
         if (root.matches && root.matches(selector)) elements.unshift(root);
         elements.forEach(function (el) {
             if (el.classList.contains("status-icon-frame") && el.getAttribute("data-status-decoration") !== "auto") return;
-            var name = resolve(el.getAttribute("data-tip-title") || el.textContent);
+            var label = el.getAttribute("data-tip-title") || el.textContent;
+            var name = effects.resolve({ name: label }) || resolve(label);
             el.setAttribute("data-status-decoration", "auto");
             el.classList.toggle("status-icon-labelled", Boolean(el.textContent.trim()));
             frame(el, { glyph: name, tone: el.classList.contains("is-bad") ? "bad"
@@ -108,6 +117,8 @@ define(["item-properties"], function (properties) {
         });
     }
 
-    return { icon: properties.icon, resolve: resolve, frame: frame, effect: effect, decorate: decorate,
-        names: properties.iconNames, has: properties.hasIcon };
+    function icon(name) { return effects.has(name) ? effects.icon(name) : properties.icon(name); }
+    return { icon: icon, resolve: resolve, frame: frame, effect: effect, decorate: decorate,
+        effectKey: effects.resolve, effectArt: function (view) { return effects.icon(effects.resolve(view)) || properties.icon("question"); },
+        names: properties.iconNames, has: function (name) { return effects.has(name) || properties.hasIcon(name); } };
 });

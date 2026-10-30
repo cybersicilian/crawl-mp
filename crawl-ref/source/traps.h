@@ -27,6 +27,8 @@ class monster;
 bool trap_is_bad_for_player(dungeon_feature_type trap);
 bool trap_is_safe(dungeon_feature_type trap, const actor* act = 0);
 bool floor_trap_suppressed(dungeon_feature_type trap, bool in_vault);
+bool floor_trap_suppressed_at(const coord_def& pos);
+bool place_agraphede_web(const coord_def& pos, bool temporary);
 void trigger_trap(actor& triggerer);
 
 bool chaos_lace_criteria(monster* mon);

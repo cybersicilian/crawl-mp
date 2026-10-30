@@ -89,6 +89,8 @@ class StagingSocket:
 class StagingWeaponTests(unittest.TestCase):
     def setUp(self):
         self.socket = StagingSocket()
+        self.socket.process = None
+        self.socket.start_crawl = Mock(side_effect=lambda game_id, **kwargs: setattr(self.socket, "process", Mock()))
         self.room = {"room_id": "room-host", "host": "Host", "game_id": "coop",
                      "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
         self.room["slots"][0]["username"] = "Host"
@@ -156,13 +158,31 @@ class StagingWeaponTests(unittest.TestCase):
         self.assertTrue(args["slot_specs"][1].endswith("/ghost"))
 
     def test_campaign_rules_reach_the_native_launch(self):
-        self.socket.party_room_settings(rune_locks=False, trap_mode="floor")
+        self.socket.party_room_settings(rune_locks=False, trap_mode="floor", shared_fate=True)
         with tempfile.TemporaryDirectory() as directory:
             self.socket.rc_path = str(Path(directory, "Host.rc"))
             self.socket.party_room_launch()
         spec = ws_handler.USER_PARTY_SPECS["Host"]["party_arg"]
         self.assertIn("runelocks=off", spec)
         self.assertIn("traps=floor", spec)
+        self.assertIn("shared_fate=on", spec)
+
+    def test_shared_fate_defaults_off_and_host_can_disable_it(self):
+        self.assertNotIn("shared_fate", self.room)
+        self.socket.party_room_settings(shared_fate=True)
+        self.socket.party_room_settings(shared_fate="false")
+        self.assertIs(self.room["shared_fate"], True)
+        self.socket.party_room_settings(shared_fate=False)
+        with tempfile.TemporaryDirectory() as directory:
+            self.socket.rc_path = str(Path(directory, "Host.rc"))
+            self.socket.party_room_launch()
+        self.assertNotIn("shared_fate=on", ws_handler.USER_PARTY_SPECS["Host"]["party_arg"])
+
+    def test_guest_cannot_change_shared_fate(self):
+        self.socket.username = "Guest"
+        self.room["slots"][1].update(state="player", username="Guest")
+        self.socket.party_room_settings(room_id="room-host", shared_fate=True)
+        self.assertNotIn("shared_fate", self.room)
 
     def test_launch_rechecks_a_forged_demigod_paladin_selection(self):
         with tempfile.TemporaryDirectory() as directory:

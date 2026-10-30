@@ -2392,6 +2392,14 @@ ENDMAP
 #       a somewhat generic theme. Kept here for a certain ease of reference.
 #
 
+NAME:   caravan_mercenary_shop
+DEPTH:  D:4-, Depths, Orc, Elf, Shoals, Snake, Vaults
+WEIGHT: 1
+KFEAT:  S = mercenary shop
+MAP
+S
+ENDMAP
+
 # 3 shops
 NAME:    minmay_shop_grove
 TAGS:    extra luniq_floating_shops transparent

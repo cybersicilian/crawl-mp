@@ -50,6 +50,7 @@
 #include "mapdef.h"
 #include "mapmark.h"
 #include "message.h"
+#include "mercenary-transit.h"
 #include "mon-abil.h"
 #include "mon-behv.h"
 #include "mon-cast.h"
@@ -67,6 +68,7 @@
 #include "religion.h"
 #include "shout.h"
 #include "spl-damage.h"
+#include "spl-goditem.h"
 #include "spl-monench.h"
 #include "spl-other.h"
 #include "spl-summoning.h"
@@ -513,7 +515,52 @@ void maybe_drop_monster_organ(monster_type mon, monster_type orig,
  *                  gold, if the player worships Gozag, or it may be the
  *                  corpse.
  */
-item_def* place_corpse_or_gold(const monster& mons, bool force, bool no_corpse)
+potion_type wyrm_distilled_potion(const monster& mons)
+{
+    // The fork contained several removed potion types. Preserve each supported
+    // dispellable effect and omit effects without a current potion equivalent.
+    static const pair<enchant_type, potion_type> mapping[] = {
+        { ENCH_HASTE, POT_HASTE },
+        { ENCH_MIGHT, POT_MIGHT },
+        { ENCH_RESISTANCE, POT_RESISTANCE },
+        { ENCH_INVIS, POT_INVISIBILITY },
+    };
+    vector<potion_type> candidates;
+    for (const auto& entry : mapping)
+    {
+        if (!mons.has_ench(entry.first))
+            continue;
+        if (entry.first == ENCH_HASTE && mons.has_ench(ENCH_GOZAG_INCITE))
+            continue;
+        if (entry.first == ENCH_INVIS && mons_class_flag(mons.type, M_INVIS))
+            continue;
+        candidates.push_back(entry.second);
+    }
+    return candidates.empty() ? NUM_POTIONS : candidates[random2(candidates.size())];
+}
+
+static void _wyrm_extract_corpse(const monster& mons, item_def& corpse)
+{
+    if (!have_passive(passive_t::wyrm_quicksilver)
+        || !mons_gives_xp(mons, you) || !monster_is_debuffable(mons))
+        return;
+    const potion_type potion = wyrm_distilled_potion(mons);
+    if (potion == NUM_POTIONS)
+        return;
+    corpse.clear();
+    corpse.base_type = OBJ_POTIONS;
+    corpse.sub_type = potion;
+    corpse.quantity = 1;
+    corpse.rnd = 1 + random2(255);
+    origin_set_monster(corpse, &mons);
+    item_colour(corpse);
+    identify_item(corpse);
+    mprf(MSGCH_GOD, "The Great Wyrm extracts %s from the remains.",
+         corpse.name(DESC_A).c_str());
+}
+
+item_def* place_corpse_or_gold(const monster& mons, bool force, bool no_corpse,
+                              int wyrm_owner_slot)
 {
     if (mons.is_abjurable()
         || mons.flags & MF_BANISHED
@@ -605,6 +652,17 @@ item_def* place_corpse_or_gold(const monster& mons, bool force, bool no_corpse)
         return nullptr;
     }
 
+    if (!force && !goldify && wyrm_owner_slot >= 0)
+    {
+        if (party::is_enabled())
+        {
+            party::scoped_player_context context(wyrm_owner_slot);
+            _wyrm_extract_corpse(mons, corpse);
+        }
+        else
+            _wyrm_extract_corpse(mons, corpse);
+    }
+
     if (in_bounds(dest))
         move_item_to_grid(&o, dest, !mons.swimming());
 
@@ -612,7 +670,7 @@ item_def* place_corpse_or_gold(const monster& mons, bool force, bool no_corpse)
         return nullptr;
 
     // Preserve the corpses of your followers (helps to tell where they died)
-    if (mons.type == MONS_ORC_APOSTLE)
+    if (corpse.base_type == OBJ_CORPSES && mons.type == MONS_ORC_APOSTLE)
         corpse.props[CORPSE_NEVER_DECAYS] = true;
 
     return &env.item[o];
@@ -693,6 +751,77 @@ static bool _is_pet_kill(killer_type killer, int i)
            && (me.who == KC_YOU || me.who == KC_FRIENDLY)
            || me2.ench == ENCH_FRENZIED
               && (me2.who == KC_YOU || me2.who == KC_FRIENDLY);
+}
+
+int wyrm_credited_killer_slot(killer_type killer, int killer_index)
+{
+    if (YOU_KILL(killer))
+        return party::is_enabled() ? party::active_slot() : 0;
+    if (!_is_pet_kill(killer, killer_index))
+        return -1;
+    if (!party::is_enabled())
+        return 0;
+    // A shared-world pet must have a known owner; otherwise crediting the
+    // currently active member would give another player's god its power.
+    if (invalid_monster_index(killer_index))
+        return -1;
+    const monster& attacker = env.mons[killer_index];
+    if (party::is_proxy_monster(attacker))
+        return party::proxy_slot(attacker);
+    return party::slot_for_mid(attacker.summoner);
+}
+
+// The source god describes vermin emerging from corpses but did not implement
+// that passive. Keep its population bounded and tied to the credited owner.
+static bool _agraphede_corpse_vermin(const monster& victim, bool guaranteed)
+{
+    if (!have_passive(passive_t::agraphede_vermin) || victim.is_summoned()
+        || victim.is_unrewarding() || victim.wont_attack()
+        || !(victim.holiness() & MH_NATURAL) || !you.can_see(victim))
+        return false;
+    int owned = 0;
+    for (monster_iterator mi; mi; ++mi)
+        if (mi->alive() && mi->summoner == you.mid
+            && mi->props.exists("agraphede_corpse_vermin"))
+            ++owned;
+    if (owned >= 3 || (!guaranteed && !one_chance_in(4)))
+        return false;
+
+    const monster_type kind = coinflip() ? MONS_SCORPION : MONS_JUMPING_SPIDER;
+    coord_def spot;
+    int choices = 0;
+    for (radius_iterator ri(victim.pos(), 2, C_SQUARE, LOS_NO_TRANS); ri; ++ri)
+    {
+        if (actor_at(*ri) || party::player_at(*ri) || cell_is_solid(*ri)
+            || !monster_habitable_grid(kind, *ri))
+            continue;
+        if (one_chance_in(++choices))
+            spot = *ri;
+    }
+    if (!choices)
+        return false;
+    mgen_data mg(kind, BEH_FRIENDLY, spot, you.mindex(),
+                 MG_FORCE_PLACE | MG_FORCE_BEH, GOD_AGRAPHEDE);
+    mg.set_summoned(&you, SPELL_NO_SPELL, summ_dur(2), false);
+    monster* vermin = create_monster(mg);
+    if (!vermin)
+        return false;
+    vermin->props["agraphede_corpse_vermin"] = true;
+    simple_god_message(" draws a brief-lived vermin from the remains.");
+    return true;
+}
+
+bool agraphede_corpse_vermin(const monster& victim, int owner_slot,
+                             bool guaranteed)
+{
+    if (owner_slot < 0 || owner_slot >= party::player_count())
+        return false;
+    if (party::is_enabled())
+    {
+        party::scoped_player_context context(owner_slot);
+        return _agraphede_corpse_vermin(victim, guaranteed);
+    }
+    return _agraphede_corpse_vermin(victim, guaranteed);
 }
 
 // Returns whether damage from a given agent counts as a 'player source' for
@@ -2206,7 +2335,9 @@ item_def* monster_die(monster& mons, const actor *killer, bool silent, bool moun
         kindex = kmons->mindex();
     }
 
-    return monster_die(mons, ktype, kindex, silent, mount_death);
+    const int player_slot = killer && killer->is_player()
+        ? party::slot_for_mid(killer->mid) : -1;
+    return monster_die(mons, ktype, kindex, silent, mount_death, false, player_slot);
 }
 
 /**
@@ -2379,7 +2510,7 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
                     {
                         if (hp_heal > 1)
                             party::heal_or_buff_party_member(i, hp_heal / 2);
-                        if (mp_heal > 1 && ally.religion != GOD_TROG)
+                        if (mp_heal > 1 && ally.uses_magic_reserve() && ally.religion != GOD_TROG)
                         {
                             ally.magic_points = min(ally.max_magic_points,
                                                     ally.magic_points + mp_heal / 2);
@@ -2426,7 +2557,7 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
         }
 
         bool healing = hp_heal && you.hp < you.hp_max && !you.duration[DUR_DEATHS_DOOR];
-        bool powering = mp_heal && you.magic_points < you.max_magic_points;
+        bool powering = you.uses_magic_reserve() && mp_heal && you.magic_points < you.max_magic_points;
 
         if (feed && (healing || powering))
         {
@@ -2608,11 +2739,13 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
  * @param mount_death The death of the mount of a mounted monster (riders).
  * @param reset  Whether to reset the monster immediately. If false (default),
  *               the monster will be reset at the end of the turn.
+ * @param credited_player_slot Optional actual player source for owner-scoped
+ *               effects when damage resolves during another party member's turn.
  * @returns a pointer to the created corpse, possibly null
  */
 item_def* monster_die(monster& mons, killer_type killer,
                       int killer_index, bool silent, bool mount_death,
-                      bool reset)
+                      bool reset, int credited_player_slot)
 {
     ASSERT(!invalid_monster(&mons));
 
@@ -2636,7 +2769,8 @@ item_def* monster_die(monster& mons, killer_type killer,
             // Set this monster's HP to 1 so that the parent cleans it up.
             mons.hit_points = 1;
 
-            monster_die(*parent, killer, killer_index, silent, mount_death, reset);
+            monster_die(*parent, killer, killer_index, silent, mount_death, reset,
+                        credited_player_slot);
 
             return nullptr;
         }
@@ -3653,7 +3787,10 @@ item_def* monster_die(monster& mons, killer_type killer,
 
     item_def* corpse = nullptr;
     if (count_kill && !was_banished && !spectralised && !corpse_consumed)
-        corpse = place_corpse_or_gold(mons, false, suppress_corpse);
+        corpse = place_corpse_or_gold(mons, false, suppress_corpse,
+                                      credited_player_slot != -1 && YOU_KILL(killer)
+                                        ? credited_player_slot
+                                        : wyrm_credited_killer_slot(killer, killer_index));
 
     if (mons_is_rider(mons.type) && !was_banished)
     {
@@ -3666,6 +3803,13 @@ item_def* monster_die(monster& mons, killer_type killer,
         ? _calc_player_experience(&mons) : 0;
     const bool ordinary_kill = gives_player_xp && !mons.is_summoned()
         && !mons.is_unrewarding() && !party::is_proxy_monster(mons);
+
+    if (corpse && corpse->is_type(OBJ_CORPSES, CORPSE_BODY) && ordinary_kill)
+    {
+        const int owner_slot = credited_player_slot != -1 && YOU_KILL(killer)
+            ? credited_player_slot : wyrm_credited_killer_slot(killer, killer_index);
+        agraphede_corpse_vermin(mons, owner_slot);
+    }
 
     if (!crawl_state.game_is_arena() && count_kill && !in_transit)
         you.kills.record_kill(&mons, killer, pet_kill);
@@ -3741,7 +3885,9 @@ item_def* monster_die(monster& mons, killer_type killer,
 
     ASSERT(!invalid_monster(&mons));
 
-    if (mons.is_divine_companion() && real_death)
+    if (is_hired_mercenary(mons) && real_death)
+        remove_companion(&mons);
+    else if (mons.is_divine_companion() && real_death)
     {
         remove_companion(&mons);
         if (mons_is_hepliaklqana_ancestor(mons.type))

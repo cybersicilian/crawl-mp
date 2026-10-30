@@ -1,5 +1,5 @@
-define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade"],
-function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade) {
+define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade", "heat-help"],
+function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade, heatHelp) {
     "use strict";
 
     var party_slot_colours = model.colours;
@@ -140,11 +140,19 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 .text("Free Explore" + (data.multiplayer ? region_tag + (active_member && active_member.queued_action ? " · Queued" : "") : ""));
         }
         var activity = active_member && active_member.activity;
+        var queued = active_member && active_member.queued_action;
+        var activity_label = { yield: "yielding", rest: "resting", explore: "exploring", travel: "travel" }[activity] || activity;
         $("#party_yield_btn").prop("hidden", !data.multiplayer || client.is_watching())
-            .prop("disabled", !active_member || active_member.alive === false)
+            .prop("disabled", !active_member || active_member.alive === false || active_member.ghost_haunting)
             .attr("aria-pressed", String(activity === "yield"))
-            .text(activity ? "Stop " + ({ yield: "yielding", rest: "resting", explore: "exploring", travel: "travel" }[activity] || activity) : "Yield");
+            .attr("data-tip-title", activity ? "Stop " + activity_label : queued ? "Clear queue" : "Yield")
+            .attr("data-tip-body", activity ? "Stop this hero's automatic activity and clear queued actions."
+                : queued ? "Clear this hero's queued actions. An action already executing keeps its native completion."
+                : "Automatically wait in place until you stop yielding or become threatened. Your floor advances with these waits.")
+            .text(activity ? "Stop " + activity_label : queued ? "Clear queue" : "Yield");
         if (activity) $("#party_banner_mode").append(" · " + ({ yield: "Yielding", rest: "Resting", explore: "Exploring", travel: "Travelling" }[activity] || activity));
+        if (data.multiplayer && data.shared_fate)
+            $("#party_banner_mode").append(" · Shared Fate");
 
         if (client.is_party_member && client.is_party_member())
         {
@@ -260,8 +268,22 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                     .attr("data-tip-body", "Current " + resource.label + ": " + model.display(resource.value) + " / " + model.display(resource.max));
                 $mpWrap.append($("<div class='party-mp-fill'></div>").css("width", resource.percent + "%"));
                 $mpWrap.append($("<div class='party-bar-label'></div>").text(resource.label + " " + model.display(resource.value) + "/" + model.display(resource.max)));
+                if (resource.label === "Heat") {
+                    heatHelp.apply($mpWrap[0], resource);
+                    $mpWrap.attr({ id: "party_heat_" + m.slot,
+                        "aria-description": "Hover, tap or press Enter for heat guidance." });
+                    $mpWrap.on("click keydown keypress keyup", function (event) {
+                        if (event.key !== "Tab") event.stopPropagation();
+                        if (event.type === "click" || event.type === "keydown" && ["Enter", " "].includes(event.key)) {
+                            event.preventDefault();
+                            if (window.dcss_tooltips) window.dcss_tooltips.show(this);
+                        }
+                    });
+                }
 
                 $bars.append($hpWrap).append($mpWrap);
+                if (resource.label === "Heat")
+                    $bars.append($("<span class='party-heat-guidance'></span>").text(heatHelp.caption(resource)));
                 $card.append($bars);
 
                 var mv_aut = m.move_aut, ak_aut = m.atk_aut;

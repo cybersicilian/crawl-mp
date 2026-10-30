@@ -29,12 +29,12 @@ function fixture(ratio) {
         glyph_mode_update_font_metrics() { this.glyph_mode_font_width = 9; this.glyph_mode_line_height = 16; }
     };
     const modules = { jquery: $, comm: {}, './cell_renderer': { DungeonCellRenderer: Base },
-        './options': { get: key => settings[key], add_listener: noop },
+        './options': { ready: () => true, get: key => settings[key], add_listener: noop },
         './enums': { ui: { NORMAL: 0, VIEW_MAP: 2 }, CURSOR_MOUSE: 1 },
         './view_data': { place_cursor(type, location) { cursor = location; } },
         './game-context': { can_target: () => false },
         './party-hover': { attach: noop, point: noop }, './traversal-effects': { attach: noop },
-        './shell-animation': { attach: noop }, './planned-route': { attach: noop },
+        './shell-animation': { attach: noop }, './chain-view': { attach: noop }, './planned-route': { attach: noop },
         './hero-feedback': { attach: noop }, './encounter-feedback': { attach: noop }, './premium-movement': { attach: noop }, './premium-effects': { animated: () => false }, './premium-regions': { animated: () => false } };
     for (const name of ['util', 'dungeon_renderer']) {
         vm.runInNewContext(fs.readFileSync(path.join(root, name + '.js'), 'utf8'), {

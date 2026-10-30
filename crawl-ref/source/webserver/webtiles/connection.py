@@ -17,6 +17,11 @@ from webtiles import config, util
 
 
 class WebtilesSocketConnection(object):
+    # Native output shares the event loop with every browser's input and ping.
+    # Bound each receive pass; the level-triggered reader resumes any backlog.
+    read_budget_seconds = 0.004
+    read_packet_limit = 64
+
     def __init__(self, socketpath, logger):
         self.crawl_socketpath = socketpath
         self.logger = logger
@@ -83,6 +88,8 @@ class WebtilesSocketConnection(object):
 
     def _handle_read(self, fd, events):
         if events & IOLoop.READ:
+            deadline = time.monotonic() + self.read_budget_seconds
+            packets = 0
             while self.socket is not None:
                 try:
                     data = self.socket.recv(128 * 1024, socket.MSG_DONTWAIT)
@@ -91,6 +98,9 @@ class WebtilesSocketConnection(object):
                 if not data:
                     break
                 self._handle_data(data)
+                packets += 1
+                if packets >= self.read_packet_limit or time.monotonic() >= deadline:
+                    break
 
         if events & IOLoop.WRITE:
             self._flush_pending_messages()

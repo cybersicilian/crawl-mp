@@ -7,7 +7,8 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
         barding: { icon: "armour", side: "right" }, cloak: { icon: "cloak", side: "left" },
         ring: { icon: "rune", side: "accessories" }, amulet: { icon: "rune", side: "accessories" },
         weapon_offhand: { icon: "blade", side: "right" }, haunted_armour: { icon: "armour", side: "extra" },
-        gizmo: { icon: "spark", side: "extra" }, twohander: { icon: "blade", side: "extra", support: true }
+        gizmo: { icon: "spark", side: "extra" }, bag: { icon: "loot", side: "left" },
+        twohander: { icon: "blade", side: "extra", support: true }
     };
     function profile(member) {
         var data = member.equipment_profile;
@@ -28,6 +29,12 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
         return item.equipped || owners.some(function (slot) {
             return slot.state === "equipped" || slot.state === "occupied";
         }) ? "equipped" : "pack";
+    }
+    function itemRestriction(member, item) {
+        var data = profile(member);
+        return data && data.slots.find(function (slot) {
+            return slot.inv_slot === item.slot && slot.state === "melded" && slot.reason;
+        });
     }
     function matchesSlot(member, item, slot) {
         var candidate = fit(member, item);
@@ -64,6 +71,8 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
             properties.render(slot.name || (slot.state === "blocked" ? "Form blocked" : "Empty"), { focusable: false })));
         if (["melded", "occupied"].includes(slot.state)) copy.append($("<span class='paperdoll-slot-state'></span>")
             .text(slot.state === "melded" ? "Melded" : "Shared occupancy"));
+        if (slot.state === "melded" && slot.reason)
+            copy.append($("<span class='paperdoll-slot-state'></span>").text(slot.reason));
         if (compatibility) copy.append(memoryUI.properties(compatibility.memory, false));
         card.append(copy).on("click", function (event) {
             if (item) options.inspect(item, card[0].id, event);
@@ -101,7 +110,7 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
         var extras = Object.create(null);
         var areas = { left: left, right: right, accessories: accessories };
         var restrictions = $("<div class='paperdoll-restrictions' aria-label='Equipment limitations'></div>");
-        var order = ["head", "cloak", "weapon", "hands", "body", "offhand", "weapon_offhand", "feet", "barding", "ring", "amulet", "gizmo", "haunted_armour", "twohander"];
+        var order = ["head", "cloak", "bag", "weapon", "hands", "body", "offhand", "weapon_offhand", "feet", "barding", "ring", "amulet", "gizmo", "haunted_armour", "twohander"];
         data.slots.slice().sort(function (a, b) { return order.indexOf(a.type) - order.indexOf(b.type); }).forEach(function (slot) {
             if (slot.capacity > 0) {
                 var side = (types[slot.type] || {}).side || "extra";
@@ -112,7 +121,7 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
                     };
                     extras[slot.type].slots.append(slotCard(member, slot, options));
                 } else areas[side].append(slotCard(member, slot, options));
-            } else if (slot.reason && ["weapon", "offhand", "body", "head", "hands", "feet", "cloak", "ring", "amulet"].includes(slot.type)
+            } else if (slot.reason && ["weapon", "offhand", "body", "head", "hands", "feet", "cloak", "bag", "ring", "amulet"].includes(slot.type)
                 && !(slot.alternatives || []).length) restrictions.append(restriction("No " + slot.label.toLowerCase(), slot.reason));
         });
         (data.restrictions || []).forEach(function (entry) { restrictions.append(restriction(entry.label, entry.reason)); });
@@ -130,5 +139,6 @@ define(["jquery", "item-properties", "./native-tile-art", "./equipment-memory-ui
         root.append($("<p class='paperdoll-help'>Select gear to inspect · Empty sockets show matching items</p>"));
         return root;
     }
-    return { profile: profile, fit: fit, selected: selected, itemState: itemState, matchesSlot: matchesSlot, render: render };
+    return { profile: profile, fit: fit, selected: selected, itemState: itemState, itemRestriction: itemRestriction,
+        matchesSlot: matchesSlot, render: render };
 });

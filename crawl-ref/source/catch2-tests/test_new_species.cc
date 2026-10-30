@@ -373,6 +373,44 @@ TEST_CASE_METHOD(content_fixture, "A stolen shield pays Defiance while ordinary 
     CHECK(eldritch::shield_bonus(you) == 6);
 }
 
+TEST_CASE_METHOD(content_fixture, "New gods can be profaned and the Wyrm's resistance spends Defiance", "[new-species][eldritch]")
+{
+    steal(GOD_IMUS_THEA);
+    steal(GOD_GREAT_WYRM);
+    steal(GOD_AGRAPHEDE);
+    REQUIRE(eldritch::invoke(eldritch::ability(GOD_GREAT_WYRM)) == spret::success);
+    CHECK(eldritch::reserve(you) == 28);
+    CHECK(you.duration[DUR_RESISTANCE] == 4 * BASELINE_DELAY);
+    CHECK(eldritch::wrath_remaining(you, GOD_IMUS_THEA) > 0);
+    CHECK(eldritch::wrath_remaining(you, GOD_GREAT_WYRM) > 0);
+    CHECK(eldritch::wrath_remaining(you, GOD_AGRAPHEDE) > 0);
+}
+
+TEST_CASE_METHOD(content_fixture, "Stolen Dazzle targets a susceptible foe and spends only on success", "[new-species][eldritch]")
+{
+    steal(GOD_IMUS_THEA);
+    monster& foe = spawn(you.pos() + coord_def(2, 0));
+    dist target;
+    target.isValid = true;
+    target.isCancel = false;
+    target.target = foe.pos();
+    REQUIRE(eldritch::invoke(eldritch::ability(GOD_IMUS_THEA), &target) == spret::success);
+    CHECK(foe.has_ench(ENCH_BLIND));
+    CHECK(eldritch::reserve(you) == 32);
+    target.target = you.pos();
+    CHECK(eldritch::invoke(eldritch::ability(GOD_IMUS_THEA), &target) == spret::abort);
+    CHECK(eldritch::reserve(you) == 32);
+}
+
+TEST_CASE_METHOD(content_fixture, "A stolen redback cannot be duplicated while alive", "[new-species][eldritch]")
+{
+    steal(GOD_AGRAPHEDE);
+    REQUIRE(eldritch::invoke(eldritch::ability(GOD_AGRAPHEDE)) == spret::success);
+    CHECK(eldritch::reserve(you) == 24);
+    CHECK(eldritch::invoke(eldritch::ability(GOD_AGRAPHEDE)) == spret::abort);
+    CHECK(eldritch::reserve(you) == 24);
+}
+
 TEST_CASE_METHOD(content_fixture, "Eldritch choices, reserve and rites survive native property serialization", "[new-species][eldritch]")
 {
     steal(GOD_ASHENZARI);

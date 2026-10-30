@@ -1,6 +1,8 @@
 #include "AppHdr.h"
+#include "grape-player.h"
 #include "oozle-memory.h"
 #include "equipment-profile.h"
+#include "bag.h"
 
 #include "describe.h"
 #include "invent.h"
@@ -53,6 +55,7 @@ const char* slot_key(equipment_slot slot)
     case SLOT_WEAPON_OR_OFFHAND: return "weapon_offhand";
     case SLOT_HAUNTED_AUX: return "haunted_armour";
     case SLOT_TWOHANDER_ONLY: return "twohander";
+    case SLOT_BAG: return "bag";
     default: return "unknown";
     }
 }
@@ -110,12 +113,38 @@ JsonNode* portrait_art()
     return art;
 }
 #endif
-JsonNode* item_profile(const item_def& item, int index)
+JsonNode* bag_profile(item_def& item, int index, bool melded)
+{
+    JsonNode* info = json_mkobject();
+    number(info, "inv_slot", index);
+    number(info, "uid", item.give_unique_id());
+    number(info, "capacity", bag::capacity(item));
+    number(info, "used", bag::used(item));
+    text(info, "name", item.name(DESC_A, true, false, true));
+    text(info, "blocked_reason", melded ? "Your bag is melded into your current form." : "");
+    JsonNode* contents = json_mkarray();
+    const auto stored_items = bag::contents(item);
+    flag(info, "contents_known", static_cast<int>(stored_items.size()) == bag::used(item));
+    for (const item_def& stored : stored_items)
+    {
+        JsonNode* entry = json_mkobject();
+        text(entry, "name", stored.name(DESC_PLAIN, true));
+        number(entry, "quantity", stored.quantity);
+        json_append_element(contents, entry);
+    }
+    json_append_member(info, "items", contents);
+    return info;
+}
+
+JsonNode* item_profile(item_def& item, int index)
 {
     JsonNode* result = json_mkobject();
     number(result, "inv_slot", index);
-    const bool equipment = item_type_is_equipment(item.base_type);
+    const bool equipment = item_type_is_equipment(item.base_type) || bag::is_bag(item);
     flag(result, "equipment", equipment);
+    if (bag::is_bag(item) && bag::used(item) > 0
+        && you.equipment.find_equipped_slot(item) == SLOT_UNUSED)
+        json_append_member(result, "bag_recovery", bag_profile(item, index, false));
 #ifdef USE_TILE
     json_append_member(result, "art", item_art(item));
 #endif
@@ -168,8 +197,12 @@ void append_slot(JsonNode* slots, equipment_slot type, int index, int capacity,
         {
             const item_def& item = you.inv[entry.item];
             state = entry.melded ? "melded" : entry.is_overflow ? "occupied" : "equipped";
-            reason = entry.melded ? "Melded into your current form; its equipment effects are inactive."
+            reason = entry.melded && grape_player::suppressed(item)
+                     ? "Interdimensional distortion has melded this item; its equipment effects are inactive."
+                     : entry.melded ? "Melded into your current form; its equipment effects are inactive."
                      : entry.is_overflow ? "This slot is also occupied by " + item.name(DESC_A, true) + "." : "";
+            if (entry.melded && grape_player::suppressed(item))
+                text(slot, "suppression", "interdimensional_grape");
             number(slot, "inv_slot", entry.item);
             text(slot, "name", item.name(DESC_A, true, false, true));
             flag(slot, "shared", entry.is_overflow);
@@ -212,6 +245,13 @@ JsonNode* equipment_profile_json()
         if (you.inv[index].defined())
             json_append_element(items, item_profile(you.inv[index], index));
     json_append_member(result, "items", items);
+    const auto bags = you.equipment.get_slot_entries(SLOT_BAG);
+    if (!bags.empty() && bags[0].item >= 0 && bags[0].item < ENDOFPACK)
+    {
+        item_def& item = you.inv[bags[0].item];
+        if (bag::is_bag(item))
+            json_append_member(result, "bag", bag_profile(item, bags[0].item, bags[0].melded));
+    }
     JsonNode* restrictions = json_mkarray();
     // A head slot may accept hats but reject hard helmets. Ask the native fit
     // function using a plain helmet; never duplicate mutation/species rules.

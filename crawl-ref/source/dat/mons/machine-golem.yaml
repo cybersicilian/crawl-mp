@@ -1,0 +1,19 @@
+name: "machine golem"
+glyph: {char: "8", colour: lightgrey}
+flags: [no_poly_to, no_exp_gain]
+resists: {petrify: 1}
+exp: 0
+genus: golem
+holiness: [nonliving]
+will: invuln
+attacks:
+ - {type: hit, damage: 15}
+hd: 1
+hp_10x: 100
+ac: 10
+ev: 10
+intelligence: brainless
+speed: 10
+size: small
+shape: misc
+tile: machine_golem

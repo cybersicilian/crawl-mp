@@ -52,6 +52,7 @@ enum cloud_type
     CLOUD_GLIMMER,
     CLOUD_FAINT_FROST,
     CLOUD_BLINDING_HAZE,
+    CLOUD_WYRM_HEAL,
     NUM_CLOUD_TYPES,
 
     // Random per-square.

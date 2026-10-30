@@ -30,9 +30,10 @@ fs.mkdirSync(output, { recursive: true });
                 key_conversion: { codes: {} }, './game-context': { get_ui_state: () => 0, get_input_mode: () => window.inputMode },
                 './enums': { ui: { NORMAL: 0 }, mouse_mode: { COMMAND: 1 }, prepare_bg_flags: value => typeof value === 'object' ? value : { value } },
                 './util': { make_key: (x, y) => x + 128 + (y + 128) * 256 },
-                './options': { get: () => false, add_listener: noop }, './tileinfo-dngn': { basetile: value => value },
+                './options': { ready: () => true, get: () => false, add_listener: noop }, './tileinfo-dngn': { basetile: value => value },
                 './view_data': {}, './mouse_control': {}, 'tooltip-policy': {}, './party-hover': { attach: noop, draw: noop },
-                './traversal-effects': { attach: noop }, './shell-animation': { attach: noop }, './sprite-reach': () => 3,
+                './traversal-effects': { attach: noop }, './shell-animation': { attach: noop }, './chain-view': { attach: noop }, './sprite-reach': () => 3,
+                './premium-movement': { attach: noop }, './premium-effects': { animated: () => false }, './premium-regions': { animated: () => false },
                 './portrait-status': {}, './status-icons': { icon: () => { const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); icon.classList.add('tt-icon'); return icon; } },
                 './workflow-actions': { reason: hero => hero.can_act === false ? 'Recovery' : '', setPlanning: noop } };
             function Base() { this.set_cell_size(20, 20); }

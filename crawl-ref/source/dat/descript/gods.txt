@@ -56,6 +56,8 @@ Fedhas is the god of plant and fungal life. Followers are prevented from
 harming any species under Fedhas' protection. In return, Fedhas grants a number
 of abilities that promote the growth of plants and fungi. These abilities may
 incidentally prove useful to adventurers.
+
+Fedhas tolerates conversion to Elyvilon. Wrath remains dormant while following that faith.
 %%%%
 Gozag
 
@@ -107,6 +109,8 @@ to spread bloodshed and corruption in the overworld. Those who gain Lugonu's
 favour will be granted some of the power of the Abyss itself, allowing them to
 call forth eldritch horrors, and even to travel between the overworld and the
 Abyss at will.
+
+Lugonu tolerates conversion to Ru. Wrath remains dormant while following that faith.
 %%%%
 Makhleb
 
@@ -115,6 +119,8 @@ flesh. Followers are expected to cleanse others by inflicting suffering and
 death on them in Makhleb's name. Dedicated followers may also access the raw
 energies and hell-spawned servants of chaos, so that they may better break the
 impure world and its false laws for their evil god's glory.
+
+Makhleb tolerates conversion to Lugonu or Trog. Wrath remains dormant while following that faith.
 %%%%
 Nemelex Xobeh
 
@@ -123,6 +129,8 @@ invoked through magical packs of cards painted in the ichor of demons. Followers
 will be granted decks of cards as they traverse the dungeon, and are encouraged
 to trust in the cards to provide them with divine assistance. However, the
 Trickster can also ensure that fortune favours the bold.
+
+Nemelex tolerates conversion to Xom. Wrath remains dormant while following that faith.
 %%%%
 Okawaru
 
@@ -135,6 +143,8 @@ for heroic feats against mighty foes.
 
 Okawaru is one of the eight gods of the Elder Pantheon. The god has no
 birthright order; those seeking this ancient power must find an altar.
+
+Okawaru tolerates conversion to the Shining One. Wrath remains dormant while following that faith.
 %%%%
 Pakellas
 
@@ -171,6 +181,8 @@ spellbooks taken directly from Sif Muna's legendary library.
 
 Sif Muna is one of the eight gods of the Elder Pantheon. Sages enter the
 Dungeon as members of the Loreminder's birthright order.
+
+Sif Muna tolerates conversion to Ashenzari or Cheibriados. Wrath remains dormant while following that faith.
 %%%%
 the Shining One
 
@@ -202,6 +214,8 @@ appreciates the passion and rhythm of combat, rewarding followers for each
 strike they deliver and for the damage they deal their foes. The longer the
 dance continues, the greater powers Uskayaw offers. When the dance ends,
 Uskayaw quickly loses interest.
+
+Uskayaw tolerates conversion to Wu Jian. Wrath remains dormant while following that faith.
 %%%%
 Vehumet
 
@@ -218,6 +232,8 @@ after battling their way out of the afterlife. Disciples of the Council are
 able to execute acrobatic martial maneuvers, such as wall jumps, spinning
 attacks and punishing lunges. They will eventually become able to request
 help in the form of a storm of heavenly clouds.
+
+The Wu Jian Council tolerates conversion to Okawaru. Wrath remains dormant while following that faith.
 %%%%
 Xom
 
@@ -225,6 +241,9 @@ Xom is a wild and unpredictable god of chaos, who seeks not worshippers but
 playthings with which to toy. Many choose to follow Xom in the hope of
 receiving fabulous rewards and mighty powers, but Xom is nothing if not
 capricious. There is nothing a follower can do to influence Xom's mood.
+
+Xom tolerates a Chaos Knight abandoning worship or converting to any god
+except Zin. Wrath remains dormant while following that faith.
 %%%%
 Yredelemnul
 
@@ -233,6 +252,8 @@ creations and chain all living souls within their inexorable grip. Followers who
 would conquer in Yredelemnul's name are granted the power to reap an army of the
 dead and bind powerful souls into eternal service - provided they can sweep
 across the land in a tide as inexorable as their god.
+
+Yredelemnul tolerates conversion to Kikubaaqudgha. Wrath remains dormant while following that faith.
 %%%%
 Zin
 
@@ -275,7 +296,8 @@ slower, worshippers of Cheibriados are granted increased attributes.
 Cheibriados rewards the faithful with the power to slow other creatures and the
 power to briefly distort the flow of time. Devout worshippers will gain the
 ability to inflict great harm on all those who move more quickly than they do,
-and finally the ability to step out of the flow of time entirely.
+and finally the ability to step out of the flow of time entirely. At the height
+of devotion, Cheibriados can bless one melee weapon with sluggish once.
 %%%%
 Dithmenos powers
 
@@ -294,7 +316,8 @@ and other ill effects. Followers may also attempt to pacify hostile monsters
 and turn them neutral. Elyvilon may directly intervene to save a follower's
 life, and if there has been no such intervention recently, is sure to prevent
 a killing blow against especially pious followers. Elyvilon may also
-occasionally protect the follower's allies from death.
+occasionally protect the follower's allies from death. At the height of devotion,
+Elyvilon can bless one melee weapon with pacifying once.
 %%%%
 Fedhas powers
 
@@ -345,7 +368,8 @@ elsewhere in the dungeon. As they spread slime across more of the dungeon, Jiyva
 will grant followers increasingly rapid health and magic regeneration, and will
 begin mutating them to better reflect Jiyva's image. Followers will later become
 able to call forth acidic ooze from the walls of the dungeon, and to turn
-monsters to slime with a touch.
+monsters to slime with a touch. At the height of devotion, Jiyva can bless one
+melee weapon with slimifying once, independently of opening the Slime Pits.
 %%%%
 Kikubaaqudgha powers
 
@@ -512,7 +536,8 @@ powers to vitalise their bodies, protecting them from various afflictions.
 Later, followers gain the ability to imprison their foes temporarily. Followers
 can eventually find temporary safety in a divine refuge. As piety grows,
 followers will be protected from mutation and the Hells, and Zin may even
-occasionally directly intervene to save a follower's life.
+occasionally directly intervene to save a follower's life. At the height of
+devotion, Zin can bless one melee weapon with silver once.
 %%%%
 Ashenzari wrath
 
@@ -813,3 +838,75 @@ Vellum wrath
 Vellum launches no separate attacks against former followers. Borrowed power
 becomes dormant without divine favour, and suppressed drawbacks return.
 Bindings and earned capacity remain recorded if the follower returns.
+%%%%
+Imus Thea
+
+Imus Thea, the Refracted, rules the illusory worlds cast by reflection and
+refraction. Followers turn incoming projectiles aside and split their own
+attacks into many paths. A prism can blind their enemies, and a reflection can
+fight at its creator's side. In exchange, their bodies become fragile as glass.
+%%%%
+Imus Thea powers
+
+Imus Thea reflects eligible hostile projectiles, including magical beams.
+Followers have 10% less maximum health and suffer a -2 accuracy penalty with
+two-handed weapons. They cannot wear shields or body armour with an
+encumbrance rating above 4.
+
+With devotion, followers can select their wielded melee weapon in the fire menu
+to project an illusory copy for 1 MP. Their projectiles can bounce off walls,
+and thrown ammunition may be copied without being consumed. Further devotion
+grants a blinding prism, Spectrum, and a mirror image that repeats attacks.
+%%%%
+Imus Thea wrath
+
+Those who abandon Imus Thea may face their own reflection from another realm,
+and find their escape blocked by the overlapping worlds.
+%%%%
+the Great Wyrm
+
+The Great Wyrm, called the Wyrm That Bites Its Tail, is a power of alchemy and
+transformation. Its followers distil magic from fallen foes and transmute
+potions into five rare essences, using them to alter themselves or other beings.
+%%%%
+the Great Wyrm powers
+
+The Great Wyrm can extract potions from the lingering enchantments of defeated
+foes. Followers can infuse a visible creature with an essence, and as their
+devotion grows they learn to transmute potions into Nigredo, Albedo, Citrinitas,
+Viriditas, and Rubedo. They can also distil corpses and evaporate potions into
+clouds. The essences have different effects when drunk, evaporated, or infused;
+their effects when drunk are reserved for followers of the Wyrm.
+%%%%
+the Great Wyrm wrath
+
+The Wyrm bites back at those who abandon its alchemical path. It may extract
+health or magic, hinder movement, or squander its former follower's potions.
+%%%%
+Agraphede
+
+Agraphede, the Primal Vermin, is the mother of venomous swarms. Her followers
+become hosts to poison and turn its danger into webs, venom and allies.
+Agraphede accepts only living worshippers; undead and nonliving beings,
+including those with an undead trait, cannot join her.
+%%%%
+Agraphede powers
+
+Agraphede makes her followers vulnerable to poison, even when they would
+otherwise resist it. As their devotion grows they can draw on poison in their
+own bodies to spin webs, venom their attacks, launch a web-spreading ball or
+hornet sting, and summon spiders. Poison spent on these abilities becomes
+immediate damage. These powers require poison and cannot be used if paying the
+cost would be lethal; the cost is paid only when the action succeeds.
+
+As their devotion grows, followers regenerate faster while poisoned, diminish
+some creatures' poison resistance when attacking, and sometimes draw temporary
+vermin from eligible natural foes they have slain (up to three at once).
+
+Followers can also turn a potion of curing into potions of poison. Webs created
+by Agraphede's power remain active in trap-suppressed games.
+%%%%
+Agraphede wrath
+
+Agraphede's abandoned swarm strikes back with poison, barbs and debilitating
+venom.

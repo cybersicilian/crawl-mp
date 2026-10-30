@@ -26,4 +26,6 @@ spret scroll_of_poison(bool unknown);
 
 string get_evaporate_result_list(int potion);
 spret cast_evaporate(int pow, bolt& beem, int pot_idx, bool fail);
+// Whether a known healing-mist explosion could benefit a visible enemy.
+bool evaporate_heals_visible_enemy(const coord_def& target);
 

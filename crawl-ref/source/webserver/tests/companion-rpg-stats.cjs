@@ -192,7 +192,7 @@ if (!chromium) {
             ['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'],
             ['./party-model', 'game_data/static/party-model.js'], ['./party-status-model', 'game_data/static/party-status-model.js'],
-            ['./status-icons', 'game_data/static/status-icons.js'],
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
             ['./party-power-cards', 'game_data/static/party-power-cards.js'],
             ['./party-skill-training', 'game_data/static/party-skill-training.js'],
             ['./party-rpg-stats', 'game_data/static/party-rpg-stats.js'],
@@ -200,6 +200,7 @@ if (!chromium) {
             ['./equipment-paperdoll', 'game_data/static/equipment-paperdoll.js'],
             ['./context-menu', 'game_data/static/context-menu.js'],
             ['./item-context-menu', 'game_data/static/item-context-menu.js'],
+            ['./folio-bag', 'game_data/static/folio-bag.js'],
             ['./folio-equipment', 'game_data/static/folio-equipment.js'],
             ['./party-inspector-render', 'game_data/static/party-inspector-render.js'],
             ['./menu-keyboard', 'game_data/static/menu-keyboard.js'],
@@ -243,7 +244,7 @@ if (!chromium) {
         assert.match(await page.locator('#companion_party_compare tbody tr').nth(1).innerText(), /Heat 4\/32/);
         await page.locator('#companion_party_compare .companion-hero-switch-btn').nth(1).click();
         assert.equal(await page.evaluate(() => window.crawl_party.inspector_slot), 1);
-        assert.match(await page.locator('#companion_rpg_metrics').innerText(), /COOLING\s*0\.95\/turn/);
+        assert.match(await page.locator('#companion_rpg_metrics').innerText(), /HEAT DISSIPATION\s*0\.95\/turn/);
         assert.match(await page.locator('#party_insp_panel_overview').innerText(), /Heat 4\/32/);
         assert.match(await page.locator('#companion_rpg_ledger').innerText(), /Magic Dart ×78, Searing Ray ×34/);
         await page.locator('#companion_party_compare .companion-hero-switch-btn').nth(0).click();

@@ -1,0 +1,20 @@
+enum: JOB_COLLECTOR
+name: Collector
+short_name: Cl
+category: Adventurer
+category_priority: 55
+str: 5
+int: 3
+dex: 4
+equipment:
+  - "hat"
+  - "robe plus:1"
+weapon_choice: plain
+recommended_species:
+  - human
+  - minotaur
+  - formicid
+skills:
+  fighting: 3
+  weapon: 2
+create_enum: false

@@ -21,6 +21,12 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         if (!rail || !hud) return;
         var bounds = hud.getBoundingClientRect();
         var layout = model.layout(bounds, doom && doom.getBoundingClientRect(), { width: window.innerWidth, height: window.innerHeight });
+        var viewport = document.getElementById("dungeon_viewport");
+        var bottom = viewport ? viewport.getBoundingClientRect().bottom : window.innerHeight;
+        if (!layout.compact) {
+            layout.maxHeight = Math.max(0, Math.min(layout.maxHeight, bottom - layout.top - 8));
+            if (layout.maxHeight < 100) layout.compact = true;
+        }
         rail.classList.toggle("is-compact", layout.compact);
         rail.style.visibility = !layout.compact && (bounds.bottom <= 0 || bounds.top >= window.innerHeight) ? "hidden" : "";
         var styles = layout.compact ? { left: "", top: "" }
@@ -28,6 +34,7 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         Object.keys(styles).forEach(function (name) { if (rail.style[name] !== styles[name]) rail.style[name] = styles[name]; });
         var height = layout.compact ? Math.max(0, Math.min(240, window.innerHeight - rail.getBoundingClientRect().top - 12)) : layout.maxHeight;
         if (rail.style.maxHeight !== height + "px") rail.style.maxHeight = height + "px";
+        $(document).trigger("creature_rail_positioned");
     }
     var refresh = frameUpdate(position);
     var portraits = indexedPaint(function (node) {
@@ -108,15 +115,18 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
             if (bar[1].style.width !== width) bar[1].style.width = width;
         });
         var statusSignature = JSON.stringify([enemy.name, data.remembered, data.statusSubject]);
+        var aura = !data.remembered && Number.isInteger(enemy.aura_radius) && enemy.aura_radius > 0
+            ? "Aura · " + enemy.aura_radius + " tiles" : "";
         signature = JSON.stringify([enemy.name, Boolean(enemy.ready) && data.timed, data.remembered,
-            data.reading, data.healthText, statusSignature]);
+            data.reading, data.healthText, statusSignature, aura]);
         if (node.signature === signature) return node;
         node.signature = signature;
         var ready = String(Boolean(enemy.ready) && data.timed), perception = data.remembered ? "last_known" : "visible";
         if (node.dataset.ready !== ready) node.dataset.ready = ready;
         if (node.dataset.perception !== perception) node.dataset.perception = perception;
         if (node.parts.name.textContent !== enemy.name) node.parts.name.textContent = enemy.name;
-        if (node.parts.reading.textContent !== data.reading) node.parts.reading.textContent = data.reading;
+        var reading = [data.reading, aura].filter(Boolean).join(" · ");
+        if (node.parts.reading.textContent !== reading) node.parts.reading.textContent = reading;
         if (node.statusSignature !== statusSignature) {
             node.statusSignature = statusSignature;
             var $effects = $(node.parts.effects).empty();
@@ -124,15 +134,20 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         }
         var effectNames = data.effects.map(function (effect) { return effect.name; }).join(", ");
         var attributes = { "aria-label": enemy.name + ": " + data.healthText + "; initiative: " + data.reading
-                + (effectNames ? "; effects: " + effectNames : "") + ". Open monster menu",
+                + (effectNames ? "; effects: " + effectNames : "")
+                + (aura ? "; " + aura + ". Its distortion can meld armour within " + enemy.aura_radius
+                    + " tiles and line of sight" : "") + ". Open monster menu",
             "data-tip-title": enemy.name + (data.remembered ? " · Last known location" : ""),
             "data-tip-body": data.remembered ? "Native invisible contact. The reticle marks its last known location; current health, action energy and position are unknown."
                 : data.healthText + ". Initiative: " + data.reading + ". The filling bar shows readiness based on the creature's speed and recovery."
-                    + (effectNames ? " Active effects: " + effectNames + "." : ""),
+                    + (effectNames ? " Active effects: " + effectNames + "." : "")
+                    + (aura ? " Its distortion can meld armour within " + enemy.aura_radius + " tiles and line of sight." : ""),
             "data-tip-meta": "Hover to locate · Click or right-click for monster menu" };
         Object.keys(attributes).forEach(function (name) {
             if (node.getAttribute(name) !== attributes[name]) node.setAttribute(name, attributes[name]);
         });
+        if (window.dcss_tooltips && node.matches("[aria-describedby~='dcss_rich_tooltip']"))
+            window.dcss_tooltips.refresh();
 
         return node;
     }

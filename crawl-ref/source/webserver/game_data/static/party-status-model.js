@@ -27,6 +27,7 @@ define([], function () {
         return member.statuses.map(function (status, index) {
             var tone = status.is_bad === true ? "bad" : status.is_bad === false ? "active" : "unknown";
             return { key: status.id === undefined ? index : status.id,
+                iconKey: status.icon_key,
                 name: status.text || status.light || "Unnamed effect", tone: tone,
                 description: status.desc || "Native active status effect.",
                 // tileweb.cc sends ceil(duration / 10), in standard turns.
@@ -43,6 +44,18 @@ define([], function () {
             if (effect) matches.push(Object.assign({ kind: treatment.kind }, effect));
         });
         return matches;
+    }
+    function banes(member) {
+        var known = member.banes_known !== false && Array.isArray(member.banes);
+        return { known: known, entries: known ? member.banes.map(function (bane, index) {
+            var xp = bane.recovery_xl_tenths;
+            return { key: bane.id === undefined ? index : bane.id,
+                iconKey: bane.icon_key,
+                name: bane.name || "Unnamed bane", description: bane.desc || "A lasting curse, cured by gaining experience.",
+                recovery: Number.isInteger(xp) && xp >= 0
+                    ? (xp === 0 ? "Less than 0.1" : (xp / 10).toFixed(1)) + " XL of experience to recover"
+                    : "Recovery experience unavailable" };
+        }) : [] };
     }
     function health(member) {
         var known = Number.isFinite(member.hp) && Number.isFinite(member.hp_max) && member.hp_max > 0;
@@ -103,8 +116,17 @@ define([], function () {
     }
     function activity(member, state) {
         if (member.alive === false || member.ghost_haunting) return { label: "Downed", tone: "bad" };
+        if (state.multiplayer && member.connected === false)
+            return { label: "Disconnected", tone: "unknown",
+                description: "This hero's reserved player is disconnected. Their combat action may hold this region until they reconnect." };
         if (member.on_same_level === false) return { label: member.place || "Elsewhere", tone: "away" };
         if (typeof member.alive !== "boolean") return { label: "Unavailable", tone: "unknown" };
+        if (member.queued_action)
+            return { label: "Queued" + (member.queued_action_count > 1 ? " (" + member.queued_action_count + ")" : ""),
+                tone: "combat", description: "Your action waits for native readiness. Escape clears queued actions." };
+        if (member.activity)
+            return { label: { yield: "Yielding", rest: "Resting", explore: "Exploring", travel: "Travelling" }[member.activity]
+                || member.activity, tone: "ready" };
         var combat = state.multiplayer && typeof member.region_combat === "boolean"
             ? member.region_combat : state.combat_locked;
         if (state.multiplayer && combat)
@@ -113,5 +135,13 @@ define([], function () {
             : state.simultaneous_turns ? "In combat" : "Waiting", tone: "combat" };
         return { label: "Exploring", tone: "ready" };
     }
-    return { effects: effects, visualEffects: visualEffects, health: health, faith: faith, activity: activity };
+    function experience(hero) {
+        var level = Number.isFinite(hero.xl) ? hero.xl : null;
+        var cap = Number.isInteger(hero.xl_cap) && hero.xl_cap >= 1 && hero.xl_cap <= 27 ? hero.xl_cap : 27;
+        var capped = level !== null && level >= cap;
+        var progress = capped ? 100 : Number.isFinite(hero.xl_next) ? Math.max(0, Math.min(100, hero.xl_next)) : null;
+        return { level: level, cap: cap, capped: capped, progress: progress };
+    }
+    return { effects: effects, banes: banes, visualEffects: visualEffects, health: health, faith: faith, activity: activity,
+        experience: experience };
 });

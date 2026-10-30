@@ -11,8 +11,10 @@
 #include "invent.h"
 #include "item-name.h"
 #include "item-prop.h"
+#include "item-use.h"
 #include "items.h"
 #include "json-wrapper.h"
+#include "libunix.h"
 #include "mutation.h"
 #include "mutation-type.h"
 #include "player.h"
@@ -20,6 +22,7 @@
 #include "prompt.h"
 #include "random.h"
 #include "species.h"
+#include "startup.h"
 #include "terrain.h"
 #include "test_player_fixture.h"
 #include "transform.h"
@@ -57,6 +60,15 @@ void refresh()
 }
 void species_setup(species_type sp)
 {
+    // Level mutations can change abilities and refresh the local tile layout.
+    // This fixture has no tile regions, so use the normal headless test setup.
+    enter_headless_mode();
+    static const bool ready = []() {
+        cio_init();
+        cgotoxy(1, 1);
+        return true;
+    }();
+    (void)ready;
     you.species = sp;
     you.experience_level = 27;
     for (int mut = 0; mut < NUM_MUTATIONS; ++mut)
@@ -202,6 +214,98 @@ TEST_CASE("Equipment matrix covers mutation boundaries", "[equipment-profile][eq
             capture(string(mutation_name(mut)) + " " + std::to_string(level), "mutation");
         }
     }
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Centaurs equip two pairs of boots alongside barding",
+                 "[equipment-profile][centaur-equipment]")
+{
+    rng::generator random(rng::GAMEPLAY);
+    species_setup(SP_GALE_CENTAUR);
+    REQUIRE(get_player_equip_slot_count(SLOT_BOOTS) == 2);
+    REQUIRE(get_player_equip_slot_count(SLOT_BARDING) == 1);
+    const int first = add_item("pair of boots");
+    const int second = add_item("pair of boots");
+    const int barding = add_item("barding");
+    const int initial_ac = you.armour_class_scaled(100);
+    REQUIRE(try_equip_item(you.inv[first], true));
+    REQUIRE(try_equip_item(you.inv[second], true));
+    REQUIRE(try_equip_item(you.inv[barding], true));
+    CHECK(you.equipment.get_slot_entries(SLOT_BOOTS).size() == 2);
+    CHECK(you.equipment.get_slot_entries(SLOT_BARDING).size() == 1);
+    CHECK(you.armour_class_scaled(100) >= initial_ac + 600);
+    const int third = add_item("pair of boots");
+    bool needs_replacement = false;
+    you.equipment.find_slot_to_equip_item(you.inv[third], needs_replacement);
+    CHECK(needs_replacement);
+    JsonWrapper profile(equipment_profile_json());
+    CHECK(text(slot(profile.node, "feet:0"), "state") == "equipped");
+    CHECK(text(slot(profile.node, "feet:1"), "state") == "equipped");
+    you.form = transformation::bat;
+    you.equipment.meld_equipment(get_form()->blocked_slots, true); refresh();
+    CHECK(item_is_melded(you.inv[first]));
+    CHECK(item_is_melded(you.inv[second]));
+    you.form = transformation::none;
+    you.equipment.unmeld_all_equipment(true); refresh();
+    CHECK_FALSE(item_is_melded(you.inv[first]));
+    CHECK_FALSE(item_is_melded(you.inv[second]));
+    REQUIRE(unequip_item(you.inv[first], false, true));
+    CHECK_FALSE(item_is_equipped(you.inv[first]));
+    CHECK(item_is_equipped(you.inv[second]));
+    CHECK(item_is_equipped(you.inv[barding]));
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Formicids equip four rings and two pairs of gloves",
+                 "[equipment-profile][formicid-equipment]")
+{
+    rng::generator random(rng::GAMEPLAY);
+    species_setup(SP_FORMICID);
+    REQUIRE(get_player_equip_slot_count(SLOT_GLOVES) == 2);
+    REQUIRE(get_player_equip_slot_count(SLOT_RING) == 4);
+    const int initial_ac = you.armour_class_scaled(100);
+    for (int i = 0; i < 2; ++i)
+    {
+        const int index = add_item("pair of gloves");
+        REQUIRE(try_equip_item(you.inv[index], true));
+    }
+    for (int i = 0; i < 4; ++i)
+    {
+        const int index = add_item("ring of protection");
+        you.inv[index].plus = 1;
+        REQUIRE(try_equip_item(you.inv[index], true));
+    }
+    CHECK(you.equipment.get_slot_entries(SLOT_GLOVES).size() == 2);
+    CHECK(you.equipment.get_slot_entries(SLOT_RING).size() == 4);
+    CHECK(you.armour_class_scaled(100) >= initial_ac + 400);
+    JsonWrapper profile(equipment_profile_json());
+    CHECK(text(slot(profile.node, "hands:1"), "state") == "equipped");
+    CHECK(text(slot(profile.node, "ring:3"), "state") == "equipped");
+    you.form = transformation::bat;
+    you.equipment.meld_equipment(get_form()->blocked_slots, true); refresh();
+    for (const auto& entry : you.equipment.get_slot_entries(SLOT_GLOVES))
+        CHECK(entry.melded);
+    you.form = transformation::none;
+    you.equipment.unmeld_all_equipment(true); refresh();
+    for (const auto& entry : you.equipment.get_slot_entries(SLOT_GLOVES))
+        CHECK_FALSE(entry.melded);
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Extra anatomy respects equipment restrictions",
+                 "[equipment-profile][centaur-equipment][formicid-equipment]")
+{
+    rng::generator random(rng::GAMEPLAY);
+    species_setup(SP_FORMICID);
+    you.mutation[MUT_MISSING_HAND] = 1;
+    CHECK(get_player_equip_slot_count(SLOT_RING) == 3);
+    you.mutation[MUT_CLAWS] = 3;
+    // Quadrumanous grants an independent glove slot even when claws block
+    // the ordinary pair.
+    CHECK(get_player_equip_slot_count(SLOT_GLOVES) == 1);
+    species_setup(SP_GALE_CENTAUR);
+    you.mutation[MUT_NO_ARMOUR] = 1;
+    CHECK(get_player_equip_slot_count(SLOT_BOOTS) == 0);
+    species_setup(SP_MINOTAUR);
+    you.mutation[MUT_HOOVES] = 3;
+    CHECK(get_player_equip_slot_count(SLOT_BOOTS) == 0);
 }
 
 TEST_CASE("Equipment matrix covers every form and returning to normal", "[equipment-profile][equipment-matrix]")

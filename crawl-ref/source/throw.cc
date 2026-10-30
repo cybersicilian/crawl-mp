@@ -9,6 +9,9 @@
 #include "oozle-memory-effects.h"
 #include "oozle-memory.h"
 #include "bloodcraft.h"
+#include "icicle-burst.h"
+#include "imus-mirror.h"
+#include "imus-spectrum.h"
 
 #include "throw.h"
 
@@ -52,12 +55,14 @@
 #include "state.h"
 #include "stringutil.h"
 #include "tag-version.h"
+#include "target.h"
 #include "terrain.h"
 #include "tilepick.h"
 #include "transform.h"
 #include "traps.h"
 #include "viewchar.h"
 #include "view.h"
+#include "zap-type.h"
 
 static shared_ptr<quiver::action> _fire_prompt_for_item();
 static int  _get_dart_chance(const int hd);
@@ -444,8 +449,8 @@ static bool _returning(const item_def &item)
     return item.is_type(OBJ_MISSILES, MI_BOOMERANG);
 }
 
-ranged_attack_beam::ranged_attack_beam(actor& agent, item_def& item)
-    : atk(ranged_attack(&agent, nullptr, &item))
+ranged_attack_beam::ranged_attack_beam(actor& agent, item_def& item, bool illusory_copy)
+    : atk(ranged_attack(&agent, nullptr, &item, false, nullptr, illusory_copy))
 {
     initialise_beam(agent, item);
 }
@@ -493,7 +498,7 @@ void ranged_attack_beam::initialise_beam(actor &agent, item_def &item)
                                  || oozle::absorbed_unrand(you, UNRAND_STORM_BOW)));
     beam.aux_source.clear();
 
-    beam.name = launched_projectile_name(item);
+    beam.name = atk.projectile_name();
 
     const unrandart_entry* entry = (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
         ? get_unrand_entry(item.unrand_idx) : nullptr;
@@ -592,7 +597,9 @@ static vector<ranged_attack_beam> _construct_player_ranged_beams(item_def* throw
 }
 
 // Returns true if the player aborted for any reason.
-static bool _trace_player_ranged_attacks(vector<ranged_attack_beam>& atks, bool no_harm_allies = false)
+static bool _trace_player_ranged_attacks(vector<ranged_attack_beam>& atks,
+                                        bool no_harm_allies = false,
+                                        const imus_spectrum_targeter* spectrum = nullptr)
 {
     // Don't trace at all when confused.
     if (you.confused())
@@ -605,7 +612,13 @@ static bool _trace_player_ranged_attacks(vector<ranged_attack_beam>& atks, bool 
         atks[i].beam.overshoot_prompt = false;
         if (no_harm_allies)
             atks[i].beam.stop_at_allies = true;
-        atks[i].beam.fire(tracer);
+        const bolt prototype = atks[i].beam;
+        bolt central = prototype;
+        central.drop_item = false;
+        central.fire(tracer);
+        atks[i].beam.friendly_past_target = central.friendly_past_target;
+        if (spectrum)
+            imus_spectrum_trace_side_rays(prototype, *spectrum, tracer);
         if (atks[i].beam.friendly_past_target)
             atks[i].beam.aimed_at_spot = true;
         using_mule |= has_unrand_effect(*atks[i].atk.weapon, UNRAND_MULE);
@@ -674,7 +687,10 @@ void aim_player_ranged_attack(quiver::action &a)
 {
     ASSERT(a.get_item() >= 0);
     item_def* item = &you.inv[a.get_item()];
-    const bool throwing = item->base_type == OBJ_MISSILES;
+    const bool projection = is_imus_illusory_weapon(&you, *item);
+    const bool throwing = item->base_type == OBJ_MISSILES || projection;
+    if (projection && !enough_mp(1, false))
+        return;
 
     if (you.confused())
     {
@@ -697,6 +713,28 @@ void aim_player_ranged_attack(quiver::action &a)
         args.self = confirm_prompt_type::cancel;
         args.is_ranged_attack = true;
         args.is_piercing = is_penetrating_attack(*item);
+        unique_ptr<imus_spectrum_targeter> spectrum;
+        unique_ptr<targeter_beam> rebound;
+        if (imus_spectrum_active() && you.current_vision > 0)
+        {
+            vector<ranged_attack_beam> probes =
+                _construct_player_ranged_beams(throwing ? item : nullptr);
+            spectrum = make_unique<imus_spectrum_targeter>(
+                &you, you.current_vision, probes[0].beam);
+            for (size_t i = 1; i < probes.size(); ++i)
+                spectrum->add_projectile(probes[i].beam);
+            args.hitfunc = spectrum.get();
+        }
+        else if (have_passive(passive_t::imus_wall_bounce)
+                 && you.current_vision > 0)
+        {
+            rebound = make_unique<targeter_beam>(&you, you.current_vision,
+                                                 ZAP_MAGIC_DART, SPELL_NO_SPELL,
+                                                 0, 0, 0);
+            ranged_attack_beam probe(you, *item);
+            rebound->set_projectile(probe.beam);
+            args.hitfunc = rebound.get();
+        }
         direction(a.target, args);
     }
     if (!a.target.isValid || a.target.isCancel)
@@ -709,7 +747,17 @@ void aim_player_ranged_attack(quiver::action &a)
     for (ranged_attack_beam& atk : atks)
         atk.beam.set_target(a.target);
 
-    if (_trace_player_ranged_attacks(atks))
+    unique_ptr<imus_spectrum_targeter> spectrum;
+    if (imus_spectrum_active() && !you.confused() && you.current_vision > 0)
+    {
+        spectrum = make_unique<imus_spectrum_targeter>(
+            &you, you.current_vision, atks[0].beam);
+        for (size_t i = 1; i < atks.size(); ++i)
+            spectrum->add_projectile(atks[i].beam);
+        if (!spectrum->set_aim(a.target.target))
+            return;
+    }
+    if (_trace_player_ranged_attacks(atks, false, spectrum.get()))
         return;
 
     // Actually perform the attack and spend time.
@@ -728,6 +776,9 @@ bool do_player_ranged_attack(const coord_def& targ, item_def* thrown_projectile,
                              const ranged_attack* prototype, bool no_harm_allies,
                              bool allow_salvo)
 {
+    if (thrown_projectile && is_imus_illusory_weapon(&you, *thrown_projectile)
+        && !enough_mp(1, false))
+        return false;
     const coord_def attack_target = targ;
     vector<ranged_attack_beam> atks = _construct_player_ranged_beams(thrown_projectile);
     for (ranged_attack_beam& atk : atks)
@@ -736,7 +787,17 @@ bool do_player_ranged_attack(const coord_def& targ, item_def* thrown_projectile,
         if (prototype)
             prototype->copy_params_to(atk.atk);
     }
-    if (_trace_player_ranged_attacks(atks, no_harm_allies))
+    unique_ptr<imus_spectrum_targeter> spectrum;
+    if (imus_spectrum_active() && !you.confused() && you.current_vision > 0)
+    {
+        spectrum = make_unique<imus_spectrum_targeter>(
+            &you, you.current_vision, atks[0].beam);
+        for (size_t i = 1; i < atks.size(); ++i)
+            spectrum->add_projectile(atks[i].beam);
+        if (!spectrum->set_aim(targ))
+            return false;
+    }
+    if (_trace_player_ranged_attacks(atks, no_harm_allies, spectrum.get()))
         return false;
     _fire_player_ranged_attacks(atks, allow_salvo);
     automaton::mark_combat(you);
@@ -850,7 +911,10 @@ static void _fire_salvo(const ranged_attack_beam &pbolt)
 static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
 {
     const item_def& item = *pbolt.atk.weapon;
-    const bool returning = _returning(item);
+    const bool projection = is_imus_illusory_weapon(&you, item);
+    const int replication_denom = imus_ammo_replication_denominator(item);
+    const bool illusory_ammo = replication_denom && one_chance_in(replication_denom);
+    const bool returning = _returning(item) && !illusory_ammo;
     const bool is_thrown = is_throwable(&you, item);
     const bool will_mulch = _thrown_object_destroyed(item);
 
@@ -865,7 +929,7 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
         else
             count_action(CACT_FIRE, item.sub_type);
     }
-    else if (is_thrown)
+    else if (is_thrown && !projection)
     {
         practise_throwing((missile_type)item.sub_type);
         count_action(CACT_THROW, item.sub_type, OBJ_MISSILES);
@@ -879,7 +943,7 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
 
     // Create message.
     mprf("You %s %s%s.",
-          is_thrown ? "throw" : "shoot" ,
+          projection ? "project" : is_thrown ? "throw" : "shoot" ,
           proj_name.c_str(),
           you.current_vision == 0 ? " into the darkness" : "");
 
@@ -889,8 +953,14 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
                    ? ammo_type_damage(item.sub_type) / 3
                    : 0; // Maybe not accurate, but reflects the damage.
 
-    pbolt.beam.drop_item = is_thrown && !returning && !will_mulch;
+    pbolt.beam.drop_item = is_thrown && !returning && !will_mulch
+                           && !projection && !illusory_ammo;
     pbolt.atk.will_mulch = will_mulch;
+    if (projection)
+    {
+        pay_mp(1);
+        flush_mp();
+    }
 
     if (crawl_state.game_is_hints())
         Hints.hints_throw_counter++;
@@ -912,7 +982,31 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
     }
     else
     {
+        unique_ptr<imus_spectrum_targeter> spectrum;
+        if (imus_spectrum_active() && you.current_vision > 0)
+        {
+            spectrum = make_unique<imus_spectrum_targeter>(
+                &you, you.current_vision, pbolt.beam);
+            if (!spectrum->set_aim(target))
+                spectrum.reset();
+        }
+        const ranged_attack_beam prototype = pbolt;
         pbolt.fire();
+        imus_mirror::replay_projectile(pbolt);
+
+        if (spectrum)
+        {
+            for (size_t i = 0; i < spectrum->endpoints().size(); ++i)
+            {
+                if (i == spectrum->endpoints().size() / 2)
+                    continue; // the original projectile is the central ray
+                ranged_attack_beam refracted = prototype;
+                refracted.beam.target = spectrum->endpoints()[i];
+                refracted.beam.chose_ray = false;
+                refracted.beam.drop_item = false;
+                refracted.fire();
+            }
+        }
 
         if (do_salvo)
         {
@@ -945,7 +1039,8 @@ static void _player_shoot(ranged_attack_beam &pbolt, bool allow_salvo)
         delete pbolt.beam.special_explosion;
 
     // Actually expend a throwing item, if it didn't return to the player's hands.
-    if (item.base_type == OBJ_MISSILES && (!returning || will_mulch))
+    if (item.base_type == OBJ_MISSILES && !illusory_ammo
+        && (!returning || will_mulch))
         dec_inv_item_quantity(item.link, 1);
 }
 

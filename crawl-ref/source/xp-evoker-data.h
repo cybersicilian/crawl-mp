@@ -30,6 +30,8 @@ static const unordered_map<misc_item_type, evoker_data, std::hash<int>> xp_evoke
           "Water glimmers in %s, now refilled and ready to use.", },
     }},
     { MISC_HORN_OF_GERYON, { "horn_debt", "horn_plus", 10, 1 } },
+    { MISC_HEALING_MIST, { "healing_mist_debt", "healing_mist_plus", 10, 1 } },
+    { MISC_AIR_HORN, { "air_horn_debt", "air_horn_plus", 10, 1 } },
     { MISC_LIGHTNING_ROD,  { "rod_debt", "rod_plus", 3, LIGHTNING_MAX_CHARGE } },
     { MISC_TIN_OF_TREMORSTONES, { "tin_debt", "tin_plus", 10, 2 } },
     { MISC_PHANTOM_MIRROR, { "mirror_debt", "mirror_plus", 10, 1 } },

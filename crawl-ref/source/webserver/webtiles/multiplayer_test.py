@@ -177,16 +177,18 @@ class MultiplayerTest(unittest.TestCase):
         self.packet(0, "player", name="HostHero", time=40, time_last_input=35, hp=20, hp_max=20,
                     inv={"a": {"name": "own gear"}})
         own = dict(slot=0, place="D:1", hp=20, hp_max=20, can_act=True,
-                   zot_clock={"remaining_aut": 100}, inventory=["own gear"])
+                   zot_clock={"remaining_aut": 100}, inventory=["own gear"], xl_cap=27, bribe_fund=3000,
+                   banes=[dict(id=1, name="Bane of Frailty", recovery_xl_tenths=10)])
         self.packet(0, "party_state", members=[own, dict(slot=1, place="D:2")],
                     global_time=40, world_aut_clock=40, floor_time=40)
         self.host.append_message.reset_mock()
         self.packet(1, "party_state", floor="D:2", global_time=50,
                     world_aut_clock=99, floor_time=99,
                     members=[dict(slot=0, place="D:1", hp=18, hp_max=18,
-                                  can_act=False, zot_clock={"remaining_aut": 90},
-                                  inventory=["wrong context"]),
-                             dict(slot=1, place="D:2", zot_clock={"remaining_aut": 85})])
+                                  can_act=False, zot_clock={"remaining_aut": 90}, xl_cap=26, bribe_fund=2500,
+                                  banes=[], inventory=["wrong context"]),
+                             dict(slot=1, place="D:2", zot_clock={"remaining_aut": 85}, xl_cap=25, bribe_fund=0,
+                                  banes=[dict(id=2, name="Bane of Slowness")])])
         player, state = self.received(self.host)[-2:]
         self.assertEqual(player["msg"], "player")
         self.assertEqual(player["time"], 50)
@@ -200,9 +202,16 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(state["world_aut_clock"], 40)
         self.assertEqual(state["members"][0]["zot_clock"]["remaining_aut"], 90)
         self.assertEqual(state["members"][1]["zot_clock"]["remaining_aut"], 85)
+        self.assertEqual(state["members"][0]["xl_cap"], 26)
+        self.assertEqual(state["members"][1]["xl_cap"], 25)
+        self.assertEqual(state["members"][0]["bribe_fund"], 2500)
+        self.assertEqual(state["members"][1]["bribe_fund"], 0)
+        self.assertEqual(state["members"][0]["banes"], [], "XP can cure an idle hero's bane")
+        self.assertEqual(state["members"][1]["banes"][0]["id"], 2)
         self.assertTrue(state["members"][0]["can_act"])
         self.assertEqual(state["members"][0]["inventory"], ["own gear"])
         self.assertEqual(own["zot_clock"]["remaining_aut"], 100)
+        self.assertEqual(own["xl_cap"], 27)
         reconnect = self.client("Host", 100)
         self.streams.restore(reconnect)
         restored = {packet["msg"]: packet for packet in self.received(reconnect)}
@@ -211,6 +220,9 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(restored["player"]["inv"], {"a": {"name": "own gear"}})
         self.assertEqual(restored["party_state"]["global_time"], 50)
         self.assertEqual(restored["party_state"]["members"][0]["zot_clock"]["remaining_aut"], 90)
+        self.assertEqual(restored["party_state"]["members"][0]["xl_cap"], 26)
+        self.assertEqual(restored["party_state"]["members"][0]["bribe_fund"], 2500)
+        self.assertEqual(restored["party_state"]["members"][0]["banes"], [])
 
     def test_personal_snapshots_scrub_other_heroes_floor_items(self):
         members = [dict(slot=i, floor_items=["private"], trade_targets=[1-i]) for i in (0, 1)]
@@ -224,6 +236,42 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(host["members"][1]["floor_items"], [])
         self.assertEqual(guest["members"][0]["trade_targets"], [])
         self.assertEqual(host["members"][0]["floor_items"], ["private"])
+
+    def test_remote_floor_cannot_overwrite_local_teammates_encounter_readiness(self):
+        self.control.members["Third"] = 2
+        local = [dict(slot=slot, place="D:1", region_id=0, region_aut_clock=40,
+                      same_region=True, can_act=True, region_combat=True)
+                 for slot in (0, 1)]
+        self.packet(0, "party_state", members=local + [dict(slot=2, place="D:2")])
+        self.packet(2, "party_state", floor="D:2", members=[
+            dict(member, same_region=False, can_act=False, region_combat=False)
+            for member in local] + [dict(slot=2, place="D:2")])
+        peer = self.control.views[0]["members"][1]
+        self.assertTrue(peer["can_act"])
+        self.assertTrue(peer["same_region"])
+        self.assertTrue(peer["region_combat"])
+
+    def test_arriving_teammate_requests_a_fresh_personal_floor_projection(self):
+        self.packet(0, "party_state", members=[dict(slot=0, place="D:1"), dict(slot=1, place="D:2")])
+        self.packet(1, "party_state", floor="D:2", members=[
+            dict(slot=0, place="D:1"), dict(slot=1, place="D:1")])
+        self.assertIn(0, self.streams.pending)
+
+    def test_remote_downing_and_revival_refresh_perception_on_affected_floors(self):
+        self.control.members["Third"] = 2
+        for target in (0, 1, 2):
+            for alive in (False, True):
+                with self.subTest(target=target, alive=alive):
+                    members = [dict(slot=slot, place="D:1" if slot < 2 else "D:2",
+                                    alive=not alive, ghost_haunting=alive, inventory=["own gear"])
+                               for slot in range(3)]
+                    self.packet(0, "party_state", members=members)
+                    self.streams.pending.clear()
+                    update = [dict(member, alive=alive, ghost_haunting=not alive)
+                              if member["slot"] == target else dict(member) for member in members]
+                    self.packet(2, "party_state", floor="D:2", members=update)
+                    self.assertEqual(0 in self.streams.pending, target < 2)
+                    self.assertEqual(self.control.views[0]["members"][0]["inventory"], ["own gear"])
 
     def test_pointer_floor_change_removes_old_peer_and_rejects_stale_coordinates(self):
         for client in self.clients:
@@ -242,6 +290,17 @@ class MultiplayerTest(unittest.TestCase):
         game = SimpleNamespace(conn=Mock())
         for kind in ("view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step"):
             CrawlProcessHandler.handle_input(game, json.dumps(dict(msg=kind, slot=0)), self.guest)
+        game.conn.send_message.assert_not_called()
+
+    def test_abandoned_prompt_adapter_uses_only_token_bound_cancel_or_more_ack(self):
+        for mode, keycode in ((1, 27), (5, 32), (7, 27)):
+            with self.subTest(mode=mode):
+                game = SimpleNamespace(conn=Mock(open=True))
+                self.assertTrue(CrawlProcessHandlerBase._cancel_abandoned_prompt(game, 1, 9, mode))
+                self.assertEqual(json.loads(game.conn.send_message.call_args.args[0]),
+                    dict(msg="key", keycode=keycode, player_id=1, prompt_activity_id=9))
+        game = SimpleNamespace(conn=Mock(open=False))
+        self.assertFalse(CrawlProcessHandlerBase._cancel_abandoned_prompt(game, 1, 9, 7))
         game.conn.send_message.assert_not_called()
 
     def test_peer_keys_cannot_wait_in_queue_to_answer_an_owned_native_prompt(self):
@@ -267,6 +326,42 @@ class MultiplayerTest(unittest.TestCase):
         game.handle_input = lambda message, source, **bindings: CrawlProcessHandler.handle_input(game, message, source, **bindings)
         return game, pump
 
+    def test_personal_view_waits_for_exact_completion_and_then_retries(self):
+        game, pump = self.command_game()
+        streams = PlayerStreams(self.control, self.presence,
+            lambda slot: CrawlProcessHandlerBase._request_native_view(game, slot))
+        game.player_streams = pump.streams = streams
+        game.party_slot_specs = {}
+        streams.native_ready = True
+        request = pump.start_manual(0)
+        self.assertIsNotNone(request)
+        streams.request(self.guest)
+        # COMMAND mode can arrive before the native activity token is released.
+        streams.note_mode(dict(msg="input_mode", mode=1))
+        game.conn.send_message.assert_not_called()
+        self.assertIn(1, streams.pending)
+        self.assertNotIn(1, streams.requested)
+        pump.command_boundary(request)
+        packets = [json.loads(call.args[0]) for call in game.conn.send_message.call_args_list]
+        self.assertEqual(packets[-1], dict(msg="view_player", slot=1))
+        self.assertIn(1, streams.requested)
+
+    def test_personal_view_does_not_interrupt_the_next_queued_command(self):
+        game, pump = self.command_game()
+        streams = PlayerStreams(self.control, self.presence,
+            lambda slot: CrawlProcessHandlerBase._request_native_view(game, slot))
+        game.player_streams = pump.streams = streams
+        game.party_slot_specs = {}
+        streams.native_ready = True
+        request = pump.start_manual(0)
+        streams.request(self.guest)
+        pump.queue_input(lambda: pump.start_manual(1), slot=1)
+        pump.command_boundary(request)
+        game.conn.send_message.assert_not_called()
+        self.assertTrue(pump.inflight)
+        pump.command_boundary(pump.request_id)
+        self.assertIn(1, streams.requested)
+
     def test_repeated_owner_keys_wait_for_exact_command_completion(self):
         game, pump = self.command_game()
         first = pump.start_manual(0)
@@ -276,9 +371,9 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(len(pump.inputs), 2)
         pump.command_boundary(first)
         packets = [json.loads(call.args[0]) for call in game.conn.send_message.call_args_list]
-        self.assertEqual([(packet["player_id"], packet["activity_id"]) for packet in packets], [(0, first + 1)])
+        self.assertEqual([(packet["player_id"], packet["activity_id"]) for packet in packets], [(1, first + 1)])
         pump.command_boundary(pump.request_id)
-        self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
+        self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 0)
 
     def test_automated_prompt_keeps_ownership_and_accepts_its_owners_response(self):
         game, pump = self.command_game()

@@ -1,5 +1,5 @@
-define(["jquery", "./party-model", "item-properties", "./workflow-actions", "chat", "./chat-context", "./equipment-paperdoll", "./native-tile-art", "./item-context-menu", "share-link", "./equipment-memory-ui"],
-function ($, model, properties, actions, chat, chatContext, paperdoll, art, itemMenus, shareLink, memoryUI) {
+define(["jquery", "./party-model", "item-properties", "./workflow-actions", "chat", "./chat-context", "./equipment-paperdoll", "./native-tile-art", "./item-context-menu", "share-link", "./equipment-memory-ui", "./folio-bag"],
+function ($, model, properties, actions, chat, chatContext, paperdoll, art, itemMenus, shareLink, memoryUI, bagUI) {
     "use strict";
     var views = Object.create(null);
     var categories = [
@@ -63,6 +63,7 @@ function ($, model, properties, actions, chat, chatContext, paperdoll, art, item
         var fit = paperdoll.fit(member, item);
         var kind = category(item, fit), name = model.itemName(item);
         var state = paperdoll.itemState(member, item), worn = state !== "pack";
+        var restriction = paperdoll.itemRestriction(member, item);
         var stateLabel = state === "melded" ? "Melded · inactive" : worn ? "Equipped" : "In backpack";
         var result = $("<li class='folio-inventory-row'></li>").attr({ "data-item-slot": item.slot,
             "data-equipped": String(worn), "data-item-state": state });
@@ -75,6 +76,7 @@ function ($, model, properties, actions, chat, chatContext, paperdoll, art, item
                 "data-tip-body": item.description || item.desc || "Known inventory of " + member.name,
                 "data-tip-meta": stateLabel }));
         copy.append(title, $("<span class='folio-item-kind'></span>").text(kind.name));
+        if (restriction) copy.append($("<span class='folio-item-fit-reason'></span>").text(restriction.reason));
         if (fit) copy.append(memoryUI.properties(fit.memory));
         if (fit && fit.equipment && fit.fits === false && state !== "melded") copy.append($("<span class='folio-item-fit-reason'></span>").text(fit.reason || "Does not fit now."));
         if (worn) copy.find(".folio-item-kind").append(
@@ -82,12 +84,21 @@ function ($, model, properties, actions, chat, chatContext, paperdoll, art, item
         var open = inspect(member, item, equipment ? "folio-item-open" : "workflow-button folio-inspect",
             "party_item_" + member.slot + "_" + item.slot);
         var buttons = $("<div class='folio-item-actions'></div>");
+        if (fit && fit.bag_recovery) {
+            var recovery = fit.bag_recovery;
+            var recoveryReason = actions.reason(member) || recovery.blocked_reason || "";
+            buttons.append($("<button type='button' class='workflow-button folio-bag-recover'>Recover contents</button>")
+                .attr({ "aria-label": "Recover contents from " + name,
+                    title: recoveryReason || "Take stored items out of this bag." })
+                .prop("disabled", Boolean(recoveryReason))
+                .on("click", function (event) { event.stopPropagation(); actions.openBag(member, recovery); }));
+        }
         if (!worn && member.slot === actions.controlledSlot() && window.crawl_party.state.party_trade === true)
             buttons.append($("<button type='button' class='workflow-button folio-trade'>Trade</button>")
                 .attr("aria-label", "Trade " + name).prop("disabled", Boolean(actions.reason(member)))
                 .on("click", function () { $(document).trigger("party_trade_open", [null, item.slot]); }));
         if (equipment) open.append(artwork, copy).attr({ "data-tip-title": properties.parse(name).name,
-            "data-tip-body": item.description || item.desc || "Inspect this item and choose its native actions.",
+            "data-tip-body": restriction ? restriction.reason : item.description || item.desc || "Inspect this item and choose its native actions.",
             "data-tip-meta": [stateLabel, "Select to inspect", actions.itemSecondaryHint(item)].filter(Boolean).join(" · ") });
         else buttons.append(open.append(properties.icon("eye"), document.createTextNode("Inspect")));
         if (item.record_id) {
@@ -164,7 +175,7 @@ function ($, model, properties, actions, chat, chatContext, paperdoll, art, item
         });
         search.on("input", function () { view.query = this.value; apply(); });
         member.inventory.forEach(function (item, index) { list.append(row(member, item, index)); });
-        inventory.append(head, $("<div class='folio-inventory-tools'></div>").append(search, filters), slotFilter, list, empty);
+        inventory.append(head, $("<div class='folio-inventory-tools'></div>").append(search, filters), slotFilter, list, empty, bagUI.render(member));
         apply(); return root.append(inventory);
     }
     $(document).on("game_cleanup.folioEquipment", function () { views = Object.create(null); });

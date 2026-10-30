@@ -138,6 +138,7 @@ protected:
     virtual bool handle_phase_hit() = 0;
     virtual bool handle_phase_damaged();
     virtual void handle_phase_killed();
+    item_def* kill_defender();
     virtual void handle_phase_end();
 
     /* Combat Calculations */
@@ -173,6 +174,7 @@ protected:
     virtual bool mons_attack_effects() = 0;
     void alert_defender();
     bool distortion_affects_defender();
+    bool distortion_gauntlets_affect_defender();
     void antimagic_affects_defender(int pow);
     void pain_affects_defender();
     brand_type random_chaos_brand();

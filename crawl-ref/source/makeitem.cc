@@ -349,11 +349,19 @@ bool is_weapon_brand_ok(int type, int brand, bool /*strict*/)
     case SPWPN_SUNDERING:
     case SPWPN_CONCUSSION:
     case SPWPN_DEVIOUS:
+    case SPWPN_PACIFYING:
+    case SPWPN_SLUGGISH:
+    case SPWPN_SILVER:
+    case SPWPN_SLIMIFYING:
         if (is_range_weapon(item))
             return false;
         break;
 
     // Ranged-only brands.
+    case SPWPN_SEEKING:
+        return item.base_type == OBJ_WEAPONS
+               && (item.sub_type == WPN_SHORTBOW || item.sub_type == WPN_ORCBOW
+                   || item.sub_type == WPN_LONGBOW);
     case SPWPN_PENETRATION:
     case SPWPN_ACID: // only exists on acidic bite/Punk
         if (!is_range_weapon(item))
@@ -880,6 +888,13 @@ bool is_armour_brand_ok(int type, int brand, bool strict)
 
     case SPARM_ARCHMAGI:
         return !strict || type == ARM_ROBE;
+
+    case SPARM_MANA_REGEN:
+        return type == ARM_ROBE;
+    case SPARM_STASIS:
+        return type == ARM_SCARF;
+    case SPARM_BUNKER:
+        return slot == SLOT_OFFHAND && type != ARM_ORB;
 
     case SPARM_PONDEROUSNESS:
         return true;
@@ -1866,6 +1881,13 @@ misc_item_type get_misc_item_type(int force_type, bool exclude)
     if (force_type != OBJ_RANDOM)
         return (misc_item_type)force_type;
 
+    // Bags are useful inventory relief, so keep them rarer than ordinary
+    // miscellaneous loot. Normal shop stock filters them separately.
+    if (one_chance_in(50))
+        return random_choose_weighted(70, MISC_POUCH,
+                                      25, MISC_SATCHEL,
+                                       5, MISC_BAG_OF_PLENTY);
+
     set<misc_item_type> choices;
 
     if (exclude)
@@ -1888,6 +1910,9 @@ misc_item_type get_misc_item_type(int force_type, bool exclude)
             MISC_PHANTOM_MIRROR,
             MISC_CONDENSER_VANE,
             MISC_TIN_OF_TREMORSTONES,
+            MISC_PIPE_OF_RECALL,
+            MISC_HEALING_MIST,
+            MISC_AIR_HORN,
         };
     }
 

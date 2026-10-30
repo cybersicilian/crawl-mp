@@ -41,6 +41,19 @@ function ($, model, icons, faith, portraitStatus, properties) {
     }
     function create(hero) {
         var $root = $("<div class='party-card-status'></div>");
+        var banes = model.banes(hero);
+        var $banes = $("<div class='party-bane-strip' role='group' aria-label='Banes'></div>")
+            .append($("<span class='party-bane-heading'></span>").text("Banes"));
+        banes.entries.forEach(function (bane) {
+            $banes.append($("<span class='party-bane' role='img' tabindex='0'></span>")
+                .append(icons.effectArt(bane), $("<span></span>").text(bane.name)).attr({ "aria-label": hero.name + ": " + bane.name + ". " + bane.recovery,
+                    "data-tip-title": bane.name, "data-tip-body": bane.description,
+                    "data-tip-meta": bane.recovery })
+                .on("click keydown keypress keyup", function (event) { event.stopPropagation(); }));
+        });
+        if (!banes.entries.length) $banes.append($("<span class='party-bane-empty'></span>")
+            .text(banes.known ? "None" : "Unavailable"));
+        $root.append($banes);
         var $row = $("<div class='party-effect-strip' role='group' aria-label='Active effects'></div>");
         var $active = $("<div class='party-effect-group' role='group' aria-label='Buffs and active effects'></div>");
         var $harmful = $("<div class='party-effect-group' role='group' aria-label='Debuffs'></div>");
@@ -54,6 +67,19 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if ($active.children().length) $row.append($active);
         if ($harmful.children().length) $row.append($harmful);
         if ($row.children().length) $root.append($row);
+        var slots = hero.equipment_profile && hero.equipment_profile.slots;
+        var distorted = Array.isArray(slots) ? slots.filter(function (slot) {
+            return slot.state === "melded" && slot.suppression === "interdimensional_grape";
+        }) : [];
+        var items = new Set(distorted.map(function (slot) { return slot.inv_slot; }));
+        if (items.size) {
+            var label = items.size + (items.size === 1 ? " item" : " items") + " suppressed";
+            var detail = "Interdimensional distortion has melded worn equipment; its effects are inactive. "
+                + "Suppressed equipment recovers gradually after leaving the aura.";
+            $root.append($('<div class="party-member-state" role="note" tabindex="0"></div>').text(label)
+                .attr({ "aria-label": hero.name + ": " + label + ". " + detail,
+                    "data-tip-title": "Interdimensional distortion", "data-tip-body": detail }));
+        }
         if (Number.isFinite(hero.defiance)) {
             $root.append($("<div class='party-member-state' role='meter' tabindex='0'></div>")
                 .attr({ id: "party_defiance_" + hero.slot, "aria-label": hero.name + " Defiance", "aria-valuemin": 0,
@@ -72,11 +98,12 @@ function ($, model, icons, faith, portraitStatus, properties) {
     }
     function activity(hero, state) {
         var current = model.activity(hero, state);
-        var level = Number.isFinite(hero.xl) ? hero.xl : null, capped = level !== null && level >= 27;
-        var progress = capped ? 100 : Number.isFinite(hero.xl_next) ? Math.max(0, Math.min(100, hero.xl_next)) : null;
+        var experience = model.experience(hero), level = experience.level, capped = experience.capped;
+        var progress = experience.progress;
         var label = "Lv. " + (level === null ? "?" : level) + " · " + current.label;
-        var description = capped ? "Experience level cap reached" : progress === null
+        var description = capped ? "Experience level cap reached (" + experience.cap + ")" : progress === null
             ? "Experience progress unavailable" : progress + "% to the next experience level";
+        description += ". Maximum level: " + experience.cap;
         var timingNote = hero.queued_action
             ? "Queued · " + (Number.isFinite(hero.aut_lead) && hero.aut_lead > 0 ? hero.aut_lead + " aut" : hero.queued_action)
             : (Number.isFinite(hero.aut_lead) && hero.aut_lead > 0
@@ -90,7 +117,8 @@ function ($, model, icons, faith, portraitStatus, properties) {
                 "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuetext": description,
                 "data-progress-state": capped ? "capped" : progress === null ? "unknown" : "known",
                 "data-tip-title": hero.name + " · " + label,
-                "data-tip-body": description + ".\n" + [hero.species, hero.job, hero.title, hero.place].filter(Boolean).join(" · "),
+                "data-tip-body": description + ".\n" + (current.description ? current.description + "\n" : "")
+                    + [hero.species, hero.job, hero.title, hero.place].filter(Boolean).join(" · "),
                 "data-tip-meta": timingNote })
             .on("click keydown keypress keyup", function (event) {
                 if (event.type.indexOf("key") === 0 && event.key === "Tab") return;

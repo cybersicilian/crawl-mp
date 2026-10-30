@@ -99,6 +99,10 @@ Eustachio title
 
 Eustachio the Magnificent
 %%%%
+Fallen title
+
+the Fallen
+%%%%
 Fannar title
 
 Fannar the Cold-Hearted

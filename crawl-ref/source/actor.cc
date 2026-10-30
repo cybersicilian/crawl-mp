@@ -339,6 +339,10 @@ int actor::equip_flight() const
 
 int actor::spirit_shield(bool items) const
 {
+    if (const player* p = as_player())
+        if (!p->uses_magic_reserve())
+            return 0;
+
     int ss = 0;
 
     if (items)
@@ -347,8 +351,9 @@ int actor::spirit_shield(bool items) const
         ss += wearing_jewellery(AMU_GUARDIAN_SPIRIT);
     }
 
-    if (is_player())
-        ss += you.get_mutation_level(MUT_MANA_SHIELD);
+    if (const player* p = as_player())
+        // This mutation has no suppression rules; use the owning hero's state.
+        ss += p->mutation[MUT_MANA_SHIELD];
 
     return ss;
 }

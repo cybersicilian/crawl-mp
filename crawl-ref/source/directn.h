@@ -53,6 +53,9 @@ public:
 
     virtual string get_error() { return ""; }
 
+    // Some targeting actions cannot see actors that other views may expose.
+    virtual bool hide_target(const coord_def&) const { return false; }
+
     // Add relevant descriptions to the target status.
     virtual vector<string> get_monster_desc(const monster_info& mi);
 private:

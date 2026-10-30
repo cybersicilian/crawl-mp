@@ -65,7 +65,7 @@ function hero(slot, count = 18) {
         });
         const files = [['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
-            ...['status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status', 'party-card-status',
+            ...['effect-icon-catalog', 'effect-icon-art', 'status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status', 'party-card-status',
                 'player-card-details', 'party-initiative', 'workflow-actions', 'party-navigation', 'party', 'native-tile-art', 'frame-update',
                 'party-power-cards', 'shell-dash-art', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])];

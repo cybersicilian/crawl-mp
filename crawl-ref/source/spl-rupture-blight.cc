@@ -7,6 +7,7 @@
 #include "message.h"
 #include "mon-death.h"
 #include "mon-ench.h"
+#include "mon-util.h"
 #include "monster.h"
 #include "ouch.h"
 #include "player.h"
@@ -56,7 +57,7 @@ void blight_monster(monster& victim, actor* agent, int power)
     else
         victim.add_ench(mon_enchant(ENCH_CONFUSION, agent,
                                    div_rand_round(relative, 3) + 10));
-    const int resistance = victim.res_poison();
+    const int resistance = agraphede_poison_resistance(&victim, agent);
     if (resistance < 3)
         poison_monster(&victim, agent, resistance ? 2 : 4, true);
 }

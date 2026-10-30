@@ -213,6 +213,19 @@ targeter_beam::targeter_beam(const actor *act, int r, zap_type zap,
     penetrates_targets = beam.pierce;
 }
 
+void targeter_beam::set_projectile(const bolt& projectile)
+{
+    beam = projectile;
+    // A targeting preview has no ranged_attack and must never drop the
+    // physical projectile. The caller's actual bolt retains its drop flag.
+    beam.drop_item = false;
+    beam.set_is_tracer(true);
+    beam.range = range;
+    beam.source = origin;
+    beam.target = aim;
+    penetrates_targets = beam.pierce;
+}
+
 bool targeter_beam::set_aim(coord_def a)
 {
     if (!targeter::set_aim(a))

@@ -1570,6 +1570,15 @@ public:
     }
 };
 
+class FormGolem : public Form
+{
+private:
+    FormGolem() : Form(transformation::golem) { }
+    DISALLOW_COPY_AND_ASSIGN(FormGolem);
+public:
+    static const FormGolem &instance() { static FormGolem inst; return inst; }
+};
+
 static const Form* forms[] =
 {
     &FormNone::instance(),
@@ -1621,6 +1630,7 @@ static const Form* forms[] =
     &FormHypnogecko::instance(),
     &FormMistmane::instance(),
     &FormScorpion::instance(),
+    &FormGolem::instance(),
 };
 
 const Form* get_form(transformation xform)

@@ -16,11 +16,11 @@
     padding: 0;
     scrollbar-width: thin;
 }
-#normal #left_column { height: 100vh; max-height: 100vh; }
+#normal #left_column { height: 100vh; max-height: 100vh; container: hud-playfield / inline-size; }
 /* Fixed layout bounds; whole tiles bleed behind the surrounding HUD. */
 #normal #dungeon_viewport { position: relative; z-index: 0; flex: 0 0 auto; min-height: 0; }
 #normal #dungeon { position: absolute; display: block; outline: none; }
-#normal #left_column > :not(#dungeon_viewport):not(.hud-floating) { position: relative; z-index: 1; }
+#normal #left_column > :where(:not(#dungeon_viewport):not(.hud-floating)) { position: relative; z-index: 1; }
 #normal #right_column { z-index: 1; }
 #normal :is(#stats, #party_hud, #monster_list) { width: 100% !important; }
 #normal :is(#stats, #party_hud, #message_pane, #monster_list, #minimap_block,

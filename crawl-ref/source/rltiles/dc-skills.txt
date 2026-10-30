@@ -53,6 +53,9 @@ sif_muna INVOCATIONS_S_ON
 uskayaw INVOCATIONS_U_ON
 yredelemnul INVOCATIONS_Y_ON
 zin INVOCATIONS_Z_ON
+imus_thea INVOCATIONS_IMUS_ON
+great_wyrm INVOCATIONS_WYRM_ON
+agraphede INVOCATIONS_AGRAPHEDE_ON
 %sdir gui/skills
 
 %texture focused-fg
@@ -108,6 +111,9 @@ sif_muna INVOCATIONS_S_FOCUS
 uskayaw INVOCATIONS_U_FOCUS
 yredelemnul INVOCATIONS_Y_FOCUS
 zin INVOCATIONS_Z_FOCUS
+imus_thea INVOCATIONS_IMUS_FOCUS
+great_wyrm INVOCATIONS_WYRM_FOCUS
+agraphede INVOCATIONS_AGRAPHEDE_FOCUS
 %sdir gui/skills
 
 %texture disabled-fg
@@ -163,6 +169,9 @@ sif_muna INVOCATIONS_S_OFF
 uskayaw INVOCATIONS_U_OFF
 yredelemnul INVOCATIONS_Y_OFF
 zin INVOCATIONS_Z_OFF
+imus_thea INVOCATIONS_IMUS_OFF
+great_wyrm INVOCATIONS_WYRM_OFF
+agraphede INVOCATIONS_AGRAPHEDE_OFF
 %sdir gui/skills
 
 %texture disabled-fg
@@ -218,6 +227,9 @@ sif_muna INVOCATIONS_S_INACTIVE
 uskayaw INVOCATIONS_U_INACTIVE
 yredelemnul INVOCATIONS_Y_INACTIVE
 zin INVOCATIONS_Z_INACTIVE
+imus_thea INVOCATIONS_IMUS_INACTIVE
+great_wyrm INVOCATIONS_WYRM_INACTIVE
+agraphede INVOCATIONS_AGRAPHEDE_INACTIVE
 %sdir gui/skills
 
 %texture mastered-fg
@@ -273,6 +285,9 @@ sif_muna INVOCATIONS_S_MAX
 uskayaw INVOCATIONS_U_MAX
 yredelemnul INVOCATIONS_Y_MAX
 zin INVOCATIONS_Z_MAX
+imus_thea INVOCATIONS_IMUS_MAX
+great_wyrm INVOCATIONS_WYRM_MAX
+agraphede INVOCATIONS_AGRAPHEDE_MAX
 %sdir gui/skills
 
 %texture none

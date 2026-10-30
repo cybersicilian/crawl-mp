@@ -185,6 +185,7 @@ under `/api/stats/...` as JSON. Sections and detail keys:
 |---|---|---|
 | `overview` | — | totals, recent games, deadliest foes, most-slain monsters, popular combos, chronicle finds |
 | `combos` | `<species_key>.<job_key>` | species × background heatmap; combo record, starting stats, aptitudes, starting skills/kit |
+
 | `species`, `jobs` | key | reference stats/aptitudes/skills/kit + gameplay and per-combo breakdown |
 | `monsters` | key | full bestiary (HD/HP/AC/EV/speed/XP, attacks, resists, spells, flags) + times slain, heroes slain, top hunters |
 | `items` | `<category>.<key>` | every category incl. brands/egos/unrands + equipped-at-last-record, use counts (Action table), chronicle finds |
@@ -194,6 +195,13 @@ under `/api/stats/...` as JSON. Sections and detail keys:
 | `deaths` | — | killers, places, ktyp, recent deaths, co-op ghosts |
 | `players` | account or hero name | adventurers and heroes, linking to `/players/<id>` and `/games/<id>` when the library knows them |
 | `skills`, `mutations` | key | aptitudes across species / trained levels; mutation reference |
+
+The combo grid orders each species and background axis by filtered games plus twice
+the wins, with games, wins, offered-pair count and name as tie breakers. This is a
+display heuristic, not a win-rate estimate or a recommendation. Rows and columns
+are ranked independently, so some unavailable cells necessarily remain outside
+the lower-right area. When no games match, offered-pair count and name determine
+the order; historical records for currently unavailable pairs remain visible.
 
 `/stats/search?q=<query>` and `/api/stats/search?q=<query>` search reference
 names, canonical keys, categories, descriptions and selected aliases, plus legal

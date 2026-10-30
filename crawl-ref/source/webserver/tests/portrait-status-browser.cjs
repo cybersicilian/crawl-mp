@@ -32,7 +32,7 @@ const output = process.env.PORTRAIT_PROOF_DIR || '/tmp/dcss-portrait-status-proo
             './tileinfo-dngn': { get_tile_info() { return null; } } }; });
         for (const [id, file] of [
             ['item-properties', 'static/scripts/item-properties.js'],
-            ['./status-icons', 'game_data/static/status-icons.js'],
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
             ['./party-status-model', 'game_data/static/party-status-model.js'],
             ['./portrait-status', 'game_data/static/portrait-status.js'],
             ['./party-faith', 'game_data/static/party-faith.js'],

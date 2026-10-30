@@ -24,6 +24,9 @@ enum equipment_slot
     SLOT_TWOHANDER_ONLY,        // Fortress Crab's slot for a two-hander (but
                                 // not a shield)
 
+    // Keep new real slots at the end: existing slot numbers are saved.
+    SLOT_BAG,
+
     // End of the 'real' equip slots.
     NUM_EQUIP_SLOTS,
 

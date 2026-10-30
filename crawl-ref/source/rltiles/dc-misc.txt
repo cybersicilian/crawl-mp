@@ -598,3 +598,8 @@ error ERROR
 %rim 1
 todo TODO
 %rim 0
+
+%sdir effect
+cloud_heal0 CLOUD_WYRM_HEAL
+cloud_heal1
+cloud_heal2

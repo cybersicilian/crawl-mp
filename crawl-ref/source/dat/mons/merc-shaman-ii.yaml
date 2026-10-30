@@ -1,0 +1,21 @@
+name: "hired ritualist"
+enum: merc_shaman_ii
+glyph: {char: "ğ", colour: yellow}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived]
+species: gnoll
+will: 60
+attacks:
+ - {type: hit, damage: 12}
+hd: 10
+hp_10x: 500
+ac: 6
+ev: 6
+spells: merc_shaman_ii
+has_corpse: true
+shout: shout
+intelligence: human
+energy: {spell: 8}
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: merc_shaman_ii

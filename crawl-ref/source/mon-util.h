@@ -212,7 +212,12 @@ int get_mons_class_ev(monster_type mc) IMMUTABLE;
 resists_t get_mons_class_resists(monster_type mc) IMMUTABLE;
 resists_t get_mons_resists(const monster& mon);
 int get_mons_resist(const monster& mon, mon_resist_flags res);
-bool monster_resists_this_poison(const monster& mons, bool force = false);
+// Resistance seen by the actual poison source. Agraphede's favour affects
+// only that player's attacks, not global monster resistance or allied pets.
+int agraphede_poison_resistance(const actor* target, const actor* source);
+const actor* agraphede_poison_beam_source(const bolt& beam);
+bool monster_resists_this_poison(const monster& mons, bool force = false,
+                                 const actor* source = nullptr);
 
 void init_monsters();
 void init_monster_symbols();

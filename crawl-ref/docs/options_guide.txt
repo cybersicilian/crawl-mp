@@ -61,7 +61,7 @@ The contents of this text are:
                 easy_floor_use, sort_menus, spell_slot, gear_slot,
                 consumable_shortcut, ability_slot, autofight_stop,
                 autofight_warning, autofight_fires, autofight_nomove_fires,
-                autofight_fire_stop, autofight_caught, autofight_wait,
+                autofight_fire_stop, autofight_caught, autofight_wait, autofight_weapon_swap,
                 autofight_prompt_range, autofight_stampede, automagic_enable,
                 automagic_slot, automagic_fight, automagic_stop,
                 fail_severity_to_confirm, easy_door, warn_hatches,
@@ -600,6 +600,14 @@ autopickup = $?!+"/♦
         up takes a turn, but only one turn (regardless of the number of
         items). If you teleport or blink onto a square with interesting
         items, these will not be picked up.
+
+auto_bag_items = !?
+        Store picked-up items of the listed classes in your equipped bag when
+        it has space. The symbols are the same as for autopickup. This option
+        is empty by default; if the bag cannot accept an item, normal pickup
+        rules apply. Gold, books, runes, gems, the Orb, vouchers and
+        Archaeologist quest items keep their usual special pickup handling.
+        Duplicate wands and experience-recharged evokers merge as usual.
 
 autopickup_exceptions ^= <pickup-regex, >don't-pickup-regex, ...
         (Ordered list option)
@@ -1483,6 +1491,14 @@ autofight_nomove_fires = true
         This option modifies the behavior of CMD_AUTOFIGHT_NOMOVE (unbound by
         default) in a similar way to how `autofight_fires`, above, modifies
         CMD_AUTOFIGHT. (Legacy name: `autofight_throw_nomove`.)
+
+autofight_weapon_swap = false
+        Allow autofight to switch between a melee weapon and a launcher in
+        inventory slots a and b, using melee for adjacent targets and the
+        launcher for distant targets. Switching takes a turn. Reaching attacks
+        retain priority when available. Wield restrictions and warning
+        inscriptions prevent automatic switches. In a shared game, the host's
+        setting applies to the party.
 
 autofight_fire_stop = false
         When firing missiles or throwing objects using autofight, if this

@@ -1,0 +1,21 @@
+name: "hired cleaner"
+enum: merc_cleaner
+glyph: {char: "K", colour: green}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived, see_invis]
+species: kobold
+will: 120
+attacks:
+ - {type: hit, flavour: shadowstab, damage: 18}
+ - {type: hit, flavour: shadowstab, damage: 12}
+hd: 15
+hp_10x: 650
+ac: 2
+ev: 25
+spells: merc_cleaner
+has_corpse: true
+shout: silent
+intelligence: human
+uses: weapons_armour
+size: small
+shape: humanoid
+tile: merc_cleaner

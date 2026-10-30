@@ -1834,6 +1834,15 @@ Arachne triumphant
 
 @The_monster@ shouts, "This is my domain now; anyone trespasses at their own peril!"
 %%%%
+############ ASCLEPIA ### Orc herbalist
+Asclepia
+
+VISUAL:@The_monster@ tightens her protective scarf.
+
+@The_monster@ says @to_foe@, "Trust me! The next one will be curing!"
+
+@The_monster@ says @to_foe@, "The best ingredients are blood and remains."
+%%%%
 ############ ASTERION ### Minotaur of Makhleb
 Asterion
 
@@ -2279,6 +2288,15 @@ VISUAL:@The_monster@ inspects you suspiciously.
 
 @The_monster@ says, "ME ROCKS!"
 ### End CHUCK ###
+%%%%
+############ BRANDAGOTH ### Lava orc sorcerer
+Brandagoth
+
+VISUAL:@The_monster@ conjures a flickering flame in his hand.
+
+@The_monster@ yells @to_foe@, "Burn!"
+
+@The_monster@ says @to_foe@, "You will become a pile of ash!"
 %%%%
 ############ CRAZY YIUF ### A mad old gnoll!
 Crazy Yiuf
@@ -4698,6 +4716,15 @@ the Shining One Frederick triumphant
 
 @Frederick@
 %%%%
+############ FALLEN ### A grieving fallen angel
+Fallen
+
+VISUAL:@The_monster@ looks at @foe@ with weary sorrow.
+
+@The_monster@ says @to_foe@, "I have already lost everything."
+
+@The_monster@ whispers, "Can the dead ever forgive us?"
+%%%%
 ############ FANNAR ### A cold-hearted elven sorcerer
 Fannar
 
@@ -5713,6 +5740,15 @@ VISUAL:@The_monster@ adjusts @possessive@ apparatus.
 
 @The_monster@ frowns @at_foe@ and says, "You violating area security."
 ## END Lodul ##
+%%%%
+############ LICHBANE ### The unchained undead
+Lichbane
+
+@The_monster@ says @to_foe@, "I slew my master with my own hands. How about you?"
+
+@The_monster@ says @to_foe@, "None shall rule over the dead!"
+
+@The_monster@ says, "Eternal death to those who command the dead!"
 %%%%
 ############ LOUISE ### A sorceress driven mad by the abyss
 Louise

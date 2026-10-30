@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const modules = {};
 for (const [name, file] of [
     ['item-properties', 'static/scripts/item-properties.js'],
-    ['./status-icons', 'game_data/static/status-icons.js'],
+    ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
     ['./party-status-model', 'game_data/static/party-status-model.js'],
     ['./portrait-status', 'game_data/static/portrait-status.js']
 ]) vm.runInNewContext(fs.readFileSync(path.join(root, file), 'utf8'), {

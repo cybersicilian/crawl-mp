@@ -138,6 +138,19 @@ bool can_do_capstone_ability(god_type god)
     return in_good_standing(god, pbreak) && !you.one_time_ability_used[god];
 }
 
+bool weapon_blessing_used(god_type god)
+{
+    return god == GOD_JIYVA
+        ? you.props.exists("jiyva_weapon_blessed")
+        : you.one_time_ability_used[god];
+}
+
+bool can_bless_weapon(god_type god)
+{
+    return in_good_standing(god, capstone_piety_rank(god) - 1)
+           && !weapon_blessing_used(god);
+}
+
 static const char *_god_blessing_description(god_type god)
 {
     switch (god)
@@ -148,6 +161,14 @@ static const char *_god_blessing_description(god_type god)
         return "corrupted by Lugonu";
     case GOD_KIKUBAAQUDGHA:
         return "bloodied by Kikubaaqudgha";
+    case GOD_ZIN:
+        return "blessed by Zin";
+    case GOD_ELYVILON:
+        return "blessed by Elyvilon";
+    case GOD_JIYVA:
+        return "transformed by Jiyva";
+    case GOD_CHEIBRIADOS:
+        return "blessed by Cheibriados";
     default:
         return "touched by the gods";
     }
@@ -164,7 +185,7 @@ static const char *_god_blessing_description(god_type god)
 */
 bool bless_weapon(god_type god, brand_type brand, colour_t colour)
 {
-    ASSERT(can_do_capstone_ability(god));
+    ASSERT(can_bless_weapon(god));
 
     int item_slot = prompt_invent_item("Brand which weapon?",
                                        menu_type::invlist,
@@ -190,6 +211,14 @@ bool bless_weapon(god_type god, brand_type brand, colour_t colour)
         prompt += "bloodied with pain";
     else if (brand == SPWPN_DISTORTION)
         prompt += "corrupted with distortion";
+    else if (brand == SPWPN_PACIFYING)
+        prompt += "blessed with pacifying";
+    else if (brand == SPWPN_SLUGGISH)
+        prompt += "blessed with sluggish";
+    else if (brand == SPWPN_SILVER)
+        prompt += "blessed with silver";
+    else if (brand == SPWPN_SLIMIFYING)
+        prompt += "transformed with slimifying";
     else
         prompt += "blessed with holy wrath";
     prompt += "?";
@@ -216,7 +245,10 @@ bool bless_weapon(god_type god, brand_type brand, colour_t colour)
         convert2bad(wpn);
 
     you.wield_change = true;
-    you.one_time_ability_used.set(god);
+    if (god == GOD_JIYVA)
+        you.props["jiyva_weapon_blessed"] = true;
+    else
+        you.one_time_ability_used.set(god);
     calc_mp(); // in case the old brand was antimagic,
     you.redraw_armour_class = true; // protection,
     you.redraw_evasion = true;      // or evasion
@@ -228,7 +260,6 @@ bool bless_weapon(god_type god, brand_type brand, colour_t colour)
     mprf(MSGCH_GOD, "Your %s shines brightly!", wpn.name(DESC_QUALNAME).c_str());
     flash_view(UA_PLAYER, colour);
     simple_god_message(" booms: Use this gift wisely!");
-    you.one_time_ability_used.set(you.religion);
     take_note(Note(NOTE_GOD_GIFT, you.religion));
 
     if (god == GOD_SHINING_ONE)
@@ -4062,10 +4093,15 @@ static void _gozag_place_shop(int index)
                     shop->shop_suffix_name.c_str());
 }
 
-static bool _shop_type_valid(shop_type type)
+bool gozag_shop_type_valid(shop_type type)
 {
     switch (type)
     {
+    // Keep Gozag's existing shop pool unchanged; the legacy sentinel is not
+    // a real shop, and mercenary shops appear through their own vaults.
+    case SHOP_LEGACY_MISCELLANY:
+    case SHOP_MERCENARY:
+        return false;
 #if TAG_MAJOR_VERSION == 34
     case SHOP_FOOD:
     case SHOP_EVOKABLES:
@@ -4095,7 +4131,7 @@ bool gozag_call_merchant()
     for (int i = 0; i < NUM_SHOPS; i++)
     {
         shop_type type = static_cast<shop_type>(i);
-        if (_shop_type_valid(type))
+        if (gozag_shop_type_valid(type))
             valid_shops.push_back(type);
     }
 

@@ -282,6 +282,12 @@ static forbidden_map divine_prohibitions[] =
     forbidden_map(),
     // GOD_VELLUM
     forbidden_map(),
+    // GOD_IMUS_THEA
+    forbidden_map(),
+    // GOD_GREAT_WYRM
+    forbidden_map(),
+    // GOD_AGRAPHEDE
+    forbidden_map(),
 };
 
 /// A definition of the way in which a god dislikes a conduct being taken.
@@ -489,6 +495,12 @@ static peeve_map divine_peeves[] =
     // GOD_VORR
     peeve_map(),
     // GOD_VELLUM
+    peeve_map(),
+    // GOD_IMUS_THEA
+    peeve_map(),
+    // GOD_GREAT_WYRM
+    peeve_map(),
+    // GOD_AGRAPHEDE
     peeve_map(),
 };
 
@@ -993,6 +1005,12 @@ static like_map divine_likes[] =
     // GOD_VORR: ordinary reward weighting, restricted to actual blood.
     DEFAULT_KILL_CONDUCT,
     // GOD_VELLUM: crafting itself never awards piety.
+    DEFAULT_KILL_CONDUCT,
+    // GOD_IMUS_THEA
+    DEFAULT_KILL_CONDUCT,
+    // GOD_GREAT_WYRM
+    { { DID_EXPLORATION, explore_response(47) } },
+    // GOD_AGRAPHEDE
     DEFAULT_KILL_CONDUCT,
 };
 

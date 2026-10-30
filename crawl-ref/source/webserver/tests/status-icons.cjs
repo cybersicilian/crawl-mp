@@ -13,7 +13,9 @@ function load(file, dependencies = {}) {
     return result;
 }
 const properties = load('static/scripts/item-properties.js');
-const icons = load('game_data/static/status-icons.js', { 'item-properties': properties });
+const catalogData = load('game_data/static/effect-icon-catalog.js');
+const art = load('game_data/static/effect-icon-art.js', { './effect-icon-catalog': catalogData });
+const icons = load('game_data/static/status-icons.js', { 'item-properties': properties, './effect-icon-art': art });
 const model = load('game_data/static/party-status-model.js');
 assert(catalog.length >= 200, 'Coverage must include the complete duration table');
 assert.equal(new Set(catalog.map(status => status.id)).size, catalog.length);

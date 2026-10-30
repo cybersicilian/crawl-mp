@@ -24,6 +24,11 @@ function ($, model, icons, tiles, art, initiative, enemies) {
         $("#party_progress_floor").attr({ "aria-label": "Current floor: " + (progress.place || "unavailable"),
             "data-tip-title": "Current floor", "data-tip-body": progress.place || "Floor information unavailable." })
             .find(".party-context-value").text(progress.place || "?");
+        var bribeLabel = progress.bribeFund === null ? "No active branch bribe" : "Bribe fund: " + progress.bribeFund + " gold";
+        $("#party_progress_bribe").prop("hidden", progress.bribeFund === null)
+            .attr({ "aria-label": bribeLabel, "data-tip-title": bribeLabel,
+                "data-tip-body": "Gold remaining to bribe the denizens of this branch. Hell branches share one fund." })
+            .find(".party-context-value").text(progress.bribeFund === null ? "" : "Bribe: " + progress.bribeFund.toLocaleString("en-US"));
         var next = JSON.stringify([progress.runes, progress.runesKnown]);
         if (runeSignature === next) return;
         runeSignature = next;
@@ -48,6 +53,7 @@ function ($, model, icons, tiles, art, initiative, enemies) {
             var $root = $("<div id='party_progress' role='group' aria-label='Party progress'>"
                 + "<span id='party_progress_gold' class='party-context-stat' tabindex='0' role='img' aria-label='Shared party gold'></span>"
                 + "<span id='party_progress_floor' class='party-context-stat' tabindex='0' role='img'><span class='party-context-value'></span></span>"
+                + "<span id='party_progress_bribe' class='party-context-stat' tabindex='0' role='img' hidden><span class='party-context-value'></span></span>"
                 + "<span id='party_progress_rune_group' role='group' aria-label='Collected runes'><span id='party_progress_runes'></span></span></div>");
             $root.find("#party_progress_gold").append(icons.icon("coin"));
             var $gold = $("#party_hud_gold");

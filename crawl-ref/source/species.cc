@@ -5,6 +5,7 @@
 #include "species.h"
 
 #include "branch.h"
+#include "grape-player.h"
 #include "item-prop.h"
 #include "items.h"
 #include "mutation.h"
@@ -786,6 +787,7 @@ void change_species_to(species_type sp)
     {
         mprf("%s falls away.", item->name(DESC_YOUR).c_str());
         you.equipment.remove(*item);
+        grape_player::forget(*item);
     }
     you.equipment.update();
 

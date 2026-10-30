@@ -4,8 +4,10 @@
 **/
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
 #include "hermit-crab.h"
 #include "automaton.h"
+#include "kimjoy-artifacts.h"
 
 #include "ouch.h"
 #include "auras.h"
@@ -41,6 +43,7 @@
 #include "spl-transloc.h"
 #include "ghost.h"
 #include "god-abil.h"
+#include "god-agraphede.h"
 #include "god-passive.h"
 #include "hints.h"
 #include "hiscores.h"
@@ -1405,6 +1408,19 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
     else if (you.petrifying())
         dam = dam * 10 / 15;
 
+    // Conversion precedes party redirection, spirit shield and death
+    // protection: this attack heals its infusion's owner instead of harming
+    // them, and must not spend another player's defensive resources.
+    if (monster* attacker = monster_by_mid(source))
+        if (dam > 0 && wyrm_essence::converts_damage(*attacker))
+        {
+            mpr("Viriditas turns the attack into healing!");
+            inc_hp(dam);
+            return;
+        }
+
+    agraphede_divert_damage(dam, death_type);
+
     if (dam > 0 && _is_real_death(death_type)
         && death_type != KILLED_BY_POISON && death_type != KILLED_BY_ZOT)
     {
@@ -1684,6 +1700,8 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
         refresh_meek_bonus();
         if (death_type != KILLED_BY_POISON)
         {
+            unseen_dragon_after_damage(dam);
+            distortion_gauntlets_after_damage(dam);
             _maybe_corrode();
             _maybe_slow();
             _maybe_silence();
@@ -1900,7 +1918,12 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
     take_note(Note(NOTE_DEATH, you.hp, you.hp_max,
                     se.death_description(scorefile_entry::DDV_NORMAL).c_str()),
               true);
-    if (you.lives && _is_real_death(death_type))
+    const bool shared_fate = party::shared_fate_enabled() && _is_real_death(death_type);
+    if (shared_fate)
+        mprf(MSGCH_DANGER, "Shared Fate: %s has died. The expedition is lost!",
+             you.your_name.c_str());
+
+    if (!shared_fate && you.lives && _is_real_death(death_type))
     {
         mark_milestone("death", lowercase_first(se.long_kill_message()).c_str());
 
@@ -1926,7 +1949,7 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
         return;
     }
 
-    if (_is_real_death(death_type) && hermit_crab::break_shell(you))
+    if (!shared_fate && _is_real_death(death_type) && hermit_crab::break_shell(you))
     {
         mark_milestone("death", lowercase_first(se.long_kill_message()).c_str());
         you.deaths++;
@@ -1939,7 +1962,7 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
         return;
     }
 
-    if (party::is_enabled() && _is_real_death(death_type)
+    if (!shared_fate && party::is_enabled() && _is_real_death(death_type)
         && (party::prepare_survivor_for_death(party::active_slot())
             || party::try_last_stand_revive(party::active_slot())))
     {
@@ -1957,9 +1980,14 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
         party::set_player_downed(party::active_slot(), true);
         stats_note_hero_downed(se);
         party::relocate_downed_ghost_to_survivor(party::active_slot());
-        mprf(MSGCH_DANGER,
-             "%s has fallen! %s's ghost travels to haunt the surviving party until revived!",
-             you.your_name.c_str(), you.your_name.c_str());
+        if (party::multiplayer_enabled())
+            mprf(MSGCH_DANGER,
+                 "%s has fallen! A surviving player can read a scroll of soul recall to resurrect them.",
+                 you.your_name.c_str());
+        else
+            mprf(MSGCH_DANGER,
+                 "%s has fallen! %s's ghost travels to haunt the surviving party until revived!",
+                 you.your_name.c_str(), you.your_name.c_str());
         return;
     }
 

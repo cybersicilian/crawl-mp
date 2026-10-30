@@ -53,7 +53,7 @@ async function main() {
         });
         for (const [name, file] of [['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'],
-            ['./status-icons', 'game_data/static/status-icons.js'], ['./player-stat-tips', 'game_data/static/player-stat-tips.js'],
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'], ['./player-stat-tips', 'game_data/static/player-stat-tips.js'],
             ['./player-hud', 'game_data/static/player-hud.js'], ['./player-card-details', 'game_data/static/player-card-details.js']]) {
             await page.evaluate(name => { window.moduleName = name; }, name);
             await page.addScriptTag({ path: path.join(root, file) });

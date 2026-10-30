@@ -17,11 +17,13 @@ const directions = [
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     try {
-        await page.setContent('<main id="normal"><div id="left_column"><canvas id="dungeon" width="640" height="480"></canvas></div></main>'
+        await page.setContent('<main id="normal"><div id="left_column"><div id="dungeon_viewport"><canvas id="dungeon" width="700" height="540"></canvas></div></div></main>'
             + '<div id="ui-stack"></div><input class="text" id="chat_input"><textarea id="draft"></textarea>'
             + '<div contenteditable="true" id="editor">Draft</div><button id="outside">Dungeon focus</button>'
             + '<dialog id="modal"><button>Close</button></dialog>');
-        await page.addStyleTag({ content: '#left_column { position: relative; width: 640px; height: 480px; } body { background: black; }' });
+        await page.addStyleTag({ content: '#left_column { position: relative; width: 640px; height: 480px; margin-left: 20px; }'
+            + '#dungeon_viewport { position: relative; width: 640px; height: 480px; }'
+            + '#dungeon { position: absolute; left: -30px; top: -30px; } body { background: black; }' });
         await page.addStyleTag({ path: path.join(overlay, 'game_data/static/styles/direction-pad.css') });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/contrib/jquery.js') });
         await page.evaluate(() => {
@@ -63,6 +65,22 @@ const directions = [
         const active = () => page.locator('#direction_pad .is-activated').evaluateAll(nodes => nodes.map(node => node.dataset.direction));
         const packets = () => page.evaluate(() => window.qaPackets.splice(0));
         const clear = () => page.clock.runFor(200);
+        const alignment = () => page.evaluate(() => {
+            const pad = document.getElementById('direction_pad').getBoundingClientRect();
+            const viewport = document.getElementById('dungeon_viewport').getBoundingClientRect();
+            return { right: viewport.right - pad.right, bottom: viewport.bottom - pad.bottom };
+        });
+        assert.deepEqual(await alignment(), { right: 10, bottom: 10 }, 'Align to the frame despite canvas bleed');
+        await page.locator('#dungeon_viewport').evaluate(node => {
+            node.style.width = '560px'; node.style.height = '400px';
+        });
+        await page.clock.runFor(64);
+        await page.waitForFunction(() => {
+            const pad = document.getElementById('direction_pad').getBoundingClientRect();
+            const viewport = document.getElementById('dungeon_viewport').getBoundingClientRect();
+            return viewport.right - pad.right === 10 && viewport.bottom - pad.bottom === 10;
+        });
+        assert.deepEqual(await alignment(), { right: 10, bottom: 10 }, 'Follow frame resizing without resizing canvas');
         assert.equal(await page.locator('#direction_pad button').count(), 8);
         assert.equal(await page.locator('.direction-pad-center').innerText(), '');
         assert.equal(await page.locator('.direction-pad-legend').count(), 0);

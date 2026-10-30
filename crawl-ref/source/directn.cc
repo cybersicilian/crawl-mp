@@ -1177,6 +1177,8 @@ void direction_chooser::calculate_target_info()
 
     for (monster_near_iterator mi(you.pos(), LOS_DEFAULT); mi; ++mi)
     {
+        if (behaviour->hide_target(mi->pos()))
+            continue;
         if (!you.aware_of(**mi))
             continue;
 
@@ -1856,6 +1858,8 @@ vector<string> get_monster_status_descriptors(const monster_info& mi)
 
 string cell_monster_description(const coord_def& pos, bool include_areas, targeting_behaviour* behavior)
 {
+    if (behavior && behavior->hide_target(pos))
+        return "";
     const monster_info* mi = env.map_knowledge(pos).monsterinfo();
     if (!mi)
         return "";
@@ -2286,7 +2290,8 @@ void direction_chooser::full_describe()
                                                          false, true, true,
                                                          range);
     for (auto m : nearby_mons)
-        if (_want_target_monster(m, mode, hitfunc))
+        if (!behaviour->hide_target(m->pos())
+            && _want_target_monster(m, mode, hitfunc))
             list_mons.push_back(*env.map_knowledge(m->pos()).monsterinfo());
 
     if (targets_objects() || just_looking)
@@ -2314,6 +2319,8 @@ void direction_chooser::full_describe()
 void direction_chooser::describe_target()
 {
     if (!map_bounds(target()) || !env.map_knowledge(target()).known())
+        return;
+    if (behaviour->hide_target(target()))
         return;
     if (full_describe_square(target(), false))
         moves.isCancel = force_cancel = true;
@@ -3553,13 +3560,16 @@ string get_monster_equipment_desc(const monster_info& mi,
 
     // as with dancing weapons, don't claim armour echoes 'wear' their armour
     if (mon_arm && mi.type != MONS_ARMOUR_ECHO && mi.type != MONS_HAUNTED_ARMOUR)
-        wearing_descriptions.push_back(mon_arm->name(DESC_A).c_str());
+        wearing_descriptions.push_back(mon_arm->name(DESC_A)
+            + (mi.props.exists("grape_body_melded") ? " (melded)" : ""));
 
     if (mon_shd)
-        wearing_descriptions.push_back(mon_shd->name(DESC_A).c_str());
+        wearing_descriptions.push_back(mon_shd->name(DESC_A)
+            + (mi.props.exists("grape_shield_melded") ? " (melded)" : ""));
 
     if (mon_aux)
-        wearing_descriptions.push_back(mon_aux->name(DESC_A).c_str());
+        wearing_descriptions.push_back(mon_aux->name(DESC_A)
+            + (mi.props.exists("grape_aux_melded") ? " (melded)" : ""));
 
     if (mon_rng)
         wearing_descriptions.push_back(mon_rng->name(DESC_A).c_str());

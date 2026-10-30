@@ -3,7 +3,10 @@ const { signInTestAccount } = require('./helpers/test-account.cjs');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chromium } = require('playwright');
+const { chromium, webkit } = require('playwright');
+const { chromiumLaunchOptions } = require('./helpers/browser-launch.cjs');
+const engine = process.env.LOADING_BROWSER || 'chromium';
+assert(['chromium', 'webkit'].includes(engine));
 const url = process.env.WEBTILES_URL || 'http://127.0.0.1:18997';
 assert(['localhost', '127.0.0.1'].includes(new URL(url).hostname));
 const output = process.env.LOADING_PROOF_DIR || '/tmp/dcss-loading-native/proof';
@@ -53,11 +56,19 @@ async function verifyGap(page, name) {
 }
 
 (async () => {
-    const browser = await chromium.launch({ headless: true, channel: 'chrome' });
+    const browser = await (engine === 'webkit' ? webkit : chromium).launch(
+        engine === 'webkit' ? { headless: true } : chromiumLaunchOptions());
     const errors = [], evidence = {};
+    function trackErrors(target) {
+        target.on('pageerror', error => errors.push(error.message));
+        target.on('console', message => {
+            if (message.type() === 'error' && message.text().startsWith('Options not set, wanted option:'))
+                errors.push(message.text());
+        });
+    }
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     page.setDefaultTimeout(30000);
-    page.on('pageerror', error => errors.push(error.message));
+    trackErrors(page);
     try {
         await page.goto(url);
         const account = 'LoadingQA' + Date.now().toString().slice(-8);
@@ -71,7 +82,7 @@ async function verifyGap(page, name) {
         evidence.heroes = initial.members.map(member => member.player_id);
 
         const spectator = await browser.newPage({ viewport: { width: 1280, height: 800 } });
-        spectator.on('pageerror', error => errors.push(error.message));
+        trackErrors(spectator);
         await spectator.goto(url);
         await holdMaps(spectator);
         await spectator.evaluate(account => { location.hash = '#watch-' + account; }, account);
@@ -95,6 +106,7 @@ async function verifyGap(page, name) {
         assert.deepEqual(errors, []);
         evidence.startup = evidence.spectating = evidence.resume = true;
         evidence.browserErrors = errors;
+        evidence.engine = engine;
         fs.writeFileSync(path.join(output, 'evidence.json'), JSON.stringify(evidence, null, 2));
         console.log(JSON.stringify({ success: true, output, ...evidence }));
     } catch (error) {

@@ -1,5 +1,5 @@
 /* Native starting values align across every planned hero without extra navigation. */
-define(["starting-sheet", "character-guide", "character-stat-help"], function (sheet, guide, help) {
+define(["starting-sheet", "character-guide", "character-stat-help", "party-manager"], function (sheet, guide, help, manager) {
     "use strict";
     var grid, panel, tabs, selected = "heroes", pending = false;
     function el(tag, className, text) {
@@ -52,7 +52,7 @@ define(["starting-sheet", "character-guide", "character-stat-help"], function (s
         });
         var actionsLabel = el("th", "", "Plan"); actionsLabel.scope = "col"; labels.appendChild(actionsLabel); head.appendChild(labels); table.append(head, tbody);
         cards.forEach(function (card, index) {
-            var build = sheet.read(card); if (!build.species || !build.job) return;
+            var build = sheet.read(card); if (!build.species || !build.job || !build.active) return;
             var row = el("tr", build.active ? "" : "is-inactive"); row.dataset.compareSlot = card.dataset.slot;
             var hero = el("th", "party-compare-hero"); hero.scope = "row";
             var identity = el("div", "party-compare-identity"), marker = el("span", "party-compare-portrait"), copy = el("div");
@@ -66,13 +66,14 @@ define(["starting-sheet", "character-guide", "character-stat-help"], function (s
             var inspect = el("button", "party-starting-sheet", "Sheet"); inspect.type = "button"; inspect.setAttribute("aria-haspopup", "dialog"); inspect.setAttribute("aria-label", "Starting sheet for " + build.name);
             inspect.dataset.compareFocus = card.dataset.slot + ":sheet"; inspect.addEventListener("click", function () { guide.openSheet(card, inspect); });
             var edit = el("button", "party-edit-hero", "Edit"); edit.type = "button"; edit.setAttribute("aria-label", "Edit " + build.name); edit.dataset.compareFocus = card.dataset.slot + ":edit";
+            edit.disabled = card.dataset.seatEditable === "false";
             edit.addEventListener("click", function () { show("heroes"); card.scrollIntoView({ block: "center" }); card.querySelector(".party-slot-name").focus({ preventScroll: true }); });
             var retry = el("button", "party-compare-retry", "Retry stats"); retry.type = "button";
             retry.addEventListener("click", function () { sheet.retry(sheet.read(card)); refreshSnapshot(card, row); });
             actions.append(inspect, edit, retry); row.appendChild(actions); tbody.appendChild(row); refreshSnapshot(card, row);
         });
         scroll.appendChild(table); panel.appendChild(scroll); scroll.scrollLeft = scrollLeft;
-        panel.appendChild(el("p", "party-composition-note", "Native starting values, before temporary effects. Hover or focus a stat for its explanation. Open and closed seats show their planned builds."));
+        panel.appendChild(el("p", "party-composition-note", "Native starting values for the heroes joining this party. Hover or focus a stat for its explanation."));
         if (focusKey) { var next = panel.querySelector("[data-compare-focus='" + focusKey + "']"); if (next) next.focus({ preventScroll: true }); }
     }
     function show(view, focus) {
@@ -98,6 +99,7 @@ define(["starting-sheet", "character-guide", "character-stat-help"], function (s
         });
         var tools = el("div", "party-setup-tools"); tools.appendChild(tabs);
         grid.before(tools); grid.after(panel); show("heroes");
+        manager.init(grid, function (card) { show("heroes"); card.scrollIntoView({ block: "start" }); card.querySelector(".party-slot-name").focus({ preventScroll: true }); });
         new MutationObserver(function (changes) {
             if (pending || selected !== "composition" || changes.every(function (change) { return change.target.closest && change.target.closest(".party-slot-monogram"); })) return;
             pending = true; requestAnimationFrame(render);

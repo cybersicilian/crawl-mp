@@ -23,7 +23,7 @@ from tornado.ioloop import IOLoop
 from webtiles import auth, checkoutput, chronicle, config, userdb, util, load_games
 from webtiles import game_library, library_socket, starting_weapons, crash_reports, system_one
 from webtiles.character_preview import ensure_seed
-from webtiles import session_recovery, party_roster
+from webtiles import session_recovery, party_roster, party_access, party_saved
 from webtiles import profile_appearance, profile_graphics, game_settings_socket
 from webtiles.state_transport import append_snapshot
 
@@ -69,7 +69,7 @@ def broadcast_party_rooms():
     chronicle_data = _get_chronicle_payload()
     for socket in list(sockets):
         if socket.is_in_lobby():
-            socket.send_message("party_rooms_list", rooms=rooms_list)
+            socket.send_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), socket))
             socket.send_message("coop_chronicle", **chronicle_data)
 
 def _resolve_party_room(room_id=None, username=None):
@@ -168,6 +168,9 @@ def do_lobby_updates():
         # synchronous.
         for socket in lobby_sockets:
             if admin_only and not socket.is_admin():
+                continue
+            if not party_access.process_allowed(PARTY_ROOMS.values(), game, socket):
+                socket.queue_message("lobby_remove", id=game.id)
                 continue
             socket.queue_message("lobby_entry", **game_entry)
 
@@ -345,7 +348,8 @@ def admin_only(f):
 MessageBundle = collections.namedtuple('MessageBundle', ["binmsg", "compressed"])
 MessageBundle.__bool__ = lambda self: bool(self.binmsg)
 
-class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebSocketHandler):
+class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMethods,
+                     library_socket.LibrarySocketMethods, tornado.websocket.WebSocketHandler):
     def __init__(self, app, req, **kwargs):
         tornado.websocket.WebSocketHandler.__init__(self, app, req, **kwargs)
         self.username = None
@@ -361,6 +365,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         self.save_info = dict()
         self.party_member_active = False
         self.party_slot = 0
+        self.party_invites = {}
         self.state_deltas = False
 
         tornado.ioloop.IOLoop.current()
@@ -400,6 +405,8 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             "join_party": self.join_party,
             "party_lobby_list": self.party_lobby_list,
             "party_room_create": self.party_room_create,
+            "party_room_open": self.party_room_open,
+            "party_room_load_save": self.party_room_load_save,
             "party_room_join": self.party_room_join,
             "party_room_leave": self.party_room_leave,
             "party_room_update_slot": self.party_room_update_slot,
@@ -564,8 +571,10 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         for process in list(processes.values()):
             if process.account_restricted() and not self.is_admin():
                 continue
+            if not party_access.process_allowed(PARTY_ROOMS.values(), process, self):
+                continue
             self.queue_message("lobby_entry", **process.lobby_entry())
-        self.queue_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
+        self.queue_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
         self.queue_message("coop_chronicle", **_get_chronicle_payload())
         self.library_fetch()
         self.send_message("lobby_complete")
@@ -948,6 +957,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
 
     def _on_crawl_end(self):
         session_recovery.cancel(self)
+        record_id = None
         if self.process:
             record_id = getattr(self.process, "record_id", None)
             if record_id:
@@ -975,6 +985,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             for r in PARTY_ROOMS.values():
                 if r.get("host", "").lower() == self.username.lower() and r.get("status") == "launched":
                     r["status"] = "staging"
+                    game = game_library.get_game(record_id) if record_id else None
+                    if game and game_library.save_files(game):
+                        r.update(party_saved.staged(game, r, DEFAULT_PARTY_SLOTS))
             broadcast_party_rooms()
 
         if not self.client_closed:
@@ -1074,7 +1087,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             self.library_fetch()
             if self.account_restricted():
                 self.queue_message("set_account_hold")
-            self.queue_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
+            self.queue_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
             if self.watched_game:
                 self.watched_game.update_watcher_description()
             elif self.is_admin():
@@ -1238,6 +1251,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                  and (expedition_id is None or getattr(process, "record_id", None) == expedition_id)]
         if len(procs) >= 1:
             process = procs[0]
+            if not party_access.process_allowed(PARTY_ROOMS.values(), process, self):
+                self.library_error("This expedition requires a lobby invite.")
+                return
             # has the spectatee blocked this user?
             if process.is_blocked(self.username) and not self.is_admin():
                 self.send_message("auth_error",
@@ -1482,6 +1498,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         target_game = self.watched_game or self.process
         if not target_game:
             return
+        if not party_access.process_allowed(PARTY_ROOMS.values(), target_game, self):
+            self.library_error("This expedition requires a lobby invite.")
+            return
         assigned_slot = target_game.join_party_member(self, slot=slot)
         if assigned_slot is None:
             return
@@ -1491,7 +1510,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
 
     def party_lobby_list(self, **kwargs):
         self.reset_lobby_timeout()
-        self.send_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
+        self.send_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
         self.send_message("coop_chronicle", **_get_chronicle_payload())
 
     def chronicle_fetch(self, **kwargs):
@@ -1503,6 +1522,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         if not self.username:
             return
         room = _resolve_party_room(username=self.username)
+        if room and room.get("resume_id"):
+            self.library_error("This lobby contains a saved expedition. Create a new lobby to use a new character build.")
+            return
         if not room:
             self.party_room_create(name=comp_name or ("%s's Expedition" % self.username),
                                    friendly_fire=True if friendly_fire is None else bool(friendly_fire),
@@ -1568,11 +1590,31 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                     slots[idx]["state"] = "open"
         broadcast_party_rooms()
 
-    def party_room_create(self, room_id=None, name=None, friendly_fire=True, game_id=None, seasonings=None, seed=None, **kwargs):
+    def party_room_create(self, room_id=None, name=None, friendly_fire=True, game_id=None, seasonings=None, seed=None, replace_save=None, **kwargs):
         self.reset_lobby_timeout()
         if not self.username:
             return
         host = self.username
+        rid = room_id or ("room-%s" % host)
+        existing = PARTY_ROOMS.get(rid)
+        if existing and existing.get("host", "").casefold() != host.casefold():
+            self.library_error("That expedition room belongs to another host. Choose a different room name.")
+            return
+        if replace_save is not None and (not existing or existing.get("resume_id")):
+            if (not existing or existing.get("resume_id") != replace_save
+                    or existing.get("status") != "staging" or not self.is_in_lobby()):
+                self.library_error("Save and return to the lobby before starting a new expedition from this saved party.")
+                return
+            # Replace only the staging room. The checkpoint and its native
+            # package remain in the library, available for an exact resume.
+        elif existing:
+            # Retries and another tab must not reset the party's chosen builds.
+            broadcast_party_rooms()
+            return
+        if any(room is not existing and room.get("host", "").casefold() == host.casefold()
+               for room in PARTY_ROOMS.values()):
+            self.library_error("You already host an expedition room. Leave it before creating another.")
+            return
         # First remove host from any other room they might be in as a guest
         for r_id, r in list(PARTY_ROOMS.items()):
             if r.get("host", "").lower() != host.lower():
@@ -1583,7 +1625,6 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                         s["hero_name"] = DEFAULT_PARTY_SLOTS[s["slot"]]["hero_name"]
                         s["ready"] = True
 
-        rid = room_id or ("room-%s" % host)
         default_game_id = game_id or "coop-2p-web-trunk"
         if default_game_id not in config.games and len(config.games) > 0:
             default_game_id = next(iter(config.games.keys()))
@@ -1609,6 +1650,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             "game_id": default_game_id,
             "slots": slots,
         }
+        party_access.configure(PARTY_ROOMS[rid], kwargs.get("visibility"))
         broadcast_party_rooms()
 
     def party_room_join(self, room_id=None, slot=None, **kwargs):
@@ -1616,48 +1658,46 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         if not self.username:
             return
         room = _resolve_party_room(room_id=room_id, username=None)
-        if not room:
+        if not room or not party_access.allowed(room, self):
+            self.library_error("This lobby is unavailable or requires an invite link.")
             return
 
         uname = self.username
-        # Check if already in room
-        existing_slot = None
-        for s in room["slots"]:
-            if s.get("username", "").lower() == uname.lower():
-                existing_slot = s
-                break
+        if party_roster.reservation(room, uname) is not None:
+            # A reconnect restores the same build and readiness rather than
+            # replacing its hero name with the account name.
+            broadcast_party_rooms()
+            return
+        if party_roster.other_room(PARTY_ROOMS.values(), room, uname) is not None:
+            self.library_error("You already belong to another expedition room. Leave it before joining this one.")
+            return
 
-        target_slot_obj = existing_slot
-        if target_slot_obj is None and slot is not None:
+        target_slot_obj = None
+        if slot is not None:
             try:
                 req_idx = int(slot)
                 if 1 <= req_idx < len(room["slots"]):
                     cand = room["slots"][req_idx]
-                    if cand["state"] != "ai" and (cand["state"] != "player" or not cand.get("username")):
+                    if party_roster.claimable(cand):
                         target_slot_obj = cand
             except (ValueError, TypeError):
                 pass
-
+        else:
+            target_slot_obj = next((cand for cand in room["slots"][1:]
+                                    if party_roster.claimable(cand)), None)
         if target_slot_obj is None:
-            for cand in room["slots"][1:]:
-                if cand["state"] in ("open", "companion") and not cand.get("username"):
-                    target_slot_obj = cand
-                    break
-
-        if target_slot_obj is None:
-            for cand in room["slots"][1:]:
-                if cand.get("state") != "ai" and not cand.get("username"):
-                    target_slot_obj = cand
-                    break
+            self.library_error("That expedition has no available seat matching your request.")
+            return
 
         if target_slot_obj is not None:
             target_slot_obj["state"] = "player"
             target_slot_obj["username"] = uname
-            target_slot_obj["hero_name"] = _sanitize_hero_name(kwargs.get("hero_name") or uname, uname)
+            if not room.get("resume_id"):
+                target_slot_obj["hero_name"] = _sanitize_hero_name(kwargs.get("hero_name") or uname, uname)
             target_slot_obj["ready"] = True
-            if kwargs.get("species"):
+            if kwargs.get("species") and not room.get("resume_id"):
                 target_slot_obj["species"] = str(kwargs["species"])
-            if kwargs.get("job"):
+            if kwargs.get("job") and not room.get("resume_id"):
                 target_slot_obj["job"] = str(kwargs["job"])
 
         broadcast_party_rooms()
@@ -1672,6 +1712,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
 
         uname = self.username
         if room.get("host", "").lower() == uname.lower():
+            if room.get("status") in ("launching", "launched"):
+                self.library_error("Save and return to the lobby before closing it.")
+                return
             rid = room.get("room_id")
             if rid in PARTY_ROOMS:
                 del PARTY_ROOMS[rid]
@@ -1680,6 +1723,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                 if s.get("username", "").lower() == uname.lower():
                     idx = s["slot"]
                     s["username"] = ""
+                    if room.get("resume_id"):
+                        s.update(state="open" if room.get("resume_multiplayer") else "companion", ready=True)
+                        continue
                     s["state"] = "companion" if idx == 1 else "open"
                     s["hero_name"] = DEFAULT_PARTY_SLOTS[idx]["hero_name"]
                     s["ready"] = True
@@ -1704,12 +1750,21 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
 
         slot_obj = room["slots"][slot_idx]
         is_host = (room.get("host", "").lower() == self.username.lower())
+        if not party_access.allowed(room, self):
+            return
+        if room.get("resume_id"):
+            if ready is not None and (is_host or slot_obj.get("username", "").casefold() == self.username.casefold()):
+                slot_obj["ready"] = bool(ready)
+                broadcast_party_rooms()
+            return
         if str(state).lower() == "ai" and not is_host:
             return
         is_owner = (slot_obj.get("username", "").lower() == self.username.lower())
         if not is_host and not is_owner:
             # Allow a connected player to claim an open/companion slot
-            if slot_idx >= 1 and slot_obj.get("state") != "ai" and not slot_obj.get("username"):
+            if (party_roster.claimable(slot_obj) and state in (None, "player")
+                    and party_roster.reservation(room, self.username) is None
+                    and party_roster.other_room(PARTY_ROOMS.values(), room, self.username) is None):
                 slot_obj["username"] = self.username
                 slot_obj["state"] = "player"
                 is_owner = True
@@ -1759,6 +1814,16 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         if room.get("host", "").lower() != self.username.lower():
             return
 
+        visibility_changed = kwargs.get("visibility") in ("private", "public") and kwargs["visibility"] != room.get("visibility", "public")
+        party_access.configure(room, kwargs.get("visibility"), kwargs.get("rotate_invite") is True)
+        if visibility_changed or kwargs.get("rotate_invite") is True:
+            party_access.persist(room)
+        if room.get("resume_id"):
+            broadcast_party_rooms()
+            if visibility_changed or kwargs.get("rotate_invite") is True:
+                party_access.refresh(PARTY_ROOMS.values(), sockets)
+            return
+
         if friendly_fire is not None:
             room["friendly_fire"] = bool(friendly_fire)
         if name is not None and str(name).strip():
@@ -1774,8 +1839,13 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             room["rune_locks"] = kwargs["rune_locks"]
         if kwargs.get("trap_mode") in ("normal", "none", "floor", "random"):
             room["trap_mode"] = kwargs["trap_mode"]
+        if isinstance(kwargs.get("shared_fate"), bool):
+            room["shared_fate"] = kwargs["shared_fate"]
 
         broadcast_party_rooms()
+
+        if visibility_changed or kwargs.get("rotate_invite") is True:
+            party_access.refresh(PARTY_ROOMS.values(), sockets)
 
     def party_room_launch(self, room_id=None, fresh=True, slots=None, friendly_fire=None, **kwargs):
         self.reset_lobby_timeout()
@@ -1789,6 +1859,12 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             return
         host = room.get("host")
         if not host or host.lower() != self.username.lower():
+            return
+        if room.get("status") in {"launching", "launched"}:
+            self.library_error("This expedition has already launched. Resume it from the lobby.")
+            return
+        if room.get("resume_id"):
+            party_saved.launch(self, room)
             return
 
         if friendly_fire is not None:
@@ -1882,12 +1958,15 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                 slot_users[s["username"]] = idx
 
         campaign_tokens = []
+        if room.get("shared_fate") is True:
+            campaign_tokens.append("shared_fate=on")
         if room.get("rune_locks") is False:
             campaign_tokens.append("runelocks=off")
         if room.get("trap_mode") in ("none", "floor", "random"):
             campaign_tokens.append("traps=" + room["trap_mode"])
         all_spec_tokens = (["mp=on"] if multiplayer else []) + seasonings_tokens + campaign_tokens + member_specs
         party_spec = "%d,ff=%s,%s" % (len(active_slots), ff_str, ",".join(all_spec_tokens))
+        previous_spec = USER_PARTY_SPECS.get(host)
         USER_PARTY_SPECS[host] = {
             "party_arg": party_spec,
             "slot_users": slot_users,
@@ -1896,6 +1975,29 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             "multiplayer": multiplayer,
             "ai_slots": ai_slots,
         }
+
+        self._library_fresh = bool(fresh)
+        room["status"] = "launching"
+        started = False
+        try:
+            self.start_crawl(game_id, character_name=slot0_hero)
+            started = getattr(self, "process", None) is not None
+        except Exception:
+            self.logger.warning("Failed to launch expedition room %s", room["room_id"], exc_info=True)
+            self.library_error("The expedition did not start. Your party is ready to retry.")
+        if not started:
+            if previous_spec is None:
+                USER_PARTY_SPECS.pop(host, None)
+            else:
+                USER_PARTY_SPECS[host] = previous_spec
+            self._library_fresh = False
+            room["status"] = "staging"
+            broadcast_party_rooms()
+            return
+        launched_process = self.process
+        room["expedition_id"] = getattr(launched_process, "record_id", None)
+        launched_players = [(idx, slot.get("username"), slot.get("hero_name"))
+                            for idx, slot in enumerate(active_slots)]
 
         try:
             chronicle.record_party_comp(
@@ -1926,12 +2028,11 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
         room["status"] = "launched"
         broadcast_party_rooms()
 
-        self._library_fresh = bool(fresh)
-        self.start_crawl(game_id)
-
         def _notify_launched_players():
-            for idx, s in enumerate(active_slots):
-                uname = s.get("username")
+            if (self.process is not launched_process or room.get("status") != "launched"
+                    or PARTY_ROOMS.get(room["room_id"]) is not room):
+                return
+            for idx, uname, hero_name in launched_players:
                 if idx >= 1 and uname and uname.lower() != host.lower():
                     for u_sock in list(find_user_sockets(uname)):
                         u_sock.send_message(
@@ -1939,7 +2040,7 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
                             room_id=room["room_id"],
                             host=host,
                             slot=idx,
-                            hero_name=s.get("hero_name", uname),
+                            hero_name=hero_name or uname,
                         )
 
         _notify_launched_players()
@@ -2156,7 +2257,9 @@ class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebS
             # this will (sooner or later) trigger _on_crawl_end, which will
             # remove `self` from `sockets`
             # XX would it be better to handle on_close messaging at that point?
-            if (shutting_down or self.close_code in (1000, 1008)
+            if (shutting_down or self.close_code == 1008
+                    or self.close_code == 1000
+                    and not session_recovery.has_connected_humans(self.process)
                     or not session_recovery.defer_stop(self)):
                 self.process.stop()
         elif self in sockets and self.process:

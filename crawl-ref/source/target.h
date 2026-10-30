@@ -74,6 +74,9 @@ public:
                    spell_type origin_spell, int pow,
                    int min_expl_rad, int max_expl_rad);
     bolt beam;
+    // Preview a configured projectile using the same bounce and piercing
+    // properties as its actual beam.
+    void set_projectile(const bolt& projectile);
     virtual bool set_aim(coord_def a) override;
     bool valid_aim(coord_def a) override;
     virtual aff_type is_affected(coord_def loc) override;

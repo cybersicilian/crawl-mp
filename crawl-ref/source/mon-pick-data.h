@@ -699,6 +699,7 @@ POP_DEPTHS,
 
 { // Dis
   CROSS_HELL_POP,
+  {  1,  7,  300, FLAT, MONS_CUBUS },
   // "basic" monsters
   {  1,  5,  500, FALL, MONS_ANCIENT_CHAMPION },
   {  1,  7,  125, FLAT, MONS_ANCIENT_CHAMPION },
@@ -723,6 +724,7 @@ POP_DEPTHS,
 
 { // Gehenna
   CROSS_HELL_POP,
+  {  1,  7,  100, FLAT, MONS_CUBUS },
   // "basic" monsters
   {  1,  5,  400, FALL, MONS_HELL_HOG },
   {  1,  7,  100, FLAT, MONS_HELL_HOG },
@@ -748,6 +750,7 @@ POP_DEPTHS,
 
 { // Cocytus
   CROSS_HELL_POP,
+  {  1,  7,  100, FLAT, MONS_INTERDIMENSIONAL_GRAPE },
   // "basic" monsters
   {  1,  5,  800, FALL, MONS_SIMULACRUM },
   {  1,  7,  200, FLAT, MONS_SIMULACRUM },
@@ -771,6 +774,8 @@ POP_DEPTHS,
 
 { // Tartarus
   CROSS_HELL_POP,
+  {  1,  7,  200, FLAT, MONS_CUBUS },
+  {  1,  7,  100, FLAT, MONS_INTERDIMENSIONAL_GRAPE },
   // "basic" monsters
   {  1,  5,  800, FALL, MONS_SPECTRAL_THING },
   {  1,  7,  200, FLAT, MONS_SPECTRAL_THING },
@@ -828,6 +833,8 @@ POP_DEPTHS,
   {  1,  7,  515, FLAT, MONS_TENTACLED_MONSTROSITY },
   {  1,  5,   89, FALL, MONS_ELECTRIC_GOLEM },
   {  6,  7,   20, FLAT, MONS_ELECTRIC_GOLEM },
+  {  1,  5,   90, SEMI, MONS_ORB_DEMON },
+  {  6,  7,   30, FLAT, MONS_ORB_DEMON },
   {  1,  7,   45, RISE, MONS_SILVER_STAR },
   {  1,  5,   42, FLAT, MONS_ORB_OF_APPROPRIATENESS },
   {  6,  7,   80, FLAT, MONS_ORB_OF_APPROPRIATENESS },
@@ -988,6 +995,7 @@ POP_DEPTHS,
   {  6, 10,   10, RISE, MONS_PUTRID_MOUTH },
   // Generic
   {  1,  7,  340, FLAT, MONS_WRETCHED_STAR },
+  {  1,  7,  335, FLAT, MONS_INTERDIMENSIONAL_GRAPE },
   {  1,  7,   65, FLAT, MONS_SILVER_STAR },
   {  1,  7,  120, FLAT, MONS_VOID_TETHER_STALKER },
   {  1,  7,  340, FLAT, MONS_TENTACLED_STARSPAWN },
@@ -1002,6 +1010,7 @@ POP_DEPTHS,
   {  1,  7,  290, FLAT, MONS_SMOKE_DEMON },
   {  1,  7,   25, FLAT, MONS_HELLION },
   {  1,  7,   21, FLAT, MONS_TORMENTOR },
+  {  1,  7,   10, FLAT, MONS_CUBUS },
   {  1,  7,   15, FLAT, MONS_REAPER },
   {  1,  7,   25, FLAT, MONS_GREEN_DEATH },
   {  1,  7,   22, FLAT, MONS_BLIZZARD_DEMON },
@@ -1051,6 +1060,7 @@ POP_DEPTHS,
   {  1,  1,    4, FLAT, MONS_GREAT_ORB_OF_EYES },
   {  1,  1,    4, FLAT, MONS_GLOWING_ORANGE_BRAIN },
   {  1,  1,    8, FLAT, MONS_TOENAIL_GOLEM },
+  {  1,  1,   50, FLAT, MONS_INTERDIMENSIONAL_GRAPE },
   {  1,  1,  192, FLAT, MONS_DEMONIC_CRAWLER },
   {  1,  1,   25, FLAT, MONS_HELL_HOUND },
   {  1,  1,   25, FLAT, MONS_HELL_HOG },
@@ -1077,6 +1087,7 @@ POP_DEPTHS,
   {  1,  1, 1000, FLAT, MONS_ZYKZYL },
   {  1,  1,  335, FLAT, MONS_HELLION },
   {  1,  1,  335, FLAT, MONS_TORMENTOR },
+  {  1,  1,  335, FLAT, MONS_CUBUS },
   {  1,  1,  535, FLAT, MONS_REAPER },
   {  1,  1,  535, FLAT, MONS_SHADOW_DEMON },
   {  1,  1,  675, FLAT, MONS_SIN_BEAST },
@@ -1262,6 +1273,8 @@ POP_DEPTHS,
   {  1,  2,  150, RISE, MONS_MELIAI },
   {  2,  2,  400, FLAT, MONS_SPARK_WASP },
 },
+{ // Golemforge: guards are placed explicitly by the forge vault.
+},
 };
 
 COMPILE_CHECK(ARRAYSZ(population) == NUM_BRANCHES);
@@ -1420,6 +1433,7 @@ static const vector<pop_entry> population_water[] =
     GENERIC_WATER_POP, // Burrows
     GENERIC_WATER_POP, // Wormlands
     GENERIC_WATER_POP, // Hive
+    GENERIC_WATER_POP, // Golemforge
 };
 COMPILE_CHECK(ARRAYSZ(population_water) == NUM_BRANCHES);
 
@@ -1528,6 +1542,7 @@ static const vector<pop_entry> population_lava[] =
     GENERIC_LAVA_POP, // Burrows
     GENERIC_LAVA_POP, // Wormlands
     GENERIC_LAVA_POP, // Hive
+    GENERIC_LAVA_POP, // Golemforge
 };
 
 COMPILE_CHECK(ARRAYSZ(population_lava) == NUM_BRANCHES);

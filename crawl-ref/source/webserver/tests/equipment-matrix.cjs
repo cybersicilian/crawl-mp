@@ -111,6 +111,64 @@ fs.mkdirSync(out, { recursive: true });
         check(await page.locator('.folio-inventory-row:visible').count() === cases[baseline].inventory.length,
             'slot loss', 'Removed slot leaves the pack filtered');
 
+        // An ineligible species should explain the missing bag slot even when
+        // the hero does not have a bag in their inventory.
+        await page.evaluate(() => {
+            const hero = window.crawl_party.state.members[window.crawl_party.inspector_slot];
+            const slots = hero.equipment_profile.slots;
+            const bag = slots.find(slot => slot.type === 'bag');
+            if (bag) Object.assign(bag, { capacity: 0, reason: 'Your body cannot carry a bag.', alternatives: [] });
+            else slots.push({ key: 'bag:0', type: 'bag', label: 'Bag', capacity: 0,
+                reason: 'Your body cannot carry a bag.', alternatives: [] });
+            window.modules.inspector.render();
+        });
+        const bagRestriction = page.locator('.paperdoll-restriction').filter({ hasText: 'No bag' });
+        check(await bagRestriction.count() === 1
+            && (await bagRestriction.getAttribute('aria-label')).includes('Your body cannot carry a bag.'),
+        'bag eligibility', 'Missing bag slot reason is not accessible');
+        await page.evaluate(baseline => {
+            const index = window.crawl_party.inspector_slot;
+            window.crawl_party.state.members[index] = { ...structuredClone(baseline), slot: index };
+            window.modules.inspector.render();
+        }, cases[baseline]);
+
+        // A worn bag exposes capacity and a direct action for its owner. The
+        // native handler validates the hero, slot, name and unique item ID.
+        await open(baseline);
+        await page.evaluate(() => {
+            const index = window.crawl_party.inspector_slot;
+            const hero = window.crawl_party.state.members[index];
+            hero.equipment_profile.bag = { inv_slot: 3, uid: 1234, name: 'a pouch',
+                used: 1, capacity: 4, blocked_reason: '', items: [{ name: 'scroll of blinking', quantity: 2 }] };
+            window.crawl_party.state.controlled_slot = index;
+            window.crawl_party.state.active_slot = index;
+            window.modules.inspector.render();
+        });
+        check((await page.locator('.folio-bag').innerText()).includes('1 / 4 slots'), 'bag', 'Capacity is missing');
+        check((await page.locator('.folio-bag tbody').innerText()).includes('scroll of blinking'), 'bag', 'Stored item is missing');
+        await page.getByRole('button', { name: 'Open a pouch' }).click();
+        const packet = await page.evaluate(() => window.packets.at(-1));
+        check(packet?.msg === 'inv_item_use' && packet.action === 'bag_open'
+            && packet.slot === 3 && packet.expected_uid === 1234
+            && packet.expected_name === 'a pouch', 'bag', 'Open action lacks the native identity guard');
+
+        await open(baseline);
+        await page.evaluate(() => {
+            const index = window.crawl_party.inspector_slot;
+            const hero = window.crawl_party.state.members[index];
+            delete hero.equipment_profile.bag;
+            const recovery = { inv_slot: 46, uid: 2345, name: 'a satchel', used: 1,
+                capacity: 8, blocked_reason: '', items: [{ name: 'scroll of blinking', quantity: 2 }] };
+            hero.inventory.push({ slot: 46, name: 'a satchel', kind_name: 'Miscellaneous', bag: true, equipped: false });
+            hero.equipment_profile.items.push({ inv_slot: 46, equipment: true, fits: false,
+                reason: 'You cannot wear it.', slot_types: ['bag'], required_slots: [], bag_recovery: recovery });
+            window.modules.inspector.render();
+        });
+        await page.getByRole('button', { name: 'Recover contents from a satchel' }).click();
+        const recoverPacket = await page.evaluate(() => window.packets.at(-1));
+        check(recoverPacket?.action === 'bag_open' && recoverPacket.slot === 46
+            && recoverPacket.expected_uid === 2345, 'bag recovery', 'Recovery action lacks the native identity guard');
+
         const evidence = { passed: !issues.length && !errors.length, counts: results.reduce((counts, result) => {
             counts[result.group] = (counts[result.group] || 0) + 1; return counts;
         }, {}), cases: results.length, widths: [1280, 768, 390, 320], issues, errors, results };

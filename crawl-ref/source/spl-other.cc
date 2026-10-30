@@ -445,7 +445,7 @@ static int _intoxicate_can_affect(const actor *actor)
     return mons
            && mons_intel(*mons) >= I_HUMAN
            && !mons->clarity()
-           && mons->res_poison() < 3;
+           && agraphede_poison_resistance(mons, &you) < 3;
 }
 
 static int _intoxicate_monsters(coord_def where, int pow, bool tracer)
@@ -457,7 +457,7 @@ static int _intoxicate_monsters(coord_def where, int pow, bool tracer)
     if (tracer && (!you.aware_of(*mons) || mons_aligned(mons, &you)))
         return 0;
 
-    if (!tracer && monster_resists_this_poison(*mons))
+    if (!tracer && monster_resists_this_poison(*mons, false, &you))
         return 0;
 
     if (!tracer && x_chance_in_y(40 + div_rand_round(pow, 3), 100))
@@ -1019,10 +1019,23 @@ spret cast_fulsome_distillation(int pow, bool check_range, bool fail)
     int obj = items(false, OBJ_POTIONS, potion, 0);
     if (obj == NON_ITEM)
     {
-        canned_msg(MSG_NOTHING_HAPPENS);
-        return spret::success;
+        mpr("There is no room for the distillate.");
+        return spret::abort;
     }
+    // Forced potion generation may produce a stack; one corpse yields one
+    // distillate, not the random bonus quantities used by ordinary loot.
+    env.item[obj].quantity = 1;
 
+    // Commit the reagent only after the product has a safe destination.
+    // In particular, terrain can destroy an item even when placement returns
+    // success; the original corpse must survive that failure.
+    if (!move_item_to_grid(&obj, you.pos()) || obj == NON_ITEM)
+    {
+        if (obj != NON_ITEM)
+            destroy_item(obj);
+        mpr("The distillate cannot be placed here.");
+        return spret::abort;
+    }
     identify_item(env.item[obj]);
 
     mprf("You extract %s from %s%s",
@@ -1034,8 +1047,6 @@ spret cast_fulsome_distillation(int pow, bool check_range, bool fail)
         did_god_conduct(DID_EVIL, 2);
 
     destroy_item(corpse_idx, true);
-
-    move_item_to_grid(&obj, you.pos());
     if (obj != NON_ITEM)
         move_item_to_inv(obj, 1, false);
 

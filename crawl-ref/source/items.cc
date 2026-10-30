@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "acquire.h"
+#include "bag.h"
 #include "archaeologist.h"
 #include "god-vellum.h"
 #include "god-pakellas.h"
@@ -666,6 +668,10 @@ void item_was_lost(const item_def &item)
     vellum::on_destroyed(item);
     _handle_gone_item(item);
     xom_check_lost_item(item);
+    // Contents are item records in the bag, so losing the container must
+    // notify the same systems as losing each stored item individually.
+    for (const item_def& contained : bag::contents(item))
+        item_was_lost(contained);
 }
 
 void item_was_destroyed(const item_def &item)
@@ -673,6 +679,8 @@ void item_was_destroyed(const item_def &item)
     vellum::on_destroyed(item);
     _handle_gone_item(item);
     xom_check_destroyed_item(item);
+    for (const item_def& contained : bag::contents(item))
+        item_was_destroyed(contained);
 }
 
 void lose_item_stack(const coord_def& where)
@@ -1587,6 +1595,13 @@ bool items_similar(const item_def &item1, const item_def &item2)
     if (item1.base_type != item2.base_type || item1.sub_type != item2.sub_type)
         return false;
 
+    // The Collector's choice scroll has an extra option that ordinary
+    // collection scrolls do not; merging them would grant it to the stack.
+    if (item1.is_type(OBJ_SCROLLS, SCR_COLLECTION)
+        && item1.props.exists(COLLECTOR_CHOICE_KEY)
+           != item2.props.exists(COLLECTOR_CHOICE_KEY))
+        return false;
+
     if (item1.base_type == OBJ_GOLD || item_is_collectible(item1))
         return true;
 
@@ -1918,6 +1933,128 @@ static bool _put_item_in_inv(item_def& it, int quant_got, bool quiet, bool& put_
     // sanity
     if (quant_got > it.quantity || quant_got <= 0)
         quant_got = it.quantity;
+
+    // Device pickup normally combines with a matching carried device rather
+    // than producing a second item. Prefer that existing main-pack device.
+    bool main_device_match = false;
+    if (it.base_type == OBJ_WANDS || is_xp_evoker(it))
+        for (int i = MAX_GEAR; i < ENDOFPACK; ++i)
+            if (you.inv[i].base_type == it.base_type
+                && you.inv[i].sub_type == it.sub_type)
+            {
+                main_device_match = true;
+                break;
+            }
+
+    // Devices already stored in any carried bag still participate in ordinary
+    // pickup merging, even when automatic bag storage is disabled or pickup
+    // is quiet. Prefer a matching device in the main pack above all bags.
+    item_def* device_bag = nullptr;
+    if (!main_device_match && (it.base_type == OBJ_WANDS || is_xp_evoker(it)))
+        for (int bag_index = 0; bag_index < ENDOFPACK; ++bag_index)
+        {
+            item_def& candidate = you.inv[bag_index];
+            if (!bag::is_bag(candidate))
+                continue;
+            for (int i = 0; i < bag::used(candidate); ++i)
+            {
+                const item_def* existing = bag::at(candidate, i);
+                if (existing && existing->base_type == it.base_type
+                    && existing->sub_type == it.sub_type)
+                {
+                    device_bag = &candidate;
+                    break;
+                }
+            }
+            if (device_bag)
+                break;
+        }
+
+    // Explicitly configured item classes go straight to the equipped bag.
+    // This happens before the inventory capacity check so a full pack can
+    // still use its bag's remaining space. Special pickups retain their native
+    // handling (gold, books, runes, gems, the Orb and shop vouchers).
+    // Quiet pickups are used internally when an item must immediately remain
+    // in the main inventory (for example, equipping it from the floor).
+    const bool auto_store = !quiet && it.base_type >= 0
+        && it.base_type < NUM_OBJECT_CLASSES
+        && Options.auto_bag_items[it.base_type] && !bag::is_bag(it)
+        && it.base_type != OBJ_GOLD && it.base_type != OBJ_BOOKS
+        && it.base_type != OBJ_RUNES && it.base_type != OBJ_GEMS
+        && it.base_type != OBJ_ORBS && !main_device_match
+        && !it.is_type(OBJ_MISCELLANY, MISC_SHOP_VOUCHER)
+        && !it.is_type(OBJ_MISCELLANY, MISC_ANCIENT_CRATE)
+        && !it.is_type(OBJ_MISCELLANY, MISC_DUSTY_TOME);
+    if (device_bag || auto_store)
+    {
+        item_def* container = device_bag ? device_bag
+                                         : you.equipment.get_first_slot_item(SLOT_BAG);
+        if (container)
+        {
+            item_def incoming = it;
+            item_def staged_bag = *container;
+            int stored_index = -1;
+            bool merged_device = false;
+            if (it.base_type == OBJ_WANDS || is_xp_evoker(it))
+                for (int i = 0; i < bag::used(staged_bag); ++i)
+                {
+                    item_def* existing = bag::at(staged_bag, i);
+                    if (!existing || existing->base_type != it.base_type
+                        || existing->sub_type != it.sub_type)
+                        continue;
+                    stored_index = i;
+                    if (it.base_type == OBJ_WANDS)
+                        existing->charges += it.charges;
+                    merged_device = true;
+                    break;
+                }
+            if (merged_device || bag::store(staged_bag, incoming, quant_got, &stored_index))
+            {
+                *container = staged_bag;
+                item_def* stored = bag::at(*container, stored_index);
+                ASSERT(stored);
+                if (merged_device && is_xp_evoker(it))
+                {
+                    if (evoker_plus(it.sub_type) < MAX_EVOKER_ENCHANT)
+                    {
+                        ++evoker_plus(it.sub_type);
+                        if (evoker_plus(it.sub_type) == MAX_EVOKER_ENCHANT)
+                            set_item_autopickup(it, AP_FORCE_OFF);
+                        if (!quiet)
+                            mpr("The device in your bag improves by +1.");
+                    }
+                    else if (!quiet)
+                        mpr("The device in your bag cannot be improved further.");
+                }
+                stored->flags &= ~ISFLAG_UNOBTAINABLE;
+                ash_id_item(*stored);
+                maybe_identify_base_type(*stored);
+                // Bag contents are carried even though they deliberately have
+                // no main-inventory index. Preserve the dropped flag while
+                // allowing normal carried-item autoinscription behavior.
+                const bool was_dropped = stored->flags & ISFLAG_DROPPED;
+                stored->flags &= ~ISFLAG_DROPPED;
+                note_inscribe_item(*stored);
+                if (was_dropped)
+                    stored->flags |= ISFLAG_DROPPED;
+                if (crawl_state.game_is_hints())
+                    taken_new_item(stored->base_type);
+                _got_item(*stored);
+                _check_note_item(*stored);
+                _maybe_log_cool_item(*stored);
+                if (stored->props.exists("chronicle_logged"))
+                    it.props["chronicle_logged"] = true;
+                if (!quiet && !merged_device)
+                    mprf("You put %s in your bag.",
+                         incoming.name(DESC_A).c_str());
+                else if (!quiet && it.base_type == OBJ_WANDS)
+                    mprf("Your bagged wand gains %d charge%s.", it.charges,
+                         it.charges == 1 ? "" : "s");
+                put_in_inv = true;
+                return true;
+            }
+        }
+    }
 
     // attempt to put the item into your inventory.
     int inv_slot;
@@ -2992,6 +3129,7 @@ bool drop_item(int item_dropped, int quant_drop)
 {
     item_def &item = you.inv[item_dropped];
 
+
     if (quant_drop < 0 || quant_drop > item.quantity)
         quant_drop = item.quantity;
 
@@ -3722,6 +3860,8 @@ inventory_category inventory_category_for(object_class_type type)
 
 inventory_category inventory_category_for(const item_def& item)
 {
+    if (bag::is_bag(item))
+        return INVENT_GEAR;
     return inventory_category_for(item.base_type);
 }
 

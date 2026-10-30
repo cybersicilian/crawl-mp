@@ -36,6 +36,9 @@ enum god_type
     GOD_IGNIS,
     GOD_VORR,
     GOD_VELLUM,
+    GOD_IMUS_THEA,
+    GOD_GREAT_WYRM,
+    GOD_AGRAPHEDE,
     NUM_GODS,                          // always after last god
 
     GOD_RANDOM = 100,

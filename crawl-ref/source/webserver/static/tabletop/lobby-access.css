@@ -1,0 +1,25 @@
+/* Absent seats are configuration, never placeholder players in a roster. */
+#lobby #party_slots_grid .party-slot-box[data-seat-active="false"],
+#lobby .has-saved-expedition :is(#party_slots_grid, .party-setup-tools, #party_composition_view) { display: none !important; }
+.party-unused-seats { padding: 12px 16px; border-top: 1px solid #9b805544; font: 12px/1.5 var(--tt-font-ui); }
+.party-unused-seats summary { color: #ddc291; cursor: pointer; }
+.party-unused-seats label { display: inline-flex; gap: 8px; align-items: center; margin: 12px 16px 0 0; }
+.party-unused-seats select { padding: 7px; background: #242829; border: 1px solid #9b8055; color: #e9dfcc; }
+.party-manager-portrait > img { width: 46px; height: 46px; object-fit: contain; image-rendering: pixelated; }
+#lobby .party-lobby-tools { display: grid; grid-template-columns: minmax(170px, 1fr) minmax(220px, 2fr); gap: 12px 16px; padding: 15px; margin: 12px 0 18px; border: 1px solid #b7a486; background: #e8dfcb66; }
+.party-lobby-tools label, .party-invite-offer label { display: grid; gap: 5px; min-width: 0; font: 600 11px/1.5 var(--tt-font-ui); color: #66553f; }
+#lobby .party-lobby-tools :is(input, select), #lobby .party-invite-offer select, #lobby_creation_visibility { box-sizing: border-box; width: 100%; min-width: 0; min-height: 38px; padding: 8px; border: 1px solid #ac9877; background: #fff9ed; color: #443a2c; font: 13px/1.4 var(--tt-font-ui); }
+#lobby_creation_visibility { width: auto; }
+.party-lobby-link-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.party-link-status { font: 11px/1.5 var(--tt-font-ui); color: #4c6547; }
+.party-loaded-summary { grid-column: 1 / -1; margin: 0; color: #51452f; font: 13px/1.5 var(--tt-font-ui); }
+.party-invite-offer { margin-top: 20px; padding: 18px; border: 1px solid #a98c58; border-left: 4px solid #90652f; background: #fff7e3; }
+#lobby .party-invite-offer h2 { margin: 0 0 8px; font-size: 24px; }
+.party-invite-offer label { max-width: 480px; margin: 14px 0 10px; }
+.party-invite-offer button { margin-right: 8px; }
+.party-invite-offer[hidden], .party-loaded-summary[hidden], #party_reset_invite[hidden], #party_new_expedition[hidden] { display: none; }
+.party-lobby-tools :is(button, input, select):focus-visible, .party-unused-seats :is(select, summary):focus-visible { outline: 2px solid #9c682e; outline-offset: 2px; }
+@media (max-width: 680px) {
+    #lobby .party-lobby-tools { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+    .party-unused-seats label { display: flex; justify-content: space-between; margin-right: 0; }
+}

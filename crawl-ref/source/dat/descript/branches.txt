@@ -255,6 +255,13 @@ The bailey is the occupied and well-guarded fortress of a ruthless warlord.
 The treasures within are protected by both physical barriers and large numbers
 of well-armed humanoid warriors.
 %%%%
+Golemforge
+
+This abandoned forge-temple was built by the first coglins and deserted by
+their forgewrights. Their machine and iron golems still defend its furnaces,
+alongside crystal guardians. The four pieces of Golem Armour are the surviving
+masterwork of the forge.
+%%%%
 Ice Cave
 
 The {{ if you.branch() == "Elf" or you.branch() == "Swamp" or

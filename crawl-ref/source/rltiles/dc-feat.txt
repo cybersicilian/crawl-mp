@@ -620,6 +620,7 @@ shop_wands SHOP_WANDS
 shop_jewellery SHOP_JEWELLERY
 shop_potions SHOP_POTIONS
 shop_gadgets SHOP_GADGETS
+shop_mercenary SHOP_MERCENARY
 %back none
 %shrink 1
 abandoned_shop DNGN_ABANDONED_SHOP
@@ -741,6 +742,8 @@ desolation_portal_closed DNGN_PORTAL_DESOLATION_GONE
 gulch_portal DNGN_PORTAL_GULCH
 gulch_exit DNGN_EXIT_GULCH
 gulch_portal_rusted DNGN_PORTAL_GULCH_GONE
+golemforge_portal DNGN_PORTAL_GOLEMFORGE
+golemforge_portal_closed DNGN_PORTAL_GOLEMFORGE_GONE
 crucible_exit DNGN_EXIT_CRUCIBLE
 
 portal_unknown DNGN_UNKNOWN_PORTAL
@@ -1125,8 +1128,22 @@ east_wind OVERLAY_EAST_WIND
 %rim 0
 %sdir dngn/altars
 vellum DNGN_ALTAR_VELLUM
+imus0 DNGN_ALTAR_IMUS_THEA
+imus1
+imus2
+imus3
+imus4
+wyrm0 DNGN_ALTAR_GREAT_WYRM
+wyrm1
+wyrm2
+wyrm3
 
 # Restore the native Hive doorway art.
 %sdir UNUSED/features
 hive_portal DNGN_ENTER_HIVE
 hive_gone DNGN_EXIT_HIVE
+
+%sdir dngn/altars
+agraphede0 DNGN_ALTAR_AGRAPHEDE
+agraphede1
+agraphede2

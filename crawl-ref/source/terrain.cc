@@ -641,6 +641,9 @@ static const pair<god_type, dungeon_feature_type> _god_altars[] =
     { GOD_IGNIS, DNGN_ALTAR_IGNIS },
     { GOD_VORR, DNGN_ALTAR_VORR },
     { GOD_VELLUM, DNGN_ALTAR_VELLUM },
+    { GOD_IMUS_THEA, DNGN_ALTAR_IMUS_THEA },
+    { GOD_GREAT_WYRM, DNGN_ALTAR_GREAT_WYRM },
+    { GOD_AGRAPHEDE, DNGN_ALTAR_AGRAPHEDE },
     { GOD_ECUMENICAL, DNGN_ALTAR_ECUMENICAL },
 };
 
@@ -1402,6 +1405,11 @@ static void _permanent_terrain_changed(coord_def pos,
                                        dungeon_feature_type nfeat,
                                        bool preserve_mimics)
 {
+    // Remove divine-web provenance when the underlying terrain is replaced.
+    // Temporary overlays leave it intact so restoring the web restores its
+    // behavior too.
+    if (nfeat != DNGN_TRAP_WEB && nfeat != DNGN_UNSEEN)
+        env.pgrid(pos) &= ~(FPROP_AGRAPHEDE_WEB | FPROP_AGRAPHEDE_WEB_TEMP);
     // XXX: do we ever call this with nfeat == DNGN_UNSEEN?
     if (nfeat != DNGN_UNSEEN)
         unnotice_feature(level_pos(level_id::current(), pos));
@@ -2291,6 +2299,10 @@ bool revert_terrain_change(coord_def pos, terrain_change_type ctype, bool expire
 
     _current_terrain_changed(pos, newfeat, false, true, false, newfeat_flv,
                              newfeat_flv_idx);
+    // A divine web placed on temporarily changed floor disappears when that
+    // floor reverts. Do not leave provenance behind on its original terrain.
+    if (newfeat != DNGN_TRAP_WEB && !is_temp_terrain(pos))
+        env.pgrid(pos) &= ~(FPROP_AGRAPHEDE_WEB | FPROP_AGRAPHEDE_WEB_TEMP);
     env.grid_colours(pos) = colour;
 
     if (ctype == TERRAIN_CHANGE_BOG || ctype == TERRAIN_CHANGE_AUTOMATON_BOG)

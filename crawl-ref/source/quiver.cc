@@ -859,6 +859,11 @@ namespace quiver
         {
         }
 
+        bool uses_mp() const override
+        {
+            return is_valid() && is_imus_illusory_weapon(&you, you.inv[item_slot]);
+        }
+
         /// does the launch type match the action type and current weapon?
         virtual bool launch_type_check() const
         {
@@ -908,7 +913,7 @@ namespace quiver
 
             // nets shouldn't be autofired with autofight_throw, only with
             // autofire.
-            if (you.inv[item_slot].sub_type == MI_THROWING_NET)
+            if (you.inv[item_slot].is_type(OBJ_MISSILES, MI_THROWING_NET))
                 return false;
 
             return true;
@@ -957,7 +962,8 @@ namespace quiver
                 const string verb =
                     make_stringf("%s%s",
                                  you.confused() ? "confused " : "",
-                                 is_throwable(&you, quiver) ? "throw" : "toss (no damage)");
+                                 is_imus_illusory_weapon(&you, quiver) ? "project an illusion of"
+                                 : is_throwable(&you, quiver) ? "throw" : "toss (no damage)");
                 qdesc.cprintf("%s: ", uppercase_first(verb).c_str());
             }
 
@@ -2303,6 +2309,8 @@ namespace quiver
             return make_shared<consumable_action>(slot);
         }
         else if (you.inv[slot].base_type == OBJ_MISSILES)
+            return make_shared<ammo_action>(slot);
+        else if (is_imus_illusory_weapon(&you, you.inv[slot]))
             return make_shared<ammo_action>(slot);
         else if (you.weapon() && you.weapon()->link == slot
                                 && is_range_weapon(*you.weapon()))

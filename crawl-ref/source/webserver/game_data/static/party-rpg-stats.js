@@ -371,7 +371,7 @@ function ($, model, properties, richText) {
         var metricItems = [
             { lbl: "SLAYING", val: formatSigned(m.slaying) },
             { lbl: "HP REGEN", val: formatRegen(m.hp_regen) },
-            { lbl: m.species === "Automaton" ? "COOLING" : "MP REGEN", val: formatRegen(m.mp_regen) },
+            { lbl: m.species === "Automaton" ? "HEAT DISSIPATION" : "MP REGEN", val: formatRegen(m.mp_regen) },
             { lbl: "SPELL LEVELS", val: spellCap },
             { lbl: "TURNS / TIME", val: turnsText },
             { lbl: "VANQUISHED", val: killsText },

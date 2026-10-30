@@ -66,7 +66,13 @@ const std::vector<power>& powers()
          "Heal 2/3/4/5% of direct damage to worthwhile natural blood-bearing foes.", "Brief bleeding, respecting bloodlessness."},
         {GOD_VELLUM, ABIL_VELLUM_WEAVE, "Borrowed Thread", 20, -1, false,
          "Transfer one whole positive randart property of weight at most 1/2/3/4; one thread total.",
-         "Briefly suppress the borrowed thread."}
+         "Briefly suppress the borrowed thread."},
+        {GOD_IMUS_THEA, ABIL_IMUS_PRISMATIC_PRISM, "Stolen Dazzle", 8, LOS_MAX_RANGE, false,
+         "Blind one susceptible visible foe for 2/3/4/5 turns.", "A hostile shining eye."},
+        {GOD_GREAT_WYRM, ABIL_WYRM_CITRINITAS, "Borrowed Resistance", 12, -1, false,
+         "Gain elemental resistance for 4/6/8/10 turns.", "A hostile fire elemental."},
+        {GOD_AGRAPHEDE, ABIL_AGRAPHEDE_SUMMON_SPIDER, "Call Redback", 16, -1, false,
+         "Call one friendly redback for 6/8/10/12 turns; only one may live at a time.", "A hostile redback."}
     };
     return rows;
 }

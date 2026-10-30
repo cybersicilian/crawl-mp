@@ -511,7 +511,9 @@ public:
     bool        animate_equip_bar; // Animate colours in equip bar.
 
     FixedBitVector<NUM_OBJECT_CLASSES> autopickups; // items to autopickup
+    FixedBitVector<NUM_OBJECT_CLASSES> auto_bag_items; // item classes stored on pickup
     bool        auto_switch;     // switch melee&ranged weapons according to enemy range
+    bool        autofight_weapon_swap;
     travel_open_doors_type travel_open_doors; // open doors while exploring
     longwalk_range_mode longwalk_range; // Maximum distance type for longwalking.
     int         longwalk_range_constant; // Distance used when longwalk_range is constant.

@@ -254,7 +254,8 @@ mcache_monster::mcache_monster(const monster_info& mon)
     m_equ_tile = (mon_weapon != nullptr) ? tilep_equ_weapon(*mon_weapon) : 0;
     if (!mons_class_wields_two_weapons(mon.type))
     {
-        const item_def* mon_shield = mon.inv[MSLOT_SHIELD].get();
+        const item_def* mon_shield = mon.props.exists("grape_shield_melded")
+                                     ? nullptr : mon.inv[MSLOT_SHIELD].get();
         m_shd_tile = (mon_shield != nullptr) ? tilep_equ_shield(*mon_shield) : 0;
         return;
     }
@@ -287,6 +288,7 @@ bool mcache_monster::get_weapon_offset(tileidx_t mon_tile,
     case TILEP_MONS_CHERUB:
     case TILEP_MONS_MENNAS:
     case TILEP_MONS_PROFANE_SERVITOR:
+    case TILEP_MONS_FALLEN:
     case TILEP_MONS_OCTOPODE:
     case TILEP_MONS_PLAYER_SHADOW_OCTOPODE:
     case TILEP_MONS_ZOMBIE_OCTOPODE:
@@ -467,6 +469,7 @@ bool mcache_monster::get_weapon_offset(tileidx_t mon_tile,
         break;
     case TILEP_MONS_SONJA:
     case TILEP_MONS_ANCIENT_CHAMPION:
+    case TILEP_MONS_LICHBANE:
     case TILEP_MONS_ANTIQUE_CHAMPION:
     case TILEP_MONS_SKELETAL_WARRIOR:
     case TILEP_MONS_SALAMANDER:
@@ -694,6 +697,7 @@ bool mcache_monster::get_weapon_offset(tileidx_t mon_tile,
     case TILEP_MONS_URUG:
     case TILEP_MONS_ORC_PRIEST:
     case TILEP_MONS_ORC_HIGH_PRIEST:
+    case TILEP_MONS_ASCLEPIA:
     case TILEP_MONS_SPRIGGAN:
     case TILEP_MONS_PLAYER_SHADOW_SPRIGGAN:
     case TILEP_MONS_SPRIGGAN_DEFENDER:
@@ -705,6 +709,7 @@ bool mcache_monster::get_weapon_offset(tileidx_t mon_tile,
     case TILEP_MONS_ORC_WIZARD:
     case TILEP_MONS_ORC_SORCERER:
     case TILEP_MONS_NERGALLE:
+    case TILEP_MONS_BRANDAGOTH:
     case TILEP_MONS_ETTIN:
     case TILEP_MONS_STONE_GIANT:
     case TILEP_MONS_TITAN:
@@ -1488,7 +1493,8 @@ bool mcache_monster::valid(const monster_info& mon)
     // shield offset and an off-hand weapon (a valid edge case)
     return have_weapon_offs && mon.inv[MSLOT_WEAPON]
            || have_shield_offs
-              && (mon.inv[MSLOT_SHIELD]
+              && ((mon.inv[MSLOT_SHIELD]
+                   && !mon.props.exists("grape_shield_melded"))
                   || mon.inv[MSLOT_ALT_WEAPON]
                      && mons_class_wields_two_weapons(mon.type));
 }
@@ -1503,7 +1509,8 @@ mcache_draco::mcache_draco(const monster_info& mon)
     m_mon_tile = tileidx_draco_base(mon);
     const item_def* mon_wep = mon.inv[MSLOT_WEAPON].get();
     m_equ_tile = (mon_wep != nullptr) ? tilep_equ_weapon(*mon_wep) : 0;
-    mon_wep = mon.inv[MSLOT_SHIELD].get();
+    mon_wep = mon.props.exists("grape_shield_melded")
+               ? nullptr : mon.inv[MSLOT_SHIELD].get();
     m_shd_tile = (mon_wep != nullptr) ? tilep_equ_shield(*mon_wep) : 0;
     m_job_tile = tileidx_draco_job(mon);
 }
@@ -1535,7 +1542,8 @@ mcache_ghost::mcache_ghost(const monster_info& mon)
 {
     ASSERT(mcache_ghost::valid(mon));
 
-    if (mon.type == MONS_FALSE_IMAGE && mon.props.exists("false_image_owner"))
+    if ((mon.type == MONS_FALSE_IMAGE || mon.type == MONS_IMUS_MIRROR)
+        && mon.props.exists("false_image_owner"))
     {
         const auto owner = static_cast<mid_t>(mon.props["false_image_owner"].get_int());
         const int slot = party::slot_for_mid(owner);
@@ -1717,7 +1725,8 @@ const dolls_data *mcache_ghost::doll() const
 
 bool mcache_ghost::valid(const monster_info& mon)
 {
-    return mon.type == MONS_FALSE_IMAGE || mons_is_pghost(mon.type);
+    return mon.type == MONS_FALSE_IMAGE || mon.type == MONS_IMUS_MIRROR
+           || mons_is_pghost(mon.type);
 }
 
 bool mcache_ghost::transparent() const

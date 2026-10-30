@@ -255,3 +255,16 @@ Philosophers enter the dungeon with the hat of Pondering and little else,
 relying on their intellect to make the most of a difficult start. If their hat
 is already reserved by the party, they receive an ordinary hat.
 %%%%
+Caravan
+
+Caravans venture into the Dungeon accompanied by a hired mercenary. They
+start with extra gold, a pouch, a pipe to recall allies and a flask of healing
+mist to help sustain their party.
+%%%%
+Collector
+
+Collectors begin with a weapon, light clothing and a scroll of Collector's
+Choice. When read, it offers a choice between a collection of artefacts and a
+wish for an available named or random artefact. The scroll is not spent when
+the reader cancels.
+%%%%

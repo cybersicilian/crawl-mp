@@ -7,6 +7,7 @@
 
 #include "item-def.h"
 #include "killer-type.h"
+#include "potion-type.h"
 #include "tag-version.h"
 
 #define ORIG_MONSTER_KEY "orig_monster_key"
@@ -33,6 +34,14 @@
 class actor;
 class monster;
 
+// Choose a current potion corresponding to a dispellable beneficial effect.
+// Returns NUM_POTIONS when no supported enchantment can be distilled.
+potion_type wyrm_distilled_potion(const monster& mons);
+int wyrm_credited_killer_slot(killer_type killer, int killer_index);
+
+// An explicitly non-player source must not fall back to the active player.
+constexpr int NO_CREDITED_PLAYER = -2;
+
 #define MONSTER_DIES_LUA_KEY "monster_dies_lua_key"
 
 // Mid of the monster who left this corpse (used to identify apostle corpses)
@@ -57,7 +66,8 @@ item_def* monster_die(monster& mons, const actor *killer, bool silent = false,
 
 item_def* monster_die(monster& mons, killer_type killer,
                       int killer_index, bool silent = false,
-                      bool mount_death = false, bool reset = false);
+                      bool mount_death = false, bool reset = false,
+                      int credited_player_slot = -1);
 
 item_def* mounted_kill(monster* daddy, monster_type mc, killer_type killer,
                        int killer_index);
@@ -67,7 +77,7 @@ bool mons_will_goldify(const monster &mons);
 void handle_monster_dies_lua(monster& mons, killer_type killer);
 
 item_def* place_corpse_or_gold(const monster& mons, bool force = false,
-                               bool no_corpse = false);
+                               bool no_corpse = false, int wyrm_owner_slot = -1);
 void maybe_drop_monster_organ(monster_type mon, monster_type orig,
                               coord_def pos, bool silent = false);
 
@@ -83,6 +93,11 @@ void heal_flayed_effect(actor* act, bool quiet = false, bool blood_only = false)
 void end_flayed_effect(monster* ghost);
 
 bool damage_contributes_xp(const actor& agent);
+
+// Attempt to raise one short-lived vermin from a suitable visible corpse.
+// `guaranteed` is for deterministic validation; it does not bypass the cap.
+bool agraphede_corpse_vermin(const monster& victim, int owner_slot,
+                             bool guaranteed = false);
 
 void mons_check_pool(monster* mons, const coord_def &oldpos,
                      killer_type killer = KILL_NONE, int killnum = -1);

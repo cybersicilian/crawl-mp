@@ -5023,6 +5023,9 @@ int str_to_ego(object_class_type item_type, string ego_str)
         "stardust",
         "mesmerism",
         "attunement",
+        "stasis",
+        "magic_recovery",
+        "bunker",
         nullptr
     };
     COMPILE_CHECK(ARRAYSZ(armour_egos) == NUM_REAL_SPECIAL_ARMOURS);
@@ -5144,6 +5147,17 @@ int str_to_ego(object_class_type item_type, string ego_str)
         if (ego_str == allowed[i])
             return i + 1;
     }
+
+    // Additional durable brands are deliberately outside the old contiguous
+    // range to preserve every legacy pseudo-brand's saved numeric ID.
+    const pair<const char*, brand_type> appended_brands[] = {
+        {"pacifying", SPWPN_PACIFYING}, {"sluggish", SPWPN_SLUGGISH},
+        {"silver", SPWPN_SILVER}, {"slimifying", SPWPN_SLIMIFYING},
+        {"seeking", SPWPN_SEEKING},
+    };
+    for (const auto& brand : appended_brands)
+        if (ego_str == brand.first)
+            return item_type == OBJ_WEAPONS ? brand.second : -1;
 
     // Incompatible or non-existent ego type
     for (int i = 1; i <= 2; i++)

@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "cubus.h"
+#include "wyrm-essence.h"
 #include "bloodcraft.h"
 
 #include "beam.h"
@@ -125,6 +127,16 @@ bool bolt::is_omnireflectable() const
     return !is_explosion
             && origin_spell != SPELL_GLACIATE
             && flavour != BEAM_VAMPIRIC_DRAINING; // buggy :(
+}
+
+bool bolt::imus_reflects_player() const
+{
+    const actor* source_actor = agent();
+    return you_worship(GOD_IMUS_THEA) && !player_under_penance(GOD_IMUS_THEA)
+           && !is_tracer() && !aimed_at_feet && source != you.pos()
+           && reflections == 0 && !YOU_KILL(thrower)
+           && (!source_actor || !source_actor->wont_attack())
+           && (is_omnireflectable() || is_blockable());
 }
 
 void bolt::emit_message(const char* m)
@@ -706,7 +718,9 @@ void bolt::initialise_fire()
     range = min(range, (int)you.current_vision);
 
     ASSERT_IN_BOUNDS(source);
-    ASSERT_RANGE(flavour, BEAM_NONE + 1, BEAM_FIRST_PSEUDO);
+    ASSERT(flavour == BEAM_POTION_HEAL || flavour == BEAM_AGRAPHEDE_STING
+           || flavour == BEAM_CUBUS_DISARM
+           || (flavour > BEAM_NONE && flavour < BEAM_FIRST_PSEUDO));
     ASSERT(!drop_item || ranged_atk);
     ASSERTM(range >= 0, "beam '%s', source '%s', has range -1",
             name.c_str(),
@@ -1610,14 +1624,15 @@ int mons_adjust_flavoured(monster* mons, bolt &pbolt, int hurted,
             if (original > 0 && doFlavouredEffects)
                 simple_monster_message(*mons, " completely resists.");
         }
-        else if (doFlavouredEffects && !one_chance_in(3))
+        else if (hurted > 0 && doFlavouredEffects && !one_chance_in(3))
             mons->corrode(pbolt.agent());
         break;
     }
 
     case BEAM_POISON:
     {
-        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted);
+        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted,
+                                      agraphede_poison_beam_source(pbolt));
 
         if (!hurted && doFlavouredEffects && original > 0)
             simple_monster_message(*mons, " completely resists.");
@@ -1636,27 +1651,46 @@ int mons_adjust_flavoured(monster* mons, bolt &pbolt, int hurted,
                              pbolt.agent(true)->name(DESC_PLAIN), 7);
             }
             else
-                poison_monster(mons, pbolt.agent());
+                poison_monster(mons, agraphede_poison_beam_source(pbolt));
         }
 
         break;
     }
 
+    case BEAM_AGRAPHEDE_STING:
+    {
+        hurted = resist_adjust_damage(mons, BEAM_POISON, hurted, pbolt.agent());
+        if (!hurted && doFlavouredEffects && original > 0)
+            simple_monster_message(*mons, " completely resists.");
+        else if (doFlavouredEffects && !one_chance_in(3))
+        {
+            poison_monster(mons, pbolt.agent(), 2);
+            if (one_chance_in(5))
+                mons->paralyse(pbolt.agent(), roll_dice(1, 3));
+            else if (one_chance_in(3))
+                mons->confuse(pbolt.agent(), 1 + random2(10));
+            else
+                mons->slow_down(pbolt.agent(), roll_dice(1, 3));
+        }
+        break;
+    }
+
     case BEAM_POISON_ARROW:
     {
-        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted);
+        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted,
+                                      agraphede_poison_beam_source(pbolt));
         const int stacks = pbolt.origin_spell == SPELL_STING ? 1 : 4;
         if (hurted < original)
         {
             if (doFlavouredEffects)
             {
                 simple_monster_message(*mons, " partially resists.");
-                poison_monster(mons, pbolt.agent(), div_rand_round(stacks, 2),
+                poison_monster(mons, agraphede_poison_beam_source(pbolt), div_rand_round(stacks, 2),
                                true);
             }
         }
         else if (doFlavouredEffects)
-            poison_monster(mons, pbolt.agent(), stacks, true);
+            poison_monster(mons, agraphede_poison_beam_source(pbolt), stacks, true);
 
         break;
     }
@@ -2077,7 +2111,7 @@ static bool _curare_hits_monster(actor *agent, monster* mons, int bonus_poison)
     if (!mons->alive())
         return false;
 
-    if (mons->res_poison() > 0)
+    if (agraphede_poison_resistance(mons, agent) > 0)
         return false;
 
     poison_monster(mons, agent, 2 + (bonus_poison / 7), true);
@@ -2103,7 +2137,7 @@ bool poison_monster(monster* mons, const actor *who, int levels,
     if (!mons->alive() || levels <= 0)
         return false;
 
-    if (monster_resists_this_poison(*mons, force))
+    if (monster_resists_this_poison(*mons, force, who))
         return false;
 
     const mon_enchant old_pois = mons->get_ench(ENCH_POISON);
@@ -2449,6 +2483,19 @@ static void _unravelling_explode(bolt &beam)
     // and it'll explode 'naturally' a little later.
 }
 
+static bool _imus_wall_bounce_owner(mid_t source_id)
+{
+    if (source_id == you.mid)
+        return have_passive(passive_t::imus_wall_bounce);
+    const int slot = party::slot_for_mid(source_id);
+    if (slot < 0)
+        return false;
+    // player::piety() and passive checks consult the active player. Swap to
+    // the projectile's owner rather than borrowing the defender's piety.
+    party::scoped_player_context context(slot);
+    return have_passive(passive_t::imus_wall_bounce);
+}
+
 bool bolt::is_bouncy(dungeon_feature_type feat) const
 {
     // Beams with no directionality will assert if we try to bounce them.
@@ -2475,6 +2522,11 @@ bool bolt::is_bouncy(dungeon_feature_type feat) const
 
     if (is_enchantment())
         return false;
+
+    if (YOU_KILL(thrower) && _imus_wall_bounce_owner(source_id)
+        && feat_is_solid(feat) && !is_explosion
+        && origin_spell != SPELL_IOOD)
+        return true;
 
     if (flavour == BEAM_ELECTRICITY
         && origin_spell != SPELL_BLINKBOLT
@@ -3184,6 +3236,9 @@ static int _potion_beam_flavour_to_colour(beam_type flavour)
     case BEAM_POTION_POISON:
         return GREEN;
 
+    case BEAM_POTION_HEAL:
+        return LIGHTGREEN;
+
     case BEAM_POTION_MIASMA:
     case BEAM_POTION_BLACK_SMOKE:
         return DARKGREY;
@@ -3224,7 +3279,8 @@ void bolt::affect_place_explosion_clouds()
         return;
     }
 
-    if (flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
+    if ((flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
+        || flavour == BEAM_POTION_HEAL)
     {
         const coord_def center = (aimed_at_feet ? source : ray.pos());
         if (p == center || x_chance_in_y(125 + ench_power, 225))
@@ -3358,6 +3414,7 @@ bool bolt::is_harmless(const monster* mon) const
     case BEAM_POTION_GREY_SMOKE:
     case BEAM_POTION_BLUE_SMOKE:
     case BEAM_POTION_PURPLE_SMOKE:
+    case BEAM_POTION_HEAL:
         return true;
 
     case BEAM_POTION_RAIN:
@@ -3394,6 +3451,9 @@ bool bolt::is_harmless(const monster* mon) const
     case BEAM_POISON:
         return mon->res_poison() >= 3;
 
+    case BEAM_AGRAPHEDE_STING:
+        return agraphede_poison_resistance(mon, agent()) >= 3;
+
     case BEAM_POTION_POISON:
         return mon->res_poison() > 0;
 
@@ -3419,6 +3479,11 @@ bool bolt::is_harmless(const monster* mon) const
 // that could affect some, but not all, players.
 bool bolt::harmless_to_player() const
 {
+    if (agraphede_web && source_id == you.mid
+        && you_worship(GOD_AGRAPHEDE) && !player_under_penance(GOD_AGRAPHEDE))
+        return true;
+    if (bounces && source_id == you.mid && _imus_wall_bounce_owner(source_id))
+        return true;
     dprf(DIAG_BEAM, "beam flavour: %d", flavour);
 
     // Marionettes can't hurt the player with anything, so don't worry about it.
@@ -3445,6 +3510,7 @@ bool bolt::harmless_to_player() const
     case BEAM_POTION_BLUE_SMOKE:
     case BEAM_POTION_PURPLE_SMOKE:
     case BEAM_POTION_RAIN:
+    case BEAM_POTION_HEAL:
         return true;
 
     // Positive enchantments.
@@ -3471,6 +3537,7 @@ bool bolt::harmless_to_player() const
         return player_prot_life(false) >= 3;
 
     case BEAM_POISON:
+    case BEAM_AGRAPHEDE_STING:
         return player_res_poison(false) >= 3
                || is_big_cloud() && player_res_poison(false) > 0;
 
@@ -4194,6 +4261,13 @@ void bolt::affect_player_enchantment(bool resistible)
         you.hurt(agent(), roll_damage(), BEAM_WARP_BODY, KILLED_BY_BEAM);
         break;
 
+    case BEAM_CUBUS_DISARM:
+        if (actor* source = agent())
+            if (monster* caster = source->as_monster())
+                obvious_effect = cubus::apply(*caster, you, cubus::effect::disarm,
+                                              ench_power, false);
+        break;
+
     default:
         // _All_ enchantments should be enumerated here!
         mpr("Software bugs nibble your toes!");
@@ -4389,6 +4463,16 @@ void bolt::affect_player()
 {
     hit_count[you.mid]++;
 
+    // The summoner is protected from their own divine web ball, even when a
+    // different party member is active while the deferred explosion resolves.
+    if (agraphede_web && source_id == you.mid
+        && you_worship(GOD_AGRAPHEDE) && !player_under_penance(GOD_AGRAPHEDE))
+        return;
+
+    // Imus protects the caster of a rebounding projectile, not companions.
+    if (bounces && source_id == you.mid && _imus_wall_bounce_owner(source_id))
+        return;
+
     if (ignores_player() || !could_harm(agent(), &you, !is_tracer()))
         return;
 
@@ -4404,6 +4488,19 @@ void bolt::affect_player()
     if (is_tracer())
     {
         tracer_affect_player();
+        return;
+    }
+
+    // Resolve this in the affected player's context, including for a party
+    // proxy. A projectile can only be reflected once by Imus; this prevents
+    // loops and does not turn allied or self-aimed attacks against their source.
+    if (imus_reflects_player())
+    {
+        const string projectile = name.empty() && origin_spell != SPELL_NO_SPELL
+                                  ? spell_title(origin_spell) : name;
+        mprf("Imus Thea reflects %s!", projectile.empty() ? "the projectile"
+                                                            : projectile.c_str());
+        reflect();
         return;
     }
 
@@ -4483,7 +4580,9 @@ void bolt::affect_player()
     }
 
     // Apply resistances to damage, but don't print "You resist" messages yet
-    int final_dam = check_your_resists(pre_res_dam, flavour, "", this, false);
+    const beam_type resist_flavour = flavour == BEAM_AGRAPHEDE_STING
+                                     ? BEAM_POISON : flavour;
+    int final_dam = check_your_resists(pre_res_dam, resist_flavour, "", this, false);
 
     // Tell the player the beam hit
     if (hit_verb.empty())
@@ -4506,7 +4605,20 @@ void bolt::affect_player()
     // these come after the beam actually hitting.
     // Note that this must be called with the pre-resistance damage, so that
     // poison effects etc work properly.
-    check_your_resists(pre_res_dam, flavour, "", this, true);
+    if (flavour != BEAM_AGRAPHEDE_STING)
+        check_your_resists(pre_res_dam, resist_flavour, "", this, true);
+
+    if (flavour == BEAM_AGRAPHEDE_STING && final_dam > 0
+        && !one_chance_in(3))
+    {
+        poison_player(2, agent() ? agent()->name(DESC_PLAIN) : name);
+        if (one_chance_in(5))
+            you.paralyse(agent(), roll_dice(1, 3));
+        else if (one_chance_in(3))
+            confuse_player(1 + random2(10));
+        else
+            slow_player(roll_dice(1, 3));
+    }
 
     if (real_flavour == BEAM_CHAOS && coinflip())
         chaos_affects_actor(&you, agent());
@@ -4951,7 +5063,8 @@ bool bolt::has_relevant_side_effect(monster* mon)
     if (flavour == BEAM_POTION_RANDOM)
         return true;
 
-    const cloud_type cloud = (flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
+    const cloud_type cloud = ((flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
+                              || flavour == BEAM_POTION_HEAL)
         ? beam2cloud(flavour)
         : get_cloud_type();
     if (cloud != CLOUD_NONE && !actor_cloud_immune(*mon, cloud))
@@ -5291,7 +5404,21 @@ void bolt::kill_monster(monster &mon)
     if (flavour == BEAM_BLOODRITE)
         mon.props[MAKHLEB_BLOODRITE_KILL_KEY] = true;
 
-    item_def *corpse = monster_die(mon, ref_killer, kindex);
+    // Preserve the actual party source for owner-scoped death effects. A
+    // reflector is the most recent source and takes precedence over the
+    // original shooter; a non-player reflector must not credit the active
+    // player merely because the original thrower was a player.
+    int credited_player_slot = -1;
+    if (reflections > 0 && reflector != MID_NOBODY)
+    {
+        credited_player_slot = party::slot_for_mid(reflector);
+        if (credited_player_slot < 0)
+            credited_player_slot = NO_CREDITED_PLAYER;
+    }
+    else if (YOU_KILL(ref_killer))
+        credited_player_slot = party::slot_for_mid(source_id);
+    item_def *corpse = monster_die(mon, ref_killer, kindex, false, false,
+                                   false, credited_player_slot);
 
     if (origin_spell != SPELL_GLACIATE && origin_spell != SPELL_GLACIAL_BREATH
         || goldify)
@@ -5615,7 +5742,7 @@ bool bolt::attempt_block(monster* mon)
 
     mon->sense_if_invisible();
 
-    item_def *shield = mon->mslot_item(MSLOT_SHIELD);
+    item_def *shield = mon->shield();
     if (is_reflectable(*mon))
     {
         if (mon->observable())
@@ -5827,6 +5954,10 @@ void bolt::affect_monster(monster* mon)
     // Make a copy of the to-hit before we modify it.
     int beam_hit = hit;
 
+    if (beam_hit != AUTOMATIC_HIT && agent() && agent()->is_player()
+        && you.duration[DUR_WYRM_CITRINITAS])
+        beam_hit += wyrm_essence::empowerment_piety() / 40;
+
     if (beam_hit != AUTOMATIC_HIT)
         beam_hit = apply_to_hit_modifiers(beam_hit, *mon);
 
@@ -5992,7 +6123,8 @@ bool bolt::ignores_monster(const monster* mon) const
         return true;
 
     // A caster can fire through their own illusory double.
-    if (mon->type == MONS_FALSE_IMAGE && source_id == mon->summoner)
+    if ((mon->type == MONS_FALSE_IMAGE || mon->type == MONS_IMUS_MIRROR)
+        && source_id == mon->summoner)
         return true;
 
     // Player shadows (or a dummy for a shadow spell tracer) can shoot through
@@ -6342,6 +6474,13 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
     // Gigantic-switches-R-Us
     switch (flavour)
     {
+    case BEAM_CUBUS_DISARM:
+        if (actor* source = agent())
+            if (monster* caster = source->as_monster())
+                return cubus::apply(*caster, *mon, cubus::effect::disarm,
+                                    ench_power, false) ? MON_AFFECTED : MON_UNAFFECTED;
+        return MON_UNAFFECTED;
+
     case BEAM_TELEPORT:
         if (mon->no_tele())
             return MON_UNAFFECTED;
@@ -7711,6 +7850,8 @@ void bolt::set_agent(const actor *actor)
  */
 actor* bolt::agent(bool ignore_reflection) const
 {
+    if (agraphede_web && (ignore_reflection || reflections == 0))
+        return actor_by_mid(source_id);
     killer_type nominal_ktype = thrower;
     mid_t nominal_source = source_id;
 
@@ -7743,7 +7884,8 @@ bool bolt::is_enchantment() const
 {
     return (flavour >= BEAM_FIRST_ENCHANTMENT
             && flavour <= BEAM_LAST_ENCHANTMENT)
-           || flavour == BEAM_MANA_RUPTURE || flavour == BEAM_BLIGHT;
+           || flavour == BEAM_MANA_RUPTURE || flavour == BEAM_BLIGHT
+           || flavour == BEAM_CUBUS_DISARM;
 }
 
 string bolt::get_short_name() const
@@ -7797,6 +7939,7 @@ static string _beam_type_name(beam_type type)
     case BEAM_MEPHITIC:              return "noxious fumes";
     case BEAM_POTION_POISON:
     case BEAM_POISON:                return "poison";
+    case BEAM_AGRAPHEDE_STING:       return "mixed poison";
     case BEAM_NEG:                   return "negative energy";
     case BEAM_ACID:                  return "acid";
     case BEAM_LIGHT:                 return "light";
@@ -7825,6 +7968,7 @@ static string _beam_type_name(beam_type type)
     case BEAM_POTION_PURPLE_SMOKE:   return "purple smoke";
     case BEAM_POTION_MUTAGENIC:      return "mutagenic fog";
     case BEAM_POTION_RAIN:           return "rain";
+    case BEAM_POTION_HEAL:           return "healing mist";
     case BEAM_POTION_RANDOM:
     case BEAM_RANDOM:                return "random";
     case BEAM_CHAOS:                 return "chaos";
@@ -7906,6 +8050,7 @@ static string _beam_type_name(beam_type type)
     case BEAM_BAT_CLOUD:             return "cloud of bats";
     case BEAM_ILL_OMEN:              return "omen";
     case BEAM_WARP_BODY:             return "warp body";
+    case BEAM_CUBUS_DISARM:          return "disarming magic";
 
     case NUM_BEAMS:                  die("invalid beam type");
     }
@@ -8070,8 +8215,17 @@ void player_beam_tracer::monster_hit(const bolt& beam, const monster& mon)
     {
         const int slot = party::proxy_slot(mon);
         if (slot < 0 || slot >= party::player_count()
-            || mon.props.exists("party_downed_ghost")
-            || !you.can_see(party::get_player(slot)) || beam.is_harmless(&mon))
+            || mon.props.exists("party_downed_ghost"))
+            return;
+        if (party::get_player(slot).mid == you.mid)
+        {
+            // A player's proxy is not an ally. Treat a harmful return as a
+            // self-hit, while respecting owner-only rebound immunity.
+            if (!beam.harmless_to_player() && !hit_self_count)
+                player_hit(true);
+            return;
+        }
+        if (!you.can_see(party::get_player(slot)) || beam.is_harmless(&mon))
             return;
         for (const bad_target& target : bad_attack_targets)
             if (target.mon == &mon)
@@ -8498,7 +8652,8 @@ int apply_willpower_bypass(const actor& source, int willpower)
 
 int apply_willpower_bypass(const monster_info& source, int willpower)
 {
-    if (source.inv[MSLOT_SHIELD]
+    if (!source.props.exists("grape_shield_melded")
+        && source.inv[MSLOT_SHIELD]
         && get_armour_ego_type(*source.inv[MSLOT_SHIELD]) == SPARM_GUILE)
     {
         willpower = max(0, willpower - 2 * WL_PIP);

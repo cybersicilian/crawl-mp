@@ -195,6 +195,25 @@ static void _setup_lightning_explosion(bolt & beam, const monster& origin)
         beam.origin_spell = SPELL_CONJURE_BALL_LIGHTNING;
 }
 
+void setup_agraphede_web_explosion(bolt& beam, const monster& origin)
+{
+    _setup_base_explosion(beam, origin);
+    beam.flavour = BEAM_ENSNARE;
+    beam.damage = ball_lightning_damage(origin.get_hit_dice());
+    beam.name = "blast of web";
+    beam.colour = WHITE;
+    beam.ex_size = 2;
+    // Preserve the owner's identity after the ball dies and its explosion is
+    // deferred. The active party member may be different when it resolves.
+    const actor* owner = actor_by_mid(origin.summoner);
+    if (owner && owner->is_player())
+    {
+        beam.source_id = origin.summoner;
+        beam.thrower = KILL_YOU_MISSILE;
+        beam.agraphede_web = true;
+    }
+}
+
 dice_def prism_damage(int hd, bool fully_powered)
 {
     const int dice = fully_powered ? 3 : 2;
@@ -324,6 +343,10 @@ static const map<monster_type, monster_explosion> explosions {
     } },
     { MONS_BALL_LIGHTNING, {
         _setup_lightning_explosion,
+        [](int hd) { return ball_lightning_damage(hd, false); },
+    } },
+    { MONS_AGRAPHEDE_WEB_BALL, {
+        setup_agraphede_web_explosion,
         [](int hd) { return ball_lightning_damage(hd, false); },
     } },
     { MONS_LURKING_HORROR, {

@@ -56,6 +56,14 @@ static bool _is_book_type(const item_def& item,
     return true;
 }
 
+int imus_weapon_accuracy_penalty(const item_def* weapon)
+{
+    if (!you_worship(GOD_IMUS_THEA) || !weapon
+        || (weapon->base_type != OBJ_WEAPONS && weapon->base_type != OBJ_STAVES))
+        return 0;
+    return you.hands_reqd(*weapon) == HANDS_TWO ? 2 : 0;
+}
+
 static bool _weapon_with_brand(const item_def &item, bool (*brand_fn)(brand_type),
                                 bool calc_unid, bool include_temp)
 {
@@ -377,6 +385,14 @@ vector<forbidden_act_type> forbidden_acts(const item_def &item, bool include_tem
  */
 bool god_forbids_item(const item_def &item, god_type which_god, bool include_temp)
 {
+    // Imus's reflections require freedom of movement, not heavy body armour
+    // or a shield. Use the same restriction for altar conversion and equipping.
+    if (which_god == GOD_IMUS_THEA && item.base_type == OBJ_ARMOUR
+        && (is_shield(item)
+            || (get_armour_slot(static_cast<armour_type>(item.sub_type))
+                    == SLOT_BODY_ARMOUR
+                && -property(item, PARM_EVASION) > 40)))
+        return true;
     return god_forbids_item_handling(item, which_god, include_temp) != FORBID_NONE;
 }
 

@@ -139,5 +139,10 @@ enum beam_type                  // bolt::flavour
     BEAM_TORMENT_DAMAGE,          // Pseudo-beam for damage flavour.
     BEAM_FIRST_PSEUDO = BEAM_TORMENT_DAMAGE,
 
+    // Appended after existing values to preserve saved beam identifiers.
+    BEAM_POTION_HEAL,
+    BEAM_AGRAPHEDE_STING,
+    BEAM_CUBUS_DISARM,
+
     NUM_BEAMS
 };

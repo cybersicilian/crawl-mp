@@ -1,0 +1,22 @@
+name: "Fallen"
+glyph: {char: "A", colour: lightcyan}
+flags: [fighter, see_invis, speaks, unique, female, flies]
+resists: {cold: 1, elec: 1}
+exp: 3000
+genus: angel
+species: profane_servitor
+holiness: [undead]
+will: 140
+attacks:
+ - {type: hit, flavour: vampiric, damage: 25}
+ - {type: hit, flavour: drain, damage: 25}
+hd: 18
+hp_10x: 1600
+ac: 16
+ev: 25
+spells: fallen
+intelligence: human
+speed: 15
+uses: starting_equipment
+size: medium
+shape: humanoid_winged

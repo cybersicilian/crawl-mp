@@ -260,6 +260,10 @@ enum enchant_type
     ENCH_DIVINE_SHIELD,
     ENCH_INSUBSTANTIAL,
     ENCH_SHACKLE,
+    ENCH_WYRM_NIGREDO,
+    ENCH_WYRM_ALBEDO,
+    ENCH_WYRM_CITRINITAS,
+    ENCH_WYRM_VIRIDITAS,
     // Update enchant_names[] in mon-ench.cc when adding or removing
     // enchantments.
     NUM_ENCHANTMENTS

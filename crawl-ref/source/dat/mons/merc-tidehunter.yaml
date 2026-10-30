@@ -1,0 +1,23 @@
+name: "hired tidehunter"
+enum: merc_tidehunter
+glyph: {char: "m", colour: white}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived, see_invis]
+species: merfolk
+will: 120
+attacks:
+ - {type: hit, damage: 24}
+hd: 15
+hp_10x: 700
+ac: 2
+ev: 25
+spells: merc_tidehunter
+has_corpse: true
+shout: shout
+intelligence: human
+habitat: amphibious
+energy: {swim: 6}
+tile_variance: water
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: merc_tidehunter

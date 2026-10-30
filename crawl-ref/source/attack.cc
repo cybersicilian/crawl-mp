@@ -6,6 +6,7 @@
  */
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
 #include "elemental-weapon.h"
 #include "god-vellum.h"
 #include "oozle-memory-effects.h"
@@ -22,6 +23,7 @@
 #include <functional>
 
 #include "art-enum.h"
+#include "beam.h"
 #include "chardump.h"
 #include "delay.h"
 #include "english.h"
@@ -31,6 +33,7 @@
 #include "fineff.h"
 #include "god-abil.h"
 #include "god-conduct.h"
+#include "god-item.h"
 #include "god-passive.h" // passive_t::no_haste
 #include "item-name.h"
 #include "item-prop.h"
@@ -38,6 +41,7 @@
 #include "mon-behv.h"
 #include "mon-clone.h"
 #include "mon-death.h"
+#include "mon-poly.h"
 #include "mutation.h"
 #include "nearby-danger.h"
 #include "party.h"
@@ -46,6 +50,7 @@
 #include "shout.h"
 #include "skills.h"
 #include "spl-damage.h"
+#include "spl-goditem.h"
 #include "spl-selfench.h"
 #include "spl-summoning.h"
 #include "spl-util.h"
@@ -140,15 +145,21 @@ bool attack::handle_phase_damaged()
 
 void attack::handle_phase_killed()
 {
+    kill_defender();
+}
+
+item_def* attack::kill_defender()
+{
     monster* mon = defender->as_monster();
     if (!invalid_monster(mon))
     {
         // Was this a reflected missile from the player?
         if (responsible->mid == MID_YOU_FAULTLESS)
-            monster_die(*mon, KILL_YOU_MISSILE, YOU_FAULTLESS);
+            return monster_die(*mon, KILL_YOU_MISSILE, YOU_FAULTLESS);
         else
-            monster_die(*mon, attacker);
+            return monster_die(*mon, attacker);
     }
+    return nullptr;
 }
 
 void attack::handle_phase_end()
@@ -177,9 +188,12 @@ int attack::calc_pre_roll_to_hit(bool random)
     // player_to_hit methods.
     if (stat_source().is_player())
     {
+        const bool seeking = using_weapon()
+                             && get_weapon_brand(*weapon) == SPWPN_SEEKING;
         mhit = 15 + (you.dex() / 2);
         // fighting contribution
-        mhit += maybe_random2_div(you.skill(SK_FIGHTING, 100), 100, random);
+        mhit += maybe_random2_div(seeking ? 5000 : you.skill(SK_FIGHTING, 100),
+                                  100, random);
 
         // weapon skill contribution
         if (using_weapon())
@@ -189,7 +203,7 @@ int attack::calc_pre_roll_to_hit(bool random)
                 if (you.skill(wpn_skill) < 1 && player_in_a_dangerous_place() && random)
                     xom_is_stimulated(10); // Xom thinks that is mildly amusing.
 
-                mhit += maybe_random2_div(you.skill(wpn_skill, 100), 100,
+                mhit += maybe_random2_div(seeking ? 5000 : you.skill(wpn_skill, 100), 100,
                                          random);
             }
         }
@@ -227,6 +241,9 @@ int attack::calc_pre_roll_to_hit(bool random)
         if (you.duration[DUR_VERTIGO])
             mhit -= 5;
 
+        if (you.duration[DUR_WYRM_CITRINITAS])
+            mhit += wyrm_essence::empowerment_piety() / 40;
+
         // mutation
         if (you.get_mutation_level(MUT_EYEBALLS))
             mhit += 2 * you.get_mutation_level(MUT_EYEBALLS) + 1;
@@ -235,9 +252,15 @@ int attack::calc_pre_roll_to_hit(bool random)
     {
         mhit = calc_mon_to_hit_base();
         if (using_weapon())
+        {
+            if (get_weapon_brand(*weapon) == SPWPN_SEEKING)
+                mhit = max(mhit, 50);
             mhit += effective_item_enchantment(*weapon) + property(*weapon, PWPN_HIT);
+        }
 
         mhit += attacker->slaying();
+        mhit += wyrm_essence::infusion_piety(*attacker->as_monster(),
+                                              ENCH_WYRM_CITRINITAS) / 40;
         mhit = mhit * (100 - bloodcraft::accuracy_penalty(*attacker->as_monster())) / 100;
     }
 
@@ -257,6 +280,8 @@ int attack::post_roll_to_hit_modifiers(int mhit, bool /*random*/)
     modifiers -= attacker->inaccuracy_penalty();
 
     modifiers += to_hit_bonus;
+    if (attacker->is_player())
+        modifiers -= imus_weapon_accuracy_penalty(weapon);
 
     if (attacker->confused())
         modifiers += CONFUSION_TO_HIT_MALUS;
@@ -490,6 +515,29 @@ void attack::alert_defender()
         if (you.pet_target == MHITNOT)
             you.pet_target = attacker->mindex();
     }
+}
+
+bool attack::distortion_gauntlets_affect_defender()
+{
+    if (simu || damage_done <= 0 || !attacker->is_player()
+        || !attacker->as_player()->unrand_equipped(UNRAND_GAUNTLETS_DISTORTION)
+        || !defender->alive() || damage_brand == SPWPN_DISTORTION
+        || defender->is_monster() && party::is_proxy_monster(*defender->as_monster()))
+        return false;
+
+    // Weapon-brand damage was already applied. Keep that accounting while
+    // applying the gauntlets' spatial damage exactly once for this attack.
+    const int previous_damage = special_damage;
+    special_damage = 0;
+    special_damage_message.clear();
+    const bool banished = distortion_affects_defender();
+    if (needs_message && !special_damage_message.empty())
+        mpr(special_damage_message);
+    special_damage_message.clear();
+    if (special_damage > 0 && defender->alive())
+        inflict_damage(special_damage, BEAM_MMISSILE);
+    special_damage += previous_damage;
+    return banished;
 }
 
 bool attack::distortion_affects_defender()
@@ -1448,6 +1496,56 @@ bool attack::apply_damage_brand(const char *what)
         defender->splash_with_acid(attacker);
         break;
 
+    case SPWPN_SILVER:
+    {
+        string message;
+        special_damage = silver_damages_victim(defender, damage_done, message);
+        if (special_damage)
+            special_damage_message = message;
+        break;
+    }
+
+    case SPWPN_PACIFYING:
+    {
+        monster* mon = defender->as_monster();
+        if (attacker->is_player() && mon && !mon->wont_attack()
+            && one_chance_in(3) && unpacifiable_reason(*mon).empty())
+        {
+            cast_pacify(mon->pos(), 30 + you.skill(SK_INVOCATIONS));
+            obvious_effect = true;
+        }
+        break;
+    }
+
+    case SPWPN_SLUGGISH:
+    {
+        monster* mon = defender->as_monster();
+        if (attacker->is_player() && mon && !mon->wont_attack()
+            && one_chance_in(3) && is_slouchable(mon->pos()))
+        {
+            special_damage = slouch_damage(mon) / 2;
+            if (special_damage)
+                special_damage_message = make_stringf(
+                    "Time twists around %s%s",
+                    defender->name(DESC_THE).c_str(),
+                    attack_strength_punctuation(special_damage).c_str());
+        }
+        break;
+    }
+
+    case SPWPN_SLIMIFYING:
+    {
+        monster* mon = defender->as_monster();
+        if (attacker->is_player() && mon && !mon->wont_attack()
+            && mon_can_be_slimified(mon)
+            && x_chance_in_y(max(30 * (30 - mon->get_hit_dice()) / 30, 0), 100))
+        {
+            slimify_monster(mon);
+            obvious_effect = true;
+        }
+        break;
+    }
+
     case SPWPN_ENTANGLING:
         if (coinflip() && attacker->can_constrict(*defender, CONSTRICT_ENTANGLE))
         {
@@ -1493,7 +1591,8 @@ void attack::calc_elemental_brand_damage(beam_type flavour,
                                          const char *what)
 {
     special_damage = resist_adjust_damage(defender, flavour,
-                                          random2(damage_done) / 2 + 1);
+                                          random2(damage_done) / 2 + 1,
+                                          attacker);
 
     if (needs_message && special_damage > 0 && verb)
     {

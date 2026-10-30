@@ -4,10 +4,12 @@
  */
 
 #include "AppHdr.h"
+#include "agraphede-enchant.h"
 #include "eldritch.h"
 #include "oozle-memory-effects.h"
 #include "oozle-memory.h"
 #include "bloodcraft.h"
+#include "corpse-knockback.h"
 #include "hydra-physiology.h"
 #include "wight.h"
 
@@ -31,6 +33,7 @@
 #include "env.h"
 #include "evoke.h"
 #include "exercise.h"
+#include "fight.h"
 #include "fineff.h"
 #include "god-conduct.h"
 #include "god-item.h"
@@ -38,6 +41,7 @@
 #include "hints.h"
 #include "invent.h"
 #include "item-prop.h"
+#include "items.h"
 #include "los.h"
 #include "losparam.h"
 #include "mapdef.h"
@@ -48,6 +52,7 @@
 #include "mon-place.h"
 #include "mon-poly.h"
 #include "mon-tentacle.h"
+#include "mon-util.h"
 #include "nearby-danger.h"
 #include "party.h"
 #include "religion.h"
@@ -892,6 +897,11 @@ bool melee_attack::handle_phase_hit()
         return false;
     }
 
+    // Agraphede's venom is an additional on-hit effect; it does not replace
+    // the weapon's existing brand and also applies to unarmed melee hits.
+    if (!simu)
+        agraphede_enchant_hit(attacker, defender);
+
     // Detonation catalyst should trigger even if the defender dies later on.
     maybe_trigger_detonation();
 
@@ -963,8 +973,19 @@ bool melee_attack::handle_phase_hit()
     if (oozle::has_equipment_effect(*attacker, weapon, UNRAND_COOLIBAH_BARDICHE))
         _trigger_coolibah_bardiche(attacker, defender, damage_done);
 
-    // Check for weapon brand & inflict that damage too
+    // Pacifying and slimifying can turn the defender neutral in the middle
+    // of a hit. Stop before follow-up effects or auxiliary attacks harm them.
+    const bool hostile_before_brand = defender->is_monster()
+                                      && defender->as_monster()->base_attitude == ATT_HOSTILE;
     apply_damage_brand();
+    if ((damage_brand == SPWPN_PACIFYING || damage_brand == SPWPN_SLIMIFYING)
+        && hostile_before_brand && defender->is_monster()
+        && defender->as_monster()->base_attitude != ATT_HOSTILE)
+    {
+        return false;
+    }
+    if (distortion_gauntlets_affect_defender())
+        return false;
     if (attacker->is_player())
         wight::drain_target(*defender);
     if (attacker->is_player() && !weapon && you.has_mutation(MUT_ACIDIC_TOUCH)
@@ -1387,6 +1408,15 @@ static void _handle_werewolf_kill_bonus(const monster& victim, bool takedown)
  */
 void melee_attack::handle_phase_killed()
 {
+    const bool knockback = !simu && weapon
+                           && item_attack_skill(*weapon) == SK_MACES_FLAILS
+                           && defender->is_monster()
+                           && !invalid_monster(defender->as_monster())
+                           && !defender->is_stationary()
+                           && !defender->is_summoned();
+    const coord_def victim_pos = defender->pos();
+    const mid_t victim_mid = defender->mid;
+    const int weapon_power = knockback ? property(*weapon, PWPN_DAMAGE) : 0;
     if (attacker->is_player()
         && you.form == transformation::maw
         && defender->is_monster() // better safe than sorry
@@ -1421,7 +1451,24 @@ void melee_attack::handle_phase_killed()
     // monster of a group, so let's not cause the player that disappointment.
                             && there_are_monsters_nearby(true, true, false);
 
-    attack::handle_phase_killed();
+    item_def* corpse = kill_defender();
+    if (knockback && corpse && corpse->is_type(OBJ_CORPSES, CORPSE_BODY)
+        && corpse->props.exists(MONSTER_MID)
+        && corpse->props[MONSTER_MID].get_int() == static_cast<int>(victim_mid)
+        && item_pos(*corpse) == victim_pos
+        && (!attacker->is_monster() || !invalid_monster(attacker->as_monster()))
+        && attacker->alive())
+    {
+        const int max_distance = max(1, weapon_power / 5);
+        const int attempts = random_range(1, max_distance);
+        const int weight = max_corpse_chunks(corpse->mon_type);
+        int distance = 0;
+        for (int i = 0; i < attempts; ++i)
+            if (!x_chance_in_y(weight, weapon_power + 5))
+                ++distance;
+        corpse_knockback::launch(*corpse, *attacker, attack_position,
+                                 distance, damage_done);
+    }
 
     if (execute)
         makhleb_execution_activate();
@@ -1471,6 +1518,14 @@ bool melee_attack::handle_phase_cleaving()
 // Returns true if any followup attack succeeded.
 bool melee_attack::handle_phase_multihit()
 {
+    // A successful divine brand can make the defender neutral before this
+    // phase. Do not launch an automatic follow-up into the new ally.
+    if ((damage_brand == SPWPN_PACIFYING || damage_brand == SPWPN_SLIMIFYING)
+        && defender && defender->is_monster()
+        && defender->as_monster()->base_attitude != ATT_HOSTILE)
+    {
+        return false;
+    }
     if (!is_followup && (weapon_multihits(weapon) || (attacker->is_player() && oozle::inherited_strikes(weapon) > 1))
         && defender && defender->alive())
     {
@@ -1884,7 +1939,12 @@ bool melee_attack::run_player_attack_set()
 
     // If we had a primary target that became ineligable after the first swing,
     // give the next swing an empty target (so we can still cleave with it).
-    if (defender && (!defender->alive() || !should_cleave_into(*attacker, *defender)))
+    const brand_type first_brand = get_weapon_brand(*first_weapon);
+    const bool pacified_target = defender && defender->is_monster()
+        && defender->as_monster()->base_attitude != ATT_HOSTILE
+        && (first_brand == SPWPN_PACIFYING || first_brand == SPWPN_SLIMIFYING);
+    if (defender && (pacified_target || !defender->alive()
+                     || !should_cleave_into(*attacker, *defender)))
         defender = nullptr;
 
     if (swing_with(*second_weapon))
@@ -2559,6 +2619,9 @@ public:
         // duplicated in _describe_talisman_form
         const int fang_damage = damage + you.has_usable_fangs() * 2;
 
+        if (you.unrand_equipped(UNRAND_ERYSICHTHONS_JAW))
+            return fang_damage + 4;
+
         if (you.get_mutation_level(MUT_ANTIMAGIC_BITE))
         {
             const int hd = you.get_hit_dice();
@@ -2592,7 +2655,8 @@ public:
 
     bool is_usable() const override
     {
-        return you.get_mutation_level(MUT_ANTIMAGIC_BITE)
+        return you.unrand_equipped(UNRAND_ERYSICHTHONS_JAW)
+            || you.get_mutation_level(MUT_ANTIMAGIC_BITE)
             || (you.has_usable_fangs()
                 || you.get_mutation_level(MUT_ACIDIC_BITE));
     }
@@ -2952,6 +3016,26 @@ bool melee_attack::player_aux_apply(unarmed_attack_type atk)
     aux_damage = inflict_damage(aux_damage, BEAM_MISSILE);
     damage_done = aux_damage;
 
+    // The Jaw's bite draws vitality without restoring the removed hunger
+    // system. Only the wearer receives its healing in a party.
+    if (atk == UNAT_BITE && damage_done > 0
+        && you.unrand_equipped(UNRAND_ERYSICHTHONS_JAW)
+        && defender->is_monster()
+        && !party::is_proxy_monster(*defender->as_monster())
+        && !you.duration[DUR_DEATHS_DOOR]
+        && you.hp < you.hp_max
+        && actor_can_drain_life_from(you, *defender)
+        && !x_chance_in_y(2, 5))
+    {
+        const int healed = resist_adjust_damage(defender, BEAM_NEG,
+                                               1 + random2(damage_done), &you);
+        if (healed > 0)
+        {
+            mpr("The Jaw draws vitality from your bite.");
+            you.heal(max(1, healed / 3));
+        }
+    }
+
     if (defender->alive())
     {
         if (atk == UNAT_CONSTRICT)
@@ -2979,7 +3063,7 @@ bool melee_attack::player_aux_apply(unarmed_attack_type atk)
             if (damage_brand == SPWPN_ACID && !one_chance_in(3))
                 defender->corrode(&you);
 
-            if (damage_brand == SPWPN_WEAKNESS && defender->res_poison() < 3)
+            if (damage_brand == SPWPN_WEAKNESS && agraphede_poison_resistance(defender, attacker) < 3)
                 defender->weaken(&you, 6);
 
             if (damage_brand == SPWPN_VULNERABILITY)
@@ -3798,7 +3882,7 @@ bool melee_attack::apply_staff_damage(const item_def* staff_weapon)
     const stave_type staff = static_cast<stave_type>(staff_weapon->sub_type);
     int dam = staff_damage(staff);
     const beam_type flavour = staff_damage_type(staff);
-    dam = resist_adjust_damage(defender, flavour, dam);
+    dam = resist_adjust_damage(defender, flavour, dam, attacker);
     if (staff == STAFF_EARTH && defender->airborne())
         dam /= 3;
     if (dam > 0)
@@ -4368,9 +4452,9 @@ void melee_attack::mons_apply_attack_flavour(attack_flavour flavour)
             mpr("Your divine stamina protects you from poison!");
             break;
         }
-        if (defender->res_poison() >= 3)
+        if (agraphede_poison_resistance(defender, attacker) >= 3)
             break;
-        if (defender->res_poison() > 0 && !one_chance_in(3))
+        if (agraphede_poison_resistance(defender, attacker) > 0 && !one_chance_in(3))
             break;
         defender->paralyse(attacker, 1);
         mons_do_poison();
@@ -4385,7 +4469,7 @@ void melee_attack::mons_apply_attack_flavour(attack_flavour flavour)
             mpr("Your divine stamina protects you from poison!");
             break;
         }
-        else if (defender->res_poison() >= 3)
+        else if (agraphede_poison_resistance(defender, attacker) >= 3)
             break;
 
         // Same frequency as AF_POISON and AF_POISON_STRONG.
@@ -4400,10 +4484,10 @@ void melee_attack::mons_apply_attack_flavour(attack_flavour flavour)
         // chance to resist with rPois.
         if (one_chance_in(6))
         {
-            if (defender->res_poison() <= 0 || one_chance_in(3))
+            if (agraphede_poison_resistance(defender, attacker) <= 0 || one_chance_in(3))
                 defender->paralyse(attacker, roll_dice(1, 3));
         }
-        else if (defender->res_poison() <= 0 || one_chance_in(3))
+        else if (agraphede_poison_resistance(defender, attacker) <= 0 || one_chance_in(3))
             defender->slow_down(attacker, roll_dice(1, 3));
 
         break;
@@ -5228,8 +5312,8 @@ void melee_attack::do_valour_beam()
 
 void melee_attack::handle_centipede_poison(int power) const
 {
-    if (defender->res_poison() >= 3
-        || defender->res_poison() && !one_chance_in(3))
+    if (agraphede_poison_resistance(defender, attacker) >= 3
+        || agraphede_poison_resistance(defender, attacker) && !one_chance_in(3))
     {
         return;
     }

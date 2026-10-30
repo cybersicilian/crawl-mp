@@ -27,6 +27,8 @@
 #endif
 
 #include "ability.h"
+#include "bag.h"
+#include "bag-menu.h"
 #include "act-iter.h"
 #include "archaeologist.h"
 #include "elemental-weapon.h"
@@ -48,6 +50,8 @@
 #include "format.h"
 #include "game-record.h"
 #include "game-modifiers.h"
+#include "grape-aura.h"
+#include "god-abil.h"
 #include "invent.h"
 #include "item-name.h"
 #include "item-prop.h" // is_weapon()
@@ -92,6 +96,8 @@
 #include "state.h"
 #include "stats-json.h"
 #include "status.h"
+#include "web-effect-keys.h"
+#include "web-bane-keys.h"
 #include "stringutil.h"
 #include "throw.h"
 #include "tile-flags.h"
@@ -1242,7 +1248,7 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
             || action == "breakthrough" || action == "designate" || action == "overclock_finite";
         const bool valid_action = !action_node || (action_node->tag == JSON_STRING
             && (action == "use" || action == "unequip" || action == "drop"
-                || action == "assimilate" || action == "weave" || workshop_action));
+                || action == "assimilate" || action == "weave" || action == "bag_open" || workshop_action));
         if ((!use_item || (expected.node && name.node))
             && valid_action
             && inv_slot >= 0 && inv_slot < ENDOFPACK && you.inv[inv_slot].defined()
@@ -1253,7 +1259,7 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         {
             // Keep the requested operation explicit: a stale second click must
             // never re-equip gear or drop something that is still worn.
-            if (use_item && action != "use" && action != "weave"
+            if (use_item && action != "use" && action != "weave" && action != "bag_open"
                 && item_is_equipped(you.inv[inv_slot]) != (action == "unequip"))
             {
                 const wint_t rejected = action_error("The item's equipment changed. Select the item again.");
@@ -1288,6 +1294,23 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
                     return action_error("The hero or item changed. Select it again.");
                 }
             }
+            if (use_item && action == "bag_open")
+            {
+                const JsonNode* uid = json_find_member(obj.node, "expected_uid");
+                const item_def& item = you.inv[inv_slot];
+                const equipment_slot equipped_slot = you.equipment.find_equipped_slot(item);
+                const bool worn = equipped_slot == SLOT_BAG && !you.equipment.is_melded(item);
+                const bool recovery = equipped_slot == SLOT_UNUSED && bag::used(item) > 0;
+                if (!bag::is_bag(item) || !uid || uid->tag != JSON_NUMBER
+                    || !item.props.exists(ITEM_UNIQUE_ID)
+                    || uid->number_ != item.props[ITEM_UNIQUE_ID].get_int()
+                    || (!worn && !recovery))
+                {
+                    const wint_t rejected = action_error("The bag or hero changed. Select it again.");
+                    _send_party_state();
+                    return rejected;
+                }
+            }
             if (use_item && workshop_action)
             {
                 const JsonNode* uid = json_find_member(obj.node, "expected_uid");
@@ -1314,6 +1337,11 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
             else if (use_item && action == "weave")
             {
                 if (vellum::invoke(inv_slot) == spret::abort)
+                    crawl_state.zero_turns_taken();
+            }
+            else if (use_item && action == "bag_open")
+            {
+                if (bag::open(you.inv[inv_slot]) == spret::abort)
                     crawl_state.zero_turns_taken();
             }
             else if (use_item && workshop_action)
@@ -2060,6 +2088,7 @@ static bool _update_statuses(player_info& c)
                 // up until now, c.status has not changed. Does this dur differ
                 // from the counter-th element in c.status?
                 if (counter >= c.status.size()
+                    || inf.id != c.status[counter].id
                     || inf.light_text != c.status[counter].light_text
                     || inf.light_colour != c.status[counter].light_colour
                     || inf.short_text != c.status[counter].short_text)
@@ -2273,6 +2302,7 @@ void TilesFramework::_send_player(bool force_full)
         for (const status_info &status : c.status)
         {
             json_open_object();
+            json_write_string("icon_key", web_effect_key(status.id));
             if (!status.light_text.empty())
             {
                 if (!status.light_text_formatted.empty())
@@ -3115,6 +3145,10 @@ void TilesFramework::_send_monster(const coord_def &gc, const monster_info* m,
     if (force_full || last->type != m->type)
     {
         json_write_int("type", m->type);
+        // Monster map records are recipient projections; the client only
+        // displays this while the creature is visible in that projection.
+        json_write_int("aura_radius", m->type == MONS_INTERDIMENSIONAL_GRAPE
+                       ? grape_aura::radius : 0);
 
         // TODO: get this information to the client in another way
         json_open_object("typedata");
@@ -3283,6 +3317,7 @@ void TilesFramework::_send_party_state()
     json_write_int("gold", you.gold);
     json_write_bool("combat_locked", !party::party_feels_safe());
     json_write_bool("friendly_fire", party::friendly_fire_enabled());
+    json_write_bool("shared_fate", party::shared_fate_enabled());
     json_write_bool("simultaneous_turns", party::simultaneous_turns_enabled() && !party::multiplayer_enabled());
     json_write_int("world_aut_clock", party::get_world_aut_clock());
     json_write_int("global_time", party::global_elapsed_time());
@@ -3304,11 +3339,23 @@ void TilesFramework::_send_party_state()
     for (int slot = 0; slot < party::player_count(); ++slot)
     {
         player &p = party::get_player(slot);
-        // Keep the slot and global player pointer aligned: nested party
-        // queries restore the current slot, not an independently rebound you.
-        party::scoped_player_context snapshot_context(slot);
         const bool same_level = (p.where_are_you == active_branch
                                  && p.depth == active_depth);
+        json_open_object();
+        json_write_int("slot", slot);
+        // Scheduler queries reconcile encounters using the loaded floor.
+        // Capture them before the stat context selects an off-floor hero;
+        // observing that hero must not regroup their floor using this map.
+        json_write_int("aut_clock", party::get_player_aut_clock(slot));
+        json_write_int("aut_lead", party::get_player_aut_lead(slot));
+        json_write_int("last_action_aut", party::member_last_action_aut(slot));
+        json_write_int("region_id", party::member_region_id(slot));
+        json_write_int("region_aut_clock", party::member_region_clock(slot));
+        json_write_bool("region_combat", party::region_combat_locked(slot));
+        json_write_bool("same_region", same_level && party::same_region(slot, m_viewer_slot >= 0 ? m_viewer_slot : active_slot));
+        json_write_bool("can_act", same_level && party::member_can_act(slot));
+        // Character-stat accessors require the matching global player pointer.
+        party::scoped_player_context snapshot_context(slot);
         const bool downed = party::is_player_downed(slot);
 
         string god_str;
@@ -3321,8 +3368,6 @@ void TilesFramework::_send_party_state()
         if (item_def* wpn = p.weapon())
             weapon_str = wpn->name(DESC_PLAIN, true, false, false);
 
-        json_open_object();
-        json_write_int("slot", slot);
         json_write_string("activity", party::member_activity(slot));
         json_open_array("trade_targets");
         for (int target = 0; target < party::player_count(); ++target)
@@ -3380,6 +3425,7 @@ void TilesFramework::_send_party_state()
         }
         json_write_string("weapon", weapon_str);
         json_write_int("xl", p.experience_level);
+        json_write_int("xl_cap", p.get_max_xl());
         json_write_int("xl_next", get_exp_progress());
         json_write_int("hp", p.hp);
         json_write_int("hp_max", p.hp_max);
@@ -3409,14 +3455,6 @@ void TilesFramework::_send_party_state()
             party::pantheon_relation_label(party::get_slot_pantheon_standing(slot)));
         json_write_string("god_politics",
             party::describe_party_god_politics(slot));
-        json_write_int("aut_clock", party::get_player_aut_clock(slot));
-        json_write_int("aut_lead", party::get_player_aut_lead(slot));
-        json_write_int("last_action_aut", party::member_last_action_aut(slot));
-        json_write_int("region_id", party::member_region_id(slot));
-        json_write_int("region_aut_clock", party::member_region_clock(slot));
-        json_write_bool("region_combat", party::region_combat_locked(slot));
-        json_write_bool("same_region", same_level && party::same_region(slot, m_viewer_slot >= 0 ? m_viewer_slot : active_slot));
-        json_write_bool("can_act", same_level && party::member_can_act(slot));
         json_write_int("move_aut", player_movement_speed());
         // Rounded display delay includes the hero's action speed (haste/slow)
         // as well as movement modifiers. Keep the older base delay contract.
@@ -3446,6 +3484,8 @@ void TilesFramework::_send_party_state()
         json_close_object();
         json_write_int("exp_pool", p.exp_available);
         json_write_string("place", level_id(p.where_are_you, p.depth).describe());
+        // Hell subbranches draw on the Vestibule's shared bribe fund.
+        json_write_int("bribe_fund", branch_bribe[gozag_fixup_branch(p.where_are_you)]);
         json_write_bool("on_same_level", same_level);
         if (same_level && in_bounds(p.pos()))
         {
@@ -3499,6 +3539,7 @@ void TilesFramework::_send_party_state()
                 {
                     json_open_object();
                     json_write_int("id", (int)st);
+                    json_write_string("icon_key", web_effect_key(st));
                     json_write_string("light", !inf.light_text.empty() ? inf.light_text : inf.short_text);
                     json_write_string("text", !inf.short_text.empty() ? inf.short_text : inf.light_text);
                     json_write_string("desc", status_light_description(inf));
@@ -3513,6 +3554,25 @@ void TilesFramework::_send_party_state()
                         : (inf.light_colour == RED || inf.light_colour == LIGHTRED || inf.light_colour == MAGENTA));
                     json_close_object();
                 }
+            }
+            json_close_array(false);
+        }
+
+        {
+            party::scoped_player_context bane_context(slot);
+            json_open_array("banes");
+            for (int b = 0; b < NUM_BANES; ++b)
+            {
+                const bane_type bane = static_cast<bane_type>(b);
+                if (!p.has_bane(bane))
+                    continue;
+                json_open_object();
+                json_write_int("id", b);
+                json_write_string("icon_key", web_bane_key(b));
+                json_write_string("name", bane_name(bane));
+                json_write_string("desc", bane_desc(bane));
+                json_write_int("recovery_xl_tenths", xl_to_remove_bane(bane));
+                json_close_object();
             }
             json_close_array(false);
         }
@@ -3816,6 +3876,8 @@ void TilesFramework::_send_party_state()
             }
             json_write_int("qty", (int)p.inv[i].quantity);
             json_write_bool("equipped", eq);
+            if (bag::is_bag(p.inv[i]))
+                json_write_bool("bag", true);
             json_write_int("base_type", (int)p.inv[i].base_type);
             json_write_string("kind_name", item_class_name(p.inv[i].base_type));
             equipment_memory::family memory_family;
@@ -3843,9 +3905,12 @@ void TilesFramework::_send_party_state()
         json_open_array("equipment_slots");
         // Dual wielders use the flexible weapon/offhand slot in place of the
         // standard offhand. Include it in the party equipment list as well.
+        vector<equipment_slot> party_slots;
         for (int eq_i = SLOT_FIRST_STANDARD; eq_i <= SLOT_WEAPON_OR_OFFHAND; ++eq_i)
+            party_slots.push_back(static_cast<equipment_slot>(eq_i));
+        party_slots.push_back(SLOT_BAG);
+        for (const equipment_slot eq_slot : party_slots)
         {
-            const equipment_slot eq_slot = static_cast<equipment_slot>(eq_i);
             const int num_slots = p.equipment.num_slots[eq_slot];
             if (num_slots <= 0)
                 continue;

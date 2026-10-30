@@ -40,12 +40,17 @@ assert.deepEqual(JSON.parse(JSON.stringify(model.magicResource({ species: 'Human
 assert.equal(model.magicResource({ species: 'Automaton', mp: 0, mp_max: 0 }).percent, 0);
 assert.equal(model.magicResource({ species: 'Automaton' }).value, null);
 assert.equal(model.display(0), '0');
+assert.notEqual(model.cardSignature({ members: [{ slot: 0, xl: 10, xl_cap: 27 }] }, 0, false),
+    model.cardSignature({ members: [{ slot: 0, xl: 10, xl_cap: 26 }] }, 0, false),
+    'A level-cap reduction must refresh the character card even below the cap');
 assert.equal(model.percentage('12%'), '12%');
 assert.equal(model.percentage(12), '12%');
 assert.equal(model.percentage(undefined), 'Unavailable');
 assert.equal(model.itemName({ name: '2 potions of might', qty: 2 }), '2 potions of might');
 assert.equal(model.controlledSlot({ controlled_slot: 0, active_slot: 1 }), 0);
 assert.equal(model.controlledSlot({ controlled_slot: 1, active_slot: 0 }), 1);
+assert.equal(model.controlledSlot({ controlled_slot: null, active_slot: 2 }), 0,
+    'A spectator follows the host projection even when a guest is acting');
 assert.equal(model.canControl({ controllable_slots: [0, 2] }, 1), false);
 assert.equal(model.canControl({ controllable_slots: [0, 2] }, 2), true);
 const controlState = { controlled_slot: 0, controllable_slots: [0, 2], members: [
@@ -85,6 +90,13 @@ for (const change of [
     state => { state.members[0].penance = 9; },
     state => { state.members[0].statuses = [{ text: 'Poisoned', dur: 6, is_bad: true }]; },
     state => { state.members[0].statuses_known = false; },
+    state => { state.members[0].banes = [{ id: 1, name: 'Bane of Lethargy', recovery_xl_tenths: 13 }]; },
+    state => { state.members[0].banes = []; },
+    state => { state.members[0].banes_known = false; },
+    state => { state.members[0].connected = false; },
+    state => { state.members[0].activity = 'yield'; },
+    state => { state.members[0].queued_action = 'move'; },
+    state => { state.members[0].queued_action_count = 2; },
     state => { state.controllable_slots = []; }
 ]) {
     const changed = structuredClone(cardState); change(changed);

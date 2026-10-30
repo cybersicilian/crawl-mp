@@ -149,6 +149,7 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
     }
     function itemVerb(item) {
         if (!state() || state().inventory_use !== true) return "Inspect";
+        if (item.bag === true) return item.equipped ? "Take off" : "Wear";
         var kind = item.kind_name || "";
         return /potion/i.test(kind) ? "Quaff" : /scroll/i.test(kind) ? "Read"
             : /wand|miscellan/i.test(kind) ? "Evoke"
@@ -172,6 +173,16 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
         if (returning) returning.waitForState = true;
         comm.send_message("inv_item_use", { slot: item.slot, expected_slot: member.slot,
             expected_name: item.name, action: item.equipped ? "unequip" : "drop" });
+    }
+    function openBag(member, bag) {
+        var blocked = reason(member) || bag && bag.blocked_reason;
+        if (blocked) { notice(blocked); return; }
+        if (!bag || !Number.isInteger(bag.inv_slot) || !Number.isInteger(bag.uid) || bag.uid <= 0) {
+            notice("Bag information is unavailable."); return;
+        }
+        clearNotice(); leaveFolio(true);
+        comm.send_message("inv_item_use", { slot: bag.inv_slot, expected_slot: member.slot,
+            expected_name: bag.name, expected_uid: bag.uid, action: "bag_open" });
     }
     function button(member, entry, kind) {
         var blocked = powerReason(member, entry, kind);
@@ -214,7 +225,7 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
     return { reason: reason, inspectionReason: inspectionReason, notice: notice, powerReason: powerReason, describe: describe, itemAction: itemAction,
         setPlanning: function (predicate) { planning = predicate; },
         itemVerb: itemVerb, itemUnequipVerb: itemUnequipVerb, assimilationReason: assimilationReason,
-        itemSecondaryAction: itemSecondaryAction, itemSecondaryHint: itemSecondaryHint, usePower: power,
+        itemSecondaryAction: itemSecondaryAction, itemSecondaryHint: itemSecondaryHint, openBag: openBag, usePower: power,
         powerButton: button, context: context, controlledSlot: controlledSlot,
         ready: function () { return ready; }, leaveFolio: leaveFolio };
 });

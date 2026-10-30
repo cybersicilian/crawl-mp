@@ -51,6 +51,7 @@
 #include "mapmark.h"
 #include "maps.h"
 #include "message.h"
+#include "mercenary.h"
 #include "misc.h"
 #include "mon-death.h"
 #include "mon-gear.h"
@@ -6572,6 +6573,14 @@ static bool _valid_item_for_shop(int item_index, shop_type shop_type_,
     if (item.base_type == OBJ_GOLD)
         return false;
 
+    // Bags are rare dungeon finds; randomly stocked ordinary shops should
+    // not turn them into routine purchases. Explicit vault stock is retained.
+    if (shop_type_ != SHOP_MERCENARY && spec.items.empty()
+        && item.base_type == OBJ_MISCELLANY
+        && (item.sub_type == MISC_POUCH || item.sub_type == MISC_SATCHEL
+            || item.sub_type == MISC_BAG_OF_PLENTY))
+        return false;
+
     // Don't place missiles or books in general antique shops...
     if (shop_type_ == SHOP_GENERAL_ANTIQUE
             && (item.base_type == OBJ_MISSILES
@@ -6639,6 +6648,17 @@ static void _stock_shop_item(int j, shop_type shop_type_,
             // shop lists ordered items; take the one at the right index
             item_index = dgn_place_item(spec.items.get_item(j), coord_def(),
                                         item_level);
+        }
+        else if (shop_type_ == SHOP_MERCENARY)
+        {
+            const int choice = random2(100);
+            const int subtype = choice < 75 ? MISC_MERCENARY_CONTRACT
+                : choice < 83 ? MISC_PIPE_OF_RECALL
+                : choice < 90 ? MISC_HEALING_MIST
+                : choice < 97 ? MISC_SATCHEL : MISC_BAG_OF_PLENTY;
+            item_index = items(true, OBJ_MISCELLANY, subtype, item_level);
+            if (item_index != NON_ITEM && subtype == MISC_MERCENARY_CONTRACT)
+                mercenary::make_contract(env.item[item_index], mercenary::random_role());
         }
         else
         {
@@ -6795,6 +6815,9 @@ object_class_type item_in_shop(shop_type shop_type)
         if (one_chance_in(10))
             return OBJ_BOOKS;
         return OBJ_SCROLLS;
+
+    case SHOP_MERCENARY:
+        return OBJ_MISCELLANY;
 
     default:
         die("unknown shop type %d", shop_type);

@@ -1,5 +1,6 @@
 OBJECTS = \
 wight.o \
+cubus.o \
 account-start.o \
 ability.o \
 auras.o \
@@ -31,6 +32,19 @@ branch-data-json.o \
 bloodspatter.o \
 cell-resource.o \
 god-vorr.o \
+wyrm-essence.o \
+wyrm-abilities.o \
+agraphede-abilities.o \
+agraphede-enchant.o \
+agraphede-web.o \
+kimjoy-artifacts.o \
+bunker.o \
+bag.o \
+bag-menu.o \
+mercenary-transit.o \
+mercenary.o \
+mercenary-gift.o \
+god-agraphede.o \
 enchantment-transfer.o \
 god-vellum-policy.o \
 god-vellum-state.o \
@@ -260,6 +274,10 @@ religion.o \
 ronin.o \
 neckbeard.o \
 archaeologist.o \
+corpse-knockback.o \
+grape-player.o \
+grape-aura.o \
+grape-monster.o \
 scroller.o \
 shopping.o \
 shout.o \
@@ -275,6 +293,7 @@ spl-clouds.o \
 spl-kimjoy.o \
 spl-shackle.o \
 icicle-burst.o \
+imus-spectrum.o \
 spl-damage.o \
 spl-rupture-blight.o \
 spl-goditem.o \
@@ -284,6 +303,8 @@ spl-other.o \
 spl-selfench.o \
 spl-summoning.o \
 false-image.o \
+imus-prism.o \
+imus-mirror.o \
 spl-transloc.o \
 spl-util.o \
 spl-vortex.o \
@@ -378,6 +399,7 @@ catch2-tests/test_ronin.o \
 catch2-tests/test_elemental_weapon.o \
 catch2-tests/test_steam_barrier.o \
 catch2-tests/test_kimjoy_poison.o \
+catch2-tests/test_kimjoy_artifacts.o \
 catch2-tests/test_scorpion_form.o \
 catch2-tests/test_shackle.o \
 catch2-tests/test_icicle_burst.o \
@@ -385,9 +407,47 @@ catch2-tests/test_neckbeard.o \
 catch2-tests/test_false_image.o \
 catch2-tests/test_rupture_blight.o \
 catch2-tests/test_archaeologist.o \
+catch2-tests/test_grape_aura.o \
+catch2-tests/test_grape_player.o \
+catch2-tests/test_asclepia.o \
+catch2-tests/test_cubus.o \
+catch2-tests/test_brandagoth.o \
+catch2-tests/test_fallen.o \
+catch2-tests/test_lichbane.o \
+catch2-tests/test_corpse_knockback.o \
+catch2-tests/test_awaken_armour.o \
+catch2-tests/test_grape_monster.o \
+catch2-tests/test_collector.o \
 catch2-tests/test_game_modifiers.o \
+catch2-tests/test_level_cap.o \
 catch2-tests/test_paladin.o \
 catch2-tests/test_vorr.o \
+catch2-tests/test_imus_core.o \
+catch2-tests/test_wyrm_core.o \
+catch2-tests/test_wyrm_essence.o \
+catch2-tests/test_wyrm_healing_cloud.o \
+catch2-tests/test_wyrm_abilities.o \
+catch2-tests/test_agraphede_abilities.o \
+catch2-tests/test_agraphede_enchant.o \
+catch2-tests/test_agraphede_resist.o \
+catch2-tests/test_agraphede_vermin.o \
+catch2-tests/test_agraphede_core.o \
+catch2-tests/test_god_respect.o \
+catch2-tests/test_weapon_blessings.o \
+catch2-tests/test_blessing_combat.o \
+catch2-tests/test_port_item_bits.o \
+catch2-tests/test_bc_unrands.o \
+catch2-tests/test_agra_web.o \
+catch2-tests/test_utility_evokers.o \
+catch2-tests/test_bunker.o \
+catch2-tests/test_bag_storage.o \
+catch2-tests/test_bag_menu.o \
+catch2-tests/test_autofight_weapon_swap.o \
+catch2-tests/test_golemforge.o \
+catch2-tests/test_mercenary_transit.o \
+catch2-tests/test_mercenary_roster.o \
+catch2-tests/test_mercenary.o \
+catch2-tests/test_mercenary_gift.o \
 catch2-tests/test_pakellas.o \
 catch2-tests/test_vellum.o \
 catch2-tests/test_vellum_integrations.o \
@@ -409,10 +469,12 @@ catch2-tests/test_equipment_memory.o \
 catch2-tests/test_equipment_matrix.o \
 catch2-tests/test_party_trade.o \
 catch2-tests/test_party_session.o \
+catch2-tests/test_party_friendly_fire.o \
 catch2-tests/test_coop_content.o \
 catch2-tests/test_mon-util.o \
 catch2-tests/test_ng-init-branches.o \
 catch2-tests/test_player.o \
+catch2-tests/test_mutation.o \
 catch2-tests/test_player_fixture.o \
 catch2-tests/test_randbook.o \
 catch2-tests/test_stringutil.o \
@@ -443,6 +505,8 @@ catch2-tests/test_owned_grid.o \
 catch2-tests/test_invisible_contacts.o \
 catch2-tests/test_monster_conditions.o \
 catch2-tests/test_zot.o \
+catch2-tests/test_imus_prism.o \
+catch2-tests/test_imus_mirror.o \
 catch2-tests/test_spl-util.o
 
 WEBTILES_OBJECTS = \

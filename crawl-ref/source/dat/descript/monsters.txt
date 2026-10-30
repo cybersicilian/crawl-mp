@@ -43,6 +43,13 @@ Now she wanders other corners of the dungeon with a small retinue of loyal
 students in tow, seeking a new domain in which they can spin their peerless
 tapestries in peace.
 %%%%
+Asclepia
+
+An orc herbalist whose remedies are made from dungeon herbs and unsettling
+additives. She supports her allies with healing and haste, and throws potions
+that burst into dangerous clouds. Her protective scarf keeps her immune to
+clouds.
+%%%%
 Asmodeus
 
 Greatest and most cunning of the Lords of Hell, Asmodeus was born when the twin
@@ -188,6 +195,12 @@ Eustachio
 
 An apprentice summoner with a flowing moustache. He has funny ideas about
 honour.
+%%%%
+Fallen
+
+Once an angel in Elyvilon's service, she was exiled after falling in love with
+a mortal. Grief led her to accept Kikubaaqudgha's offer to raise the dead, and
+she now wanders beneath an aura of darkness, wielding the powers she gained.
 %%%%
 Fannar
 
@@ -339,6 +352,12 @@ An ogre emissary of the Ironbound Order, sent to find and stop intruders before
 they enter the Vaults. Fiercely charismatic, he's rallied a small army of his
 kin, overawing them with the long-range lightning array he wears on his back.
 (The large coin purse he took from the Vaults is also quite persuasive.)
+%%%%
+Lichbane
+
+A skeletal warrior who broke free of a lich lord and slew its former master
+with a weapon made to destroy the undead. Now Lichbane hunts those who command
+the dead, pulling enemies close and disrupting their magic.
 %%%%
 Lom Lobon
 
@@ -703,6 +722,12 @@ they seem somehow to resemble a warrior from the distantly remembered past.
 The memory and the memorialist fight in concert, each able to fire past the
 other.
 %%%%
+ancient automaton
+
+A great steam-powered construct built by the first coglins. It still patrols
+the abandoned forge-temple, driving intruders back with crushing blows and
+firing steam and destructive orbs from its ancient machinery.
+%%%%
 ancient champion
 
 An unfathomably ancient skeleton. It has hundreds of golden sigils etched onto
@@ -867,6 +892,12 @@ bog body
 
 An undead figure preserved by the brackish waters of a bog, and reanimated by
 some unknown magic.
+%%%%
+Brandagoth
+
+A lava orc sorcerer who draws on his inner heat to hurl fire and magma. He
+can move through lava unharmed, but cold leaves him vulnerable. Fire elementals
+and hell hounds gather around him.
 %%%%
 boggart
 
@@ -2406,6 +2437,11 @@ orange demon
 
 An amber-coloured demon with a barbed tail not unlike that of a scorpion.
 %%%%
+Orb Demon
+
+A demon drawn from Pandemonium to Zot and warped by the Orb's power. It blinks
+through battle, hurling bolts and orbs of destructive magic at intruders.
+%%%%
 Orb Guardian
 
 A huge, glowing, four-limbed purple creature with heightened senses, created by
@@ -3120,6 +3156,11 @@ A wicked youthful hybrid with a woman's head, a lion's body, and the wings of
 an eagle. It gleefully wreaks havoc with both the violent turbulence of
 high winds and the frustration of bewildering magics.
 %%%%
+deployed shield
+
+A shield pinned upright as a defensive barricade. Its bearer can retrieve it
+by moving; if it is destroyed, the shield falls to the ground.
+%%%%
 splinterfrost barricade
 
 A durable barricade made of ice reinforced with forgecraft magic. A lattice of
@@ -3343,6 +3384,18 @@ toenail golem
 
 A huge animated statue made entirely from toenail clippings. Some people just
 have too much time on their hands.
+%%%%
+cubus
+
+A beguiling demon that uses its power to turn an opponent's equipment against
+them. It can force a weapon from a foe's grasp or draw jewellery away from a
+susceptible wearer; the removed items remain in their owner's inventory.
+%%%%
+interdimensional grape
+
+A strange fruit that drifts between dimensions. Its aura can temporarily meld
+armour worn within two tiles and a clear line of sight. Melded equipment recovers
+gradually after leaving the aura.
 %%%%
 tormentor
 
@@ -4243,3 +4296,73 @@ Vespara
 
 An enormous queen bee with a deep, commanding buzz. Her workers answer it with
 a furious determination to defend their queen.
+%%%%
+machine golem
+
+A small, tireless construct of the first coglins, still defending the abandoned
+forge-temple long after its makers departed.
+%%%%
+hired soldier
+
+A human soldier who fights for a share of a caravan's fortunes.
+%%%%
+hired knight
+
+An experienced human soldier, trained to bear arms and armour for a caravan.
+%%%%
+hired death knight
+
+A veteran caravan fighter who answers wounds with a dark mirror and drains
+life from enemies in close combat.
+%%%%
+hired paladin
+
+A veteran caravan fighter who strikes with holy force and can heal companions.
+%%%%
+hired skald
+
+A merfolk traveller who combines arms with defensive magic.
+%%%%
+hired infuser
+
+A seasoned merfolk fighter who uses magic to defend and hasten themselves.
+%%%%
+hired tidehunter
+
+A veteran merfolk warrior whose magic can call a wave against distant foes.
+%%%%
+hired witch
+
+An elf spellcaster who travels with a caravan and fights from a distance.
+%%%%
+hired sorceress
+
+An experienced elf spellcaster who travels with a caravan.
+%%%%
+hired archmage
+
+A veteran elf spellcaster protected against the elements and skilled in magic.
+%%%%
+hired brigand
+
+A sharp-eyed kobold scout trained to strike distracted enemies.
+%%%%
+hired assassin
+
+An experienced kobold scout who can disappear from sight before striking.
+%%%%
+hired cleaner
+
+A veteran kobold scout who slips in and out of combat to strike vulnerable foes.
+%%%%
+hired shaman
+
+A gnoll healer who supports a caravan with prayer and healing magic.
+%%%%
+hired ritualist
+
+An experienced gnoll shaman who weakens enemies and heals companions.
+%%%%
+hired chieftain
+
+A veteran gnoll shaman who hastens and heals allies while hindering enemies.

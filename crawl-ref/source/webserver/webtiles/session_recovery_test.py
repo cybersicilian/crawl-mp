@@ -33,6 +33,31 @@ class SessionRecoveryTest(unittest.TestCase):
         self.process.stop.assert_called_once()
         self.assertIsNone(self.old.reconnect_timeout)
 
+    def test_host_drop_does_not_stop_connected_teammates_after_grace(self):
+        connected = {1}
+        self.process.party_control = SimpleNamespace(multiplayer=True, connected_slots=lambda: connected)
+        session_recovery.defer_stop(self.old)
+        expire = self.loop.call_later.call_args.args[1]
+        expire()
+        self.process.stop.assert_not_called()
+        self.assertIsNotNone(self.old.reconnect_timeout)
+        self.assertTrue(session_recovery.reclaim(self.new, [self.old]))
+        self.assertIs(self.new.process, self.process)
+        self.process.stop.assert_not_called()
+
+    def test_hostless_expedition_stops_after_last_human_disconnects(self):
+        connected = {1}
+        self.process.party_control = SimpleNamespace(multiplayer=True, connected_slots=lambda: connected,
+                                                       ai_slots={2})
+        session_recovery.defer_stop(self.old)
+        expire = self.loop.call_later.call_args.args[1]
+        expire()
+        self.process.stop.assert_not_called()
+        connected.clear()
+        expire()
+        self.process.stop.assert_called_once()
+        self.assertIsNone(self.old.reconnect_timeout)
+
     def test_reclaim_transfers_callback_and_same_process_without_starting_another(self):
         session_recovery.defer_stop(self.old)
         self.assertTrue(session_recovery.reclaim(self.new, [self.old]))
@@ -131,6 +156,44 @@ class SessionRecoveryTest(unittest.TestCase):
         self.new._library_resume_id = "save-b"
         self.assertFalse(session_recovery.reclaim(self.new, [self.old], reconnect=True))
         self.new.send_message.assert_not_called()
+
+    def close_owner(self, code=1000, connected=frozenset({1}), ai_slots=frozenset()):
+        self.process.party_control = SimpleNamespace(multiplayer=True,
+            connected_slots=lambda: set(connected), ai_slots=set(ai_slots))
+        self.old.close_code = code
+        self.old.is_running = lambda: True
+        self.old.total_message_bytes = self.old.failed_messages = self.old.failed_on_messages = 0
+        self.old.logger = Mock()
+        with patch("webtiles.ws_handler.shutting_down", False):
+            CrawlWebSocket.on_close(self.old)
+
+    def test_normal_host_socket_close_keeps_connected_teammates_playing(self):
+        self.close_owner()
+        self.process.stop.assert_not_called()
+        self.assertIsNotNone(self.old.reconnect_timeout)
+        self.loop.call_later.call_args.args[1]()
+        self.process.stop.assert_not_called()
+        self.assertTrue(session_recovery.reclaim(self.new, [self.old]))
+        self.assertIs(self.new.process, self.process)
+
+    def test_normal_close_without_a_connected_human_stops_immediately(self):
+        for connected, ai_slots in ((set(), set()), ({None}, set()), ({2}, {2})):
+            with self.subTest(connected=connected, ai_slots=ai_slots):
+                self.process.stop.reset_mock()
+                self.close_owner(connected=connected, ai_slots=ai_slots)
+                self.process.stop.assert_called_once()
+
+    def test_policy_close_still_stops_even_with_connected_teammates(self):
+        self.close_owner(code=1008)
+        self.process.stop.assert_called_once()
+        self.assertIsNone(self.old.reconnect_timeout)
+
+    def test_server_shutdown_still_stops_even_with_connected_teammates(self):
+        self.close_owner(code=1001)
+        self.process.stop.reset_mock()
+        with patch("webtiles.ws_handler.shutting_down", True):
+            CrawlWebSocket.on_close(self.old)
+        self.process.stop.assert_called_once()
 
     def test_native_pong_and_browser_ping_count_as_liveness(self):
         socket = SimpleNamespace(received_pong=False, send_message=Mock())

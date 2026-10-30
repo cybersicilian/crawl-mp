@@ -5,6 +5,7 @@
 
 #include "AppHdr.h"
 #include "party.h"
+#include "automaton.h"
 
 #include "message.h"
 
@@ -2041,10 +2042,10 @@ void canned_msg(canned_message_type which_message)
             mpr("You don't know any spells.");
             break;
         case MSG_MANA_INCREASE:
-            mpr("You feel your magic capacity increase.");
+            mpr(automaton::resource_text(you, "You feel your magic capacity increase."));
             break;
         case MSG_MANA_DECREASE:
-            mpr("You feel your magic capacity decrease.");
+            mpr(automaton::resource_text(you, "You feel your magic capacity decrease."));
             break;
         case MSG_DISORIENTED:
             mpr("You feel momentarily disoriented.");
@@ -2065,20 +2066,23 @@ void canned_msg(canned_message_type which_message)
             mpr("Your health is already full.");
             break;
         case MSG_FULL_MAGIC:
-            mpr("Your reserves of magic are already full.");
+            mpr(you.species == SP_AUTOMATON ? "You have no heat to dissipate."
+                                          : "Your reserves of magic are already full.");
             break;
         case MSG_GAIN_HEALTH:
             mpr("You feel better.");
             break;
         case MSG_GAIN_MAGIC:
-            mpr("You feel your power returning.");
+            mpr(you.species == SP_AUTOMATON ? "You feel your heat dissipating."
+                                          : "You feel your power returning.");
             break;
         case MSG_MAGIC_DRAIN:
         {
             if (you.has_mutation(MUT_HP_CASTING))
                 mpr("You feel momentarily drained.");
             else
-                mprf(MSGCH_WARN, "You suddenly feel drained of magical energy!");
+                mprf(MSGCH_WARN, you.species == SP_AUTOMATON ? "Your heat suddenly rises!"
+                                                          : "You suddenly feel drained of magical energy!");
             break;
         }
         case MSG_SOMETHING_IN_WAY:

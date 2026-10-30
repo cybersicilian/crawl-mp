@@ -63,7 +63,7 @@
 }
 .party-portrait [data-portrait-effect='invisible'] { background: radial-gradient(ellipse at 50% 50%, #aab6d940, #4655753b 55%, transparent 85%); }
 .party-portrait [data-portrait-effect='invisible']::before { background: repeating-linear-gradient(0deg, transparent 0 5px, #b9cae521 6px 6.5px, transparent 7px 11px); }
-#normal .party-portrait[data-portrait-ghost='true'] .hud-hero-medallion > img { opacity: .6; filter: saturate(.5); }
+#normal .party-portrait[data-portrait-ghost='true'] .hud-hero-medallion > :is(img, .hud-hero-appearance) { opacity: .6; filter: saturate(.5); }
 .party-portrait .portrait-status-layer::before,
 .party-portrait .portrait-status-layer::after { animation-delay: var(--portrait-motion-phase, 0s); }
 @keyframes portrait-heat { from { transform: translateY(2px) scaleX(.94); opacity: .55; } to { transform: translateY(-3px) scaleX(1.04); opacity: .95; } }

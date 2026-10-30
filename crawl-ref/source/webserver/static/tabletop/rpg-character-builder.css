@@ -1,0 +1,101 @@
+/* Character creation: dark leather, worn brass, and a compact native stat sheet. */
+#lobby.has-chapter-index #party_slots_grid .party-slot-box {
+    --rpg-ink: #eee5d2;
+    --rpg-muted: #c4b59b;
+    --rpg-gold: #e1c386;
+    color: var(--rpg-ink);
+    background: radial-gradient(ellipse at 18% 0%, #4c3c34 0%, transparent 42%), linear-gradient(155deg, #292526, #171a1b 70%);
+    border: 1px solid #8e7550;
+    border-top: 3px solid #b9965d;
+    box-shadow: inset 0 0 0 1px #ffffff0c, 0 8px 20px #211a1730;
+}
+#lobby.has-chapter-index #party_slots_grid .party-slot-box:hover { border-color: #b9965d; box-shadow: inset 0 0 0 1px #ffffff0c, 0 8px 20px #211a1730; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-top { border-color: #b899634d; gap: 16px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-monogram { flex-basis: 156px; height: 186px; color: #e8d3a4; border: 1px solid #a99061; border-radius: 3px 3px 48px 48px; background: radial-gradient(ellipse, #70614b, #302b29 70%); box-shadow: inset 0 0 0 4px #201c1b, 0 4px 16px #0006; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-monogram .native-player-tile { width: 144px; height: 144px; background: transparent; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-monogram .native-player-tile :is(img, canvas) { width: 144px; height: 144px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-hero-name { color: #f2dfb7; font-size: 27px; }
+#lobby.has-chapter-index #party_slots_grid :is(.party-slot-title, .party-slot-occupant, .party-slot-state-note) { color: var(--rpg-muted) !important; }
+#lobby.has-chapter-index #party_slots_grid .party-starting-sheet { color: #f0dbb2; background: #3a3028; border: 1px solid #8e7550; }
+#lobby.has-chapter-index #party_slots_grid .party-starting-sheet:hover { background: #544331; border-color: #d5b778; }
+#lobby.has-chapter-index #party_slots_grid .build-overview { margin: 0; padding: 12px 13px; border: 1px solid #9e815449; border-left: 2px solid #c8a768; background: #111617b8; color: var(--rpg-ink); }
+#lobby.has-chapter-index #party_slots_grid .build-overview-heading { align-items: center; }
+#lobby.has-chapter-index #party_slots_grid .build-overview-heading h4 { color: #f3e4c3; font: 600 19px/1.25 var(--tt-font-title); }
+.build-overview-kicker { display: block; margin-bottom: 3px; color: #bdab8c; font: 700 9px/1.3 var(--tt-font-ui); letter-spacing: .12em; text-transform: uppercase; }
+.build-overview-code { color: #dfc18d; font: 700 12px/1.2 var(--tt-font-ui); }
+#lobby.has-chapter-index #party_slots_grid .build-overview-fit { margin: 5px 0 10px; color: #c9b081; font: 600 10px/1.3 var(--tt-font-ui); }
+.build-stat-group { display: flex; gap: 4px; margin-top: 5px; }
+.build-stat { display: grid; flex: 1; min-width: 0; gap: 2px; padding: 5px 3px; text-align: center; border: 1px solid #b69a6750; background: #413a31a8; }
+.build-stat-label { color: #c6b692; font: 700 9px/1 var(--tt-font-ui); letter-spacing: .05em; }
+.build-stat-value { color: #f8ebd1; font: 600 18px/1.15 var(--tt-font-title); font-variant-numeric: tabular-nums; }
+.build-highlight { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; min-width: 0; }
+.build-highlight-label { flex: 0 0 60px; color: #c7ad79; font: 700 9px/1.4 var(--tt-font-ui); letter-spacing: .08em; }
+.build-highlight-values { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+.build-highlight-chip, .build-highlight-more { color: #e6dcc9; font: 11px/1.35 var(--tt-font-ui); }
+.build-highlight-chip { padding: 2px 6px; border: 1px solid #b69a6740; background: #3b342c99; }
+.build-highlight-traits .build-highlight-chip { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.build-highlight-more { padding: 2px 0; color: #c7b99f; }
+#lobby.has-chapter-index #party_slots_grid .build-overview-status { color: #dfd2b8; }
+#lobby.has-chapter-index #party_slots_grid .party-field-label { color: #e2cfab; }
+#lobby.has-chapter-index #party_slots_grid :is(input, select, .choice-select-trigger) { color: #f2e7d4; background: #1d2222; border: 1px solid #806d52; }
+#lobby.has-chapter-index #party_slots_grid .choice-select-trigger:hover:not(:disabled) { background: #303333; border-color: #c6a973; }
+#lobby.has-chapter-index #party_slots_grid .character-choice-copy { color: #cbbca3; -webkit-line-clamp: 1; }
+#lobby.has-chapter-index #party_slots_grid .character-choice-details { color: #e2c38a; }
+#lobby.has-chapter-index #party_slots_grid .party-trait-guide { color: #e6dccb; }
+#lobby.has-chapter-index #party_slots_grid .party-trait-guide summary { color: #e2c38a; }
+#lobby.has-chapter-index #party_slots_grid :is(.party-trait-guide section, .party-slot-bottom, .party-archetype-row) { border-color: #a88d5b55; }
+#lobby.has-chapter-index #party_slots_grid :is(.party-trait-availability, .party-trait-reason, .party-weapon-row > span, .party-presets-label, .party-slot-combo-summary) { color: #c7b99f !important; }
+#lobby.has-chapter-index #party_slots_grid :is(.party-mode-btn, .party-archetype-btn, .party-ready-badge) { color: #e7d7bb; background: #302b28; border-color: #927a55; }
+#lobby.has-chapter-index #party_slots_grid :is(.party-mode-btn.active, .party-archetype-btn[aria-pressed="true"]) { color: #fff2d5; background: #614a32; border-color: #d3af70; box-shadow: inset 0 -2px #d0ad6f; }
+#lobby.has-chapter-index #party_slots_grid :is(button, input, select, summary):focus-visible { outline: 2px solid #f0cf8f; outline-offset: 2px; }
+#lobby .party-character-fields > .party-field-row:has(.party-slot-species),
+#lobby .party-character-fields > .party-field-row:has(.party-slot-job) { grid-column: 1 / -1; }
+.visual-choices { min-width: 0; }
+.visual-choice-tools { display: flex; align-items: stretch; gap: 7px; margin-bottom: 7px; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice-search { flex: 1; min-width: 0; min-height: 38px; padding: 8px 10px; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice-search::placeholder { color: #bdad93; opacity: 1; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice-toggle { flex: 0 0 auto; padding: 6px 10px; color: #eedab6; border: 1px solid #8e7550; background: #3a3028; font: 600 11px/1.3 var(--tt-font-ui); cursor: pointer; }
+.visual-choice-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.visual-choice-list.is-expanded { max-height: 340px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #b99a63 #252523; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice { display: flex; align-items: center; gap: 7px; min-width: 0; min-height: 68px; padding: 5px; text-align: left; color: #e8dec9; background: #252829; border: 1px solid #806c50; border-radius: 3px; cursor: pointer; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice:hover:not(:disabled) { background: #40382f; border-color: #d0af76; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice[aria-pressed="true"] { background: #53422f; border-color: #e4be78; box-shadow: inset 0 0 0 1px #d6b271; }
+#lobby.has-chapter-index #party_slots_grid .visual-choice:disabled { opacity: .55; cursor: default; }
+.visual-choice-art { display: grid; flex: 0 0 43px; place-items: center; height: 52px; border: 1px solid #a88b5c66; background: radial-gradient(ellipse, #5d5042, #242728); }
+.visual-choice-image { display: block; width: 42px; height: 42px; object-fit: contain; image-rendering: pixelated; }
+.visual-choice-text { min-width: 0; }
+.visual-choice-name { display: block; overflow-wrap: anywhere; font: 600 11px/1.2 var(--tt-font-ui); }
+.visual-choice-meta { display: block; margin-top: 3px; color: #d3bb8c; font: 10px/1.2 var(--tt-font-ui); }
+.visual-choice-count { display: block; color: #c7b99f; font: 11px/1.3 var(--tt-font-ui); }
+.visual-choice-count:empty { display: none; }
+
+/* The expanded starting sheet keeps its native data and tabs in the same skin. */
+html dialog#character_guide_dialog.character-starting-sheet {
+    --folio-ivory: #202323; --folio-ink: #eee5d2; --folio-crimson: #e4c58b; --folio-rule: #826d4e;
+    --tt-ink: #eee5d2; --tt-ink-soft: #c9baa0; --tt-folio-muted: #c9baa0;
+    background: #202323; color: #eee5d2; border-color: #a48a5c; border-top-color: #c7a568;
+}
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-header { background: linear-gradient(110deg, #40332a, #222526); border-color: #826d4e; }
+html dialog#character_guide_dialog.character-starting-sheet :is(.character-guide-eyebrow, .character-guide-context, .party-insp-hero-meta) { color: #c9baa0; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-close-btn { background: #302c28; border-color: #826d4e; color: #f0ddba; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-tab-bar { background: #191d1d; border-color: #826d4e; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-tab-btn { color: #d4c3a8; background: transparent; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-tab-btn[aria-selected="true"] { color: #f5dfb2; background: #40362a; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-tab-btn:hover { background: #514331; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-body { background: #202323; color: #eee5d2; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-banner { background: #2f302b; border-color: #8d7955; }
+html dialog#character_guide_dialog.character-starting-sheet :is(.party-insp-stat-box, .party-insp-res-grid, .party-insp-table) { background: #302e29; border-color: #806d4f; }
+html dialog#character_guide_dialog.character-starting-sheet :is(.party-insp-stat-box .lbl, .party-insp-res-lbl) { color: #c9baa0; }
+html dialog#character_guide_dialog.character-starting-sheet :is(.party-insp-stat-box .val, .party-insp-table td, .party-insp-table th) { color: #f2e7d1; }
+html dialog#character_guide_dialog.character-starting-sheet .party-insp-section-title { color: #e4c58b; border-color: #826d4e; }
+html dialog#character_guide_dialog.character-starting-sheet .starting-guide-links button { background: #40362a; color: #f1ddb7; border-color: #a78a58; }
+@media (max-width: 680px) {
+    #lobby.has-chapter-index #party_slots_grid .party-slot-monogram { flex-basis: 110px; height: 142px; }
+    #lobby.has-chapter-index #party_slots_grid .party-slot-monogram .native-player-tile { width: 96px; height: 96px; }
+    #lobby.has-chapter-index #party_slots_grid .party-slot-monogram .native-player-tile :is(img, canvas) { width: 96px; height: 96px; }
+    .visual-choice-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .build-highlight-label { flex-basis: 53px; }
+}
+@media (forced-colors: active) {
+    .build-stat, .build-highlight-chip { border: 1px solid CanvasText; }
+}

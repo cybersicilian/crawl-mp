@@ -167,4 +167,8 @@ static const vector<monster_info_flag_name> monster_info_flag_names = {
     { MB_REMEMBERED_INVIS, "remembered", "remembered", "remembered"},
     { MB_PHASE_SHIFT, "phased", "out of phase", "phased", monster_condition_kind::beneficial },
     { MB_DIVINE_SHIELD, "divine shielded", "divinely shielded", "divine shielded", monster_condition_kind::beneficial },
+    { MB_WYRM_NIGREDO, "nigredo", "infused with nigredo", "infused with nigredo", monster_condition_kind::harmful },
+    { MB_WYRM_ALBEDO, "albedo", "infused with albedo", "infused with albedo", monster_condition_kind::harmful },
+    { MB_WYRM_CITRINITAS, "citrinitas", "infused with citrinitas", "infused with citrinitas", monster_condition_kind::beneficial },
+    { MB_WYRM_VIRIDITAS, "viriditas", "infused with viriditas", "infused with viriditas", monster_condition_kind::harmful },
 };

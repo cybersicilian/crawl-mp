@@ -70,6 +70,7 @@
 #include "map-knowledge.h"
 #include "mapmark.h"
 #include "message.h"
+#include "mercenary-transit.h"
 #include "mon-behv.h"
 #include "mon-death.h"
 #include "mon-place.h"
@@ -1217,6 +1218,65 @@ static void _grab_follower(monster* fol)
         view_update_at(old_pos);
 }
 
+// Multiplayer leaves other members and their summons on the old floor, so it
+// cannot use the single-player follower sweep. Move only this departing
+// member's hired companions that were tagged when they started the stairs.
+void grab_multiplayer_hired_followers()
+{
+    for (radius_iterator ri(you.pos(), 3, C_SQUARE, LOS_NO_TRANS, true); ri; ++ri)
+    {
+        monster* fol = monster_at(*ri);
+        if (!fol || !fol->alive() || fol->incapacitated()
+            || !testbits(fol->flags, MF_TAKING_STAIRS)
+            || !mercenary_owned_by(*fol, you))
+        {
+            continue;
+        }
+        _grab_follower(fol);
+    }
+    // The normal follower sweep clears tags after the stair delay. In split
+    // floors it is skipped, so clear any remaining tags owned by the
+    // departing player, including hires that moved away or became unable to
+    // follow during the delay. Leave other members' followers untouched.
+    for (monster& mon : menv_real)
+        if (mon.alive() && mercenary_owned_by(mon, you))
+            mon.flags &= ~MF_TAKING_STAIRS;
+}
+
+// On a shared branch change, other party members are transported too. Their
+// nearby hired companions were tagged in their own player contexts and may be
+// outside the active member's normal follower radius.
+void grab_shared_party_hired_followers(const level_id& old_level)
+{
+    if (!party::is_enabled() || party::multiplayer_enabled()
+        || old_level.branch == you.where_are_you)
+    {
+        return;
+    }
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (slot == party::active_slot())
+            continue;
+        const player& owner = party::get_player(slot);
+        if (owner.where_are_you != old_level.branch || owner.depth != old_level.depth
+            || !in_bounds(owner.pos()))
+        {
+            continue;
+        }
+        for (radius_iterator ri(owner.pos(), 3, C_SQUARE, LOS_NO_TRANS, true); ri; ++ri)
+        {
+            monster* fol = monster_at(*ri);
+            if (!fol || !fol->alive() || fol->incapacitated()
+                || !testbits(fol->flags, MF_TAKING_STAIRS)
+                || !mercenary_owned_by(*fol, owner))
+            {
+                continue;
+            }
+            _grab_follower(fol);
+        }
+    }
+}
+
 // Expire all friendly summons / zombies / etc. when the player is leaving a floor.
 static void _expire_temporary_allies()
 {
@@ -1230,7 +1290,7 @@ static void _expire_temporary_allies()
     }
 }
 
-static void _grab_followers_and_expire_summons()
+static void _grab_followers_and_expire_summons(const level_id& old_level)
 {
     int non_stair_using_allies = 0;
     int non_stair_using_undead = 0;
@@ -1331,6 +1391,8 @@ static void _grab_followers_and_expire_summons()
 
         _grab_follower(fol);
     }
+
+    grab_shared_party_hired_followers(old_level);
 
     // Clear flags of monsters that didn't follow.
     for (auto &mons : menv_real)
@@ -1629,6 +1691,7 @@ static const vector<branch_type> portal_generation_order =
     // do not pregenerate bazaar (TODO: this is non-ideal)
     // do not pregenerate trove
     BRANCH_GULCH,
+    BRANCH_GOLEMFORGE,
     BRANCH_WIZLAB,
     BRANCH_DESOLATION,
 };
@@ -2166,8 +2229,13 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
         // games.
         if (old_level.depth != -1)
         {
-            if (!crawl_state.game_is_descent() && !party::multiplayer_enabled())
-                _grab_followers_and_expire_summons();
+            if (!crawl_state.game_is_descent())
+            {
+                if (party::multiplayer_enabled())
+                    grab_multiplayer_hired_followers();
+                else
+                    _grab_followers_and_expire_summons(old_level);
+            }
 
             if (env.level_state & LSTATE_DELETED)
                 delete_level(old_level), dprf("<lightmagenta>Deleting level.</lightmagenta>");
@@ -2661,6 +2729,7 @@ static void _save_game_base()
     if (party::is_enabled())
     {
         party::sync_shared_state_from_active();
+        party::save_friendly_fire();
         {
             party::scoped_player_context ctx0(0);
             _write_tagged_chunk("you", TAG_YOU);
@@ -3395,6 +3464,7 @@ static bool _restore_game(const string& filename)
         party::sync_shared_state_from_active();
     }
 
+    party::restore_friendly_fire();
     party::restore_downed_state();
     _convert_obsolete_species();
 
@@ -3711,24 +3781,6 @@ static bool _convert_obsolete_species()
                 "if you want to remain a Vampire.");
         }
         change_species_to(SP_HUMAN);
-        return true;
-    }
-    else if (you.species == SP_ARMATAUR)
-    {
-        if (!yesno(
-            "This Armataur save game cannot be loaded as-is. If you load it now,\n"
-            "your character will be converted to a Gale Centaur. Continue?",
-                       false, 'N'))
-        {
-            you.save->abort(); // don't even rewrite the header
-            delete you.save;
-            you.save = 0;
-            game_ended(game_exit::abort,
-                "Please load the save in an earlier version "
-                "if you want to remain an Armataur.");
-        }
-        change_species_to(SP_GALE_CENTAUR);
-        you.duration[DUR_STAMPEDE] = 0; // Was DUR_ROLLPAGE
         return true;
     }
 #endif

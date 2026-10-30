@@ -31,6 +31,13 @@ static const struct spell_desc spelldata[] =
 {
 
 // Curated fork spell ports; IDs are appended for save compatibility.
+{ SPELL_CUBUS_DISARM, "Disarm", spschool::hexes,
+  spflag::dir_or_target | spflag::not_self | spflag::WL_check | spflag::needs_tracer
+      | spflag::monster,
+  4, 200, LOS_RADIUS, LOS_RADIUS, 2, TILEG_SLOW },
+{ SPELL_CUBUS_ALLURE, "Allure of Cubus", spschool::hexes,
+  spflag::dir_or_target | spflag::not_self | spflag::monster,
+  4, 200, LOS_RADIUS, LOS_RADIUS, 2, TILEG_CONFUSE },
 { SPELL_SHACKLE, "Shackle", spschool::hexes,
   spflag::dir_or_target | spflag::not_self | spflag::WL_check,
   2, 200, LOS_RADIUS, LOS_RADIUS, 2, TILEG_SHACKLE },

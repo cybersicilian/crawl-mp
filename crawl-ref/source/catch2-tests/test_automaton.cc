@@ -13,7 +13,11 @@
 #include "env.h"
 #include "fight.h"
 #include "fineff.h"
+#include "evoke.h"
+#include "item-name.h"
+#include "potion.h"
 #include "level-state-type.h"
+#include "libunix.h"
 #include "losglobal.h"
 #include "mapmark.h"
 #include "mon-act.h"
@@ -22,6 +26,7 @@
 #include "monster.h"
 #include "mutation.h"
 #include "ng-restr.h"
+#include "options.h"
 #include "ouch.h"
 #include "party.h"
 #include "player.h"
@@ -36,6 +41,8 @@
 #include "spl-summoning.h"
 #include "spl-util.h"
 #include "status.h"
+#include "startup.h"
+#include "state.h"
 #include "stringutil.h"
 #include "tags.h"
 #include "target.h"
@@ -1341,6 +1348,47 @@ TEST_CASE_METHOD(engraving_fixture, "Intoxication engraving requires a susceptib
     CHECK_FALSE(automaton::safe_intoxication_engraving());
 }
 
+TEST_CASE_METHOD(engraving_fixture, "Automatic miscasts do not ask for confirmation",
+                 "[automaton]")
+{
+    unwind_var<int> warning(Options.fail_severity_to_confirm, 1);
+    unwind_var<decltype(crawl_state.disables)> disables(crawl_state.disables);
+    crawl_state.disables.set(DIS_CONFIRMATIONS, false);
+    you.base_stats[STAT_INT] = 1;
+    set_skill_level(SK_SPELLCASTING, 0, true);
+    set_skill_level(SK_CONJURATIONS, 0, true);
+    set_skill_level(SK_FIRE_MAGIC, 0, true);
+    you.hp = you.hp_max = 1000; // Survive the real miscast effects.
+    const spell_type spell = SPELL_FIREBALL;
+    you.spells[0] = spell;
+    you.spell_no = 1;
+    REQUIRE(failure_rate_to_int(raw_spell_fail(spell)) == 100);
+    REQUIRE(fail_severity(spell) >= Options.fail_severity_to_confirm);
+    const coord_def target = you.pos() + coord_def(3, 0);
+    monster& foe = spawn(0, target, ATT_HOSTILE);
+    const int before = you.magic_points;
+
+    SECTION("Automatic casts still attempt the spell and pay its cost")
+    {
+        REQUIRE(automaton::trigger_attack(target));
+        CHECK(you.magic_points == before - spell_mana(spell));
+        CHECK(foe.hit_points == foe.max_hit_points); // Failure is not bypassed.
+        CHECK_FALSE(automaton::casting_automatically());
+    }
+    SECTION("Manual casts still reject a guaranteed failure")
+    {
+        // The manual path redraws the console before rejecting the cast.
+        enter_headless_mode();
+        cio_init();
+        cgotoxy(1, 1);
+        you.species = SP_HUMAN;
+        dist aim;
+        aim.target = target;
+        CHECK(cast_a_spell(false, spell, &aim) == spret::abort);
+        CHECK(you.magic_points == before);
+    }
+}
+
 TEST_CASE("Automatic beams decline all tracer warnings", "[automaton]")
 {
     player_beam_tracer tracer;
@@ -2378,4 +2426,344 @@ TEST_CASE_METHOD(engraving_fixture, "Each party member observes encounters in th
     CHECK(other.magic_points < other.max_magic_points);
     CHECK(you.props.exists("automaton_visible_threats"));
     CHECK(other.props.exists("automaton_visible_threats"));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Ranged engravings fire after an action without a weapon attack",
+                 "[automaton][automaton-action]")
+{
+    monster& foe = spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = 8;
+    you.turn_is_over = true;
+    you.last_cast_spell = SPELL_BLINK;
+    SECTION("waiting in place") {}
+    SECTION("moving before the reaction")
+    {
+        you.set_position(you.pos() + coord_def(0, 1));
+        invalidate_los();
+    }
+    const int before = you.magic_points;
+    rng::seed(8128);
+    automaton::react_to_action();
+    CHECK(foe.hit_points < foe.max_hit_points);
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    CHECK(you.time_taken == 8);
+    CHECK(you.turn_is_over);
+    CHECK(you.last_cast_spell == SPELL_BLINK);
+    CHECK(you.props["automaton_combat_heat_until"].get_int() > you.elapsed_time);
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    ++you.num_turns;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    ++you.num_turns;
+    you.elapsed_time += 100;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - 2 * spell_mana(SPELL_MAGIC_DART));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Summoning engravings work while distant foes are visible",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(5, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    const int before = you.magic_points;
+    automaton::react_to_action();
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+    ++you.num_turns;
+    you.elapsed_time += 100;
+    automaton::react_to_action();
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings require an action and a safe reachable threat",
+                 "[automaton][automaton-action]")
+{
+    const coord_def target = you.pos() + coord_def(4, 0);
+    monster& foe = spawn(0, target, ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    SECTION("zero time") { you.time_taken = 0; }
+    SECTION("menu or cancelled action") { you.turn_is_over = false; }
+    SECTION("paralysed") { you.duration[DUR_PARALYSIS] = 10; }
+    SECTION("no remaining thermal capacity") { you.magic_points = 0; }
+    SECTION("non automaton") { you.species = SP_HUMAN; }
+    SECTION("only friendly creatures") { foe.base_attitude = ATT_FRIENDLY; }
+    SECTION("only neutral creatures") { foe.base_attitude = ATT_NEUTRAL; }
+    SECTION("out of spell range") { you.spells[0] = SPELL_FREEZE; }
+    SECTION("an ally blocks the beam")
+    {
+        spawn(1, you.pos() + coord_def(2, 0), ATT_FRIENDLY);
+    }
+    SECTION("Manifold Assault needs a melee attack")
+    {
+        you.spells[0] = SPELL_MANIFOLD_ASSAULT;
+    }
+    const int before = you.magic_points;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before);
+    CHECK(foe.hit_points == foe.max_hit_points);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings try another foe when the nearest target is unsafe",
+                 "[automaton][automaton-action]")
+{
+    monster& blocked = spawn(0, you.pos() + coord_def(3, 0), ATT_HOSTILE);
+    monster& ally = spawn(1, you.pos() + coord_def(2, 0), ATT_FRIENDLY);
+    monster& clear = spawn(2, you.pos() + coord_def(0, 4), ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    rng::seed(8128);
+    automaton::react_to_action();
+    CHECK(blocked.hit_points == blocked.max_hit_points);
+    CHECK(ally.hit_points == ally.max_hit_points);
+    CHECK(clear.hit_points < clear.max_hit_points);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Attacking cannot also gain an action engraving",
+                 "[automaton][automaton-action]")
+{
+    const coord_def target = you.pos() + coord_def(4, 0);
+    spawn(0, target, ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spells[1] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 2;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    REQUIRE(automaton::trigger_attack(target, true));
+    const int after_attack = you.magic_points;
+    automaton::react_to_action();
+    CHECK(you.magic_points == after_attack);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Encounter observation does not fire offensive engravings for another hero",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    const int before = you.magic_points;
+    automaton::observe_encounter();
+    CHECK(you.magic_points == before);
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 0);
+    party::set_player_count(2);
+    party::set_multiplayer(true);
+    player& other = party::get_player(1);
+    other = you;
+    other.mid = party::mid_for_slot(1);
+    other.save = nullptr;
+    other.set_position(you.pos() + coord_def(-2, 0));
+    automaton::react_to_action();
+    REQUIRE(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(other.magic_points == before);
+    {
+        party::scoped_player_context context(1, true);
+        automaton::react_to_action();
+        CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+        CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+    }
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings keep the bee's three-turn winding",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_CLOCKWORK_BEE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    automaton::react_to_action();
+    automaton::advance_bee_engraving();
+    REQUIRE(automaton::bee_winding_remaining(you) == 3 * BASELINE_DELAY);
+    for (int turns = 2; turns >= 0; --turns)
+    {
+        ++you.num_turns;
+        you.elapsed_time += BASELINE_DELAY;
+        automaton::react_to_action();
+        automaton::advance_bee_engraving();
+        CHECK(automaton::bee_winding_remaining(you) == turns * BASELINE_DELAY);
+    }
+    CHECK(count_summons(&you, SPELL_CLOCKWORK_BEE) == 1);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Guardian spirit converts absorbed damage into heat",
+                 "[automaton][automaton-thermal]")
+{
+    you.religion = GOD_NO_GOD;
+    you.hp = you.hp_max = 100;
+    you.magic_points = you.max_magic_points = 20;
+    SECTION("amulet")
+    {
+        carry(0, OBJ_JEWELLERY, AMU_GUARDIAN_SPIRIT, false);
+        wear(0, SLOT_AMULET);
+    }
+    SECTION("armour ego")
+    {
+        carry(0, OBJ_ARMOUR, ARM_SCARF, false).brand = SPARM_SPIRIT_SHIELD;
+        wear(0, SLOT_CLOAK);
+    }
+    SECTION("mutation") { you.mutation[MUT_MANA_SHIELD] = 1; }
+    you.species = SP_AUTOMATON;
+    REQUIRE(you.spirit_shield() > 0);
+    ouch(15, KILLED_BY_MONSTER, MID_NOBODY, nullptr, nullptr, true);
+    CHECK(you.hp > 85);
+    CHECK(automaton::heat(you) > 0);
+    CHECK((100 - you.hp) + automaton::heat(you) == 15);
+    // At full heat the shield has no thermal capacity left to absorb damage.
+    you.magic_points = 0;
+    const int before = you.hp;
+    ouch(15, KILLED_BY_MONSTER, MID_NOBODY, nullptr, nullptr, true);
+    CHECK(you.hp == before - 15);
+    CHECK(automaton::heat(you) == 20);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Resource effects dissipate or build Automaton heat",
+                 "[automaton][automaton-thermal]")
+{
+    you.species = SP_AUTOMATON;
+    you.max_magic_points = 20;
+    you.magic_points = 12;
+    inc_mp(5, true);
+    CHECK(automaton::heat(you) == 3);
+    drain_mp(5, true);
+    CHECK(automaton::heat(you) == 8);
+    CHECK(get_potion_effect(POT_MAGIC)->can_quaff(nullptr, false));
+    CHECK(player_channelling_chance() > 0);
+    you.religion = GOD_ZIN;
+    CHECK(check_ability_possible(ABIL_ZIN_VITALISATION, true));
+    you.religion = GOD_SIF_MUNA;
+    CHECK(check_ability_possible(ABIL_SIF_MUNA_CHANNEL_ENERGY, true));
+    you.religion = GOD_NO_GOD;
+    you.mutation[MUT_MP_WANDS] = 1;
+    CHECK(wand_mp_cost() == 3);
+    carry(0, OBJ_ARMOUR, ARM_ROBE, false).brand = SPARM_INFUSION;
+    wear(0);
+    CHECK(you.infusion_amount() > 0);
+    pay_mp(3);
+    CHECK(automaton::heat(you) == 11);
+    refund_mp(3);
+    CHECK(automaton::heat(you) == 8);
+    automaton::cool_down(you, 2);
+    CHECK(automaton::heat(you) == 6);
+    inc_mp(100, true);
+    CHECK(automaton::heat(you) == 0);
+    string reason;
+    CHECK_FALSE(get_potion_effect(POT_MAGIC)->can_quaff(&reason));
+    CHECK(reason == "You have no heat to dissipate.");
+    you.species = SP_HUMAN;
+    you.magic_points = 12;
+    drain_mp(4, true);
+    inc_mp(1, true);
+    CHECK(you.magic_points == 9);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Resource gear improves heat dissipation and capacity",
+                 "[automaton][automaton-thermal]")
+{
+    you.religion = GOD_NO_GOD;
+    you.species = SP_AUTOMATON;
+    you.max_magic_points = 20;
+    you.magic_points = 12;
+    you.elapsed_time = 100;
+    const int capacity = get_real_mp(true);
+    const int cooling = player_mp_regen();
+    auto& ring = carry(0, OBJ_JEWELLERY, RING_MAGICAL_POWER, false);
+    wear(0, SLOT_RING);
+    CHECK_FALSE(is_useless_item(ring, false));
+    CHECK(get_real_mp(true) == capacity + 9);
+    CHECK(ring.name(DESC_PLAIN).find("heat capacity") != string::npos);
+    CHECK(ring.name(DESC_DBNAME) == "ring of magical power");
+    auto& amulet = carry(1, OBJ_JEWELLERY, AMU_MANA_REGENERATION, false);
+    wear(1, SLOT_AMULET);
+    CHECK_FALSE(is_useless_item(amulet, false));
+    CHECK(amulet.name(DESC_PLAIN) == "amulet of heat dissipation");
+    CHECK(amulet.name(DESC_DBNAME) == "amulet of magic regeneration");
+    CHECK(player_mp_regen() > cooling);
+    auto& armour = carry(2);
+    armour.brand = SPARM_MANA_REGEN;
+    artefact_set_property(armour, ARTP_MAGICAL_POWER, 9);
+    artefact_set_property(armour, ARTP_MANA_REGENERATION, 1);
+    wear(2);
+    you.duration[DUR_SOUL_AMBROSIA] = 10;
+    CHECK(get_real_mp(true) == capacity + 18);
+    you.species = SP_HUMAN;
+    const int regeneration = player_mp_regen();
+    you.species = SP_AUTOMATON;
+    CHECK(player_mp_regen() == regeneration * 3 / 2 + 80);
+    automaton::mark_combat(you);
+    CHECK(player_mp_regen() == regeneration * 3 / 2);
+    automaton::cool_down(you, 100);
+    CHECK(you.check_mp_regen_attunement);
+    you.species = SP_HUMAN;
+    CHECK(amulet.name(DESC_PLAIN) == "amulet of magic regeneration");
+}
+
+TEST_CASE("Resource capability and thermal presentation belong to each hero",
+          "[automaton][automaton-thermal]")
+{
+    player construct;
+    player human;
+    construct.species = SP_AUTOMATON;
+    human.species = SP_HUMAN;
+    CHECK_FALSE(construct.has_mana());
+    CHECK(construct.uses_magic_reserve());
+    CHECK(human.has_mana());
+    human.mutation[MUT_MANA_SHIELD] = construct.mutation[MUT_MANA_SHIELD] = 1;
+    CHECK(human.spirit_shield(false) == 1);
+    CHECK(construct.spirit_shield(false) == 1);
+    unwind_var<uint8_t> active_hp_casting(you.mutation[MUT_HP_CASTING], 1);
+    CHECK(human.uses_magic_reserve());
+    CHECK(construct.uses_magic_reserve());
+    human.mutation[MUT_HP_CASTING] = 1;
+    CHECK_FALSE(human.uses_magic_reserve());
+    CHECK(human.spirit_shield(false) == 0);
+    CHECK(automaton::resource_text(construct, "magic regeneration, MP+9")
+          == "heat dissipation, Heat+9");
+    CHECK(automaton::resource_text(human, "magic regeneration, MP+9")
+          == "magic regeneration, MP+9");
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Losing borrowed capacity heats an Automaton",
+                 "[automaton][automaton-thermal]")
+{
+    you.species = SP_AUTOMATON;
+    you.experience_level = 15;
+    calc_mp();
+    you.magic_points = you.max_magic_points - 2;
+    const int reserve = you.magic_points;
+    you.props["vellum_applied_mp"].get_int() = 9;
+    vellum::refresh();
+    CHECK(you.magic_points == max(0, reserve - 9));
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Party resource recovery dissipates Automaton heat",
+                 "[automaton][automaton-thermal]")
+{
+    party::set_player_count(2);
+    auto& ally = party::get_player(1);
+    ally.species = SP_AUTOMATON;
+    ally.hp = ally.hp_max = 100;
+    ally.max_magic_points = 20;
+    ally.magic_points = 12;
+    party::set_player_downed(1, false);
+    party::heal_or_buff_party_member(1, 0, 5, NUM_DURATIONS, 0, nullptr, false);
+    CHECK(automaton::heat(ally) == 3);
+    ally.species = SP_HUMAN;
+    ally.magic_points = 12;
+    party::heal_or_buff_party_member(1, 0, 5, NUM_DURATIONS, 0, nullptr, false);
+    CHECK(ally.magic_points == 17);
+    party::set_player_count(1);
 }

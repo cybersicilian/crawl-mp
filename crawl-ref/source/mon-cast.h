@@ -21,6 +21,8 @@ struct dice_def;
 
 void init_mons_spells();
 bool is_valid_mon_spell(spell_type spell);
+// Configure one of Asclepia's five monster-owned potion-cloud projectiles.
+void setup_monster_evaporate(bolt& beam, int power, int cloud_choice);
 
 void prayer_of_brilliance(monster* agent);
 

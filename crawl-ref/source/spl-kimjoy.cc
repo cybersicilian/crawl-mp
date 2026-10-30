@@ -27,7 +27,7 @@ int rootspike_constriction_damage(actor& caster, monster& target, int damage)
 {
     const int poison = damage * 60 / 100;
     const int adjusted = damage - poison
-                         + resist_adjust_damage(&target, BEAM_POISON, poison);
+                         + resist_adjust_damage(&target, BEAM_POISON, poison, &caster);
     if (adjusted > 0 && (adjusted < damage ? !one_chance_in(3) : one_chance_in(3)))
         poison_monster(&target, &caster);
     return adjusted;
@@ -59,7 +59,7 @@ spret cast_eringyas_rootspike(int power, coord_def target, bool fail)
     // Kimjoy's root spikes resist 60% of their damage as poison. Keep
     // the remaining physical damage effective against poison-immune foes.
     const int poison = raw * 60 / 100;
-    const int damage = raw - poison + resist_adjust_damage(victim, BEAM_POISON, poison);
+    const int damage = raw - poison + resist_adjust_damage(victim, BEAM_POISON, poison, &you);
     mprf("Poisonous roots strike %s%s", victim->name(DESC_THE).c_str(),
          attack_strength_punctuation(damage).c_str());
     flash_tile(target, LIGHTGREEN);

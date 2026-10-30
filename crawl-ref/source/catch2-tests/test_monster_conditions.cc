@@ -35,3 +35,24 @@ TEST_CASE("Monster conditions retain native names and creature-relative effect k
         return condition.id == MB_FROZEN_IN_TERROR && condition.kind == monster_condition_kind::harmful;
     }));
 }
+
+TEST_CASE("Wyrm infusion conditions identify each persistent essence", "[monster-conditions][wyrm-ui]")
+{
+    init_monsters();
+    monster_info info(MONS_ORC);
+    info.mb.set(MB_WYRM_NIGREDO);
+    info.mb.set(MB_WYRM_ALBEDO);
+    info.mb.set(MB_WYRM_CITRINITAS);
+    info.mb.set(MB_WYRM_VIRIDITAS);
+    const auto conditions = info.conditions();
+    const auto find = [&](monster_info_flags id) -> const monster_condition& {
+        const auto found = std::find_if(conditions.begin(), conditions.end(),
+            [id](const monster_condition& condition) { return condition.id == id; });
+        REQUIRE(found != conditions.end());
+        return *found;
+    };
+    CHECK(find(MB_WYRM_NIGREDO).description == "infused with nigredo");
+    CHECK(find(MB_WYRM_ALBEDO).description == "infused with albedo");
+    CHECK(find(MB_WYRM_CITRINITAS).kind == monster_condition_kind::beneficial);
+    CHECK(find(MB_WYRM_VIRIDITAS).description == "infused with viriditas");
+}

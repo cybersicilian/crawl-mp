@@ -1,5 +1,8 @@
 /* Current-tile loot shares the map/log footer without covering the dungeon. */
-#normal #hud_bottom_row { grid-template-columns: 148px minmax(0, 1fr) clamp(210px, 25%, 300px); }
+#normal #hud_bottom_row {
+    grid-template-columns: 148px minmax(0, 1fr) clamp(210px, 25%, 300px);
+    height: clamp(140px, 17vh, 160px); flex-basis: clamp(140px, 17vh, 160px);
+}
 #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating) { grid-template-columns: minmax(0, 1fr) clamp(210px, 25%, 300px); }
 #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating):has(#message_pane.hud-floating) { grid-template-columns: 1fr; height: clamp(112px, 17vh, 140px); flex-basis: clamp(112px, 17vh, 140px); }
 #hud_floor_items { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; border-left: 1px solid #a98d5645; background: #171c20; color: var(--tt-vellum); font: 11px/1.3 var(--tt-font-ui); }
@@ -18,7 +21,7 @@
 #normal :is(.floor-item, .floor-pickup-menu):focus-visible, #hud_floor_items:focus-visible { outline: 2px solid #dec88c; outline-offset: -2px; }
 #normal .floor-pickup-menu:disabled { opacity: .5; cursor: default; }
 @media (max-width: 1050px) {
-    #normal #hud_bottom_row { grid-template-columns: 130px minmax(0, 1fr) 200px; }
+    #normal #hud_bottom_row { grid-template-columns: 148px minmax(0, 1fr) 200px; }
 }
 @media (pointer: coarse) {
     #normal #hud_bottom_row { height: clamp(144px, 20vh, 160px); flex-basis: clamp(144px, 20vh, 160px); }
@@ -28,5 +31,17 @@
 @media (max-width: 680px) {
     #normal #hud_bottom_row { grid-template-columns: min(100px, 24vw) minmax(0, 1fr) min(160px, 40vw); }
     #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating) { grid-template-columns: minmax(0, 1fr) min(160px, 40vw); }
+    #hud_floor_items > header { flex-wrap: wrap; }
+}
+/* Size the footer for the playfield, which can be much narrower than the screen. */
+@container hud-playfield (max-width: 420px) {
+    #normal #hud_bottom_row {
+        grid-template-columns: minmax(0, 1fr); grid-auto-rows: max-content;
+        align-content: start; overflow-y: auto; scrollbar-width: thin;
+    }
+    #normal #hud_bottom_map:not(.hud-floating) { min-height: 136px; border-right: 0; border-bottom: 1px solid #a98d5630; }
+    #normal #hud_minimap { justify-content: flex-start; }
+    #normal #hud_bottom_row #message_pane:not(.hud-floating) { height: 100px; min-height: 100px; }
+    #normal #hud_floor_items { height: 140px; min-height: 110px; border-left: 0; border-top: 1px solid #a98d5645; }
     #hud_floor_items > header { flex-wrap: wrap; }
 }

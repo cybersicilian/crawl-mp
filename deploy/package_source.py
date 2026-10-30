@@ -12,6 +12,37 @@ EXCLUDED_PARTS = {".git", ".venv", "node_modules", "__pycache__", ".codex", ".ag
 EXCLUDED_SUFFIXES = {".o", ".d", ".a", ".so", ".dylib", ".pyc", ".db3", ".db", ".sqlite", ".sqlite3", ".log", ".tmp"}
 STATE_ROOTS = ("rcs/", "saves/", "morgue/", "crawl-ref/source/rcs/", "crawl-ref/source/saves/", "crawl-ref/source/morgue/", "crawl-ref/source/webserver/run/")
 HUD_MANIFEST = "crawl-ref/source/webserver/static/ui-sprites/hud-sprites.json"
+CHARACTER_CATALOG = "crawl-ref/source/webserver/static/scripts/character-catalog.js"
+
+
+def character_assets(root):
+    """Validate and include every immutable player image referenced by the catalog.
+
+    Also usable on a staged release before publishing a selective web overlay.
+    The catalog remains authoritative; this never regenerates character data.
+    """
+    catalog = root / CHARACTER_CATALOG
+    if not catalog.is_file():
+        return []
+    urls = set(re.findall(r'"src"\s*:\s*"(/static/player-tiles/[^\"]+)"',
+                          catalog.read_text()))
+    if not urls:
+        raise ValueError("Character catalog has no player image references")
+    assets = []
+    for url in sorted(urls):
+        match = re.fullmatch(r"/static/player-tiles/[\w-]+-([a-f0-9]{12})\.png", url)
+        if not match:
+            raise ValueError("Invalid player image URL: " + url)
+        asset = root / "crawl-ref/source/webserver" / url.lstrip("/")
+        if asset.is_symlink() or not asset.resolve().is_relative_to(root.resolve()):
+            raise ValueError("Player image must be a regular source file: " + url)
+        data = asset.read_bytes()
+        if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+            raise ValueError("Player image is not a PNG: " + url)
+        if hashlib.sha256(data).hexdigest()[:12] != match[1]:
+            raise ValueError("Player image content does not match its filename: " + url)
+        assets.append(asset.relative_to(root).as_posix())
+    return assets
 
 
 def include(name):
@@ -25,9 +56,10 @@ def include(name):
 
 def runtime_assets(root):
     """Include the declared runtime overlay without packaging private art sources."""
+    assets = character_assets(root)
     manifest = root / HUD_MANIFEST
     if not manifest.is_file():
-        return []
+        return assets
     filename = json.loads(manifest.read_text())["file"]
     match = re.fullmatch(r"hud-sprites\.([a-f0-9]{12})\.png", filename)
     if not match:
@@ -37,7 +69,7 @@ def runtime_assets(root):
         raise ValueError("Runtime atlas must be a regular source file")
     if hashlib.sha256(asset.read_bytes()).hexdigest()[:12] != match[1]:
         raise ValueError("HUD runtime atlas content does not match its filename")
-    return [asset.relative_to(root).as_posix()]
+    return assets + [asset.relative_to(root).as_posix()]
 
 
 def source_names(root):

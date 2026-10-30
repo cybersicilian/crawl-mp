@@ -22,6 +22,7 @@ const root = path.resolve(__dirname, '..');
             window.qaChatFocus = 0;
             window.qaHandlers = {};
             window.qaModules = {
+                require: { toUrl: () => "data:text/css," },
                 jquery: window.jQuery,
                 comm: {
                     send_message(msg, fields) { window.qaPackets.push({ msg, ...fields }); },
@@ -39,7 +40,7 @@ const root = path.resolve(__dirname, '..');
                 './player-card-details': { mount() {} }, './hud-bottom-strip': { init() {} },
                 './player-card-sections': { init() {} }, './party-progress': { init() {} },
                 './party-card-readings': { init() {} }, './floor-items': { init() {} }, './session-menu': { init() {} },
-                './assimilation-panel': { init() {} }, './premium-dungeon': { init() {} }
+                './assimilation-panel': { init() {} }, './premium-dungeon': { init() {} }, './common-hotkeys': { init() {} }
             };
             window.define = (dependencies, factory) => {
                 window.qaModules[window.qaName] = typeof dependencies === 'function'
@@ -56,6 +57,10 @@ const root = path.resolve(__dirname, '..');
             window.qaName = 'expedition-url';
         });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/expedition-url.js') });
+        for (const name of ['text-query', 'library-browser']) {
+            await page.evaluate(name => { window.qaName = name; }, name);
+            await page.addScriptTag({ path: path.join(root, 'static/scripts', name + '.js') });
+        }
         await page.evaluate(() => { window.qaName = 'library-ui'; });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/library-ui.js') });
         for (const name of ['menu-keyboard', 'hud-input']) {

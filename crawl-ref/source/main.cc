@@ -69,6 +69,7 @@
 #include "fight.h"
 #include "files.h"
 #include "game-modifiers.h"
+#include "grape-aura.h"
 #include "fineff.h"
 #include "god-abil.h"
 #include "god-companions.h"
@@ -109,6 +110,7 @@
 #include "options.h"
 #include "output.h"
 #include "party.h"
+#include "mercenary.h"
 #include "player.h"
 #include "player-notices.h"
 #include "player-reacts.h"
@@ -441,6 +443,15 @@ NORETURN static void _launch_game()
         }
         party::sync_shared_state_from_active();
         party::sync_all_proxies();
+    }
+
+    // Each Caravan's first hire belongs to that member, including in a
+    // multiplayer party. Failed placement remains pending for the next load.
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        party::scoped_player_context context(slot);
+        if (you.char_class == JOB_CARAVAN && you.on_current_level)
+            mercenary::ensure_starter_companion();
     }
 
     // Attach the macro key recorder
@@ -2056,6 +2067,11 @@ static void _handle_autofight(command_type cmd, command_type prev_cmd)
         mprf(MSGCH_ERROR, "Lua error: %s", clua.error.c_str());
 }
 
+static bool _can_control_expedition_lifecycle()
+{
+    return !party::multiplayer_enabled() || party::active_slot() == 0;
+}
+
 class GameMenu : public Menu
 {
 // this could be easily generalized for other menus that select among commands
@@ -2130,11 +2146,12 @@ public:
         items[1]->add_tile(tileidx_command(CMD_GAME_MENU));
         // n.b. CMD_SAVE_GAME_NOW crashes on returning to the main menu if we
         // don't exit out of this popup now, not sure why
-        add_entry(new CmdMenuEntry(
-            (crawl_should_restart(game_exit::save)
-                            ? "Save and return to main menu"
-                            : "Save and exit"),
-            MEL_ITEM, 'S', CMD_SAVE_GAME_NOW, false));
+        if (_can_control_expedition_lifecycle())
+            add_entry(new CmdMenuEntry(
+                (crawl_should_restart(game_exit::save)
+                                ? "Save and return to main menu"
+                                : "Save and exit"),
+                MEL_ITEM, 'S', CMD_SAVE_GAME_NOW, false));
         add_entry(new CmdMenuEntry("Generate and view character dump",
             MEL_ITEM, '#', CMD_SHOW_CHARACTER_DUMP));
 #ifdef USE_TILE_LOCAL
@@ -2156,9 +2173,12 @@ public:
             MEL_ITEM, CK_F12, CMD_TOGGLE_KEYBOARD));
 #endif
         add_entry(new CmdMenuEntry("", MEL_SUBTITLE));
-        add_entry(new CmdMenuEntry(
-                            "Quit and <lightred>abandon character</lightred>",
-            MEL_ITEM, 'Q', CMD_QUIT, false));
+        if (_can_control_expedition_lifecycle())
+            add_entry(new CmdMenuEntry(
+                                "Quit and <lightred>abandon character</lightred>",
+                MEL_ITEM, 'Q', CMD_QUIT, false));
+        else
+            add_entry(new CmdMenuEntry("The host controls saving and ending this expedition.", MEL_SUBTITLE));
     }
 
     vector<MenuEntry *> show(bool reuse_selections = false) override
@@ -2183,6 +2203,16 @@ void process_command(command_type cmd, command_type prev_cmd)
         if (m.cmd == CMD_NO_CMD)
             return;
         cmd = m.cmd;
+    }
+
+    // The native command boundary covers keyboard remaps, macros and menus.
+    // A guest's personal command must not stop or abandon every hero's game.
+    if (!_can_control_expedition_lifecycle()
+        && (cmd == CMD_SAVE_GAME || cmd == CMD_SAVE_GAME_NOW
+            || cmd == CMD_QUIT || cmd == CMD_SUSPEND_GAME))
+    {
+        mpr("Only the expedition host can save and exit, abandon, or suspend this game.");
+        return;
     }
 
     shell::prepare_command(cmd);
@@ -2734,6 +2764,7 @@ void world_reacts()
             env.elapsed_time += floor_delta;
         else
             you.elapsed_time += you.time_taken;
+        grape_aura::advance(floor_delta);
         if (you.elapsed_time >= 2*1000*1000*1000)
         {
             // 2B of 1/10 turns. A 32-bit signed int can hold 2.1B.

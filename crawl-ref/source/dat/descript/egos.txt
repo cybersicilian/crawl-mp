@@ -401,3 +401,39 @@ It deals increased damage compared to normal missiles and substantially
 increased damage to chaotic and magically transformed beings. It also inflicts
 extra damage against mutated beings, depending on how mutated they are.
 %%%%
+%%%%
+pacifying (pacify) weapon ego
+
+It sometimes attempts to pacify hostile creatures (1/3 chance); success depends
+on their nature and your Invocations skill.
+%%%%
+sluggish (sluggish) weapon ego
+
+It sometimes twists time around faster hostile creatures, dealing half of
+Cheibriados's Slouch damage (1/3 chance).
+%%%%
+silver (silver) weapon ego
+
+It sears chaotic and magically transformed creatures, dealing extra damage.
+%%%%
+slimifying (slimify) weapon ego
+
+It may turn a susceptible hostile creature into a slime. The chance decreases
+with the creature's hit dice.
+%%%%
+seeking (seeking) weapon ego
+
+Its shots are much more accurate.
+%%%%
+stasis (stasis) armour ego
+
+It prevents teleportation, blinking, haste, and slowing while worn.
+%%%%
+magic recovery (regenMP) armour ego
+
+It doubles your natural rate of magic recovery.
+%%%%
+bunker (bunker) armour ego
+
+It grants the Deploy Shield ability, placing the shield as a protective
+barricade. Moving from your position retrieves it if possible.

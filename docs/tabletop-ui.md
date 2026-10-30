@@ -46,6 +46,14 @@ inside the repository; runtime rendering needs no external asset service.
 - The builder derives every starting species, background and legal combination
   from that catalog. `character-builder.js` supplies wider hero folios and native
   combination labels; `starting-sheet.js` renders a read-only native starting sheet.
+  Searchable visual species and background galleries show recommended choices first,
+  filter all legal choices immediately, and retain the native select as the room's
+  authoritative value. Species use native portraits; background icons reuse native
+  tiles (with category fallbacks for jobs without a dedicated tile). The dark,
+  brass-accented builder shows a larger equipped native portrait and compact
+  starting attributes, defenses, and build highlights; the expanded starting sheet
+  provides the full native skills, equipment and spells. The optional undead-trait
+  guide compares all three descriptions and current compatibility.
   `native-start.js` requests the configured executable's `-character-preview-json`
   snapshot: real HP/MP, AC/EV/SH, adjusted attributes and skills, resistances,
   equipment, memorized spells and starting spell access. The engine runs its normal

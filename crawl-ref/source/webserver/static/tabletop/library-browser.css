@@ -1,0 +1,105 @@
+/* Aligned expedition facts and immediate collection controls, using existing theme tokens. */
+#game_library_panel {
+    --library-ink: var(--ui-ink, var(--tt-folio-ink, #2b241c));
+    --library-muted: var(--ui-quiet, var(--tt-folio-muted, #665c49));
+    --library-rule: var(--ui-rule, var(--tt-folio-rule, #d5c7a9));
+    --library-field: var(--ui-page-raised, var(--tt-folio-raised, #fffbef));
+}
+#game_library_panel .library-browser-tools {
+    display: flex; flex-wrap: wrap; align-items: end; gap: 12px;
+    margin-top: 18px; padding-block: 14px; border-block: 1px solid var(--library-rule);
+}
+#game_library_panel :is(.library-search-field, .library-select) {
+    display: grid; gap: 6px; min-width: 0; color: var(--library-muted);
+    font: 600 12px/1.4 var(--tt-font-ui, system-ui);
+}
+#game_library_panel .library-search-field { flex: 1 1 240px; }
+#game_library_panel .library-select { flex: 0 1 160px; }
+#lobby.has-chapter-index #game_library_panel .library-browser-tools :is(input, select) {
+    box-sizing: border-box; min-height: 42px; width: 100%; max-width: none; margin: 0;
+    padding: 9px 12px; border: 1px solid var(--library-rule); border-radius: 4px;
+    background: var(--library-field); color: var(--library-ink); font: 14px/1.5 var(--tt-font-ui, system-ui);
+}
+#game_library_panel .library-browser-tools :is(input, select, button):focus-visible {
+    outline: 2px solid var(--ui-chapter, #943824); outline-offset: 3px;
+}
+#game_library_panel .library-result-count { margin: 12px 0 0; color: var(--library-muted); font-size: 12px; }
+#lobby.has-chapter-index #game_library_panel .game-library-list { display: block; margin-top: 10px; }
+#game_library_panel .library-expeditions {
+    width: 100%; table-layout: fixed; border-collapse: collapse; color: var(--library-ink); text-align: left;
+}
+#game_library_panel .library-expeditions th {
+    box-sizing: border-box; padding: 10px 12px; color: var(--library-muted); border-bottom: 2px solid var(--library-rule);
+    font: 600 12px/1.5 var(--tt-font-ui, system-ui);
+}
+#game_library_panel .library-expeditions th:first-child { width: 34%; }
+#game_library_panel .library-expeditions th:nth-child(2) { width: 18%; }
+#game_library_panel .library-expeditions th:nth-child(3) { width: 19%; }
+#lobby.has-chapter-index #game_library_panel .library-expeditions .game-library-entry {
+    display: table-row; border: 0; border-bottom: 1px solid var(--library-rule);
+    border-radius: 0; background: transparent; color: var(--library-ink);
+}
+#game_library_panel .library-expeditions td {
+    box-sizing: border-box; padding: 16px 12px; vertical-align: top; overflow-wrap: anywhere; line-height: 1.5;
+}
+#game_library_panel .library-expeditions .library-entry-actions { display: table-cell; }
+#game_library_panel .library-entry-actions > * { margin: 0 8px 8px 0; }
+#lobby.has-chapter-index #game_library_panel .library-expeditions h3 {
+    font: 600 19px/1.3 var(--tt-font-title, Georgia); color: var(--ui-chapter, #2f5239);
+}
+#game_library_panel .library-expeditions .library-roster { margin: 8px 0 0; color: var(--library-muted); font-size: 12px; }
+#lobby.has-chapter-index #game_library_panel .library-expeditions small {
+    margin: 0; color: var(--library-ink); font-size: 13px; font-variant-numeric: tabular-nums;
+}
+#game_library_panel .library-expeditions .library-saved-time { color: var(--library-muted); font-size: 12px; }
+#game_library_panel .library-expeditions .library-state { text-transform: none; letter-spacing: 0; }
+#game_library_panel [data-status="unavailable"] .library-state {
+    color: var(--library-muted); background: var(--library-field); border-color: var(--library-rule);
+}
+#game_library_panel [data-status="running"] .library-state::before { content: "● "; }
+#lobby #game_library_panel .library-expeditions :is(.library-delete, a:not(.dcss-btn-primary)) {
+    background: transparent; color: var(--ui-chapter, #943824); border-color: transparent;
+}
+#lobby #game_library_panel .library-expeditions .library-delete { padding: 5px 0; font-size: 12px; }
+#lobby :is(.collection-clear, .library-clear):disabled { opacity: .5; cursor: default; }
+#lobby .collection-clear { min-height: 40px; }
+#game_library_panel .library-browser-tools[hidden], #game_library_panel .library-result-count[hidden] { display: none; }
+@media (max-width: 1000px) {
+    #game_library_panel .library-expeditions th:first-child { width: 30%; }
+    #game_library_panel .library-expeditions th:nth-child(2) { width: 19%; }
+    #game_library_panel .library-expeditions th:nth-child(3) { width: 21%; }
+    #game_library_panel .library-expeditions td { padding-inline: 8px; }
+}
+@media (max-width: 700px) {
+    #game_library_panel .library-expeditions thead {
+        position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);
+    }
+    #lobby.has-chapter-index #game_library_panel .library-expeditions .game-library-entry {
+        display: block; padding: 16px 0;
+    }
+    #game_library_panel .library-expeditions td { display: block; padding: 4px 0; }
+    #game_library_panel .library-expeditions td:not(:first-child)::before {
+        content: attr(data-label); display: block; margin: 6px 0 3px; color: var(--library-muted);
+        font-size: 11px; font-weight: 600;
+    }
+    #game_library_panel .library-expeditions .library-entry-actions { display: block; }
+    #game_library_panel .library-select { flex: 1 1 115px; }
+    #game_library_panel .library-clear { min-height: 42px; }
+}
+
+#lobby.has-chapter-index #game_library_panel h2 { color: var(--ui-chapter, var(--tt-folio-crimson)); }
+#lobby.has-chapter-index #game_library_panel .library-expeditions .dcss-btn-primary {
+    background: var(--ui-action, #70442c); color: var(--ui-action-text, #fff5df);
+    border-color: var(--ui-action, #70442c);
+}
+#lobby.has-chapter-index #game_library_panel .library-expeditions .dcss-btn-primary:hover {
+    color: var(--ui-action-text, #fff5df); filter: brightness(1.08);
+}
+
+#lobby.has-chapter-index #game_library_panel :is(.library-section-heading p, .library-empty-state) {
+    color: var(--library-muted);
+}
+#lobby.has-chapter-index #game_library_panel .library-header-actions a { color: var(--ui-chapter, #943824); }
+#lobby.has-chapter-index #game_library_panel :is(.library-header-actions, .library-browser-tools) .dcss-btn {
+    background: var(--library-field); color: var(--library-ink); border-color: var(--library-rule);
+}

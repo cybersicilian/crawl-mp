@@ -15,6 +15,7 @@
 #include "god-abil.h"
 #include "god-vellum.h"
 #include "invent.h"
+#include "imus-prism.h"
 #include "item-prop.h"
 #include "items.h"
 #include "menu.h"
@@ -31,6 +32,7 @@
 #include "skills.h"
 #include "spl-goditem.h"
 #include "spl-book.h"
+#include "spl-summoning.h"
 #include "spl-util.h"
 #include "state.h"
 #include "stringutil.h"
@@ -165,6 +167,7 @@ spret petition()
     return spret::success;
 }
 
+#if TAG_MAJOR_VERSION == 34
 spret wand_surge(dist* target)
 {
     std::vector<int> slots;
@@ -202,6 +205,7 @@ spret wand_surge(dist* target)
     request.payment = []() { return spend(cost(GOD_PAKELLAS)); };
     return evoke_device(you.inv[slot], target, request);
 }
+#endif
 }
 
 spret invoke_power(god_type god, dist* target)
@@ -291,7 +295,7 @@ spret invoke_power(god_type god, dist* target)
         you.duration[DUR_ELDER_HEROISM] = 60;
         break;
     case GOD_SIF_MUNA:
-        if (you.magic_points == you.max_magic_points)
+        if (!you.uses_magic_reserve() || you.magic_points == you.max_magic_points)
             return spret::abort;
         inc_mp(1 + rank());
         start_delay<ElderChannel>(1 + rank());
@@ -401,6 +405,24 @@ spret invoke_power(god_type god, dist* target)
     }
     case GOD_IGNIS:
         you.duration[DUR_ELDER_ARMOUR] = 80;
+        break;
+    case GOD_IMUS_THEA:
+    {
+        const auto cell = aim(target, LOS_RADIUS);
+        monster* victim = cell ? hostile_at(*cell) : nullptr;
+        if (!victim || !imus_prism_can_dazzle(*victim))
+            return spret::abort;
+        victim->add_ench(mon_enchant(ENCH_BLIND, &you, (2 + rank()) * BASELINE_DELAY, 1));
+        simple_monster_message(*victim, " is dazzled.");
+        break;
+    }
+    case GOD_GREAT_WYRM:
+        you.increase_duration(DUR_RESISTANCE, 4 + 2 * rank(), 10);
+        break;
+    case GOD_AGRAPHEDE:
+        if (creation_alive(god) || !player_summon_check(MONS_REDBACK)
+            || !summon(god, MONS_REDBACK, you.pos()))
+            return spret::abort;
         break;
     default:
         return spret::abort;

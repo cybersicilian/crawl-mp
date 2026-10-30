@@ -190,7 +190,7 @@ void refresh()
     const int previous_mp = you.props.exists("vellum_applied_mp")
         ? you.props["vellum_applied_mp"].get_int() : 0;
     const int current_mp = bonus(you, ARTP_MAGICAL_POWER);
-    if (previous_mp > current_mp && !you.has_mutation(MUT_HP_CASTING))
+    if (previous_mp > current_mp && you.uses_magic_reserve())
         pay_mp(previous_mp - current_mp);
     you.props["vellum_applied_mp"] = current_mp;
     calc_mp();

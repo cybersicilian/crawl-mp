@@ -859,8 +859,11 @@ static JsonNode *_books_json()
 static JsonNode *_weapon_brands_json()
 {
     JsonNode *arr = json_mkarray();
-    for (int b = SPWPN_NORMAL + 1; b < NUM_REAL_SPECIAL_WEAPONS; ++b)
+    for (int b = SPWPN_NORMAL + 1; b < NUM_SPECIAL_WEAPONS; ++b)
     {
+        // The intervening range contains the legacy sentinel and transient brands.
+        if (b >= NUM_REAL_SPECIAL_WEAPONS && b < SPWPN_PACIFYING)
+            continue;
         const brand_type brand = static_cast<brand_type>(b);
         const char *verbose = brand_type_name(brand, false);
         const char *terse = brand_type_name(brand, true);

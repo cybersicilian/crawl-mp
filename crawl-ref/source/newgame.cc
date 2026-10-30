@@ -100,6 +100,7 @@ enum MenuOptions
     M_TRAIT = -10,
     M_RUNE_LOCKS = -11,
     M_TRAPS = -12,
+    M_SHARED_FATE = -13,
 };
 
 enum MenuChoices
@@ -1462,6 +1463,11 @@ protected:
         _add_choice_menu_option(0, 5, string("^T - Traps: ") + trap_name,
                                 CONTROL('T'), M_TRAPS,
                                 "Cycle trap modes; vault travel traps and puzzle mechanisms remain active.");
+        if (party::multiplayer_enabled())
+            _add_choice_menu_option(1, 5,
+                string("^F - Shared Fate: ") + (party::starting_shared_fate() ? "on" : "off"),
+                CONTROL('F'), M_SHARED_FATE,
+                "If one player dies, everyone loses. Overrides resurrection and extra lives.");
 
         _add_choice_menu_option(1, 0,
                 "    * - Random " + choice_name, '*', M_RANDOM,
@@ -1538,6 +1544,10 @@ void UINewGameMenu::menu_item_activated(int id)
     bool viable = false;
     switch (id)
     {
+    case M_SHARED_FATE:
+        party::set_starting_shared_fate(!party::starting_shared_fate());
+        done = true;
+        return;
     case M_RUNE_LOCKS:
         party::set_starting_campaign_modifiers(!party::starting_no_rune_locks(),
                                                party::starting_trap_mode());

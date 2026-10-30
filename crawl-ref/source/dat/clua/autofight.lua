@@ -273,6 +273,20 @@ local function get_monster_info(dx,dy,no_move)
   -- We can possibly move towards warded enemies, but not attack them while immune
   if m:is_damage_immune() and m:is("warding") then
     info.attack_type = AF_MOVES
+  elseif not AUTOFIGHT_FORCE_FIRE then
+    if -info.distance == 1 and have_ranged()
+        and autofight.weapon_swap_available(false) then
+      info.attack_type = AF_MELEE
+      info.swap_weapon = true
+    elseif -info.distance > 1 and info.attack_type ~= AF_REACHING
+        and not have_ranged() and you.see_cell_no_trans(dx, dy)
+        and autofight.weapon_swap_available(true) then
+      local aim_x, aim_y = autofight.best_aim(dx, dy, false)
+      if aim_x ~= 0 or aim_y ~= 0 then
+        info.attack_type = AF_FIRE
+        info.swap_weapon = true
+      end
+    end
   end
 
   if info.attack_type == AF_MOVES and not will_tab(0,0,dx,dy) then
@@ -479,6 +493,8 @@ function attack(allow_movement, check_caught)
     else
       crawl.mpr("No target in view!")
     end
+  elseif info.swap_weapon then
+    crawl.do_commands({"CMD_WEAPON_SWAP"})
   elseif info.attack_type == AF_FIRE then
     if (not attack_fire(x,y, not allow_movement, pierce)) then
       crawl.mpr("No reachable target in view!")

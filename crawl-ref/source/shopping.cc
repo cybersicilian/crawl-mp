@@ -29,6 +29,7 @@
 #include "libutil.h"
 #include "menu.h"
 #include "message.h"
+#include "mercenary.h"
 #include "notes.h"
 #include "options.h"
 #include "output.h"
@@ -549,6 +550,8 @@ unsigned int item_value(item_def item, bool ident)
             switch (item.sub_type)
             {
             case SCR_ACQUIREMENT:
+            case SCR_COLLECTION:
+            case SCR_WISH:
                 valued += 520;
                 break;
 
@@ -707,6 +710,18 @@ unsigned int item_value(item_def item, bool ident)
     case OBJ_MISCELLANY:
         switch (item.sub_type)
         {
+        case MISC_MERCENARY_CONTRACT:
+            valued += mercenary::contract_value(item);
+            break;
+        case MISC_POUCH:
+            valued += 150;
+            break;
+        case MISC_SATCHEL:
+            valued += 350;
+            break;
+        case MISC_BAG_OF_PLENTY:
+            valued += 650;
+            break;
         case MISC_HORN_OF_GERYON:
         case MISC_ZIGGURAT:
         case MISC_SHOP_VOUCHER:
@@ -925,6 +940,7 @@ static bool _purchase(shop_struct& shop, const level_pos& pos, int index,
                       int cost, bool voucher)
 {
     item_def item = shop.stock[index]; // intentional copy
+    const bool contract = mercenary::is_contract(item);
     shop.stock.erase(shop.stock.begin() + index);
 
     // Remove from shopping list if it's unique
@@ -978,6 +994,8 @@ static bool _purchase(shop_struct& shop, const level_pos& pos, int index,
     }
 
     // Shopkeepers will place goods you can't carry outside the shop.
+    if (contract)
+        return true;
     if (item_is_stationary(item)
         || !move_item_to_inv(item))
     {
@@ -1378,10 +1396,15 @@ void ShopMenu::purchase_selected()
             continue;
 
         use_voucher = price == voucher_value;
-        if (use_voucher)
-            voucher_value = 0;
 
         const int quant = item.quantity;
+
+        // A hire is created before the payment and stock mutation. If no
+        // placement is possible, both the gold and the offer are preserved.
+        if (mercenary::is_contract(item) && !mercenary::recruit(item))
+            continue;
+        if (use_voucher)
+            voucher_value = 0;
 
         if (!_purchase(shop, pos, i, price, use_voucher))
         {
@@ -1698,6 +1721,8 @@ string shop_type_name(shop_type type)
             return "Distillery";
         case SHOP_GENERAL:
             return "General Store";
+        case SHOP_MERCENARY:
+            return "Mercenary";
         default:
             return "Bug";
     }
@@ -1798,6 +1823,8 @@ static const char *shop_types[] =
     "distillery",
     "scroll",
     "general",
+    "removed miscellaneous",
+    "mercenary",
 };
 
 /** What shop type is this?
@@ -1807,6 +1834,8 @@ static const char *shop_types[] =
  */
 shop_type str_to_shoptype(const string &s)
 {
+    if (s == "removed miscellaneous")
+        return SHOP_UNASSIGNED;
 #if TAG_MAJOR_VERSION == 34
     if (s == "removed gadget" || s == "removed food")
         return SHOP_UNASSIGNED;

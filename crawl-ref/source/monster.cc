@@ -4,12 +4,14 @@
 **/
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
 #include "chain-devil.h"
 #include "eldritch.h"
 #include "god-vorr.h"
 #include "bloodcraft.h"
 #include "level-time.h"
 #include "mon-energy.h"
+#include "grape-monster.h"
 
 #include <cmath>
 #include <algorithm>
@@ -953,6 +955,7 @@ bool monster::unequip(mon_inv_type slot, bool msg)
     if (msg)
         unequip_message(*item);
 
+    grape_monster::restore(*this, slot);
     unlink_item(inv[slot]);
     do_unequip_effects(*item);
 
@@ -1186,6 +1189,11 @@ bool monster::pickup_launcher(item_def &launch, bool msg, bool force)
 
 static bool _is_signature_weapon(const monster* mons, const item_def &weapon)
 {
+    if (mons->type == MONS_LICHBANE
+        && is_unrandom_artefact(weapon, UNRAND_UNDEADHUNTER))
+    {
+        return true;
+    }
     // Riders only have tiles for wielding spears, so prefer not to pick up other weapons.
     if (mons->type == MONS_RED_DEVIL
         || mons->type == MONS_GOBLIN_RIDER
@@ -2015,18 +2023,19 @@ item_def *monster::mslot_item(mon_inv_type mslot) const
     return mi == NON_ITEM ? nullptr : &env.item[mi];
 }
 
-bool monster::unrand_equipped(int unrand_index, bool /*include_melded*/) const
+bool monster::unrand_equipped(int unrand_index, bool include_melded) const
 {
     const unrandart_entry* entry = get_unrand_entry(unrand_index);
     const mon_inv_type mslot = equip_slot_to_mslot(get_item_slot(entry->base_type, entry->sub_type));
-    const item_def *item = mslot_item(mslot);
+    const item_def *item = include_melded ? mslot_item(mslot)
+                                          : grape_monster::effective_item(*this, mslot);
 
     return item && has_unrand_effect(*item, unrand_index);
 }
 
 item_def *monster::shield() const
 {
-    item_def *shield = mslot_item(MSLOT_SHIELD);
+    item_def *shield = grape_monster::effective_item(*this, MSLOT_SHIELD);
 
     if (shield && is_shield(*shield))
         return shield;
@@ -2035,12 +2044,12 @@ item_def *monster::shield() const
 
 item_def *monster::offhand_item() const
 {
-    return mslot_item(MSLOT_SHIELD);
+    return grape_monster::effective_item(*this, MSLOT_SHIELD);
 }
 
 item_def* monster::body_armour() const
 {
-    return mslot_item(MSLOT_ARMOUR);
+    return grape_monster::effective_item(*this, MSLOT_ARMOUR);
 }
 
 /**
@@ -3183,7 +3192,7 @@ int monster::base_armour_class() const
     if (type == MONS_ARMOUR_ECHO)
     {
         // Armour spirits get double AC from their armour.
-        const int armour_slot = inv[MSLOT_ARMOUR];
+        const int armour_slot = grape_monster::effective_index(*this, MSLOT_ARMOUR);
         if (armour_slot != NON_ITEM)
         {
             const int typ = env.item[armour_slot].sub_type;
@@ -3221,11 +3230,11 @@ int monster::armour_class() const
     ac += 5 * wearing_ego(OBJ_WEAPONS, SPWPN_PROTECTION);
 
     // armour from ac
-    const item_def *armour = mslot_item(MSLOT_ARMOUR);
+    const item_def *armour = grape_monster::effective_item(*this, MSLOT_ARMOUR);
     if (armour)
         ac += armour_bonus(*armour);
 
-    const item_def *aux = mslot_item(MSLOT_AUX_ARMOUR);
+    const item_def *aux = grape_monster::effective_item(*this, MSLOT_AUX_ARMOUR);
     if (aux)
         ac += armour_bonus(*aux);
 
@@ -3336,7 +3345,7 @@ int monster::evasion(bool include_temp, const actor* /*act*/) const
     // account for armour
     for (int slot = MSLOT_AUX_ARMOUR; slot <= MSLOT_SHIELD; slot++)
     {
-        const item_def* armour = mslot_item(static_cast<mon_inv_type>(slot));
+        const item_def* armour = grape_monster::effective_item(*this, static_cast<mon_inv_type>(slot));
         if (armour)
             ev += property(*armour, PARM_EVASION) / 60;
     }
@@ -3648,9 +3657,9 @@ int monster::res_fire() const
     {
         u += scan_artefacts(ARTP_FIRE);
 
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int aux       = inv[MSLOT_AUX_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+        const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+        const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -3709,9 +3718,9 @@ int monster::res_cold() const
     {
         u += scan_artefacts(ARTP_COLD);
 
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int aux       = inv[MSLOT_AUX_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+        const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+        const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -3757,7 +3766,7 @@ int monster::res_elec() const
         // No ego armour, but storm dragon.
         // Also no non-artefact rings at present,
         // but it doesn't hurt to be thorough.
-        const int armour    = inv[MSLOT_ARMOUR];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -3808,9 +3817,9 @@ int monster::res_poison(bool include_temp) const
     {
         u += scan_artefacts(ARTP_POISON);
 
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int aux       = inv[MSLOT_AUX_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+        const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+        const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -3853,7 +3862,7 @@ bool monster::res_miasma(bool /*include_temp*/) const
         return true;
     }
 
-    const item_def *armour = mslot_item(MSLOT_ARMOUR);
+    const item_def *armour = grape_monster::effective_item(*this, MSLOT_ARMOUR);
     if (armour && has_unrand_effect(*armour, UNRAND_EMBRACE))
         return true;
 
@@ -3862,7 +3871,7 @@ bool monster::res_miasma(bool /*include_temp*/) const
 
 int monster::res_holy_energy() const
 {
-    if (type == MONS_PROFANE_SERVITOR)
+    if (type == MONS_PROFANE_SERVITOR || type == MONS_FALLEN)
         return 3;
 
     if (undead_or_demonic())
@@ -3897,9 +3906,9 @@ int monster::res_negative_energy(bool intrinsic_only) const
     {
         u += scan_artefacts(ARTP_NEGATIVE_ENERGY);
 
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int aux       = inv[MSLOT_AUX_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+        const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+        const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -3990,7 +3999,7 @@ int monster::willpower() const
     if (props.exists(KIKU_WRETCH_KEY))
         return 0;
 
-    const item_def *arm = mslot_item(MSLOT_ARMOUR);
+    const item_def *arm = grape_monster::effective_item(*this, MSLOT_ARMOUR);
     if (arm && has_unrand_effect(*arm, UNRAND_FOLLY))
         return 0;
 
@@ -4017,9 +4026,9 @@ int monster::willpower() const
     u += WL_PIP * scan_artefacts(ARTP_WILLPOWER);
 
     // Ego equipment resistance.
-    const int armour    = inv[MSLOT_ARMOUR];
-    const int aux       = inv[MSLOT_AUX_ARMOUR];
-    const int shld      = inv[MSLOT_SHIELD];
+    const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+    const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+    const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
     const int jewellery = inv[MSLOT_JEWELLERY];
 
     if (armour != NON_ITEM && env.item[armour].base_type == OBJ_ARMOUR)
@@ -4519,7 +4528,8 @@ int monster::hurt(const actor *agent, int amount, beam_type flavour,
         if (agent == nullptr)
             monster_die(*this, KILL_NON_ACTOR, NON_MONSTER);
         else if (agent->is_player())
-            monster_die(*this, KILL_YOU, NON_MONSTER);
+            monster_die(*this, KILL_YOU, NON_MONSTER, false, false, false,
+                        party::slot_for_mid(agent->mid));
         else
             monster_die(*this, KILL_MON, agent->mindex());
     }
@@ -6791,7 +6801,8 @@ bool monster::cloud_immune(bool items) const
 {
     // Cloud Mage is also checked for in (so stay in sync with)
     // monster_info::monster_info(monster_type, monster_type).
-    return type == MONS_CLOUD_MAGE || actor::cloud_immune(items);
+    return type == MONS_CLOUD_MAGE || type == MONS_ASCLEPIA
+           || actor::cloud_immune(items);
 }
 
 bool monster::damage_immune(const actor* source) const
@@ -6886,6 +6897,8 @@ int monster::spell_hd(spell_type spell) const
 
     if (has_ench(ENCH_EMPOWERED_SPELLS))
         hd += 5;
+    if (has_ench(ENCH_WYRM_CITRINITAS))
+        hd += max(2, wyrm_essence::infusion_piety(*this, ENCH_WYRM_CITRINITAS) / 40);
     if (has_ench(ENCH_DIMINISHED_SPELLS))
         hd = max(1, hd - 7);
 

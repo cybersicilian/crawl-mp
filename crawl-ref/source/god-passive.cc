@@ -281,6 +281,24 @@ static const vector<god_passive> god_passives[] =
     { },
     // Vellum: owner-scoped attachments use the explicit equipment adapter.
     { },
+    // Imus's reflection is handled by the projectile adapter.
+    {
+        { 1, passive_t::imus_illusory_weapon },
+        { 2, passive_t::imus_wall_bounce },
+        { 2, passive_t::imus_illusory_ammo },
+    },
+    // Great Wyrm: extract defeated foes' dispellable enchantments.
+    { { 0, passive_t::wyrm_quicksilver } },
+    // Agraphede: poison is both a burden and a resource.
+    {
+        { 0, passive_t::agraphede_anti_resist },
+        { 1, passive_t::agraphede_poison_guard },
+        { 2, passive_t::agraphede_poison_regen },
+        { 2, passive_t::agraphede_vermin },
+        { 3, passive_t::agraphede_enfeeble },
+        { 3, passive_t::agraphede_poison_feed },
+        { 6, passive_t::agraphede_spell_power },
+    },
 };
 COMPILE_CHECK(ARRAYSZ(god_passives) == NUM_GODS);
 

@@ -23,6 +23,10 @@ const root = path.resolve(__dirname, '..');
             };
         });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/item-properties.js') });
+        for (const name of ['effect-icon-catalog', 'effect-icon-art']) {
+            await page.evaluate(name => { window.moduleName = './' + name; }, name);
+            await page.addScriptTag({ path: path.join(root, 'game_data/static/' + name + '.js') });
+        }
         await page.evaluate(() => { window.moduleName = 'status-icons'; });
         await page.addScriptTag({ path: path.join(root, 'game_data/static/status-icons.js') });
         const cases = await page.evaluate(() => {

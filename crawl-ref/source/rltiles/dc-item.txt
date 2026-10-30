@@ -358,6 +358,12 @@ i-entangling BRAND_ENTANGLING
 i-sundering BRAND_SUNDERING
 i-concussion BRAND_CONCUSSION
 i-devious BRAND_DEVIOUS BRAND_WEP_LAST
+# Appended save-stable brands use explicit tile mappings.
+i-sickness BRAND_PACIFYING
+i-speed BRAND_SLUGGISH
+i-holy_wrath BRAND_SILVER
+i-venom BRAND_SLIMIFYING
+i-penetration BRAND_SEEKING
 # missile-only brands, order doesn't matter
 i-dispersal BRAND_DISPERSAL
 i-explosion BRAND_EXPLOSION
@@ -527,6 +533,7 @@ effect/slug7 MI_SLUG7
 
 ######OBJ_ARMOUR
 %sdir item/armour
+iron_dragon_armour ARM_IRON_DRAGON_ARMOUR
 robe1 ARM_ROBE
 robe2
 %enchant_variation ARM_ROBE shiny runed glowing
@@ -809,7 +816,10 @@ i-glass BRAND_ARM_GLASS
 i-fire BRAND_ARM_PYROMANIA
 i-stardust BRAND_ARM_STARDUST
 i-mesmerism BRAND_ARM_MESMERISM
-i-attunement BRAND_ARM_ATTUNEMENT BRAND_ARM_LAST
+i-attunement BRAND_ARM_ATTUNEMENT
+i-protection BRAND_ARM_STASIS
+i-energy BRAND_ARM_MANA_REGEN
+i-reflection BRAND_ARM_BUNKER BRAND_ARM_LAST
 %rim 1
 
 ###########OBJ_WANDS
@@ -909,6 +919,7 @@ chunk_brands/i-decay FOOD_CHUNK_ROTTING
 chunk_brands/i-forbidden FOOD_CHUNK_FORBIDDEN
 chunk_brands/i-inedible FOOD_CHUNK_INEDIBLE
 %back none
+
 chunk_brands/i-decay FOOD_ROTTING
 chunk_brands/i-forbidden FOOD_FORBIDDEN
 chunk_brands/i-inedible FOOD_INEDIBLE
@@ -988,6 +999,7 @@ i-butterflies SCR_BUTTERFLIES SCR_ID_LAST
 ############ring
 %sdir item/ring
 %rim 0
+i-r-elec RING_INSULATION
 wooden RING_NORMAL_OFFSET UNSEEN_RING
 silver
 gold
@@ -1640,3 +1652,25 @@ rune_burrows UNCOLLECTED_RUNE_BURROWS
 %sdir gui/commands
 page_next ITEM_PAGE_NEXT
 page_previous ITEM_PAGE_PREVIOUS
+
+# Identified alchemical essences; separate from the save-ordered potion labels.
+%sdir item/potion
+%back i-label
+i-nigredo WYRM_NIGREDO
+i-albedo WYRM_ALBEDO
+i-citrinitas WYRM_CITRINITAS
+i-viriditas WYRM_VIRIDITAS
+i-rubedo WYRM_RUBEDO
+%back none
+
+# Curated utility evokers.
+%sdir item/misc
+misc_pipe MISC_PIPE_OF_RECALL
+misc_healing_mist MISC_HEALING_MIST
+misc_healing_mist_inert MISC_HEALING_MIST_INERT
+misc_air_horn MISC_AIR_HORN
+misc_air_horn_inert MISC_AIR_HORN_INERT
+
+# Carrying bags share the source-fork sprite; their item name and capacity
+# distinguish the three tiers in inventory and equipment views.
+misc_carry_bag MISC_CARRY_BAG

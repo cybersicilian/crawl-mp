@@ -567,6 +567,7 @@ PORTAL_ENTRANCE(DNGN_ENTER_GAUNTLET, "gate leading to a gauntlet", "enter_gauntl
 PORTAL_ENTRANCE(DNGN_ENTER_ICE_CAVE, "frozen archway", "enter_ice_cave", WHITE),
 PORTAL_ENTRANCE(DNGN_ENTER_VOLCANO, "dark tunnel", "enter_volcano", RED),
 PORTAL_ENTRANCE(DNGN_ENTER_GULCH, "mutagenic drain", "enter_gulch", ETC_EARTH),
+PORTAL_ENTRANCE(DNGN_ENTER_GOLEMFORGE, "sealed forge-door", "enter_golemforge", LIGHTCYAN),
 PORTAL_ENTRANCE(DNGN_ENTER_WIZLAB, "magical portal", "enter_wizlab", ETC_SHIMMER_BLUE),
 PORTAL_ENTRANCE(DNGN_ENTER_DESOLATION, "crumbling gateway", "enter_desolation", WHITE),
 PORTAL_ENTRANCE(DNGN_ENTER_ARENA, "gate leading to Okawaru's Arena", "enter_arena", WHITE),
@@ -585,6 +586,7 @@ PORTAL_EXIT(DNGN_EXIT_GAUNTLET, "gate leading back out of this place", "exit_gau
 PORTAL_EXIT(DNGN_EXIT_ICE_CAVE, "ice covered gate leading back out of this place", "exit_ice_cave", WHITE),
 PORTAL_EXIT(DNGN_EXIT_VOLCANO, "rocky tunnel leading out of this place", "exit_volcano", RED),
 PORTAL_EXIT(DNGN_EXIT_GULCH, "gate leading back out of this place", "exit_gulch", ETC_EARTH),
+PORTAL_EXIT(DNGN_EXIT_GOLEMFORGE, "forge-door leading back out", "exit_golemforge", LIGHTCYAN),
 PORTAL_EXIT(DNGN_EXIT_WIZLAB, "portal leading out of this place", "exit_wizlab", ETC_SHIMMER_BLUE),
 PORTAL_EXIT(DNGN_EXIT_DESOLATION, "gate leading back out of this place", "exit_desolation", WHITE),
 PORTAL_EXIT(DNGN_EXIT_ARENA, "gate leading back out of this place", "exit_arena", WHITE),
@@ -719,6 +721,9 @@ ALTAR(DNGN_ALTAR_WU_JIAN, "ornate altar of the Wu Jian Council", "altar_wu_jian"
 ALTAR(DNGN_ALTAR_IGNIS, "candlelit altar of Ignis", "altar_ignis", ETC_CANDLES),
 ALTAR(DNGN_ALTAR_VORR, "blood-filled altar of Vorr", "altar_vorr", RED),
 ALTAR(DNGN_ALTAR_VELLUM, "thread-wreathed altar of Vellum", "altar_vellum", LIGHTMAGENTA),
+ALTAR(DNGN_ALTAR_IMUS_THEA, "prismatic altar of Imus Thea", "altar_imus_thea", LIGHTCYAN),
+ALTAR(DNGN_ALTAR_GREAT_WYRM, "alchemical altar of the Great Wyrm", "altar_great_wyrm", LIGHTGREEN),
+ALTAR(DNGN_ALTAR_AGRAPHEDE, "web-draped altar of Agraphede", "altar_agraphede", GREEN),
 
 #define FOUNTAIN(enum, name, vaultname, colour)\
 {\

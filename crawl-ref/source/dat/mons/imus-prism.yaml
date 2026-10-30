@@ -1,0 +1,19 @@
+name: "prismatic prism"
+enum: imus_prism
+glyph: {char: "*", colour: etc_magic}
+flags: [flies, stationary, no_exp_gain, no_poly_to, peripheral]
+resists: {elec: 1, fire: 1, cold: 1}
+exp: 0
+genus: fulminant_prism
+species: fulminant_prism
+holiness: [nonliving]
+will: invuln
+attacks:
+hd: 5
+hp_10x: 150
+ac: 3
+ev: 0
+intelligence: brainless
+size: little
+shape: orb
+tile_variance: random

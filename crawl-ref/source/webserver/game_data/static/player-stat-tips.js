@@ -1,4 +1,4 @@
-define(["jquery", "character-stat-help"], function ($, help) {
+define(["jquery", "character-stat-help", "./party-model", "heat-help"], function ($, help, model, heatHelp) {
     "use strict";
 
     function set_rich_tip($el, title, badge, body, meta, html_body, mirror_parent)
@@ -112,6 +112,12 @@ define(["jquery", "character-stat-help"], function ($, help) {
             null,
             false
         );
+        var magicLine = document.getElementById("stats_mpline");
+        if (magicLine && heat) heatHelp.apply(magicLine, model.magicResource(player));
+        else if (magicLine) {
+            magicLine.removeAttribute("data-tip-heat"); magicLine.removeAttribute("data-heat-state");
+            ["role", "aria-label", "aria-description", "aria-valuetext", "aria-valuemin", "aria-valuemax", "aria-valuenow"].forEach(function (key) { magicLine.removeAttribute(key); });
+        }
 
         var ac_mod_txt = player.ac_mod ? " (" + (player.ac_mod > 0 ? "+" : "") + player.ac_mod + " modifier)" : "";
         set_rich_tip(

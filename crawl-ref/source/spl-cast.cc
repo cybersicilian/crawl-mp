@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
 #include "automaton.h"
 #include "auras.h"
 #include "bloodcraft.h"
@@ -33,12 +34,15 @@
 #include "fight.h"
 #include "format.h"
 #include "god-abil.h"
+#include "god-agraphede.h"
 #include "god-conduct.h"
 #include "god-item.h"
 #include "god-passive.h" // passive_t::shadow_spells
 #include "hints.h"
 #include "invent.h"
 #include "icicle-burst.h"
+#include "imus-spectrum.h"
+#include "imus-mirror.h"
 #include "false-image.h"
 #include "items.h"
 #include "item-prop.h"
@@ -581,6 +585,9 @@ int calc_spell_power(spell_type spell)
 {
     int power = _skill_power(spell);
 
+    if (you.duration[DUR_WYRM_CITRINITAS])
+        power += wyrm_essence::empowerment_piety() * 4;
+
     if (you.divine_exegesis)
         power += you.skill(SK_SPELLCASTING, 200);
 
@@ -698,6 +705,9 @@ static int _spell_enhancement(spell_type spell)
     }
 
     enhanced += you.archmagi();
+    if (have_passive(passive_t::agraphede_spell_power)
+        && agraphede_poison_spell(spell))
+        ++enhanced;
     enhanced += you.duration[DUR_BRILLIANCE] > 0
                 || you.unrand_equipped(UNRAND_FOLLY);
 
@@ -709,7 +719,7 @@ static int _spell_enhancement(spell_type spell)
 
     // Hana's Scimitar provides an enhancer if you cast the spell from 80% mmp
     // or more, and you have mp.
-    if (you.unrand_equipped(UNRAND_HANAS_SCIMITAR) && you.max_magic_points > 0
+    if (you.uses_magic_reserve() && you.unrand_equipped(UNRAND_HANAS_SCIMITAR) && you.max_magic_points > 0
         && (you.magic_points + spell_mana(spell)) * 100 >= you.max_magic_points * 80)
     {
         enhanced++;
@@ -1240,7 +1250,7 @@ void do_post_spellcast_effects(spell_type spell)
                 || ally.depth != you.depth
                 || grid_distance(you.pos(), ally.pos()) > 4
                 || !you.see_cell_no_trans(ally.pos())
-                || ally.magic_points >= ally.max_magic_points)
+                || !ally.uses_magic_reserve() || ally.magic_points >= ally.max_magic_points)
             {
                 continue;
             }
@@ -1388,6 +1398,7 @@ static bool _spellcasting_aborted(spell_type spell, bool fake_spell)
     if (Options.fail_severity_to_confirm > 0
         && Options.fail_severity_to_confirm <= severity
         && !crawl_state.disables[DIS_CONFIRMATIONS]
+        && !automaton::casting_automatically()
         && !fake_spell)
     {
         if (failure_rate_to_int(raw_spell_fail(spell)) == 100)
@@ -1759,6 +1770,9 @@ unique_ptr<targeter> find_spell_targeter(spell_type spell, int pow, int range)
     if (get_spell_flags(spell) & spflag::targeting_mask
         && spell_to_zap(spell) != NUM_ZAPS)
     {
+        if (imus_spectrum_active() && imus_spectrum_spell(spell))
+            return make_unique<imus_spectrum_targeter>(
+                &you, range, imus_spectrum_spell_projectile(spell, pow, range));
         return make_unique<targeter_beam>(&you, range, spell_to_zap(spell),
                                           spell, pow, 0, 0);
     }
@@ -2564,6 +2578,9 @@ spret your_spells(spell_type spell, int powc, bool actual_spell,
         _apply_post_zap_effect(spell, orig_target_pos);
         if (actual_spell && spell != SPELL_ELEMENTAL_WEAPON)
             elemental_weapon::on_spell_cast(spell);
+        if (actual_spell)
+            imus_mirror::replay_spell(spell, powc, orig_target_pos,
+                                     beam.path_taken);
 
         const monster* victim = monster_at(orig_target_pos);
         if (actual_spell && original_mid && orig_target_pos != you.pos()
@@ -3304,7 +3321,11 @@ static spret _do_cast(spell_type spell, int powc, const dist& spd,
     // Finally, try zaps.
     zap_type zap = spell_to_zap(spell);
     if (zap != NUM_ZAPS)
+    {
+        if (imus_spectrum_active() && imus_spectrum_spell(spell))
+            return imus_spectrum_zap(spell, powc, beam, fail);
         return zapping(zap, powc,  beam, true, nullptr, fail);
+    }
 
     return spret::none;
 }

@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
 #include "archaeologist.h"
 #include "automaton.h"
 #include "hermit-crab.h"
@@ -907,6 +908,7 @@ void player::finalise_movement(const actor* /*to_blame*/)
 
     if (last_move_pos != pos())
     {
+        wyrm_essence::leave_player_miasma(*this, last_move_pos);
         if (cloud_struct* cloud = cloud_at(pos()))
         {
             if (cloud->type == CLOUD_BLASTMOTES)
@@ -1390,6 +1392,16 @@ static int _player_bonus_regen()
     int rr = REGEN_PIP * (oozle::passive_bonus(ARTP_REGENERATION)
         + vellum::bonus(you, ARTP_REGENERATION));
 
+    if (have_passive(passive_t::agraphede_poison_regen)
+        && you.duration[DUR_POISONING])
+    {
+        rr += REGEN_PIP;
+        if (you.piety() >= piety_breakpoint(4))
+            rr += REGEN_PIP;
+        if (you.piety() >= piety_breakpoint(5))
+            rr += REGEN_PIP;
+    }
+
     // Amulets, troll leather armour, and artefacts.
     vector<item_def*> eq = you.equipment.get_slot_items(SLOT_ALL_EQUIPMENT, false, true);
     for (item_def* item : eq)
@@ -1539,6 +1551,10 @@ int player_mp_regen()
 
     if (you.get_mutation_level(MUT_MANA_REGENERATION))
         regen_amount *= 2;
+
+    if (const item_def *body = you.equipment.get_first_slot_item(SLOT_BODY_ARMOUR))
+        if (get_armour_ego_type(*body) == SPARM_MANA_REGEN)
+            regen_amount *= 2;
 
     regen_amount += 40 * oozle::passive_bonus(ARTP_MANA_REGENERATION);
 
@@ -1827,6 +1843,7 @@ int player_res_electricity(bool allow_random, bool include_temp, bool items)
     {
         // staff
         re += you.wearing(OBJ_STAVES, STAFF_AIR);
+        re += you.wearing_jewellery(RING_ELEC_RESISTANCE);
 
         // artefacts and dragon armour
         re += you.scan_artefacts(ARTP_ELECTRICITY);
@@ -1876,12 +1893,19 @@ int player_res_poison(bool allow_random, bool include_temp, bool items, bool for
     const int form_rp = forms ? cur_form(include_temp)->res_pois() : 0;
     if (you.is_nonliving(include_temp, forms)
         || you.is_lifeless_undead(include_temp)
-        || form_rp == 3
-        || items && you.unrand_equipped(UNRAND_OLGREB)
-        || include_temp && you.duration[DUR_DIVINE_STAMINA])
+        || form_rp == 3)
     {
         return 3;
     }
+
+    // Innate lifeless forms remain immune; Agraphede suppresses otherwise
+    // acquired poison resistance for the active follower only.
+    if (have_passive(passive_t::agraphede_anti_resist))
+        return 0;
+
+    if (items && you.unrand_equipped(UNRAND_OLGREB)
+        || include_temp && you.duration[DUR_DIVINE_STAMINA])
+        return 3;
 
     int rp = form_rp;
 
@@ -2617,7 +2641,7 @@ int player_wizardry()
 
 int player_channelling_chance(bool max)
 {
-    if (you.has_mutation(MUT_HP_CASTING))
+    if (!you.uses_magic_reserve())
         return 0;
 
     const int skill = max ? 27 : you.skill(SK_EVOCATIONS);
@@ -3428,7 +3452,8 @@ void level_change(bool skip_attribute_increase)
     // directly sometimes {dlb}
     you.redraw_experience = true;
 
-    while (you.experience < exp_needed(you.experience_level))
+    while (you.experience_level > you.get_max_xl()
+           || you.experience < exp_needed(you.experience_level))
         lose_level();
 
     while (you.experience_level < you.get_max_xl()
@@ -3742,6 +3767,19 @@ void level_change(bool skip_attribute_increase)
     // Hints mode arbitrarily ends at xp 7.
     if (crawl_state.game_is_hints() && you.experience_level >= 7)
         hints_finished();
+}
+
+const char *const XL_CAP_LOSS_KEY = "permanent_xl_cap_loss";
+
+void reduce_level_cap(int levels)
+{
+    if (levels <= 0)
+        return;
+    you.props[XL_CAP_LOSS_KEY] = min(26, you.permanent_xl_cap_loss() + min(26, levels));
+    if (you.experience_level > you.get_max_xl())
+        level_change();
+    you.redraw_experience = true;
+    you.redraw_title = true;
 }
 
 void adjust_level(int diff, bool just_xp)
@@ -4121,7 +4159,9 @@ bool player::faith(bool items) const
 /// Does the player have permastasis?
 bool player::stasis() const
 {
-    return species == SP_FORMICID;
+    const item_def *cloak = equipment.get_first_slot_item(SLOT_CLOAK);
+    return species == SP_FORMICID
+           || (cloak && get_armour_ego_type(*cloak) == SPARM_STASIS);
 }
 
 bool player::can_burrow() const
@@ -4397,18 +4437,30 @@ int player::scan_artefacts(artefact_prop_type which_property,
  * how much MP they can spend per attack, depending on their available MP (or
  * HP if they're a Djinn).
  */
+bool player::has_mana() const
+{
+    return species != SP_AUTOMATON && uses_magic_reserve();
+}
+
+bool player::uses_magic_reserve() const
+{
+    // The same reserve stores mana or free thermal capacity. HP casting is
+    // unsuppressible; read this hero rather than the active hero's mutations.
+    return mutation[MUT_HP_CASTING] == 0;
+}
+
 int player::infusion_amount() const
 {
     int cost = 0;
-    if (you.unrand_equipped(UNRAND_POWER_GLOVES))
-        cost = you.has_mutation(MUT_HP_CASTING) ? 0 : 999;
+    if (unrand_equipped(UNRAND_POWER_GLOVES))
+        cost = has_mutation(MUT_HP_CASTING) ? 0 : 999;
     else
         cost = wearing_ego(OBJ_ARMOUR, SPARM_INFUSION);
 
-    if (you.has_mutation(MUT_HP_CASTING))
-        return min(you.hp - 1, cost);
+    if (has_mutation(MUT_HP_CASTING))
+        return min(hp - 1, cost);
     else
-        return min(you.magic_points, cost);
+        return min(magic_points, cost);
 }
 
 void dec_hp(int hp_loss, bool fatal, const char *aux)
@@ -4466,7 +4518,8 @@ void flush_mp()
         && you.magic_points < you.max_magic_points
                               * Options.magic_point_warning / 100)
     {
-        mprf(MSGCH_DANGER, "* * * LOW MAGIC WARNING * * *");
+        mprf(MSGCH_DANGER, you.species == SP_AUTOMATON
+             ? "* * * HIGH HEAT WARNING * * *" : "* * * LOW MAGIC WARNING * * *");
     }
 
     take_note(Note(NOTE_MP_CHANGE, you.magic_points, you.max_magic_points));
@@ -4501,6 +4554,9 @@ static void _dec_mp(int mp_loss, bool silent)
 
 void drain_mp(int mp_loss, bool ignore_resistance)
 {
+    if (!you.uses_magic_reserve())
+        return;
+
     if (!ignore_resistance && you.has_mutation(MUT_INVIOLATE_MAGIC))
         mp_loss = mp_loss / 3;
 
@@ -4528,6 +4584,12 @@ void refund_hp(int cost)
 
 void refund_mp(int cost)
 {
+    // Aborted engravings refund thermal capacity, not mana.
+    if (you.species == SP_AUTOMATON)
+    {
+        automaton::cool_down(you, cost);
+        return;
+    }
     if (you.has_mutation(MUT_HP_CASTING))
     {
         you.hp += cost;
@@ -4594,9 +4656,11 @@ bool enough_mp(int minimum, bool suppress_msg, bool abort_macros)
         if (!suppress_msg)
         {
             if (get_real_mp(true) < minimum)
-                mpr("You don't have enough magic capacity.");
+                mpr(you.species == SP_AUTOMATON ? "You don't have enough heat capacity."
+                                              : "You don't have enough magic capacity.");
             else
-                mpr("You don't have enough magic at the moment.");
+                mpr(you.species == SP_AUTOMATON ? "You need to dissipate more heat first."
+                                              : "You don't have enough magic at the moment.");
         }
         if (abort_macros)
         {
@@ -4613,7 +4677,7 @@ void inc_mp(int mp_gain, bool silent)
 {
     ASSERT(!crawl_state.game_is_arena());
 
-    if (mp_gain < 1 || you.magic_points >= you.max_magic_points)
+    if (!you.uses_magic_reserve() || mp_gain < 1 || you.magic_points >= you.max_magic_points)
         return;
 
     you.magic_points += mp_gain;
@@ -4694,6 +4758,8 @@ int player_drained()
 
 void rot_mp(int mp_loss)
 {
+    if (!you.uses_magic_reserve())
+        return;
     you.mp_max_adj -= mp_loss;
     calc_mp();
 
@@ -4773,7 +4839,8 @@ int get_real_hp(bool trans, bool drained, bool include_reservation)
                 + (you.get_mutation_level(MUT_RUGGED_BROWN_SCALES) ?
                    you.get_mutation_level(MUT_RUGGED_BROWN_SCALES) * 2 + 1 : 0)
                 - (you.get_mutation_level(MUT_FRAIL) * 10)
-                - (hep_frail ? 10 : 0);
+                - (hep_frail ? 10 : 0)
+                - (you_worship(GOD_IMUS_THEA) ? 10 : 0);
 
     hitp /= 100;
 
@@ -4824,8 +4891,10 @@ int get_real_mp(bool include_items)
     enp += highest_skill + min(8 * scale, min(highest_skill, scaled_xl)) / 2;
 
     // Analogous to ROBUST/FRAIL
-    enp *= 100 + (you.get_mutation_level(MUT_HIGH_MAGIC) * 10)
-               - (you.get_mutation_level(MUT_LOW_MAGIC) * 10);
+    enp *= you.uses_magic_reserve()
+           ? 100 + (you.get_mutation_level(MUT_HIGH_MAGIC) * 10)
+                 - (you.get_mutation_level(MUT_LOW_MAGIC) * 10)
+           : 100;
     enp /= 100 * scale;
 //    enp = stepdown_value(enp, 9, 18, 45, 100)
     enp += species::get_mp_modifier(you.species);
@@ -4834,18 +4903,20 @@ int get_real_mp(bool include_items)
     enp += you.mp_max_adj;
 
     // Now applied after scaling so that power items are more useful -- bwr
-    if (include_items)
+    if (include_items && you.uses_magic_reserve())
     {
         enp += 9 * you.wearing_jewellery(RING_MAGICAL_POWER);
         enp +=     you.scan_artefacts(ARTP_MAGICAL_POWER);
     }
 
-    enp += get_form()->max_mp_bonus();
+    if (you.uses_magic_reserve())
+        enp += get_form()->max_mp_bonus();
 
-    enp *= 100 + you.attribute[ATTR_DIVINE_VIGOUR] * 5;
+    enp *= you.uses_magic_reserve() ? 100 + you.attribute[ATTR_DIVINE_VIGOUR] * 5 : 100;
     enp /= 100;
 
-    if (include_items && you.wearing_ego(OBJ_WEAPONS, SPWPN_ANTIMAGIC))
+    if (include_items && you.uses_magic_reserve()
+        && you.wearing_ego(OBJ_WEAPONS, SPWPN_ANTIMAGIC))
         enp /= 3;
 
     enp = max(enp, 0);
@@ -9213,11 +9284,15 @@ bool player::strip_willpower(actor */*attacker*/, int dur, bool quiet)
 
 bool player::drain_magic(actor */*attacker*/, int pow)
 {
+    if (!uses_magic_reserve())
+        return false;
+
     int amount = min(you.magic_points, random2avg(pow / 8, 3));
     if (!amount)
         return false;
 
-    mprf(MSGCH_WARN, "You feel your power leaking away.");
+    mprf(MSGCH_WARN, species == SP_AUTOMATON ? "Heat floods your mechanisms."
+                                           : "You feel your power leaking away.");
     drain_mp(amount);
     return true;
 }

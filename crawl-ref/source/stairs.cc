@@ -15,6 +15,7 @@
 #include "artefact.h"
 #include "bloodspatter.h"
 #include "branch.h"
+#include "bunker.h"
 #include "chardump.h"
 #include "colour.h"
 #include "coordit.h"
@@ -898,6 +899,17 @@ void floor_transition(dungeon_feature_type how,
     }
 
     const coord_def stair_pos = you.pos();
+
+    // Recover carried shields while the source floor and all member contexts
+    // still refer to the same level.
+    bunker::retrieve_party_on_departure(
+        old_level, whither.branch != old_level.branch && !forced
+                   && !party::multiplayer_enabled());
+    // On shared branch transitions the other members travel too; let each
+    // of them bring their own nearby hired companions from this floor.
+    tag_transported_party_mercenaries(
+        old_level, stair_pos, whither.branch != old_level.branch && !forced
+                              && !party::multiplayer_enabled());
 
     if (how == DNGN_EXIT_DUNGEON)
     {

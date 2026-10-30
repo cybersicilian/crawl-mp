@@ -36,7 +36,7 @@ define([], function () {
             // differently timed actors stay separate; no aggregate health is invented.
             var stack = JSON.stringify([creature.name, creature.type, creature.perception,
                 creature.damage_level, creature.health, creature.energy_deficit, creature.speed,
-                creature.ready, creature.statuses_known, creature.statuses]);
+                creature.ready, creature.statuses_known, creature.statuses, creature.aura_radius]);
             if (!group.stacks.has(stack)) group.stacks.set(stack, []);
             group.stacks.get(stack).push(creature); group.count++;
         });

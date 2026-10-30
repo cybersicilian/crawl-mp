@@ -80,18 +80,18 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Fire
-    SPELL_STEAM_BARRIER,
     SPELL_FOXFIRE,
     SPELL_BOLT_OF_MAGMA,
+    SPELL_STEAM_BARRIER,
     SPELL_PLASMA_BEAM,
     SPELL_BOLT_OF_FIRE,
     SPELL_STARBURST,
 },
 
 {   // Book of Ice
-    SPELL_ICICLE_BURST,
     SPELL_FREEZING_CLOUD,
     SPELL_BOLT_OF_COLD,
+    SPELL_ICICLE_BURST,
     SPELL_OZOCUBUS_REFRIGERATION,
     SPELL_POLAR_VORTEX,
 },
@@ -117,13 +117,13 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Young Poisoner's Handbook
-    SPELL_OLGREBS_LAST_MERCY,
     SPELL_POISONOUS_VAPOURS,
     SPELL_FULSOME_DISTILLATION,
     SPELL_MERCURY_ARROW,
     SPELL_OLGREBS_TOXIC_RADIANCE,
     SPELL_VENOM_BOLT,
     SPELL_POISON_ARROW,
+    SPELL_OLGREBS_LAST_MERCY,
 },
 
 {   // Book of Lightning
@@ -144,9 +144,9 @@ static const vector<spell_type> spellbook_templates[] =
 
 {   // Book of Misfortune
     SPELL_SHACKLE,
-    SPELL_FALSE_IMAGE,
     SPELL_JINXBITE,
     SPELL_SCARLET_FETTERS,
+    SPELL_FALSE_IMAGE,
     SPELL_STOLEN_SIGHT,
     SPELL_VIOLENT_UNRAVELLING,
     SPELL_ENFEEBLE,
@@ -236,10 +236,10 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Book of Unlife
-    SPELL_BLIGHT,
     SPELL_SOUL_SPLINTER,
     SPELL_MARTYRS_KNELL,
     SPELL_DEATH_CHANNEL,
+    SPELL_BLIGHT,
 },
 
 #if TAG_MAJOR_VERSION == 34
@@ -281,11 +281,11 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Book of Power
-    SPELL_MANA_RUPTURE,
     SPELL_BATTLESPHERE,
     SPELL_BOMBARD,
     SPELL_FORTRESS_BLAST,
     SPELL_SPELLSPARK_SERVITOR,
+    SPELL_MANA_RUPTURE,
 },
 
 {   // Book of Cantrips
@@ -296,9 +296,9 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Party Tricks
-    SPELL_ELEMENTAL_WEAPON,
     SPELL_APPORTATION,
     SPELL_JINXBITE,
+    SPELL_ELEMENTAL_WEAPON,
     SPELL_INTOXICATE,
 },
 
@@ -337,9 +337,9 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Transmutation
-    SPELL_SCORPION_FORM,
     SPELL_PETRIFY,
     SPELL_IRRADIATE,
+    SPELL_SCORPION_FORM,
     SPELL_FULSOME_FUSILLADE,
 },
 

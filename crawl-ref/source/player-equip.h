@@ -99,6 +99,8 @@ struct player_equip_set
     void meld_equipment(vector<item_def*> to_meld, bool skip_effects = false);
     void unmeld_slot(equipment_slot slot, bool skip_effects = false);
     void unmeld_all_equipment(bool skip_effects = false);
+    // Unmeld only this item, unless a form or fishtail still blocks a slot.
+    bool unmeld_item(item_def& item, bool skip_effects = false);
     bool is_melded(const item_def& item);
 
     // Functions related to the equipping/unequipping process

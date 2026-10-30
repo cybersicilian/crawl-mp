@@ -9,6 +9,9 @@
 
 using std::vector;
 
+// Imus's documented awkwardness with two-handed weapons (-2 to hit).
+int imus_weapon_accuracy_penalty(const item_def* weapon);
+
 bool is_holy_item(const item_def& item, bool calc_unid = true, bool include_temp = true);
 bool is_evil_item(const item_def& item, bool calc_unid = true, bool include_temp = true);
 bool is_chaotic_item(const item_def& item, bool calc_unid = true, bool include_temp = true);

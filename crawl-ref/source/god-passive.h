@@ -254,6 +254,17 @@ enum class passive_t
 
     /// TSO provide blessings to allied creatures when you slay enemies
     inspire_followers,
+    imus_illusory_weapon,
+    imus_wall_bounce,
+    imus_illusory_ammo,
+    wyrm_quicksilver,
+    agraphede_anti_resist,
+    agraphede_poison_guard,
+    agraphede_poison_regen,
+    agraphede_vermin,
+    agraphede_enfeeble,
+    agraphede_poison_feed,
+    agraphede_spell_power,
 };
 
 enum ru_interference

@@ -21,6 +21,8 @@
 #include "misc.h" // december_holidays
 #include "mon-place.h"
 #include "mpr.h"
+#include "party.h"
+#include "player.h"
 #include "randbook.h"
 #include "religion.h" // upgrade_hepliaklqana_weapon
 #include "state.h"
@@ -792,6 +794,22 @@ int make_mons_weapon(monster_type type, int level, bool melee_only)
         { MONS_EFREET,                  EFREET_WSPEC },
         { MONS_ERICA,                   EFREET_WSPEC },
         { MONS_AZRAEL,                  EFREET_WSPEC },
+        { MONS_BRANDAGOTH, {
+            { { WPN_QUARTERSTAFF, 1 } }, {},
+            { { SPWPN_FLAMING, 1 } },
+        } },
+        { MONS_LICHBANE, {
+            { { WPN_GREAT_MACE, 1 }, { WPN_BATTLEAXE, 1 },
+              { WPN_GREAT_SWORD, 1 } },
+            { 2, 1, 3 },
+            { { SPWPN_HEAVY, 1 }, { SPWPN_FLAMING, 1 },
+              { SPWPN_ELECTROCUTION, 1 } },
+        } },
+        { MONS_FALLEN, {
+            { { WPN_GLAIVE, 1 } }, { 1, 3, 8 },
+            { { SPWPN_HEAVY, 3 }, { SPWPN_DISTORTION, 2 },
+              { SPWPN_ANTIMAGIC, 1 } },
+        } },
         { MONS_ANGEL, {
             { { WPN_WHIP,               3 },
               { WPN_SACRED_SCOURGE,     1 }, },
@@ -1170,6 +1188,40 @@ int make_mons_weapon(monster_type type, int level, bool melee_only)
     // special cases.
     switch (type)
     {
+    case MONS_LICHBANE:
+    {
+        const int unique_index = UNRAND_UNDEADHUNTER - UNRAND_START;
+        unique_item_status_type status = get_unique_item_status(UNRAND_UNDEADHUNTER);
+        if (party::is_enabled())
+        {
+            for (int slot = 0; slot < party::player_count(); ++slot)
+            {
+                const unique_item_status_type candidate =
+                    party::get_player(slot).unique_items[unique_index];
+                // Lost artefacts can regenerate in the Abyss; an existing
+                // copy anywhere in the party must take precedence.
+                if (candidate != UNIQ_NOT_EXISTS
+                    && (status == UNIQ_NOT_EXISTS
+                        || (status == UNIQ_LOST_IN_ABYSS
+                            && candidate != UNIQ_LOST_IN_ABYSS)))
+                {
+                    status = candidate;
+                }
+            }
+            // Shared-state synchronization copies the active hero's record
+            // to the rest of the party, so reconcile before taking fallback.
+            if (status != UNIQ_NOT_EXISTS)
+            {
+                you.unique_items[unique_index] = status;
+                for (int slot = 0; slot < party::player_count(); ++slot)
+                    party::get_player(slot).unique_items[unique_index] = status;
+            }
+        }
+        if (status == UNIQ_NOT_EXISTS
+            && make_item_unrandart(item, UNRAND_UNDEADHUNTER))
+            force_item = true;
+        break;
+    }
     case MONS_KOBOLD:
     case MONS_KOBOLD_BRIGAND:
         item.base_type = OBJ_WEAPONS;
@@ -1345,6 +1397,12 @@ int make_mons_weapon(monster_type type, int level, bool melee_only)
         set_item_ego_type(item, OBJ_WEAPONS, SPWPN_VENOM);
         break;
 
+    case MONS_ASCLEPIA:
+        force_item = true;
+        item.base_type = OBJ_STAVES;
+        item.sub_type = STAFF_ALCHEMY;
+        break;
+
     case MONS_ARACHNE:
         force_item = true;
         item.base_type = OBJ_STAVES;
@@ -1483,7 +1541,16 @@ int make_mons_weapon(monster_type type, int level, bool melee_only)
                                                 custom_name));
 
     if (thing_created == NON_ITEM)
+    {
+        // make_item_unrandart reserves the unique before a floor item slot
+        // is allocated. Keep Undeadhunter available if allocation fails.
+        if (type == MONS_LICHBANE
+            && is_unrandom_artefact(item, UNRAND_UNDEADHUNTER))
+        {
+            set_unique_item_status(item, UNIQ_NOT_EXISTS);
+        }
         return NON_ITEM;
+    }
 
     // Copy temporary item into the item array if were forcing it, since
     // items() won't have done it for us.
@@ -1541,6 +1608,15 @@ static void _give_weapon(monster *mon, int level, bool second_weapon = false)
         return;
 
     give_specific_item(mon, thing_created);
+    if (mon->type == MONS_LICHBANE && party::is_enabled())
+    {
+        const item_def* wielded = mon->mslot_item(MSLOT_WEAPON);
+        if (wielded && is_unrandom_artefact(*wielded, UNRAND_UNDEADHUNTER))
+            for (int slot = 0; slot < party::player_count(); ++slot)
+                party::get_player(slot).unique_items[UNRAND_UNDEADHUNTER
+                                                     - UNRAND_START]
+                    = get_unique_item_status(UNRAND_UNDEADHUNTER);
+    }
     if (second_weapon)
         return;
 
@@ -2258,6 +2334,7 @@ int make_mons_armour(monster_type type, int level)
     case MONS_AGNES:
     case MONS_BURIAL_ACOLYTE:
     case MONS_NECROMANCER:
+    case MONS_BRANDAGOTH:
     case MONS_VAMPIRE_MAGE:
     case MONS_PIKEL:
     case MONS_HELLBINDER:
@@ -2293,6 +2370,13 @@ int make_mons_armour(monster_type type, int level)
     case MONS_TIAMAT:
         force_item = true;
         make_item_unrandart(item, UNRAND_DRAGONSKIN);
+        break;
+
+    case MONS_ASCLEPIA:
+        force_item = true;
+        item.base_type = OBJ_ARMOUR;
+        item.sub_type = ARM_CLOAK;
+        item.plus = 2;
         break;
 
     case MONS_NESSOS:

@@ -499,6 +499,8 @@ void revive()
     you.props[CORROSION_KEY] = 0;
 
     undrain_hp(9999);
+    if (you.pending_revival)
+        party::apply_resurrection_cost();
     set_hp(9999);
     set_mp(9999);
     you.pending_revival = false;

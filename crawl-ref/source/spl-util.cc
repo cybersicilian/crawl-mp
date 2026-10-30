@@ -18,6 +18,7 @@
 
 #include "act-iter.h" // monster_near_iterator
 #include "areas.h"
+#include "automaton.h"
 #include "art-enum.h"
 #include "coordit.h"
 #include "directn.h"
@@ -308,7 +309,9 @@ spell_type get_spell_by_letter(char letter)
 
 bool add_spell_to_memory(spell_type spell)
 {
-    if (!coop_content::spell_available(spell))
+    if (!coop_content::spell_available(spell)
+        || (you.species == SP_AUTOMATON
+            && !automaton::has_automatic_trigger(spell)))
         return false;
 
     if (vehumet_is_offering(spell))
@@ -1219,6 +1222,8 @@ string casting_uselessness_reason(spell_type spell, bool temp, bool *god_forbids
 {
     if (god_forbids)
         *god_forbids = false;
+    if (you.species == SP_AUTOMATON && !automaton::has_automatic_trigger(spell))
+        return "this spell has no automatic engraving trigger.";
     if (temp)
     {
         if (you.species == SP_SPARKBORN && you.in_water())

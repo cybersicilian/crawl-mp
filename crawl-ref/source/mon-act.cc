@@ -4,9 +4,13 @@
 **/
 
 #include "AppHdr.h"
+#include "wyrm-essence.h"
+#include "spl-goditem.h"
 #include "automaton.h"
 #include "chain-devil.h"
 #include "level-time.h"
+#include "imus-prism.h"
+#include "imus-mirror.h"
 
 #include "mon-act.h"
 
@@ -1829,6 +1833,16 @@ static void _pre_monster_move(monster& mons)
     // Dissipate player ball lightnings and foxfires
     // that have left the player's sight
     // (monsters are allowed to 'cheat', as with orb of destruction)
+    if (mons.type == MONS_AGRAPHEDE_WEB_BALL)
+    {
+        const actor* owner = actor_by_mid(mons.summoner);
+        if (!owner || !owner->alive()
+            || !cell_see_cell(owner->pos(), mons.pos(), LOS_NO_TRANS))
+        {
+            monster_die(mons, KILL_RESET, NON_MONSTER);
+            return;
+        }
+    }
     if ((mons.type == MONS_BALL_LIGHTNING || mons_is_seeker(mons))
         && mons.summoner == MID_PLAYER
         && !cell_see_cell(you.pos(), mons.pos(), LOS_NO_TRANS))
@@ -2052,6 +2066,14 @@ void handle_monster_move(monster* mons)
     if (!mons->has_action_energy())
         return;
 
+    if (!disabled && mons->has_ench(ENCH_WYRM_ALBEDO)
+        && monster_is_debuffable(*mons) && one_chance_in(2))
+    {
+        simple_monster_message(*mons, " is interrupted by albedo!");
+        mons->speed_increment -= non_move_energy;
+        return;
+    }
+
     if (!disabled)
         move_solo_tentacle(mons);
 
@@ -2100,6 +2122,15 @@ void handle_monster_move(monster* mons)
         mons->lose_energy(EUT_MOVE);
         return;
     }
+
+    if (mons->type == MONS_IMUS_PRISM)
+    {
+        imus_prism_act(*mons);
+        skip_turn = true;
+    }
+
+    if (mons->type == MONS_IMUS_MIRROR && imus_mirror::act(*mons))
+        skip_turn = true;
 
     if (mons->type == MONS_FULMINANT_PRISM
         || mons->type == MONS_SHADOW_PRISM)
@@ -2704,6 +2735,12 @@ static void _post_monster_move(monster* mons)
 {
     if (invalid_monster(mons))
         return;
+
+    if (mons->has_ench(ENCH_WYRM_NIGREDO) && !cloud_at(mons->pos()))
+    {
+        const actor* source = mons->get_ench(ENCH_WYRM_NIGREDO).agent();
+        place_cloud(CLOUD_MIASMA, mons->pos(), 2, source ? source : mons);
+    }
 
     mons->handle_constriction();
 

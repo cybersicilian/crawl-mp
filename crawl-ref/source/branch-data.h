@@ -486,6 +486,15 @@ const Branch branches[NUM_BRANCHES] =
       YELLOW, BROWN,
       ')', {}, branch_noise::normal, 8,
       {BRANCH_BURROWS} },
+
+    { BRANCH_GOLEMFORGE, NUM_BRANCHES, -1, -1, 1, 20,
+      brflag::no_x_level_travel | brflag::no_items,
+      DNGN_ENTER_GOLEMFORGE, DNGN_EXIT_GOLEMFORGE, NUM_FEATURES,
+      "Golemforge", "the Golemforge", "Forge",
+      "You enter the abandoned forge-temple of the first coglins!",
+      LIGHTGREY, LIGHTCYAN,
+      '*', {}, branch_noise::normal, DEFAULT_MON_DIE_SIZE,
+      {} },
 };
 
 /*

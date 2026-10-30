@@ -4,6 +4,8 @@
 #include "ng-setup.h"
 
 #include "account-start.h"
+#include "acquire.h"
+#include "bag.h"
 #include "art-enum.h"
 #include "artefact.h"
 #include "character-trait.h"
@@ -17,6 +19,7 @@
 #include "invent.h"
 #include "item-name.h"
 #include "item-prop.h"
+#include "item-status-flag-type.h"
 #include "items.h"
 #include "item-use.h"
 #include "jobs.h"
@@ -151,7 +154,13 @@ item_def* newgame_make_item(object_class_type base,
     if (you.species == SP_IRIT && base == OBJ_ARMOUR && sub_type == ARM_ROBE)
         sub_type = ARM_LEATHER_ARMOUR;
 
-    inventory_category category = inventory_category_for(base);
+    // Some miscellaneous subtypes (bags) are equipment and must be placed in
+    // a gear slot before autoequip_item() can equip them.
+    item_def prototype;
+    prototype.base_type = base;
+    prototype.sub_type = sub_type;
+    prototype.quantity = qty;
+    inventory_category category = inventory_category_for(prototype);
     int slot;
     int start = category == INVENT_CONSUMABLE ? MAX_GEAR : 0;
     int end = category == INVENT_GEAR ? MAX_GEAR : ENDOFPACK;
@@ -216,7 +225,7 @@ item_def* newgame_make_item(object_class_type base,
     // Make sure branded and/or enchanted items appear as such.
     item_set_appearance(item);
 
-    if (item_type_is_equipment(item.base_type))
+    if (item_type_is_equipment(item.base_type) || bag::is_bag(item))
         autoequip_item(item);
 
     if (item.base_type == OBJ_MISSILES)
@@ -450,6 +459,19 @@ void give_items_skills(const newgame_def& ng)
     case JOB_PHILOSOPHER:
         _give_starting_unrand(ARM_HAT, UNRAND_PONDERING);
         break;
+    case JOB_CARAVAN:
+        // Party gold is shared, so retain this member's starting contribution.
+        you.gold += 150;
+        if (party::is_enabled())
+            party::sync_shared_gold(you.gold);
+        break;
+    case JOB_COLLECTOR:
+        if (item_def *scroll = newgame_make_item(OBJ_SCROLLS, SCR_COLLECTION))
+        {
+            scroll->props[COLLECTOR_CHOICE_KEY] = true;
+            scroll->flags |= ISFLAG_IDENTIFIED;
+        }
+        break;
     case JOB_BILLIONAIRE:
     {
         // Gold is shared in a party: grant the fortune once, even if a
@@ -469,6 +491,8 @@ void give_items_skills(const newgame_def& ng)
         break;
     }
     account_start::give_items();
+    if (party::multiplayer_enabled())
+        newgame_make_item(OBJ_SCROLLS, SCR_SOUL_RECALL);
     give_job_skills(you.char_class);
     _give_job_spells(you.char_class);
     if (you.char_class == JOB_ARCHAEOLOGIST)

@@ -59,6 +59,8 @@ bool handle_chain_removal(vector<item_def*>& to_remove, bool interactive);
 bool try_equip_item(item_def& item, bool instant = false);
 bool try_unequip_item(item_def& item);
 bool can_unequip_item(item_def& item, bool silent = false);
+// The first item whose removal would leave the player over lethal terrain.
+const item_def* flight_removal_hazard(const vector<item_def*>& to_remove);
 bool warn_about_changing_gear(const vector<item_def*>& to_remove,
                               item_def* to_equip = nullptr,
                               bool always_fast = false);

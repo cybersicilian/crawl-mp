@@ -16,8 +16,12 @@ const gods = [...godNames.matchAll(/case GOD_([A-Z_]+):\s+return "([^"]+)";/g)]
 gods.push('Jiyva');
 assert.equal(new Set(gods).size, gods.length, 'Native deity names remain distinct.');
 assert(gods.includes('Vorr'), 'Vorr joins the existing native shrine renderer.');
+assert(gods.includes('Vellum'), 'Vellum has a native shrine renderer.');
+assert(gods.includes('Imus Thea'), 'Imus Thea has a native shrine renderer.');
+assert(gods.includes('the Great Wyrm'), 'The Great Wyrm has a native shrine renderer.');
+assert(gods.includes('Agraphede'), 'Agraphede has a native shrine renderer.');
 const nativePortraits = gods.length * 7 + 2;
-const materialGradients = (gods.length * 7 + 4) * 2;
+const materialGradients = (gods.length * 7 + 5) * 2;
 
 (async function () {
     fs.mkdirSync(output, { recursive: true });
@@ -51,7 +55,7 @@ const materialGradients = (gods.length * 7 + 4) * 2;
         });
         for (const [id, file] of [
             ['item-properties', 'static/scripts/item-properties.js'],
-            ['./status-icons', 'game_data/static/status-icons.js'],
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
             ['./party-status-model', 'game_data/static/party-status-model.js'],
             ['./tileinfo-floor', 'game_data/static/tileinfo-floor.js'],
             ['./tileinfo-wall', 'game_data/static/tileinfo-wall.js'],
@@ -86,7 +90,8 @@ const materialGradients = (gods.length * 7 + 4) * 2;
                 window.jQuery('#gallery').append(row);
             });
             if (!videoMode) window.jQuery('#exceptions').append(build(undefined, null, 1000), build('No God', null, 1001),
-                build('Trog', 6, 1002, { penance: 30 }), build('Sif Muna', null, 1003));
+                build('Trog', 6, 1002, { penance: 30 }), build('Sif Muna', null, 1003),
+                build('No God', null, 1004, { species: 'Eldritch', defiance: 37, elder_rites: 2 }));
         }, { gods: videoMode ? showcase : gods, heroArt, videoMode });
         if (videoMode) {
             await page.evaluate(() => {
@@ -148,6 +153,8 @@ const materialGradients = (gods.length * 7 + 4) * 2;
         assert.equal(await page.locator('#party_faith_1000.is-unknown').count(), 1);
         assert.equal(await page.locator('#party_faith_1001.is-unaffiliated').count(), 1);
         assert.equal(await page.locator('#party_faith_1002.is-penance').count(), 1);
+        assert.match(await page.locator('#party_faith_1004').getAttribute('aria-label'), /Defiance 37\/100/);
+        assert.equal(await page.locator('#party_faith_1004 [data-ui-icon="spark"]').count(), 1);
         assert.match(await page.locator('#party_faith_1002').getAttribute('aria-label'), /Under penance/);
         const motion = await page.evaluate(() => {
             const portraits = [...document.querySelectorAll('.party-portrait')];

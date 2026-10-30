@@ -4,11 +4,13 @@
  **/
 
 #include "AppHdr.h"
+#include "kimjoy-artifacts.h"
 #include "chain-devil.h"
 #include "eldritch.h"
 #include "god-vellum.h"
 
 #include "player-reacts.h"
+#include "bunker.h"
 
 #include <algorithm>
 #include <cerrno>
@@ -74,6 +76,7 @@
 #include "ouch.h"
 #include "output.h"
 #include "party.h"
+#include "mercenary.h"
 #include "player.h"
 #include "player-stats.h"
 #include "random.h"
@@ -706,6 +709,13 @@ static void _decrement_transform_duration(int delay)
     if (you.form == you.default_form || you.form == transformation::flux)
         return;
 
+    if (you.form == transformation::golem)
+    {
+        if (!golem_armour_complete(you))
+            return_to_default_form();
+        return;
+    }
+
     if (you.form == transformation::scorpion
         && you.has_spell(SPELL_SCORPION_FORM)
         && calc_spell_power(SPELL_SCORPION_FORM) >= 75)
@@ -1155,7 +1165,7 @@ static void _handle_emergency_flight()
 static void _maybe_attune_regen_items()
 {
     bool attune_regen = you.check_hp_regen_attunement;
-    bool attune_mana_regen = you.check_mp_regen_attunement;
+    bool attune_mana_regen = you.uses_magic_reserve() && you.check_mp_regen_attunement;
     you.check_hp_regen_attunement = false;
     you.check_mp_regen_attunement = false;
 
@@ -1178,7 +1188,7 @@ static void _maybe_attune_regen_items()
             || vellum::item_bonus(you, arm, ARTP_REGENERATION);
 
         if ((attune_regen && regen_hp
-             && (you.magic_points == you.max_magic_points || !is_mana_regen_item(arm)))
+             && (!you.uses_magic_reserve() || you.magic_points == you.max_magic_points || !is_mana_regen_item(arm)))
             || (attune_mana_regen && is_mana_regen_item(arm)
                 && (you.hp == you.hp_max || !regen_hp)))
         {
@@ -1187,7 +1197,7 @@ static void _maybe_attune_regen_items()
                 gained_regen = true;
             if (arm.is_type(OBJ_JEWELLERY, AMU_CHEMISTRY))
                 gained_chemistry = true;
-            else if (!gained_mana_regen && is_mana_regen_item(arm))
+            else if (you.uses_magic_reserve() && !gained_mana_regen && is_mana_regen_item(arm))
                 gained_mana_regen = true;
 
             eq_list.push_back(is_artefact(arm) ? get_artefact_name(arm) :
@@ -1205,14 +1215,19 @@ static void _maybe_attune_regen_items()
 
     vector<string> msgs;
 
-    if (gained_regen || gained_mana_regen)
+    if (you.species == SP_AUTOMATON && gained_mana_regen)
+        msgs.emplace_back(gained_regen ? "regenerate health and dissipate heat more quickly"
+                                      : "dissipate heat more quickly");
+    else if (gained_regen || gained_mana_regen)
     {
         msgs.emplace_back(make_stringf("regenerate%s more quickly",
                 gained_regen && gained_mana_regen ? " health and magic"
                 : (gained_regen ? "" : " magic")));
     }
     if (gained_chemistry)
-        msgs.emplace_back("extract magic from the potions you drink");
+        msgs.emplace_back(you.species == SP_AUTOMATON
+            ? "dissipate heat when you drink potions"
+            : "extract magic from the potions you drink");
 
     plural = plural || eq_list.size() > 1;
     string eq_str = comma_separated_line(eq_list.begin(), eq_list.end());
@@ -1252,7 +1267,7 @@ static void _regenerate_hp_and_mp(int delay)
     while (you.hit_points_regeneration >= 100)
     {
         // at low mp, "mana link" restores mp in place of hp
-        if (you.has_mutation(MUT_MANA_LINK)
+        if (you.uses_magic_reserve() && you.has_mutation(MUT_MANA_LINK)
             && !x_chance_in_y(you.magic_points, you.max_magic_points))
         {
             inc_mp(1);
@@ -1276,7 +1291,10 @@ static void _regenerate_hp_and_mp(int delay)
 
         while (you.magic_points_regeneration >= 100)
         {
-            inc_mp(1);
+            if (you.species == SP_AUTOMATON)
+                automaton::cool_down(you, 1);
+            else
+                inc_mp(1);
             you.magic_points_regeneration -= 100;
         }
 
@@ -1337,6 +1355,14 @@ void player_reacts()
     if (crawl_state.game_is_descent() && !env.properties.exists(DESCENT_STAIRS_KEY))
         return;
 
+    bunker::retrieve_after_moving();
+
+    // A crowded arrival must not permanently lose a Caravan's starting hire.
+    if (you.char_class == JOB_CARAVAN
+        && you.props.exists("caravan_mercenary_pending"))
+        mercenary::ensure_starter_companion();
+
+    automaton::react_to_action();
     automaton::advance_bee_engraving();
 
 

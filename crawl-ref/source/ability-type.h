@@ -346,6 +346,14 @@ enum ability_type
 #endif
     ABIL_WU_JIAN_WALLJUMP,
 
+    // Agraphede (stable across both supported save tags).
+    ABIL_AGRAPHEDE_WEB = 1290,
+    ABIL_AGRAPHEDE_CONVERT_POISON,
+    ABIL_AGRAPHEDE_ENCHANT_POISON,
+    ABIL_AGRAPHEDE_TRAP,
+    ABIL_AGRAPHEDE_HORNET_STING,
+    ABIL_AGRAPHEDE_SUMMON_SPIDER,
+
     // Ignis
 #if TAG_MAJOR_VERSION == 34
     ABIL_IGNIS_SEA_OF_FIRE = 1300,
@@ -358,11 +366,32 @@ enum ability_type
     ABIL_IGNIS_RISING_FLAME,
 #endif
 
+    // Great Wyrm (stable for both save tag versions).
+    ABIL_WYRM_INFUSE = 1310,
+    ABIL_WYRM_NIGREDO,
+    ABIL_WYRM_ALBEDO,
+    ABIL_WYRM_CITRINITAS,
+    ABIL_WYRM_VIRIDITAS,
+    ABIL_WYRM_RUBEDO,
+    ABIL_WYRM_FULSOME_DISTILLATION,
+    ABIL_WYRM_EVAPORATE,
+
     ABIL_VORR_RUPTURE = 1320,
     ABIL_VORR_RED_PASSAGE,
     ABIL_VORR_GREAT_LETTING,
 
     ABIL_VELLUM_WEAVE = 1330,
+
+    // Imus Thea (stable religious ability bindings).
+    ABIL_IMUS_PRISMATIC_PRISM = 1340,
+    ABIL_IMUS_SPECTRUM,
+    ABIL_IMUS_FRAGMENTATION,
+
+    // Divine weapon gifts: fixed bindings in both supported save tags.
+    ABIL_ZIN_BLESS_WEAPON = 1343,
+    ABIL_ELYVILON_BLESS_WEAPON,
+    ABIL_JIYVA_BLESS_WEAPON,
+    ABIL_CHEIBRIADOS_BLESS_WEAPON,
 
 #if TAG_MAJOR_VERSION == 34
     ABIL_PANTHEON_CONVERGENCE = 1490,
@@ -406,6 +435,9 @@ enum ability_type
     ABIL_KITSUNE_CHARM,
     ABIL_MELIAI_SMITE,
     ABIL_STEP_BEHIND,
+    ABIL_GOLEM_FORM,
+    ABIL_DEPLOY_BUNKER,
+    ABIL_MERCENARY_GIFT,
 
     // Stable god IDs select one policy row without borrowing worship state.
     ABIL_ELDRITCH_FIRST_POWER = 2000,

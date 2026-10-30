@@ -16,7 +16,8 @@ public:
 public:
     ranged_attack(actor *attacker, actor *defender,
                   const item_def *wpn,
-                  bool teleport = false, actor *blame = 0);
+                  bool teleport = false, actor *blame = 0,
+                  bool illusory_copy = false);
 
     // Applies attack damage and other effects.
     bool attack();
@@ -27,6 +28,7 @@ public:
     void set_projectile_prefix(string prefix);
     string projectile_name() const;
     bool is_piercing() const;
+    bool is_illusory_projection() const { return illusory_projection; }
 
     void copy_params_to(ranged_attack &other) const;
 
@@ -69,6 +71,7 @@ private:
     string proj_name;
     bool teleport;
     bool _did_net;
+    bool illusory_projection;
 };
 
 int player_archery_damage_bonus(int dam, bool random);

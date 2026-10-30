@@ -269,6 +269,8 @@ string process_description(const describe_info &inf, bool include_title)
 //      seems acceptable.
 static string _format_prop_desc(string prop_name, string prop_desc)
 {
+    prop_name = automaton::resource_text(you, prop_name);
+    prop_desc = automaton::resource_text(you, prop_desc);
     // XXX: It is possible some Android layouts are too small to wrap properly
     //      to 80 characters (and I am currently not certain how to check on my
     //      own), so let's just not do any justification.
@@ -3335,7 +3337,7 @@ string get_item_description(const item_def &item,
             description << "\nMenu/colouring prefixes: " << menu_prefix;
     }
 
-    return description.str();
+    return automaton::resource_text(you, description.str());
 }
 
 string get_cloud_desc(cloud_type cloud, bool include_title)

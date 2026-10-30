@@ -61,7 +61,7 @@ fs.mkdirSync(out, { recursive: true });
         for (const [name, file] of [
             ['spell-cost', 'static/scripts/spell-cost.js'],
             ['item-properties', 'static/scripts/item-properties.js'], ['character-stat-help', 'static/scripts/character-stat-help.js'],
-            ['./party-model', 'game_data/static/party-model.js'], ['./party-status-model', 'game_data/static/party-status-model.js'], ['./status-icons', 'game_data/static/status-icons.js'],
+            ['./party-model', 'game_data/static/party-model.js'], ['./party-status-model', 'game_data/static/party-status-model.js'], ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
             ['./enums', 'game_data/static/enums.js'], ['./inspection-dialog', 'game_data/static/inspection-dialog.js'],
             ['./workflow-actions', 'game_data/static/workflow-actions.js'],
             ['./native-tile-art', 'game_data/static/native-tile-art.js'],
@@ -69,6 +69,7 @@ fs.mkdirSync(out, { recursive: true });
             ['./context-menu', 'game_data/static/context-menu.js'],
             ['./party-skill-training', 'game_data/static/party-skill-training.js'],
             ['./item-context-menu', 'game_data/static/item-context-menu.js'],
+            ['./folio-bag', 'game_data/static/folio-bag.js'],
             ['./folio-equipment', 'game_data/static/folio-equipment.js'], ['./party-power-cards', 'game_data/static/party-power-cards.js'],
             ['./party-inspector-render', 'game_data/static/party-inspector-render.js'],
             ['./menu-keyboard', 'game_data/static/menu-keyboard.js'],

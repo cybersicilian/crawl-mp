@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "bag.h"
 #include "coop-content.h"
 
 #include "item-prop.h"
@@ -127,6 +128,7 @@ static const armour_def Armour_prop[] =
             { SPARM_FIRE_RESISTANCE, 2 },
             { SPARM_POSITIVE_ENERGY, 2 },
             { SPARM_NORMAL,          4 },
+            { SPARM_MANA_REGEN,      2 },
             { SPARM_WILLPOWER,       4 },
     }},
     { ARM_LEATHER_ARMOUR,       "leather armour",         3,  -40,   20,
@@ -176,6 +178,7 @@ static const armour_def Armour_prop[] =
             { SPARM_INVISIBILITY, 1 },
             { SPARM_HARM,         1 },
             { SPARM_SHADOWS,      1 },
+            { SPARM_STASIS,       1 },
     }},
 
     { ARM_GLOVES,               "gloves",                 1,   0,   45,
@@ -259,6 +262,7 @@ static const armour_def Armour_prop[] =
             { SPARM_POSITIVE_ENERGY,   5 },
             { SPARM_NORMAL,            5 },
             { SPARM_REFLECTION,        9 },
+            { SPARM_BUNKER,            4 },
             { SPARM_PROTECTION,       14 },
     }},
     { ARM_KITE_SHIELD,         "kite shield",             8, -100,  70,
@@ -270,6 +274,7 @@ static const armour_def Armour_prop[] =
             { SPARM_NORMAL,               4 },
             { SPARM_CORROSION_RESISTANCE, 4 },
             { SPARM_REFLECTION,           13 },
+            { SPARM_BUNKER,                4 },
             { SPARM_PROTECTION,           10 },
     }},
     { ARM_TOWER_SHIELD,        "tower shield",           13, -150,  80,
@@ -281,6 +286,7 @@ static const armour_def Armour_prop[] =
             { SPARM_PONDEROUSNESS,        5 },
             { SPARM_CORROSION_RESISTANCE, 5 },
             { SPARM_REFLECTION,           9 },
+            { SPARM_BUNKER,               4 },
             { SPARM_PROTECTION,           15 },
     }},
 
@@ -305,6 +311,8 @@ static const armour_def Armour_prop[] =
         ARMF_STEALTH),
     DRAGON_ARMOUR(GOLDEN,      "golden",                 12, -230,  800,
         ARMF_RES_FIRE | ARMF_RES_COLD | ARMF_RES_POISON),
+    { ARM_IRON_DRAGON_ARMOUR, "iron dragon scales",      16, -270, 800,
+        SLOT_BODY_ARMOUR, SIZE_LITTLE, SIZE_GIANT, false, 37, {}, 0 },
 
 #undef DRAGON_ARMOUR
 };
@@ -491,6 +499,18 @@ static const vector<brand_weight_tuple> RANGED_BRANDS = {
     { SPWPN_DRAINING,      7 },
     { SPWPN_ELECTROCUTION, 4 },
     { SPWPN_ANTIMAGIC,     2 },
+};
+
+/// Seeking is restricted to bows; other launchers keep the ordinary pool.
+static const vector<brand_weight_tuple> BOW_BRANDS = {
+    { SPWPN_NORMAL,        54 },
+    { SPWPN_FLAMING,       11 },
+    { SPWPN_FREEZING,      11 },
+    { SPWPN_HEAVY,          7 },
+    { SPWPN_DRAINING,       7 },
+    { SPWPN_ELECTROCUTION,  4 },
+    { SPWPN_ANTIMAGIC,      2 },
+    { SPWPN_SEEKING,        4 },
 };
 
 /// brand weights for holy (TSO-blessed) weapons.
@@ -818,16 +838,16 @@ static const weapon_def Weapon_prop[] =
 
     { WPN_SHORTBOW,          "shortbow",            8,  2, 14,
         SK_RANGED_WEAPONS,   SIZE_LITTLE, NUM_SIZE_LEVELS,
-        DAMV_NON_MELEE, 8, 0, 30, RANGED_BRANDS },
+        DAMV_NON_MELEE, 8, 0, 30, BOW_BRANDS },
     { WPN_ORCBOW,            "orcbow",             11, -3, 15,
         SK_RANGED_WEAPONS,   SIZE_LITTLE, NUM_SIZE_LEVELS,
-        DAMV_NON_MELEE, 8, 20, 40, RANGED_BRANDS },
+        DAMV_NON_MELEE, 8, 20, 40, BOW_BRANDS },
     { WPN_ARBALEST,          "arbalest",           16, -2, 19,
         SK_RANGED_WEAPONS,   SIZE_LITTLE, NUM_SIZE_LEVELS,
         DAMV_NON_MELEE, 5, 20, 75, RANGED_BRANDS },
     { WPN_LONGBOW,           "longbow",            14,  0, 17,
         SK_RANGED_WEAPONS,   SIZE_MEDIUM, NUM_SIZE_LEVELS,
-        DAMV_NON_MELEE, 2, 13, 110, RANGED_BRANDS },
+        DAMV_NON_MELEE, 2, 13, 110, BOW_BRANDS },
     { WPN_TRIPLE_CROSSBOW,   "triple crossbow",    23, -2, 23,
         SK_RANGED_WEAPONS,   SIZE_SMALL, NUM_SIZE_LEVELS,
         DAMV_NON_MELEE, 0, 13, 200, RANGED_BRANDS },
@@ -988,9 +1008,11 @@ static const item_set_def item_sets[] =
     { "blast wand",         OBJ_WANDS,      { WAND_ICEBLAST, WAND_ROOTS, WAND_WARPING } },
     { "ally scroll",        OBJ_SCROLLS,    { SCR_SUMMONING, SCR_BUTTERFLIES } },
     { "area misc",          OBJ_MISCELLANY, { MISC_CONDENSER_VANE,
-                                              MISC_TIN_OF_TREMORSTONES } },
+                                              MISC_TIN_OF_TREMORSTONES,
+                                              MISC_AIR_HORN } },
     { "ally misc",          OBJ_MISCELLANY, { MISC_BOX_OF_BEASTS,
-                                              MISC_SACK_OF_SPIDERS } },
+                                              MISC_SACK_OF_SPIDERS,
+                                              MISC_PIPE_OF_RECALL } },
     { "control misc",       OBJ_MISCELLANY, { MISC_PHIAL_OF_FLOODS,
                                               MISC_GRAVITAMBOURINE } },
 };
@@ -1348,6 +1370,7 @@ static map<monster_type, armour_type> _monster_hides = {
     { MONS_PEARL_DRAGON,        ARM_PEARL_DRAGON_ARMOUR },
     { MONS_SHADOW_DRAGON,       ARM_SHADOW_DRAGON_ARMOUR },
     { MONS_QUICKSILVER_DRAGON,  ARM_QUICKSILVER_DRAGON_ARMOUR },
+    { MONS_IRON_DRAGON,         ARM_IRON_DRAGON_ARMOUR },
 };
 
 /**
@@ -2234,9 +2257,26 @@ string launched_projectile_name(const item_def &item)
     }
 }
 
+bool is_imus_illusory_weapon(const actor* owner, const item_def& item)
+{
+    return owner == &you && have_passive(passive_t::imus_illusory_weapon)
+           && item.base_type == OBJ_WEAPONS && !is_range_weapon(item)
+           && you.weapon() == &item;
+}
+
+int imus_ammo_replication_denominator(const item_def& item)
+{
+    if (item.base_type != OBJ_MISSILES
+        || !have_passive(passive_t::imus_illusory_ammo))
+        return 0;
+    return max(1, 400 / max(1, you.piety()));
+}
+
 // Returns true if item can be reasonably thrown without a launcher.
 bool is_throwable(const actor *actor, const item_def &wpn)
 {
+    if (is_imus_illusory_weapon(actor, wpn))
+        return true;
     if (wpn.base_type != OBJ_MISSILES)
         return false;
     if (!actor)
@@ -2512,6 +2552,8 @@ static map<scroll_type, item_rarity_type> _scroll_rarity = {
     { SCR_SOUL_RECALL,    RARITY_RARE },
     { SCR_SHARED_VIGOUR,  RARITY_RARE },
     { SCR_ACQUIREMENT,    RARITY_VERY_RARE },
+    { SCR_COLLECTION,     RARITY_VERY_RARE },
+    { SCR_WISH,           RARITY_VERY_RARE },
 };
 
 item_rarity_type consumable_rarity(const item_def &item)
@@ -3069,6 +3111,10 @@ equipment_slot get_item_slot(const item_def& item)
 
 equipment_slot get_item_slot(object_class_type type, int sub_type)
 {
+    if (type == OBJ_MISCELLANY
+        && (sub_type == MISC_POUCH || sub_type == MISC_SATCHEL
+            || sub_type == MISC_BAG_OF_PLENTY))
+        return SLOT_BAG;
     switch (type)
     {
     case OBJ_WEAPONS:
@@ -3099,6 +3145,8 @@ equipment_slot get_item_slot(object_class_type type, int sub_type)
  */
 vector<equipment_slot> get_all_item_slots(const item_def& item)
 {
+    if (bag::is_bag(item))
+        return {SLOT_BAG};
     switch (item.base_type)
     {
     case OBJ_WEAPONS:
@@ -3779,6 +3827,8 @@ string item_name_for_set(item_set_type typ)
 // character, ignoring temporary effects, curses, etc.
 bool is_equippable_item(const item_def& item)
 {
+    if (bag::is_bag(item))
+        return can_equip_item(item);
     switch (item.base_type)
     {
         case OBJ_WEAPONS:
@@ -3843,6 +3893,7 @@ int jewellery_usefulness_limit(jewellery_type type)
         // Completely non-stacking
         case RING_SEE_INVISIBLE:
         case RING_RESIST_CORROSION:
+        case RING_ELEC_RESISTANCE:
         case RING_FLIGHT:
         case AMU_ACROBAT:
         case AMU_GUARDIAN_SPIRIT:

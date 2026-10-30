@@ -1,0 +1,22 @@
+name: "Brandagoth"
+glyph: {char: "o", colour: darkgrey}
+flags: [unique, see_invis, speaks, warm_blood, male]
+resists: {fire: 3, cold: -1}
+exp: 1100
+species: orc
+will: 80
+attacks:
+ - {type: hit, flavour: fire, damage: 7}
+hd: 12
+hp_10x: 800
+ac: 12
+ev: 6
+spells: brandagoth
+has_corpse: true
+shout: shout
+intelligence: human
+habitat: amphibious_lava
+speed: 10
+uses: weapons_armour
+size: medium
+shape: humanoid

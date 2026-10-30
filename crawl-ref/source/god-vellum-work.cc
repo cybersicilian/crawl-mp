@@ -316,7 +316,7 @@ bool commit(const quote& prepared)
         lose_piety(prepared.cost);
     you.equipment.update();
     const int lost_mp = old_mp - you.scan_artefacts(ARTP_MAGICAL_POWER);
-    if (lost_mp > 0 && !you.has_mutation(MUT_HP_CASTING))
+    if (lost_mp > 0 && you.uses_magic_reserve())
         pay_mp(lost_mp);
     // MP depletion above covers native and borrowed losses together.
     you.props["vellum_applied_mp"] = bonus(you, ARTP_MAGICAL_POWER);

@@ -11,13 +11,26 @@ for (const name of ['party-model', 'party-progress-model']) {
 const project = modules['./party-progress-model'].project;
 assert.equal(project(null).gold, null);
 assert.equal(project(null).place, null);
+assert.equal(project(null).bribeFund, null);
 assert.equal(project(null).runesKnown, false);
 const state = { controlled_slot: 1, gold: 0, members: [
-    { slot: 0, place: 'D:1', runes: ['serpentine', 'silver'] },
-    { slot: 1, place: 'D:2', runes: ['silver', 'golden'] }
+    { slot: 0, god: 'Gozag', place: 'D:1', bribe_fund: 3000, runes: ['serpentine', 'silver'] },
+    { slot: 1, god: 'Gozag', place: 'D:2', bribe_fund: 1725, runes: ['silver', 'golden'] }
 ] };
 assert.equal(project(state).gold, 0);
 assert.equal(project(state).place, 'D:2');
+assert.equal(project(state).bribeFund, 1725, 'Shows the controlled hero’s branch fund');
+assert.equal(project({ ...state, controlled_slot: 0 }).bribeFund, 3000, 'Switching heroes follows their branch');
+for (const god of ['Trog', 'No God', '', null, undefined]) {
+    const members = [state.members[0], { ...state.members[1], god }];
+    assert.equal(project({ ...state, members }).bribeFund, null, 'Only the controlled Gozag worshipper sees the fund');
+    assert.equal(project({ ...state, members, controlled_slot: 0 }).bribeFund, 3000,
+        'Another hero’s religion does not hide the controlled Gozag worshipper’s fund');
+}
+for (const bribe_fund of [0, -1, '3000', Infinity, 1.5, undefined]) {
+    const members = [state.members[0], { ...state.members[1], bribe_fund }];
+    assert.equal(project({ ...state, members }).bribeFund, null, 'Exhausted, absent or invalid funds stay hidden');
+}
 assert.equal(project(state).runes.length, 3, 'Party rune union does not double-count');
 assert.equal(project(state).runes[0].tile, 'RUNE_SNAKE');
 assert.equal(project(state).runesKnown, true);

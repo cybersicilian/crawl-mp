@@ -365,6 +365,7 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
         animate: function ()
         {
+            if (!options.ready()) return;
             var tick = Math.floor(window.performance.now() / 250);
             var background = !options.get("tile_realtime_anim") || tick !== last_background_tick;
             if (background) {
@@ -435,7 +436,8 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             clearTimeout(anim_interval);
             anim_interval = null;
         }
-        if (animation_running && options.get("tile_realtime_anim"))
+        // game_init runs before the native options packet is dispatched.
+        if (animation_running && options.ready() && options.get("tile_realtime_anim"))
         {
             anim_interval = setInterval(function () {
                 renderer.animate();

@@ -55,6 +55,7 @@
 #include "transform.h"
 #include "traps.h"
 #include "view.h"
+#include "wyrm-essence.h"
 #include "xom.h"
 
 static int _scale_pot_duration(int base, bool is_potion)
@@ -163,8 +164,15 @@ public:
             mpr("That felt strangely inert.");
         // need to redraw from yellow to green even if no hp was gained
         if (you.duration[DUR_POISONING])
-            you.redraw_hit_points = true;
-        you.duration[DUR_POISONING] = 0;
+        {
+            if (you_worship(GOD_AGRAPHEDE))
+                simple_god_message(" prevents the cure of poison.");
+            else
+            {
+                you.redraw_hit_points = true;
+                you.duration[DUR_POISONING] = 0;
+            }
+        }
         you.duration[DUR_CONF] = 0;
         return true;
     }
@@ -610,7 +618,7 @@ public:
 
     bool can_quaff(string *reason = nullptr, bool temp = true) const override
     {
-        if (you.has_mutation(MUT_HP_CASTING) || temp && !you.max_magic_points)
+        if (!you.uses_magic_reserve() || temp && !you.max_magic_points)
         {
             if (reason)
                 *reason = "You have no magic to restore.";
@@ -619,7 +627,8 @@ public:
         else if (temp && you.magic_points == you.max_magic_points)
         {
             if (reason)
-                *reason = "Your magic is already full.";
+                *reason = you.species == SP_AUTOMATON ? "You have no heat to dissipate."
+                                                     : "Your magic is already full.";
             return false;
         }
         return true;
@@ -630,7 +639,7 @@ public:
         int amount = is_potion ? you.scale_potion_mp_healing(POT_MAGIC_MP)
                                : POT_MAGIC_MP;
         inc_mp(amount);
-        if (you.has_mutation(MUT_HP_CASTING))
+        if (!you.uses_magic_reserve())
             mpr("Magic washes over you without effect.");
         else
         {
@@ -642,7 +651,8 @@ public:
             else if (is_potion && you.has_mutation(MUT_DOUBLE_POTION_HEAL))
                 mpr("You savour every drop.");
 
-            mpr("Magic courses through your body.");
+            mpr(you.species == SP_AUTOMATON ? "Heat dissipates from your body."
+                                          : "Magic courses through your body.");
         }
         return true;
     }
@@ -1142,6 +1152,7 @@ public:
 
         int sum_hp_pct = 0;
         int sum_mp_pct = 0;
+        int mana_users = 0;
         int living_on_floor = 0;
 
         for (int i = 0; i < count; ++i)
@@ -1153,9 +1164,11 @@ public:
                 continue;
 
             sum_hp_pct += (p.hp * 100) / max(1, p.hp_max);
-            sum_mp_pct += p.max_magic_points > 0
-                          ? (p.magic_points * 100) / p.max_magic_points
-                          : 100;
+            if (p.uses_magic_reserve() && p.max_magic_points > 0)
+            {
+                sum_mp_pct += (p.magic_points * 100) / p.max_magic_points;
+                ++mana_users;
+            }
             ++living_on_floor;
         }
 
@@ -1163,7 +1176,7 @@ public:
             return false;
 
         const int avg_hp_pct = min(100, (sum_hp_pct / living_on_floor) + 20);
-        const int avg_mp_pct = min(100, (sum_mp_pct / living_on_floor) + 20);
+        const int avg_mp_pct = min(100, (sum_mp_pct / max(1, mana_users)) + 20);
 
         for (int i = 0; i < count; ++i)
         {
@@ -1178,7 +1191,7 @@ public:
                 const int target_hp = max(p.hp, (p.hp_max * avg_hp_pct) / 100);
                 p.hp = min(p.hp_max, target_hp + 5);
             }
-            if (p.max_magic_points > 0)
+            if (p.uses_magic_reserve() && p.max_magic_points > 0)
             {
                 const int target_mp = max(p.magic_points,
                                           (p.max_magic_points * avg_mp_pct) / 100);
@@ -1368,6 +1381,60 @@ public:
     }
 };
 
+template <potion_type Essence>
+class PotionWyrmEssence : public PotionEffect
+{
+    PotionWyrmEssence() : PotionEffect(Essence) { }
+public:
+    static const PotionWyrmEssence& instance()
+    {
+        static PotionWyrmEssence instance;
+        return instance;
+    }
+
+    bool effect(bool = true, int power = 40, bool is_potion = true) const override
+    {
+        if (!you_worship(GOD_GREAT_WYRM))
+        {
+            simple_god_message(" whispers that only followers may embrace this essence.",
+                               GOD_GREAT_WYRM);
+            return true;
+        }
+        switch (Essence)
+        {
+        case POT_NIGREDO:
+            // Permanent HP rot is no longer a current player mechanic. Use
+            // the existing temporary draining effect for alchemical decay.
+            return PotionDecay::instance().effect(true, power, is_potion);
+        case POT_ALBEDO:
+            return PotionCancellation::instance().effect(true, power, is_potion);
+        case POT_CITRINITAS:
+            mpr("You feel empowered.");
+            wyrm_essence::empower_player(you, you.piety() / 50 + random2(10),
+                                          you.mid);
+            return true;
+        case POT_VIRIDITAS:
+            you.duration[DUR_POISONING] = 0;
+            you.duration[DUR_CONF] = 0;
+            you.duration[DUR_SLOW] = 0;
+            you.duration[DUR_PETRIFYING] = 0;
+            you.duration[DUR_WEAK] = 0;
+            you.redraw_hit_points = true;
+            you.redraw_evasion = true;
+            mpr("You feel restored.");
+            return true;
+        case POT_RUBEDO:
+            mprf(MSGCH_DURATION, "You feel protected.");
+            you.increase_duration(DUR_RESISTANCE,
+                                  _scale_pot_duration(min(random2(max(1, power)) + 15,
+                                                          20), is_potion));
+            return true;
+        default:
+            return false;
+        }
+    }
+};
+
 static const unordered_map<potion_type, const PotionEffect*, std::hash<int>> potion_effects = {
     { POT_CURING, &PotionCuring::instance(), },
     { POT_HEAL_WOUNDS, &PotionHealWounds::instance(), },
@@ -1396,6 +1463,11 @@ static const unordered_map<potion_type, const PotionEffect*, std::hash<int>> pot
     { POT_SOUL_AMBROSIA, &PotionSoulAmbrosia::instance(), },
     { POT_CONCORD, &PotionConcord::instance(), },
     { POT_TRANSFUSION, &PotionTransfusion::instance(), },
+    { POT_NIGREDO, &PotionWyrmEssence<POT_NIGREDO>::instance(), },
+    { POT_ALBEDO, &PotionWyrmEssence<POT_ALBEDO>::instance(), },
+    { POT_CITRINITAS, &PotionWyrmEssence<POT_CITRINITAS>::instance(), },
+    { POT_VIRIDITAS, &PotionWyrmEssence<POT_VIRIDITAS>::instance(), },
+    { POT_RUBEDO, &PotionWyrmEssence<POT_RUBEDO>::instance(), },
 };
 
 const PotionEffect* get_potion_effect(potion_type pot)
@@ -1429,6 +1501,8 @@ static const map<potion_type, string> _spore_msg =
 
 static void _handle_potion_fungus(potion_type potion)
 {
+    if (!_spore_msg.count(potion))
+        return;
     // Baseline chance not to trigger.
     if (!one_chance_in(3))
         return;
@@ -1470,6 +1544,13 @@ static void _handle_potion_fungus(potion_type potion)
 bool quaff_potion(item_def &potion, bool force)
 {
     const bool was_known = item_type_known(potion);
+
+    if (player_under_penance(GOD_GREAT_WYRM)
+        && wyrm_essence::penance_extracts_potion(random2(3)))
+    {
+        simple_god_message(" extracts your potion before you drink!", GOD_GREAT_WYRM);
+        return true;
+    }
 
     if (!was_known)
     {

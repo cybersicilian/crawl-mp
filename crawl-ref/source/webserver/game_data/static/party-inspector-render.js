@@ -162,6 +162,7 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
             { lbl: "INT", val: model.display(m.intel) },
             { lbl: "DEX", val: model.display(m.dex) },
             { lbl: "XL / NEXT", val: model.display(m.xl) + " (" + model.percentage(m.xl_next) + ")" },
+            { lbl: "LEVEL CAP", val: model.display(m.xl_cap) },
             { lbl: "AC", val: model.display(m.ac) },
             { lbl: "EV", val: model.display(m.ev) },
             { lbl: "SH", val: model.display(m.sh) },
@@ -231,6 +232,17 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
             $resGrid.append($rRow);
         }
         $panelOverview.append($resGrid);
+
+        var banes = statusModel.banes(m);
+        $panelOverview.append($("<div class='party-insp-section-title'>Banes</div>"));
+        var $baneTable = $("<table class='party-insp-table party-insp-banes'><thead><tr><th>Bane</th><th>Recovery</th><th>Effect</th></tr></thead><tbody></tbody></table>");
+        banes.entries.forEach(function (bane) {
+            $baneTable.find("tbody").append($("<tr></tr>").append($("<td></td>").append(icons.effectArt(bane), document.createTextNode(bane.name)),
+                $("<td></td>").text(bane.recovery), $("<td></td>").text(bane.description)));
+        });
+        if (!banes.entries.length) $baneTable.find("tbody").append($("<tr></tr>")
+            .append($("<td colspan='3'></td>").text(banes.known ? "No active banes." : "Bane information unavailable.")));
+        $panelOverview.append($baneTable);
 
         // Active Buffs & Status Effects
         $panelOverview.append($("<div class='party-insp-section-title'>Active Buffs &amp; Status Effects</div>"));

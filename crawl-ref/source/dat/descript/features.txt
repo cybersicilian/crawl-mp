@@ -1033,6 +1033,11 @@ A mutagenic drain
 A passage leading to a gutter gulch, gradually rusting away. Entering it will
 inflict three temporary mutations upon you, or decompose you if you're undead.
 %%%%
+A sealed forge-door
+
+A mechanism leading to an abandoned coglin forge-temple. The distant hammering
+and its moving locks will fall silent when the entrance seals shut.
+%%%%
 A magical portal
 
 A portal leading to a wizard's laboratory. It is fading away.
@@ -1604,6 +1609,11 @@ A blood-filled altar of Vorr.
 A shallow cracked stone basin collects blood beneath a single hanging drop.
 Two narrow channels run over its worn rim. The Red Wake calls for worthy
 bloodshed and offers the spilled blood back as terrible rites.
+%%%%
+A prismatic altar of Imus Thea.
+
+Many reflections shimmer within this altar, each showing a slightly different
+world. Its facets scatter light across the surrounding floor.
 
 %%%%
 A tunnel to the Burrows
@@ -1644,3 +1654,13 @@ A pool of honey
 
 A shallow pool of thick, sticky honey. Grounded creatures move through it even
 more slowly than through shallow water. Flying creatures pass over it freely.
+%%%%
+An alchemical altar of the Great Wyrm.
+
+A serpent coils around the altar, its jaws closed upon its tail. Alchemical
+vessels glimmer among the carved scales.
+%%%%
+A web-draped altar of Agraphede.
+
+Fine webs cover a dark stone altar, where the shadows seem to stir with the
+movement of countless small legs.

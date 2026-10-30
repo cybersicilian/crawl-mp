@@ -17,6 +17,27 @@ deployment acceptance for that change is separate from the earlier release.
 
 ## Rules
 
+- Local source update (29 October 2026): every newly created multiplayer hero,
+  including a late joiner, receives one identified scroll of soul recall. A
+  living player reads it through the normal inventory action to resurrect fallen
+  teammates at half health and magic, without draining survivors. It recalls
+  fallen teammates from other floors and clears their saved downed state.
+  Replacements remain rare dungeon loot (the same rarity tier as summoning).
+  Each successful resurrection permanently reduces the restored hero's maximum
+  experience level by one, stacking with Ru's Sacrifice Experience, to a minimum
+  cap of 1. This also applies to personal extra lives. Current XL is reduced only
+  if it exceeds the new cap. The personal cost persists through save/resume.
+  Existing saves are not retroactively stocked. Divine and support-item revival
+  mechanics remain available; ordinary multiplayer stairs and last-stand party
+  wipes do not provide free resurrection. If nobody survives, the expedition ends.
+- The optional **Shared Fate** campaign modifier makes a single player's death
+  end the entire multiplayer expedition, including when they have personal extra
+  lives or a Hermit Crab shell. Divine effects that prevent death still apply.
+  The host selects it before launch; it defaults off for new rooms and old saves,
+  persists in the native player properties, follows late joiners, and appears in
+  the party banner. Solo parties retain their existing death rules. Implementation
+  and verification are recorded in [the resurrection design](design/coop-resurrection/README.md);
+  these source changes do not establish deployment.
 - At launch, include occupied authenticated player seats. Exclude companions and
   empty seats automatically; retain their configured builds for solo planning.
 - Compact sparse lobby seats into native slots while preserving each account's

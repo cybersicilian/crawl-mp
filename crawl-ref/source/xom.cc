@@ -4175,6 +4175,8 @@ static bool _xom_maybe_neutral_summon(int sever, bool threat,
 // Xom's not bored or wrathful, severity gives a chance of some being neutral.
 static void _xom_brain_drain(int sever)
 {
+    if (!you.uses_magic_reserve())
+        return;
     bool created = false;
     bool upgrade = you.penance[GOD_XOM];
     int xl = upgrade ? you.experience_level + 6 : you.experience_level;
@@ -4960,7 +4962,7 @@ static const vector<xom_event_data> _list_xom_bad_actions = {
     },
     {
         XOM_BAD_BRAIN_DRAIN, 100, 0, [](int /*sv*/, int tn)
-        {return tn > 0 && you.magic_points > 3;}
+        {return tn > 0 && you.uses_magic_reserve() && you.magic_points > 3;}
     },
     {
         XOM_BAD_FAKE_SHATTER, 75, 0, [](int /*sv*/, int tn)

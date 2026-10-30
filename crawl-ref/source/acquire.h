@@ -9,6 +9,9 @@
 
 #define ACQUIRE_KEY "acquired" // acquirement source prop on acquired items
 #define ACQUIRE_ITEMS_KEY "acquire_items" // acquirement items player prop
+#define COLLECTION_ITEMS_KEY "collection_items"
+#define COLLECTOR_CHOICE_KEY "collector_choice"
+#define COLLECTOR_RANDOM_WISH_KEY "collector_random_wish"
 
 #define OKAWARU_WEAPONS_KEY "okawaru_weapons"
 #define OKAWARU_WEAPON_GIFTED_KEY "okawaru_weapon_gifted"
@@ -23,6 +26,21 @@ const int COGLIN_GIZMO_NUM = 3;
 const int COGLIN_GIZMO_XL = 14;
 
 bool acquirement_menu();
+bool collection_menu();
+bool collector_claim_collection_item(int index);
+bool wish_menu();
+bool collector_wish_eligible(int index);
+vector<int> collector_wish_candidates();
+// Menu actions are negative so that they cannot collide with unrand IDs.
+enum collector_wish_action
+{
+    WISH_RANDOM = -1,
+    WISH_SEARCH = -2,
+    WISH_PREVIOUS_PAGE = -3,
+    WISH_NEXT_PAGE = -4,
+};
+vector<int> collector_wish_page_entries(const vector<int>& candidates,
+                                        size_t page);
 
 bool okawaru_gift_weapon();
 bool okawaru_gift_armour();

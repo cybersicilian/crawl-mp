@@ -15,11 +15,14 @@ namespace game_modifiers
 
     extern const char *const RUNE_LOCKS_DISABLED_KEY;
     extern const char *const TRAPS_KEY;
+    extern const char *const SHARED_FATE_KEY;
 
     bool rune_locks_disabled(const player& p);
+    bool shared_fate(const player& p);
     traps trap_mode(const player& p);
     const char *trap_mode_name(traps mode);
     bool floor_traps_enabled(const player& p);
     bool random_traps_enabled(const player& p);
-    void set_campaign(player& p, bool no_rune_locks, traps mode);
+    void set_campaign(player& p, bool no_rune_locks, traps mode,
+                      bool shared_fate = false);
 }

@@ -1,0 +1,21 @@
+name: "Orb Demon"
+glyph: {char: "1", colour: lightblue}
+flags: [fighter, see_invis]
+resists: {elec: 1, fire: 1, poison: 1}
+exp: 2500
+holiness: [demonic]
+will: 140
+attacks:
+ - {type: hit, flavour: blink, damage: 20}
+ - {type: hit, damage: 20}
+hd: 17
+hp_10x: 1500
+ac: 10
+ev: 15
+spells: orb_demon
+shout: scream
+intelligence: human
+speed: 10
+uses: open_doors
+size: large
+shape: humanoid

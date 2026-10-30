@@ -7,7 +7,9 @@ define(["jquery", "./tooltip-glossary", "tooltip-content", "rich-text"], functio
         dialog.id = "workflow_help_dialog"; dialog.setAttribute("aria-labelledby", "workflow_help_title");
         var title = document.createElement("h2"); title.id = "workflow_help_title";
         content.renderTitle(title, data.title);
-        var body = document.createElement("div"); body.className = "workflow-help-body"; body.innerHTML = richText.render(data.body);
+        var body = document.createElement("div"); body.className = "workflow-help-body";
+        if (data.heat) content.render(body, data.body, "", data.heat);
+        else body.innerHTML = richText.render(data.body);
         var close = document.createElement("button"); close.type = "button"; close.className = "workflow-button";
         close.textContent = "Close · Esc"; close.addEventListener("click", function () { dialog.close(); });
         dialog.append(close, title, body);

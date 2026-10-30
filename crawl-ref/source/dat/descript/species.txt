@@ -17,6 +17,12 @@ Automaton
 
 Automata are magical constructs whose spells are engraved into their bodies.
 Their mechanisms build heat as they unleash magic automatically.
+They use heat instead of mana: magic regeneration improves heat dissipation,
+magic restoration cools them, and magical power increases their heat capacity.
+Guardian spirit absorbs damage by building heat in place of spending mana.
+Offensive and summoning engravings can activate after your actions when a
+visible threat is present, including moving or waiting; no weapon attack is
+required. Each spell still needs a safe target or effect and time to cool.
 Mutagenic effects and magical contamination corrode their bodies instead of
 changing them or causing magical glow.
 Each spell's description explains its automatic trigger. Some spells have no
@@ -124,7 +130,8 @@ a colour.
 Formicid
 
 Formicids are humanoid ants adept at digging. Their limbs are exceptionally
-strong and they live in a state of permanent stasis.
+strong and they live in a state of permanent stasis. Their four arms allow them
+to wear two pairs of gloves and four rings.
 %%%%
 Felid
 
@@ -133,7 +140,8 @@ Felids are many-lived sentient cats. They cannot use armour or weapons.
 Gale Centaur
 
 Powerful equine hybrids who trace their ancestry to the four winds themselves,
-Gale Centaurs are at their strongest while galloping swiftly towards foes.
+Gale Centaurs are at their strongest while galloping swiftly towards foes. They
+can wear two pairs of boots as well as barding.
 %%%%
 Gargoyle
 

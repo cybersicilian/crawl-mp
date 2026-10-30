@@ -1,13 +1,14 @@
 /* Content-sized action banks; empty capacity stays out of the play surface. */
 #normal #dcss_quick_dock {
     position: relative; display: flex; flex-wrap: nowrap; align-items: center;
-    box-sizing: border-box; height: 32px; min-height: 32px; gap: 6px; padding: 2px 6px;
+    box-sizing: border-box; height: auto; min-height: 50px; gap: 6px; padding: 2px 6px;
     background: #191e23; border-top: 1px solid #84714b45; border-bottom: 1px solid #070b0f;
     box-shadow: none;
 }
-#normal #dcss_quick_dock:not(.hud-floating) { width: max-content; max-width: 100%; align-self: flex-start; }
+#normal #dcss_quick_dock:not(.hud-floating) { width: max-content; max-width: 100%; align-self: flex-start; z-index: 35; }
 #quickbar_primary, #quickbar_slots { display: flex; flex: 0 0 auto; align-items: center; gap: 2px; }
 #quickbar_slots { border-left: 1px solid #a88a5638; padding-left: 6px; }
+#quickbar_slots { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
 #normal #quickbar_primary .dcss-dock-btn, #normal .hud-quick-slot,
 #normal #quickbar_commands .dcss-dock-btn, #normal #quickbar_commands .workflow-expedition-details > summary,
 #normal .quickbar-catalog-action, #quickbar_more > summary {
@@ -40,6 +41,19 @@
     position: absolute; top: 0; left: 1px; padding: 0 2px; border-radius: 1px;
     background: #152b35; color: #d6f2ff; font: bold 9px/1.1 sans-serif; pointer-events: none;
 }
+/* Keep complete costs, stack counts and shortcut keys outside the artwork. */
+#normal .hud-quick-slot:not(.is-empty) {
+    display: grid; grid-template-columns: 8px minmax(22px, 1fr) 8px; grid-template-rows: 22px auto;
+    align-items: center; justify-items: center; gap: 2px 0;
+    flex: 0 0 60px; width: 60px; height: auto; min-height: 44px; padding: 2px;
+}
+.hud-quick-slot > :is(canvas, .tt-icon) { grid-column: 2; grid-row: 1; }
+.hud-quick-slot > :is(.quickbar-key, .quickbar-quantity, .quickbar-cast-mode) {
+    position: static; max-width: 100%; min-width: 0; padding: 0; margin: 0;
+}
+.hud-quick-slot > .quickbar-key { grid-column: 1; grid-row: 1; align-self: start; }
+.hud-quick-slot > .quickbar-cast-mode { grid-column: 3; grid-row: 1; align-self: start; }
+.hud-quick-slot > .quickbar-quantity { grid-column: 1 / -1; grid-row: 2; overflow-wrap: anywhere; text-align: center; }
 #normal #quickbar_more { flex: 0 0 auto; margin: 0; }
 #quickbar_more > summary { background: transparent; list-style: none; border-color: transparent; }
 #quickbar_more > summary::-webkit-details-marker { display: none; }
@@ -106,7 +120,7 @@
 [data-quick-kind] { cursor: grab; }
 #normal :is(.hud-quick-slot, .quickbar-catalog-action)[aria-disabled='true'] { cursor: default; opacity: .5; }
 @media (pointer: coarse) {
-    #normal #dcss_quick_dock { height: 38px; min-height: 38px; }
+    #normal #dcss_quick_dock { height: auto; min-height: 54px; }
     #normal #quickbar_primary .dcss-dock-btn, #normal .hud-quick-slot, #quickbar_more > summary,
     #normal .quickbar-catalog-action { width: 32px; height: 32px; min-width: 32px; min-height: 32px; }
     #quickbar_catalog { grid-template-columns: repeat(auto-fill, 32px); }
@@ -137,4 +151,5 @@
     #normal #dcss_quick_dock:not(.hud-floating) #quickbar_slots {
         flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: thin;
     }
+    #normal #right_column { padding-bottom: 64px; }
 }

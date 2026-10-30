@@ -7,6 +7,7 @@ module "autofight"
 #include "AppHdr.h"
 
 #include "l-libs.h"
+#include "l-autofight.h"
 
 #include "beam.h"
 #include "clua.h"
@@ -14,11 +15,16 @@ module "autofight"
 #include "coord.h"
 #include "coordit.h"
 #include "env.h"
+#include "invent.h"
+#include "item-prop.h"
+#include "item-use.h"
 #include "los.h"
 #include "losglobal.h"
 #include "map-knowledge.h"
 #include "monster.h"
 #include "mon-info.h"
+#include "options.h"
+#include "player-equip.h"
 #include "throw.h"
 
 
@@ -195,11 +201,47 @@ LUAFN(autofight_is_piercing)
     return 1;
 }
 
+bool autofight_weapon_swap_available(bool ranged)
+{
+    if (!Options.autofight_weapon_swap || you.berserk()
+        || you.has_mutation(MUT_SLOW_WIELD)
+        || you.has_mutation(MUT_WIELD_OFFHAND)
+        || slot_is_melded(SLOT_WEAPON))
+        return false;
+
+    item_def *current = you.weapon();
+    if (!current || (current->link != 0 && current->link != 1))
+        return false;
+
+    const item_def &other = you.inv[1 - current->link];
+    if (!other.defined() || (ranged ? !is_range_weapon(other)
+                                   : !is_melee_weapon(other)))
+        return false;
+    if (ranged ? !is_melee_weapon(*current) : !is_range_weapon(*current))
+        return false;
+
+    return !(you.shield() && you.hands_reqd(other) == HANDS_TWO)
+        && can_equip_item(other, true)
+        && can_unequip_item(*current, true)
+        && !flight_removal_hazard({current})
+        && !needs_handle_warning(*current, OPER_UNEQUIP)
+        && !needs_handle_warning(other, OPER_WIELD)
+        && !needs_handle_warning(other, OPER_EQUIP)
+        && !needs_handle_warning(other, ranged ? OPER_FIRE : OPER_ATTACK);
+}
+
+LUAFN(autofight_weapon_swap_available_lua)
+{
+    lua_pushboolean(ls, autofight_weapon_swap_available(lua_toboolean(ls, 1)));
+    return 1;
+}
+
 static const struct luaL_Reg autofight_lib[] =
 {
     { "best_aim", autofight_best_aim },
     { "is_candidate_for_attack", autofight_is_candidate_for_attack},
     { "is_piercing", autofight_is_piercing},
+    { "weapon_swap_available", autofight_weapon_swap_available_lua },
     { nullptr, nullptr }
 };
 

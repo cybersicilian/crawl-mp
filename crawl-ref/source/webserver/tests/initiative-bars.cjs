@@ -68,6 +68,7 @@ async function browserProof() {
     const output = process.env.INITIATIVE_PROOF_DIR || '/tmp/dcss-initiative-proof';
     fs.mkdirSync(output, { recursive: true });
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await require('./helpers/ui-sprite-fixture.cjs').install(page);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     try {
@@ -78,7 +79,8 @@ async function browserProof() {
             'game_data/static/styles/game-coop.css', 'game_data/static/styles/tabletop-party.css',
             'game_data/static/styles/gameplay-shell.css', 'game_data/static/styles/hud-workspace.css',
             'game_data/static/styles/hud-polish.css', 'game_data/static/styles/party-initiative.css',
-            'game_data/static/styles/party-card-status.css', 'game_data/static/styles/party-faith.css',
+            'game_data/static/styles/party-card-status.css', 'game_data/static/styles/hud-reflow.css',
+            'game_data/static/styles/party-faith.css',
             'game_data/static/styles/party-progress.css']) {
             await page.addStyleTag({ content: fs.readFileSync(path.join(root, file), 'utf8') });
         }
@@ -99,18 +101,23 @@ async function browserProof() {
                 './tileinfo-dngn': {},
                 './workflow-actions': { reason: () => '' }, './chat-context': { update: noop },
                 './party-doom': { update: noop },
-                './party-trade': { button: () => window.jQuery('<button type="button">Trade</button>') },
+                './party-trade': { button: () => window.jQuery('<button type="button" class="party-mini-btn">Trade</button>') },
                 'item-properties': { render: text => document.createTextNode(text) }
             };
             window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(dep => window.modules[dep])); };
         });
-        for (const [name, file] of [['./party-model', 'party-model.js'], ['./party-status-model', 'party-status-model.js'],
+        for (const [name, file] of [['item-properties', '../../static/scripts/item-properties.js'],
+            ['./effect-icon-catalog', 'effect-icon-catalog.js'], ['./effect-icon-art', 'effect-icon-art.js'], ['./status-icons', 'status-icons.js'], ['./frame-update', 'frame-update.js'],
+            ['./hud-iconography', 'hud-iconography.js'], ['./party-model', 'party-model.js'], ['./party-status-model', 'party-status-model.js'],
             ['./party-faith', 'party-faith.js'], ['./portrait-status', 'portrait-status.js'], ['./party-card-status', 'party-card-status.js'], ['./player-card-details', 'player-card-details.js'], ['./party-initiative', 'party-initiative.js'],
             ['./party-navigation', 'party-navigation.js'], ['./party-controls', 'party-controls.js'], ['party', 'party.js']]) {
             await page.evaluate(name => { window.moduleName = name; }, name);
             await page.addScriptTag({ path: path.join(root, 'game_data/static', file) });
         }
-        const render = data => page.evaluate(data => window.modules.party.state(data), data);
+        const render = data => page.evaluate(data => {
+            window.modules.party.state(data);
+            window.modules['./hud-iconography'].init();
+        }, data);
         await render(snapshot);
         const meters = page.locator('.party-initiative');
         assert.equal(await meters.count(), 4);
@@ -148,6 +155,31 @@ async function browserProof() {
         assert.equal(await page.locator('.party-initiative[data-timing-state="unknown"]').count(), 4);
         await page.evaluate(() => window.jQuery('#party_progress').append(window.modules['./party-initiative'].createMonster()));
         const timing = page.locator('#party_progress_monsters'), yieldButton = page.locator('#party_yield_btn');
+        const connectionState = structuredClone(snapshot);
+        connectionState.multiplayer = true;
+        connectionState.members[0].queued_action = 'move';
+        connectionState.members[0].queued_action_count = 3;
+        connectionState.members[1].connected = false;
+        connectionState.members[2].activity = 'rest';
+        await render(connectionState);
+        assert.equal(await page.locator('[data-party-slot="0"] .party-member-activity').textContent(), 'Queued (3)');
+        assert.equal(await page.locator('[data-party-slot="1"] .party-member-activity').textContent(), 'Disconnected');
+        assert.match(await page.locator('#party_xp_1').getAttribute('data-tip-body'), /until they reconnect/);
+        assert.equal(await page.locator('[data-party-slot="2"] .party-member-activity').textContent(), 'Resting');
+        assert.equal(await yieldButton.textContent(), 'Clear queue');
+        await yieldButton.click();
+        assert.deepEqual(await page.evaluate(() => window.testCommands.pop()), ['party_activity', { action: 'cancel' }]);
+        await page.screenshot({ path: path.join(output, 'connection-and-queue.png') });
+        assert(await page.locator('.party-member-state').evaluateAll(elements => elements.every(element => {
+            const bounds = element.getBoundingClientRect();
+            const card = element.closest('.party-card').getBoundingClientRect();
+            return bounds.width > 80 && bounds.left >= card.left && bounds.right <= card.right;
+        })), 'Connection and queue status fit inside narrow hero cards');
+        await page.locator('#party_xp_1').focus();
+        connectionState.members[1].connected = true;
+        await render(connectionState);
+        assert.equal(await page.locator('[data-party-slot="1"] .party-member-activity').textContent(), 'Exploring');
+        assert.equal(await page.evaluate(() => document.activeElement.id), 'party_xp_1');
         const renderMode = async data => {
             await render(data);
             await page.evaluate(data => window.modules['./party-initiative'].updateMonster(

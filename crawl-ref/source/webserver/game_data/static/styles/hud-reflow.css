@@ -25,12 +25,12 @@
 #normal #left_column { background: #000; }
 #normal #dcss_quick_dock:not(.hud-floating) { margin-top: auto; flex-shrink: 0; }
 #normal #hud_bottom_row { display: grid; grid-template-columns: 148px minmax(0, 1fr); box-sizing: border-box; flex: 0 0 clamp(112px, 17vh, 140px); width: 100%; height: clamp(112px, 17vh, 140px); min-height: 0; border-top: 1px solid #a98d5645; background: #12181d; }
-#normal #hud_bottom_map { position: relative; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; min-height: 0; padding: 3px 4px; border-right: 1px solid #a98d5630; }
+#normal #hud_bottom_map { position: relative; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; min-height: 0; padding: 3px 4px; overflow: auto; border-right: 1px solid #a98d5630; }
 #normal #hud_bottom_map.hud-floating { position: fixed; width: var(--panel-width) !important; }
-#normal #hud_map_tools { display: flex; flex: 0 0 24px; align-items: center; gap: 3px; align-self: flex-start; width: 100%; }
-#normal #hud_map_tools button { box-sizing: border-box; width: 22px; min-width: 22px; height: 22px; min-height: 22px; padding: 2px; margin: 0; }
+#normal #hud_map_tools { display: flex; flex: 0 0 auto; flex-wrap: wrap; align-items: center; gap: 3px; align-self: flex-start; width: 100%; min-height: 24px; }
+#normal #hud_map_tools button { box-sizing: border-box; flex: 0 0 22px; width: 22px; min-width: 22px; height: 22px; min-height: 22px; padding: 2px; margin: 0; }
 #normal #hud_map_tools .tt-icon { width: 16px; height: 16px; margin: 0; }
-#normal #hud_map_tools #hud_zoom_controls { display: flex; gap: 2px; padding: 0 4px 0 0; margin: 0; }
+#normal #hud_map_tools #hud_zoom_controls { display: flex; flex: 0 1 auto; flex-wrap: wrap; min-width: 0; gap: 2px; padding: 0 4px 0 0; margin: 0; }
 #normal #hud_minimap { display: flex; flex: 1 1 auto; align-items: center; justify-content: center; width: 100%; min-height: 0; }
 #normal #hud_minimap > summary { display: none; }
 #normal #minimap_block { flex: 0 0 auto; margin: 0; padding: 0; border: 0; background: #101419; }

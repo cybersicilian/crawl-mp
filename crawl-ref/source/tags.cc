@@ -64,6 +64,7 @@
 #include "items.h"
 #include "jobs.h"
 #include "mapmark.h"
+#include "mercenary-transit.h"
 #include "map-knowledge.h"
 #include "misc.h"
 #include "mon-death.h"
@@ -2632,7 +2633,7 @@ static void unmarshall_shop(reader &th, shop_struct& shop)
     if (shop.type == SHOP_UNASSIGNED)
         return;
     if (th.getMinorVersion() < TAG_MINOR_MISC_SHOP_CHANGE
-        && shop.type == NUM_SHOPS)
+        && shop.type == SHOP_LEGACY_MISCELLANY)
     {
         // This was SHOP_MISCELLANY, which is now part of SHOP_EVOKABLES.
         shop.type = SHOP_EVOKABLES;
@@ -8610,7 +8611,8 @@ static void _tag_read_level_monsters(reader &th)
     // so that we clear constriction properly for constricted monsters.
     for (monster_iterator mi; mi; ++mi)
     {
-        if (!mi->is_divine_companion() || !companion_is_elsewhere(mi->mid))
+        if (!(mi->is_divine_companion() || is_hired_mercenary(**mi))
+            || !companion_is_elsewhere(mi->mid))
             continue;
 
         const mid_t mid = mi->mid;

@@ -1,0 +1,79 @@
+##############################################################################
+# Golemforge: the abandoned forge-temple of the first coglins.
+# The timed entrance and construct cast are adapted from kimjoy's Golemforge;
+# the four-piece Golem Armour is the forge-temple's surviving masterwork.
+##############################################################################
+
+: crawl_require('dlua/vault.lua')
+
+{{
+function golemforge_portal(e)
+  local messager = timed_msg {
+    initmsg = { "You hear distant hammering.",
+                "There is a sealed forge-door on this level. " ..
+                "Find it before its mechanism closes!" },
+    finalmsg = "The distant hammering fades away.",
+    verb = 'clanking',
+    noisemaker = 'forge-door',
+    ranges = {
+      { 5000, 'faint ' }, { 4000, '' }, { 2500, 'steady ' },
+      { 1500, 'quick ' }, { 0, 'loud ' }
+    }
+  }
+  e.lua_marker('O', timed_marker {
+    disappear = "The forge-door seals shut.",
+    entity = 'forge-door',
+    turns = crawl.random_range(600, 800),
+    single_timed = true,
+    floor = "stone_arch",
+    feat_tile = "dngn_portal_golemforge_gone",
+    msg = messager
+  })
+  e.tags("uniq_golemforge chance_golemforge")
+  e.chance(500)
+  e.kfeat("O = enter_golemforge")
+end
+}}
+
+default-depth: Elf, Depths:1-4
+
+NAME: portal_golemforge_entry
+TAGS: transparent
+DEPTH: Elf, Depths:1-4
+: golemforge_portal(_G)
+MAP
+  .....
+  .xxx.
+  .xOx.
+  .x+x.
+  .....
+ENDMAP
+
+default-depth: Forge
+
+NAME: golemforge_main
+PLACE: Forge
+TAGS: no_item_gen no_monster_gen no_trap_gen
+ORIENT: encompass
+KFEAT: < = exit_golemforge
+KFEAT: X = permarock_wall
+KMONS: m = machine golem
+KMONS: i = iron golem
+KMONS: y = crystal guardian
+KMONS: t = ancient automaton
+KITEM: h = Golem helmet pre_id
+KITEM: a = Golem armour pre_id
+KITEM: g = Golem gauntlets pre_id
+KITEM: b = Golem greaves pre_id
+MAP
+XXXXXXXXXXXXXXXXXXXXX
+X<........m........XX
+X...m......m.......XX
+X.....i........y...XX
+X..................XX
+X..m............m..XX
+X......i.......y...XX
+X..................XX
+X..h....a..t.g....bXX
+XXXXXXXXXXXXXXXXXXXXX
+ENDMAP

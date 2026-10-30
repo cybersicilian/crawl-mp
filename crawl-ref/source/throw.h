@@ -39,7 +39,7 @@ struct ranged_attack_beam
     bolt beam;
     ranged_attack atk;
 
-    ranged_attack_beam(actor& agent, item_def& item);
+    ranged_attack_beam(actor& agent, item_def& item, bool illusory_copy = false);
     ranged_attack_beam(actor& agent, item_def& item, bolt& beam);
 
     void fire();

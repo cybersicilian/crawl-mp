@@ -96,6 +96,12 @@ const vector<branch_type> &dgn_portal_generation_order();
 bool dgn_branch_will_generate(branch_type br);
 bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
                 const level_id& old_level);
+// Extract only the active member's tagged hired companions on a split-floor
+// multiplayer departure, leaving other members and their allies in place.
+void grab_multiplayer_hired_followers();
+// Extract already-tagged hires of the other members transported by a shared
+// branch transition, while their positions still refer to the source floor.
+void grab_shared_party_hired_followers(const level_id& old_level);
 void delete_level(const level_id &level);
 void save_level(const level_id& lid);
 

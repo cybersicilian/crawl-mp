@@ -34,6 +34,7 @@
 #include "mon-clone.h"
 #include "mon-death.h"
 #include "mon-place.h"
+#include "mon-util.h"
 #include "nearby-danger.h" // Compass (for random_walk, CloudGenerator)
 #include "player-stats.h"
 #include "religion.h"
@@ -363,6 +364,13 @@ static const cloud_data clouds[] = {
     { "blinding haze", nullptr,                   // terse, verbose name
         BLUE,                                     // colour
         { TILE_CLOUD_BLIND, CTVARY_DUR },         // tile
+    },
+
+    // CLOUD_WYRM_HEAL: harmless but beneficial to any creature inside it.
+    { "healing mist", nullptr,
+      GREEN,
+      { TILE_CLOUD_WYRM_HEAL, CTVARY_DUR },
+      BEAM_NONE, {},
     },
 
 };
@@ -993,7 +1001,7 @@ static int _cloud_base_damage(const actor *act,
  * Is the given actor immune to cloud damage and other negative side effects
  * (other than opaque clouds + invis) from all clouds of the given type?
  */
-bool actor_cloud_immune(const actor &act, cloud_type type)
+bool actor_cloud_immune(const actor &act, cloud_type type, const actor* source)
 {
     // Cloud immunity doesn't prevent Blastmote explosions.
     if (type == CLOUD_BLASTMOTES
@@ -1030,9 +1038,9 @@ bool actor_cloud_immune(const actor &act, cloud_type type)
 #endif
                    ;
         case CLOUD_MEPHITIC:
-            return act.res_poison() > 0 || act.clarity();
+            return agraphede_poison_resistance(&act, source) > 0 || act.clarity();
         case CLOUD_POISON:
-            return act.res_poison() > 0;
+            return agraphede_poison_resistance(&act, source) > 0;
         case CLOUD_STEAM:
             return act.res_steam() > 0;
         case CLOUD_MIASMA:
@@ -1081,7 +1089,11 @@ bool actor_cloud_immune(const actor &act, cloud_type type)
 // side-effects on the actor.
 bool actor_cloud_immune(const actor &act, const cloud_struct &cloud)
 {
-    if (actor_cloud_immune(act, cloud.type))
+    // Resolve only the recorded owner; cloud.agent() falls back to the active
+    // player for a missing player source, which is unsafe in a party.
+    const actor* source = cloud.source == MID_NOBODY ? nullptr
+                                                     : actor_by_mid(cloud.source);
+    if (actor_cloud_immune(act, cloud.type, source))
         return true;
 
     if (!could_harm(cloud.agent(), &act))
@@ -1622,6 +1634,37 @@ void actor_apply_cloud(actor *act)
         return;
     }
     cloud_struct &cloud = *cl;
+
+    // Like the fork's healing cloud, this affects every creature, including
+    // enemies. Harmless clouds normally exit early through cloud immunity.
+    // Use the recipient's context: player::heal and Death's Door consult you.
+    if (cloud.type == CLOUD_WYRM_HEAL)
+    {
+        monster* mon = act->as_monster();
+        if (mon && party::is_proxy_monster(*mon))
+        {
+            if (mon->props.exists("party_downed_ghost"))
+                return;
+            const int slot = party::proxy_slot(*mon);
+            if (slot < 0 || slot >= party::player_count())
+                return;
+            party::scoped_player_context context(slot);
+            if (!you.cloud_immune() && you.hp > 0 && !you.duration[DUR_DEATHS_DOOR])
+                you.heal(1);
+        }
+        else if (act->is_player())
+        {
+            const int slot = party::slot_for_mid(act->mid);
+            if (slot < 0)
+                return;
+            party::scoped_player_context context(slot);
+            if (!you.cloud_immune() && you.hp > 0 && !you.duration[DUR_DEATHS_DOOR])
+                you.heal(1);
+        }
+        else if (mon && mon->alive() && !mon->cloud_immune())
+            mon->heal(1 + mon->max_hit_points / 10);
+        return;
+    }
 
     if (cloud.type == CLOUD_STORM)
     {
@@ -2449,6 +2492,8 @@ cloud_type beam2cloud(beam_type flavour)
         return CLOUD_PURPLE_SMOKE;
     case BEAM_POTION_RAIN:
         return CLOUD_RAIN;
+    case BEAM_POTION_HEAL:
+        return CLOUD_WYRM_HEAL;
     case BEAM_POTION_RANDOM:
         return random_choose(CLOUD_FIRE, CLOUD_COLD, CLOUD_POISON,
                              CLOUD_MEPHITIC, CLOUD_STEAM, CLOUD_MIASMA,

@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "bag.h"
+#include "bag-menu.h"
 #include "god-vellum.h"
 #include "coop-content.h"
 #include "oozle-memory-effects.h"
@@ -869,6 +871,8 @@ operation_types item_to_oper(const item_def *target)
 {
     if (!target)
         return OPER_WIELD; // unwield
+    else if (bag::is_bag(*target))
+        return OPER_WEAR;
     else
         return _item_type_to_oper(target->base_type);
 }
@@ -877,6 +881,8 @@ static operation_types _item_to_removal(item_def *target)
 {
     if (!target)
         return OPER_NONE;
+    else if (bag::is_bag(*target))
+        return OPER_TAKEOFF;
     else
         return _item_type_to_remove_oper(target->base_type);
 }
@@ -889,11 +895,15 @@ static bool _equip_oper(operation_types oper)
 
 string item_equip_verb(const item_def& item)
 {
+    if (bag::is_bag(item))
+        return "wear";
     return _oper_name(_item_type_to_oper(item.base_type));
 }
 
 string item_unequip_verb(const item_def& item)
 {
+    if (bag::is_bag(item))
+        return "take off";
     const operation_types oper = _item_type_to_remove_oper(item.base_type);
     if (oper == OPER_WIELD)
         return "unwield";
@@ -1274,6 +1284,23 @@ static bool _is_slow_equip(const item_def& item)
     return true;
 }
 
+const item_def* flight_removal_hazard(const vector<item_def*>& to_remove)
+{
+    if (!is_feat_dangerous(env.grid(you.pos()), false, !you.permanent_flight(false))
+        || (you.duration[DUR_FLIGHT] && !dur_expiring(DUR_FLIGHT)))
+        return nullptr;
+
+    const int equipped_flight = you.equip_flight();
+    int removed_flight = 0;
+    for (const item_def* item : to_remove)
+    {
+        if ((item_grants_flight(*item) || vellum::item_bonus(you, *item, ARTP_FLY))
+            && ++removed_flight >= equipped_flight)
+            return item;
+    }
+    return nullptr;
+}
+
 /**
  * Potentially prompt the player about a multitude of things related to changing
  * their current gear. This includes inscriptions, god disapproval, Drain^ and
@@ -1337,24 +1364,12 @@ bool warn_about_changing_gear(const vector<item_def*>& to_remove, item_def* to_e
 
     // Check whether removing any of this sequence of items would cause us to
     // lose flight over dangerous terrain.
-    if (is_feat_dangerous(env.grid(you.pos()), false, !you.permanent_flight(false))
-        && (!you.duration[DUR_FLIGHT] || dur_expiring(DUR_FLIGHT)))
+    if (const item_def* item = flight_removal_hazard(to_remove))
     {
-        const int equipped_flight = you.equip_flight();
-        int removed_flight = 0;
-        for (item_def* item : to_remove)
-        {
-            if (item_grants_flight(*item) || vellum::item_bonus(you, *item, ARTP_FLY))
-            {
-                if (++removed_flight >= equipped_flight)
-                {
-                    mprf(MSGCH_PROMPT, "Removing %s right now would cause you to %s!",
-                            item->name(DESC_YOUR).c_str(),
-                            env.grid(you.pos()) == DNGN_DEEP_WATER ? "drown" : "burn");
-                    return false;
-                }
-            }
-        }
+        mprf(MSGCH_PROMPT, "Removing %s right now would cause you to %s!",
+             item->name(DESC_YOUR).c_str(),
+             env.grid(you.pos()) == DNGN_DEEP_WATER ? "drown" : "burn");
+        return false;
     }
 
     return true;
@@ -1489,6 +1504,13 @@ bool try_equip_item(item_def& item, bool instant)
     //       foor.
     if (!warn_about_changing_gear(to_remove, &item, instant))
         return false;
+
+    // Removing a bag may need to empty its contents into the pack or onto the
+    // floor. Do this only after every other cancellable warning has passed.
+    for (item_def* removed : to_remove)
+        if (bag::is_bag(*removed)
+            && !bag::prepare_unequip(*removed, item.pos != ITEM_IN_INVENTORY))
+            return false;
 
     // Now do the actual removal and equipping.
 
@@ -1749,6 +1771,10 @@ bool try_unequip_item(item_def& item)
 
     if (!warn_about_changing_gear(to_remove))
         return false;
+
+    for (item_def* removed : to_remove)
+        if (bag::is_bag(*removed) && !bag::prepare_unequip(*removed))
+            return false;
 
     do_equipment_change(nullptr, SLOT_UNUSED, to_remove);
 
@@ -2675,6 +2701,8 @@ static bool _is_cancellable_scroll(scroll_type scroll)
            || scroll == SCR_BRAND_WEAPON
            || scroll == SCR_ENCHANT_WEAPON
            || scroll == SCR_ACQUIREMENT
+           || scroll == SCR_COLLECTION
+           || scroll == SCR_WISH
            || scroll == SCR_POISON;
 }
 
@@ -3125,6 +3153,34 @@ bool read(item_def* scroll, dist *target)
             result = spret::abort;
         break;
 
+    case SCR_COLLECTION:
+    case SCR_WISH:
+    {
+        if (feat_eliminates_items(env.grid(you.pos())))
+        {
+            mpr("Anything you acquired here would fall and be lost!");
+            result = spret::abort;
+            break;
+        }
+        bool wish = which_scroll == SCR_WISH;
+        if (scroll->props.exists(COLLECTOR_CHOICE_KEY))
+        {
+            mprf(MSGCH_PROMPT, "Choose (c)ollection or (w)ish, or Esc to cancel: ");
+            const int choice = getchm();
+            if (choice != 'c' && choice != 'C' && choice != 'w' && choice != 'W')
+            {
+                result = spret::abort;
+                break;
+            }
+            wish = choice == 'w' || choice == 'W';
+        }
+        if (!(wish ? wish_menu() : collection_menu()))
+            result = spret::abort;
+        else if (scroll->props.exists(COLLECTOR_CHOICE_KEY))
+            you.props.erase(wish ? COLLECTION_ITEMS_KEY : COLLECTOR_RANDOM_WISH_KEY);
+        break;
+    }
+
     case SCR_FEAR:
         mpr("You assume a fearsome visage.");
         mass_enchantment(ENCH_FEAR, 1000);
@@ -3297,7 +3353,8 @@ bool read(item_def* scroll, dist *target)
         break;
 
     case SCR_SOUL_RECALL:
-        party::scroll_soul_recall();
+        if (!party::scroll_soul_recall())
+            result = spret::abort;
         break;
 
     case SCR_RALLYING:
@@ -3647,6 +3704,18 @@ void tile_item_use(int idx)
 
     // Equipped?
     const bool equipped = item_is_equipped(item);
+
+    if (bag::is_bag(item))
+    {
+        // A bag can retain contents after a forced change of species. Those
+        // contents remain retrievable even if this character cannot wear it.
+        if (equipped || (bag::used(item) > 0
+                         && !get_player_equip_slot_count(SLOT_BAG, nullptr)))
+            bag::open(item);
+        else
+            try_equip_item(item);
+        return;
+    }
 
     if (item_ever_evokable(item))
     {

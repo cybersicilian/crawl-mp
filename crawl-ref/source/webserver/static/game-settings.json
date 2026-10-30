@@ -54,6 +54,7 @@
     {"id": "automagic_stop", "label": "Stop automatic casting below magic", "group": "Combat & casting", "type": "number", "default": 0, "description": "Magic percentage at which automatic casting stops.", "min": 0, "max": 100, "step": 1},
     {"id": "automagic_fight", "label": "Fall back to melee when out of magic", "group": "Combat & casting", "type": "boolean", "default": false, "description": ""},
     {"id": "auto_switch", "label": "Automatically switch weapons", "group": "Combat & casting", "type": "boolean", "default": false, "description": ""},
+    {"id": "autofight_weapon_swap", "label": "Swap melee and ranged weapons in auto-fight", "group": "Combat & casting", "type": "boolean", "default": false, "description": "On the next game launch, switch between a melee weapon and launcher in slots a and b for nearby and distant targets. Each switch takes a turn. In a shared game, the host's setting applies to the party."},
     {"id": "simple_targeting", "label": "Simplified targeting", "group": "Combat & casting", "type": "boolean", "default": false, "description": ""},
     {"id": "allow_self_target", "label": "Target yourself", "group": "Combat & casting", "type": "choice", "default": "prompt", "description": "", "options": ["prompt", "true", "false"], "optionLabels": ["Ask first", "Allow", "Never"]},
     {"id": "show_invis_targeter", "label": "Show invisible-creature targeting", "group": "Combat & casting", "type": "boolean", "default": true, "description": ""},

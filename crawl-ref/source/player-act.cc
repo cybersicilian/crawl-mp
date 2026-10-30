@@ -149,7 +149,14 @@ int player::get_experience_level() const
 
 int player::get_max_xl() const
 {
-    return 27 - get_mutation_level(MUT_INEXPERIENCED) * RU_SAC_XP_LEVELS;
+    return max(1, 27 - get_mutation_level(MUT_INEXPERIENCED) * RU_SAC_XP_LEVELS
+                    - permanent_xl_cap_loss());
+}
+
+int player::permanent_xl_cap_loss() const
+{
+    return props.exists(XL_CAP_LOSS_KEY)
+        ? max(0, min(26, props[XL_CAP_LOSS_KEY].get_int())) : 0;
 }
 
 bool player::can_pass_through_feat(dungeon_feature_type grid) const
@@ -205,6 +212,9 @@ brand_type player::damage_brand(const item_def* wpn) const
         const int inherited = native == SPWPN_NORMAL ? oozle::body_property(ARTP_BRAND) : 0;
         return inherited ? static_cast<brand_type>(inherited) : native;
     }
+
+    if (unrand_equipped(UNRAND_FISTS_OF_THUNDER))
+        return SPWPN_ELECTROCUTION;
 
     // Forms retain their own native brands; anatomy mutations are suppressed
     // automatically in forms which replace the player's body.
@@ -628,7 +638,8 @@ string player::unarmed_attack_name(string default_name) const
     else if (species == SP_OOZLE)
         default_name = "Pseudopods";
 
-    return get_form()->get_uc_attack_name(default_name);
+    const string name = get_form()->get_uc_attack_name(default_name);
+    return unrand_equipped(UNRAND_FISTS_OF_THUNDER) ? name + " (elec)" : name;
 }
 
 bool player::fumbles_attack()

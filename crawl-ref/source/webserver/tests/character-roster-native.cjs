@@ -20,16 +20,17 @@ fs.mkdirSync(output, { recursive: true });
         ({ page } = await client(browser, url, 'R', errors));
         await page.locator('#lobby_home [data-lobby-create]').click();
         for (const [kind, value] of [['species', 'Tortle'], ['job', 'Blood Liturgist']]) {
-            await page.locator(`#party_slot_${kind}_0_picker`).click();
-            await page.locator('.choice-picker-search').fill(value.toLowerCase());
-            await page.locator('.choice-picker').getByRole('option', { name: value, exact: true }).click();
+            await page.locator(`#party_slot_${kind}_0_visual_search`).fill(value.toLowerCase());
+            await page.locator(`#party_slot_${kind}_0_visual_choices`).locator('.visual-choice')
+                .filter({ has: page.locator('.visual-choice-name', { hasText: value }) }).first().click();
             await page.waitForFunction(({ kind, value }) =>
                 document.querySelector(`#party_slot_${kind}_0`).value === value, { kind, value });
         }
         const hero = page.locator('.party-slot-box[data-slot="0"]');
         await hero.locator('.party-slot-weapon').selectOption('hand axe');
-        for (const slot of [1, 2, 3])
-            await page.locator(`.party-slot-box[data-slot="${slot}"] [data-mode="closed"]`).click();
+        await page.locator('.party-slot-box[data-slot="1"] [data-mode="closed"]').click();
+        await page.locator('.party-unused-seats summary').click();
+        for (const slot of [2, 3]) await page.locator(`[data-manager-focus="${slot}:control"]`).selectOption('closed');
         await hero.scrollIntoViewIfNeeded();
         await page.mouse.move(15, 15);
         await hero.screenshot({ path: path.join(output, 'tortle-blood-liturgist-selection.png') });

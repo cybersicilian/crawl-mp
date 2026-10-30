@@ -1,0 +1,21 @@
+name: "Lichbane"
+glyph: {char: "z", colour: lightcyan}
+flags: [unique, no_regen, speaks]
+resists: {cold: 1}
+exp: 2400
+species: ancient_champion
+holiness: [undead]
+will: 120
+attacks:
+ - {type: hit, damage: 36}
+hd: 18
+hp_10x: 1400
+ac: 10
+ev: 10
+spells: lichbane
+shout: shout
+intelligence: human
+speed: 10
+uses: weapons_armour
+size: medium
+shape: humanoid

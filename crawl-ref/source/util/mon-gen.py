@@ -71,6 +71,8 @@ class Monster(MutableMapping):
 
     def corpse_tile(self):
         if "corpse_tile" in self:
+            if self["corpse_tile"] == "none":
+                return "TILE_ERROR"
             return "TILE_CORPSE_" + self["corpse_tile"].upper()
         if not self.unique_corpse():
             return "TILE_ERROR"

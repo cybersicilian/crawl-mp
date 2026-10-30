@@ -92,7 +92,8 @@ string desc_cloud_damage(cloud_type cl_type, bool vs_player);
 void actor_apply_cloud(actor *act);
 bool actor_cloud_immune(const actor &act, const cloud_struct &cloud);
 bool cloud_dissipates_for(const cloud_struct& cloud, const actor& act);
-bool actor_cloud_immune(const actor &act, cloud_type type);
+bool actor_cloud_immune(const actor &act, cloud_type type,
+                        const actor* source = nullptr);
 bool mons_avoids_cloud(const monster* mons, coord_def pos,
                        bool placement = false);
 

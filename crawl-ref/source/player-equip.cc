@@ -1,4 +1,6 @@
 #include "AppHdr.h"
+#include "grape-player.h"
+#include "bag.h"
 #include "elemental-weapon.h"
 #include "god-vellum.h"
 #include "coop-content.h"
@@ -192,27 +194,36 @@ int count = 0;
         return count;
 
     case SLOT_BOOTS:
+    {
+        // Centaur boots are fitted to hooves; barding remains a separate slot.
+        const bool centaur = you.species == SP_GALE_CENTAUR
+#if TAG_MAJOR_VERSION == 34
+                             || you.species == SP_CENTAUR
+#endif
+                             ;
         if (you.species == SP_MELIAI)
             NO_SLOT("You have no feet for boots.")
         if (you.species == SP_ENT)
             NO_SLOT("Your roots cannot wear boots.")
-        if (species::wears_barding(you.species) || you.has_mutation(MUT_FORMLESS))
+        if ((species::wears_barding(you.species) && !centaur)
+            || you.has_mutation(MUT_FORMLESS))
             NO_SLOT("You don't have any feet!")
         else if (player_size <= SIZE_LITTLE)
             NO_SLOT(make_stringf("Those are too big for your %s.", you.foot_name(true).c_str()))
-        else if (player_size >= SIZE_LARGE)
+        else if (player_size >= SIZE_LARGE && !centaur)
             NO_SLOT(make_stringf("Those are too small for your %s.", you.foot_name(true).c_str()))
         else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR)
                  || you.has_mutation(MUT_SOFT_EQUIPMENT))
             NO_SLOT("You can't wear boots.")
-        else if (you.get_mutation_level(MUT_HOOVES, false) >= 3)
+        else if (you.get_mutation_level(MUT_HOOVES, false) >= 3 && !centaur)
             NO_SLOT("Your hooves can't fit into boots.")
         else if (you.get_mutation_level(MUT_TALONS, false) >= 3)
             NO_SLOT("Your talons can't fit into boots.")
         else if (you.has_mutation(MUT_FLOAT))
             NO_SLOT("You have no feet!")
 
-        return 1;
+        return centaur ? 2 : 1;
+    }
 
     case SLOT_BARDING:
         if (species::wears_barding(you.species))
@@ -248,6 +259,8 @@ int count = 0;
         int ring_count = you.species == SP_HYDRA ? 0 : 2;
         if (you.species == SP_OCTOPODE)
             ring_count = 8;
+        else if (you.species == SP_FORMICID)
+            ring_count = 4;
 
         if (ring_count && you.has_mutation(MUT_MISSING_HAND))
             ring_count -= 1;
@@ -290,6 +303,16 @@ int count = 0;
         else
             return 0;
 
+    case SLOT_BAG:
+        // A bag is carried on the back, independent of the cloak slot.
+        // These species have no suitable corporeal humanoid torso.
+        if (you.species == SP_POLTERGEIST || you.species == SP_FELID
+            || you.species == SP_OCTOPODE || you.species == SP_HYDRA
+            || you.species == SP_HERMIT_CRAB || you.species == SP_PROTEAN
+            || you.species == SP_OOZLE)
+            NO_SLOT("You have no suitable back for a bag.")
+        return 1;
+
     default:
         return 0;
 
@@ -315,6 +338,7 @@ const static vector<equipment_slot> _flex_slots[] =
     {SLOT_WEAPON_OR_OFFHAND, SLOT_WEAPON, SLOT_OFFHAND},
     {SLOT_HAUNTED_AUX, SLOT_HELMET, SLOT_GLOVES, SLOT_BOOTS, SLOT_CLOAK},
     {SLOT_TWOHANDER_ONLY},
+    {SLOT_BAG},
 
     // NUM_EQUIP_SLOTS
     {},
@@ -337,7 +361,7 @@ const static vector<equipment_slot> _flex_slots[] =
     // SLOT_ALL_EQUIPMENT
     {SLOT_WEAPON, SLOT_OFFHAND, SLOT_BODY_ARMOUR, SLOT_HELMET, SLOT_GLOVES,
      SLOT_BOOTS, SLOT_BARDING, SLOT_CLOAK, SLOT_RING, SLOT_AMULET, SLOT_GIZMO,
-     SLOT_WEAPON_OR_OFFHAND, SLOT_HAUNTED_AUX},
+     SLOT_WEAPON_OR_OFFHAND, SLOT_HAUNTED_AUX, SLOT_BAG},
 
     // SLOT_WEAPON_STRICT
     {SLOT_WEAPON},
@@ -501,7 +525,7 @@ bool can_equip_item(const item_def& item, bool temp, string* veto_reason,
 
     if (god_forbids)
         *god_forbids = false;
-    if (!item_type_is_equipment(item.base_type))
+    if (!item_type_is_equipment(item.base_type) && !bag::is_bag(item))
         NO_EQUIP("That isn't an equippable item.")
 
     if (you.species == SP_TWO_HEADED_OGRE && is_shield(item))
@@ -1285,6 +1309,8 @@ void player_equip_set::unmeld_slot(equipment_slot slot, bool skip_effects)
         {
             if (entry.melded)
             {
+                if (grape_player::suppressed(entry.get_item()))
+                    continue;
                 if (entry.is_overflow)
                 {
                     // If this item takes up multiple slots, verify that none of
@@ -1342,6 +1368,8 @@ void player_equip_set::unmeld_all_equipment(bool skip_effects)
     {
         if (entry.melded)
         {
+            if (grape_player::suppressed(entry.get_item()))
+                continue;
             // If the player is untransforming from a form where fishtail is
             // active, don't unmeld their boots.
             if (you.fishtail)
@@ -1362,6 +1390,41 @@ void player_equip_set::unmeld_all_equipment(bool skip_effects)
     }
 
     handle_unmelding(was_unmelded, skip_effects);
+}
+
+bool player_equip_set::unmeld_item(item_def& item, bool skip_effects)
+{
+    if (grape_player::suppressed(item))
+        return false;
+    bool found = false;
+    for (const player_equip_entry& entry : items)
+    {
+        if (entry.item != item.link || !entry.melded)
+            continue;
+        found = true;
+        if (slot_is_melded(entry.slot) || num_slots[entry.slot] <= 0)
+            return false;
+        int occupied = 0;
+        int needed = 0;
+        for (const player_equip_entry& other : items)
+            if (other.slot == entry.slot)
+            {
+                if (!other.melded && other.item != item.link)
+                    ++occupied;
+                if (other.melded && other.item == item.link)
+                    ++needed;
+            }
+        if (occupied + needed > num_slots[entry.slot])
+            return false;
+    }
+    if (!found)
+        return false;
+    for (player_equip_entry& entry : items)
+        if (entry.item == item.link)
+            entry.melded = false;
+    vector<item_def*> unmelded = {&item};
+    handle_unmelding(unmelded, skip_effects);
+    return true;
 }
 
 void player_equip_set::handle_unmelding(vector<item_def*>& to_unmeld, bool skip_effects)
@@ -1523,6 +1586,11 @@ bool player_equip_set::innate_slot_is_covered(equipment_slot slot) const
     int innate_slots = get_player_equip_slot_count(slot, nullptr, false, false);
     if (innate_slots == 0 || slot_is_melded(slot))
         return false;
+
+    if (slot == SLOT_GLOVES)
+        for (const player_equip_entry& entry : get_slot_entries(slot))
+            if (is_unrandom_artefact(entry.get_item(), UNRAND_FISTS_OF_THUNDER))
+                return false;
 
     return (int)get_slot_entries(slot).size() == num_slots[slot];
 }
@@ -1686,6 +1754,7 @@ bool unequip_item(item_def& item, bool msg, bool skip_effects,
     const int item_slot = item.link;
     bool was_melded = item_is_melded(item);
     you.equipment.remove(item);
+    grape_player::forget(item);
     you.equipment.update();
 
     if (you.props.exists("vellum_bindings"))
@@ -1900,7 +1969,7 @@ void unequip_artefact_effect(item_def &item,  bool *show_msgs, bool meld,
         if (proprt[ARTP_HP])
             _calc_hp_artefact();
 
-        if (proprt[ARTP_MAGICAL_POWER] && !you.has_mutation(MUT_HP_CASTING))
+        if (proprt[ARTP_MAGICAL_POWER] && you.uses_magic_reserve())
         {
             const bool gives_mp = proprt[ARTP_MAGICAL_POWER] > 0;
             if (msg)
@@ -2093,7 +2162,7 @@ static void _equip_weapon_effect(item_def& item, bool showMsgs, bool unmeld)
             break;
 
         case SPWPN_ANTIMAGIC:
-            if (you.has_mutation(MUT_HP_CASTING))
+            if (!you.uses_magic_reserve())
                 mpr("You feel a force failing to suppress your magic.");
             else
             {
@@ -2249,7 +2318,7 @@ static void _unequip_weapon_effect(item_def& item, bool showMsgs, bool meld,
 
             case SPWPN_ANTIMAGIC:
                 calc_mp();
-                if (!you.has_mutation(MUT_HP_CASTING))
+                if (you.uses_magic_reserve())
                     mpr("You feel magic returning to you.");
                 break;
 
@@ -2304,7 +2373,12 @@ static void _unequip_weapon_effect(item_def& item, bool showMsgs, bool meld,
 
 static void _spirit_shield_message(bool unmeld)
 {
-    if (!unmeld && you.spirit_shield() < 2 && !you.has_mutation(MUT_HP_CASTING))
+    if (you.species == SP_AUTOMATON)
+    {
+        mpr("A protective spirit links incoming damage to your heat capacity.");
+        return;
+    }
+    if (!unmeld && you.spirit_shield() < 2 && you.uses_magic_reserve())
     {
         mpr("You feel your power drawn to a protective spirit.");
 #if TAG_MAJOR_VERSION == 34
@@ -2316,7 +2390,7 @@ static void _spirit_shield_message(bool unmeld)
 #endif
     }
     else if (!unmeld && (you.get_mutation_level(MUT_MANA_SHIELD)
-                         || you.has_mutation(MUT_HP_CASTING)))
+                         || !you.uses_magic_reserve()))
     {
         mpr("You feel the presence of a powerless spirit.");
     }
@@ -2433,6 +2507,16 @@ static void _equip_armour_effect(item_def& arm, bool unmeld)
                 mpr("You feel strangely lacking in power.");
             else
                 mpr("You feel powerful.");
+            break;
+
+        case SPARM_STASIS:
+            mpr("You feel firmly anchored in space and time.");
+            break;
+
+        case SPARM_MANA_REGEN:
+            if (you.uses_magic_reserve())
+                mpr(you.species == SP_AUTOMATON ? "Your heat dissipates more quickly."
+                                              : "Your magic begins to recover more quickly.");
             break;
 
         case SPARM_SPIRIT_SHIELD:
@@ -2568,8 +2652,18 @@ static void _unequip_armour_effect(item_def& item, bool meld, bool was_melded)
         mpr("You feel strangely numb.");
         break;
 
+    case SPARM_STASIS:
+        mpr("You feel less anchored in space and time.");
+        break;
+
+    case SPARM_MANA_REGEN:
+        if (you.uses_magic_reserve())
+            mpr(you.species == SP_AUTOMATON ? "Your heat no longer dissipates as quickly."
+                                          : "Your magic no longer recovers as quickly.");
+        break;
+
     case SPARM_SPIRIT_SHIELD:
-        if (!you.spirit_shield())
+        if (you.uses_magic_reserve() && !you.spirit_shield())
         {
             mpr("You feel strangely alone.");
 #if TAG_MAJOR_VERSION == 34
@@ -2671,7 +2765,7 @@ static void _handle_regen_item_equip(const item_def& item)
         return;
     }
 #endif
-    if (regen_mp && !regen_hp && !player_regenerates_mp()
+    if (regen_mp && !regen_hp && (!you.uses_magic_reserve() || !player_regenerates_mp())
         && !item.is_type(OBJ_JEWELLERY, AMU_CHEMISTRY))
     {
         mprf("The %s feel%s cold and inert.", item_name.c_str(),
@@ -2750,7 +2844,7 @@ static void _equip_jewellery_effect(item_def &item, bool unmeld)
         break;
 
     case RING_MAGICAL_POWER:
-        if (you.has_mutation(MUT_HP_CASTING))
+        if (!you.uses_magic_reserve())
         {
             mpr("You repel a surge of foreign magic.");
             break;
@@ -2900,7 +2994,7 @@ static void _unequip_jewellery_effect(item_def &item, bool meld, bool was_melded
         break;
 
     case RING_MAGICAL_POWER:
-        if (!you.has_mutation(MUT_HP_CASTING))
+        if (you.uses_magic_reserve())
         {
             canned_msg(MSG_MANA_DECREASE);
             pay_mp(9);

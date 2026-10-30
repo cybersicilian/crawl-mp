@@ -214,8 +214,11 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
                         if (window.game_loading)
                         {
                             delete window.game_loading;
-                            uninhibit_messages();
+                            // Draining can synchronously start the next cached client.
+                            // Release this poll before that client owns a new timer.
                             clearInterval(load_interval);
+                            load_interval = undefined;
+                            uninhibit_messages();
                         }
                     }
                 }, asset_failure);

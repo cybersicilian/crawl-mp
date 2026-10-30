@@ -1,0 +1,19 @@
+name: "hired brigand"
+enum: merc_brigand
+glyph: {char: "K", colour: yellow}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived, see_invis]
+species: kobold
+will: 30
+attacks:
+ - {type: hit, flavour: shadowstab, damage: 4}
+hd: 5
+hp_10x: 275
+ac: 0
+ev: 10
+has_corpse: true
+shout: silent
+intelligence: human
+uses: weapons_armour
+size: small
+shape: humanoid
+tile: merc_brigand

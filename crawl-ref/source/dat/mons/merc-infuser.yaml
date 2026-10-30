@@ -1,0 +1,23 @@
+name: "hired infuser"
+enum: merc_infuser
+glyph: {char: "m", colour: yellow}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived]
+species: merfolk
+will: 80
+attacks:
+ - {type: hit, damage: 15}
+hd: 10
+hp_10x: 550
+ac: 1
+ev: 15
+spells: merc_infuser
+has_corpse: true
+shout: shout
+intelligence: human
+habitat: amphibious
+energy: {swim: 6}
+tile_variance: water
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: merc_infuser

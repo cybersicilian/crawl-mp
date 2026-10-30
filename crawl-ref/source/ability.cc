@@ -14,6 +14,13 @@
 #include "god-vorr.h"
 #include "bloodcraft.h"
 #include "wight.h"
+#include "imus-spectrum.h"
+#include "imus-prism.h"
+#include "imus-mirror.h"
+#include "agraphede-abilities.h"
+#include "agraphede-enchant.h"
+#include "agraphede-web.h"
+#include "kimjoy-artifacts.h"
 
 #include "ability.h"
 #include "shell.h"
@@ -65,6 +72,8 @@
 #include "menu.h"
 #include "message.h"
 #include "neckbeard.h"
+#include "bunker.h"
+#include "mercenary-gift.h"
 #include "mgen-data.h"
 #include "mon-behv.h"
 #include "mon-book.h"
@@ -104,6 +113,7 @@
 #include "state.h"
 #include "stepdown.h"
 #include "stringutil.h"
+#include "wyrm-abilities.h"
 #include "tag-version.h"
 #include "target.h"
 #include "target-dithmenos.h"
@@ -425,6 +435,11 @@ static vector<ability_def> &_get_ability_list()
             {fail_basis::xl, 30, 1}, abflag::target | abflag::not_self },
         { ABIL_STEP_BEHIND, "Step Behind", 2, 0, 0, LOS_RADIUS, {},
             abflag::target | abflag::not_self },
+        { ABIL_GOLEM_FORM, "Activate Golem Armour", 0, 0, 0, -1, {}, abflag::none },
+        { ABIL_MERCENARY_GIFT, "Give Mercenary Equipment", 0, 0, 0, -1, {},
+            abflag::silence_ok },
+        { ABIL_DEPLOY_BUNKER, "Deploy Shield", 0, 0, 0, 1, {},
+            abflag::target | abflag::not_self },
         { ABIL_ASSIMILATE, "Assimilate",
             0, 0, 0, -1, {}, abflag::delay },
         { ABIL_RETRACT_SHELL, "Retract into Shell",
@@ -499,6 +514,15 @@ static vector<ability_def> &_get_ability_list()
         { ABIL_ZIN_SANCTUARY, "Sanctuary",
             7, 0, 15, -1, {fail_basis::invo, 80, 4, 25}, abflag::none },
         { ABIL_ZIN_DONATE_GOLD, "Donate Gold",
+            0, 0, 0, -1, {fail_basis::invo}, abflag::none },
+
+        { ABIL_ZIN_BLESS_WEAPON, "Brand Weapon With Silver",
+            0, 0, 0, -1, {fail_basis::invo}, abflag::none },
+        { ABIL_ELYVILON_BLESS_WEAPON, "Brand Weapon With Pacifying",
+            0, 0, 0, -1, {fail_basis::invo}, abflag::none },
+        { ABIL_JIYVA_BLESS_WEAPON, "Brand Weapon With Slimifying",
+            0, 0, 0, -1, {fail_basis::invo}, abflag::none },
+        { ABIL_CHEIBRIADOS_BLESS_WEAPON, "Brand Weapon With Sluggish",
             0, 0, 0, -1, {fail_basis::invo}, abflag::none },
 
         // The Shining One
@@ -804,6 +828,38 @@ static vector<ability_def> &_get_ability_list()
         // Vorr: blood payment is validated and committed by the rite.
         { ABIL_VELLUM_WEAVE, "Weave Enchantments",
             0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_IMUS_PRISMATIC_PRISM, "Prismatic Prism",
+            4, 0, 3, 4, {fail_basis::invo, 40, 5, 20}, abflag::target },
+        { ABIL_IMUS_SPECTRUM, "Spectrum",
+            4, 0, 4, -1, {fail_basis::invo, 50, 5, 20}, abflag::none },
+        { ABIL_IMUS_FRAGMENTATION, "Fragmentation",
+            6, 0, 6, -1, {fail_basis::invo, 60, 5, 20}, abflag::none },
+        { ABIL_WYRM_INFUSE, "Infuse Essence",
+            2, 0, 0, LOS_RADIUS, {}, abflag::target },
+        { ABIL_WYRM_NIGREDO, "Nigredo", 0, 0, 1, -1, {}, abflag::none },
+        { ABIL_WYRM_ALBEDO, "Albedo", 0, 0, 2, -1, {}, abflag::none },
+        { ABIL_WYRM_CITRINITAS, "Citrinitas", 0, 0, 2, -1, {}, abflag::none },
+        { ABIL_WYRM_VIRIDITAS, "Viriditas", 0, 0, 4, -1, {}, abflag::none },
+        { ABIL_WYRM_RUBEDO, "Rubedo", 0, 0, 6, -1, {}, abflag::none },
+        { ABIL_WYRM_FULSOME_DISTILLATION, "Fulsome Distillation",
+            1, 0, 0, -1, {}, abflag::none },
+        { ABIL_WYRM_EVAPORATE, "Evaporate",
+            2, 0, 0, -1, {}, abflag::none },
+        { ABIL_AGRAPHEDE_WEB, "Create Web",
+            0, 0, 1, 3, {fail_basis::invo, 30, 4, 20},
+            abflag::target | abflag::not_self },
+        { ABIL_AGRAPHEDE_CONVERT_POISON, "Convert Curing Potion",
+            0, 0, 0, -1, {}, abflag::none },
+        { ABIL_AGRAPHEDE_ENCHANT_POISON, "Enchant Poison",
+            0, 0, 1, -1, {fail_basis::invo, 40, 4, 20}, abflag::none },
+        { ABIL_AGRAPHEDE_TRAP, "Ball of Web",
+            0, 0, 4, -1, {fail_basis::invo, 60, 4, 25}, abflag::none },
+        { ABIL_AGRAPHEDE_HORNET_STING, "Hornet Sting",
+            0, 0, 3, LOS_RADIUS, {fail_basis::invo, 50, 4, 20},
+            abflag::dir_or_target | abflag::not_self },
+        { ABIL_AGRAPHEDE_SUMMON_SPIDER, "Summon Spider",
+            0, 0, 12, LOS_RADIUS, {fail_basis::invo, 70, 4, 25},
+            abflag::target | abflag::not_self },
         { ABIL_VORR_RUPTURE, "Rupture",
             0, 0, 0, 5, {fail_basis::invo}, abflag::target | abflag::not_self },
         { ABIL_VORR_RED_PASSAGE, "Red Passage",
@@ -1096,10 +1152,11 @@ const string make_cost_description(ability_type ability)
     const ability_def& abil = get_ability_def(ability);
     string ret;
     if (abil.get_mp_cost())
-        ret += make_stringf(", %d MP", abil.get_mp_cost());
+        ret += make_stringf(you.species == SP_AUTOMATON ? ", %d heat" : ", %d MP",
+                            abil.get_mp_cost());
 
     if (abil.flags & abflag::variable_mp)
-        ret += ", MP";
+        ret += you.species == SP_AUTOMATON ? ", Heat" : ", MP";
 
     if (ability == ABIL_CACOPHONY)
         ret += ", Noise";
@@ -1117,6 +1174,12 @@ const string make_cost_description(ability_type ability)
 
     if (abil.piety_cost)
         ret += make_stringf(", Piety%s", abil.piety_pips().c_str());
+
+    if (agraphede_abilities::uses_poison(ability))
+        ret += make_stringf(", %d poison and HP",
+                            agraphede_abilities::poison_cost(ability));
+    if (ability == ABIL_AGRAPHEDE_CONVERT_POISON)
+        ret += ", 1 potion of curing";
 
     if (abil.flags & abflag::breath)
         ret += ", Breath";
@@ -1200,6 +1263,14 @@ static const string _detailed_cost_description(ability_type ability)
         return "This ability drains maximum HP, which recovers as you gain experience.";
     if (ability == ABIL_AUTOMATON_DELETE_SPELL)
         return "Deleting an engraving drains maximum HP, which recovers as you gain experience. Cancelling costs nothing.";
+    if (ability == ABIL_AGRAPHEDE_CONVERT_POISON)
+        return "This ability consumes one potion of curing to create three to five "
+               "identified potions of poison. If the output cannot be placed, "
+               "the curing potion is not consumed.";
+    if (agraphede_abilities::uses_poison(ability))
+        return make_cost_description(ability)
+            + ". The poison is converted to equal HP damage on success; "
+              "you cannot invoke this power if the payment would be lethal.";
     if (eldritch::policy(eldritch::god_for_ability(ability)))
         return "This ability costs " + make_cost_description(ability)
             + ". Defiance is restored by ordinary combat experience.";
@@ -1222,7 +1293,7 @@ static const string _detailed_cost_description(ability_type ability)
     if (abil.get_mp_cost())
     {
         have_cost = true;
-        ret << "\nMP     : ";
+        ret << (you.species == SP_AUTOMATON ? "\nHeat   : " : "\nMP     : ");
         ret << abil.get_mp_cost();
     }
     if (abil.get_hp_cost())
@@ -1320,8 +1391,10 @@ ability_type restored_dithmenos_ability(ability_type ability)
 
 ability_type fixup_ability(ability_type ability)
 {
+#if TAG_MAJOR_VERSION == 34
     if (ability == ABIL_PAKELLAS_FIELD_KIT && pakellas::kit_claimed())
         return ABIL_NON_ABILITY;
+#endif
     switch (ability)
     {
     case ABIL_TROG_BERSERK:
@@ -1356,6 +1429,10 @@ ability_type fixup_ability(ability_type ability)
         if (you.props.exists(OKAWARU_WEAPON_GIFTED_KEY))
             return ABIL_NON_ABILITY;
         // fall through
+    case ABIL_ZIN_BLESS_WEAPON:
+    case ABIL_ELYVILON_BLESS_WEAPON:
+    case ABIL_JIYVA_BLESS_WEAPON:
+    case ABIL_CHEIBRIADOS_BLESS_WEAPON:
     case ABIL_TSO_BLESS_WEAPON:
     case ABIL_KIKU_BLESS_WEAPON:
     case ABIL_LUGONU_BLESS_WEAPON:
@@ -1370,6 +1447,7 @@ ability_type fixup_ability(ability_type ability)
     case ABIL_TROG_BROTHERS_IN_ARMS:
     case ABIL_GOZAG_BRIBE_BRANCH:
     case ABIL_QAZLAL_ELEMENTAL_FORCE:
+    case ABIL_IMUS_FRAGMENTATION:
         if (you.allies_forbidden())
             return ABIL_NON_ABILITY;
         else
@@ -2003,6 +2081,13 @@ static bool _can_rising_flame(bool quiet)
 // TODO: Many more cases need to be added!
 static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
 {
+    if (!you.uses_magic_reserve() && (abil.get_mp_cost() > 0
+                           || abil.ability == ABIL_SIF_MUNA_CHANNEL_ENERGY))
+    {
+        if (!quiet)
+            mpr("You have no magic reserve to power this ability.");
+        return false;
+    }
     if (abil.ability == ABIL_MELIAI_SMITE && you.hp_max <= 1)
     {
         if (!quiet)
@@ -2313,7 +2398,8 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
                 mpr("You're too exhausted to draw out your power.");
             return false;
         }
-        if (you.hp == you.hp_max && you.magic_points == you.max_magic_points
+        if (you.hp == you.hp_max && (!you.uses_magic_reserve()
+                                    || you.magic_points == you.max_magic_points)
             && !you.duration[DUR_CONF]
             && !you.duration[DUR_SLOW]
             && !you.attribute[ATTR_HELD]
@@ -2885,6 +2971,8 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
 
 bool check_ability_possible(const ability_type ability, bool quiet)
 {
+    if (!agraphede_abilities::can_pay(ability, quiet))
+        return false;
     return _check_ability_possible(get_ability_def(ability), quiet);
 }
 
@@ -2899,6 +2987,15 @@ public:
     bool targeted() override
     {
         return !!(get_ability_flags(abil) & abflag::targeting_mask);
+    }
+
+    bool hide_target(const coord_def& pos) const override
+    {
+        return (abil == ABIL_WYRM_INFUSE
+                || abil == ABIL_AGRAPHEDE_WEB
+                || abil == ABIL_AGRAPHEDE_HORNET_STING
+                || abil == ABIL_AGRAPHEDE_SUMMON_SPIDER)
+               && wyrm_abilities::hidden_party_target(pos);
     }
 private:
     ability_type abil;
@@ -2984,8 +3081,22 @@ unique_ptr<targeter> find_ability_targeter(ability_type ability)
     }
     switch (ability)
     {
+    case ABIL_AGRAPHEDE_WEB:
+        return make_unique<targeter_smite>(&you, 3, 0, 0);
+    case ABIL_AGRAPHEDE_SUMMON_SPIDER:
+        return make_unique<targeter_smite>(&you, LOS_RADIUS, 0, 0);
+    case ABIL_AGRAPHEDE_HORNET_STING:
+        return find_spell_targeter(SPELL_VENOM_BOLT,
+                                   15 + you.skill(SK_INVOCATIONS, 7) / 2,
+                                   LOS_RADIUS);
+    case ABIL_WYRM_INFUSE:
+        return make_unique<targeter_smite>(&you, LOS_RADIUS, 0, 0);
+    case ABIL_IMUS_PRISMATIC_PRISM:
+        return make_unique<targeter_smite>(&you, 4, 2, 2);
     case ABIL_STEP_BEHIND:
         return neckbeard::step_targeter();
+    case ABIL_DEPLOY_BUNKER:
+        return make_unique<targeter_smite>(&you, 1, 0, 0);
     case ABIL_CRAB_WALK:
         return make_unique<targeter_multiposition>(&you, hermit_crab::crab_walk_targets());
     case ABIL_SHELL_DASH:
@@ -3279,7 +3390,8 @@ bool activate_talent(const talent& tal, dist *target, int inventory_slot)
     if (!target)
         target = &target_local;
 
-    if (!_check_ability_possible(abil))
+    if (!_check_ability_possible(abil)
+        || !agraphede_abilities::can_pay(abil.ability))
     {
         crawl_state.zero_turns_taken();
         return false;
@@ -3307,8 +3419,10 @@ bool activate_talent(const talent& tal, dist *target, int inventory_slot)
         args.restricts = testbits(abil.flags, abflag::target) ? DIR_ENFORCE_RANGE
                                                               : DIR_NONE;
         args.mode = abil.ability == ABIL_ELYVILON_DIVINE_ALMS ? TARG_FRIEND
-            : abil.ability == ABIL_CRAB_WALK ? TARG_NON_ACTOR
+            : abil.ability == ABIL_CRAB_WALK || abil.ability == ABIL_DEPLOY_BUNKER ? TARG_NON_ACTOR
             : abil.ability == ABIL_SHELL_DASH
+                || abil.ability == ABIL_IMUS_PRISMATIC_PRISM
+                || abil.ability == ABIL_WYRM_INFUSE
                 || abil.ability == ABIL_VORR_RED_PASSAGE || abil.ability == ABIL_VORR_GREAT_LETTING
                 ? TARG_ANY : TARG_HOSTILE;
         args.range = range;
@@ -3705,6 +3819,73 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_STEP_BEHIND:
         return neckbeard::step_behind(target->target);
 
+    case ABIL_IMUS_SPECTRUM:
+        fail_check();
+        imus_spectrum_activate();
+        return spret::success;
+
+    case ABIL_IMUS_PRISMATIC_PRISM:
+        return cast_imus_prism(12 + skill_bump(SK_INVOCATIONS, 6),
+                               target->target, fail);
+
+    case ABIL_IMUS_FRAGMENTATION:
+        return imus_mirror::cast(you.piety() / 4 + you.skill(SK_INVOCATIONS, 5),
+                                 fail);
+
+    case ABIL_WYRM_INFUSE:
+        return wyrm_abilities::infuse(target->target, fail);
+    case ABIL_WYRM_NIGREDO:
+    case ABIL_WYRM_ALBEDO:
+    case ABIL_WYRM_CITRINITAS:
+    case ABIL_WYRM_VIRIDITAS:
+    case ABIL_WYRM_RUBEDO:
+        return wyrm_abilities::transmute(abil.ability, fail);
+    case ABIL_WYRM_FULSOME_DISTILLATION:
+        return cast_fulsome_distillation(you.piety(), true, fail);
+    case ABIL_WYRM_EVAPORATE:
+        return your_spells(SPELL_EVAPORATE, you.piety(), false, nullptr,
+                           nullptr, fail);
+
+    case ABIL_AGRAPHEDE_WEB:
+        return agraphede_abilities::create_web(target->target, fail);
+    case ABIL_AGRAPHEDE_CONVERT_POISON:
+        return agraphede_abilities::convert_curing(fail);
+    case ABIL_AGRAPHEDE_ENCHANT_POISON:
+        if (!agraphede_abilities::can_pay(abil.ability))
+            return spret::abort;
+        fail_check();
+        agraphede_enchant_poison(11 + you.skill(SK_INVOCATIONS, 7));
+        agraphede_abilities::pay(abil.ability);
+        return spret::success;
+    case ABIL_AGRAPHEDE_TRAP:
+    {
+        if (!agraphede_abilities::can_pay(abil.ability))
+            return spret::abort;
+        const int enhancement = agraphede_abilities::poison_enhancement();
+        const int power = agraphede_abilities::enhanced_power(you.skill(SK_INVOCATIONS));
+        fail_check();
+        if (!agra_web::summon(power, min(4, 1 + enhancement)))
+            return spret::abort;
+        agraphede_abilities::pay(abil.ability);
+        return spret::success;
+    }
+    case ABIL_AGRAPHEDE_HORNET_STING:
+    {
+        if (!agraphede_abilities::can_pay(abil.ability))
+            return spret::abort;
+        const int power = agraphede_abilities::enhanced_power(
+            15 + you.skill(SK_INVOCATIONS, 7) / 2);
+        if (!player_tracer(ZAP_AGRAPHEDE_STING, power, beam, beam.range))
+            return spret::abort;
+        fail_check();
+        // Once targeting and failure checks have succeeded, firing cannot abort.
+        // Pay before the beam fires, since a reflection can damage its caster.
+        agraphede_abilities::pay(abil.ability);
+        return zapping(ZAP_AGRAPHEDE_STING, power, beam);
+    }
+    case ABIL_AGRAPHEDE_SUMMON_SPIDER:
+        return agraphede_abilities::summon_spiders(target->target, fail);
+
     case ABIL_CRAB_WALK:
         return hermit_crab::crab_walk(target->target);
 
@@ -3841,6 +4022,14 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
 
     case ABIL_SPIDER_JUMP:
         return spider_jump();
+
+    case ABIL_GOLEM_FORM:
+        return activate_golem_armour() ? spret::success : spret::abort;
+    case ABIL_MERCENARY_GIFT:
+        return mercenary::prompt_gift() ? spret::success : spret::abort;
+
+    case ABIL_DEPLOY_BUNKER:
+        return bunker::deploy(target->target);
 
     case ABIL_WATERY_GRAVE:
         return cast_watery_grave();
@@ -3998,6 +4187,23 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_TSO_SUMMON_DIVINE_WARRIOR:
         return cast_summon_holy_warrior(you.skill(SK_INVOCATIONS, 4), fail);
 
+    case ABIL_ZIN_BLESS_WEAPON:
+        if (!bless_weapon(GOD_ZIN, SPWPN_SILVER, YELLOW))
+            return spret::abort;
+        break;
+    case ABIL_ELYVILON_BLESS_WEAPON:
+        if (!bless_weapon(GOD_ELYVILON, SPWPN_PACIFYING, WHITE))
+            return spret::abort;
+        break;
+    case ABIL_JIYVA_BLESS_WEAPON:
+        if (!bless_weapon(GOD_JIYVA, SPWPN_SLIMIFYING, GREEN))
+            return spret::abort;
+        break;
+    case ABIL_CHEIBRIADOS_BLESS_WEAPON:
+        if (!bless_weapon(GOD_CHEIBRIADOS, SPWPN_SLUGGISH, LIGHTBLUE))
+            return spret::abort;
+        break;
+
     case ABIL_TSO_BLESS_WEAPON:
         simple_god_message(" will bless one of your weapons.");
         // included in default force_more_message
@@ -4085,9 +4291,15 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                     continue;
                 if (party::are_gods_concordant(GOD_YREDELEMNUL, ally.religion))
                 {
+#if TAG_MAJOR_VERSION == 34
                     party::heal_or_buff_party_member(
                         i, 4 + random2(6), 0, DUR_REGENERATION, 6 + random2(5),
                         "Yredelemnul's soul-harvest vitalises");
+#else
+                    party::heal_or_buff_party_member(
+                        i, 4 + random2(6), 0, NUM_DURATIONS, 0,
+                        "Yredelemnul's soul-harvest vitalises");
+#endif
                 }
 
             }
@@ -4310,7 +4522,8 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_SIF_MUNA_CHANNEL_ENERGY:
     {
         fail_check();
-        mpr("You channel some magical energy.");
+        mpr(you.species == SP_AUTOMATON ? "You channel energy to dissipate heat."
+                                      : "You channel some magical energy.");
         const int dur = 4 + random2avg(you.skill_rdiv(SK_SPELLCASTING, 3, 10), 2);
         you.increase_duration(DUR_CHANNEL_ENERGY, dur, 100);
         if (party::is_enabled())
@@ -5099,6 +5312,13 @@ bool player_has_ability(ability_type abil, bool include_unusable)
         return hermit_crab::crab_walk_ready(you);
     case ABIL_STEP_BEHIND:
         return you.char_class == JOB_NECKBEARD;
+    case ABIL_GOLEM_FORM:
+        return golem_armour_complete(you) && you.form != transformation::golem
+               && !you.get_mutation_level(MUT_NO_ARTIFICE);
+    case ABIL_MERCENARY_GIFT:
+        return mercenary::can_give_item();
+    case ABIL_DEPLOY_BUNKER:
+        return bunker::available(you) && !bunker::find(you);
     case ABIL_HERMIT_MOULT:
         return you.species == SP_HERMIT_CRAB;
     case ABIL_ENT_PASSWALL:
@@ -5225,6 +5445,9 @@ vector<talent> your_talents(bool include_unusable, bool ignore_piety)
             ABIL_SHAFT_SELF,
             ABIL_HOP,
             ABIL_STEP_BEHIND,
+            ABIL_GOLEM_FORM,
+            ABIL_DEPLOY_BUNKER,
+            ABIL_MERCENARY_GIFT,
             ABIL_CRAB_WALK,
             ABIL_HERMIT_MOULT,
             ABIL_ENT_PASSWALL,
@@ -5437,6 +5660,10 @@ int find_ability_slot(const ability_type abil, char firstletter)
     case ABIL_KIKU_GIFT_CAPSTONE_SPELLS:
         first_slot = letter_to_index('N');
         break;
+    case ABIL_ZIN_BLESS_WEAPON:
+    case ABIL_ELYVILON_BLESS_WEAPON:
+    case ABIL_JIYVA_BLESS_WEAPON:
+    case ABIL_CHEIBRIADOS_BLESS_WEAPON:
     case ABIL_TSO_BLESS_WEAPON:
     case ABIL_KIKU_BLESS_WEAPON:
     case ABIL_LUGONU_BLESS_WEAPON:

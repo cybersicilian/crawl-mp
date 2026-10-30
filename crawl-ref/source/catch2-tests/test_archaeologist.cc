@@ -2,6 +2,7 @@
 #include "AppHdr.h"
 
 #include "archaeologist.h"
+#include "bag.h"
 #include "artefact.h"
 #include "art-enum.h"
 #include "branch.h"
@@ -13,6 +14,7 @@
 #include "mon-util.h"
 #include "mutation.h"
 #include "ng-restr.h"
+#include "options.h"
 #include "party.h"
 #include "playable.h"
 #include "player.h"
@@ -225,6 +227,29 @@ TEST_CASE_METHOD(archaeologist_fixture, "Archaeologist recovers a dropped tome a
     CHECK(you.inv[crate_slot].base_type == entry->base_type);
     CHECK(you.inv[crate_slot].sub_type == entry->sub_type);
     CHECK(you.props["archaeologist_phase"].get_int() == 4);
+}
+
+TEST_CASE_METHOD(archaeologist_fixture,
+                 "Auto-bag pickup preserves the Archaeologist tome quest",
+                 "[archaeologist][bag-storage]")
+{
+    unwind_var<FixedBitVector<NUM_OBJECT_CLASSES>> restore(Options.auto_bag_items);
+    Options.auto_bag_items.reset();
+    Options.auto_bag_items.set(OBJ_MISCELLANY);
+    archaeologist::start_quest();
+    const int tome_slot = find_item(MISC_DUSTY_TOME);
+    REQUIRE(tome_slot >= 0);
+    item_def tome = you.inv[tome_slot];
+    you.inv[tome_slot].clear();
+    item_def& pouch = carry(0, OBJ_MISCELLANY, MISC_POUCH, false);
+    wear(0, SLOT_BAG);
+    you.experience_level = 3;
+    archaeologist::on_level_change();
+    REQUIRE(move_item_to_inv(tome));
+    CHECK(bag::used(pouch) == 0);
+    REQUIRE(you.props.exists("archaeologist_skill"));
+    const skill_type skill = static_cast<skill_type>(you.props["archaeologist_skill"].get_int());
+    CHECK(you.skill_manual_points[skill] == 700);
 }
 
 TEST_CASE_METHOD(archaeologist_fixture, "Archaeologist quest state and dropped crate survive recovery", "[archaeologist]")

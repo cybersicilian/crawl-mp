@@ -1,6 +1,6 @@
 """Host control is sticky; connected guests cannot impersonate another hero."""
 import json
-from types import SimpleNamespace
+from types import MethodType, SimpleNamespace
 import unittest
 from unittest.mock import Mock
 
@@ -12,6 +12,7 @@ class GameplayProtocolTest(unittest.TestCase):
     def setUp(self):
         self.game = SimpleNamespace(username="Host", party_members={"Host": 0, "Guest": 1},
                                     party_mode=True, conn=Mock(open=True), process=Mock())
+        self.game.handle_input = MethodType(CrawlProcessHandler.handle_input, self.game)
         self.game.party_control = PartyControl("Host", self.game.party_members)
         self.game.party_control.state = {"msg": "party_state", "active_slot": 1, "members": [
             {"slot": slot, "alive": True} for slot in range(4)]}

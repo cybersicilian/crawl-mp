@@ -290,6 +290,33 @@ bool floor_trap_suppressed(dungeon_feature_type type, bool in_vault)
         && type != DNGN_TRAP_TELEPORT_PERMANENT && !vault_travel;
 }
 
+bool floor_trap_suppressed_at(const coord_def& pos)
+{
+    if (!in_bounds(pos))
+        return true;
+    const dungeon_feature_type type = env.grid(pos);
+    if (type == DNGN_TRAP_WEB && (env.pgrid(pos) & FPROP_AGRAPHEDE_WEB))
+        return false;
+    return floor_trap_suppressed(type, map_masked(pos, MMT_VAULT));
+}
+
+bool place_agraphede_web(const coord_def& pos, bool temporary)
+{
+    if (!in_bounds(pos) || env.grid(pos) != DNGN_FLOOR)
+        return false;
+    dungeon_terrain_changed(pos, DNGN_TRAP_WEB);
+    if (env.grid(pos) != DNGN_TRAP_WEB)
+        return false;
+    env.pgrid(pos) |= FPROP_AGRAPHEDE_WEB;
+    if (temporary)
+        env.pgrid(pos) |= FPROP_AGRAPHEDE_WEB_TEMP;
+    else
+        env.pgrid(pos) &= ~FPROP_AGRAPHEDE_WEB_TEMP;
+    if (you.see_cell(pos))
+        update_terrain_knowledge(pos);
+    return true;
+}
+
 // Triggers a trap-like feature at a given actor's location.
 // (If there isn't one, nothing happens)
 void trigger_trap(actor& triggerer)
@@ -301,7 +328,7 @@ void trigger_trap(actor& triggerer)
     // Plates, passages and vault travel traps may be essential to a puzzle or
     // the only route through a vault. Vault masks conservatively protect all
     // vault teleport and shaft features because their purpose is not tagged.
-    if (floor_trap_suppressed(type, map_masked(triggerer.pos(), MMT_VAULT)))
+    if (floor_trap_suppressed_at(triggerer.pos()))
         return;
 
     const bool you_trigger = triggerer.is_player();
@@ -604,7 +631,8 @@ void trigger_trap(actor& triggerer)
                 mpr("You pick your way through the web.");
             else if (you.trap_in_web())
             {
-                if (orig_terrain(pos) != DNGN_TRAP_WEB)
+                if (orig_terrain(pos) != DNGN_TRAP_WEB
+                    || (env.pgrid(pos) & FPROP_AGRAPHEDE_WEB_TEMP))
                     destroy_trap(pos);
                 if (player_in_a_dangerous_place())
                     xom_is_stimulated(50);
@@ -622,7 +650,8 @@ void trigger_trap(actor& triggerer)
                         mpr("A web moves frantically as something is caught in it!");
                     // Don't try to escape the web in the same turn
                     m->props[NEWLY_TRAPPED_KEY] = true;
-                    if (orig_terrain(pos) != DNGN_TRAP_WEB)
+                    if (orig_terrain(pos) != DNGN_TRAP_WEB
+                        || (env.pgrid(pos) & FPROP_AGRAPHEDE_WEB_TEMP))
                         destroy_trap(pos);
                 }
             }
@@ -690,6 +719,12 @@ void destroy_trap(const coord_def& pos)
 {
     if (!feat_is_trap(env.grid(pos)))
         return;
+
+    // If this is the underlying divine web, removing it removes its saved
+    // provenance too. A temporary overlay over an underlying divine web must
+    // leave the underlying web's provenance in place when it is restored.
+    if (!is_temp_terrain(pos) || orig_terrain(pos) != DNGN_TRAP_WEB)
+        env.pgrid(pos) &= ~(FPROP_AGRAPHEDE_WEB | FPROP_AGRAPHEDE_WEB_TEMP);
 
     if (!revert_terrain_change(pos, TERRAIN_CHANGE_GOLUBRIA, false))
         dungeon_terrain_changed(pos, DNGN_FLOOR);
@@ -1036,6 +1071,7 @@ void place_webs(int num)
         if (tries >= 200)
             break;
 
+        env.pgrid(pos) &= ~(FPROP_AGRAPHEDE_WEB | FPROP_AGRAPHEDE_WEB_TEMP);
         env.grid(pos) = DNGN_TRAP_WEB;
     }
 }

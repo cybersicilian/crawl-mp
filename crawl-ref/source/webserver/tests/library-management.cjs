@@ -3,32 +3,35 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const { chromium } = require('playwright');
 const root = path.resolve(__dirname, '..');
+const verifyCollection = require('./helpers/library-browser-checks.cjs');
 
 (async () => {
     const browser = await chromium.launch(process.env.BROWSER_EXECUTABLE
         ? { headless: true, executablePath: process.env.BROWSER_EXECUTABLE }
         : { headless: true, channel: 'chrome' });
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    page.setDefaultTimeout(10000);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     try {
         await page.route('https://save-manager.test/**', route => {
             const pathname = new URL(route.request().url()).pathname;
             if (pathname === '/') return route.fulfill({ contentType: 'text/html',
-                body: '<!doctype html><html><meta name="viewport" content="width=device-width,initial-scale=1">'
+                body: '<!doctype html><html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
                     + '<body><main id="lobby" class="has-chapter-index">'
                     + '<section id="party_lobby_panel"></section></main></body></html>' });
             return route.fulfill({ path: path.join(root, pathname) });
         });
         await page.goto('https://save-manager.test/');
         for (const file of ['style.css', 'tabletop/navigation.css', 'tabletop/lobby-workspace.css',
-            'fonts/fonts.css', 'tabletop/library.css'])
+            'fonts/fonts.css', 'tabletop/lobby-dashboard.css', 'tabletop/layout-rhythm.css',
+            'tabletop/ui-themes.css', 'tabletop/theme-lobby.css', 'tabletop/library.css'])
             await page.addStyleTag({ url: 'https://save-manager.test/static/' + file });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/contrib/jquery.js') });
         await page.evaluate(() => {
             window.qaPackets = [];
             window.qaHandlers = {};
-            window.qaModules = { jquery: window.jQuery, comm: {
+            window.qaModules = { require: { toUrl: value => "https://save-manager.test/static/scripts/" + value }, jquery: window.jQuery, comm: {
                 send_message(msg, fields) { window.qaPackets.push({ msg, ...fields }); },
                 register_handlers(handlers) { Object.assign(window.qaHandlers, handlers); }
             } };
@@ -45,6 +48,10 @@ const root = path.resolve(__dirname, '..');
             window.qaRender = () => window.qaHandlers.game_library({ player_id: 'owner', games: window.qaGames });
         });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/expedition-url.js') });
+        for (const name of ['text-query', 'library-browser']) {
+            await page.evaluate(name => { window.qaModule = name; }, name);
+            await page.addScriptTag({ path: path.join(root, 'static/scripts', name + '.js') });
+        }
         await page.evaluate(() => { window.qaModule = 'library-ui'; });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/library-ui.js') });
         await page.evaluate(() => window.qaRender());
@@ -55,6 +62,7 @@ const root = path.resolve(__dirname, '..');
         assert.equal(await page.locator('[data-game-id="save-0"] .library-state').textContent(), 'Saved');
         assert.equal(await page.getByRole('link', { name: 'Return to game', exact: true }).getAttribute('href'), '#expedition-save-3');
         assert.equal(await page.getByRole('link', { name: 'My history', exact: true }).getAttribute('href'), '/players/owner');
+        await verifyCollection(page);
         const primary = page.locator('[data-library-load="save-0"]');
         const contrast = await primary.evaluate(el => {
             const style = getComputedStyle(el);
@@ -140,6 +148,10 @@ const root = path.resolve(__dirname, '..');
         assert.equal(await page.locator('[data-library-delete]').count(), 0);
         assert.deepEqual(errors, []);
         console.log('Save manager: compact rows, readable Resume, running/history links, empty state, cancellation, keyboard deletion, busy/error states, retained search/focus and layouts at 320–2674px passed.');
+    } catch (error) {
+        if (process.env.LIBRARY_MANAGEMENT_SCREENSHOT)
+            await page.screenshot({ path: process.env.LIBRARY_MANAGEMENT_SCREENSHOT.replace('.png', '-failure.png'), fullPage: true });
+        throw error;
     } finally {
         await browser.close();
     }

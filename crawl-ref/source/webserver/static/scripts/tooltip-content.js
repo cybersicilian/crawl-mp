@@ -1,5 +1,5 @@
 /* One presentation contract for native descriptions and rich-tooltip metadata. */
-define(["item-properties", "rich-text"], function (artwork, richText) {
+define(["item-properties", "rich-text", "heat-help"], function (artwork, richText, heatHelp) {
     "use strict";
 
     var definitions = {
@@ -92,11 +92,15 @@ define(["item-properties", "rich-text"], function (artwork, richText) {
     }
 
     // Rich prose uses the shared renderer; player-supplied HTML remains escaped.
-    function render(node, body, meta) {
+    function render(node, body, meta, heat) {
         var data = parse(body, meta);
         node.textContent = "";
         node.setAttribute("data-tip-reading", [body, meta].filter(Boolean).join("\n\n"));
         node.classList.add("tip-content");
+        if (heat) {
+            node.setAttribute("data-tip-reading-heat", heat);
+            node.appendChild(heatHelp.render(heat));
+        } else node.removeAttribute("data-tip-reading-heat");
         if (data.facts.length) node.appendChild(renderFacts(data.facts));
         if (data.text) {
             var prose = element("div", "tip-description");

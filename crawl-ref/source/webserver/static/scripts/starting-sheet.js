@@ -15,7 +15,8 @@ define(["character-catalog", "item-properties", "native-start", "player-doll", "
             job: catalog.jobs[value(".party-slot-job")], weapon: value(".party-slot-weapon"), trait: value(".party-slot-trait") || "none",
             seed: card.dataset.startingSeed || "", gameId: card.dataset.gameId || "", companion: card.dataset.slot !== "0",
             multiplayer: card.dataset.multiplayer === "true",
-            modifiers: card.dataset.startingModifiers || "", active: !card.matches(".slot-state-open, .slot-state-closed")
+            modifiers: card.dataset.startingModifiers || "", active: card.dataset.seatActive === undefined
+                ? !card.matches(".slot-state-open, .slot-state-closed") : card.dataset.seatActive === "true"
         };
     }
     function heading(parent, text) { parent.appendChild(el("h3", "party-insp-section-title", text)); }

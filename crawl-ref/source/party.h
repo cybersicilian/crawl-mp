@@ -96,6 +96,9 @@ namespace party
     void apply_starting_campaign_modifiers(player& leader);
     bool starting_no_rune_locks();
     game_modifiers::traps starting_trap_mode();
+    bool starting_shared_fate();
+    void set_starting_shared_fate(bool enabled);
+    bool shared_fate_enabled();
     void set_starting_campaign_modifiers(bool no_rune_locks, game_modifiers::traps mode);
     const member_setup &starting_member(int slot);
     void set_starting_trait(int slot, character_trait trait);
@@ -104,9 +107,11 @@ namespace party
     void setup_party_members_on_new_game();
     bool add_party_member(const std::string &spec = "");
 
-    // Friendly fire setting (default false = shoot-through immunity)
+    // Friendly fire defaults to enabled; disabled protects party members.
     bool friendly_fire_enabled();
     void set_friendly_fire(bool enabled);
+    void save_friendly_fire();
+    void restore_friendly_fire();
 
     // Pebble Broth Seasonings (Run Modifiers) & Superlatives
     bool has_seasoning_fast_boil();
@@ -125,6 +130,9 @@ namespace party
     // Player slot access & context switching
     int active_slot();
     player& get_player(int slot);
+    // Publish the greatest allocated monster ID across all party members.
+    // Scoped player contexts can allocate monsters without a full turn switch.
+    void sync_monster_ids();
     inline player& Member(int slot) { return get_player(slot); }
     inline player& player_in_Slot(int slot) { return get_player(slot); }
     inline player& player_in_slot(int slot) { return get_player(slot); }
@@ -135,6 +143,8 @@ namespace party
     bool is_party_mid(mid_t m);
     mid_t mid_for_slot(int slot);
     int slot_for_mid(mid_t m);
+    // A live player and their monster proxy represent the same actor.
+    bool same_actor_identity(const actor* first, const actor* second);
     int player_slot_at(const coord_def &pos, bool include_active = true);
     player* player_at(const coord_def &pos, bool include_active = true);
 
@@ -188,6 +198,8 @@ namespace party
 
     // Downed / Ghost Spectator & Revival mechanics
     bool is_player_downed(int slot);
+    // Charge successful multiplayer resurrections, including personal lives.
+    void apply_resurrection_cost();
     // Resolve pending extra lives for inactive party members on this floor.
     bool resolve_pending_revivals();
     void restore_downed_state();
@@ -197,7 +209,8 @@ namespace party
     bool any_player_alive();
     void revive_downed_players(bool on_floor_transition, int hp_drain_percent = 35);
     // When the last standing player falls while teammates are downed, revive
-    // the downed teammates instead of ending the run. Once per floor.
+    // the downed teammates instead of ending the run. Solo parties only,
+    // once per floor; multiplayer requires an explicit resurrection resource.
     bool try_last_stand_revive(int falling_slot);
     void relocate_downed_ghost_to_survivor(int downed_slot);
 

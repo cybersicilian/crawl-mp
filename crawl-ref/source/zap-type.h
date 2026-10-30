@@ -209,5 +209,6 @@ enum zap_type
     ZAP_AUTOMATON_LASER,
     ZAP_MANA_RUPTURE,
     ZAP_BLIGHT,
+    ZAP_AGRAPHEDE_STING,
     NUM_ZAPS
 };

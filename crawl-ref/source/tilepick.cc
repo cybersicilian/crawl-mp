@@ -128,6 +128,8 @@ tileidx_t tileidx_shop(const shop_struct *shop)
         case SHOP_GENERAL:
         case SHOP_GENERAL_ANTIQUE:
             return TILE_SHOP_GENERAL;
+        case SHOP_MERCENARY:
+            return TILE_SHOP_MERCENARY;
         default:
             return TILE_DNGN_ERROR;
     }
@@ -407,6 +409,8 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_PORTAL_VOLCANO;
     case DNGN_ENTER_GULCH:
         return TILE_DNGN_PORTAL_GULCH;
+    case DNGN_ENTER_GOLEMFORGE:
+        return TILE_DNGN_PORTAL_GOLEMFORGE;
     case DNGN_ENTER_WIZLAB:
         return TILE_DNGN_PORTAL_WIZARD_LAB;
     case DNGN_ENTER_DESOLATION:
@@ -474,6 +478,8 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_EXIT_VOLCANO;
     case DNGN_EXIT_GULCH:
         return TILE_DNGN_EXIT_GULCH;
+    case DNGN_EXIT_GOLEMFORGE:
+        return TILE_DNGN_PORTAL_GOLEMFORGE;
     case DNGN_EXIT_DESOLATION:
         return TILE_DNGN_EXIT_DESOLATION;
     case DNGN_EXIT_WIZLAB:
@@ -552,6 +558,12 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_ALTAR_VORR;
     case DNGN_ALTAR_VELLUM:
         return TILE_DNGN_ALTAR_VELLUM;
+    case DNGN_ALTAR_IMUS_THEA:
+        return TILE_DNGN_ALTAR_IMUS_THEA;
+    case DNGN_ALTAR_GREAT_WYRM:
+        return TILE_DNGN_ALTAR_GREAT_WYRM;
+    case DNGN_ALTAR_AGRAPHEDE:
+        return TILE_DNGN_ALTAR_AGRAPHEDE;
     case DNGN_ALTAR_ECUMENICAL:
         return TILE_DNGN_ALTAR_ECUMENICAL;
     case DNGN_FOUNTAIN_BLUE:
@@ -2380,7 +2392,8 @@ static tileidx_t _tileidx_monster_no_props(const monster_info& mon)
             // but will use a regular stance if she picks up a shield
             // (enhancer staves are compatible with those).
             const item_def* weapon = mon.inv[MSLOT_WEAPON].get();
-            if (!mon.inv[MSLOT_SHIELD] && weapon
+            if ((!mon.inv[MSLOT_SHIELD]
+                 || mon.props.exists("grape_shield_melded")) && weapon
                 && (weapon->is_type(OBJ_STAVES, STAFF_ALCHEMY)
                     || is_unrandom_artefact(*weapon, UNRAND_OLGREB)))
             {
@@ -2882,6 +2895,10 @@ static const map<monster_info_flags, tileidx_t> monster_status_icons = {
     { MB_KNOWN_INVIS, TILEI_UNSEEN_INVIS_KNOWN },
     { MB_INVISIBLE, TILEI_SEEN_INVIS },
     { MB_DIVINE_SHIELD, TILEI_DIVINE_SHIELD },
+    { MB_WYRM_NIGREDO, TILEI_WYRM_NIGREDO },
+    { MB_WYRM_ALBEDO, TILEI_WYRM_ALBEDO },
+    { MB_WYRM_CITRINITAS, TILEI_WYRM_CITRINITAS },
+    { MB_WYRM_VIRIDITAS, TILEI_WYRM_VIRIDITAS },
 };
 
 set<tileidx_t> status_icons_for(const monster_info &mons)
@@ -3340,6 +3357,9 @@ static tileidx_t _tileidx_armour_base(const item_def &item)
     case ARM_STORM_DRAGON_ARMOUR:
         return TILE_ARM_STORM_DRAGON_ARMOUR;
 
+    case ARM_IRON_DRAGON_ARMOUR:
+        return TILE_ARM_IRON_DRAGON_ARMOUR;
+
     case ARM_SHADOW_DRAGON_ARMOUR:
         return TILE_ARM_SHADOW_DRAGON_ARMOUR;
 
@@ -3627,6 +3647,19 @@ static tileidx_t _tileidx_misc(const item_def &item)
     case MISC_SKALD_HORN:
         return TILE_MISC_HORN_OF_GERYON;
 
+    case MISC_PIPE_OF_RECALL:
+        return TILE_MISC_PIPE_OF_RECALL;
+    case MISC_HEALING_MIST:
+        return evoker_charges(item.sub_type) ? TILE_MISC_HEALING_MIST
+                                             : TILE_MISC_HEALING_MIST_INERT;
+    case MISC_AIR_HORN:
+        return evoker_charges(item.sub_type) ? TILE_MISC_AIR_HORN
+                                             : TILE_MISC_AIR_HORN_INERT;
+    case MISC_POUCH:
+    case MISC_SATCHEL:
+    case MISC_BAG_OF_PLENTY:
+        return TILE_MISC_CARRY_BAG;
+
     // Default for summary menus
     case NUM_MISCELLANY:
     case MISC_PHANTOM_MIRROR:
@@ -3639,6 +3672,8 @@ static tileidx_t _tileidx_misc(const item_def &item)
         return TILE_MISC_QUAD_DAMAGE;
 
     case MISC_SHOP_VOUCHER:
+        return TILE_MISC_SHOP_VOUCHER;
+    case MISC_MERCENARY_CONTRACT:
         return TILE_MISC_SHOP_VOUCHER;
 
     case MISC_ANCIENT_CRATE:
@@ -3724,6 +3759,8 @@ tileidx_t tileidx_item(const item_def &item)
         {
             switch (type)
             {
+            case SCR_COLLECTION:
+            case SCR_WISH:
             case SCR_SOUL_RECALL:
                 return TILE_SCR_ID_FIRST + SCR_ACQUIREMENT;
             case SCR_RALLYING:
@@ -3757,6 +3794,8 @@ tileidx_t tileidx_item(const item_def &item)
 
             if (item.is_identified())
             {
+                if (type == RING_ELEC_RESISTANCE)
+                    return TILE_RING_INSULATION;
                 const int ring_tile_type = (type == RING_CAMARADERIE)
                                            ? RING_SLAYING : type;
                 return TILE_RING_ID_FIRST + ring_tile_type - RING_FIRST_RING
@@ -3798,6 +3837,11 @@ tileidx_t tileidx_item(const item_def &item)
                 return TILE_POT_ID_FIRST + POT_BRILLIANCE;
             case POT_TRANSFUSION:
                 return TILE_POT_ID_FIRST + POT_MAGIC;
+            case POT_NIGREDO: return TILE_WYRM_NIGREDO;
+            case POT_ALBEDO: return TILE_WYRM_ALBEDO;
+            case POT_CITRINITAS: return TILE_WYRM_CITRINITAS;
+            case POT_VIRIDITAS: return TILE_WYRM_VIRIDITAS;
+            case POT_RUBEDO: return TILE_WYRM_RUBEDO;
             default:
                 return TILE_POT_ID_FIRST + type;
             }
@@ -3951,6 +3995,27 @@ tileidx_t tileidx_item_projectile(const item_def &item)
 // is based on the randomized description. It returns 0 if there is none.
 tileidx_t tileidx_known_base_item(tileidx_t label)
 {
+    // Wyrm labels are appended outside the save-ordered potion tile range.
+    // Resolve them explicitly so floor and WebTiles layers retain the same
+    // unidentified appearance and identification rules as other potions.
+    potion_type wyrm_potion = NUM_POTIONS;
+    switch (label)
+    {
+    case TILE_WYRM_NIGREDO: wyrm_potion = POT_NIGREDO; break;
+    case TILE_WYRM_ALBEDO: wyrm_potion = POT_ALBEDO; break;
+    case TILE_WYRM_CITRINITAS: wyrm_potion = POT_CITRINITAS; break;
+    case TILE_WYRM_VIRIDITAS: wyrm_potion = POT_VIRIDITAS; break;
+    case TILE_WYRM_RUBEDO: wyrm_potion = POT_RUBEDO; break;
+    default: break;
+    }
+    if (wyrm_potion != NUM_POTIONS)
+    {
+        if (!type_is_identified(OBJ_POTIONS, wyrm_potion))
+            return TILE_UNSEEN_POTION;
+        const int desc = you.item_description[IDESC_POTIONS][wyrm_potion]
+                         % NDSC_POT_PRI;
+        return TILE_POTION_OFFSET + desc;
+    }
     if (label >= TILE_POT_ID_FIRST && label <= TILE_POT_ID_LAST)
     {
         int type = label - TILE_POT_ID_FIRST;
@@ -3960,6 +4025,16 @@ tileidx_t tileidx_known_base_item(tileidx_t label)
             return TILE_UNSEEN_POTION;
         else
             return TILE_POTION_OFFSET + desc;
+    }
+
+    // Insulation is appended outside the save-ordered ring-label range.
+    if (label == TILE_RING_INSULATION)
+    {
+        if (!type_is_identified(OBJ_JEWELLERY, RING_ELEC_RESISTANCE))
+            return TILE_UNSEEN_RING;
+        const int desc = you.item_description[IDESC_RINGS][RING_ELEC_RESISTANCE]
+                         % NDSC_JEWEL_PRI;
+        return TILE_RING_NORMAL_OFFSET + desc;
     }
 
     if (label >= TILE_RING_ID_FIRST && label <= TILE_RING_ID_LAST)
@@ -4266,6 +4341,12 @@ tileidx_t tileidx_skill(skill_type skill, int train)
                 ch = TILEG_INVOCATIONS_F_ON; break;
             case GOD_HEPLIAKLQANA:
                 ch = TILEG_INVOCATIONS_H_ON; break;
+            case GOD_IMUS_THEA:
+                ch = TILEG_INVOCATIONS_IMUS_ON; break;
+            case GOD_GREAT_WYRM:
+                ch = TILEG_INVOCATIONS_WYRM_ON; break;
+            case GOD_AGRAPHEDE:
+                ch = TILEG_INVOCATIONS_AGRAPHEDE_ON; break;
             case GOD_LUGONU:
                 ch = TILEG_INVOCATIONS_L_ON; break;
             case GOD_MAKHLEB:
@@ -4481,6 +4562,12 @@ tileidx_t tileidx_ability(const ability_type ability)
         return TILEG_ABILITY_HOP;
     case ABIL_STEP_BEHIND:
         return TILEG_ABILITY_BLINK;
+    case ABIL_GOLEM_FORM:
+        return TILEG_ABILITY_GOLEM_FORM;
+    case ABIL_DEPLOY_BUNKER:
+        return TILEG_ABILITY_TSO_DIVINE_SHIELD;
+    case ABIL_MERCENARY_GIFT:
+        return TILEG_ABILITY_OKAWARU_GIFT_WEAPON;
     case ABIL_HERMIT_MOULT:
         return TILEG_SPLINTERFROST_SHELL;
     case ABIL_ENT_PASSWALL:
@@ -4573,6 +4660,14 @@ tileidx_t tileidx_ability(const ability_type ability)
         return TILEG_ABILITY_ZIN_SANCTUARY;
     case ABIL_ZIN_DONATE_GOLD:
         return TILEG_ABILITY_ZIN_DONATE_GOLD;
+    case ABIL_ZIN_BLESS_WEAPON:
+        return TILEG_ABILITY_ZIN_BLESS_WEAPON;
+    case ABIL_ELYVILON_BLESS_WEAPON:
+        return TILEG_ABILITY_ELYVILON_BLESS_WEAPON;
+    case ABIL_JIYVA_BLESS_WEAPON:
+        return TILEG_ABILITY_JIYVA_BLESS_WEAPON;
+    case ABIL_CHEIBRIADOS_BLESS_WEAPON:
+        return TILEG_ABILITY_CHEIBRIADOS_BLESS_WEAPON;
     // TSO
     case ABIL_TSO_DIVINE_SHIELD:
         return TILEG_ABILITY_TSO_DIVINE_SHIELD;
@@ -4751,6 +4846,26 @@ tileidx_t tileidx_ability(const ability_type ability)
     case ABIL_ELDER_RITE: return TILEG_ABILITY_ELDER_RITE;
     case ABIL_VELLUM_WEAVE:
         return TILEG_ABILITY_VELLUM_WEAVE;
+    case ABIL_IMUS_PRISMATIC_PRISM:
+        return TILEG_ABILITY_IMUS_PRISMATIC_PRISM;
+    case ABIL_IMUS_SPECTRUM:
+        return TILEG_ABILITY_IMUS_SPECTRUM;
+    case ABIL_IMUS_FRAGMENTATION:
+        return TILEG_ABILITY_IMUS_FRAGMENTATION;
+    case ABIL_WYRM_INFUSE: return TILEG_ABILITY_WYRM_INFUSE;
+    case ABIL_WYRM_NIGREDO: return TILEG_ABILITY_WYRM_NIGREDO;
+    case ABIL_WYRM_ALBEDO: return TILEG_ABILITY_WYRM_ALBEDO;
+    case ABIL_WYRM_CITRINITAS: return TILEG_ABILITY_WYRM_CITRINITAS;
+    case ABIL_WYRM_VIRIDITAS: return TILEG_ABILITY_WYRM_VIRIDITAS;
+    case ABIL_WYRM_RUBEDO: return TILEG_ABILITY_WYRM_RUBEDO;
+    case ABIL_WYRM_FULSOME_DISTILLATION: return TILEG_ABILITY_WYRM_FULSOME_DISTILLATION;
+    case ABIL_WYRM_EVAPORATE: return TILEG_ABILITY_WYRM_EVAPORATE;
+    case ABIL_AGRAPHEDE_WEB: return TILEG_ABILITY_AGRAPHEDE_WEB;
+    case ABIL_AGRAPHEDE_CONVERT_POISON: return TILEG_ABILITY_AGRAPHEDE_CONVERT_POISON;
+    case ABIL_AGRAPHEDE_ENCHANT_POISON: return TILEG_ABILITY_AGRAPHEDE_ENCHANT_POISON;
+    case ABIL_AGRAPHEDE_TRAP: return TILEG_ABILITY_AGRAPHEDE_TRAP;
+    case ABIL_AGRAPHEDE_HORNET_STING: return TILEG_ABILITY_AGRAPHEDE_HORNET_STING;
+    case ABIL_AGRAPHEDE_SUMMON_SPIDER: return TILEG_ABILITY_AGRAPHEDE_SUMMON_SPIDER;
     case ABIL_VORR_RUPTURE:
         return TILEG_ABILITY_VORR_RUPTURE;
     case ABIL_VORR_RED_PASSAGE:
@@ -5008,6 +5123,8 @@ tileidx_t tileidx_branch(const branch_type br)
         return TILE_DNGN_PORTAL_VOLCANO;
     case BRANCH_GULCH:
         return TILE_DNGN_PORTAL_GULCH;
+    case BRANCH_GOLEMFORGE:
+        return TILE_DNGN_PORTAL_GOLEMFORGE;
     case BRANCH_WIZLAB:
         return TILE_DNGN_PORTAL_WIZARD_LAB_7; /* I like this colour */
     case BRANCH_DESOLATION:
@@ -5251,7 +5368,17 @@ tileidx_t tileidx_known_brand(const item_def &item)
             // brands presuming a messy false fixed order, and bleeds into
             // missile brands otherwise. Maybe this should just be a full
             // switch case fix-up instead.
-            if (brand == SPWPN_ACID)
+            if (brand == SPWPN_PACIFYING)
+                return TILE_BRAND_PACIFYING;
+            else if (brand == SPWPN_SLUGGISH)
+                return TILE_BRAND_SLUGGISH;
+            else if (brand == SPWPN_SILVER)
+                return TILE_BRAND_SILVER;
+            else if (brand == SPWPN_SLIMIFYING)
+                return TILE_BRAND_SLIMIFYING;
+            else if (brand == SPWPN_SEEKING)
+                return TILE_BRAND_SEEKING;
+            else if (brand == SPWPN_ACID)
                 return TILE_BRAND_ACID;
             else if (brand == SPWPN_FOUL_FLAME)
                 return TILE_BRAND_FOUL_FLAME;

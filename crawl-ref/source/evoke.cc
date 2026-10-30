@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "bag.h"
+#include "bag-menu.h"
 #include "coop-content.h"
 
 #include "evoke.h"
@@ -44,12 +46,14 @@
 #include "losglobal.h"
 #include "losparam.h"
 #include "message.h"
+#include "mercenary-transit.h"
 #include "mgen-data.h"
 #include "misc.h"
 #include "mon-behv.h"
 #include "mon-clone.h"
 #include "mon-pick.h"
 #include "mon-place.h"
+#include "mon-util.h"
 #include "mutant-beast.h"
 #include "nearby-danger.h" // i_feel_safe
 #include "party.h"
@@ -65,6 +69,7 @@
 #include "spl-clouds.h"
 #include "spl-damage.h"
 #include "spl-monench.h" // FASTROOT_POWER_KEY
+#include "spl-other.h"
 #include "spl-summoning.h"
 #include "spl-util.h"
 #include "state.h"
@@ -331,6 +336,26 @@ static bool _sack_of_spiders_veto_mon(monster_type mon)
 {
    // Don't summon any beast that would anger your god.
     return god_hates_monster(mon);
+}
+
+// Agraphede reuses the current sack-of-spiders population, but summons near
+// the selected enemy and attributes every summon to the invoking player.
+bool agraphede_summon_spiders(int power, int count, const coord_def& target)
+{
+    bool made_mons = false;
+    monster* foe = monster_at(target);
+    if (!foe)
+        return false;
+    for (int n = 0; n < count; ++n)
+    {
+        const monster_type mon = pick_monster_from(pop_spiders,
+            max(1, min(27, power)), _sack_of_spiders_veto_mon);
+        mgen_data mg(mon, BEH_FRIENDLY, target, foe->mindex(), MG_FORCE_BEH);
+        mg.set_summoned(&you, 0, summ_dur(3 + random2(4)));
+        if (create_monster(mg))
+            made_mons = true;
+    }
+    return made_mons;
 }
 
 static bool _spill_out_spiders(const evocation& activation)
@@ -1006,6 +1031,13 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
     if (!item)
         return "";
 
+    // A bag is mundane storage, not a magical device. An unworn bag can be
+    // opened only to recover contents after a forced equipment change.
+    if (bag::is_bag(*item))
+        return temp && you.equipment.find_equipped_slot(*item) != SLOT_BAG
+                    && bag::used(*item) == 0
+               ? "You must wear the bag to open it." : "";
+
     if (item->is_type(OBJ_MISCELLANY, MISC_ANCIENT_CRATE))
         return "The crate opens after its owner's tome has been studied.";
     if (item->is_type(OBJ_MISCELLANY, MISC_DUSTY_TOME))
@@ -1085,7 +1117,8 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
 
     if (temp
         && item->base_type == OBJ_MISCELLANY
-        && item->sub_type == MISC_CONDENSER_VANE
+        && (item->sub_type == MISC_CONDENSER_VANE
+            || item->sub_type == MISC_HEALING_MIST)
         && (env.level_state & LSTATE_STILL_WINDS))
     {
         return "The air is too still for clouds to form.";
@@ -1094,7 +1127,9 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
     if (temp
         && item->base_type == OBJ_MISCELLANY
         && (item->sub_type == MISC_HORN_OF_GERYON
-            || item->sub_type == MISC_SKALD_HORN)
+            || item->sub_type == MISC_SKALD_HORN
+            || item->sub_type == MISC_AIR_HORN
+            || item->sub_type == MISC_PIPE_OF_RECALL)
         && you.is_silenced())
     {
         return "You can't produce a sound!";
@@ -1265,7 +1300,8 @@ static spret _evoke_astral_beacon(int plus, const evocation& activation)
                                       -(you.hp_max * 2 / 5));
             calc_hp();
             you.hp = max(1, you.hp_max * hp_pct / 100);
-            you.magic_points = max(you.magic_points, you.max_magic_points / 2);
+            if (you.uses_magic_reserve())
+                you.magic_points = max(you.magic_points, you.max_magic_points / 2);
             you.duration[DUR_CONF] = 0;
             you.duration[DUR_SLOW] = 0;
             you.duration[DUR_POISONING] = 0;
@@ -1494,6 +1530,53 @@ static spret _evoke_skald_horn(int plus, const evocation& activation)
     return spret::success;
 }
 
+// The pipe calls the invoking player's own summons, never another party
+// member's summons or a player represented by a monster proxy.
+bool recall_pipe_can_recall(const monster& target)
+{
+    return !party::is_proxy_monster(target) && target.was_created_by(you)
+           && mons_is_recallable(&you, target);
+}
+
+static spret _healing_mist(const evocation& activation)
+{
+    for (monster_near_iterator mi(you.pos(), LOS_NO_TRANS); mi; ++mi)
+    {
+        if (!mi->wont_attack() && you.can_see(**mi))
+        {
+            if (!yesno("This healing mist may heal an enemy. Continue?", true, 'n'))
+                return spret::abort;
+            break;
+        }
+    }
+    if (!activation.commit())
+        return spret::abort;
+    mpr("You open the flask and release a cloud of healing mist.");
+    noisy(10, you.pos());
+    big_cloud(CLOUD_WYRM_HEAL, &you, you.pos(),
+              5 + you.skill(SK_EVOCATIONS, 3), 10 + random2(8));
+    return spret::success;
+}
+
+static spret _air_horn(const evocation& activation)
+{
+    targeter_radius hitfunc(&you, LOS_NO_TRANS);
+    auto vulnerable = [](const actor *act) -> bool
+    {
+        return act && !party::same_actor_identity(&you, act)
+               && could_harm(&you, act);
+    };
+    if (stop_attack_prompt(hitfunc, "sound the air horn", vulnerable)
+        || !activation.commit())
+        return spret::abort;
+    noisy(20, you.pos());
+    const int power = 30 + div_rand_round(you.skill(SK_EVOCATIONS, 15), 2);
+    const spret result = fire_los_attack_spell(SPELL_SONIC_WAVE, power, &you, false);
+    if (result == spret::success)
+        you.sentinel_mark(true);
+    return result;
+}
+
 spret evoke_device(item_def& item, dist* target, const evocation& activation)
 {
     if (!coop_content::enabled()
@@ -1537,6 +1620,8 @@ spret evoke_device(item_def& item, dist* target, const evocation& activation)
         case MISC_ASTRAL_BEACON: result = _evoke_astral_beacon(evoker_plus(subtype), activation); break;
         case MISC_TWIN_SPARK_CONDUIT: result = _evoke_twin_spark_conduit(evoker_plus(subtype), activation); break;
         case MISC_SKALD_HORN: result = _evoke_skald_horn(evoker_plus(subtype), activation); break;
+        case MISC_HEALING_MIST: result = _healing_mist(activation); break;
+        case MISC_AIR_HORN: result = _air_horn(activation); break;
         default: return spret::abort;
         }
         if (result == spret::success && !activation.externally_funded)
@@ -1563,6 +1648,8 @@ spret evoke_device(item_def& item, dist* target, const evocation& activation)
 
 bool evoke_item(item_def& item, dist *preselect)
 {
+    if (bag::is_bag(item))
+        return bag::open(item) == spret::success;
     if (item.base_type == OBJ_WANDS || is_xp_evoker(item))
         return evoke_device(item, preselect) != spret::abort;
     if (!item_currently_evokable(&item))
@@ -1598,6 +1685,19 @@ bool evoke_item(item_def& item, dist *preselect)
 
         switch (item.sub_type)
         {
+        case MISC_PIPE_OF_RECALL:
+        {
+            mpr("You play a calling melody on the pipe.");
+            noisy(8, you.pos());
+            bool recalled = false;
+            for (monster_iterator mi; mi; ++mi)
+                if (recall_pipe_can_recall(**mi) && try_recall(mi->mid))
+                    recalled = true;
+            recalled |= recall_owned_mercenaries(you);
+            if (!recalled)
+                mpr("None of your summons or mercenaries answers your call.");
+            break;
+        }
 #if TAG_MAJOR_VERSION == 34
         case MISC_BOTTLED_EFREET:
         case MISC_FAN_OF_GALES:
@@ -1727,6 +1827,9 @@ string evoke_damage_string(const item_def& item)
             const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + evoker_plus(item.sub_type) * 7;
             return make_stringf("2d%d", 6 + pow / 6);
         }
+        else if (item.sub_type == MISC_AIR_HORN)
+            return spell_damage_string(SPELL_SONIC_WAVE, true,
+                                       30 + you.skill(SK_EVOCATIONS, 15) / 2);
         else
             return "";
     }
@@ -1752,10 +1855,13 @@ string evoke_noise_string(const item_def& item)
         else if (item.sub_type == MISC_GRAVITAMBOURINE)
             return spell_noise_string(SPELL_GRAVITAS);
         else if (item.sub_type == MISC_TWIN_SPARK_CONDUIT
-                 || item.sub_type == MISC_SKALD_HORN)
+                 || item.sub_type == MISC_SKALD_HORN
+                 || item.sub_type == MISC_AIR_HORN)
             return "loud";
         else if (item.sub_type == MISC_AEGIS_STANDARD
-                 || item.sub_type == MISC_ASTRAL_BEACON)
+                 || item.sub_type == MISC_ASTRAL_BEACON
+                 || item.sub_type == MISC_HEALING_MIST
+                 || item.sub_type == MISC_PIPE_OF_RECALL)
             return "moderate";
         else
             return "";
@@ -1801,7 +1907,7 @@ void stardust_orb_trigger(int mp_spent)
 {
     if (!you.duration[DUR_STARDUST_COOLDOWN]
         && you.wearing_ego(OBJ_ARMOUR, SPARM_STARDUST)
-        && !you.has_mutation(MUT_HP_CASTING))
+        && you.uses_magic_reserve())
     {
         schedule_stardust_fineff(&you, stardust_orb_power(mp_spent),
                                  stardust_orb_max(), SHOOTING_STAR_ORB);

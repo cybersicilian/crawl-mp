@@ -1,0 +1,15 @@
+name: "interdimensional grape"
+glyph: {char: "%", colour: magenta}
+flags: [flies, see_invis, insubstantial]
+exp: 770
+holiness: [nonliving]
+will: invuln
+attacks:
+hd: 10
+hp_10x: 700
+ac: 10
+ev: 10
+intelligence: brainless
+energy: {move: 8}
+size: little
+shape: orb

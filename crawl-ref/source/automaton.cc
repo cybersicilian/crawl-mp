@@ -36,6 +36,7 @@ namespace
 {
 const char *const COMBAT_HEAT_UNTIL = "automaton_combat_heat_until";
 const char *const VISIBLE_THREATS = "automaton_visible_threats";
+const char *const ATTACK_TURN = "automaton_attack_turn";
 const char *const TOXIC_ENGRAVING = "automaton_toxic_engraving";
 const char *const BEE_WINDING = "automaton_bee_winding";
 const char *const BEE_TARGET = "automaton_bee_target";
@@ -783,7 +784,7 @@ enum class engraving_trigger
     blazeheart, alembic
 };
 
-// This classification drives both the description and memorisation warning.
+// This classification drives descriptions and spell acquisition eligibility.
 // Individual casts still check the actual target, resources and cooldown.
 engraving_trigger classify_engraving(spell_type spell)
 {
@@ -858,14 +859,16 @@ bool has_automatic_trigger(spell_type spell)
 
 std::string engraving_guidance(spell_type spell)
 {
+    if (spell == SPELL_MANIFOLD_ASSAULT)
+        return "This engraving may activate during a melee attack against safe targets.";
     if (los_hex_engraving(spell))
-        return "This engraving may affect susceptible foes in sight during an attack, when no protected creature is in its area.";
+        return "This engraving may affect susceptible foes in sight after moving, waiting or attacking with a threat in sight, when no protected creature is in its area.";
     if (spell == SPELL_SIGIL_OF_BINDING)
-        return "This engraving may inscribe binding sigils during an attack without replacing existing sigils. Friendly, neutral and protected creatures pass safely.";
+        return "This engraving may inscribe binding sigils after moving, waiting or attacking with a threat in sight without replacing existing sigils. Friendly, neutral and protected creatures pass safely.";
     if (spell == SPELL_PHALANX_BEETLE)
-        return "This engraving may forge a protective phalanx beetle during an attack, without replacing your existing beetle.";
+        return "This engraving may forge a protective phalanx beetle after moving, waiting or attacking with a threat in sight, without replacing your existing beetle.";
     if (spell == SPELL_BLASTMOTE)
-        return "This engraving may kindle blastmotes beneath you during an attack. Move away: the cloud disperses harmlessly if its explosion would catch a friendly or protected creature.";
+        return "This engraving may kindle blastmotes beneath you after moving, waiting or attacking with a threat in sight. Move away: the cloud disperses harmlessly if its explosion would catch a friendly or protected creature.";
     switch (classify_engraving(spell))
     {
     case engraving_trigger::invalid:
@@ -875,31 +878,31 @@ std::string engraving_guidance(spell_type spell)
     case engraving_trigger::passwall:
         return "This engraving may escape through a known clear wall when badly hurt. Passage takes time and can be interrupted.";
     case engraving_trigger::dragon_call:
-        return "This engraving may summon dragons during an attack when the call is ready and it is safe.";
+        return "This engraving may summon dragons after moving, waiting or attacking with a threat in sight when the call is ready and it is safe.";
     case engraving_trigger::toxic_aura:
-        return "This engraving may radiate poison during an attack. The aura ends if a protected creature comes within range.";
+        return "This engraving may radiate poison after moving, waiting or attacking with a threat in sight. The aura ends if a protected creature comes within range.";
     case engraving_trigger::bog:
-        return "This engraving may create a bog on clear, unaltered ground during an attack. It recedes beneath protected creatures.";
+        return "This engraving may create a bog on clear, unaltered ground after moving, waiting or attacking with a threat in sight. It recedes beneath protected creatures.";
     case engraving_trigger::searing_ray:
-        return "This engraving may fire one searing ray during an attack without starting a channel.";
+        return "This engraving may fire one searing ray after moving, waiting or attacking with a threat in sight without starting a channel.";
     case engraving_trigger::clockwork_bee:
-        return "This engraving may wind a clockwork bee during an attack, using heat once. Winding takes three normal-speed turns and stops if you take damage or lose the target; an existing bee is not replaced.";
+        return "This engraving may wind a clockwork bee after moving, waiting or attacking with a threat in sight, using heat once. Winding takes three normal-speed turns and stops if you take damage or lose the target; an existing bee is not replaced.";
     case engraving_trigger::spike_launcher:
         return "This engraving may construct a spike launcher in a visible wall beside a hostile. It avoids neutral and friendly creatures and will not replace an existing launcher.";
     case engraving_trigger::blazeheart:
-        return "This engraving may forge a blazeheart golem during an attack, without replacing an existing one. Its core cools harmlessly if a protected creature is nearby; otherwise it explodes and leaves fire clouds.";
+        return "This engraving may forge a blazeheart golem after moving, waiting or attacking with a threat in sight, without replacing an existing one. Its core cools harmlessly if a protected creature is nearby; otherwise it explodes and leaves fire clouds.";
     case engraving_trigger::alembic:
-        return "This engraving may construct a walking alembic during an attack, without replacing an existing one. Its fumes disperse beneath friendly and neutral creatures.";
+        return "This engraving may construct a walking alembic after moving, waiting or attacking with a threat in sight, without replacing an existing one. Its fumes disperse beneath friendly and neutral creatures.";
     case engraving_trigger::escape:
         return "This engraving may activate when badly hurt and threatened.";
     case engraving_trigger::attack:
-        return "This engraving may activate during an attack when its effect is safe.";
+        return "This engraving may activate after moving, waiting or attacking with a threat in sight when its effect is safe.";
     case engraving_trigger::summon:
-        return "This engraving may summon an ally during an attack when it is safe.";
+        return "This engraving may summon an ally after moving, waiting or attacking with a threat in sight when it is safe.";
     case engraving_trigger::self:
-        return "This engraving may activate when encountering or attacking a threat.";
+        return "This engraving may activate when encountering a threat or acting with one in sight.";
     case engraving_trigger::targeted:
-        return "This engraving may activate during an attack against a safe target.";
+        return "This engraving may activate after moving, waiting or attacking with a threat in sight against a safe target.";
     }
     return "This spell currently has no automatic engraving trigger.";
 }
@@ -913,6 +916,44 @@ void mark_combat(player& p)
 {
     if (p.species == SP_AUTOMATON)
         p.props[COMBAT_HEAT_UNTIL].get_int() = p.elapsed_time + 5 * BASELINE_DELAY;
+}
+
+void cool_down(player& p, int amount)
+{
+    if (p.species != SP_AUTOMATON || amount <= 0)
+        return;
+    p.magic_points = min(p.max_magic_points, p.magic_points + amount);
+    p.redraw_magic_points = true;
+    if (p.magic_points == p.max_magic_points)
+        p.check_mp_regen_attunement = true;
+}
+
+std::string resource_text(const player& p, std::string text)
+{
+    if (p.species != SP_AUTOMATON)
+        return text;
+
+    const pair<const char*, const char*> terms[] = {
+        { "divided between the wearer's reserves of health and magic",
+          "absorbed by building heat, with the rest taken from health" },
+        { "divided between your reserves of health and magic",
+          "absorbed by building heat, with the rest taken from health" },
+        { "full reserves of magic", "fully dissipated heat" },
+        { "reserves of magical power", "heat capacity" },
+        { "magic regeneration", "heat dissipation" },
+        { "magic recovery", "heat dissipation" },
+        { "magical power", "heat capacity" },
+        { "magic capacity", "heat capacity" },
+        { "restores some MP", "dissipates some heat" },
+        { "potion of magic", "potion of cooling" },
+        { "infusion of magical energy", "burst of heat dissipation" },
+        { "RegenMP", "Dissipate" },
+        { "MP+", "Heat+" },
+        { "MP-", "Heat-" },
+    };
+    for (const auto& term : terms)
+        text = replace_all(text, term.first, term.second);
+    return text;
 }
 
 int cooling_rate(const player& p, int base_regeneration)
@@ -1092,7 +1133,47 @@ static bool trigger(const coord_def& target, trigger_phase phase, bool ranged = 
 
 bool trigger_attack(const coord_def& target, bool ranged)
 {
+    if (you.species == SP_AUTOMATON && !casting_engraving)
+        you.props[ATTACK_TURN].get_int() = you.num_turns;
     return trigger(target, trigger_phase::attack, ranged);
+}
+
+void react_to_action()
+{
+    if (you.species != SP_AUTOMATON || casting_engraving
+        || you.time_taken <= 0 || !you.turn_is_over || you.cannot_act()
+        || you.duration[DUR_TIME_STEP] || crawl_state.game_is_arena())
+        return;
+    // This hook runs only for the hero who spent the action. Observation can
+    // run for other heroes or on redraw, so it must not drive offensive casts.
+    // An attack already had its opportunity, even if no engraving was ready.
+    if (you.props.exists(ATTACK_TURN)
+        && you.props[ATTACK_TURN].get_int() == you.num_turns)
+        return;
+    you.props[ATTACK_TURN].get_int() = you.num_turns;
+
+    vector<coord_def> targets;
+    for (monster_near_iterator mi(you.pos(), LOS_NO_TRANS); mi; ++mi)
+    {
+        const monster& mon = **mi;
+        if (you.can_see(mon) && mons_is_threatening(mon)
+            && !mon.wont_attack() && !mon.neutral()
+            && !party::is_proxy_monster(mon))
+            targets.push_back(mon.pos());
+    }
+    stable_sort(targets.begin(), targets.end(), [](const coord_def& a,
+                                                 const coord_def& b)
+    {
+        return grid_distance(you.pos(), a) < grid_distance(you.pos(), b);
+    });
+    for (const coord_def& target : targets)
+        // Reuse all attack targeting, heat and cooldown checks. Manifold
+        // Assault still needs an actual melee attack; waiting is not one.
+        if (trigger(target, trigger_phase::attack, true))
+        {
+            mark_combat(you);
+            break;
+        }
 }
 
 bool trigger_escape()

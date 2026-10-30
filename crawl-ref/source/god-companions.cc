@@ -27,6 +27,7 @@
 #include "items.h"
 #include "macro.h"
 #include "message.h"
+#include "mercenary-transit.h"
 #include "mon-death.h"
 #include "mon-gear.h"
 #include "mon-pathfind.h"
@@ -122,7 +123,7 @@ void update_companions()
         monster* mons = monster_by_mid(entry.first);
         if (mons)
         {
-            if (mons->is_divine_companion())
+            if (mons->is_divine_companion() || is_hired_mercenary(*mons))
             {
                 ASSERT(mons->alive());
                 entry.second.mons = follower(*mons);

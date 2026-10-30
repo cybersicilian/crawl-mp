@@ -99,7 +99,10 @@ function ($, createViews, browser, overview, discovery) {
             if (!returnedFromGame) controller.show("play", false, room ? "party_lobby_panel" : "lobby_home");
         }
         hadRoom = room;
-        if (signedIn && root.style.display !== "none" && returnedFromGame &&
+        if (signedIn && root.style.display !== "none" && returnedFromGame && room &&
+            document.getElementById("party_room_view").classList.contains("has-saved-expedition")) {
+            returnedFromGame = false; controller.show("play", false, "party_lobby_panel");
+        } else if (signedIn && root.style.display !== "none" && returnedFromGame &&
             controller.current() === "play" && document.querySelector("#game_library_panel [data-library-load]"))
             controller.show("saved", false);
         text(primary, room ? "Your party" : "New expedition");
@@ -190,6 +193,9 @@ function ($, createViews, browser, overview, discovery) {
         new MutationObserver(schedule).observe(root.querySelector(".welcome-entry"), {
             attributes: true, attributeFilter: ["class"] });
         window.addEventListener("resize", schedule, { passive: true }); update();
+        window.addEventListener("party-lobby-opened", function () { jump("party_lobby_panel", false); schedule(); });
+        window.addEventListener("party-invite-opened", function () { jump("lobby_friends_panel", false); schedule(); });
+        window.dispatchEvent(new CustomEvent("lobby-navigation-ready"));
     }
     $(document).ready(init);
     return { init: init };

@@ -5,16 +5,26 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 function fixture(images) {
-    let wait, next = 0, ready = 0;
+    let wait, next = 0, ready = 0, now = 0;
     const timers = new Map(), errors = [];
     vm.runInNewContext(fs.readFileSync(path.join(__dirname,
         '../static/scripts/asset-readiness.js'), 'utf8'), {
         define(deps, factory) { wait = factory(); }, URL, document: { baseURI: 'https://game.test/' },
-        setTimeout(callback, ms) { timers.set(++next, {callback, ms}); return next; },
+        setTimeout(callback, ms) { timers.set(++next, {callback, ms, due: now + ms}); return next; },
         clearTimeout(id) { timers.delete(id); }
     });
     const cancel = wait({querySelectorAll: () => images}, () => ready++, error => errors.push(error));
     return {cancel, timers, errors, ready: () => ready,
+        advance(ms) {
+            const end = now + ms;
+            while (true) {
+                const entry = [...timers].filter(([, value]) => value.due <= end)
+                    .sort((a, b) => a[1].due - b[1].due)[0];
+                if (!entry) break;
+                now = entry[1].due; timers.delete(entry[0]); entry[1].callback();
+            }
+            now = end;
+        },
         tick(ms) {
             const entry = [...timers].find(([, value]) => value.ms === ms);
             assert(entry, 'Expected timer ' + ms);
@@ -83,9 +93,23 @@ async function main() {
         const image = new ImageFixture(); let lateDecode;
         image.decode = () => new Promise(resolve => { lateDecode = resolve; });
         const f = fixture([image]); image.load();
-        f.tick(30000); lateDecode(); await Promise.resolve();
+        f.tick(120000); lateDecode(); await Promise.resolve();
         assert.equal(f.ready(), 0, 'A timed-out decode cannot release the barrier for its replacement');
         f.cancel(); assert.equal(f.timers.size, 0);
+    }
+    {
+        const image = new ImageFixture(), f = fixture([image]);
+        f.advance(45000);
+        assert.equal(image.requests.length, 0, 'A healthy slow atlas keeps its download progress');
+        assert.equal(f.errors.length, 0); assert.equal(f.ready(), 0);
+        image.load(); assert.equal(f.ready(), 1);
+        f.advance(180000); assert.equal(image.requests.length, 0);
+    }
+    {
+        const style = new StyleFixture(), f = fixture([style]);
+        f.advance(30000); f.advance(250);
+        assert.equal(style.requests.length, 1, 'A stalled stylesheet retains its shorter recovery deadline');
+        style.load(); assert.equal(f.ready(), 1);
     }
     {
         const image = new ImageFixture(), f = fixture([image]);

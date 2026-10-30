@@ -41,7 +41,7 @@ fs.mkdirSync(out, { recursive: true });
             ['spell-cost', 'static/scripts/spell-cost.js'], ['item-properties', 'static/scripts/item-properties.js'],
             ['./party-model', 'game_data/static/party-model.js'], ['./party-trade-model', 'game_data/static/party-trade-model.js'],
             ['./enums', 'game_data/static/enums.js'], ['./workflow-actions', 'game_data/static/workflow-actions.js'],
-            ['./status-icons', 'game_data/static/status-icons.js'], ['./native-tile-art', 'game_data/static/native-tile-art.js'],
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'], ['./native-tile-art', 'game_data/static/native-tile-art.js'],
             ['trade', 'game_data/static/party-trade.js']
         ]) {
             await page.evaluate(name => { window.moduleName = name; }, name);

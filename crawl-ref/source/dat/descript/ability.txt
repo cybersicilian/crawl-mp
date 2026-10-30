@@ -1418,3 +1418,142 @@ must be visible and clear. This costs 2 MP (or 2 HP for health-powered casters)
 and shares Blink's cooldown for five normal-speed turns. Stasis and the Orb's
 interference prevent the move.
 %%%%
+Prismatic Prism ability
+
+Place a prism within four tiles. It flashes three times, blinding susceptible
+creatures within two tiles, including allied summons; it deals no damage.
+Its strength improves with your devotion to Imus Thea.
+%%%%
+Spectrum ability
+
+For a short time, eligible beam spells and thrown attacks spread along multiple
+paths toward your target.
+%%%%
+Fragmentation ability
+
+Call forth a mirror image of yourself. On its turn, it repeats eligible spells
+and ranged attacks you have used, if it can find a safe line to the target.
+Using this ability again strengthens the image and recalls it if it is out of
+sight and a safe space is available.
+%%%%
+Create Web ability
+
+Spin a web at a nearby location. It can ensnare creatures that enter it and
+remains active even when ordinary floor traps are disabled. The power converts
+up to five points of your poison into immediate damage.
+%%%%
+Convert Curing Potion ability
+
+Turn one potion of curing into several identified potions of poison.
+%%%%
+Enchant Poison ability
+
+Temporarily add venom to melee attacks, including unarmed attacks, and launched
+projectiles. This does not replace a weapon's existing brand. The power converts
+up to fifteen points of your poison into immediate damage.
+%%%%
+Ball of Web ability
+
+Create a ball that pursues foes and bursts, damaging and ensnaring creatures
+within two tiles. You are protected from its burst; your companions are not.
+The power converts all of your poison into immediate damage.
+%%%%
+Hornet Sting ability
+
+Fire a venomous sting that can poison, slow, confuse or paralyse its target.
+The power converts all of your poison into immediate damage.
+%%%%
+Summon Spider ability
+
+Summon a swarm of spiders and other poisonous allies. The power converts all
+of your poison into immediate damage.
+%%%%
+Infuse Essence ability
+
+Choose an alchemical essence and a visible target. The infusion consumes one
+essence and applies its effect to that creature. Party members can receive
+Nigredo or Citrinitas; Rubedo can spread their existing infusions. Albedo and
+Viriditas can only be infused into monsters.
+%%%%
+Nigredo ability
+
+Transmute a potion or essence into Nigredo, the essence of decay. A creature
+infused with Nigredo leaves miasma behind as it moves; evaporating Nigredo also
+produces miasma. Drinking it is harmful.
+%%%%
+Albedo ability
+
+Transmute a potion or essence into Albedo, the essence of purification. Drinking
+it dispels your beneficial effects and reduces contamination. Infused creatures
+with dispellable effects can falter; evaporation produces flame. Albedo cannot
+interrupt a party member.
+%%%%
+Citrinitas ability
+
+Transmute a potion or essence into Citrinitas, the essence of empowerment.
+Drinking it or infusing a creature improves accuracy and spell power.
+%%%%
+Viriditas ability
+
+Transmute a potion or essence into Viriditas, the essence of restoration.
+Drinking it cures several ailments, and evaporating it creates a cloud that
+heals creatures within it, including enemies.
+An infused creature's attacks can heal the infusion's owner instead of dealing
+damage. Viriditas can only be infused into hostile monsters.
+%%%%
+Rubedo ability
+
+Transmute a potion or essence into Rubedo, the essence of completion. Drinking
+it grants resistance to several elements. Infusing a creature spreads its
+other essences to eligible creatures in sight.
+%%%%
+Fulsome Distillation ability
+
+Distil an alchemical potion from a corpse on the ground. The creature's
+properties determine the result; the corpse is consumed on success.
+%%%%
+Evaporate ability
+
+Choose a potion and throw it to create a cloud. The cloud depends on the potion,
+which is consumed only after the action succeeds.
+%%%%
+%%%%
+Brand Weapon With Silver ability
+
+Zin permanently blesses a non-artefact melee weapon with silver. This gift may
+be received once.
+%%%%
+Brand Weapon With Pacifying ability
+
+Elyvilon permanently blesses a non-artefact melee weapon with pacifying. This
+gift may be received once.
+%%%%
+Brand Weapon With Slimifying ability
+
+Jiyva permanently transforms a non-artefact melee weapon with slimifying. This
+gift may be received once, separately from the opening of the Slime Pits.
+%%%%
+Brand Weapon With Sluggish ability
+
+Cheibriados permanently blesses a non-artefact melee weapon with sluggish. This
+gift may be received once.
+%%%%
+Activate Golem Armour ability
+
+Activate a complete set of golem armour to assume Golem Form. The armour stays
+equipped, and removing any piece ends the transformation. In this form you are
+larger and stronger, gain armour and health, and resist negative energy and
+petrification. Use End Transformation to return to your usual form.
+%%%%
+Deploy Shield ability
+
+Pin your equipped bunker shield in an adjacent empty square. It becomes a
+stationary barrier whose durability increases with Shields skill. Moving
+retrieves it; if the barrier is destroyed, the shield falls to the ground.
+%%%%
+Give Mercenary Equipment ability
+
+Give a carried weapon, staff, armour or missile stack to one of your visible
+mercenaries. Their previous equipment falls on safe ground. Mercenaries can
+only use equipment suited to their role; a witch's spells follow their staff.
+Equipped or cursed items must be removed before being given.

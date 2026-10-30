@@ -706,6 +706,7 @@ public:
     int get_hit_dice() const override;
     int get_experience_level() const override;
     int get_max_xl() const;
+    int permanent_xl_cap_loss() const;
     bool is_player() const override
     {
         return true;
@@ -790,6 +791,9 @@ public:
     bool weapon_is_good_stab(const item_def *weapon = nullptr) const;
     bool has_good_stab() const;
 
+    // Mana and free thermal capacity share a reserve; HP casting does not.
+    bool has_mana() const;
+    bool uses_magic_reserve() const;
     int infusion_amount() const;
 
     item_def *weapon(int which_attack = -1) const override;
@@ -1252,6 +1256,9 @@ int xp_to_level_diff(int xp, int scale=1);
 
 void level_change(bool skip_attribute_increase = false);
 void adjust_level(int diff, bool just_xp = false);
+// Permanent potential loss, separate from removable mutations and Ru's cost.
+extern const char *const XL_CAP_LOSS_KEY;
+void reduce_level_cap(int levels);
 
 bool is_player_same_genus(const monster_type mon);
 monster_type player_mons(bool transform = true);

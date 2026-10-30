@@ -37,11 +37,23 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
         var pad = document.getElementById("direction_pad");
         var canvas = document.getElementById("dungeon"), root = document.getElementById("left_column");
         if (!pad || !canvas || !root) return;
-        var bounds = canvas.getBoundingClientRect(), parent = root.getBoundingClientRect();
-        pad.style.visibility = bounds.width < pad.offsetWidth + 16 || bounds.height < pad.offsetHeight + 16 ? "hidden" : "";
-        // The canvas keeps its native dimensions and pointer coordinates.
-        pad.style.left = Math.max(8, bounds.right - parent.left - pad.offsetWidth - 10) + "px";
-        pad.style.top = Math.max(8, bounds.bottom - parent.top - pad.offsetHeight - 10) + "px";
+        // Whole tiles bleed behind the HUD; align controls to the visible frame.
+        var viewport = document.getElementById("dungeon_viewport") || canvas;
+        var bounds = viewport.getBoundingClientRect(), parent = root.getBoundingClientRect();
+        var inset = 10;
+        pad.style.visibility = bounds.width < pad.offsetWidth + inset * 2
+            || bounds.height < pad.offsetHeight + inset * 2 ? "hidden" : "";
+        var left = Math.max(bounds.left + inset, bounds.right - pad.offsetWidth - inset);
+        var top = Math.max(bounds.top + inset, bounds.bottom - pad.offsetHeight - inset);
+        var rail = document.getElementById("enemy_initiative_rail");
+        if (rail && !rail.hidden && !rail.classList.contains("is-compact") && getComputedStyle(rail).visibility !== "hidden") {
+            var occupied = rail.getBoundingClientRect();
+            if (left < occupied.right && left + pad.offsetWidth > occupied.left
+                && top < occupied.bottom && top + pad.offsetHeight > occupied.top)
+                left = Math.max(bounds.left + inset, occupied.left - pad.offsetWidth - inset);
+        }
+        pad.style.left = left - parent.left + "px";
+        pad.style.top = top - parent.top + "px";
     }
     function update() {
         var blocked = reason();
@@ -91,12 +103,14 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
         observer = new ResizeObserver(refresh);
         observer.observe(root);
         observer.observe(document.getElementById("dungeon"));
+        var viewport = document.getElementById("dungeon_viewport");
+        if (viewport) observer.observe(viewport);
         observer.observe(pad[0]);
         update();
     }
     $(document).on("game_init.directionPad", init)
         .on("game_keydown.directionPad game_keypress.directionPad", onKey)
-        .on("party_state_rendered.directionPad game_actions_changed.directionPad game_popup_changed.directionPad game_ui_changed.directionPad hud_workspace_changed.directionPad", refresh)
+        .on("party_state_rendered.directionPad game_actions_changed.directionPad game_popup_changed.directionPad game_ui_changed.directionPad hud_workspace_changed.directionPad creature_rail_positioned.directionPad", refresh)
         .on("game_cleanup.directionPad", function () {
             refresh.cancel();
             clearHighlight();

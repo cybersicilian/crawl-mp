@@ -461,6 +461,7 @@ const vector<GameOption*> game_options::build_options_list()
              {"toggle", SKM_FOCUS_TOGGLE}}, true),
         new BoolGameOption(SIMPLE_NAME(read_persist_options), false),
         new BoolGameOption(SIMPLE_NAME(auto_switch), false),
+        new BoolGameOption(SIMPLE_NAME(autofight_weapon_swap), false),
         new BoolGameOption(SIMPLE_NAME(suppress_startup_errors), false),
         new BoolGameOption(SIMPLE_NAME(simple_targeting), false),
         new MultipleChoiceGameOption<confirm_prompt_type>(
@@ -1625,6 +1626,7 @@ void game_options::reset_options()
 #endif
 
     // set it to the .crawlrc default
+    auto_bag_items.reset();
     autopickups.reset();
     autopickups.set(OBJ_GOLD);
     autopickups.set(OBJ_SCROLLS);
@@ -4025,7 +4027,22 @@ bool base_game_options::read_custom_option(opt_parse_state &, bool)
 bool game_options::read_custom_option(opt_parse_state &state, bool runscripts)
 {
     const string key = state.key; // weak
-    if (key == "autopickup")
+    if (key == "auto_bag_items")
+    {
+        if (state.plain())
+            auto_bag_items.reset();
+        char32_t c;
+        for (const char* tp = state.field.c_str(); int s = utf8towc(&c, tp); tp += s)
+        {
+            const object_class_type type = item_class_by_sym(c);
+            if (type < NUM_OBJECT_CLASSES)
+                auto_bag_items.set(type, !state.minus_equal());
+            else
+                report_error("Bad object type '%*s' for auto_bag_items.\n", s, tp);
+        }
+        return true;
+    }
+    else if (key == "autopickup")
     {
         // clear out autopickup
         autopickups.reset();

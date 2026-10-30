@@ -41,7 +41,7 @@ function fixture() {
     const modules = { jquery: $, comm,
         './util': { make_key: (x, y) => x + 128 + (y + 128) * 256 },
         './enums': { prepare_bg_flags: value => typeof value === 'object' ? value : { value }, ui: { NORMAL: 0 } },
-        './options': { get: () => false, add_listener() {} },
+        './options': { ready: () => true, get: () => false, add_listener() {} },
         './tileinfo-dngn': { basetile: value => value },
         './view_data': {}, './mouse_control': {}, './game-context': {}, 'tooltip-policy': {},
         './party-hover': { attach() {}, draw() {} },

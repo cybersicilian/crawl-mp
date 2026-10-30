@@ -40,6 +40,9 @@ Being skilled with Maces & Flails will allow you to attack more quickly with
 all weapons of this type, as well as increasing your accuracy and damage with
 them.
 
+Killing blows can knock corpses away, potentially damaging creatures in their
+path. Heavier corpses are harder to move.
+
 Being skilled with Maces & Flails increases your effectiveness with Axes and
 Staves, and vice versa.
 %%%%

@@ -477,6 +477,8 @@ bool library_add_spells(vector<spell_type> spells, bool quiet)
     vector<spell_type> new_spells;
     for (spell_type st : spells)
     {
+        if (you.species == SP_AUTOMATON && !automaton::has_automatic_trigger(st))
+            continue;
         if (coop_content::spell_available(st) && !you.spell_library[st])
         {
             you.spell_library.set(st, true);
@@ -1275,32 +1277,19 @@ bool learn_spell(spell_type specspell, bool wizard, bool interactive)
         }
     }
 
-    const string mem_spell_warning_string =
-        !wizard && you.species == SP_AUTOMATON
-                && !automaton::has_automatic_trigger(specspell)
-            ? "This spell has no automatic engraving trigger."
-            : "";
-
     if (interactive)
     {
         const string prompt = make_stringf(
-                 "Memorise %s, consuming %d spell level%s and leaving %d?%s%s",
+                 "Memorise %s, consuming %d spell level%s and leaving %d?",
                  spell_title(specspell), spell_levels_required(specspell),
                  spell_levels_required(specspell) != 1 ? "s" : "",
-                 player_spell_levels() - spell_levels_required(specspell),
-                 !mem_spell_warning_string.empty() ? " " : "",
-                 mem_spell_warning_string.c_str());
+                 player_spell_levels() - spell_levels_required(specspell));
 
         if (!yesno(prompt.c_str(), true, 'n', false))
         {
             canned_msg(MSG_OK);
             return false;
         }
-    }
-    else
-    {
-        if (!wizard && !mem_spell_warning_string.empty())
-            mprf(MSGCH_WARN, "%s", mem_spell_warning_string.c_str());
     }
 
     if (wizard)

@@ -1,0 +1,19 @@
+name: "hired soldier"
+enum: merc_fighter
+glyph: {char: "p", colour: lightgray}
+flags: [speaks, warm_blood, no_poly_to, no_gen_derived]
+species: human
+will: 20
+attacks:
+ - {type: hit, damage: 5}
+hd: 5
+hp_10x: 350
+ac: 2
+ev: 5
+has_corpse: true
+shout: shout
+intelligence: human
+uses: weapons_armour
+size: medium
+shape: humanoid
+tile: merc_fighter

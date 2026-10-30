@@ -2,6 +2,12 @@
 import /etc/caddy/apps/*.caddy
 
 dcss.iancaltabiano.com {
+    # Parallel HTTP/2 asset requests stalled in live Chrome acceptance.
+    # Keep the tested compatibility path scoped to this hostname.
+    tls {
+        alpn http/1.1
+    }
+    header >Alt-Svc clear
     encode zstd gzip
     header {
         X-Content-Type-Options nosniff

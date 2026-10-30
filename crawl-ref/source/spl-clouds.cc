@@ -25,8 +25,11 @@
 #include "libutil.h"
 #include "message.h"
 #include "mon-behv.h" // ME_WHACK
+#include "mon-util.h"
+#include "monster.h"
 #include "ouch.h"
 #include "party.h"
+#include "prompt.h"
 #include "random-pick.h"
 #include "shout.h"
 #include "spl-util.h"
@@ -255,6 +258,24 @@ static void _get_evaporate_result(vector<beam_type>& beams, int potion)
 {
     switch (potion)
     {
+    case POT_NIGREDO:
+        beams.push_back(BEAM_POTION_MIASMA);
+        break;
+    case POT_ALBEDO:
+        beams.push_back(BEAM_POTION_FIRE);
+        break;
+    case POT_VIRIDITAS:
+        beams.push_back(BEAM_POTION_HEAL);
+        break;
+    // The fork treats these as random evaporation rather than inventing
+    // an additional essence effect.
+    case POT_CITRINITAS:
+    case POT_RUBEDO:
+        beams = { BEAM_POTION_FIRE, BEAM_MEPHITIC, BEAM_POTION_COLD,
+                  BEAM_POTION_POISON, BEAM_POTION_BLUE_SMOKE,
+                  BEAM_POTION_BLACK_SMOKE, BEAM_POTION_STEAM,
+                  BEAM_POTION_STEAM, BEAM_POTION_STEAM, BEAM_POTION_STEAM };
+        break;
     case POT_STRONG_POISON:
     case POT_CANCELLATION:
         beams.push_back(BEAM_POTION_POISON);
@@ -370,6 +391,20 @@ string get_evaporate_result_list(int potion)
                                 " or ", ", ");
 }
 
+bool evaporate_heals_visible_enemy(const coord_def& target)
+{
+    // Radius one includes the directly targeted square.  The three-argument
+    // LOS overload takes an exclude_center flag, not a radius.
+    for (radius_iterator ri(target, 1, C_SQUARE, LOS_SOLID); ri; ++ri)
+    {
+        monster* mon = monster_at(*ri);
+        if (mon && !party::is_proxy_monster(*mon)
+            && you.can_see(*mon) && !mons_aligned(&you, mon))
+            return true;
+    }
+    return false;
+}
+
 // Assumes beem.range has already been set -cao
 spret cast_evaporate(int pow, bolt& beem, int pot_idx, bool fail)
 {
@@ -388,6 +423,8 @@ spret cast_evaporate(int pow, bolt& beem, int pot_idx, bool fail)
     beem.hit          = AUTOMATIC_HIT;
     beem.damage       = dice_def(1, 0);
     beem.ench_power   = pow;
+    if (potion.sub_type == POT_NIGREDO)
+        beem.ench_power *= 2;
     beem.is_explosion = true;
     beem.origin_spell = SPELL_EVAPORATE;
 
@@ -396,6 +433,10 @@ spret cast_evaporate(int pow, bolt& beem, int pot_idx, bool fail)
 
     if (!you.confused())
     {
+        if (potion.sub_type == POT_VIRIDITAS && potion.is_identified()
+            && evaporate_heals_visible_enemy(beem.target)
+            && !yesno("This healing mist may heal an enemy. Continue?", true, 'n'))
+            return spret::abort;
         // Assume worst-case scenario when throwing an unidentified potion or a
         // potion with random effects.
         tracer_beam.flavour = BEAM_POTION_RANDOM;

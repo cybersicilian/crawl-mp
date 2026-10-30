@@ -22,6 +22,7 @@
 #include "env.h"
 #include "fight.h"
 #include "ghost.h"
+#include "grape-monster.h"
 #include "god-abil.h"
 #include "god-passive.h" // passive_t::neutral_slimes
 #include "item-prop.h"
@@ -157,6 +158,10 @@ static map<enchant_type, monster_info_flags> trivial_ench_mb_mappings = {
     { ENCH_STAMPEDE,        MB_STAMPEDE },
     { ENCH_PHASE_SHIFT,     MB_PHASE_SHIFT },
     { ENCH_DIVINE_SHIELD,   MB_DIVINE_SHIELD },
+    { ENCH_WYRM_NIGREDO,    MB_WYRM_NIGREDO },
+    { ENCH_WYRM_ALBEDO,     MB_WYRM_ALBEDO },
+    { ENCH_WYRM_CITRINITAS, MB_WYRM_CITRINITAS },
+    { ENCH_WYRM_VIRIDITAS,  MB_WYRM_VIRIDITAS },
 };
 
 static monster_info_flags ench_to_mb(const monster& mons, enchant_type ench)
@@ -413,7 +418,7 @@ void monster_info::_populate_as_generic()
 
     props.clear();
     // Change this in sync with monster::cloud_immune()
-    if (type == MONS_CLOUD_MAGE)
+    if (type == MONS_CLOUD_MAGE || type == MONS_ASCLEPIA)
         props[CLOUD_IMMUNE_MB_KEY] = true;
 
     // At least enough to keep from crashing. TODO: allow specifying these?
@@ -560,7 +565,7 @@ monster_info::monster_info(const monster* m, int milev)
             if (_is_public_key(entry.first))
                 props[entry.first] = entry.second;
     }
-    if (type == MONS_FALSE_IMAGE)
+    if (type == MONS_FALSE_IMAGE || type == MONS_IMUS_MIRROR)
         props["false_image_owner"] = static_cast<int>(m->summoner);
 
     // Translate references to tentacles into just their locations
@@ -847,6 +852,10 @@ monster_info::monster_info(const monster* m, int milev)
 
     for (unsigned i = 0; i <= MSLOT_LAST_VISIBLE_SLOT; ++i)
     {
+        if (grape_monster::suppressed(*m, static_cast<mon_inv_type>(i)))
+            props[i == MSLOT_ARMOUR ? "grape_body_melded"
+                  : i == MSLOT_AUX_ARMOUR ? "grape_aux_melded"
+                                          : "grape_shield_melded"] = true;
         bool ok;
         if (m->inv[i] == NON_ITEM)
             ok = false;
@@ -1696,8 +1705,12 @@ int monster_info::randarts(artefact_prop_type ra_prop) const
     {
         item_def* weapon = inv[MSLOT_WEAPON].get();
         item_def* second = inv[MSLOT_ALT_WEAPON].get(); // Two-headed ogres, etc.
-        item_def* armour = inv[MSLOT_ARMOUR].get();
-        item_def* shield = inv[MSLOT_SHIELD].get();
+        item_def* armour = props.exists("grape_body_melded")
+                           ? nullptr : inv[MSLOT_ARMOUR].get();
+        item_def* aux = props.exists("grape_aux_melded")
+                        ? nullptr : inv[MSLOT_AUX_ARMOUR].get();
+        item_def* shield = props.exists("grape_shield_melded")
+                           ? nullptr : inv[MSLOT_SHIELD].get();
         item_def* ring   = inv[MSLOT_JEWELLERY].get();
 
         if (weapon && weapon->base_type == OBJ_WEAPONS && is_artefact(*weapon))
@@ -1708,6 +1721,9 @@ int monster_info::randarts(artefact_prop_type ra_prop) const
 
         if (armour && armour->base_type == OBJ_ARMOUR && is_artefact(*armour))
             ret += artefact_property(*armour, ra_prop);
+
+        if (aux && aux->base_type == OBJ_ARMOUR && is_artefact(*aux))
+            ret += artefact_property(*aux, ra_prop);
 
         if (shield && shield->base_type == OBJ_ARMOUR && is_artefact(*shield))
             ret += artefact_property(*shield, ra_prop);

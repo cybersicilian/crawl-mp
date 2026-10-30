@@ -19,6 +19,8 @@
 #include "artefact.h"
 #include "art-enum.h"
 #include "colour.h"
+#include "cio.h"
+#include "coop-content.h"
 #include "database.h"
 #include "describe.h"
 #include "dungeon.h"
@@ -36,6 +38,8 @@
 #include "known-items.h"
 #include "libutil.h"
 #include "macro.h"
+#include "makeitem.h"
+#include "menu.h"
 #include "message.h"
 #include "notes.h"
 #include "output.h"
@@ -569,6 +573,9 @@ static const vector<pair<misc_item_type, int> > _misc_base_weights()
         {MISC_PHIAL_OF_FLOODS,     20},
         {MISC_CONDENSER_VANE,      20},
         {MISC_GRAVITAMBOURINE,     20},
+        {MISC_PIPE_OF_RECALL,      (no_allies ? 0 : 20)},
+        {MISC_HEALING_MIST,        20},
+        {MISC_AIR_HORN,            20},
     };
     if (party::is_enabled())
     {
@@ -1499,10 +1506,37 @@ AcquireMenu::AcquireMenu(CrawlVector &aitems, string ikey,
         set_title("Choose an item to acquire.");
 }
 
-static void _create_acquirement_item(item_def &item, string items_key,
+static bool _create_acquirement_item(item_def &item, string items_key,
                                      bool is_gizmo = false)
 {
     auto &acq_items = you.props[items_key].get_vector();
+
+    // Collection scrolls must survive a failed placement. Place their selected
+    // artefact before clearing the saved offers or consuming the scroll.
+    const bool collection = items_key == COLLECTION_ITEMS_KEY;
+    if (collection)
+    {
+        // Offers can outlive the anatomy or religion used to generate them.
+        // Keep them for later if the reader can no longer use this one.
+        if (is_useless_item(item, false) || god_forbids_item(item))
+        {
+            mpr("You can no longer use that artefact; your collection is unchanged.");
+            return false;
+        }
+        if (feat_destroys_items(env.grid(you.pos())))
+        {
+            mpr("The artefact would be destroyed here.");
+            return false;
+        }
+        item.flags |= (ISFLAG_IDENTIFIED | ISFLAG_NOTED_ID
+                       | ISFLAG_NOTED_GET | ISFLAG_SEEN);
+        const int placed = copy_item_to_grid(item, you.pos());
+        if (placed == NON_ITEM || placed < 0)
+        {
+            mpr("There is no room for the artefact.");
+            return false;
+        }
+    }
 
     // Now that we have a selection, mark any generated unrands as not having
     // been generated, so they go back in circulation. Exclude the selected
@@ -1540,6 +1574,8 @@ static void _create_acquirement_item(item_def &item, string items_key,
             }
         }
     }
+    else if (collection)
+        canned_msg(MSG_SOMETHING_APPEARS);
     else
     {
         if (copy_item_to_grid(item, you.pos()) != NON_ITEM)
@@ -1550,6 +1586,7 @@ static void _create_acquirement_item(item_def &item, string items_key,
 
     acq_items.clear();
     you.props.erase(items_key);
+    return true;
 }
 
 void AcquireMenu::init_entries()
@@ -1577,8 +1614,12 @@ void AcquireMenu::init_entries()
         }
 
         item_def &acq_item = *static_cast<item_def*>(item.data);
-        _create_acquirement_item(acq_item, key, is_gizmo);
-
+        if (!_create_acquirement_item(acq_item, key, is_gizmo))
+        {
+            deselect_all();
+            update_more();
+            return true;
+        }
         return false;
     };
 }
@@ -1777,6 +1818,254 @@ bool acquirement_menu()
     acq_menu.show();
 
     return !you.props.exists(ACQUIRE_ITEMS_KEY);
+}
+
+// Keep offers in the reader's saved properties. Cancelling must not reroll them.
+bool collection_menu()
+{
+    if (!you.props.exists(COLLECTION_ITEMS_KEY))
+    {
+        CrawlVector &offers = you.props[COLLECTION_ITEMS_KEY].get_vector();
+        for (object_class_type type : shuffled_acquirement_classes(true))
+        {
+            if (type != OBJ_WEAPONS && type != OBJ_ARMOUR
+                && type != OBJ_JEWELLERY && type != OBJ_STAVES)
+                continue;
+            for (int attempt = 0; attempt < 8; ++attempt)
+            {
+                item_def item = _acquirement_item_def(type, AQ_SCROLL);
+                if (!item.defined())
+                    continue;
+                if (is_unrandom_artefact(item))
+                {
+                    destroy_item(item, true);
+                    continue;
+                }
+                if (!is_artefact(item) && !make_item_randart(item, true))
+                    continue;
+                if (is_useless_item(item, false) || god_forbids_item(item))
+                    continue;
+                item.flags |= ISFLAG_IDENTIFIED;
+                offers.push_back(item);
+                break;
+            }
+            if (offers.size() >= 4)
+                break;
+        }
+        if (offers.empty())
+        {
+            you.props.erase(COLLECTION_ITEMS_KEY);
+            mpr("No suitable artefacts can be found for your collection.");
+            return false;
+        }
+    }
+    auto &offers = you.props[COLLECTION_ITEMS_KEY].get_vector();
+    int index = 0;
+    if (clua.callfn("c_choose_acquirement", ">d", &index)
+        && index >= 1 && index <= static_cast<int>(offers.size()))
+        return collector_claim_collection_item(index - 1);
+    AcquireMenu menu(offers, COLLECTION_ITEMS_KEY);
+    menu.show();
+    return !you.props.exists(COLLECTION_ITEMS_KEY);
+}
+
+bool collector_claim_collection_item(int index)
+{
+    if (!you.props.exists(COLLECTION_ITEMS_KEY))
+        return false;
+    auto &offers = you.props[COLLECTION_ITEMS_KEY].get_vector();
+    if (index < 0 || index >= static_cast<int>(offers.size()))
+        return false;
+    item_def &item = offers[index].get_item();
+    return _create_acquirement_item(item, COLLECTION_ITEMS_KEY);
+}
+
+bool collector_wish_eligible(int index)
+{
+    if (index <= UNRAND_START || index >= UNRAND_LAST)
+        return false;
+    const unrandart_entry *entry = get_unrand_entry(index);
+    if (!entry || entry->base_type == OBJ_UNASSIGNED
+        || entry->flags & (UNRAND_FLAG_NOGEN | UNRAND_FLAG_DELETED
+                           | UNRAND_FLAG_SPECIAL)
+        || (!coop_content::enabled() && coop_content::exclusive_unrand(index)))
+        return false;
+    if (get_unique_item_status(index) != UNIQ_NOT_EXISTS)
+        return false;
+    if (party::is_enabled())
+        for (int slot = 0; slot < party::player_count(); ++slot)
+            if (party::get_player(slot).unique_items[index - UNRAND_START]
+                != UNIQ_NOT_EXISTS)
+                return false;
+    item_def probe;
+    probe.base_type = entry->base_type;
+    probe.sub_type = entry->sub_type;
+    probe.quantity = 1;
+    return can_equip_item(probe, false);
+}
+
+vector<int> collector_wish_candidates()
+{
+    vector<int> candidates;
+    for (int index = UNRAND_START + 1; index < UNRAND_LAST; ++index)
+        if (collector_wish_eligible(index))
+            candidates.push_back(index);
+    sort(candidates.begin(), candidates.end(), [](int a, int b)
+    {
+        return lowercase_string(get_unrand_entry(a)->name)
+               < lowercase_string(get_unrand_entry(b)->name);
+    });
+    return candidates;
+}
+
+// Leave room for Random, Search and both page controls within the 52
+// distinct menu letters. WebTiles sends a clicked entry's hotkey, so wrapping
+// menu_letter would otherwise make a click select a different artefact.
+static constexpr size_t WISH_PAGE_SIZE = 48;
+
+vector<int> collector_wish_page_entries(const vector<int>& candidates,
+                                        size_t page)
+{
+    vector<int> entries = { WISH_RANDOM, WISH_SEARCH };
+    const size_t pages = max<size_t>(1, (candidates.size() + WISH_PAGE_SIZE - 1)
+                                          / WISH_PAGE_SIZE);
+    page = min(page, pages - 1);
+    if (page > 0)
+        entries.push_back(WISH_PREVIOUS_PAGE);
+    if (page + 1 < pages)
+        entries.push_back(WISH_NEXT_PAGE);
+    const size_t start = page * WISH_PAGE_SIZE;
+    const size_t end = min(start + WISH_PAGE_SIZE, candidates.size());
+    entries.insert(entries.end(), candidates.begin() + start,
+                   candidates.begin() + end);
+    return entries;
+}
+
+// Named wishes are selected from the currently available fixed artefacts.
+// The menu also offers a random choice; cancellation does not spend the scroll.
+bool wish_menu()
+{
+    vector<int> candidates = collector_wish_candidates();
+    if (candidates.empty())
+    {
+        mpr("No available, usable artefact matches that wish.");
+        return false;
+    }
+    vector<int> visible = candidates;
+    size_t page = 0;
+    int chosen = WISH_RANDOM;
+    while (true)
+    {
+        vector<int> entries = collector_wish_page_entries(visible, page);
+        Menu menu(MF_SINGLESELECT | MF_ARROWS_SELECT | MF_INIT_HOVER,
+                  "collector_wish");
+        menu.set_title("Choose an artefact to wish for:");
+        menu_letter key = 'a';
+        for (int &candidate : entries)
+        {
+            string label;
+            switch (candidate)
+            {
+            case WISH_RANDOM:        label = "Random artefact"; break;
+            case WISH_SEARCH:        label = "Search all artefact names"; break;
+            case WISH_PREVIOUS_PAGE: label = "Previous page"; break;
+            case WISH_NEXT_PAGE:     label = "Next page"; break;
+            default: label = get_unrand_entry(candidate)->name; break;
+            }
+            auto entry = make_unique<MenuEntry>(label, MEL_ITEM, 1, key++);
+            entry->data = &candidate;
+            menu.add_entry(std::move(entry));
+        }
+        const vector<MenuEntry *> selection = menu.show();
+        if (selection.empty())
+            return false;
+        chosen = *static_cast<int *>(selection.front()->data);
+        if (chosen == WISH_PREVIOUS_PAGE)
+        {
+            --page;
+            continue;
+        }
+        if (chosen == WISH_NEXT_PAGE)
+        {
+            ++page;
+            continue;
+        }
+        if (chosen == WISH_SEARCH)
+        {
+            char query[80] = "";
+            mprf(MSGCH_PROMPT, "Search artefact names (empty to show all): ");
+            if (cancellable_get_line(query, sizeof query))
+                continue;
+            const string needle = lowercase_string(query);
+            visible.clear();
+            for (int candidate : candidates)
+                if (lowercase_string(get_unrand_entry(candidate)->name)
+                        .find(needle) != string::npos)
+                    visible.push_back(candidate);
+            page = 0;
+            continue;
+        }
+        break;
+    }
+    int selected = -1;
+    const char *const random_key = COLLECTOR_RANDOM_WISH_KEY;
+    if (chosen < 0 && you.props.exists(random_key))
+    {
+        selected = you.props[random_key].get_int();
+        if (!collector_wish_eligible(selected))
+        {
+            you.props.erase(random_key);
+            selected = -1;
+        }
+    }
+    if (chosen >= 0)
+        selected = chosen;
+    else if (selected < 0)
+    {
+        // Random is drawn from all eligible artefacts, regardless of search.
+        selected = candidates[random2(candidates.size())];
+    }
+    // The list was built before the menu opened; another party member may
+    // have acquired or reserved an artefact in the meantime.
+    if (!collector_wish_eligible(selected))
+    {
+        mpr("That artefact is no longer available.");
+        return false;
+    }
+    if (chosen < 0)
+        you.props[random_key] = selected;
+    const unrandart_entry *entry = get_unrand_entry(selected);
+    if (!yesno(make_stringf("Wish for %s?", entry->name).c_str(),
+               false, 'n'))
+        return false;
+    item_def item;
+    item.base_type = entry->base_type;
+    item.sub_type = entry->sub_type;
+    item.quantity = 1;
+    if (!make_item_unrandart(item, selected))
+        return false;
+    if (god_forbids_item(item))
+    {
+        set_unique_item_status(item, UNIQ_NOT_EXISTS);
+        mpr("Your god forbids that artefact.");
+        return false;
+    }
+    item_colour(item);
+    item_set_appearance(item);
+    const int placed = copy_item_to_grid(item, you.pos());
+    if (placed == NON_ITEM || placed < 0)
+    {
+        set_unique_item_status(item, UNIQ_NOT_EXISTS);
+        mpr("There is no room for your wish.");
+        return false;
+    }
+    if (party::is_enabled())
+        for (int slot = 0; slot < party::player_count(); ++slot)
+            party::get_player(slot).unique_items[selected - UNRAND_START]
+                = get_unique_item_status(selected);
+    you.props.erase(random_key);
+    canned_msg(MSG_SOMETHING_APPEARS);
+    return true;
 }
 
 /// Does this item duplicate an already-generated item's base/subtype plus ego? (Ignore plus.)

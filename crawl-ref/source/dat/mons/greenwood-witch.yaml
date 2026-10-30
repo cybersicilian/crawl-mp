@@ -1,0 +1,22 @@
+name: "greenwood witch"
+glyph: {char: "H", colour: lightgreen}
+flags: [speaks, warm_blood, see_invis, female]
+resists: {poison: 1, neg: 1}
+exp: 1800
+will: 100
+attacks:
+ - {type: hit, damage: 25}
+ - {type: kick, damage: 25}
+hd: 17
+hp_10x: 700
+ac: 5
+ev: 15
+spells: greenwood_witch
+has_corpse: true
+shout: shout
+intelligence: human
+speed: 13
+uses: weapons_armour
+size: medium
+shape: humanoid
+corpse_tile: none

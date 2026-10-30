@@ -289,6 +289,7 @@ scarf_invisibility SCARF_INVISIBILITY
 ###Boots
 %parts_ctg BOOTS
 %sdir player/boots
+golem_boots GOLEM_BOOTS
 
 short_red NORMAL
 %syn SHORT_RED
@@ -404,6 +405,8 @@ pants16 LOWARM3
 ### Leg armour
 %parts_ctg BODY
 %sdir player/body
+golem_armour GOLEM_ARMOUR
+invdragon INVDRAGON
 
 robe_blue ROBE_NORMAL
 %syn ROBE_BLUE
@@ -633,6 +636,7 @@ vision_form_octopode VISION_FORM_OCTOPODE
 ### Arms
 %parts_ctg ARM
 %sdir player/gloves
+golem_gloves GOLEM_GLOVES
 glove_red NORMAL
 %syn GLOVE_RED
 glove_gray
@@ -1363,6 +1367,8 @@ blade_form_octopode BLADE_FORM_OCTOPODE
 ###Helms
 %parts_ctg HELM
 %sdir player/head
+golem_helmet GOLEM_HELMET
+jaws JAWS
 
 ## Hats
 cone_blue HAT_NORMAL

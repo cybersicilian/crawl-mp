@@ -1019,3 +1019,63 @@ feeds the old wards sewn into the cuffs, sheltering nearby companions.
 
 Available only in multiplayer.
 %%%%
+hand wraps "Fists of Thunder"
+
+These crackling hand wraps leave the wearer's claws free and surround unarmed
+strikes with electricity. They also protect their wearer from electricity.
+%%%%
+hand cannon "Scorpio"
+
+This venomous hand cannon carries an unusual enchantment: its shots drag
+surviving enemies toward the wielder along the path of the projectile.
+%%%%
+butterfly sword
+
+This eager blade strikes with extraordinary speed, scattering a butterfly
+with each blow.
+%%%%
+lajatang "Battle's Echo"
+
+A warrior-mage's double-ended staff. When enemies draw near, a spectral
+copy appears and joins its wielder's attacks.
+%%%%
+viper's Fang
+
+A quick blade coated in a potent venom that makes its victims increasingly
+susceptible to poison.
+%%%%
+gauntlets of Distortion
+
+These warped gauntlets add spatial distortion to the wearer's attacks. Their
+unstable magic may also blink the wearer when they are hurt.
+%%%%
+scales of the Unseen Dragon
+
+The scales of a veiled quicksilver dragon can turn their wearer invisible when
+struck, at the cost of magical contamination.
+%%%%
+Erysichthon's Jaw
+
+The enchanted jaw of a long-dead king grants its wearer a vicious bite that
+can draw vitality from a living victim.
+%%%%
+Golem gauntlets
+
+Crystal gauntlets from an abandoned forge-temple. Alone they offer protection;
+assembled with the other three pieces, they awaken the armour's greater power.
+%%%%
+Golem armour
+
+The crystal core of an ancient forge-temple masterwork. With its matching
+helmet, gauntlets, and greaves, it can become a mighty golem exoskeleton.
+%%%%
+Golem greaves
+
+Crystal greaves from an abandoned forge-temple. They form one part of a
+four-piece suit whose combined power can be awakened by its wearer.
+%%%%
+Golem helmet
+
+A heavy crystal helmet from an abandoned forge-temple. It completes the
+ancient armour when worn with its matching breastplate, gauntlets, and greaves.
+%%%%

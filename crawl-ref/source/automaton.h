@@ -12,6 +12,10 @@ namespace automaton
 // The existing magic reserve represents remaining thermal capacity. Keeping
 // it on the player preserves per-hero state and existing save compatibility.
 int heat(const player& p);
+// Explicit thermal recovery for cooling and spell refunds.
+void cool_down(player& p, int amount);
+// Translate resource-facing copy, keeping stored item and database keys intact.
+std::string resource_text(const player& p, std::string text);
 void mark_combat(player& p);
 int cooling_rate(const player& p, int base_regeneration);
 bool overheat_from_berserk(player& p);
@@ -44,6 +48,9 @@ bool safe_passwall_destination(const coord_def& dest);
 bool passwall_escape_aim(coord_def& aim);
 coord_def area_engraving_aim(spell_type spell, const coord_def& origin);
 bool trigger_attack(const coord_def& target, bool ranged = false);
+// One offensive opportunity after the active hero's time-consuming action.
+// Reuses attack safety checks, without requiring a weapon attack first.
+void react_to_action();
 bool trigger_escape();
 void observe_encounter();
 }

@@ -765,7 +765,8 @@ static void _do_east_wind(int num_steps)
         if (monster* mon = monster_at(*ri))
             east_wind_expose_monster(mon);
 
-    you.magic_points_regeneration += you.max_magic_points * num_steps * random_range(5, 7);
+    if (you.uses_magic_reserve())
+        you.magic_points_regeneration += you.max_magic_points * num_steps * random_range(5, 7);
     you.did_east_wind = 2; // One stage expires immediately, so that the next can remain visually.
 }
 

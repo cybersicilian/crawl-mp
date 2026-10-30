@@ -369,6 +369,10 @@ static void _post_init(bool newc)
 
     read_init_file(true);
     Options.fixup_options();
+    // The second rc pass can change the launch rule after the save loads.
+    // A saved party rule takes precedence, while old saves keep the rc value.
+    if (!newc)
+        party::restore_friendly_fire();
 
 #ifdef USE_TILE
     // Redraw the map in case the init file has changed anything - at least

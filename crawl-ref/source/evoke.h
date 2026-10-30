@@ -18,6 +18,7 @@ constexpr int CENTIPEDE_BAUBLE_MINSKILL = 4;
 string manual_skill_names(bool short_text=false);
 
 void wind_blast(actor* agent, int pow, coord_def target);
+bool agraphede_summon_spiders(int power, int count, const coord_def& target);
 
 string cannot_evoke_item_reason(const item_def *item=nullptr,
                                 bool temp=true, bool ident=true,
@@ -43,3 +44,4 @@ int stardust_orb_max(bool max = false);
 int stardust_orb_power(int mp_spent, bool max_evo = false);
 void stardust_orb_trigger(int mp_spent);
 bool mirror_can_effect(monster *victim);
+bool recall_pipe_can_recall(const monster& target);

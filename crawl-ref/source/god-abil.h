@@ -15,6 +15,7 @@
 #include "random.h"
 #include "recite-eligibility.h"
 #include "recite-type.h"
+#include "shop-type.h"
 #include "spl-cast.h"
 
 class dist;
@@ -99,6 +100,9 @@ typedef FixedVector<int, NUM_RECITE_TYPES> recite_counts;
 
 int capstone_piety_rank(god_type god);
 bool can_do_capstone_ability(god_type god);
+// Jiyva's weapon gift is separate from its existing Slime vault unlock.
+bool weapon_blessing_used(god_type god);
+bool can_bless_weapon(god_type god);
 bool bless_weapon(god_type god, brand_type brand, colour_t colour);
 bool zin_donate_gold();
 string zin_recite_text(const int seed, const int prayertype, int step);
@@ -196,6 +200,7 @@ bool gozag_potion_petition();
 int gozag_price_for_shop(bool max = false);
 bool gozag_setup_call_merchant(bool quiet = false);
 bool gozag_call_merchant();
+bool gozag_shop_type_valid(shop_type type);
 branch_type gozag_fixup_branch(branch_type branch);
 int gozag_type_bribable(monster_type type);
 bool gozag_branch_bribable(branch_type branch);

@@ -1447,6 +1447,13 @@ void monster::apply_enchantment(const mon_enchant &me)
         decay_enchantment(en);
         break;
 
+    case ENCH_WYRM_NIGREDO:
+    case ENCH_WYRM_ALBEDO:
+    case ENCH_WYRM_CITRINITAS:
+    case ENCH_WYRM_VIRIDITAS:
+        decay_enchantment(en);
+        break;
+
     case ENCH_SUMMON_TIMER:
         // Allies of TSO worshippers never expire while fighting evil.
         if (friendly() && you_worship(GOD_SHINING_ONE))
@@ -2205,7 +2212,8 @@ static const char *enchant_names[] =
     "diminished_spells", "orb_cooldown", "sunder_charge",
     "exposed", "briar_cooldown", "stampeding",
     "preparing_to_lurk", "phase_shift", "divine_shield",
-    "insubstantial", "shackle",
+    "insubstantial", "shackle", "wyrm_nigredo", "wyrm_albedo",
+    "wyrm_citrinitas", "wyrm_viriditas",
     "buggy", // NUM_ENCHANTMENTS
 };
 

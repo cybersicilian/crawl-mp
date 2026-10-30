@@ -1,0 +1,20 @@
+name: "Asclepia"
+glyph: {char: "o", colour: lightgreen}
+flags: [unique, warm_blood, speaks, maintain_range, female]
+exp: 800
+species: orc
+will: 40
+attacks:
+ - {type: hit, damage: 6}
+hd: 10
+hp_10x: 650
+ac: 5
+ev: 9
+spells: asclepia
+has_corpse: true
+shout: shout
+intelligence: human
+speed: 10
+uses: weapons_armour
+size: medium
+shape: humanoid

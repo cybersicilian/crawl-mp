@@ -1,5 +1,5 @@
-define(["jquery", "comm", "./player", "./tileinfo-main", "./status-icons", "./workflow-actions", "./party-power-cards", "./power-art", "./native-tile-art", "spell-cost", "./frame-update", "./item-context-menu"],
-function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spellCost, frameUpdate, itemMenus) {
+define(["jquery", "comm", "./player", "./tileinfo-main", "./status-icons", "./workflow-actions", "./party-power-cards", "./power-art", "./native-tile-art", "spell-cost", "./frame-update", "./item-context-menu", "./equipment-paperdoll"],
+function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spellCost, frameUpdate, itemMenus, paperdoll) {
     "use strict";
     var filter = "all", signature = "";
     function member() {
@@ -79,15 +79,18 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
     function itemButton(hero, item, inspectOnly) {
         var verb = inspectOnly ? "Inspect" : actions.itemVerb(item);
         var blocked = inspectOnly ? "" : actions.reason(hero);
-        var button = iconButton(itemIcon(item), verb + " " + item.name).addClass("hud-item-slot")
+        var quantity = item.qty > 1 ? "Quantity: " + item.qty : "";
+        var restriction = paperdoll.itemRestriction(hero, item);
+        var button = iconButton(itemIcon(item), verb + " " + item.name + (quantity ? " · " + quantity : "")).addClass("hud-item-slot")
             .attr({ id: (inspectOnly ? "party_pack_" : "hud_item_") + hero.slot + "_" + item.slot,
                 "data-tip-title": item.name, "data-tip-badge": item.kind_name || "Item",
-                "data-tip-body": item.description || "Inspect this item for its known properties and available actions.",
-                "data-tip-meta": [item.equipped ? "Equipped" : "In pack", inspectOnly ? "Inspect " + hero.name + "'s equipment"
+                "data-tip-body": restriction ? restriction.reason : item.description || "Inspect this item for its known properties and available actions.",
+                "data-tip-meta": [restriction ? "Melded · inactive" : item.equipped ? "Equipped" : "In pack", quantity, inspectOnly ? "Inspect " + hero.name + "'s equipment"
                     : blocked || "Click: " + verb.toLowerCase() + ". Right-click: actions.",
                     inspectOnly ? "" : actions.itemSecondaryHint(item)].filter(Boolean).join(" · "),
                 "aria-disabled": String(Boolean(blocked)) })
-            .toggleClass("is-equipped", Boolean(item.equipped));
+            .toggleClass("is-equipped", Boolean(item.equipped)).toggleClass("is-melded", Boolean(restriction));
+        if (restriction) button.attr("aria-label", verb + " " + item.name + ". Melded: " + restriction.reason);
         if (inspectOnly) {
             button.on("click contextmenu", function (event) {
                 event.preventDefault(); event.stopPropagation();
@@ -106,7 +109,8 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
         if (drawTile(canvas, item, hero)) button.empty().append(canvas);
         button.append($("<kbd class='hud-slot-letter'></kbd>").text(item.letter));
         if (item.qty > 1) button.append($("<span class='hud-slot-quantity'></span>").text(item.qty));
-        if (item.equipped) button.append($("<span class='hud-equipped-mark' aria-hidden='true'>◆</span>"));
+        if (restriction) button.append($("<span class='hud-melded-mark' aria-hidden='true'>M</span>"));
+        else if (item.equipped) button.append($("<span class='hud-equipped-mark' aria-hidden='true'>◆</span>"));
         return button;
     }
     function renderInventory(hero) {

@@ -358,6 +358,8 @@ spret cast_awaken_armour(int pow, bool fail)
     item_def &fake_armour = env.item[mitm_slot];
     fake_armour.clear();
     fake_armour = *armour;
+    // The summoned copy must not share the worn item's persistent identity.
+    fake_armour.props.erase(ITEM_UNIQUE_ID);
     fake_armour.flags |= ISFLAG_SUMMONED | ISFLAG_IDENTIFIED;
 
     spirit->pickup_item(fake_armour, false, true);
@@ -4582,6 +4584,8 @@ spret cast_phalanx_beetle(const actor& agent, int pow, bool fail)
 
 static int _rending_blade_power(int base_power)
 {
+    if (!you.uses_magic_reserve())
+        return base_power;
     const int mp_spent = max(0, you.magic_points - spell_difficulty(SPELL_RENDING_BLADE));
     const int mp_bonus = stepdown(mp_spent, 10);
     return base_power * (100 + mp_bonus * 5) / 100;
@@ -4606,9 +4610,10 @@ spret cast_rending_blade(int pow, bool fail)
     if (monster* mon = create_monster(blade))
     {
         mpr("You condense your magic into a crackling blade!");
-        you.props[RENDING_BLADE_MP_KEY].get_int() = you.magic_points;
+        you.props[RENDING_BLADE_MP_KEY].get_int() = you.uses_magic_reserve() ? you.magic_points : 0;
         mon->props[RENDING_BLADE_POWER_KEY] = _rending_blade_power(pow);
-        pay_mp(you.magic_points);
+        if (you.uses_magic_reserve())
+            pay_mp(you.magic_points);
     }
     else
         canned_msg(MSG_NOTHING_HAPPENS);

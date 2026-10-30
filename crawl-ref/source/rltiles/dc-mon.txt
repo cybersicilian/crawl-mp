@@ -381,6 +381,13 @@ fulminant_prism1 MONS_FULMINANT_PRISM
 fulminant_prism2
 fulminant_prism3
 fulminant_prism4
+prismatic_prism1 MONS_IMUS_PRISM
+prismatic_prism2
+prismatic_prism3
+prismatic_prism4
+ball_of_web MONS_AGRAPHEDE_WEB_BALL
+bunker_shield MONS_BUNKER_SHIELD
+machine_golem MONS_MACHINE_GOLEM
 shadow_prism1 MONS_SHADOW_PRISM
 shadow_prism2
 shadow_prism3
@@ -415,6 +422,7 @@ undying_armoury MONS_UNDYING_ARMOURY
 ### Abyssal horrors ('*')
 %sdir mon/abyss
 ancient_zyme MONS_ANCIENT_ZYME
+interdimensional_grape MONS_INTERDIMENSIONAL_GRAPE
 apocalypse_crab MONS_APOCALYPSE_CRAB
 lurking_horror MONS_LURKING_HORROR
 starcursed_mass MONS_STARCURSED_MASS
@@ -437,6 +445,7 @@ balrug MONS_BALRUG
 blizzard_demon MONS_BLIZZARD_DEMON
 cacodemon MONS_CACODEMON
 executioner MONS_EXECUTIONER
+orb_demon MONS_ORB_DEMON
 brimstone_fiend MONS_BRIMSTONE_FIEND
 green_death MONS_GREEN_DEATH
 zykzyl MONS_ZYKZYL
@@ -448,6 +457,7 @@ ignacio MONS_IGNACIO
 %sdir mon/demons
 
 # type '2' demons
+cubus MONS_CUBUS
 sin_beast MONS_SIN_BEAST
 ice_devil MONS_ICE_DEVIL
 reaper MONS_REAPER
@@ -832,6 +842,7 @@ cherub MONS_CHERUB
 profane_servitor MONS_PROFANE_SERVITOR
 %sdir mon/unique
 %rim 1
+fallen MONS_FALLEN
 mennas MONS_MENNAS
 
 ## Giants ('C')
@@ -1365,6 +1376,8 @@ ghoul MONS_GHOUL
 %sdir mon/unique
 %rim 0
 blorkula MONS_BLORKULA_THE_ORCULA
+asclepia MONS_ASCLEPIA
+brandagoth MONS_BRANDAGOTH
 urug MONS_URUG
 nergalle MONS_NERGALLE
 saint_roka MONS_SAINT_ROKA
@@ -1420,6 +1433,9 @@ wight MONS_WIGHT
 %rim 1
 skeletal_warrior MONS_SKELETAL_WARRIOR
 ancient_champion MONS_ANCIENT_CHAMPION
+%sdir mon/unique
+lichbane MONS_LICHBANE
+%sdir mon/undead
 mon/vault/antique_champion MONS_ANTIQUE_CHAMPION
 %rim 1
 %sdir mon/undead
@@ -1488,6 +1504,7 @@ misc/unseen PLAYER
 %rim 0
 ## Transformations
 %sdir player/transform
+golem_form TRAN_GOLEM
 bat_form TRAN_BAT
 bat_form_gargoyle TRAN_BAT_GARGOYLE
 beast_form TRAN_BEAST
@@ -1643,6 +1660,29 @@ statue_form_hydra6
 statue_form_hydra7
 statue_form_hydra8
 statue_form_hydra9
+
+# Caravan mercenaries. Water variants follow their corresponding land tile.
+%sdir mon/humanoids/mercenary
+%rim 0
+merc_fighter MONS_MERC_FIGHTER
+merc_knight MONS_MERC_KNIGHT
+merc_death_knight MONS_MERC_DEATH_KNIGHT
+merc_paladin MONS_MERC_PALADIN
+merc_skald MONS_MERC_SKALD
+merc_skald_water
+merc_infuser MONS_MERC_INFUSER
+merc_infuser_water
+merc_tidehunter MONS_MERC_TIDEHUNTER
+merc_tidehunter_water
+merc_witch MONS_MERC_WITCH
+merc_sorceress MONS_MERC_SORCERESS
+merc_elementalist MONS_MERC_ELEMENTALIST
+merc_brigand MONS_MERC_BRIGAND
+merc_assassin MONS_MERC_ASSASSIN
+merc_cleaner MONS_MERC_CLEANER
+merc_shaman MONS_MERC_SHAMAN
+merc_shaman_ii MONS_MERC_SHAMAN_II
+merc_shaman_iii MONS_MERC_SHAMAN_III
 
 %rim 1
 %sdir misc

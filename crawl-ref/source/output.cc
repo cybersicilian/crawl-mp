@@ -716,7 +716,7 @@ static const equipment_slot slot_order[] =
     SLOT_WEAPON, SLOT_OFFHAND, SLOT_WEAPON_OR_OFFHAND, SLOT_BODY_ARMOUR,
     SLOT_HAUNTED_AUX,
     SLOT_HELMET, SLOT_CLOAK, SLOT_GLOVES, SLOT_BOOTS, SLOT_BARDING,
-    SLOT_AMULET, SLOT_RING, SLOT_GIZMO
+    SLOT_AMULET, SLOT_RING, SLOT_GIZMO, SLOT_BAG
 };
 
 static void _print_stats_equip(int x, int y)
@@ -2046,6 +2046,8 @@ int update_monster_pane()
 
 int equip_slot_by_name(const char *s)
 {
+    if (!strcasecmp(s, equip_slot_name(SLOT_BAG, true)))
+        return SLOT_BAG;
     for (int i = SLOT_FIRST_STANDARD; i <= SLOT_LAST_STANDARD; ++i)
     {
         const equipment_slot slot = static_cast<equipment_slot>(i);
@@ -2661,7 +2663,7 @@ static vector<formatted_string> _get_overview_resistances(
 
     if (!you.has_mutation(MUT_HP_CASTING))
     {
-        out += chop_string("MPRegen", cwidth);
+        out += chop_string(you.species == SP_AUTOMATON ? "HeatDis" : "MPRegen", cwidth);
 #if TAG_MAJOR_VERSION == 34
         const bool etheric = you.unrand_equipped(UNRAND_ETHERIC_CAGE);
         const int mp_regen = player_mp_regen() //round up

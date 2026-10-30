@@ -35,6 +35,31 @@ for (const [name, symbol] of Object.entries(portSpells)) {
     assert.equal(art.resolve({ name }, 'spell'), gui[symbol], `${name} resolves by name`);
     assert.equal(art.resolve({ name, tile: gui[symbol] }, 'spell'), gui[symbol], `${name} accepts native metadata`);
 }
+for (const [name, symbol] of Object.entries({
+    'Prismatic Prism': 'ABILITY_IMUS_PRISMATIC_PRISM',
+    'Spectrum': 'ABILITY_IMUS_SPECTRUM',
+    'Fragmentation': 'ABILITY_IMUS_FRAGMENTATION',
+    'Infuse Essence': 'ABILITY_WYRM_INFUSE', 'Nigredo': 'ABILITY_WYRM_NIGREDO',
+    'Albedo': 'ABILITY_WYRM_ALBEDO', 'Citrinitas': 'ABILITY_WYRM_CITRINITAS',
+    'Viriditas': 'ABILITY_WYRM_VIRIDITAS', 'Rubedo': 'ABILITY_WYRM_RUBEDO',
+    'Fulsome Distillation': 'ABILITY_WYRM_FULSOME_DISTILLATION',
+    'Evaporate': 'ABILITY_WYRM_EVAPORATE',
+    'Create Web': 'ABILITY_AGRAPHEDE_WEB',
+    'Convert Curing Potion': 'ABILITY_AGRAPHEDE_CONVERT_POISON',
+    'Enchant Poison': 'ABILITY_AGRAPHEDE_ENCHANT_POISON',
+    'Ball of Web': 'ABILITY_AGRAPHEDE_TRAP',
+    'Hornet Sting': 'ABILITY_AGRAPHEDE_HORNET_STING',
+    'Summon Spider': 'ABILITY_AGRAPHEDE_SUMMON_SPIDER',
+    'Stolen Dazzle': 'ABILITY_IMUS_PRISMATIC_PRISM',
+    'Borrowed Resistance': 'ABILITY_WYRM_CITRINITAS',
+    'Call Redback': 'ABILITY_AGRAPHEDE_SUMMON_SPIDER',
+    'Profane Altar': 'ABILITY_PROFANE_ALTAR', 'Invoke Elder Rites': 'ABILITY_ELDER_RITE',
+    'Weave Enchantments': 'ABILITY_VELLUM_WEAVE',
+    'Activate Golem Armour': 'ABILITY_GOLEM_FORM'
+})) {
+    assert(Number.isInteger(gui[symbol]), `${name} has a generated invocation tile`);
+    assert.equal(art.resolve({ name }, 'ability'), gui[symbol], `${name} resolves to its native art`);
+}
 for (const [, , name, body] of spells) {
     const symbol = [...body.matchAll(/TILEG_(\w+)/g)].at(-1)[1];
     if (symbol === 'ERROR' || symbol === 'TODO') continue;

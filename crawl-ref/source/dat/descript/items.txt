@@ -1,4 +1,47 @@
 %%%%
+pouch
+
+A small carrying pouch with room for four stacks of items. Equip it on your
+back to store and retrieve items. Retrieve items before using them; doing so
+requires space in the appropriate inventory category.
+%%%%
+satchel
+
+A sturdy carrying satchel with room for eight stacks of items. Equip it on
+your back to store and retrieve items. Retrieve items before using them; doing
+so requires space in the appropriate inventory category.
+%%%%
+bag of plenty
+
+A spacious bag with room for twelve stacks of items. Equip it on your back to
+store and retrieve items. Retrieve items before using them; doing so requires
+space in the appropriate inventory category.
+%%%%
+air horn
+
+A fearsomely loud horn that sends a damaging sonic wave through everything in
+sight. Blowing it marks its user, attracting enemies. It recharges with
+experience.
+%%%%
+flask of healing mist
+
+A flask whose diffuser fills the surrounding area with healing mist. The mist
+heals creatures within it, including enemies. It recharges with experience.
+%%%%
+pipe of recall
+
+A pipe whose melody calls the user's own summoned allies on the current floor
+and hired mercenaries to their side. It cannot be played in silence.
+%%%%
+ring of insulation
+
+A ring that protects its wearer from electrical damage.
+%%%%
+iron dragon scales
+
+The immensely heavy scales of an iron dragon. They grant exceptional armour
+protection, but offer no innate resistance to the elements.
+%%%%
 acid dragon scales
 
 The scales of an acid dragon. Although it does not provide its wearer with as
@@ -1249,6 +1292,9 @@ potion of mutation
 A potion which mutates the drinker, removing several mutations then
 granting a few random mutations, which are likely (but not guaranteed) to be
 beneficial.
+
+It can strengthen innate mutations up to their normal limits. Only the added
+levels can be removed; innate abilities are preserved.
 %%%%
 potion of resistance
 
@@ -1503,6 +1549,19 @@ A wonderful scroll which causes the creation of a valuable item, with the
 reader choosing from a small selection. The items offered will often be a
 good match for the reader's skills; and if nothing recommends itself, the
 reader can always choose a heap of gold.
+%%%%
+scroll of collection
+
+A rare scroll offering a selection of artefacts suited to the reader. The
+selection is preserved if the reader cancels. A Collector's Choice scroll
+instead lets its reader choose either this collection or a wish when read.
+%%%%
+scroll of wish
+
+A rare scroll that can create an available, usable fixed artefact. Enter its
+exact name, or request a random eligible artefact. Artefacts already created
+or reserved in the party cannot be wished for again. Cancelling preserves the
+scroll.
 %%%%
 scroll of amnesia
 
@@ -2029,6 +2088,15 @@ party ghosts at half health and magic without draining the survivors' vitality.
 If all companions are already alive, it instead recalls separated allies to the
 reader's side and envelops the party in a brief sanctuary ward.
 
+Every hero begins a cooperative expedition with one of these scrolls, including
+heroes joining later. Further scrolls are rare dungeon finds. A living player
+must read it; it can restore fallen companions even from another floor. If the
+whole party falls, the expedition ends. Shared Fate ends the expedition on the
+first player's death, overriding resurrection and extra lives.
+
+Each resurrection permanently lowers the revived hero's maximum experience
+level by one, to a minimum of 1. This stacks with Ru's Sacrifice Experience.
+
 Available only in multiplayer.
 %%%%
 scroll of rallying
@@ -2127,4 +2195,39 @@ dusty tome
 
 An old tome recovered with an ancient crate. Its owner can decipher it upon
 reaching experience level 3, beginning the study needed to open the crate.
+%%%%
+potion of nigredo
+
+The Wyrm's dark essence of decay. It can be infused into a creature or
+evaporated into miasma; drinking it is harmful to the Wyrm's followers and has
+no effect on others.
+%%%%
+potion of albedo
+
+The Wyrm's essence of purification. It can be used in infusion or evaporation,
+or drunk by a follower to purge magical effects and reduce contamination.
+Albedo cannot interrupt a party member.
+%%%%
+potion of citrinitas
+
+The Wyrm's essence of empowerment. Drinking it as a follower or infusing a
+creature improves accuracy and spell power.
+%%%%
+potion of viriditas
+
+The Wyrm's essence of restoration. It can cure a follower's ailments when drunk,
+create a cloud that heals creatures, including enemies, when evaporated, or
+turn an infused hostile monster's attacks into healing for the infuser.
+%%%%
+potion of rubedo
+
+The Wyrm's essence of completion. It grants resistance when drunk by a follower,
+or spreads a target's other infusions to eligible creatures in sight.
+%%%%
+mercenary contract
+
+An offer of service from a named mercenary. Buying a contract recruits that
+mercenary for the purchasing party member. The buyer can recall their hire and
+give them suitable equipment. If there is no room for the mercenary to appear,
+the offer remains available and no gold is spent.
 %%%%

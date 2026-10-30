@@ -10,6 +10,7 @@
 #include "ng-restr.h"
 
 #include "party.h"
+#include "mercenary.h"
 
 #include <algorithm>
 #include <cctype>
@@ -20,6 +21,7 @@
 #include "adjust.h"
 #include "art-enum.h"
 #include "artefact.h"
+#include "automaton.h"
 #include "cloud.h"
 #include "coord.h"
 #include "coordit.h"
@@ -107,6 +109,7 @@ namespace party
     static bool s_seasoning_soul_tether = false;
     static bool s_seasoning_chaotic_ladle = false;
     static bool s_no_rune_locks = false;
+    static bool s_shared_fate = false;
     static game_modifiers::traps s_trap_mode = game_modifiers::traps::normal;
     static int s_damage_dealt[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
     static int s_support_acts[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
@@ -159,6 +162,7 @@ namespace party
     {
         TEMPLE_MAP_KEY, TEMPLE_GODS_KEY, OVERFLOW_TEMPLES_KEY,
         game_modifiers::RUNE_LOCKS_DISABLED_KEY, game_modifiers::TRAPS_KEY,
+        game_modifiers::SHARED_FATE_KEY,
     };
 
     static void _copy_world_generation(player& target, const player& source)
@@ -270,6 +274,7 @@ namespace party
         s_seasoning_soul_tether = false;
         s_seasoning_chaotic_ladle = false;
         s_no_rune_locks = false;
+        s_shared_fate = false;
         s_trap_mode = game_modifiers::traps::normal;
         s_slot0_name_configured = false;
         s_member_configs.clear();
@@ -451,6 +456,11 @@ namespace party
                 continue;
 
             const string lower = lowercase_string(part);
+            if (lower == "shared_fate=on" || lower == "shared_fate=off")
+            {
+                s_shared_fate = lower == "shared_fate=on";
+                continue;
+            }
             if (lower == "runelocks=off" || lower == "runelocks=on")
             {
                 s_no_rune_locks = lower == "runelocks=off";
@@ -564,11 +574,19 @@ namespace party
 
     void apply_starting_campaign_modifiers(player& leader)
     {
-        game_modifiers::set_campaign(leader, s_no_rune_locks, s_trap_mode);
+        game_modifiers::set_campaign(leader, s_no_rune_locks, s_trap_mode,
+                                     s_shared_fate);
     }
 
     bool starting_no_rune_locks() { return s_no_rune_locks; }
     game_modifiers::traps starting_trap_mode() { return s_trap_mode; }
+    bool starting_shared_fate() { return s_shared_fate; }
+    void set_starting_shared_fate(bool enabled) { s_shared_fate = enabled; }
+
+    bool shared_fate_enabled()
+    {
+        return multiplayer_enabled() && game_modifiers::shared_fate(you);
+    }
 
     void set_starting_campaign_modifiers(bool no_rune_locks, game_modifiers::traps mode)
     {
@@ -750,7 +768,8 @@ namespace party
 
         s_players[0].last_mid = max(s_players[0].last_mid, you.last_mid);
         s_players[0].last_item_uid = max(s_players[0].last_item_uid, you.last_item_uid);
-        s_players[0].spell_library |= you.spell_library;
+        // Starting libraries are merged by sync_shared_state_from_active(),
+        // which applies each recipient's species restrictions.
     }
 
     void setup_party_members_on_new_game()
@@ -826,6 +845,11 @@ namespace party
             _record_spawn_place(s_players[new_slot]);
             sync_shared_state_from_active();
             sync_player_to_proxy(new_slot);
+            {
+                scoped_player_context context(new_slot);
+                if (you.char_class == JOB_CARAVAN && you.on_current_level)
+                    mercenary::ensure_starter_companion();
+            }
         }
 
         return true;
@@ -839,6 +863,18 @@ namespace party
     void set_friendly_fire(bool enabled)
     {
         s_friendly_fire = enabled;
+    }
+
+    void save_friendly_fire()
+    {
+        s_players[0].props["party_friendly_fire"] = s_friendly_fire;
+    }
+
+    void restore_friendly_fire()
+    {
+        const auto &props = s_players[0].props;
+        if (props.exists("party_friendly_fire"))
+            s_friendly_fire = props["party_friendly_fire"].get_bool();
     }
 
     bool has_seasoning_fast_boil()
@@ -914,6 +950,16 @@ namespace party
     {
         const int clamped = min(max(slot, 0), MAX_PARTY_PLAYERS - 1);
         return s_players[clamped];
+    }
+
+    void sync_monster_ids()
+    {
+        mid_t highest = you.last_mid;
+        for (int slot = 0; slot < player_count(); ++slot)
+            highest = max(highest, s_players[slot].last_mid);
+        you.last_mid = highest;
+        for (int slot = 0; slot < player_count(); ++slot)
+            s_players[slot].last_mid = highest;
     }
 
     mid_t mid_for_slot(int slot)
@@ -999,6 +1045,7 @@ namespace party
             return;
 
         player &active = s_players[s_active_slot];
+        auto shared_spell_library = active.spell_library;
         for (int i = 0; i < s_player_count; ++i)
         {
             if (i == s_active_slot)
@@ -1017,7 +1064,7 @@ namespace party
             }
             active.unique_creatures |= s_players[i].unique_creatures;
             _merge_world_generation(active, s_players[i]);
-            active.spell_library |= s_players[i].spell_library;
+            shared_spell_library |= s_players[i].spell_library;
             active.attribute[ATTR_GOLD_GENERATED] =
                 max(active.attribute[ATTR_GOLD_GENERATED],
                     s_players[i].attribute[ATTR_GOLD_GENERATED]);
@@ -1038,9 +1085,21 @@ namespace party
         // Copy campaign-wide state without overwriting per-player where_are_you / depth!
         for (int i = 0; i < s_player_count; ++i)
         {
+            player &p = s_players[i];
+            // Keep the complete pool for other species even when the active
+            // hero cannot engrave every shared spell.
+            p.spell_library = shared_spell_library;
+            if (p.species == SP_AUTOMATON)
+            {
+                for (int s = 0; s < NUM_SPELLS; ++s)
+                    if (p.spell_library[s]
+                        && !automaton::has_automatic_trigger(static_cast<spell_type>(s)))
+                    {
+                        p.spell_library.set(s, false);
+                    }
+            }
             if (i == s_active_slot)
                 continue;
-            player &p = s_players[i];
             if (!multiplayer_enabled())
                 p.elapsed_time = active.elapsed_time;
             p.last_mid = active.last_mid;
@@ -1064,7 +1123,6 @@ namespace party
             p.unique_items = active.unique_items;
             p.type_ids = active.type_ids;
             p.item_description = active.item_description;
-            p.spell_library = active.spell_library;
             p.zot_orb_monster = active.zot_orb_monster;
             p.royal_jelly_dead = active.royal_jelly_dead;
             p.chapter = active.chapter;
@@ -1367,6 +1425,24 @@ namespace party
         return mon.props[PROXY_SLOT_KEY].get_int();
     }
 
+    bool same_actor_identity(const actor* first, const actor* second)
+    {
+        if (!first || !second)
+            return false;
+        if (first == second)
+            return true;
+        const auto actor_slot = [](const actor* act)
+        {
+            if (act->is_player())
+                return slot_for_mid(act->mid);
+            const monster* mon = act->as_monster();
+            return mon && is_proxy_monster(*mon) ? proxy_slot(*mon) : -1;
+        };
+        const int first_slot = actor_slot(first);
+        return first_slot >= 0 && first_slot < player_count()
+               && first_slot == actor_slot(second);
+    }
+
     monster* get_proxy_monster(int slot)
     {
         if (slot < 0 || slot >= MAX_PARTY_PLAYERS)
@@ -1507,8 +1583,11 @@ namespace party
         {
             player *saved_you = real_you;
             real_you = &p;
-            gd.ac = p.armour_class();
-            gd.ev = p.evasion(false);
+            // Proxies are refreshed by personal views and context switches.
+            // Snapshot display stats without the combat accessors' random
+            // rounding, so observing a hero cannot advance gameplay RNG.
+            gd.ac = p.armour_class_scaled(1);
+            gd.ev = p.evasion_scaled(1, false);
             real_you = saved_you;
         }
         mon->set_ghost(gd);
@@ -1579,10 +1658,14 @@ namespace party
             { ENCH_HASTE,            DUR_HASTE,            "hasted" },
             { ENCH_MIGHT,            DUR_MIGHT,            "mighty" },
             { ENCH_INVIS,            DUR_INVIS,            "invisible" },
+#if TAG_MAJOR_VERSION == 34
             { ENCH_REGENERATION,     DUR_REGENERATION,     "regenerating" },
+#endif
             { ENCH_SWIFT,            DUR_SWIFTNESS,        "swift" },
             { ENCH_RESISTANCE,       DUR_RESISTANCE,       "resistant to the elements" },
+#if TAG_MAJOR_VERSION == 34
             { ENCH_DEFLECT_MISSILES, DUR_DEFLECT_MISSILES, "protected from missiles" },
+#endif
             { ENCH_EMPOWERED_SPELLS, DUR_BRILLIANCE,       "brilliant" },
         };
 
@@ -1726,7 +1809,7 @@ namespace party
             p.hp = min(p.hp_max, p.hp + heal_amount);
             did_effect = true;
         }
-        if (mp_amount > 0 && p.magic_points < p.max_magic_points)
+        if (p.uses_magic_reserve() && mp_amount > 0 && p.magic_points < p.max_magic_points)
         {
             p.magic_points = min(p.max_magic_points, p.magic_points + mp_amount);
             did_effect = true;
@@ -2147,15 +2230,55 @@ namespace party
 
     bool prepare_survivor_for_death(int falling_slot)
     {
+        if (shared_fate_enabled())
+            return false;
         // Another member can have an extra life pending during the same
         // monster turn in which the last standing member falls.
         resolve_pending_revivals();
         return any_other_player_alive(falling_slot);
     }
 
+    // All resurrection sources must update the saved and live downed state,
+    // pending extra lives and recovery clock together.
+    void apply_resurrection_cost()
+    {
+        if (!multiplayer_enabled())
+            return;
+        const int previous_cap = you.get_max_xl();
+        reduce_level_cap(1);
+        if (you.get_max_xl() < previous_cap)
+            mprf(MSGCH_WARN, "Resurrection diminishes your potential. Your maximum level is now %d.",
+                 you.get_max_xl());
+        else
+            mpr("Your maximum level cannot fall below 1.");
+    }
+
+    static void _restore_downed_member(int slot, int hp_numerator,
+                                       int hp_denominator, int mp_denominator,
+                                       bool preserve_mp = false)
+    {
+        player &p = s_players[slot];
+        {
+            scoped_player_context context(slot);
+            apply_resurrection_cost();
+        }
+        // A cap reduction can also lower XL and maximum HP/MP. Calculate the
+        // recovery from those new maxima, retaining exact fractional rounding.
+        p.hp = max(1, p.hp_max * hp_numerator / hp_denominator);
+        const int mp = max(0, p.max_magic_points / mp_denominator);
+        if (p.uses_magic_reserve())
+            p.magic_points = preserve_mp ? min(p.max_magic_points, max(p.magic_points, mp)) : mp;
+        p.pending_revival = false;
+        // While still downed, join the destination encounter at its current
+        // clock instead of carrying pre-death recovery into the resurrection.
+        if (multiplayer_enabled())
+            reconcile_floor_regions();
+        set_player_downed(slot, false);
+    }
+
     void revive_downed_players(bool on_floor_transition, int hp_drain_percent)
     {
-        if (!is_enabled())
+        if (!is_enabled() || shared_fate_enabled())
             return;
 
         bool any_downed = false;
@@ -2190,15 +2313,11 @@ namespace party
             if (!s_downed[i])
                 continue;
 
-            s_downed[i] = false;
             player &p = s_players[i];
-            p.props["party_downed"] = false;
             p.where_are_you = active.where_are_you;
             p.depth = active.depth;
-            p.hp = max(1, p.hp_max / 3);
-            p.magic_points = max(0, p.max_magic_points / 3);
-            p.pending_revival = false;
-            s_aut_clock[i] = s_world_aut_clock;
+            p.level_stack = active.level_stack;
+            _restore_downed_member(i, 1, 3, 3);
             if (s_seasoning_soul_tether)
             {
                 heal_or_buff_party_member(i, 0, DUR_MIGHT, 12, false);
@@ -2221,7 +2340,7 @@ namespace party
 
     bool try_last_stand_revive(int falling_slot)
     {
-        if (!is_enabled())
+        if (!is_enabled() || multiplayer_enabled())
             return false;
 
         bool any_downed = false;
@@ -2785,7 +2904,11 @@ namespace party
                 && _same_floor(s_players[boon_slot], active))
             {
                 const duration_type boons[] = {
-                    DUR_MIGHT, DUR_REGENERATION, DUR_BRILLIANCE, DUR_SWIFTNESS
+                    DUR_MIGHT,
+#if TAG_MAJOR_VERSION == 34
+                    DUR_REGENERATION,
+#endif
+                    DUR_BRILLIANCE, DUR_SWIFTNESS
                 };
                 const duration_type chosen = boons[random2(ARRAYSZ(boons))];
                 heal_or_buff_party_member(boon_slot, 3 + random2(5), chosen,
@@ -3307,24 +3430,27 @@ namespace party
         if (!in_bounds(active.pos()))
             return false;
 
-        // Priority 1: Resurrect all downed party ghosts at 50% HP/MP with ZERO survivor HP drain!
+        // Resurrect fallen companions before applying the living-party recall.
         int revived_count = 0;
+        bool blocked_revival = false;
         for (int i = 0; i < s_player_count; ++i)
         {
-            if (!s_downed[i])
+            if (i == s_active_slot || !s_downed[i])
                 continue;
 
-            s_downed[i] = false;
+            const coord_def pos = _find_habitable_tile_near(active.pos(), i, LOS_RADIUS);
+            if (shared_fate_enabled() || pos == active.pos())
+            {
+                blocked_revival = true;
+                continue;
+            }
             player &p = s_players[i];
             p.where_are_you = active.where_are_you;
             p.depth = active.depth;
-            p.hp = max(1, p.hp_max / 2);
-            p.magic_points = max(0, p.max_magic_points / 2);
-            p.pending_revival = false;
-            s_aut_clock[i] = s_world_aut_clock;
-
-            const coord_def pos = _find_habitable_tile_near(active.pos(), i, 2);
+            p.level_stack = active.level_stack;
             p.set_position(pos);
+            _restore_downed_member(i, 1, 2, 2);
+            _record_spawn_place(p);
 
             heal_or_buff_party_member(i, 0, DUR_DIVINE_SHIELD, 6, true);
             place_cloud(CLOUD_TLOC_ENERGY, pos, 3 + random2(4), &you);
@@ -3340,6 +3466,12 @@ namespace party
             heal_or_buff_party_member(s_active_slot, 0, DUR_DIVINE_SHIELD, 5, false);
             sync_all_proxies();
             return true;
+        }
+        if (blocked_revival)
+        {
+            mpr(shared_fate_enabled() ? "Shared Fate prevents resurrection."
+                                     : "There is no room nearby for your fallen companions to return.");
+            return false;
         }
 
         // Priority 2: Recall separated living teammates (off-floor or > 2 tiles away)
@@ -3374,13 +3506,17 @@ namespace party
 
             const int heal = max(6, p.hp_max / 6);
             heal_or_buff_party_member(i, heal, DUR_DIVINE_SHIELD, 6, false);
+#if TAG_MAJOR_VERSION == 34
             heal_or_buff_party_member(i, 0, DUR_REGENERATION, random_range(10, 16), false);
+#endif
             ++warded_count;
         }
 
         const int self_heal = max(6, you.hp_max / 6);
         heal_or_buff_party_member(s_active_slot, self_heal, DUR_DIVINE_SHIELD, 6, false);
+#if TAG_MAJOR_VERSION == 34
         heal_or_buff_party_member(s_active_slot, 0, DUR_REGENERATION, random_range(10, 16), false);
+#endif
 
         sync_all_proxies();
 
@@ -3447,7 +3583,9 @@ namespace party
             const int turns = random_range(12, 20);
             heal_or_buff_party_member(i, 0, DUR_MIGHT, turns, true);
             heal_or_buff_party_member(i, 0, DUR_RESISTANCE, turns, false);
+#if TAG_MAJOR_VERSION == 34
             heal_or_buff_party_member(i, 0, DUR_DEFLECT_MISSILES, turns, false);
+#endif
             if (i != s_active_slot)
                 ++rallied;
         }
@@ -3593,7 +3731,7 @@ namespace party
 
             const player &p = s_players[i];
             const int hp_pct = (p.hp * 100) / max(1, p.hp_max);
-            const int mp_pct = p.max_magic_points > 0
+            const int mp_pct = p.uses_magic_reserve() && p.max_magic_points > 0
                                ? (p.magic_points * 100) / p.max_magic_points
                                : 0;
             best_hp_pct = max(best_hp_pct, hp_pct);
@@ -3619,7 +3757,7 @@ namespace party
                 p.hp = min(p.hp_max, max(p.hp, target_hp) + bonus_hp);
             }
 
-            if (p.max_magic_points > 0)
+            if (p.uses_magic_reserve() && p.max_magic_points > 0)
             {
                 const int target_mp = (p.max_magic_points * best_mp_pct) / 100;
                 const int bonus_mp = max(4, p.max_magic_points / 4);
@@ -3628,7 +3766,11 @@ namespace party
             }
 
             const int turns = random_range(15, 25);
+#if TAG_MAJOR_VERSION == 34
             heal_or_buff_party_member(i, 0, DUR_REGENERATION, turns, true);
+#else
+            heal_or_buff_party_member(i, 0, NUM_DURATIONS, 0, true);
+#endif
             heal_or_buff_party_member(i, 0, DUR_SOUL_AMBROSIA, turns, false);
         }
 
@@ -3641,7 +3783,7 @@ namespace party
     bool try_revive_downed_ghost_in_radius(const coord_def &center, int radius,
                                            int hp_pct)
     {
-        if (!is_enabled())
+        if (!is_enabled() || shared_fate_enabled())
             return false;
 
         const player &active = s_players[s_active_slot];
@@ -3655,9 +3797,7 @@ namespace party
                 continue;
 
             player &p = s_players[i];
-            s_downed[i] = false;
-            p.hp = max(1, (p.hp_max * hp_pct) / 100);
-            p.magic_points = max(p.magic_points, p.max_magic_points / 4);
+            _restore_downed_member(i, hp_pct, 100, 4, true);
             sync_all_proxies();
             sync_player_to_proxy(i);
             mprf(MSGCH_RECOVERY,

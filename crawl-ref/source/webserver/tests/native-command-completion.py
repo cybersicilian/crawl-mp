@@ -151,11 +151,21 @@ class NativeProbe:
         return [member["turns"] for member in self.party[0]["members"]]
 
     def close(self):
+        self.packet_callback = None
         if self.process.poll() is None:
-            os.killpg(self.process.pid, signal.SIGTERM)
             try:
-                self.process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
+                os.killpg(self.process.pid, signal.SIGHUP)
+            except ProcessLookupError:
+                pass
+            # Crawl saves/exits on HUP. Keep draining its private socket so a
+            # full datagram buffer cannot block that exit during fixture close.
+            deadline = time.monotonic() + 5
+            while self.process.poll() is None and time.monotonic() < deadline:
+                try:
+                    self.poll(0.05)
+                except OSError:
+                    time.sleep(0.01)  # Socket/PTY may close just before waitpid.
+            if self.process.poll() is None:
                 os.killpg(self.process.pid, signal.SIGKILL)
                 self.process.wait(timeout=5)
         self.selector.close()

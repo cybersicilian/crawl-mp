@@ -783,6 +783,7 @@ int monster::umbra_radius() const
     switch (type)
     {
     case MONS_PROFANE_SERVITOR:
+    case MONS_FALLEN:
         return 5; // Very unholy!
     default:
         return -1;

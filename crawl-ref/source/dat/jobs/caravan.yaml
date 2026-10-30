@@ -1,0 +1,23 @@
+enum: JOB_CARAVAN
+name: Caravan
+short_name: Ca
+category: Adventurer
+category_priority: 85
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "robe"
+  - "pipe of recall no_exclude"
+  - "flask of healing mist no_exclude"
+  - "pouch"
+recommended_species:
+  - human
+  - spriggan
+  - gale centaur
+  - demigod
+skills:
+  armour: 2
+  dodging: 2
+  stealth: 2
+create_enum: false

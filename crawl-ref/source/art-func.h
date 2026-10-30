@@ -34,6 +34,7 @@
 #include "fight.h"
 #include "fineff.h"        // For the Storm Queen's Shield
 #include "god-abil.h"      // For Forgewarden's cuirass (ru_reject_sacrifices)
+#include "kimjoy-artifacts.h"
 #include "losglobal.h"     // For cell_see_cell
 #include "mgen-data.h"     // For Sceptre of Asmodeus
 #include "melee-attack.h"  // For Fungal Fisticloak
@@ -1483,7 +1484,7 @@ static void _GUARD_unequip(item_def *item, bool * show_msgs)
 static void _WUCAD_MU_equip(item_def */*item*/, bool *show_msgs,
                             bool /*unmeld*/)
 {
-    if (you.has_mutation(MUT_HP_CASTING))
+    if (!you.uses_magic_reserve())
     {
         _equip_mpr(show_msgs, "The crystal ball is unable to connect with your "
                               "magical essence.");
@@ -1525,7 +1526,7 @@ static void _RCLOUDS_world_reacts(item_def */*item*/)
 static void _POWER_GLOVES_equip(item_def * /*item*/, bool *show_msgs,
                                 bool /*unmeld*/)
 {
-    if (you.has_mutation(MUT_HP_CASTING))
+    if (!you.uses_magic_reserve())
     {
         _equip_mpr(show_msgs, "The gloves are unable to connect with your "
                               "magical essence.");
@@ -1536,7 +1537,7 @@ static void _POWER_GLOVES_equip(item_def * /*item*/, bool *show_msgs,
 
 static void _POWER_GLOVES_unequip(item_def * /*item*/, bool *show_msgs)
 {
-    if (!you.has_mutation(MUT_HP_CASTING))
+    if (you.uses_magic_reserve())
         _equip_mpr(show_msgs, "The surge of magic dissipates.");
 }
 
@@ -1854,7 +1855,7 @@ static void _HANAS_SCIMITAR_equip(item_def */*item*/, bool *show_msgs, bool unme
 {
     if (!unmeld)
     {
-        if (you.has_mutation(MUT_INNATE_CASTER))
+        if (!you.uses_magic_reserve() || you.has_mutation(MUT_INNATE_CASTER))
             _equip_mpr(show_msgs, "You feel unable to tap into the sword's magical power.");
         else if (!you.skill(SK_SPELLCASTING))
             _equip_mpr(show_msgs, "You feel strangely lacking in power.");
@@ -2032,7 +2033,7 @@ static void _CONDUIT_STAFF_melee_effects(item_def* /*weapon*/, actor* attacker,
             || ally.depth != you.depth
             || grid_distance(you.pos(), ally.pos()) > 4
             || !you.see_cell_no_trans(ally.pos())
-            || ally.magic_points >= ally.max_magic_points)
+            || !ally.uses_magic_reserve() || ally.magic_points >= ally.max_magic_points)
         {
             continue;
         }
@@ -2280,3 +2281,50 @@ static void _SHIELDMATE_GAUNTLETS_melee_effects(item_def* /*gloves*/,
         mpr("Your Shieldmate gauntlets pulse with golden warding across the shield-wall!");
 }
 
+static void _BUTTERFLY_SWORD_melee_effects(item_def*, actor* attacker,
+                                           actor*, int, melee_attack*)
+{
+    if (!attacker || !attacker->alive())
+        return;
+    mgen_data butterfly(MONS_BUTTERFLY, BEH_NEUTRAL, attacker->pos(),
+                        attacker->mindex(), MG_AUTOFOE);
+    butterfly.set_summoned(attacker, MON_SUMM_BUTTERFLIES, summ_dur(2));
+    create_monster(butterfly, false);
+}
+
+static void _SPECTRAL_BATTLE_STAFF_world_reacts(item_def* item)
+{
+    if (find_spectral_weapon(*item)
+        || !there_are_monsters_nearby(true, true, false))
+    {
+        return;
+    }
+    coord_def position;
+    if (find_habitable_spot_near(you.pos(), MONS_SPECTRAL_WEAPON, 2,
+                                 position, 0, &you))
+    {
+        create_spectral_weapon(you, position, *item);
+    }
+}
+
+static void _SPECTRAL_BATTLE_STAFF_unequip(item_def* item, bool* show_msgs)
+{
+    if (monster* spectral = find_spectral_weapon(*item))
+    {
+        _equip_mpr(show_msgs, "Your spectral weapon disappears.");
+        end_spectral_weapon(spectral, false, true);
+    }
+}
+
+static void _VIPERS_FANG_melee_effects(item_def*, actor* attacker,
+                                       actor* defender, int dam, melee_attack*)
+{
+    vipers_fang_virulence(attacker, defender, dam);
+}
+
+// The equipped set confers a form only while all four pieces remain worn.
+// Each item gets the same unequip callback; transformation expiry is optional.
+static void _GOLEM_GLOVES_unequip(item_def*, bool*) { deactivate_golem_armour(); }
+static void _GOLEM_ARMOUR_unequip(item_def*, bool*) { deactivate_golem_armour(); }
+static void _GOLEM_BOOTS_unequip(item_def*, bool*) { deactivate_golem_armour(); }
+static void _GOLEM_HELMET_unequip(item_def*, bool*) { deactivate_golem_armour(); }

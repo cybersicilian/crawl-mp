@@ -1,0 +1,21 @@
+enum: golem
+equivalent_mons: iron_golem
+short_name: Golem
+long_name: golem armour
+description: an activated suit of golem armour.
+melds: []
+resists: {neg: 1, petrify: 1}
+str: 10
+size: giant
+hp_mod: 110
+ac: {base: 10}
+unarmed: {base: 10}
+unarmed_colour: lightblue
+unarmed_name: Golem gauntlets
+changes_anatomy: yes
+changes_substance: yes
+hand_name: activated golem gauntlet
+foot_name: activated golem greave
+flesh_name: activated golem armour
+fakemuts:
+  - ["golem armour", "Your assembled golem armour is activated."]

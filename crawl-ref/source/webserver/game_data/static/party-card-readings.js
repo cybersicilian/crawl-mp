@@ -1,4 +1,4 @@
-define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], function ($, icons, art, frameUpdate) {
+define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./party-status-model"], function ($, icons, art, frameUpdate, statusModel) {
     "use strict";
     var focusedControl = "";
     function isolate(event) {
@@ -27,7 +27,10 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
     function metadata(card, hero) {
         var meta = card.children(".party-member-meta"), root = meta.children(".party-icon-meta");
         if (!root.length) root = $("<span class='party-icon-meta'></span>").prependTo(meta);
-        reading(root, "level", "level-cap", "Experience level", finite(hero.xl));
+        reading(root, "level", "level-cap", "Experience level", Number.isFinite(hero.xl)
+            ? hero.xl + (Number.isInteger(hero.xl_cap) ? "/" + hero.xl_cap : "") : null,
+            Number.isFinite(hero.xl) ? "Experience level: " + hero.xl
+                + (Number.isInteger(hero.xl_cap) ? ". Maximum level: " + hero.xl_cap : "") : "Experience level unavailable");
         var floorBody = hero.place ? "Current floor: " + hero.place : "Current floor unavailable";
         if (Number.isInteger(hero.region_id)) {
             floorBody += " · Region R" + (hero.region_id + 1)
@@ -132,8 +135,8 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
     }
     function progress(card, hero) {
         var bar = card.find(".party-member-state"), level = bar.find(".party-member-level");
-        var text = Number.isFinite(hero.xl) && hero.xl >= 27 ? "100%"
-            : Number.isFinite(hero.xl_next) ? Math.max(0, Math.min(100, hero.xl_next)) + "%" : "?";
+        var experience = statusModel.experience(hero);
+        var text = experience.progress === null ? "?" : experience.progress + "%";
         if (level.attr("data-reading-value") !== text) {
             level.attr("data-reading-value", text).empty().append(icons.icon("experience"), document.createTextNode(text));
         }

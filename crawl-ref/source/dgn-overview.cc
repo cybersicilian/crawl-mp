@@ -174,6 +174,7 @@ static string shoptype_to_string(shop_type s)
     case SHOP_ARMOUR:          return "<w>[</w>";
     case SHOP_ARMOUR_ANTIQUE:  return "<yellow>[</yellow>";
     case SHOP_GENERAL:         return "<w>*</w>";
+    case SHOP_MERCENARY:       return "<w>&</w>";
     case SHOP_GENERAL_ANTIQUE: return "<yellow>*</yellow>";
     case SHOP_JEWELLERY:       return "<w>=</w>";
     case SHOP_BOOK:            return "<w>:</w>";

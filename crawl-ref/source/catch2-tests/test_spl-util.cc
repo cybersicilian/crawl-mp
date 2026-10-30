@@ -1,6 +1,7 @@
 #include "catch_amalgamated.hpp"
 
 #include "AppHdr.h"
+#include "automaton.h"
 #include "delay.h"
 #include "spl-util.h"
 #include "player.h"
@@ -8,6 +9,26 @@
 #include "spl-book.h"
 #include "rltiles/tiledef-gui.h"
 #include "test_player_fixture.h"
+
+TEST_CASE("Fixed spellbooks list spells in level order", "[spellbooks]")
+{
+    init_spell_descs();
+    for (int i = 0; i < NUM_BOOKS; ++i)
+    {
+        const book_type book = static_cast<book_type>(i);
+        if (!book_exists(book))
+            continue;
+        int previous_level = 0;
+        for (const spell_type spell : spellbook_template(book))
+        {
+            INFO("book=" << i << " spell=" << static_cast<int>(spell));
+            REQUIRE(spell != SPELL_NO_SPELL);
+            const int level = spell_difficulty(spell);
+            CHECK(level >= previous_level);
+            previous_level = level;
+        }
+    }
+}
 
 TEST_CASE("All spells are valid")
 {
@@ -160,13 +181,15 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture,
     you.spell_library.set(SPELL_SUMMON_FOREST, true);
     you.hidden_spells.set(SPELL_SUMMON_FOREST, true);
 
-    SECTION("unsupported and hidden spells remain memorisable")
+    SECTION("unsupported saved spells cannot be memorised even when hidden")
     {
         const auto summary = get_spell_library_summary();
         CHECK(summary.total == 2);
-        CHECK(summary.memorisable == 2);
+        CHECK(summary.memorisable == 1);
         CHECK(summary.without_automatic_trigger == 1);
-        CHECK(you_can_memorise(SPELL_SUMMON_FOREST));
+        CHECK_FALSE(you_can_memorise(SPELL_SUMMON_FOREST));
+        CHECK(desc_cannot_memorise_reason(SPELL_SUMMON_FOREST)
+              == "this spell has no automatic engraving trigger.");
     }
     SECTION("known spells leave the library count")
     {
@@ -180,5 +203,85 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture,
     {
         you.species = SP_HUMAN;
         CHECK(get_spell_library_summary().without_automatic_trigger == 0);
+        CHECK(you_can_memorise(SPELL_SUMMON_FOREST));
+    }
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Every Sage book grant excludes unsupported Automaton spells",
+                 "[automaton][spell-library][sage]")
+{
+    init_spell_descs();
+    you.species = SP_AUTOMATON;
+    for (int b = 0; b < BOOK_ANNIHILATIONS; ++b)
+    {
+        const auto book = static_cast<book_type>(b);
+        if (!book_exists(book))
+            continue;
+        CAPTURE(b);
+        you.spell_library.reset();
+        you.hidden_spells.reset();
+        library_add_spells(spellbook_template(book), true);
+        for (int s = 0; s < NUM_SPELLS; ++s)
+            if (you.spell_library[s])
+            {
+                CAPTURE(s);
+                CHECK(automaton::has_automatic_trigger(static_cast<spell_type>(s)));
+            }
+    }
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Automatons can only acquire and memorise spells with triggers",
+                 "[automaton][spell-library]")
+{
+    init_spell_descs();
+    you.species = SP_AUTOMATON;
+    you.spell_library.reset();
+    you.hidden_spells.reset();
+    you.vehumet_gifts.clear();
+    you.spells.fill(SPELL_NO_SPELL);
+    you.spell_no = 0;
+
+    for (spell_type spell : {SPELL_SUMMON_FOREST, SPELL_MALIGN_GATEWAY})
+    {
+        CAPTURE(spell);
+        REQUIRE_FALSE(automaton::has_automatic_trigger(spell));
+        CHECK_FALSE(you_can_memorise(spell));
+        CHECK_FALSE(library_add_spells({spell}, true));
+        CHECK_FALSE(you.spell_library[spell]);
+        CHECK_FALSE(you.hidden_spells[spell]);
+        CHECK_FALSE(add_spell_to_memory(spell));
+        CHECK_FALSE(you.has_spell(spell));
+        CHECK(you.spell_no == 0);
+        // The wizard path must also respect permanent species restrictions.
+        CHECK_FALSE(learn_spell(spell, true, false));
+    }
+
+    SECTION("mixed rewards retain supported spells")
+    {
+        CHECK(library_add_spells({SPELL_SUMMON_FOREST, SPELL_MAGIC_DART,
+                                  SPELL_MALIGN_GATEWAY}, true));
+        CHECK(you.spell_library[SPELL_MAGIC_DART]);
+        CHECK_FALSE(you.spell_library[SPELL_SUMMON_FOREST]);
+        CHECK_FALSE(you.spell_library[SPELL_MALIGN_GATEWAY]);
+        CHECK(you_can_memorise(SPELL_MAGIC_DART));
+        CHECK(add_spell_to_memory(SPELL_MAGIC_DART));
+        CHECK(you.has_spell(SPELL_MAGIC_DART));
+    }
+    SECTION("old divine offers remain unmemorisable")
+    {
+        you.vehumet_gifts.insert(SPELL_SUMMON_FOREST);
+        CHECK(get_spell_library_summary().memorisable == 0);
+        CHECK_FALSE(learn_spell(SPELL_SUMMON_FOREST, false, false));
+        CHECK_FALSE(you.spell_library[SPELL_SUMMON_FOREST]);
+    }
+    SECTION("other species can still acquire unsupported engravings")
+    {
+        you.species = SP_HUMAN;
+        CHECK(library_add_spells({SPELL_SUMMON_FOREST}, true));
+        CHECK(you.spell_library[SPELL_SUMMON_FOREST]);
+        CHECK(you_can_memorise(SPELL_SUMMON_FOREST));
+        CHECK(add_spell_to_memory(SPELL_SUMMON_FOREST));
     }
 }

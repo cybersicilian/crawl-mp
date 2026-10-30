@@ -4,6 +4,7 @@
  */
 
 #include "AppHdr.h"
+#include "agraphede-enchant.h"
 #include "oozle-memory-effects.h"
 #include "bloodcraft.h"
 
@@ -17,6 +18,8 @@
 #include "fight.h"
 #include "fprop.h"
 #include "god-conduct.h"
+#include "god-item.h"
+#include "god-vellum.h"
 #include "item-prop.h"
 #include "message.h"
 #include "mon-behv.h"
@@ -24,6 +27,7 @@
 #include "monster.h"
 #include "player.h"
 #include "spl-monench.h" //corona_monster
+#include "spl-transloc.h"
 #include "stringutil.h"
 #include "teleport.h"
 #include "throw.h"
@@ -33,12 +37,14 @@
 
 ranged_attack::ranged_attack(actor *attk, actor *defn,
                              const item_def *wpn,
-                             bool tele, actor *blame)
+                             bool tele, actor *blame, bool illusory_copy)
     : ::attack(attk, defn, blame), range_used(0), reflected(false),
         will_mulch(false), pierce(false),
-        teleport(tele), _did_net(false)
+        teleport(tele), _did_net(false),
+        illusory_projection(wpn && (illusory_copy || is_imus_illusory_weapon(attk, *wpn)))
 {
-    ASSERT(wpn && (wpn->base_type == OBJ_MISSILES || is_range_weapon(*wpn)));
+    ASSERT(wpn && (wpn->base_type == OBJ_MISSILES || is_range_weapon(*wpn)
+                   || (illusory_projection && wpn->base_type == OBJ_WEAPONS)));
 
     weapon = wpn;
     damage_brand = oozle::effective_brand(*attacker, weapon);
@@ -46,7 +52,8 @@ ranged_attack::ranged_attack(actor *attk, actor *defn,
     init_attack(0);
     kill_type = KILLED_BY_BEAM;
 
-    proj_name = launched_projectile_name(*weapon);
+    proj_name = illusory_projection ? "illusory " + weapon->name(DESC_BASENAME)
+                                   : launched_projectile_name(*weapon);
 
     // [dshaligram] When changing bolt names here, you must edit
     // hiscores.cc (scorefile_entry::terse_missile_cause()) to match.
@@ -77,6 +84,7 @@ void ranged_attack::copy_params_to(ranged_attack &other) const
     other.will_mulch   = will_mulch;
     other.pierce       = pierce;
     other.proj_name    = proj_name;
+    other.illusory_projection = illusory_projection;
 
     attack::copy_params_to(other);
 }
@@ -84,6 +92,11 @@ void ranged_attack::copy_params_to(ranged_attack &other) const
 int ranged_attack::post_roll_to_hit_modifiers(int mhit, bool random)
 {
     int modifiers = attack::post_roll_to_hit_modifiers(mhit, random);
+    // Missile attacks carry the projectile as `weapon`; use the launcher
+    // for the penalty without applying it to separately thrown missiles.
+    if (attacker->is_player() && weapon->base_type == OBJ_MISSILES
+        && !throwing())
+        modifiers -= imus_weapon_accuracy_penalty(you.weapon());
 
     if (teleport && attacker->is_monster())
         modifiers += attacker->as_monster()->get_hit_dice() * 3 / 2;
@@ -340,6 +353,9 @@ bool ranged_attack::handle_phase_hit()
         if (apply_damage_brand(make_stringf("the %s", proj_name.c_str()).c_str()))
             return false;
 
+        if (distortion_gauntlets_affect_defender())
+            return false;
+
         if (testbits(weapon->flags, ISFLAG_CHAOTIC) && defender->alive())
         {
             unwind_var<brand_type> save_brand(damage_brand);
@@ -353,6 +369,25 @@ bool ranged_attack::handle_phase_hit()
         {
             return false;
         }
+    }
+
+    // The fork applies this effect to launched projectiles, not standalone
+    // thrown missiles. A simulated tracer must never poison its target.
+    if (!simu && !throwing())
+        agraphede_enchant_hit(attacker, defender);
+
+    // Launched attacks normally carry the actual launcher, including a
+    // two-headed ogre's offhand. Older missile-based attacks use the equipped
+    // launcher instead.
+    const item_def* launcher = weapon->base_type == OBJ_WEAPONS
+        ? weapon : attacker->weapon();
+    if (!simu && !illusory_projection && !throwing() && attacker->alive()
+        && defender->alive() && launcher
+        && is_unrandom_artefact(*launcher, UNRAND_SCORPIO)
+        && vellum::native_power_enabled(*launcher))
+    {
+        const bolt path = bolt::path_tracer(attacker->pos(), defender->pos());
+        beckon(*defender, path);
     }
 
     if (attacker->alive() && defender->alive()
@@ -376,7 +411,7 @@ bool ranged_attack::handle_phase_hit()
 
 bool ranged_attack::throwing() const
 {
-    return SK_THROWING == wpn_skill;
+    return SK_THROWING == wpn_skill || illusory_projection;
 }
 
 bool ranged_attack::using_weapon() const
@@ -388,7 +423,8 @@ int ranged_attack::weapon_damage() const
 {
     int dam = property(*weapon, PWPN_DAMAGE);
 
-    if (attacker->is_player() && throwing())
+    if (attacker->is_player() && throwing()
+        && !illusory_projection)
         dam += throwing_base_damage_bonus(*weapon, true);
 
     return dam;
@@ -425,6 +461,8 @@ int ranged_attack::apply_mon_damage_modifiers(int damage)
 
 int ranged_attack::player_apply_final_multipliers(int damage, bool /*aux*/)
 {
+    if (illusory_projection)
+        damage = damage * 4 / 5;
     if (!throwing())
     {
         damage = player_archery_damage_bonus(damage, true);
@@ -500,12 +538,12 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
             break;
         case SPMSL_POISONED:
         case SPMSL_BLINDING:
-            if (defender->res_poison() >= 3)
+            if (agraphede_poison_resistance(defender, attacker) >= 3)
                 susceptible = false;
             break;
         case SPMSL_CURARE:
-            if ((defender->is_player() && defender->res_poison() >= 3)
-               || defender->res_poison() > 0)
+            if ((defender->is_player() && agraphede_poison_resistance(defender, attacker) >= 3)
+               || agraphede_poison_resistance(defender, attacker) > 0)
             {
                 susceptible = false;
             }
@@ -515,7 +553,7 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
                 susceptible = false;
             break;
         case SPMSL_FRENZY:
-            if (defender->res_poison() >= 3
+            if (agraphede_poison_resistance(defender, attacker) >= 3
                 || defender->is_player()
                    && !you.can_go_berserk(false, false, false)
                 || defender->is_monster()
@@ -557,7 +595,7 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
 
 bool ranged_attack::dart_check(special_missile_type type)
 {
-    if (defender->res_poison() >= 3)
+    if (agraphede_poison_resistance(defender, attacker) >= 3)
     {
         if (needs_message)
         {

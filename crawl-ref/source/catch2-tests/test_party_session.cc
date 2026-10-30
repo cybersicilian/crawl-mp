@@ -1,5 +1,6 @@
 #include "catch_amalgamated.hpp"
 #include "AppHdr.h"
+#include "automaton.h"
 #include "env.h"
 #include "feature.h"
 #include "delay.h"
@@ -20,6 +21,7 @@
 #include "timed-effects.h"
 #include "party.h"
 #include "player.h"
+#include "spl-util.h"
 #include "test_player_fixture.h"
 #include "test_vellum_fixture.h"
 
@@ -30,6 +32,13 @@ struct session_fixture : MockPlayerYouTestsFixture
     session_fixture()
     {
         init_show_table();
+        // Encounter contracts require an empty floor, independent of clouds,
+        // markers and monsters left by other singleton-based native fixtures.
+        init_monsters();
+        dgn_reset_level(false);
+        for (int x = 24; x <= 55; ++x)
+            for (int y = 30; y <= 40; ++y)
+                env.grid(coord_def(x, y)) = DNGN_FLOOR;
         party::reset_activities();
         party::set_player_count(2);
         you.where_are_you = BRANCH_DUNGEON;
@@ -100,6 +109,41 @@ struct encounter_monster
     }
     ~encounter_monster() { env.mons[0] = original; }
 };
+}
+
+TEST_CASE_METHOD(session_fixture,
+                 "Party spell sharing respects Automaton triggers without losing human spells",
+                 "[automaton][spell-library][party-session]")
+{
+    init_spell_descs();
+    const int automaton_slot = GENERATE(0, 1);
+    const int human_slot = 1 - automaton_slot;
+    player& machine = party::get_player(automaton_slot);
+    player& human = party::get_player(human_slot);
+    machine.species = SP_AUTOMATON;
+    human.species = SP_HUMAN;
+    machine.spell_library.reset();
+    human.spell_library.reset();
+    REQUIRE_FALSE(automaton::has_automatic_trigger(SPELL_SUMMON_FOREST));
+    REQUIRE(automaton::has_automatic_trigger(SPELL_MAGIC_DART));
+
+    // Include an unsupported saved entry, plus a supported machine-only spell.
+    machine.spell_library.set(SPELL_SUMMON_FOREST);
+    machine.spell_library.set(SPELL_MAGIC_DART);
+    human.spell_library.set(SPELL_SUMMON_FOREST);
+    human.spell_library.set(SPELL_MALIGN_GATEWAY);
+
+    for (int active : {0, 1, 0})
+    {
+        party::scoped_player_context actor(active);
+        party::sync_shared_state_from_active();
+        CHECK(machine.spell_library[SPELL_MAGIC_DART]);
+        CHECK_FALSE(machine.spell_library[SPELL_SUMMON_FOREST]);
+        CHECK_FALSE(machine.spell_library[SPELL_MALIGN_GATEWAY]);
+        CHECK(human.spell_library[SPELL_MAGIC_DART]);
+        CHECK(human.spell_library[SPELL_SUMMON_FOREST]);
+        CHECK(human.spell_library[SPELL_MALIGN_GATEWAY]);
+    }
 }
 
 TEST_CASE_METHOD(session_fixture, "Occupied floors have independent action clocks", "[party-session]")

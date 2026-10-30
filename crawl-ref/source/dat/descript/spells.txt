@@ -1,4 +1,14 @@
 %%%%
+Disarm spell
+
+Attempts to force a weapon from its wielder's grasp. Willpower can resist it.
+The weapon remains in its owner's inventory.
+%%%%
+Allure of Cubus spell
+
+May draw a piece of jewellery from a susceptible target. The jewellery remains
+in its owner's inventory.
+%%%%
 Engraved Laser spell
 
 An automaton's mechanisms focus a powerful, non-elemental beam. The pattern
@@ -720,8 +730,9 @@ Splits the earth to draw up a localised, short-lived volcano under the target.
 Evaporate spell
 
 Superheats a potion from the caster's inventory and hurls it at a target, where
-it shatters and releases a billowing cloud of alchemical fumes. The type of
-cloud created depends on the potion evaporated:
+it shatters and releases a billowing cloud of alchemical fumes. Some monsters
+conjure a potion with unpredictable contents instead. For potions carried by a
+player, the type of cloud depends on the potion evaporated:
 
   * Poison: poison gas
   * Strong poison or cancellation: poison gas or noxious fumes

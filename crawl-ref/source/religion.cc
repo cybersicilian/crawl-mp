@@ -21,9 +21,11 @@
 
 #include "ability.h"
 #include "archaeologist.h"
+#include "imus-mirror.h"
 #include "acquire.h"
 #include "act-iter.h"
 #include "areas.h"
+#include "automaton.h"
 #include "attitude-change.h"
 #include "branch.h"
 #include "chardump.h"
@@ -43,6 +45,8 @@
 #include "god-conduct.h"
 #include "god-item.h"
 #include "god-passive.h"
+#include "god-agraphede.h"
+#include "character-trait.h"
 #include "god-prayer.h"
 #include "god-wrath.h"
 #include "hints.h"
@@ -116,6 +120,9 @@ const vector<vector<god_power>> & get_all_god_powers()
                  "Zin will no longer cleanse your potions of mutation.",
                  "Zin will cleanse your potions of mutation." },
             {-1, ABIL_ZIN_DONATE_GOLD, "donate money to Zin" },
+            { 7, ABIL_ZIN_BLESS_WEAPON,
+                 "Zin will bless your weapon with silver... once.",
+                 "Zin is no longer ready to bless your weapon." },
         },
 
         // TSO
@@ -257,6 +264,9 @@ const vector<vector<god_power>> & get_all_god_powers()
             { 3, ABIL_ELYVILON_HEAL_SELF, "provide healing for yourself" },
             { 3, ABIL_ELYVILON_DIVINE_ALMS, "comfort your suffering allies" },
             { 5, ABIL_ELYVILON_AURA_OF_VIGOUR, "call upon Elyvilon for divine vigour" },
+            { 7, ABIL_ELYVILON_BLESS_WEAPON,
+                 "Elyvilon will bless your weapon with pacifying... once.",
+                 "Elyvilon is no longer ready to bless your weapon." },
         },
 
         // Lugonu
@@ -301,6 +311,9 @@ const vector<vector<god_power>> & get_all_god_powers()
             { 5, "You may now expel jellies when seriously injured.",
                  "You will no longer expel jellies when injured.",
                  "You may expel jellies when seriously injured." },
+            { 7, ABIL_JIYVA_BLESS_WEAPON,
+                 "Jiyva will transform your weapon with slimifying... once.",
+                 "Jiyva is no longer ready to transform your weapon." },
         },
 
         // Fedhas
@@ -320,6 +333,9 @@ const vector<vector<god_power>> & get_all_god_powers()
             { 3, ABIL_CHEIBRIADOS_DISTORTION, "warp the flow of time around you" },
             { 4, ABIL_CHEIBRIADOS_SLOUCH, "inflict damage on those overly hasty" },
             { 5, ABIL_CHEIBRIADOS_TIME_STEP, "step out of the flow of time" },
+            { 7, ABIL_CHEIBRIADOS_BLESS_WEAPON,
+                 "Cheibriados will bless your weapon with sluggish... once.",
+                 "Cheibriados is no longer ready to bless your weapon." },
         },
 
         // Ashenzari
@@ -469,6 +485,41 @@ const vector<vector<god_power>> & get_all_god_powers()
         // Vellum: the menu enforces earned milestones and exact personal costs.
         {
             { 0, ABIL_VELLUM_WEAVE, "weave enchantments within your personal binding capacity" },
+        },
+        // Imus Thea
+        {
+            { 0, "reflect incoming projectiles" },
+            { 1, "fire an illusory replication of your weapon" },
+            { 2, "bounce projectiles off walls and replicate ammunition" },
+            { 3, ABIL_IMUS_PRISMATIC_PRISM, "create a blinding prismatic prism" },
+            { 4, ABIL_IMUS_SPECTRUM, "scatter projectiles into a spectrum" },
+            { 5, ABIL_IMUS_FRAGMENTATION, "create a mirror of yourself" },
+        },
+        // The Great Wyrm
+        {
+            { 0, "distil defeated foes' magical enchantments into potions" },
+            { 1, ABIL_WYRM_INFUSE, "infuse a creature with alchemical essence" },
+            { 1, ABIL_WYRM_NIGREDO, "transmute essence of Nigredo" },
+            { 1, ABIL_WYRM_FULSOME_DISTILLATION, "distil a corpse into a potion" },
+            { 2, ABIL_WYRM_EVAPORATE, "evaporate a potion" },
+            { 2, ABIL_WYRM_ALBEDO, "transmute essence of Albedo" },
+            { 3, ABIL_WYRM_CITRINITAS, "transmute essence of Citrinitas" },
+            { 4, ABIL_WYRM_VIRIDITAS, "transmute essence of Viriditas" },
+            { 5, ABIL_WYRM_RUBEDO, "transmute essence of Rubedo" },
+        },
+        // Agraphede
+        {
+            { 0, "lose poison resistance and cannot cure poison" },
+            { 1, ABIL_AGRAPHEDE_WEB, "create a web" },
+            { 1, "convert a portion of damage into poison" },
+            { 2, ABIL_AGRAPHEDE_CONVERT_POISON, "turn curing potions into poison" },
+            { 2, "regenerate while poisoned and summon vermin from corpses" },
+            { 3, ABIL_AGRAPHEDE_ENCHANT_POISON, "enchant attacks with poison" },
+            { 3, "weaken poison resistance and gain poison when healthy" },
+            { 4, ABIL_AGRAPHEDE_TRAP, "release a ball of web" },
+            { 5, ABIL_AGRAPHEDE_HORNET_STING, "deliver a hornet sting" },
+            { 6, ABIL_AGRAPHEDE_SUMMON_SPIDER, "summon spiders" },
+            { 6, "enhance poison spells" },
         },
     };
     static bool god_powers_init = false;
@@ -1312,6 +1363,9 @@ static set<spell_type> _vehumet_eligible_gift_spells(set<spell_type> excluded_sp
         if (excluded_spells.count(spell))
             continue;
 
+        if (you.species == SP_AUTOMATON && !automaton::has_automatic_trigger(spell))
+            continue;
+
         if (vehumet_supports_spell(spell)
             && !you.has_spell(spell)
             && !you.spell_library[spell]
@@ -1603,6 +1657,43 @@ static bool _give_kiku_gift(bool forced)
     you.num_total_gifts[you.religion]++;
     take_note(Note(NOTE_GOD_GIFT, you.religion));
 
+    return true;
+}
+
+// Agraphede's fork gifts are themed books.  Retain them as physical books,
+// but use spells available to players in the current spell registry.
+static bool _give_agraphede_gift(bool forced)
+{
+    const int gifts = you.num_total_gifts[GOD_AGRAPHEDE];
+    if (gifts >= 2 || (!forced && you.raw_piety < piety_breakpoint(gifts ? 2 : 0)))
+        return false;
+
+    vector<spell_type> spells;
+    if (!gifts)
+        spells = {SPELL_POISONOUS_VAPOURS, SPELL_EVAPORATE,
+                  coinflip() ? SPELL_MEPHITIC_CLOUD : SPELL_IGNITE_POISON};
+    else
+        spells = {random_choose(SPELL_OLGREBS_TOXIC_RADIANCE,
+                                SPELL_ERINGYAS_ROOTSPIKE, SPELL_VENOM_BOLT),
+                  coinflip() ? SPELL_INTOXICATE : SPELL_NOXIOUS_BOG,
+                  coinflip() ? SPELL_POISON_ARROW : SPELL_OLGREBS_LAST_MERCY};
+
+    int index = items(true, OBJ_BOOKS, BOOK_MINOR_MAGIC, 1, 0, GOD_AGRAPHEDE);
+    if (index == NON_ITEM)
+        return false;
+    init_book_theme_randart(env.item[index], spells);
+    name_book_theme_randart(env.item[index], spschool::alchemy, spschool::none,
+                            "Agraphede", "Poison");
+    if (!move_item_to_grid(&index, you.pos(), true) || index == NON_ITEM)
+    {
+        if (index != NON_ITEM)
+            destroy_item(index);
+        return false;
+    }
+    simple_god_message(" grants you a gift!");
+    ++you.num_current_gifts[GOD_AGRAPHEDE];
+    ++you.num_total_gifts[GOD_AGRAPHEDE];
+    take_note(Note(NOTE_GOD_GIFT, GOD_AGRAPHEDE));
     return true;
 }
 
@@ -2132,6 +2223,10 @@ bool do_god_gift(bool forced)
             success = _give_kiku_gift(forced);
             break;
 
+        case GOD_AGRAPHEDE:
+            success = _give_agraphede_gift(forced);
+            break;
+
         case GOD_SIF_MUNA:
             success = _give_sif_gift(forced);
             break;
@@ -2228,6 +2323,9 @@ string god_name(god_type which_god, bool long_name)
     case GOD_IGNIS:         return "Ignis";
     case GOD_VORR:          return "Vorr";
     case GOD_VELLUM:        return "Vellum";
+    case GOD_IMUS_THEA:     return "Imus Thea";
+    case GOD_GREAT_WYRM:    return "the Great Wyrm";
+    case GOD_AGRAPHEDE:     return "Agraphede";
     case GOD_JIYVA: // This is handled at the beginning of the function
     case GOD_ECUMENICAL:    return "an unknown god";
     case NUM_GODS:          return "Buggy";
@@ -2444,7 +2542,9 @@ static void _handle_piety_gain(int old_piety)
             {
                 if (power.rank == rank
                     || power.rank == 7 && rank == capstone_piety_rank(you.religion)
-                        && !you.one_time_ability_used[you.religion])
+                        && !(power.abil == ABIL_JIYVA_BLESS_WEAPON
+                             ? weapon_blessing_used(GOD_JIYVA)
+                             : you.one_time_ability_used[you.religion]))
                 {
                     power.display(true, "You can now %s.");
     #ifdef USE_TILE_LOCAL
@@ -2683,7 +2783,9 @@ static void _handle_piety_loss(int old_piety)
             {
                 if (power.rank == rank
                     || power.rank == 7 && rank == capstone_piety_rank(you.religion)
-                        && !you.one_time_ability_used[you.religion])
+                        && !(power.abil == ABIL_JIYVA_BLESS_WEAPON
+                             ? weapon_blessing_used(GOD_JIYVA)
+                             : you.one_time_ability_used[you.religion]))
                 {
                     power.display(false, "You can no longer %s.");
 #if TAG_MAJOR_VERSION == 34
@@ -2949,7 +3051,11 @@ void excommunication(bool voluntary, god_type new_god)
 
     if (old_god == GOD_VORR)
         vorr::abandon();
+    if (old_god == GOD_IMUS_THEA)
+        imus_mirror::abandon();
     you.religion = GOD_NO_GOD;
+    if (old_god == GOD_IMUS_THEA)
+        calc_hp();
 
     you.piety_info.register_excommunication();
 
@@ -3397,6 +3503,11 @@ static bool _god_rejects_loveless(god_type god)
 string cannot_join_god_reason(god_type which_god, bool include_temp, bool check_gear)
 {
     const string god = god_speaker(which_god);
+    if (which_god == GOD_AGRAPHEDE
+        && (get_character_trait(you) != character_trait::none
+            || you.is_lifeless_undead(false)
+            || you.is_nonliving(false, false)))
+        return god + " requires a living body that can be poisoned.";
     if (which_god == GOD_PAKELLAS && you.has_mutation(MUT_NO_ARTIFICE))
         return god + " requires the ability to use magical devices.";
 
@@ -3952,6 +4063,7 @@ static const map<god_type, function<void ()>> on_join = {
     { GOD_TROG, join_trog_skills },
     { GOD_ZIN, _join_zin },
     { GOD_MAKHLEB, _join_makhleb },
+    { GOD_IMUS_THEA, []() { calc_hp(); } },
     { GOD_JIYVA, []() { you.redraw_armour_class = true; /* slime wall immunity */ }}
 };
 
@@ -4199,6 +4311,30 @@ bool god_hates_your_god(god_type god, god_type your_god)
     if (god == your_god)
         return false;
 
+    // These relationships are directed: the former god tolerates a switch
+    // to the named new god, but the reverse need not be true.
+    switch (god)
+    {
+    case GOD_FEDHAS:       if (your_god == GOD_ELYVILON) return false; break;
+    case GOD_USKAYAW:      if (your_god == GOD_WU_JIAN) return false; break;
+    case GOD_WU_JIAN:      if (your_god == GOD_OKAWARU) return false; break;
+    case GOD_OKAWARU:      if (your_god == GOD_SHINING_ONE) return false; break;
+    case GOD_NEMELEX_XOBEH: if (your_god == GOD_XOM) return false; break;
+    case GOD_MAKHLEB:
+        if (your_god == GOD_LUGONU || your_god == GOD_TROG) return false;
+        break;
+    case GOD_LUGONU:       if (your_god == GOD_RU) return false; break;
+    case GOD_YREDELEMNUL:  if (your_god == GOD_KIKUBAAQUDGHA) return false; break;
+    case GOD_SIF_MUNA:
+        if (your_god == GOD_ASHENZARI || your_god == GOD_CHEIBRIADOS) return false;
+        break;
+    case GOD_XOM:
+        if (your_god != GOD_ZIN && you.char_class == JOB_CHAOS_KNIGHT)
+            return false;
+        break;
+    default: break;
+    }
+
     // Non-good gods always hate your current god.
     if (!is_good_god(god))
         return true;
@@ -4287,6 +4423,9 @@ static void _handle_god_time_for_active_player()
         int sacrifice_count;
         switch (you.religion)
         {
+        case GOD_AGRAPHEDE:
+            agraphede_feed_poison();
+            break;
         case GOD_BEOGH:
             maybe_generate_apostle_challenge();
             break;
@@ -4382,12 +4521,15 @@ int god_colour(god_type god) // mv - added
 
     case GOD_NEMELEX_XOBEH:
     case GOD_VELLUM:
+    case GOD_IMUS_THEA:
+    case GOD_GREAT_WYRM:
         return LIGHTMAGENTA;
 
     case GOD_SIF_MUNA:
         return LIGHTBLUE;
 
     case GOD_JIYVA:
+    case GOD_AGRAPHEDE:
         return GREEN;
 
     case GOD_CHEIBRIADOS:
@@ -4469,6 +4611,8 @@ colour_t god_message_altar_colour(god_type god)
 
     case GOD_NEMELEX_XOBEH:
     case GOD_VELLUM:
+    case GOD_IMUS_THEA:
+    case GOD_GREAT_WYRM:
         return LIGHTMAGENTA;
 
     case GOD_SIF_MUNA:
@@ -4483,6 +4627,7 @@ colour_t god_message_altar_colour(god_type god)
         return LIGHTCYAN;
 
     case GOD_JIYVA:
+    case GOD_AGRAPHEDE:
         return random_choose(GREEN, LIGHTGREEN);
 
     case GOD_DITHMENOS:
@@ -4972,7 +5117,10 @@ bool god_power_usable(const god_power& power, bool ignore_piety, bool ignore_pen
     ASSERT(abil != ABIL_NON_ABILITY);
     return power.god == you.religion
             && (power.rank <= 0
-                || power.rank == 7 && can_do_capstone_ability(you.religion)
+                || power.rank == 7
+                   && (power.abil == ABIL_JIYVA_BLESS_WEAPON
+                       ? can_bless_weapon(GOD_JIYVA)
+                       : can_do_capstone_ability(you.religion))
                 || piety_rank() >= power.rank
                 || ignore_piety)
             && (!player_under_penance()

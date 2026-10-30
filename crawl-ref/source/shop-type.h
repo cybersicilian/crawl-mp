@@ -20,6 +20,9 @@ enum shop_type
     SHOP_DISTILLERY,
     SHOP_SCROLL,
     SHOP_GENERAL,
+    // Old TAG34 saves used the previous NUM_SHOPS value for misc shops.
+    SHOP_LEGACY_MISCELLANY,
+    SHOP_MERCENARY,
     NUM_SHOPS, // must remain last 'regular' member {dlb}
     SHOP_UNASSIGNED = 100,
     SHOP_RANDOM,

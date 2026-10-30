@@ -103,6 +103,56 @@ class DeploymentTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "content"):
                 package.runtime_assets(root)
 
+    def test_package_includes_catalog_images_even_when_git_ignores_them(self):
+        package = module("package_source")
+        with tempfile.TemporaryDirectory() as location:
+            root = pathlib.Path(location)
+            catalog = root / package.CHARACTER_CATALOG
+            catalog.parent.mkdir(parents=True)
+            pixels = b"\x89PNG\r\n\x1a\nplayer-pixels"
+            filename = "protean-" + hashlib.sha256(pixels).hexdigest()[:12] + ".png"
+            url = "/static/player-tiles/" + filename
+            catalog.write_text('define(function () { return {"tile": {"src": "' + url + '"}}; });')
+            image = root / "crawl-ref/source/webserver" / url.lstrip("/")
+            image.parent.mkdir(parents=True)
+            image.write_bytes(pixels)
+            destination = root / "release.tar.gz"
+            with mock.patch.object(package.subprocess, "check_output", return_value=(package.CHARACTER_CATALOG + "\0").encode()):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    package.package(root, destination)
+            with tarfile.open(destination) as archive:
+                self.assertEqual(set(archive.getnames()),
+                                 {package.CHARACTER_CATALOG, image.relative_to(root).as_posix()})
+            image.unlink()
+            with self.assertRaises(FileNotFoundError):
+                package.runtime_assets(root)
+            image.write_bytes(pixels + b"changed")
+            with self.assertRaisesRegex(ValueError, "content does not match"):
+                package.character_assets(root)
+
+    def test_catalog_images_reject_escaping_urls_symlinks_and_non_png_data(self):
+        package = module("package_source")
+        with tempfile.TemporaryDirectory() as location:
+            root = pathlib.Path(location)
+            catalog = root / package.CHARACTER_CATALOG
+            catalog.parent.mkdir(parents=True)
+            for url in ("/static/player-tiles/../secret.png", "/static/player-tiles/bad.png"):
+                catalog.write_text(json.dumps({"src": url}))
+                with self.assertRaisesRegex(ValueError, "Invalid player image URL"):
+                    package.character_assets(root)
+            data = b"not-an-image"
+            url = "/static/player-tiles/hero-" + hashlib.sha256(data).hexdigest()[:12] + ".png"
+            catalog.write_text(json.dumps({"src": url}))
+            image = root / "crawl-ref/source/webserver" / url.lstrip("/")
+            image.parent.mkdir(parents=True)
+            image.write_bytes(data)
+            with self.assertRaisesRegex(ValueError, "not a PNG"):
+                package.character_assets(root)
+            image.unlink()
+            image.symlink_to(catalog)
+            with self.assertRaisesRegex(ValueError, "regular source file"):
+                package.character_assets(root)
+
     def test_recovery_preserves_committed_wal_rows_and_nested_library(self):
         recovery = module("recovery_copy")
         with tempfile.TemporaryDirectory() as location:

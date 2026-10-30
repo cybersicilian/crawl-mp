@@ -40,6 +40,10 @@ enum feature_property_type
     // Don't reveal this tiles when fully mapping a branch on entry
     FPROP_NO_AUTOMAP    = (1 << 22),
     FPROP_MIMIC         = (1 << 23),
+    // A web created by Agraphede remains active even when ordinary floor
+    // traps are disabled. The level property grid is saved with the terrain.
+    FPROP_AGRAPHEDE_WEB = (1 << 24),
+    FPROP_AGRAPHEDE_WEB_TEMP = (1 << 25),
 };
 DEF_BITFIELD(terrain_property_t, feature_property_type);
 

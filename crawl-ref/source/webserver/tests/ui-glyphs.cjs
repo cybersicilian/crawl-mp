@@ -36,7 +36,7 @@ async function main() {
             window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(dep => window.modules[dep])); };
         });
         for (const [name, file] of [['item-properties', 'static/scripts/item-properties.js'],
-            ['status-icons', 'game_data/static/status-icons.js']]) {
+            ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['status-icons', 'game_data/static/status-icons.js']]) {
             await page.evaluate(name => { window.moduleName = name; }, name);
             await page.addScriptTag({ path: path.join(root, file) });
         }

@@ -115,6 +115,7 @@ enum armour_type
     ARM_ORB,
 #endif
 
+    ARM_IRON_DRAGON_ARMOUR,
     NUM_ARMOURS
 };
 
@@ -178,7 +179,6 @@ enum brand_type // item_def.special
     SPWPN_SUNDERING,
     SPWPN_CONCUSSION,
     SPWPN_DEVIOUS,
-
 // From this point on save compat is irrelevant.
     NUM_REAL_SPECIAL_WEAPONS,
 
@@ -190,6 +190,12 @@ enum brand_type // item_def.special
     SPWPN_VULNERABILITY, // Demonic Touch
     SPWPN_FOUL_FLAME, // Pan lords and Brilliance
     SPWPN_DEBUG_RANDART,
+    // Saved IDs appended after all legacy real and transient brands.
+    SPWPN_PACIFYING,
+    SPWPN_SLUGGISH,
+    SPWPN_SILVER,
+    SPWPN_SLIMIFYING,
+    SPWPN_SEEKING,
     NUM_SPECIAL_WEAPONS,
 };
 
@@ -241,6 +247,7 @@ enum jewellery_type
     RING_TELEPORT_CONTROL,
 #endif
     RING_CAMARADERIE,
+    RING_ELEC_RESISTANCE,
     NUM_RINGS,                         //   keep as last ring; should not overlap
                                        //   with amulets!
     // RINGS after num_rings are for unique types for artefacts
@@ -331,12 +338,21 @@ enum misc_item_type
     MISC_ASTRAL_BEACON,
     MISC_TWIN_SPARK_CONDUIT,
     MISC_SKALD_HORN,
-    // Quest-only items; append to preserve existing save subtype IDs.
+    // Append new items here to preserve existing save subtype IDs.
     MISC_ANCIENT_CRATE,
     MISC_DUSTY_TOME,
+    // Historically this sentinel equalled NUM_MISCELLANY and may occur in
+    // old saves. Keep its numeric value reserved when adding real items.
+    MISC_DECK_UNKNOWN,
+    MISC_PIPE_OF_RECALL,
+    MISC_HEALING_MIST,
+    MISC_AIR_HORN,
+    MISC_POUCH,
+    MISC_SATCHEL,
+    MISC_BAG_OF_PLENTY,
+    MISC_MERCENARY_CONTRACT,
 
     NUM_MISCELLANY,
-    MISC_DECK_UNKNOWN = NUM_MISCELLANY,
 };
 
 // in no particular order (but we need *a* fixed order for dbg-scan)
@@ -371,6 +387,13 @@ const vector<misc_item_type> misc_types =
     MISC_ASTRAL_BEACON,
     MISC_TWIN_SPARK_CONDUIT,
     MISC_SKALD_HORN,
+    MISC_PIPE_OF_RECALL,
+    MISC_HEALING_MIST,
+    MISC_AIR_HORN,
+    MISC_POUCH,
+    MISC_SATCHEL,
+    MISC_BAG_OF_PLENTY,
+    MISC_MERCENARY_CONTRACT,
 };
 
 enum missile_type
@@ -496,6 +519,8 @@ enum scroll_type
     SCR_RALLYING,
     SCR_PHASE_SWAP,
     SCR_SHARED_VIGOUR,
+    SCR_COLLECTION,
+    SCR_WISH,
     NUM_SCROLLS
 };
 
@@ -563,6 +588,9 @@ enum special_armour_type
     SPARM_STARDUST,
     SPARM_MESMERISM,
     SPARM_ATTUNEMENT,
+    SPARM_STASIS,
+    SPARM_MANA_REGEN,
+    SPARM_BUNKER,
     NUM_REAL_SPECIAL_ARMOURS,
     NUM_SPECIAL_ARMOURS,
 };

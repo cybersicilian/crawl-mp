@@ -1161,11 +1161,20 @@ bool mon_special_ability(monster* mons)
         break;
 
     case MONS_BALL_LIGHTNING:
+    case MONS_AGRAPHEDE_WEB_BALL:
+    {
+        if (mons->type == MONS_AGRAPHEDE_WEB_BALL && is_sanctuary(mons->pos()))
+            break;
+        // A web ball follows its summoner's sight, not whichever party
+        // member happens to be active when the monster takes its turn.
+        const actor* owner = mons->type == MONS_AGRAPHEDE_WEB_BALL
+                             ? actor_by_mid(mons->summoner) : &you;
         for (actor_near_iterator targ(mons, LOS_NO_TRANS); targ; ++targ)
         {
             if (mons_aligned(mons, *targ) || targ->is_firewood()
                 || grid_distance(mons->pos(), targ->pos()) > 2
-                || (mons->friendly() && !you.see_cell(targ->pos())))
+                || (mons->friendly()
+                    && (!owner || !owner->see_cell(targ->pos()))))
             {
                 continue;
             }
@@ -1175,6 +1184,7 @@ bool mon_special_ability(monster* mons)
             break;
         }
         break;
+    }
 
     case MONS_FOXFIRE:
     case MONS_SHOOTING_STAR:

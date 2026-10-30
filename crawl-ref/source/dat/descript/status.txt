@@ -1369,3 +1369,23 @@ Mistmane status
 
 Your head is a cloud of swirling mist. Any potions you drink will be metabolised
 into clouds of baleful gas which you can expel with your melee attack.
+%%%%
+Spectrum status
+
+Your eligible beam spells and ranged attacks split into multiple rays. Imus
+Thea's favour also lets eligible projectiles rebound from walls; check the
+targeting preview for their paths.
+%%%%
+VenomStrike status
+
+Your melee attacks, including unarmed attacks, and launched projectiles can
+poison their targets. This effect does not replace your weapon's brand.
+%%%%
+Citrine status
+
+Citrinitas temporarily empowers your attacks and spells.
+%%%%
+Nigredo status
+
+Your movement leaves a trail of miasma while this infusion lasts. The clouds
+are dangerous to creatures that enter them.

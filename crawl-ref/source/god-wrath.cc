@@ -103,6 +103,9 @@ static const char *_god_wrath_adjectives[] =
     "fiery vengeance",  // Ignis
     "red reckoning",    // Vorr
     "unbinding",        // Vellum (no active wrath)
+    "refraction",       // Imus Thea
+    "extraction",       // the Great Wyrm
+    "bite",             // Agraphede
 };
 COMPILE_CHECK(ARRAYSZ(_god_wrath_adjectives) == NUM_GODS);
 
@@ -1737,6 +1740,72 @@ static bool _uskayaw_retribution()
     return true;
 }
 
+static bool _imus_retribution()
+{
+    if (monster* mirror = create_monster(
+            _wrath_mon_data(MONS_PLAYER_ILLUSION, GOD_IMUS_THEA)))
+    {
+        ghost_demon stats;
+        stats.init_player_ghost();
+        mirror->set_ghost(stats);
+        mirror->ghost_demon_init();
+    }
+    you.increase_duration(DUR_DIMENSION_ANCHOR,
+                          50 + you.experience_level * 5, 200);
+    mprf(MSGCH_WARN, "The world overlaps around you!");
+    return true;
+}
+
+static bool _agraphede_retribution()
+{
+    switch (random2(7))
+    {
+    case 0: case 1: case 2: case 3:
+        barb_player(random_range(5, 10), 3);
+        poison_player(10 + random2avg(15, 2), "Agraphede", "divine venom");
+        break;
+    case 4: case 5:
+        simple_god_message("'s slowing venom runs through your body!", false,
+                           GOD_AGRAPHEDE);
+        slow_player(10 + random2avg(15, 2));
+        poison_player(10 + random2avg(15, 2), "Agraphede", "divine venom");
+        break;
+    case 6:
+        you.paralyse(nullptr, random_range(2, 7), _god_wrath_name(GOD_AGRAPHEDE));
+        return false;
+    }
+    return true;
+}
+
+static bool _wyrm_retribution()
+{
+    switch (random2(7))
+    {
+    case 0: case 1: case 2: case 3:
+        simple_god_message(" extracts your essence!", false, GOD_GREAT_WYRM);
+        if (you.hp > 1)
+            dec_hp(you.hp / 4 + 1, false);
+        if (you.magic_points > 1)
+        {
+            drain_mp(you.magic_points / 4 + 1);
+            canned_msg(MSG_MAGIC_DRAIN);
+        }
+        break;
+    case 4: case 5:
+        simple_god_message(" extracts your vigour!", false, GOD_GREAT_WYRM);
+        slow_player(10 + random2avg(15, 2));
+        break;
+    case 6:
+        if (you.can_be_paralysed())
+        {
+            simple_god_message(" extracts your energy!", false, GOD_GREAT_WYRM);
+            you.paralyse(nullptr, random_range(2, 7), _god_wrath_name(GOD_GREAT_WYRM));
+        }
+        return false;
+    }
+    return true;
+}
+
 bool divine_retribution(god_type god, bool no_bonus, bool force)
 {
     ASSERT(god != GOD_NO_GOD);
@@ -1780,6 +1849,9 @@ bool divine_retribution(god_type god, bool no_bonus, bool force)
     case GOD_WU_JIAN:       do_more = _wu_jian_retribution(); break;
     case GOD_IGNIS:         do_more = _ignis_retribution(); break;
     case GOD_VORR:          vorr::wrath(); break;
+    case GOD_IMUS_THEA:     do_more = _imus_retribution(); break;
+    case GOD_GREAT_WYRM:    do_more = _wyrm_retribution(); break;
+    case GOD_AGRAPHEDE:     do_more = _agraphede_retribution(); break;
 
     case GOD_ASHENZARI:
     case GOD_ELYVILON:

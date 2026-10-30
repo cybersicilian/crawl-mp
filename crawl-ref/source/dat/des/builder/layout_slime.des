@@ -1,5 +1,6 @@
 # Required file contains overview
 : crawl_require("dlua/layout/geoelf.lua")
+: crawl_require("dlua/layout/zonify.lua")
 
 ##############################################################
 # layout_slime_grid
@@ -132,8 +133,13 @@ TAGS:   no_rotate no_vmirror no_hmirror
   end
 
   -- generate the layout
+  -- Reopen room edges where rooms overlap so the connected corridor tree
+  -- cannot leave isolated floor pockets behind.
   geoelf.generate(_G, room_data, corridor_data, extra_corridor_fraction,
-                  fancy_room_fraction, false, false, true, stone_room_fraction)
+                  fancy_room_fraction, false, true, true, stone_room_fraction)
+  -- Decorative shapes can leave single-cell pockets even with open edges.
+  -- Keep the largest walkable region, as other native layouts do.
+  zonify.map_fill_zones(_G, 1, 'x', 0)
 }}
 MAP
 ENDMAP

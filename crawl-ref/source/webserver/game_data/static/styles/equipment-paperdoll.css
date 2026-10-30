@@ -122,6 +122,10 @@ dialog#party_inspector_modal .folio-item-open { display: flex; flex: 1; flex-dir
 .folio-equipment.is-crpg-layout .folio-state { color: #bbd49c; font-size: 12px; }
 .is-crpg-layout .folio-inventory-row[data-item-state='melded'] .folio-state { color: #d7c4ed; }
 .folio-equipment.is-crpg-layout .folio-item-actions { justify-content: center; align-items: flex-end; flex-wrap: wrap; flex-direction: column; max-width: 95px; padding: 6px; gap: 3px; }
+.folio-bag { margin-top: 1rem; }
+.folio-bag-items { width: 100%; border-collapse: collapse; text-align: left; }
+.folio-bag-items th, .folio-bag-items td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #a58a5366; }
+.folio-bag-items th:last-child, .folio-bag-items td:last-child { text-align: right; }
 dialog#party_inspector_modal .is-crpg-layout .folio-share { min-height: 28px; padding: 3px 5px; color: var(--equip-muted); font-size: 11px; border: 0; border-radius: 2px; }
 dialog#party_inspector_modal .is-crpg-layout .folio-trade { min-height: 28px; padding: 3px 6px; border: 1px solid #a58c5e80; border-radius: 3px; background: #e5c38912; color: var(--equip-gold); font-size: 11px; box-shadow: none; text-shadow: none; }
 .is-crpg-layout .folio-item-actions a { color: var(--equip-gold); font-size: 12px; }

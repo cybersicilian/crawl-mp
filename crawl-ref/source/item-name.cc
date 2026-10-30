@@ -13,7 +13,9 @@
 #include <sstream>
 
 #include "areas.h"
+#include "acquire.h"
 #include "artefact.h"
+#include "automaton.h"
 #include "art-enum.h"
 #include "branch.h"
 #include "cio.h"
@@ -275,6 +277,7 @@ string item_def::name(description_level_type descrip, bool terse, bool ident,
                 case SLOT_BODY_ARMOUR:
                 case SLOT_RING:
                 case SLOT_AMULET:
+                case SLOT_BAG:
                     buff << " (worn)";
                     break;
                 case SLOT_GIZMO:
@@ -309,7 +312,8 @@ string item_def::name(description_level_type descrip, bool terse, bool ident,
         buff << " (bound)";
     }
 
-    return buff.str();
+    return descrip == DESC_DBNAME ? buff.str()
+                                 : automaton::resource_text(you, buff.str());
 }
 
 static bool _missile_brand_is_prefix(special_missile_type brand)
@@ -424,6 +428,7 @@ static const char *weapon_brands_terse[] =
     "vuln",
     "foul flame",
     "debug",
+    "pacify", "sluggish", "silver", "slimify", "seeking",
 };
 
 static const char *weapon_brands_verbose[] =
@@ -454,6 +459,7 @@ static const char *weapon_brands_verbose[] =
     "vulnerability",
     "foul flame",
     "debug",
+    "pacifying", "sluggish", "silver", "slimifying", "seeking",
 };
 
 static const char *weapon_brands_adj[] =
@@ -484,6 +490,7 @@ static const char *weapon_brands_adj[] =
     "will-reducing",
     "foul flame",
     "debug",
+    "pacifying", "sluggish", "silver", "slimifying", "seeking",
 };
 
 COMPILE_CHECK(ARRAYSZ(weapon_brands_terse) == NUM_SPECIAL_WEAPONS);
@@ -593,6 +600,9 @@ const char* special_armour_type_name(special_armour_type ego, bool terse)
         case SPARM_STARDUST:          return "stardust";
         case SPARM_MESMERISM:         return "mesmerism";
         case SPARM_ATTUNEMENT:        return "attunement";
+        case SPARM_STASIS:            return "stasis";
+        case SPARM_MANA_REGEN:        return "magic recovery";
+        case SPARM_BUNKER:            return "bunker";
         default:                      return "bugginess";
         }
     }
@@ -655,6 +665,9 @@ const char* special_armour_type_name(special_armour_type ego, bool terse)
         case SPARM_STARDUST:          return "Stardust";
         case SPARM_MESMERISM:         return "Mesmerism";
         case SPARM_ATTUNEMENT:        return "Attunement";
+        case SPARM_STASIS:            return "Stasis";
+        case SPARM_MANA_REGEN:        return you.species == SP_AUTOMATON ? "Dissipate" : "RegenMP";
+        case SPARM_BUNKER:            return "Bunker";
         default:                      return "buggy";
         }
     }
@@ -733,6 +746,11 @@ const char* potion_type_name(int potiontype)
     case POT_SOUL_AMBROSIA:     return "soul ambrosia";
     case POT_CONCORD:           return "concord";
     case POT_TRANSFUSION:       return "transfusion";
+    case POT_NIGREDO:           return "nigredo";
+    case POT_ALBEDO:            return "albedo";
+    case POT_CITRINITAS:        return "citrinitas";
+    case POT_VIRIDITAS:         return "viriditas";
+    case POT_RUBEDO:            return "rubedo";
 
     case POT_MIST:              return "mist";
     case POT_POISON:            return "poison";
@@ -775,6 +793,8 @@ const char* scroll_type_name(int scrolltype)
     case SCR_RALLYING:           return "rallying";
     case SCR_PHASE_SWAP:         return "phase swap";
     case SCR_SHARED_VIGOUR:      return "shared vigour";
+    case SCR_COLLECTION:         return "collection";
+    case SCR_WISH:               return "wish";
 #if TAG_MAJOR_VERSION == 34
     case SCR_HOLY_WORD:          return "holy word";
     case SCR_CURSE_WEAPON:       return "curse weapon";
@@ -826,6 +846,7 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_POSITIVE_ENERGY:       return "positive energy";
         case RING_WILLPOWER:             return "willpower";
         case RING_CAMARADERIE:           return "camaraderie";
+        case RING_ELEC_RESISTANCE:       return "insulation";
 #if TAG_MAJOR_VERSION == 34
         case RING_FIRE:                  return "obsoleteness";
         case RING_ICE:                   return "obsoleteness";
@@ -878,18 +899,19 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_DEXTERITY:             return "Dex";
         case RING_INTELLIGENCE:          return "Int";
         case RING_WIZARDRY:              return "Wiz";
-        case RING_MAGICAL_POWER:         return "MP+9";
+        case RING_MAGICAL_POWER:         return you.species == SP_AUTOMATON ? "Heat+9" : "MP+9";
         case RING_FLIGHT:                return "Fly";
         case RING_POSITIVE_ENERGY:       return "rN+";
         case RING_WILLPOWER:             return "Will+";
         case RING_CAMARADERIE:           return "Camaraderie";
+        case RING_ELEC_RESISTANCE:       return "rElec";
 #if TAG_MAJOR_VERSION == 34
         case RING_FIRE:                  return "obsolete";
         case RING_ICE:                   return "obsolete";
         case RING_TELEPORTATION:         return "obsolete";
         case RING_TELEPORT_CONTROL:      return "obsolete";
 #endif
-        case AMU_MANA_REGENERATION:      return "RegenMP";
+        case AMU_MANA_REGENERATION:      return you.species == SP_AUTOMATON ? "Dissipate" : "RegenMP";
         case AMU_ACROBAT:                return "Acrobat";
 #if TAG_MAJOR_VERSION == 34
         case AMU_RAGE:                   return "obsolete";
@@ -1079,6 +1101,13 @@ static string misc_type_name(int type)
     case MISC_SHOP_VOUCHER:              return "shop voucher";
     case MISC_ANCIENT_CRATE:             return "ancient crate";
     case MISC_DUSTY_TOME:                return "dusty tome";
+    case MISC_PIPE_OF_RECALL:            return "pipe of recall";
+    case MISC_HEALING_MIST:              return "flask of healing mist";
+    case MISC_AIR_HORN:                  return "air horn";
+    case MISC_POUCH:                     return "pouch";
+    case MISC_SATCHEL:                   return "satchel";
+    case MISC_BAG_OF_PLENTY:             return "bag of plenty";
+    case MISC_MERCENARY_CONTRACT:        return "mercenary contract";
 
     default:
         return "buggy miscellaneous item";
@@ -1779,7 +1808,13 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
             buff << " ";
 
         if (identified)
-            buff << "of " << scroll_type_name(item_typ);
+        {
+            if (item_typ == SCR_COLLECTION && props.exists(COLLECTOR_CHOICE_KEY)
+                && !dbname)
+                buff << "of Collector's Choice";
+            else
+                buff << "of " << scroll_type_name(item_typ);
+        }
         else
             buff << "labelled " << make_name(subtype_rnd, MNAME_SCROLL);
         break;
@@ -1840,7 +1875,11 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         else if (!dbname && is_xp_evoker(*this) && in_inventory(*this))
             buff << "+" << evoker_plus(item_typ) << " ";
 
-        buff << misc_type_name(item_typ);
+        if (!dbname && item_typ == MISC_MERCENARY_CONTRACT
+            && props.exists("mercenary_name"))
+            buff << props["mercenary_name"].get_string() << " contract";
+        else
+            buff << misc_type_name(item_typ);
 
         if (is_xp_evoker(*this) && !dbname && !evoker_charges(sub_type))
             buff << " (inert)";
@@ -2962,6 +3001,8 @@ bool is_good_item(const item_def &item)
         if (item.sub_type == SCR_TORMENT)
             return you.res_torment();
         return item.sub_type == SCR_ACQUIREMENT
+               || item.sub_type == SCR_COLLECTION
+               || item.sub_type == SCR_WISH
                || item.sub_type == SCR_SOUL_RECALL
                || item.sub_type == SCR_SHARED_VIGOUR;
     case OBJ_POTIONS:
@@ -3413,7 +3454,7 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
             return true;
 
         if (is_unrandom_artefact(item, UNRAND_WUCAD_MU))
-            return you.has_mutation(MUT_HP_CASTING) || you_worship(GOD_TROG);
+            return !you.uses_magic_reserve() || you_worship(GOD_TROG);
 
         if (is_artefact(item))
             return false;
@@ -3425,7 +3466,7 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
             {
 #if TAG_MAJOR_VERSION == 34
             case SPARM_SPIRIT_SHIELD:
-                return you.spirit_shield(false);
+                return !you.uses_magic_reserve() || you.spirit_shield(false);
 #endif
             case SPARM_REPULSION:
                 return temp && have_passive(passive_t::upgraded_storm_shield)
@@ -3445,9 +3486,9 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
             case SPARM_RAGE:
                 return !you.can_go_berserk(false, false, true, nullptr, temp);
             case SPARM_ENERGY:
-                return you.has_mutation(MUT_HP_CASTING) || you_worship(GOD_TROG);
+                return !you.uses_magic_reserve() || you_worship(GOD_TROG);
             case SPARM_STARDUST:
-                return you.has_mutation(MUT_HP_CASTING);
+                return !you.uses_magic_reserve();
             default:
                 return false;
             }
@@ -3548,7 +3589,7 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
                     || !ignore_faith_reason().empty();
 
         case AMU_GUARDIAN_SPIRIT:
-            return you.spirit_shield(false) || you.has_mutation(MUT_HP_CASTING);
+            return !you.uses_magic_reserve() || you.spirit_shield(false);
 
         case RING_POSITIVE_ENERGY:
             return player_prot_life(false, temp, false) == 3;
@@ -3561,10 +3602,10 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
                     (temp && regeneration_is_inhibited());
 
         case AMU_MANA_REGENERATION:
-            return !you.max_magic_points;
+            return !you.uses_magic_reserve() || !you.max_magic_points;
 
         case RING_MAGICAL_POWER:
-            return you.has_mutation(MUT_HP_CASTING);
+            return !you.uses_magic_reserve();
 
         case RING_SEE_INVISIBLE:
             return you.innate_sinv();

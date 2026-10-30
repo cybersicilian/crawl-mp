@@ -76,5 +76,7 @@ enum job_type
     JOB_BILLIONAIRE,
     JOB_NECKBEARD,
     JOB_PHILOSOPHER,
+    JOB_COLLECTOR,
+    JOB_CARAVAN,
 
     // Auto-generated enums start here

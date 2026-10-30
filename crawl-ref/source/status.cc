@@ -219,6 +219,7 @@ static void _describe_channelled_spell(status_info& inf);
 bool fill_status_info(int status, status_info& inf)
 {
     inf = status_info();
+    inf.id = status;
 
     bool found = false;
 

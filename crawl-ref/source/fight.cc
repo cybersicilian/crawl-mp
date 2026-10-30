@@ -935,10 +935,13 @@ static int _beam_to_resist(const actor* defender, beam_type flavour)
  * @param rawdamage     The base damage, to be adjusted by resistance.
  * @return              The amount of damage done, after resists are applied.
  */
-int resist_adjust_damage(const actor* defender, beam_type flavour, int rawdamage)
+int resist_adjust_damage(const actor* defender, beam_type flavour, int rawdamage,
+                         const actor* attacker)
 {
     const beam_type base_flavour = get_beam_resist_type(flavour);
-    const int res = _beam_to_resist(defender, base_flavour);
+    const int res = base_flavour == BEAM_POISON
+                    ? agraphede_poison_resistance(defender, attacker)
+                    : _beam_to_resist(defender, base_flavour);
     if (!res)
         return rawdamage;
 

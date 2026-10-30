@@ -10,6 +10,7 @@ define(["./party-model"], function (party) {
         var members = state && Array.isArray(state.members) ? state.members : [];
         var hero = members.find(function (member) { return member.slot === party.controlledSlot(state); });
         var gold = state && state.gold;
+        var bribeFund = hero && hero.god === "Gozag" ? hero.bribe_fund : null;
         var runes = [], known = members.length > 0;
         members.forEach(function (member) {
             if (!Array.isArray(member.runes) || member.runes_known === false) known = false;
@@ -19,6 +20,7 @@ define(["./party-model"], function (party) {
             });
         });
         return { gold: Number.isFinite(gold) && gold >= 0 ? gold : null,
+            bribeFund: Number.isInteger(bribeFund) && bribeFund > 0 ? bribeFund : null,
             place: hero && typeof hero.place === "string" && hero.place ? hero.place : null,
             runesKnown: known, runes: runes.map(function (name) {
                 return { name: name, tile: Object.prototype.hasOwnProperty.call(runeTiles, name) ? runeTiles[name] : null };

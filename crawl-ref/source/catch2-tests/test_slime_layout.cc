@@ -12,6 +12,7 @@
 #include "maps.h"
 #include "mon-util.h"
 #include "player.h"
+#include "terrain.h"
 #include "test_player_fixture.h"
 #include "unwind.h"
 
@@ -27,6 +28,7 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture,
     init_item_name_cache();
     databaseSystemInit();
     unwinder close_databases([] { databaseSystemShutdown(); });
+    init_show_table();
     init_feat_desc_cache();
     init_dungeon_lua();
     read_map("des/builder/layout_slime.des");
@@ -39,7 +41,7 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture,
         REQUIRE(definition);
         you.where_are_you = spec.second;
         int stone_count = 0;
-        for (int depth = 1; depth <= (spec.second == BRANCH_SLIME ? 4 : 3); ++depth)
+        for (int depth = 1; depth <= (spec.second == BRANCH_SLIME ? 5 : 3); ++depth)
         {
             you.depth = depth;
             for (int sample = 0; sample < 8; ++sample)

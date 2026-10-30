@@ -20,6 +20,8 @@ async function install(page, profiles, nativeRoot) {
             chat: { tag_item() {} }, './chat-context': { inventory_item: item => item } };
         window.define = (deps, factory) => {
             if (typeof deps === 'function') { factory = deps; deps = []; }
+            for (const name of deps)
+                if (!(name in window.modules)) throw new Error('Missing fixture dependency: ' + name + ' for ' + window.moduleName);
             window.modules[window.moduleName] = factory(...deps.map(name => window.modules[name]));
         };
         window.speciesNames = Object.keys(profiles);
@@ -31,14 +33,19 @@ async function install(page, profiles, nativeRoot) {
             controllable_slots: members.map(member => member.slot), members } };
     }, profiles);
     await require('./rich-text-fixture.cjs').install(page);
+    await page.addScriptTag({ path: path.join(root, 'game_data/static/focus-trap.js') });
+    await page.evaluate(() => { window.modules['./focus-trap'] = window.focusTrap; });
     for (const [name, file] of [
         ['spell-cost', 'static/scripts/spell-cost.js'],
         ['item-properties', 'static/scripts/item-properties.js'], ['character-stat-help', 'static/scripts/character-stat-help.js'],
         ['share-link', 'static/scripts/share-link.js'],
-        ['./party-model', 'game_data/static/party-model.js'], ['./party-status-model', 'game_data/static/party-status-model.js'], ['./status-icons', 'game_data/static/status-icons.js'],
-        ['./enums', 'game_data/static/enums.js'], ['./workflow-actions', 'game_data/static/workflow-actions.js'],
+        ['./party-model', 'game_data/static/party-model.js'], ['./party-status-model', 'game_data/static/party-status-model.js'], ['./effect-icon-catalog', 'game_data/static/effect-icon-catalog.js'], ['./effect-icon-art', 'game_data/static/effect-icon-art.js'], ['./status-icons', 'game_data/static/status-icons.js'],
+        ['./enums', 'game_data/static/enums.js'], ['./inspection-dialog', 'game_data/static/inspection-dialog.js'],
+        ['./workflow-actions', 'game_data/static/workflow-actions.js'],
+        ['./equipment-memory-ui', 'game_data/static/equipment-memory-ui.js'],
         ['./native-tile-art', 'game_data/static/native-tile-art.js'], ['./equipment-paperdoll', 'game_data/static/equipment-paperdoll.js'],
         ['./context-menu', 'game_data/static/context-menu.js'],
+        ['./folio-bag', 'game_data/static/folio-bag.js'],
         ['./party-skill-training', 'game_data/static/party-skill-training.js'],
         ['./item-context-menu', 'game_data/static/item-context-menu.js'],
         ['./folio-equipment', 'game_data/static/folio-equipment.js'], ['./party-power-cards', 'game_data/static/party-power-cards.js'],

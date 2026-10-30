@@ -13,7 +13,7 @@ async function install(page) {
             modules[window.sharedModuleName] = factory(...dependencies.map(name => modules[name]));
         };
     });
-    for (const name of ['rich-text', 'text-columns']) {
+    for (const name of ['rich-text', 'text-columns', 'heat-help']) {
         await page.evaluate(name => { window.sharedModuleName = name; }, name);
         await page.addScriptTag({ path: path.join(root, 'static/scripts', name + '.js') });
     }

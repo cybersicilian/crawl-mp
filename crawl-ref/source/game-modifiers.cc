@@ -7,6 +7,13 @@ namespace game_modifiers
 {
     const char *const RUNE_LOCKS_DISABLED_KEY = "game_modifiers_no_rune_locks";
     const char *const TRAPS_KEY = "game_modifiers_traps";
+    const char *const SHARED_FATE_KEY = "game_modifiers_shared_fate";
+
+    bool shared_fate(const player& p)
+    {
+        return p.props.exists(SHARED_FATE_KEY)
+               && p.props[SHARED_FATE_KEY].get_bool();
+    }
 
     bool rune_locks_disabled(const player& p)
     {
@@ -49,9 +56,10 @@ namespace game_modifiers
         return mode == traps::normal || mode == traps::random_only;
     }
 
-    void set_campaign(player& p, bool no_rune_locks, traps mode)
+    void set_campaign(player& p, bool no_rune_locks, traps mode, bool shared_fate)
     {
         p.props[RUNE_LOCKS_DISABLED_KEY] = no_rune_locks;
         p.props[TRAPS_KEY] = static_cast<int>(mode);
+        p.props[SHARED_FATE_KEY] = shared_fate;
     }
 }

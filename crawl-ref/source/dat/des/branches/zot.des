@@ -4704,6 +4704,97 @@ XXXXXXXXXXXccddddddddddddddccXXXcp.............ocXXXcchhhhhhhhhhhhhhccXXXXXXXXXX
 XXXXXXXXXXXXccccccccccccccccXXXXcccccccc@ccccccccXXXXccccccccccccccccXXXXXXXXXXX
 ENDMAP
 
+# Alternate end hall adapted from bcrawl: older chamber encounters and trap
+# distribution, using current trap types and the modern Orb dais and gem.
+NAME:       hall_of_Zot_bcrawl
+PLACE:      Zot:$
+ORIENT:     north
+TAGS:       no_dump no_trap_gen patrolling
+
+## terrain
+# XXX: Fixed trap chance spots and slim chances for traps on nearly every
+# square should be replaced with per-chamber trap NSUBSTs, with separate
+# NSUBSTs for each chamber's inner and outer edges alongside main innards.
+KFEAT:    ~ = trap_zot / trap_dispersal / trap_net / trap_alarm w:5 / floor w:80
+KFEAT:    ^ = trap_zot / trap_dispersal / trap_net / trap_alarm w:5
+KMASK:    1! = no_item_gen
+SUBST:    C = X:90 c
+SUBST:    ^ = ^ .:10
+SUBST:    . = .:500 ^
+SUBST:    ! = ^ .:40
+# 1/4 times, lower the chance of forced traps to enter the first chambers,
+# but provide some statues between the first and second chambers instead.
+SHUFFLE:  ABab / ^^.. / ^^.. / ^^..
+SUBST:    A = ^..., B = ^.
+SUBST:    a = ., b = 6G
+
+## monsters
+MONS:     orb guardian, killer klown, electric golem, orb of appropriateness
+MONS:     ancient lich / dread lich, orange crystal statue / w:20 obsidian statue
+SHUFFLE:  234
+SUBST:    8 = 8..., 5 = 5.
+# For the chambers closer to the orb, have 1/3 chances for more ancient liches,
+# 1/3 chance for more orbs of fire, or 1/3 chances for more killer klowns and
+# random floor spawns.
+SUBST:    ? = .:8 ?
+SUBST:    ? : KLM
+SUBST:    K = 4:30 5 0 ~
+SUBST:    L = 4 5:30 0 ~
+SUBST:    M = 2:20 4 5 0:20 ~
+
+## colours
+COLOUR:     cX = lightmagenta
+TILE:       c = stone_wall_zot_last
+LFLOORCOL:  magenta
+LROCKCOL:   lightmagenta
+LFLOORTILE: floor_rough_magenta
+LROCKTILE:  wall_zot_lightmagenta
+
+KITEM:    R = prismatic gem
+KITEM:    Z = Orb of Zot
+KFEAT:    Z = orb dais
+
+validate {{ return has_exit_from_glyph('Z') }}
+
+MAP
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXX.............XXXXXXXXXXXXXXXXXXXXXXXXX.............XXXXXXXXXXXXXX
+XXXXXXXXXXXX...................XXXXXXXXXXXXXXXXXXX...................XXXXXXXXXXX
+XXXXXXXXXXX..........3...........XXXXXXXXXXXXXXX...........3..........XXXXXXXXXX
+XXXXXXXXXX..~.....................XXXXXXXXXXXXX.....................~..XXXXXXXXX
+XXXXXXXXXX.......?..?.....~.~.....XXX...1...XXX.....~.~.....?..?.......XXXXXXXXX
+XXXXXXXXXXX.~...........?.........XX..1...1..XX.........?...........~.XXXXXXXXXX
+XXXXXXXXXXXX......................X1...!!!...1X......................XXXXXXXXXXX
+XXXXXXXXXXXXX.....4....2....~.~......1.!Z!.1......~.~....2....4.....XXXXXXXXXXXX
+XXXXXXXXXXXX....?...?.....?...?...X1...!!!...1X...?...?.....?....?...XXXXXXXXXXX
+XXXXXXXXXXX.......?....?..........XX..1...1..XX..........?....2.......XXXXXXXXXX
+XXXXXXXXXX.....~..........~.~.....XXX...1...XXX.....~.~..........~.....XXXXXXXXX
+XXXXXXXXXX...~....................XXXXXXXXXXXXX....................~...XXXXXXXXX
+XXXXXXXXXXX.....~.~.~..~.........XXcccccccccccXX........~...~.~.~.....XXXXXXXXXX
+XXXXXXXXXXXX............~..~...XXXcccccccccccccXXX...~..~.........~..XXXXXXXXXXX
+XXXXXXXXXXXXX........~.XX...XXXXcccccccccccccccccXXXX...XX.~........XXXXXXXXXXXX
+XXXXXXXXXXXXXXa111aXXXXXXXXXXcccccccccccccccccccccccXXXXXXXXXXb111bXXXXXXXXXXXXX
+XXXXXXXXXXXcc..........XX...AA1.ccccccccccccccccc.1BB...XX..........ccXXXXXXXXXX
+XXXXXXXXXXcc...~.~..~.~.....AA1...ccccccccccccc...1BB.......~..~.~.~.ccXXXXXXXXX
+XXXXXXXXXcc.~...~......~.~...ccc...ccccccccccc...ccc...~.~.~..~.......ccXXXXXXXX
+XXXXXXXXXc.~..~....~.~........ccc...............ccc.....~....~..~.~....cXXXXXXXX
+XXXXXXXXXc..~..~.~....~.~.~.5.cXcc......R......ccXc.5.~.~.~....~.~...~.cXXXXXXXX
+XXXXXXXXXc..~.....~.~.......~.cXXc.............cXXc~........~.....~.~..cXXXXXXXX
+XXXXXXXXXc.~...~......~.~.....cXXcc.1...1...1.ccXXc......~.......~.....cXXXXXXXX
+XXXXXXXXXc~..~...~.~.~.~...~.~cXXXc...........cXXXc~.~..~..~.~.~...~.~.cXXXXXXXX
+XXXXXXXXXc.....~.........~....cXXcc...........ccXXc....~.~.............cXXXXXXXX
+XXXXXXXXXcc...5..~..~.~....~.ccXXc.............cXXcc~.....~....~..5.~.ccXXXXXXXX
+XXXXXXXXXXcc~......~....~.~.ccXXcc.............ccXXcc.~.~....~....~..ccXXXXXXXXX
+XXXXXXXXXXXcc..............ccXXXc...............cXXXcc..............ccXXXXXXXXXX
+XXXXXXXXXXXXccccccccccccccccXXXXcccccccc@ccccccccXXXXccccccccccccccccXXXXXXXXXXX
+ENDMAP
+
 # There's few vaults on Zot:5, tone down their chances.
 NAME: dummy_balancer_zot
 TAGS: dummy

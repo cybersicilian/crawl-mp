@@ -48,8 +48,6 @@ typedef map<level_id, i_transit_list> items_in_transit;
 
 extern monsters_in_transit the_lost_ones;
 
-void transit_lists_clear();
-
 m_transit_list *get_transit_list(const level_id &where);
 void add_monster_to_transit(const level_id &dest, const monster& m);
 
@@ -62,6 +60,11 @@ void handle_followers(const coord_def &from,
                       bool (*handler)(const coord_def &pos,
                                       const coord_def &from));
 void tag_followers();
+// Tag only owned mercenaries near each other party member who is travelling
+// with the active player from this loaded floor.
+void tag_transported_party_mercenaries(const level_id& source,
+                                      const coord_def& stair_pos,
+                                      bool transport_party);
 void untag_followers();
 void transport_followers_from(const coord_def &from);
 

@@ -19,10 +19,13 @@
 #include "god-passive.h" // passive_t::convert_orcs
 #include "items.h"
 #include "libutil.h" // map_find
+#include "mercenary-transit.h"
 #include "mon-behv.h"
 #include "mon-death.h" //monster_die
 #include "mon-place.h"
 #include "mpr.h"
+#include "party.h"
+#include "player.h"
 #include "religion.h"
 #include "tag-version.h"
 #include "terrain.h"
@@ -39,7 +42,8 @@ static void _cull_lost_mons(m_transit_list &mlist, int how_many)
     for (auto i = mlist.begin(); i != mlist.end();)
     {
         auto finger = i++;
-        if (!mons_is_unique(finger->mons.type))
+        if (!mons_is_unique(finger->mons.type)
+            && !is_hired_mercenary(finger->mons))
         {
             mlist.erase(finger);
 
@@ -50,8 +54,16 @@ static void _cull_lost_mons(m_transit_list &mlist, int how_many)
 
     // If we're still over the limit (unlikely), just lose
     // the old ones.
-    while (how_many-- > MAX_LOST && !mlist.empty())
-        mlist.erase(mlist.begin());
+    for (auto i = mlist.begin(); how_many > MAX_LOST && i != mlist.end();)
+    {
+        if (is_hired_mercenary(i->mons))
+            ++i;
+        else
+        {
+            i = mlist.erase(i);
+            --how_many;
+        }
+    }
 }
 
 /**
@@ -85,7 +97,7 @@ void add_monster_to_transit(const level_id &lid, const monster& m)
     dprf("Monster in transit to %s: %s", dest.describe().c_str(),
          m.name(DESC_PLAIN, true).c_str());
 
-    if (m.is_divine_companion())
+    if (m.is_divine_companion() || is_hired_mercenary(m))
         move_companion_to(&m, dest);
 
     const int how_many = mlist.size();
@@ -150,7 +162,7 @@ static void _level_place_followers(m_transit_list &m)
 
         if (using_stairs && mon->place(true))
         {
-            if (mon->mons.is_divine_companion())
+            if (mon->mons.is_divine_companion() || is_hired_mercenary(mon->mons))
             {
                 move_companion_to(monster_by_mid(mon->mons.mid),
                                                  level_id::current());
@@ -296,6 +308,8 @@ void apply_daction_to_transit(daction_type act)
         for (auto j = m->begin(); j != m->end(); ++j)
         {
             monster* mon = &j->mons;
+            const bool hired = is_hired_mercenary(*mon);
+            const mid_t mid = mon->mid;
             if (mons_matches_daction(mon, act))
                 apply_daction_to_mons(mon, act, false, true);
 
@@ -304,6 +318,10 @@ void apply_daction_to_transit(daction_type act)
             // points to it, so decrement the iterator first.
             if (!mon->alive())
             {
+                // A deferred action can destroy an off-level follower without
+                // visiting the normal on-level death cleanup.
+                if (hired)
+                    companion_list.erase(mid);
                 // Remove this monster from the deferred reset queue.
                 cancel_pending_monster_reset(mon);
                 m->erase(j--);
@@ -443,6 +461,9 @@ static bool _mons_can_follow_player_from(const monster &mons,
                                          const coord_def from,
                                          bool within_level = false)
 {
+    // Another party member cannot take an owned mercenary to a new floor.
+    if (is_hired_mercenary(mons) && !mercenary_owned_by(mons, you))
+        return false;
     if (!mons.alive()
         || mons.speed_increment < 50
         || mons.incapacitated()
@@ -461,7 +482,8 @@ static bool _mons_can_follow_player_from(const monster &mons,
     // seeking the player will follow up/down stairs.
     if (!mons.friendly()
           && (!mons_is_seeking(mons) || mons.foe != MHITYOU)
-        || mons.foe == MHITNOT && mons.behaviour != BEH_WITHDRAW)
+        || mons.foe == MHITNOT && mons.behaviour != BEH_WITHDRAW
+           && !(mons.friendly() && is_hired_mercenary(mons)))
     {
         return false;
     }
@@ -535,6 +557,38 @@ void handle_followers(const coord_def &from,
 void tag_followers()
 {
     handle_followers(you.pos(), _tag_follower_at);
+}
+
+void tag_transported_party_mercenaries(const level_id& source,
+                                      const coord_def& stair_pos,
+                                      bool transport_party)
+{
+    if (!transport_party || !party::is_enabled() || !in_bounds(stair_pos))
+        return;
+
+    const int active = party::active_slot();
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (slot == active)
+            continue;
+        const player& member = party::get_player(slot);
+        if (member.where_are_you != source.branch || member.depth != source.depth
+            || !in_bounds(member.pos()))
+            continue;
+
+        const coord_def member_pos = member.pos();
+        party::scoped_player_context context(slot);
+        int tagged = 0;
+        for (radius_iterator ri(member_pos, 3, C_SQUARE, LOS_NO_TRANS, true); ri; ++ri)
+        {
+            monster* follower = monster_at(*ri);
+            if (follower && is_hired_mercenary(*follower)
+                && mercenary_owned_by(*follower, you)
+                && _tag_follower_at(*ri, stair_pos)
+                && ++tagged >= 18)
+                break;
+        }
+    }
 }
 
 /**

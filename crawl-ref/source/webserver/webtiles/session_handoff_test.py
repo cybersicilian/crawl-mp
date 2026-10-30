@@ -1,4 +1,5 @@
 """Real WebSocket handoffs retain the running engine and its other players."""
+import asyncio
 import json
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
@@ -102,6 +103,33 @@ class SessionHandoffTests(Workspace, AsyncHTTPTestCase):
     async def resume(self, connection, reconnect=False):
         connection.write_message(json.dumps(dict(msg="expedition_open", id=self.game["id"],
                                                  reconnect=reconnect)))
+
+    @gen_test
+    async def test_dropped_host_can_reclaim_after_grace_while_guest_keeps_playing(self):
+        old_connection, old = await self.login()
+        guest = object()
+        watchers = {old, guest}
+        process = SimpleNamespace(username="Host", record_id=self.game["id"], process=Mock(),
+            conn=Mock(open=True), stop=Mock(), handle_input=Mock(),
+            party_control=SimpleNamespace(multiplayer=True, connected_slots=lambda: {1} if guest in watchers else set()),
+            remove_watcher=Mock(side_effect=watchers.discard), add_watcher=Mock(side_effect=watchers.add))
+        old.process, old.game_id = process, "coop"
+        self.processes["fixture"] = process
+        with patch.dict(config.server_config, reconnect_grace_period=0.03):
+            old_connection.close(code=1001)
+            await asyncio.sleep(0.15)
+            self.assertTrue(old.client_closed)
+            self.assertNotIn(old, watchers)
+            self.assertIsNotNone(old.reconnect_timeout)
+            process.stop.assert_not_called()
+            new_connection, new = await self.login()
+            await self.resume(new_connection, reconnect=True)
+            await self.read_until(new_connection, "game_started")
+            self.assertIsNone(old.process)
+            self.assertIs(new.process, process)
+            self.assertEqual(watchers, {new, guest})
+            self.assertIsNone(old.reconnect_timeout)
+            process.stop.assert_not_called()
 
     @gen_test
     async def test_explicit_resume_hands_off_unsaved_game_and_closes_previous_socket(self):

@@ -108,6 +108,33 @@ class PartyControlTest(unittest.TestCase):
         self.assertEqual(self.control.controllable(self.host), [0])
         self.assertEqual(self.control.next_slot(self.host), 0)
 
+    def test_connection_status_is_live_without_changing_native_or_saved_membership(self):
+        self.control.claim(self.guest(), 1)
+        self.party_state()
+        connected = {0}
+        self.control.connected_slots = lambda: connected
+        first = self.control.snapshot(self.host)
+        self.assertEqual([hero["connected"] for hero in first["members"]], [True, False, False, False])
+        connected.add(1)
+        second = self.control.snapshot(self.host)
+        self.assertTrue(second["members"][1]["connected"])
+        self.assertFalse(first["members"][1]["connected"])
+        self.assertNotIn("connected", self.control.state["members"][1])
+        self.assertEqual(self.control.members, {"Host": 0, "Guest": 1})
+
+    def test_ai_seat_presence_does_not_require_a_human_socket(self):
+        self.control.claim(self.guest(), 1)
+        self.party_state()
+        self.control.connected_slots = lambda: {0}
+        self.control.ai_slots = {2}
+        state = self.control.snapshot(self.host)
+        self.assertEqual([hero["connected"] for hero in state["members"]], [True, False, True, False])
+
+    def test_missing_connection_provider_keeps_legacy_status_unknown(self):
+        self.control.claim(self.guest(), 1)
+        self.party_state()
+        self.assertNotIn("connected", self.control.snapshot(self.host)["members"][0])
+
 
 if __name__ == "__main__":
     unittest.main()

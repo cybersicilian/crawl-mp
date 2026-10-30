@@ -21,6 +21,7 @@
 #include "god-passive.h" // jiyva_eat_offlevel_items
 #include "hiscores.h"
 #include "items.h"
+#include "libutil.h" // mouse_control
 #include "luaterp.h" // debug_terp_lua
 #include "macro.h"
 #include "menu.h" // column_composer
@@ -335,6 +336,8 @@ void handle_wizard_command()
     }
 
     {
+        // Web multiplayer must expose this key wait as an owned prompt.
+        mouse_control mc(MOUSE_MODE_PROMPT);
         mprf(MSGCH_PROMPT, "Enter Wizard Command (? - help): ");
         cursor_control con(true);
         wiz_command = getchm();

@@ -27,6 +27,7 @@ fs.mkdirSync(out, { recursive: true });
             window.qaPackets = []; window.qaHandlers = {};
             window.qaState = { playing: true, watching: false, ready: true };
             window.modules = {
+                require: { toUrl: () => "data:text/css," },
                 jquery: window.jQuery,
                 comm: {
                     send_message(msg, fields) { window.qaPackets.push({ msg, ...fields }); },
@@ -44,6 +45,8 @@ fs.mkdirSync(out, { recursive: true });
         });
         for (const [name, file] of [
             ['expedition-url', 'static/scripts/expedition-url.js'],
+            ['text-query', 'static/scripts/text-query.js'],
+            ['library-browser', 'static/scripts/library-browser.js'],
             ['library-ui', 'static/scripts/library-ui.js'],
             ['key_conversion', 'static/scripts/key_conversion.js'],
             ['client-input', 'static/scripts/client-input.js'],

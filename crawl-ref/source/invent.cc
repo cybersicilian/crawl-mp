@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "bag.h"
 
 #include "invent.h"
 
@@ -748,7 +749,10 @@ bool get_tiles_for_item(const item_def &item, vector<tile_def>& tileset, bool sh
             ? item.holding_monster()->pos()
             : item.pos;
         tileidx_t ch = 0;
-        if (c != coord_def() && show_background && item.link != ITEM_IN_SHOP)
+        // Menu entries can represent detached items, such as bag contents.
+        // Their sentinel position is not a dungeon coordinate.
+        if (c != coord_def() && in_bounds(c) && show_background
+            && item.link != ITEM_IN_SHOP)
         {
             ch = tileidx_feature(c);
             tileset.emplace_back(ch);
@@ -1277,6 +1281,7 @@ const char* equip_slot_name(equipment_slot type, bool terse)
     case SLOT_RING:        return "Ring";
     case SLOT_AMULET:      return "Amulet";
     case SLOT_GIZMO:       return "Gizmo";
+    case SLOT_BAG:         return "Bag";
     case SLOT_HAUNTED_AUX: return "Armour";
     default:               return "";
     }
@@ -1402,7 +1407,8 @@ bool item_is_selected(const item_def &i, int selector)
             return false;
         // fallthrough
     case OSEL_EQUIPABLE:
-        return item_is_selected(i, OBJ_ARMOUR)
+        return bag::is_bag(i)
+            || item_is_selected(i, OBJ_ARMOUR)
             || item_is_selected(i, OSEL_WIELD)
             || item_is_selected(i, OBJ_JEWELLERY)
             || item_is_selected(i, OBJ_TALISMANS);
@@ -2056,8 +2062,21 @@ bool item_is_wieldable(const item_def &item)
  */
 void list_charging_evokers(FixedVector<item_def*, NUM_MISCELLANY> &evokers)
 {
-    for (auto &item : you.inv)
+    for (int inventory_index = 0; inventory_index <= ENDOFPACK; ++inventory_index)
     {
+        item_def& item = you.inv[inventory_index];
+        // Stored XP evokers remain carried by this player and continue to
+        // recharge, including in a bag temporarily removed by a forced change.
+        if (inventory_index < ENDOFPACK && bag::is_bag(item))
+        {
+            for (int index = 0; index < bag::used(item); ++index)
+            {
+                item_def* stored = bag::at(item, index);
+                if (stored && is_xp_evoker(*stored)
+                    && evoker_debt(stored->sub_type) != 0)
+                    evokers[stored->sub_type] = stored;
+            }
+        }
         // can't charge non-evokers, or evokers that are full
         if (!is_xp_evoker(item) || evoker_debt(item.sub_type) == 0)
             continue;

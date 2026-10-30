@@ -2972,4 +2972,20 @@ _mon_hex_zap(ZAP_ILL_OMEN, BEAM_ILL_OMEN),
     TILE_BOLT_IRRADIATE,
 },
 
+{
+    ZAP_AGRAPHEDE_STING,
+    "hornet sting",
+    new calcdice_calculator<4, 16, 3, 5>,
+    new tohit_calculator<8, 1, 20>,
+    new dicedef_calculator<3, 6, 1, 13>,
+    new tohit_calculator<19, 1, 20>,
+    LIGHTGREEN,
+    false,
+    BEAM_AGRAPHEDE_STING,
+    DCHAR_FIRED_ZAP,
+    false,
+    false,
+    TILE_BOLT_POISON_ARROW,
+},
+
 };

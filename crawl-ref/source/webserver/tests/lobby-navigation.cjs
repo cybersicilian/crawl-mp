@@ -38,7 +38,7 @@ function quiet(start) {
 async function loadFixture() {
     await page.evaluate(() => require('comm').handle_message({ msg: 'game_library', player_id: 'qa-account',
         games: Array.from({ length: 5 }, (_, i) => ({ id: 'qa-save-' + i,
-            name: 'The Amber Expedition ' + i, status: 'saved', loadable: i !== 4, running: i === 0,
+            name: i === 2 ? 'Ember Pilgrimage' : 'The Amber Expedition ' + i, status: 'saved', loadable: i !== 4, running: i === 0,
             saved_at: '2026-10-18T12:00:00Z', state: { place: 'Dungeon:3', turns: 120 + i,
                 players: [{ name: 'Lyra', species: 'Deep Elf', job: 'Conjurer' }] } })) }));
     await page.waitForFunction(() => document.querySelectorAll('.lobby-recent-entry').length === 2);
@@ -76,9 +76,8 @@ async function loadFixture() {
     assert.equal(await page.locator('#play_now').isVisible(), false);
     await page.getByLabel('Hero 1 name', { exact: true }).fill('Archivist');
     await page.getByLabel('Hero 1 name', { exact: true }).press('Tab');
-    await page.locator('#party_slot_species_1_picker').click();
-    await page.getByRole('combobox', { name: 'Search Species' }).fill('Gargoyle');
-    await page.getByRole('option', { name: 'Gargoyle', exact: true }).click();
+    await page.locator('#party_slot_species_1_visual_search').fill('Gargoyle');
+    await page.locator('#party_slot_species_1_visual_choices [data-value="Gargoyle"]').click();
     await page.waitForTimeout(250);
     const original = await roster(), start = sent.length;
     await view('saved', true); assert(await page.locator('#game_library_panel').isVisible());
@@ -103,7 +102,7 @@ async function loadFixture() {
     await view('play');
     quiet(start); await shot('party-desktop');
     // The launch bar remains reachable after scrolling through long character cards.
-    await page.locator('.party-slot-box').last().scrollIntoViewIfNeeded();
+    await page.locator('.party-slot-box:visible').last().scrollIntoViewIfNeeded();
     const sticky = await page.locator('#btn_launch_party_room').boundingBox();
     assert(sticky.y >= 0 && sticky.y + sticky.height < 800);
     await page.locator('#btn_leave_party_room').click(); await page.locator('#lobby_home').waitFor({ state: 'visible' });
@@ -114,10 +113,10 @@ async function loadFixture() {
     assert.equal(await page.locator('.lobby-nav-count').textContent(), '5');
     await shot('play-populated-desktop');
     await view('saved');
-    await page.getByRole('searchbox', { name: 'Find a saved expedition' }).fill('Expedition 2');
+    await page.getByRole('searchbox', { name: 'Find a saved expedition' }).fill('Ember');
     assert.equal(await page.locator('#game_library_panel .game-library-entry:visible').count(), 1);
     await view('play'); await view('saved');
-    assert.equal(await page.getByRole('searchbox', { name: 'Find a saved expedition' }).inputValue(), 'Expedition 2');
+    assert.equal(await page.getByRole('searchbox', { name: 'Find a saved expedition' }).inputValue(), 'Ember');
     quiet(silent);
     await page.evaluate(() => { window.qaSend = window.socket.send.bind(window.socket);
         window.socket.send = payload => { const { msg, ...data } = JSON.parse(payload);
@@ -152,6 +151,13 @@ async function loadFixture() {
     await page.getByRole('searchbox', { name: 'Find a friend or expedition' }).fill('AmberHost');
     assert.equal(await page.locator('#player_list tbody tr:visible').count(), 1);
     assert.equal(await page.locator('#party_rooms_table tbody tr:visible').count(), 0);
+    const liveActions = page.locator('#player_list tbody tr:visible .live-expedition-actions');
+    assert.equal(await liveActions.locator('.coop-watch-table-btn').getAttribute('href'), '#expedition-live-expedition-0');
+    await liveActions.locator('a').evaluateAll(links => links.forEach(link => link.addEventListener('click', event => event.preventDefault(), { once: true })));
+    await liveActions.getByRole('link', { name: 'Join co-op', exact: true }).click();
+    assert.equal(await page.evaluate(() => window.pending_auto_join_party), true);
+    await liveActions.getByRole('link', { name: 'Watch', exact: true }).click();
+    assert.equal(await page.evaluate(() => window.pending_auto_join_party), false);
     await page.getByRole('button', { name: 'Show full details' }).click();
     assert(await page.locator('#player_list tbody tr:visible .god').isVisible());
     await page.getByRole('searchbox', { name: 'Find a friend or expedition' }).fill('nothing-matches-qa');

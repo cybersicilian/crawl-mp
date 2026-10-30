@@ -115,5 +115,90 @@ class InputRecoveryTest(unittest.TestCase):
         self.restore.assert_not_called()
 
 
+class DisconnectedPromptRecoveryTest(unittest.TestCase):
+    def setUp(self):
+        self.clock = 0.0
+        self.connected = {0}
+        self.cancel = Mock(return_value=True)
+        self.streams = SimpleNamespace(native_ready=True)
+        self.pump = ActivityPump(SimpleNamespace(multiplayer=True, views={}), self.streams,
+            lambda: self.connected, Mock(), now=lambda: self.clock, probe=Mock(),
+            cancel_prompt=self.cancel, prompt_grace=3)
+        self.request = self.pump.start_manual(1)
+        self.pump.prompt_boundary()
+        self.pump.tick()
+
+    def status(self, **fields):
+        self.pump.recover(dict(activity_id=self.request, state="prompt", owner=1,
+                               input_mode=7, **fields))
+
+    def test_grace_and_fresh_native_evidence_cancel_without_unlocking(self):
+        peer = Mock()
+        self.pump.queue_input(peer, 0)
+        self.clock = 2.99
+        self.status()
+        self.cancel.assert_not_called()
+        self.clock = 3
+        self.status()
+        self.cancel.assert_called_once_with(1, self.request, 7)
+        self.assertTrue(self.pump.inflight)
+        self.assertFalse(self.streams.native_ready)
+        peer.assert_not_called()
+        self.pump.recover(dict(activity_id=self.request, state="complete", owner=1))
+        peer.assert_called_once()
+
+    def test_timeouts_busy_unknown_and_stale_status_never_cancel(self):
+        for instant in (5, 10, 20):
+            self.clock = instant
+            self.pump.tick()
+        for state in ("busy", "unknown"):
+            self.pump.recover(dict(activity_id=self.request, state=state, owner=1))
+        for token in (0, True, self.request + 1):
+            self.pump.recover(dict(activity_id=token, state="prompt", owner=1, input_mode=7))
+        self.cancel.assert_not_called()
+        self.assertTrue(self.pump.inflight)
+
+    def test_reconnect_or_another_tab_preserves_prompt_and_restarts_grace(self):
+        self.clock = 2
+        self.connected.add(1)
+        self.pump.tick()
+        self.clock = 10
+        self.status()
+        self.cancel.assert_not_called()
+        self.connected.remove(1)
+        self.pump.tick()
+        self.clock = 12.9
+        self.status()
+        self.cancel.assert_not_called()
+        self.clock = 13
+        self.status()
+        self.cancel.assert_called_once_with(1, self.request, 7)
+
+    def test_native_owner_change_starts_its_own_absence_period(self):
+        self.clock = 5
+        self.pump.recover(dict(activity_id=self.request, state="prompt", owner=0, input_mode=1))
+        self.connected.clear()
+        self.pump.tick()
+        self.clock = 7.9
+        self.pump.recover(dict(activity_id=self.request, state="prompt", owner=0, input_mode=1))
+        self.cancel.assert_not_called()
+        self.clock = 8
+        self.pump.recover(dict(activity_id=self.request, state="prompt", owner=0, input_mode=1))
+        self.cancel.assert_called_once_with(0, self.request, 1)
+
+    def test_nested_prompt_retries_are_rate_limited_and_keep_the_same_token(self):
+        self.clock = 3
+        self.status()
+        self.clock = 3.1
+        self.status()
+        self.cancel.assert_called_once()
+        self.clock = 8
+        self.status()
+        self.assertEqual(self.cancel.call_count, 2)
+        self.assertEqual(self.cancel.call_args.args, (1, self.request, 7))
+        self.assertEqual(self.pump.recovery_counts["abandoned_prompts"], 2)
+        self.assertTrue(self.pump.inflight)
+
+
 if __name__ == '__main__':
     unittest.main()

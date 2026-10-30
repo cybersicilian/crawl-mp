@@ -169,6 +169,9 @@ void punish(god_type god)
         you.duration[DUR_ELDER_UNRAVEL] = brief;
         you.equipment.update();
         break;
+    case GOD_IMUS_THEA: wrath_summon(MONS_SHINING_EYE); break;
+    case GOD_GREAT_WYRM: wrath_summon(MONS_FIRE_ELEMENTAL); break;
+    case GOD_AGRAPHEDE: wrath_summon(MONS_REDBACK); break;
     default: break;
     }
     you.redraw_armour_class = you.redraw_evasion = you.redraw_status_lights = true;

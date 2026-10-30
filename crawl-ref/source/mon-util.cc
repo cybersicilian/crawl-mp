@@ -6,6 +6,7 @@
 #include "AppHdr.h"
 
 #include "mon-util.h"
+#include "grape-monster.h"
 
 #include <algorithm>
 #include <cmath>
@@ -396,10 +397,51 @@ int get_mons_resist(const monster& mon, mon_resist_flags res)
     return get_resist(get_mons_resists(mon), res);
 }
 
-// Returns true if the monster successfully resists this attempt to poison it.
-bool monster_resists_this_poison(const monster& mons, bool force)
+const actor* agraphede_poison_beam_source(const bolt& beam)
 {
-    const int res = mons.res_poison();
+    // bolt::agent() resolves player-owned beams to the currently active
+    // player. Retain explicit source/reflector identity across party turns.
+    const mid_t source = beam.reflections > 0 ? beam.reflector : beam.source_id;
+    return source == MID_NOBODY ? nullptr : actor_by_mid(source, false, true);
+}
+
+int agraphede_poison_resistance(const actor* target, const actor* source)
+{
+    if (!target)
+        return 0;
+    const int resistance = target->res_poison();
+    const monster* mon = target->as_monster();
+    if (!source || !mon || party::is_proxy_monster(*mon))
+        return resistance;
+    const mon_holy_type holiness = mon->holiness();
+    if (!(holiness & (MH_NATURAL | MH_HOLY | MH_DEMONIC)))
+        return resistance;
+
+    int slot = -1;
+    if (source->is_player())
+        slot = source->mid == you.mid ? party::active_slot()
+                                      : party::slot_for_mid(source->mid);
+    else if (const monster* proxy = source->as_monster())
+        if (party::is_proxy_monster(*proxy))
+            slot = party::proxy_slot(*proxy);
+    if (source->mid == you.mid)
+        slot = party::active_slot();
+    if (slot < 0)
+        return resistance;
+    party::scoped_player_context context(slot);
+    if (!have_passive(passive_t::agraphede_enfeeble))
+        return resistance;
+    if ((holiness & MH_NATURAL)
+        || ((holiness & (MH_HOLY | MH_DEMONIC))
+            && in_good_standing(GOD_AGRAPHEDE, 4)))
+        return 0;
+    return resistance;
+}
+
+bool monster_resists_this_poison(const monster& mons, bool force,
+                                 const actor* source)
+{
+    const int res = agraphede_poison_resistance(&mons, source);
     if (res >= 3)
         return true;
     if (!force && res >= 1 && x_chance_in_y(2, 3))
@@ -458,15 +500,15 @@ int monster::wearing(object_class_type obj_type, int sub_type,
 
     case OBJ_ARMOUR:
 
-        item = mslot_item(MSLOT_SHIELD);
+        item = grape_monster::effective_item(*this, MSLOT_SHIELD);
         if (item && item->is_type(OBJ_ARMOUR, sub_type))
             ret++;
 
-        item = mslot_item(MSLOT_ARMOUR);
+        item = grape_monster::effective_item(*this, MSLOT_ARMOUR);
         if (item && item->is_type(OBJ_ARMOUR, sub_type))
             ret++;
 
-        item = mslot_item(MSLOT_AUX_ARMOUR);
+        item = grape_monster::effective_item(*this, MSLOT_AUX_ARMOUR);
         if (item && item->is_type(OBJ_ARMOUR, sub_type))
             ret++;
 
@@ -516,21 +558,21 @@ int monster::wearing_ego(object_class_type obj_type, int special) const
         break;
 
     case OBJ_ARMOUR:
-        item = mslot_item(MSLOT_SHIELD);
+        item = grape_monster::effective_item(*this, MSLOT_SHIELD);
         if (item && item->base_type == OBJ_ARMOUR
             && get_armour_ego_type(*item) == special)
         {
             ret++;
         }
 
-        item = mslot_item(MSLOT_ARMOUR);
+        item = grape_monster::effective_item(*this, MSLOT_ARMOUR);
         if (item && item->base_type == OBJ_ARMOUR
             && get_armour_ego_type(*item) == special)
         {
             ret++;
         }
 
-        item = mslot_item(MSLOT_AUX_ARMOUR);
+        item = grape_monster::effective_item(*this, MSLOT_AUX_ARMOUR);
         if (item && item->base_type == OBJ_ARMOUR
             && get_armour_ego_type(*item) == special)
         {
@@ -563,9 +605,9 @@ int monster::scan_artefacts(artefact_prop_type ra_prop,
     {
         const int weap      = inv[MSLOT_WEAPON];
         const int second    = inv[MSLOT_ALT_WEAPON]; // Two-headed ogres, etc.
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int aux       = inv[MSLOT_AUX_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
+        const int armour    = grape_monster::effective_index(*this, MSLOT_ARMOUR);
+        const int aux       = grape_monster::effective_index(*this, MSLOT_AUX_ARMOUR);
+        const int shld      = grape_monster::effective_index(*this, MSLOT_SHIELD);
         const int jewellery = inv[MSLOT_JEWELLERY];
 
         if (weap != NON_ITEM && env.item[weap].base_type == OBJ_WEAPONS
@@ -1721,6 +1763,7 @@ bool mons_class_can_use_stairs(monster_type mc)
            && mc != MONS_GERYON
            && mc != MONS_ROYAL_JELLY
            && mc != MONS_BALL_LIGHTNING
+           && mc != MONS_AGRAPHEDE_WEB_BALL
            && mc != MONS_SPECTRAL_WEAPON;
 }
 

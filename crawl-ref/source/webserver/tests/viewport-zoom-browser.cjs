@@ -46,13 +46,14 @@ fs.mkdirSync(output, { recursive: true });
                     }
                 };
                 window.modules = { jquery: $, comm: {}, './cell_renderer': { DungeonCellRenderer: Base },
-                    './options': { get: key => settings[key], add_listener: noop },
+                    './options': { ready: () => true, get: key => settings[key], add_listener: noop },
                     './enums': { ui: { NORMAL: 0, VIEW_MAP: 2 }, CURSOR_MOUSE: 1 },
                     './view_data': { place_cursor(type, point) { window.cursor = point; }, remove_cursor: noop },
                     'tooltip-policy': { hover_ms: 450 },
                     './game-context': game, './map_knowledge': { get: () => ({ t: {} }) },
                     './sprite-reach': () => 1, './party-hover': { attach: noop, draw: noop, point: noop, leave: noop },
-                    './traversal-effects': { attach: noop }, './shell-animation': { attach: noop },
+                    './traversal-effects': { attach: noop }, './shell-animation': { attach: noop }, './chain-view': { attach: noop },
+                    './premium-movement': { attach: noop }, './premium-effects': { animated: () => false }, './premium-regions': { animated: () => false },
                     './planned-route': { attach: noop }, './hero-feedback': { attach: noop }, './encounter-feedback': { attach: noop },
                     './status-icons': { icon: () => document.createTextNode('↔') } };
                 window.define = (deps, factory) => { modules[window.moduleName] = factory(...deps.map(key => modules[key])); };

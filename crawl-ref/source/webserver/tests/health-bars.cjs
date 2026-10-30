@@ -73,7 +73,7 @@ async function browserProof() {
             window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(dep => window.modules[dep])); };
         });
         for (const [name, file] of [['item-properties', 'static/scripts/item-properties.js'],
-            ...['status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status',
+            ...['effect-icon-catalog', 'effect-icon-art', 'status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status',
                 'party-card-status', 'player-card-details', 'party-initiative', 'party-navigation', 'party']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])]) {
             await page.evaluate(name => { window.moduleName = name; }, name);

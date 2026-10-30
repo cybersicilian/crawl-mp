@@ -443,6 +443,11 @@ void fill_doll_equipment(dolls_data &result)
         result.parts[TILEP_PART_BASE] = TILEP_TRAN_WISP;
         _fill_doll_equipment_all_melded(result);
         break;
+    case transformation::golem:
+        result.parts[TILEP_PART_BASE] = TILEP_TRAN_GOLEM;
+        // The activated set supplies its own complete character image.
+        _fill_doll_equipment_all_melded(result);
+        break;
     case transformation::jelly:
         result.parts[TILEP_PART_BASE] = TILEP_TRAN_JELLY;
         _fill_doll_equipment_all_melded(result);

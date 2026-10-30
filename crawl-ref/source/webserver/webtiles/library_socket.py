@@ -177,6 +177,7 @@ class LibrarySocketMethods:
 
 def configure_process(process, game):
     process.record_id = game["id"]
+    process.lobby_room = json.loads(game["party_json"]).get("room")
     process.character_name = json.loads(game["party_json"]).get("character_name") or process.username
     process.game_params = process.game_params.copy()
     env = dict(process.game_params.templated("env", username=process.username, default={}))

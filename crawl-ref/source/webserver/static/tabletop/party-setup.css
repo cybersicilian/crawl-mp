@@ -66,6 +66,8 @@
 }
 .choice-picker-results { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .choice-picker-option { padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+.choice-picker-option-name { display: block; }
+.choice-picker-option-description { display: block; margin-top: 2px; color: var(--tt-folio-muted); font-size: 11px; line-height: 1.35; }
 .choice-picker-option[aria-selected="true"] { color: var(--tt-folio-crimson); font-weight: 700; }
 .choice-picker-option[aria-selected="true"]::after { content: '✓'; float: right; margin-left: 12px; }
 .choice-picker-option:is(:hover, .is-highlighted) { background: #ede1cc; outline: 1px solid #cfc0a1; outline-offset: -1px; }
@@ -110,6 +112,22 @@
 #lobby.has-chapter-index #party_slots_grid .slot-p0 .party-slot-modes { display: none; }
 #lobby .party-slot-state-note:empty { display: none; }
 #lobby .party-character-fields { gap: 12px 14px; }
+
+/* Keep the consequences of the current selections beside their controls. */
+#lobby .build-overview { margin: 14px 0; padding: 12px; border: 1px solid #cabb9f; border-left: 3px solid var(--tt-folio-crimson); background: #fffaf0; color: var(--tt-folio-ink); font: 12px/1.45 var(--tt-font-ui); }
+#lobby .build-overview-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+#lobby .build-overview-heading h4, #lobby .build-overview-section h4 { margin: 0; color: var(--tt-folio-crimson); font: 600 13px/1.4 var(--tt-font-ui); }
+#lobby .build-overview-heading span { font-weight: 700; }
+#lobby .build-overview-fit, #lobby .build-overview-note, #lobby .build-overview-status { margin: 5px 0 0; color: var(--tt-folio-muted); }
+#lobby .build-overview-section { margin-top: 9px; }
+#lobby .build-overview-table { width: 100%; border-collapse: collapse; text-align: left; }
+#lobby .build-overview-table th, #lobby .build-overview-table td { padding: 3px 6px 3px 0; border-bottom: 1px solid #e6dbc6; vertical-align: top; }
+#lobby .build-overview-table th { width: 96px; font-weight: 600; }
+#lobby .party-trait-guide { margin-top: 7px; color: var(--tt-folio-ink); font: 12px/1.45 var(--tt-font-ui); }
+#lobby .party-trait-guide summary { color: var(--tt-folio-crimson); cursor: pointer; font-weight: 600; }
+#lobby .party-trait-guide section { padding: 6px 0; border-bottom: 1px solid #e6dbc6; }
+#lobby .party-trait-guide p { margin: 2px 0; }
+#lobby .party-trait-availability { color: var(--tt-folio-muted); }
 .party-field-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
 #lobby.has-chapter-index #party_slots_grid .party-field-heading .character-choice-details {
     display: inline-flex;

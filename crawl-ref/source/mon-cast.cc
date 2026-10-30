@@ -7,6 +7,7 @@
 #include "level-time.h"
 
 #include "mon-cast.h"
+#include "cubus.h"
 
 #include <algorithm>
 #include <cmath>
@@ -239,6 +240,31 @@ static mons_spell_logic _hex_logic(spell_type spell,
 
 /// How do monsters go about casting spells?
 static const map<spell_type, mons_spell_logic> spell_to_logic = {
+    { SPELL_CUBUS_DISARM, {
+        [](const monster& caster) {
+            actor* foe = caster.get_foe();
+            return ai_action::good_or_impossible(
+                foe && cubus::can_affect(caster, *foe, cubus::effect::disarm));
+        },
+        _fire_simple_beam,
+        [](bolt& beam, const monster&, int power) {
+            beam.flavour = BEAM_CUBUS_DISARM;
+            beam.ench_power = power;
+        },
+        MSPELL_LOGIC_NONE, 16,
+    } },
+    { SPELL_CUBUS_ALLURE, {
+        [](const monster& caster) {
+            actor* foe = caster.get_foe();
+            return ai_action::good_or_impossible(
+                foe && cubus::can_affect(caster, *foe, cubus::effect::allure));
+        },
+        [](monster& caster, mon_spell_slot slot, bolt&) {
+            if (actor* foe = caster.get_foe())
+                cubus::apply(caster, *foe, cubus::effect::allure,
+                             mons_spellpower(caster, slot.spell));
+        },
+    } },
     { SPELL_MIGHT, {
         _should_selfench(ENCH_MIGHT),
         _fire_simple_beam,
@@ -636,6 +662,17 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
         _always_worthwhile,
         _fire_simple_beam,
         _setup_heal_other,
+    } },
+    { SPELL_EVAPORATE, {
+        [](const monster &caster) {
+            if (env.level_state & LSTATE_STILL_WINDS || !caster.get_foe())
+                return ai_action::impossible();
+            return _caster_sees_foe(caster);
+        },
+        _fire_simple_beam,
+        [](bolt &beam, const monster&, int power) {
+            setup_monster_evaporate(beam, power, random2(5));
+        },
     } },
     { SPELL_LRD, {
         _always_worthwhile,
@@ -1295,6 +1332,22 @@ static void _fire_simple_beam(monster &/*caster*/, mon_spell_slot, bolt &pbolt)
     pbolt.fire();
 }
 
+void setup_monster_evaporate(bolt& beam, int power, int cloud_choice)
+{
+    static const beam_type flavours[] = { BEAM_MEPHITIC, BEAM_POTION_MIASMA,
+        BEAM_POTION_POISON, BEAM_POTION_FIRE, BEAM_POTION_STEAM };
+    ASSERT_RANGE(cloud_choice, 0, 5);
+    beam.name = "potion";
+    beam.colour = GREEN;
+    beam.glyph = dchar_glyph(DCHAR_FIRED_MISSILE);
+    beam.flavour = flavours[cloud_choice];
+    beam.hit = 14 + power / 30;
+    beam.damage = dice_def(1, 0);
+    beam.ench_power = power;
+    beam.is_explosion = true;
+    beam.ex_size = 1;
+}
+
 /**
  * Take the given explosion and fire it, handling screen-refresh issues in the
  * process.
@@ -1550,7 +1603,8 @@ static void _cast_brain_bite(monster &caster, mon_spell_slot slot, bolt&)
 
     if (foe->is_player())
     {
-        drain = min(you.magic_points, max(1, you.max_magic_points / 5));
+        drain = you.uses_magic_reserve()
+                ? min(you.magic_points, max(1, you.max_magic_points / 5)) : 0;
         if (drain > 0)
         {
             mprf(MSGCH_WARN, "You feel your power leaking away.");
@@ -7763,9 +7817,15 @@ void mons_cast(monster* mons, bolt pbolt, spell_type spell_cast,
     }
 
     bool evoke {slot_flags & MON_SPELL_EVOKE};
+    // Preserve the potion flavour already traced during spell selection.
+    const bool traced_potion = spell_cast == SPELL_EVAPORATE
+                               && pbolt.origin_spell == SPELL_EVAPORATE;
+    const beam_type traced_flavour = pbolt.flavour;
     // Always do setup. It might be done already, but it doesn't hurt
     // to do it again (cheap).
     setup_mons_cast(mons, pbolt, spell_cast, evoke);
+    if (traced_potion)
+        pbolt.flavour = traced_flavour;
 
     // single calculation permissible {dlb}
     const spell_flags flags = get_spell_flags(spell_cast);

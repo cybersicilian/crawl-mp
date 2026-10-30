@@ -6,9 +6,10 @@ const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '../static/scripts/client-transport.js'), 'utf8');
 const loadingSource = fs.readFileSync(path.join(__dirname, '../static/scripts/game-loading.js'), 'utf8');
 
-function fixture() {
+function fixture(options = {}) {
     let factory, beforeSend, imagesReady, now = 0, timerId = 0, loading, createStream;
     const timers = new Map(), received = [], immediate = [], errors = [];
+    let assetLoads = 0;
     const window = {}, document = { hidden: false, getElementById() { return {}; } };
     vm.runInNewContext(loadingSource, { define(deps, init) { loading = init(); } });
     vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../static/scripts/state-stream.js'), 'utf8'), {
@@ -21,6 +22,7 @@ function fixture() {
         handle_message_immediately(message) { immediate.push(message.msg); return message.msg === 'ping'; },
         handle_message(message) {
             received.push(message.msg);
+            if (message.msg === 'game_client') client.receive_game_client(message);
             if (message.msg === 'delay') client.delay(message.t);
             if (message.msg === 'multi') client.handle_multi_message(message);
             if (message.msg === 'reenter') client.enqueue_messages('{"msg":"nested"}');
@@ -30,7 +32,9 @@ function fixture() {
     };
     vm.runInNewContext(source, { define(deps, init) {
         factory = init(jquery, comm, loading, () => ({ connect() {}, stop() {} }), createStream,
-            (root, ready) => { imagesReady = ready; return () => {}; });
+            (root, ready) => { imagesReady = ready; assetLoads++;
+                if (options.cachedReplacement && assetLoads > 1) ready();
+                return () => {}; });
     },
         window, document, TextDecoder, Blob, Uint8Array, requirejs: { undef() {} },
         Date: { now: () => now }, console: { error: (...args) => errors.push(args) },
@@ -173,5 +177,20 @@ for (const content of ['<div>legacy client</div>', '<script>game_loading</script
     f.enqueue(message('new-state'));
     assert.deepEqual(f.received, ['new-state'], 'Reset discards stale input barriers and queued updates');
     assert.equal(f.timers.size, 0, 'Stale asset callbacks cannot start polling the new session');
+}
+{
+    const f = fixture({ cachedReplacement: true });
+    const content = '<script>game_loading</script>';
+    f.client.receive_game_client({ version: 'first', content });
+    f.enqueue({ msg: 'game_client', version: 'replacement', content }, message('replacement-state'));
+    f.imagesReady();
+    f.window.game_loading = true;
+    f.tick();
+    assert.deepEqual(f.received, ['game_client']);
+    assert.equal(f.timers.size, 1, 'Finishing the old loader must not cancel the replacement loader');
+    f.window.game_loading = true;
+    f.tick();
+    assert.deepEqual(f.received, ['game_client', 'replacement-state']);
+    assert.equal(f.timers.size, 0);
 }
 console.log('Transport ordering, interruptible delays, loading barriers, yielding and legacy messages passed.');

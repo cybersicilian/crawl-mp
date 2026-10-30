@@ -1,8 +1,8 @@
-/* Shared effect frames: the same inset metal tile on dark HUD and light folio. */
+/* Shared Terraria-inspired effect wells; native artwork and game turn units. */
 .status-icon-frame {
-    --status-size: 22px;
-    --status-accent: #a9b7c7;
-    --status-well: #252c35;
+    --status-size: 32px;
+    --status-accent: #8ba8e4;
+    --status-well: #273867;
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -15,10 +15,10 @@
     min-height: var(--status-size);
     margin: 0;
     padding: 2px;
-    border: 1px solid #b7a078;
-    border-radius: 3px;
-    background: linear-gradient(145deg, #ffffff0d, transparent 55%), var(--status-well);
-    box-shadow: inset 0 0 0 1px #080e14, 0 1px 1px #0007;
+    border: 2px solid #7491c5;
+    border-radius: 2px;
+    background: linear-gradient(145deg, #ffffff12, transparent 55%), var(--status-well);
+    box-shadow: inset 0 0 0 1px #141d3e, 1px 2px 0 #0007;
     color: #f1e5cf;
     vertical-align: middle;
     line-height: 1;
@@ -36,8 +36,8 @@
     pointer-events: none;
     z-index: -1;
 }
-.status-icon-frame[data-status-tone='active'] { --status-accent: #94c9b1; --status-well: #1f3731; }
-.status-icon-frame[data-status-tone='bad'] { --status-accent: #f1a18d; --status-well: #492a2a; }
+.status-icon-frame[data-status-tone='active'] { --status-accent: #b1d7c0; border-color: #8ca6dc; }
+.status-icon-frame[data-status-tone='bad'] { --status-accent: #f1a18d; --status-well: #532c48; border-color: #ca756e; }
 .status-icon-frame[data-status-tone='passive'] { --status-accent: #98b5c9; --status-well: #26323d; }
 .status-icon-frame[data-status-tone='unknown'] { border-style: dashed; }
 .status-icon-frame[data-status-expiring='true']::after {
@@ -49,7 +49,14 @@
     border-bottom: 2px dotted var(--status-accent);
     pointer-events: none;
 }
-.status-icon-frame > .tt-icon { width: 16px; height: 16px; margin: 0; flex: 0 0 16px; }
+.status-icon-frame > .tt-icon { width: 24px; height: 24px; margin: 0; flex: 0 0 24px; image-rendering: pixelated; }
+.status-icon-frame.has-duration { margin-bottom: 15px; }
+.status-icon-duration {
+    position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+    color: #f1e5cf; background: #152031; padding: 1px 2px; border-radius: 2px;
+    font: 10px/1.1 var(--tt-font-mono, monospace); font-variant-numeric: tabular-nums;
+    white-space: nowrap; pointer-events: none;
+}
 .status-icon-frame > .status-icon-warning {
     position: absolute;
     top: -2px;
@@ -73,7 +80,7 @@
 .status-icon-labelled { width: auto; gap: 4px; padding-inline: 4px; }
 .status-icon-levels .resistance-icons { flex-wrap: nowrap; }
 @media (pointer: coarse) {
-    .status-icon-frame { --status-size: 28px; }
+    .status-icon-frame { --status-size: 36px; }
 }
 @media (forced-colors: active) {
     .status-icon-frame { border-color: ButtonText; background: Canvas; color: CanvasText; box-shadow: none; }

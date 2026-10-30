@@ -1,6 +1,6 @@
 /* Staging character controls and their authoritative room commands.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers) {
+define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers", "party-lobby-tools"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers, lobbyTools) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
@@ -115,6 +115,7 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
             guide.init($grid[0]);
             $grid.find(".party-slot-box").each(function () { builder.refresh(this); });
             composition.init($grid[0]);
+            lobbyTools.init();
             $(".party-campaign-options").remove();
             $(".party-setup-tools").append(modifiers.create(function (settings) {
                 var room = api.find_my_party_room();
@@ -243,6 +244,9 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 var $box = $(this).closest(".party-slot-box");
                 var slotIdx = parseInt($box.attr("data-slot"), 10);
                 var mode = $(this).attr("data-mode");
+                var room = api.find_my_party_room(), occupant = room && room.slots && room.slots[slotIdx];
+                if (occupant && occupant.username && mode !== occupant.state
+                    && !window.confirm("Release " + occupant.username + "'s seat and change its control?")) return;
                 send_slot_update(slotIdx, { state: mode });
             });
 
@@ -259,11 +263,14 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
             $("#btn_create_party_room, #btn_create_party_room_empty").on("click", function (ev) {
                 ev.preventDefault();
                 var pendingDaily = window.__PEBBLE_PENDING_DAILY;
+                var access = document.getElementById("lobby_creation_visibility");
+                var visibility = access ? access.value : "public";
                 window.__PEBBLE_PENDING_DAILY = null;
                 if (pendingDaily)
                 {
                     send_message("party_room_create", {
                         hero_name: state.current_user || "Aldric",
+                        visibility: visibility,
                         name: "Soup of the Day: " + pendingDaily.name,
                         seed: pendingDaily.seed,
                         friendly_fire: pendingDaily.seasonings.indexOf("friendly_fire") !== -1,
@@ -274,6 +281,7 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 {
                     send_message("party_room_create", {
                         hero_name: state.current_user || "Aldric",
+                        visibility: visibility,
                         friendly_fire: true
                     });
                 }
@@ -312,13 +320,19 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 }
                 else
                 {
-                    send_message("party_room_join", { room_id: roomId });
+                    var seat = $(this).closest("tr").find(".party-room-seat").val();
+                    var payload = { room_id: roomId };
+                    if (seat !== undefined && seat !== null && seat !== "") payload.slot = Number(seat);
+                    send_message("party_room_join", payload);
                 }
             });
 
             $("#btn_leave_party_room").on("click", function (ev) {
                 ev.preventDefault();
                 var room = api.find_my_party_room();
+                if (room && room.host === state.current_user && room.slots.some(function (slot) {
+                    return slot.username && slot.username !== state.current_user;
+                }) && !window.confirm("Close this party and release the other players' seats?")) return;
                 send_message("party_room_leave", {
                     room_id: room ? room.room_id : state.current_party_room_id
                 });

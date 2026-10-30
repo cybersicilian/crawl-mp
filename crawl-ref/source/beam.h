@@ -178,6 +178,7 @@ struct bolt
     mid_t       source_id = MID_NOBODY;// The mid of the source (remains
                                        // MID_NOBODY if not coming from a player
                                        // or a monster).
+    bool agraphede_web = false; // deferred web blast retains its owner's MID
     string source_name = "";      // The name of the source, should it
                                   // be different from agent->name(),
                                   // or if the actor dies prematurely.
@@ -365,6 +366,7 @@ private:
     int get_cloud_size(bool min = false, bool max = false) const;
     bool is_blockable() const;
     bool is_omnireflectable() const;
+    bool imus_reflects_player() const;
     bool is_fiery() const;
     bool can_burn_trees() const;
     bool is_bouncy(dungeon_feature_type feat) const;

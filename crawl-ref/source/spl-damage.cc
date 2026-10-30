@@ -42,6 +42,7 @@
 #include "mon-cast.h"
 #include "mon-death.h"
 #include "mon-place.h"
+#include "mon-util.h"
 #include "mon-tentacle.h"
 #include "mutation.h"
 #include "ouch.h"
@@ -737,7 +738,8 @@ static spret _cast_los_attack_spell(spell_type spell, int pow,
             tile = TILE_BOLT_SINGING;
             // prompt_verb = "sing" The singing sword prompts in melee-attack
             vulnerable = [](const actor *caster, const actor *act) {
-                return act != caster && could_harm(caster, act);
+                return !party::same_actor_identity(caster, act)
+                       && could_harm(caster, act);
             };
             break;
 
@@ -1304,6 +1306,7 @@ static const map<monster_type, monster_frag> fraggable_monsters = {
     { MONS_RUSTED_INSPECTOR,  { "metal", CYAN, frag_damage_type::metal } },
     { MONS_IRON_ELEMENTAL,    { "metal", CYAN, frag_damage_type::metal } },
     { MONS_IRON_GOLEM,        { "metal", CYAN, frag_damage_type::metal } },
+    { MONS_ANCIENT_AUTOMATON, { "metal", CYAN, frag_damage_type::metal } },
     { MONS_PEACEKEEPER,       { "metal", CYAN, frag_damage_type::metal } },
     { MONS_WAR_GARGOYLE,      { "metal", CYAN, frag_damage_type::metal } },
     { MONS_CLOCKWORK_BEE,     { "metal", CYAN, frag_damage_type::metal } },
@@ -3528,10 +3531,10 @@ void forest_damage(const actor *mon)
     }
 }
 
-static bool _toxic_can_affect(const actor *act)
+static bool _toxic_can_affect(const actor *act, const actor* source)
 {
     // currently monsters are still immune at rPois 1
-    return act->res_poison() < (act->is_player() ? 3 : 1);
+    return agraphede_poison_resistance(act, source) < (act->is_player() ? 3 : 1);
 }
 
 spret cast_toxic_radiance(actor *agent, int pow, bool fail, bool tracer)
@@ -3540,7 +3543,7 @@ spret cast_toxic_radiance(actor *agent, int pow, bool fail, bool tracer)
     {
         for (actor_near_iterator ai(agent, LOS_NO_TRANS); ai; ++ai)
         {
-            if (!_toxic_can_affect(*ai) || mons_aligned(agent, *ai))
+            if (!_toxic_can_affect(*ai, agent) || mons_aligned(agent, *ai))
                 continue;
             const monster* mons = ai->as_monster();
             if (mons && !mons_is_threatening(*mons))
@@ -3555,7 +3558,8 @@ spret cast_toxic_radiance(actor *agent, int pow, bool fail, bool tracer)
     if (agent->is_player())
     {
         targeter_radius hitfunc(&you, LOS_NO_TRANS);
-        if (stop_attack_prompt(hitfunc, "poison", _toxic_can_affect))
+        if (stop_attack_prompt(hitfunc, "poison", [agent](const actor* target)
+                               { return _toxic_can_affect(target, agent); }))
             return spret::abort;
 
         fail_check();
@@ -3614,7 +3618,7 @@ void toxic_radiance_effect(actor* agent, int mult, bool on_cast)
 
     for (actor_near_iterator ai(agent->pos(), LOS_NO_TRANS); ai; ++ai)
     {
-        if (!_toxic_can_affect(*ai) || !could_harm(agent, *ai))
+        if (!_toxic_can_affect(*ai, agent) || !could_harm(agent, *ai))
             continue;
 
         // Monsters can skip hurting friendlies
@@ -3623,7 +3627,7 @@ void toxic_radiance_effect(actor* agent, int mult, bool on_cast)
 
         int dam = roll_dice(1, 1 + div_rand_round(pow, 20))
                             * div_rand_round(mult, BASELINE_DELAY);
-        dam = resist_adjust_damage(*ai, BEAM_POISON, dam);
+        dam = resist_adjust_damage(*ai, BEAM_POISON, dam, agent);
 
         if (ai->is_player())
         {
@@ -3796,7 +3800,8 @@ dice_def poisonous_vapours_damage(int pow, bool random)
 spret cast_poisonous_vapours(const actor& agent, int pow, const coord_def target, bool fail)
 {
     actor* act = actor_at(target);
-    if (agent.is_player() && act && you.aware_of(*act) && act->res_poison() <= 0
+    if (agent.is_player() && act && you.aware_of(*act)
+        && agraphede_poison_resistance(act, &agent) <= 0
         && stop_attack_prompt(act->as_monster(), false, target))
     {
         return spret::abort;
@@ -3809,11 +3814,13 @@ spret cast_poisonous_vapours(const actor& agent, int pow, const coord_def target
     else
         mpr("Poisonous fumes billow in the air!");
 
-    if (!act || act->res_poison() > 0 || !could_harm(&agent, act, true, true))
+    if (!act || agraphede_poison_resistance(act, &agent) > 0
+        || !could_harm(&agent, act, true, true))
         return spret::success;
 
     int dmg = resist_adjust_damage(act, BEAM_POISON,
-                                   poisonous_vapours_damage(pow, true).roll());
+                                   poisonous_vapours_damage(pow, true).roll(),
+                                   &agent);
     act->hurt(&agent, dmg, BEAM_POISON);
 
     // Attempt to poison the target.
@@ -4458,7 +4465,8 @@ void actor_apply_toxic_bog(actor * act)
         return;
 
     const int base_damage = toxic_bog_damage().roll();
-    const int damage = resist_adjust_damage(act, BEAM_POISON_ARROW, base_damage);
+    const int damage = resist_adjust_damage(act, BEAM_POISON_ARROW, base_damage,
+                                            oppressor);
     const int resist = base_damage - damage;
 
     const int final_damage = timescale_damage(act, damage);

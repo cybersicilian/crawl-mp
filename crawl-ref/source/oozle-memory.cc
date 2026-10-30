@@ -189,6 +189,8 @@ limits current_policy(const player& owner)
         policy.maxima[type] = std::numeric_limits<int>::max();
     for (int brand = SPWPN_NORMAL + 1; brand < NUM_REAL_SPECIAL_WEAPONS; ++brand)
         policy.brands.insert(static_cast<brand_type>(brand));
+    for (int brand = SPWPN_PACIFYING; brand <= SPWPN_SEEKING; ++brand)
+        policy.brands.insert(static_cast<brand_type>(brand));
     policy.brands.insert(SPWPN_ACID);
     policy.brands.insert(SPWPN_FOUL_FLAME);
     policy.scaled_properties.insert(ARTP_HP);
