@@ -4,7 +4,10 @@ Branch: `claude/trusting-brahmagupta-ba643d`, built on the merged screenshot bra
 (`claude/ui-overhaul-screenshots-a44fc1` at be8ac92fb3). Scope is the WebTiles
 browser client only: no engine, protocol, save or server change. The brief in the
 user's words: "no text clipping; enhanced information clarity, design flourishes to
-evoke Baldur's Gate, more responsive gameplay".
+evoke Baldur's Gate, more responsive gameplay", with a fifth goal added mid-pass:
+"strong composure, alignment, etc. with clear visual lines in our design".
+The parent branch's later portrait-arch commit (43429d4e3e) is merged in; the medallion
+keeps its arch radius and the gilt tokens.
 
 ## Clipping and overflow fixes
 
@@ -46,6 +49,27 @@ Applied through existing selectors (no DOM renames):
 - Party builder: seat portraits in arched gilt medallion frames; the selected seat is lit (crimson frame, gilt inner line, soft glow).
 - Combat log: engraved turn rules, dramatic damage lines.
 
+## Composition and alignment
+
+Measured with a Playwright probe (`scratchpad/align.cjs`, logs `align-before-measure.txt` /
+`align-after-measure.txt`) that records left/right edges, row heights and caption sizes of
+every chip, label and panel on the builder, mission bar, sidebar, dock and hero sheet.
+
+Tokens (`static/tabletop/tokens.css`): `--tt-type-caption: 10px` (the one tertiary text
+style), `--tt-hud-row: 28px` (every mission-bar chip and tool), `--tt-hud-gutter: 8px`
+(every sidebar panel's inner padding). Component: `.tr-caption` in `tactics-components.css`.
+
+| Surface | Before | After |
+| --- | --- | --- |
+| Mission bar rows | Five chip heights on one strip: mode 28, turn 22, facts 26, tools 30, zoom value 20 (tops 7–12px) | One 28px row, all chips top-aligned at 8px; zoom value 22px centred. Faint vertical rules separate hero · mode · turn · facts · tools. |
+| Captions | 8.5px (AC/EV/SH labels, cluster title), 9px (turn order, combat log, Act/Quick, turn separators), 9.5px (initiative reading), 10px (mission labels) | All 10px, 600 weight, .08em small caps, muted ink. Primary text stays 13px title weight (hero names), secondary 12–13px values. |
+| Sidebar gutters | Cards 7px, turn-order rail 6px, planner 7/8px, ping bar 7px | All on the 8px gutter; card inner sections bleed by the same 8px. Rail, cards, ping bar and planner share the same left and right edge (1092–1430 at 1440). |
+| Companion readings | Defense chips indented 2px with a stray rule, so AC sat 2px right of the HP bar | Flush with the bars and the hero name (one left edge for name, defenses, bars) |
+| Dock | Menu / Common hotkeys at 32px beside 40px controls | 40px, so the dock's top and bottom lines run straight through every control |
+| Hero sheet | Aut strip padded 12px against a 16px banner; stat labels could wrap | 16px inner gutters; labels `nowrap`; the twelve-track stat grid keeps all rows aligned |
+| Folio dialogs | 20px side padding against the hero sheet's 24px | 24px, one gutter for every parchment surface |
+| Builder | Seat tabs 8/10px padding, composition card 14/16px, "Party at a glance" 20px beside "Expedition rules" 18px | Seat tabs 10/12px, composition card 16px, both section headings 20px chapter crimson |
+
 ## Responsiveness
 
 - New `game_data/static/action-feedback.js` (mounted from `adventure-ui.js`): observes the existing input paths only (document `click` capture on dock buttons, quick slots, direction pad, view tools, tray commands, planner Go; `game_keydown`/`game_keypress` for gameplay keys when input mode is NORMAL/COMMAND and no popup is open). On each command it (1) adds `is-activated` to the control for 120ms, (2) pulses the controlled hero's medallion (`is-acting`, 240ms, reduced-motion safe), (3) shows a `#mission_ack` chip over the dungeon ("o Auto-Explore", "5 Rest", "Move ↑") in a *sent* state, which ticks to *done* on the next `player_state_changed`/`party_state_rendered` and fades 600ms later (1.5s cap if nothing returns). It never sends, translates or repeats a native command. Verified live: pressing `5` gave `{text: "5Rest", dockActivated: true, ring: true}` within 40ms; clicking Explore gave the pressed state and a *sent* chip within 30ms, *done* after the engine update.
@@ -55,6 +79,7 @@ Applied through existing selectors (no DOM renames):
 
 ## Verification
 
+- Alignment probe after the composition pass: every mission-bar chip measures 28px tall at the same top; sidebar captions all 10px; rail, cards, ping bar and planner share one left and right edge.
 - `node --check` on every touched script (`party.js`, `direction-pad.js`, `adventure-ui.js`, `action-feedback.js`, `tests/render-benchmark.cjs`): pass. Brace balance on all 19 touched stylesheets: balanced.
 - Browser-free suites: `tactical-planner`, `display-frames`, `quickbar-model`, `initiative-bars`, `party-status`, `enemy-banners`, `creature-roster`, `status-icons` pass; `node --test shell-animation hero-feedback encounter-feedback graphics-preferences` pass.
 - Render benchmark (`tests/render-benchmark.cjs`, 30 iterations, same headless Chrome, base export of be8ac92fb3 vs this tree). The fixture needed `encounter-banner` in its module list (the merge made `dungeon_renderer` depend on it; without the stub the benchmark fails on the base tree too); that one-line fix is included. Medians are unchanged within noise: classic full repaint 1.7/1.7ms, illustrated full repaint 2.6/2.6ms, premium full repaint 4.5/4.7ms, premium packet 14.5/13.9ms, premium camera step 6.1/5.7ms (base/after). None of the renderer modules were touched.

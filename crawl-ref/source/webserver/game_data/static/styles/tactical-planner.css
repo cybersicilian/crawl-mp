@@ -6,7 +6,7 @@
     --cf-move: var(--ui-accent-bright, #89dce6); --cf-attack: var(--ui-enemy, var(--ui-danger, #ff8a76));
     --cf-wait: var(--ui-muted, #adb8b6); --cf-power: var(--ui-arcane, #c9a6ff);
     --cf-good: var(--ui-ally, var(--ui-good, #92e5ae)); --cf-warn: var(--ui-warn, #f0c36d);
-    margin-top: 8px; padding: 7px 8px 8px; border: 1px solid var(--ui-rule, #9e98604f); border-radius: 4px;
+    margin-top: 8px; padding: var(--tt-hud-gutter, 8px); border: 1px solid var(--ui-rule, #9e98604f); border-radius: 4px;
     color: var(--ui-text, #d5d4bf); background: var(--ui-recess, #10191e);
     font: 11px/1.35 var(--tt-font-ui, system-ui, sans-serif); font-variant-numeric: tabular-nums;
 }
@@ -16,7 +16,7 @@
 #tactical_planner[data-plan-state='paused'] { border-color: var(--cf-warn); }
 
 .plan-header { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
-.plan-title { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ui-muted, #adb8b6); }
+.plan-title { font-size: var(--tt-type-caption, 10px); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-muted, #adb8b6); }
 .plan-title .plan-hero { font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--ui-title, #e6d3a6); font-size: 11px; }
 .plan-meta { display: inline-flex; gap: 6px; color: var(--ui-muted, #adb8b6); font-family: var(--tt-font-mono, monospace); font-size: 10px; white-space: nowrap; }
 .plan-meta .plan-cost:not(:empty)::before { content: "·"; margin-right: 6px; }

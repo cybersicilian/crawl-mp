@@ -324,3 +324,9 @@
     .tr-gilded, .tr-medallion { border-color: CanvasText; background: Canvas; box-shadow: none; }
     .tr-rule-engraved::before, .tr-rule-engraved::after { background: CanvasText; }
 }
+
+/* ---- Caption: the one tertiary text style (section names, chip labels) --- */
+.tr-caption {
+    font: 600 var(--tt-type-caption, 10px)/1.2 var(--tt-font-ui, sans-serif);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ui-muted, #c0b296);
+}

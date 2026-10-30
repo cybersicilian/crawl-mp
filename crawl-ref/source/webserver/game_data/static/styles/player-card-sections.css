@@ -59,7 +59,7 @@
 }
 #normal #right_column { overflow: hidden; }
 #normal #hud_sidebar_scroll { min-height: 0; overflow-x: hidden; overflow-y: auto; }
-#normal .party-card-sections { grid-column: 1 / -1; min-width: 0; margin: 3px -7px -9px; }
+#normal .party-card-sections { grid-column: 1 / -1; min-width: 0; margin: 3px calc(-1 * var(--tt-hud-gutter, 8px)) -9px; }
 #normal .party-card-sections :is(#hud_powers, #hud_inventory) {
     position: relative; display: block; width: auto !important; height: auto !important;
     min-width: 0; min-height: 0; max-height: none; margin: 0; overflow: visible;

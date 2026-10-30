@@ -13,6 +13,10 @@
     --tt-title-entry: 19px;
     /* Tactics-RPG scale: labels never drop below 12px; 11px is for key hints only. */
     --tt-type-key: 11px;
+    /* Composition: every HUD caption is 10px small caps; chips share a 28px row; panels share an 8px gutter. */
+    --tt-type-caption: 10px;
+    --tt-hud-row: 28px;
+    --tt-hud-gutter: 8px;
     --tt-type-label: 12px;
     --tt-type-body: 13px;
     --tt-type-reading: 14px;

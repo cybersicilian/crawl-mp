@@ -42,10 +42,17 @@
 }
 #normal #party_turn_banner[data-mode="combat"]::after { background: linear-gradient(90deg, transparent, var(--shell-combat), transparent); }
 .mission-label {
-    font: 600 10px/1.2 var(--shell-font); letter-spacing: .06em; text-transform: uppercase;
+    font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; text-transform: uppercase;
     color: var(--shell-muted); white-space: nowrap;
 }
-#normal #party_turn_banner .party-banner-label { font: 600 10px/1.2 var(--shell-font); color: var(--shell-muted); }
+#normal #party_turn_banner .party-banner-label { font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; color: var(--shell-muted); }
+/* Vertical rules organise the strip into hero · mode · turn · facts · tools. */
+#normal #party_turn_banner.mission-bar > :is(.mission-mode, #mission_clock, .mission-status, .mission-tools) { position: relative; }
+#normal #party_turn_banner.mission-bar > :is(.mission-mode, #mission_clock, .mission-status, .mission-tools)::before {
+    content: ""; position: absolute; left: -5px; top: 50%; width: 1px; height: 22px; transform: translateY(-50%);
+    background: linear-gradient(180deg, transparent, var(--shell-rule) 20%, var(--shell-rule) 80%, transparent); pointer-events: none;
+}
+#normal #party_turn_banner.mission-bar > .mission-tools::before { left: -6px; }
 .mission-hero { display: inline-flex; align-items: center; gap: 8px; flex: 0 1 auto; min-width: 0; }
 .mission-portrait {
     --mission-accent: var(--shell-hero);
@@ -72,7 +79,7 @@
 /* The pill names the mode itself; a separate "Mode" caption only spent width. */
 .mission-mode > .mission-label { display: none; }
 #normal #party_turn_banner #party_banner_mode {
-    display: inline-flex; align-items: center; gap: 5px; min-height: 22px; padding: 2px 9px;
+    display: inline-flex; align-items: center; gap: 5px; box-sizing: border-box; min-height: var(--tt-hud-row, 28px); padding: 2px 10px;
     border: 1px solid color-mix(in srgb, var(--shell-explore) 55%, transparent); border-radius: 999px;
     background: color-mix(in srgb, var(--shell-explore) 16%, transparent); color: var(--shell-explore);
     font: 600 11px/1.3 var(--shell-font); letter-spacing: .02em; white-space: nowrap; text-shadow: none;
@@ -86,7 +93,7 @@
     background: color-mix(in srgb, var(--shell-combat) 18%, transparent); color: var(--shell-combat);
 }
 .mission-stat {
-    display: inline-flex; align-items: center; gap: 5px; min-width: 0; padding: 2px 8px; box-sizing: border-box;
+    display: inline-flex; align-items: center; gap: 5px; min-width: 0; min-height: var(--tt-hud-row, 28px); padding: 2px 8px; box-sizing: border-box;
     border: 1px solid var(--shell-rule); border-radius: 3px;
     background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
 }
@@ -104,12 +111,12 @@
 }
 /* Connection chip (connection-quality.js) reads like the other facts, with its own caption. */
 #normal #party_turn_banner #connection_quality {
-    display: inline-flex; align-items: center; gap: 5px; min-height: 26px; margin: 0; padding: 2px 8px; box-sizing: border-box;
+    display: inline-flex; align-items: center; gap: 5px; min-height: var(--tt-hud-row, 28px); margin: 0; padding: 2px 8px; box-sizing: border-box;
     border: 1px solid var(--shell-rule); border-radius: 3px; background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
     color: var(--shell-text); font: 600 12px/1.2 var(--shell-font); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 #normal #party_turn_banner #connection_quality::before {
-    content: "Ping"; font: 600 10px/1.2 var(--shell-font); letter-spacing: .06em; text-transform: uppercase; color: var(--shell-muted);
+    content: "Ping"; font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
 }
 #normal #party_turn_banner #connection_quality .connection-quality-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--shell-explore); box-shadow: 0 0 5px currentColor; }
 #normal #party_turn_banner #connection_quality[data-connection="fair"] .connection-quality-dot { background: var(--ui-warn, #e0a84b); }
@@ -117,7 +124,7 @@
 #normal #party_turn_banner #connection_quality:is([data-connection="measuring"]) .connection-quality-dot { background: var(--shell-muted); }
 #normal #party_turn_banner #party_progress .party-context-stat,
 #normal #party_turn_banner #party_progress_rune_group {
-    display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 2px 8px; box-sizing: border-box;
+    display: inline-flex; align-items: center; gap: 5px; min-height: var(--tt-hud-row, 28px); padding: 2px 8px; box-sizing: border-box;
     border: 1px solid var(--shell-rule); border-left-width: 1px; border-radius: 3px;
     background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
     font: 600 12px/1.2 var(--shell-font); font-variant-numeric: tabular-nums;
@@ -128,7 +135,7 @@
 #normal #party_turn_banner #party_progress_runes { gap: 3px; }
 #normal #party_turn_banner .party-progress-rune { width: 20px; height: 20px; }
 #normal #party_turn_banner .party-progress-rune :is(.party-rune-art, canvas) { width: 20px; height: 20px; }
-#normal #party_turn_banner #party_progress_monsters { min-height: 26px; padding: 2px 8px; }
+#normal #party_turn_banner #party_progress_monsters { min-height: var(--tt-hud-row, 28px); padding: 2px 8px; }
 #normal #party_turn_banner #party_progress_monsters .party-initiative { flex: 0 0 64px; }
 #normal #workflow_camera_context {
     flex-basis: auto; padding: 2px 8px; border-radius: 999px;
@@ -142,14 +149,14 @@
     border-right: 1px solid var(--shell-rule);
 }
 .hud-zoom-value {
-    display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; padding: 0 4px;
+    display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 22px; padding: 0 4px;
     border-radius: 3px; background: var(--shell-recess); color: var(--shell-muted);
     font: 600 10px/1 var(--shell-mono); font-variant-numeric: tabular-nums;
 }
 #normal #hud_zoom_reset[aria-pressed="true"] { border-color: var(--shell-accent); color: var(--shell-accent-bright); }
 #normal #party_turn_banner :is(.party-banner-btn, .mission-tools button) {
     display: inline-flex; align-items: center; justify-content: center; gap: 4px;
-    width: 30px; min-width: 30px; height: 30px; min-height: 30px; padding: 4px; margin: 0;
+    width: var(--tt-hud-row, 28px); min-width: var(--tt-hud-row, 28px); height: var(--tt-hud-row, 28px); min-height: var(--tt-hud-row, 28px); padding: 4px; margin: 0;
     border: 1px solid var(--shell-edge); border-radius: 4px;
     background: var(--shell-panel); color: var(--shell-text);
     box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #00000066; text-shadow: none; cursor: pointer;
@@ -209,7 +216,7 @@
 #normal #quickbar_primary { gap: 4px; }
 #normal #quickbar_primary::before {
     content: "Act"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
-    font: 600 9px/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+    font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
     writing-mode: vertical-rl; transform: rotate(180deg);
 }
 #normal #quickbar_primary .dcss-dock-btn {
@@ -247,7 +254,7 @@
 #normal #quickbar_slots { gap: 4px; padding-left: 10px; border-left: 1px solid var(--shell-rule); }
 #normal #quickbar_slots::before {
     content: "Quick"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
-    font: 600 9px/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+    font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
     writing-mode: vertical-rl; transform: rotate(180deg);
 }
 #normal .hud-quick-slot {
@@ -281,7 +288,7 @@
 #quickbar_more > summary:hover { border-color: var(--shell-accent); color: var(--shell-accent-bright); background: var(--shell-raised); }
 #quickbar_more[open] > summary { border-color: var(--shell-accent); background: var(--shell-raised); }
 #normal #dock_session_menu, #normal #dock_common_hotkeys {
-    height: 32px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
+    height: 40px; min-height: 40px; padding: 4px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
     background: var(--shell-panel); color: var(--shell-text); font: 600 11px/1.3 var(--shell-font);
 }
 #normal #dock_session_menu { margin-left: auto; }
@@ -314,7 +321,7 @@
 #normal #quickbar_commands.quickbar-command-view .workflow-action-group[data-action-group="expedition"] { grid-column: 1 / -1; }
 #normal #quickbar_commands .workflow-action-group::before {
     width: 100%; flex-basis: 100%; margin: 0 0 2px; padding-bottom: 2px; border-bottom: 1px solid var(--shell-rule);
-    font: 600 10px/1.3 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+    font: 600 var(--tt-type-caption, 10px)/1.3 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
 }
 #normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a) {
     min-height: 30px; padding: 4px 8px; gap: 8px; border: 1px solid var(--shell-rule); border-radius: 4px;

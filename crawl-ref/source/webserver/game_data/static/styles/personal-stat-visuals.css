@@ -42,7 +42,7 @@
     position: relative; padding-top: 11px;
 }
 #normal .party-self-details .hud-stat-cluster-title {
-    position: absolute; left: 1px; top: 0; font: 600 8.5px/1.2 var(--tt-font-ui); letter-spacing: .08em;
+    position: absolute; left: 1px; top: 0; font: 600 var(--tt-type-caption, 10px)/1.2 var(--tt-font-ui); letter-spacing: .08em;
     text-transform: uppercase; color: var(--ui-muted, #c0b296); pointer-events: none;
 }
 #normal .party-self-details .hud-defense-cluster { order: 1; }

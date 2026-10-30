@@ -70,7 +70,7 @@
 }
 #normal .party-faith-row:focus-visible { outline: 1px solid #ead6a1; outline-offset: 1px; border-radius: 2px; }
 .party-faith-label, .party-reading-label, .party-sidebar-label, .hud-stat-label, .initiative-label {
-    font: 600 8.5px/1.2 var(--tt-font-ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ui-muted, #c0b296);
+    font: 600 var(--tt-type-caption, 10px)/1.2 var(--tt-font-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-muted, #c0b296);
 }
 .party-faith-name { color: var(--ui-text, #f0e5cd); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .party-faith-stars { font: 10px/1 var(--tt-font-mono); letter-spacing: .05em; color: #e9ce8e; white-space: nowrap; }
@@ -82,7 +82,8 @@
 #normal .party-icon-reading .party-reading-label { line-height: 1; }
 #normal .party-icon-reading .party-reading-label:empty { display: none; }
 #normal .party-reading-cluster { display: inline-flex; align-items: center; gap: 2px; min-width: 0; }
-#normal .party-defense-cluster { padding-left: 4px; margin-left: 2px; border-left: 1px solid #ac966240; }
+/* Flush with the bars below it; the chips' own frames provide the grouping. */
+#normal .party-defense-cluster { padding-left: 0; margin-left: 0; border-left: 0; }
 #normal .party-defense-cluster .party-icon-reading .tt-icon { display: none; }
 #normal .party-defense-cluster .party-icon-reading { min-height: 18px; padding: 1px 4px; }
 #normal .party-member-state .party-reading-label { position: relative; margin-right: 1px; }
@@ -100,7 +101,7 @@
 /* Initiative meter keeps its label in words. */
 #normal .party-member-timing { display: inline-flex; align-items: center; gap: 5px; flex: 0 1 auto; min-width: 0; }
 /* Long readings ("+10 banked · −1020 recovering") break at the dot onto a second line. */
-.initiative-reading { display: inline-block; max-width: 17ch; font: 600 9.5px/1.15 var(--tt-font-mono); color: #d9d8c8; white-space: normal; text-align: right; }
+.initiative-reading { display: inline-block; max-width: 17ch; font: 600 var(--tt-type-caption, 10px)/1.15 var(--tt-font-mono); color: #d9d8c8; white-space: normal; text-align: right; }
 #normal .party-card:not(.is-controlled-card) .party-member-identity > .party-member-name { flex: 1 1 auto; min-width: 0; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .initiative-reading[data-timing-state='ready'] { color: #b5dfb1; }
 .initiative-reading[data-timing-state='banked'] { color: #b5dfb1; }

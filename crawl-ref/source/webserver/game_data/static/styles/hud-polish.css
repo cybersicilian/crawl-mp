@@ -77,13 +77,13 @@
 #normal .hud-stats-details { gap: 3px 8px; margin-top: 5px; }
 #normal :is(#stats_hp_bar, #stats_mp_bar) { height: 8px; margin-top: 3px; border-radius: 1px; border-color: #8e754c; }
 #normal #stats_noise { opacity: .75; }
-#normal #party_hud { padding: 8px 10px; }
+#normal #party_hud { padding: var(--tt-hud-gutter, 8px) 10px; }
 #normal #party_hud_gold { margin-left: 7px; font-size: 10px; color: #c9b281 !important; }
 #normal #workflow_compact_btn { font-size: 10px; min-height: 24px; padding: 3px 5px; border-color: #927b4a42; }
 /* Portrait and content columns keep small actions beneath the vitality bars. */
 #normal .party-card {
     display: grid; grid-template-columns: 42px minmax(0, 1fr);
-    gap: 3px 7px; box-sizing: border-box; position: relative; padding: 7px; margin-bottom: 5px;
+    gap: 3px 7px; box-sizing: border-box; position: relative; padding: var(--tt-hud-gutter, 8px); margin-bottom: 6px;
     border: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent); border-left: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent) !important;
     border-radius: 4px;
     background: var(--ui-leather, linear-gradient(125deg, #31332c33, #171c2266));
@@ -116,7 +116,7 @@
 #normal .party-card-actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; align-self: start; }
 #normal .party-card-actions .party-mini-btn.hud-iconified { width: 20px; min-width: 20px; height: 20px; min-height: 20px; padding: 2px; }
 #normal .party-card-actions .tt-icon { width: 16px; height: 16px; }
-.workflow-compact-roster #normal .party-card { padding: 7px; min-height: 68px; }
+.workflow-compact-roster #normal .party-card { padding: var(--tt-hud-gutter, 8px); min-height: 68px; }
 #normal .hud-hero-medallion {
     grid-column: 1; grid-row: 1 / span 3; position: relative; width: 42px; height: 50px; padding: 0;
     align-self: start; overflow: hidden; cursor: pointer;
@@ -129,7 +129,7 @@
 .hud-hero-medallion img { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; margin-top: 1px; }
 .hud-hero-medallion > .tt-icon { width: 16px; height: 16px; color: #d9c28f; margin-top: 4px; }
 .hud-hero-medallion small { position: absolute; bottom: 3px; left: 0; right: 0; font: 8px/1 var(--tt-font-ui); color: #d7c392; text-align: center; }
-#normal .party-ping-bar { gap: 5px; padding-top: 7px; margin-top: 6px; border-color: #ae92563d; }
+#normal .party-ping-bar { gap: 5px; padding-top: var(--tt-hud-gutter, 8px); margin-top: 6px; border-color: #ae92563d; }
 #normal .party-ping-bar > span { font-size: 10px; color: #b1a78f; }
 #normal .party-ping-btn.hud-iconified { min-height: 27px; height: 27px; padding: 4px; border-color: #796a4d60; }
 #normal .party-ping-bar .tt-icon { width: 16px; height: 16px; }

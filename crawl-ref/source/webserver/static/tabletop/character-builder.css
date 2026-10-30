@@ -178,7 +178,7 @@
 #lobby.has-chapter-index #party_slots_grid .party-ready-badge:disabled { cursor: default; opacity: 1; transform: none; }
 
 /* Party composition: coverage chips, warnings, then the native stat comparison. */
-.party-composition-view { container-type: inline-size; min-width: 0; padding: 14px 16px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 6px; background: var(--ui-page-raised, var(--tt-folio-raised)); }
+.party-composition-view { container-type: inline-size; min-width: 0; padding: 16px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 6px; background: var(--ui-page-raised, var(--tt-folio-raised)); }
 .party-composition-header { margin-bottom: 12px; }
 #lobby .party-composition-header h3 { margin: 0 0 4px; color: var(--ui-chapter, var(--tt-folio-crimson)); font: 600 20px/1.2 var(--tt-font-title); }
 .party-composition-header p, .party-composition-note { margin: 0; color: var(--ui-quiet, var(--tt-folio-muted)); font: 12px/1.55 var(--tt-font-ui); }
