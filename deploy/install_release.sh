@@ -7,7 +7,9 @@ PORT="${3:-8080}"
 SOURCE="$RELEASE/crawl-ref/source"
 cd "$SOURCE"
 printf '0.33-coop\n' > util/release_ver
-make "-j${BUILD_JOBS:-2}" WEBTILES=y NOWIZARD=y crawl webserver docs
+# The content port uses std::optional and other C++17 library features; the
+# Makefile's default -std=c++11 no longer compiles it.
+make "-j${BUILD_JOBS:-2}" WEBTILES=y NOWIZARD=y STDFLAG=-std=c++17 crawl webserver docs
 ./crawl -version
 PYTHONPATH=webserver python3 -m unittest webtiles.chat_tags_test webtiles.game_library_test webtiles.character_preview_test webtiles.asset_revision_test webtiles.starting_weapons_test webtiles.gameplay_protocol_test webtiles.party_control_test webtiles.skill_training_test
 python3 webserver/tests/native-character-preview.py --binary "$SOURCE/crawl"
