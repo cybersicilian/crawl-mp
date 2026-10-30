@@ -74,6 +74,7 @@ defaults = {
     'connection_timeout': 10 * 60,
     'websocket_ping_interval': 20,
     'websocket_ping_timeout': 20,
+    'websocket_max_write_buffer': 16 * 1024 * 1024, # bytes queued per client
     'reconnect_grace_period': 30,
     'max_idle_time': 5 * 60 * 60,
     'max_lobby_idle_time': 3 * 60 * 60,

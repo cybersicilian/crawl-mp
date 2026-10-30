@@ -1,17 +1,41 @@
 """Authenticated save/load orchestration; IDs never grant control of a game."""
+import concurrent.futures
 import copy
 import json
+import logging
 import os
+
+from tornado.ioloop import IOLoop
 
 from webtiles import config, game_library, character_names
 
+# Save-library and chronicle I/O (SQLite, JSON snapshots, os.stat) runs here
+# instead of on the IOLoop. A single worker keeps jobs in submission order, so
+# a lobby refresh queued after a game's final ingest observes that ingest.
+_db_executor = concurrent.futures.ThreadPoolExecutor(
+    max_workers=1, thread_name_prefix="webtiles-library")
 
-def running_game_ids():
+
+def run_in_db_thread(func, *args):
+    """Run library I/O on the worker; the returned Future resolves on the IOLoop."""
+    return IOLoop.current().run_in_executor(_db_executor, func, *args)
+
+
+def when_done(future, callback):
+    """Call callback(future) on the IOLoop once the worker has finished."""
+    IOLoop.current().add_future(future, callback)
+
+
+def running_game_snapshot():
+    """The IOLoop-thread half of running_game_ids().
+
+    Returns the identified record ids plus the owners of native processes
+    that have not named their save yet; those need a database lookup."""
     from webtiles import process_handler, ws_handler
     processes = list(process_handler.processes.values())
     processes += [socket.process for socket in list(ws_handler.sockets)
                   if socket.process is not None]
-    identifiers = set()
+    identifiers, unnamed_owners = set(), []
     for process in processes:
         identifier = getattr(process, "record_id", None)
         if identifier:
@@ -19,8 +43,31 @@ def running_game_ids():
         elif getattr(process, "username", None):
             # A reconnected native process can predate its identity message.
             # Protect that owner's saves until the process is identified.
-            identifiers.update(game["id"] for game in game_library.list_games(process.username))
+            unnamed_owners.append(process.username)
+    return identifiers, unnamed_owners
+
+
+def _complete_running_ids(identifiers, unnamed_owners):
+    for owner in unnamed_owners:
+        identifiers.update(game["id"] for game in game_library.list_games(owner))
     return identifiers
+
+
+def running_game_ids():
+    return _complete_running_ids(*running_game_snapshot())
+
+
+def library_payload(username, active_ids, unnamed_owners=()):
+    """Body of a game_library reply; touches only SQLite and files, so it may
+    run on the library worker."""
+    active_ids = _complete_running_ids(set(active_ids), unnamed_owners)
+    game_library.purge_fallen_saves(username, active_ids)
+    games = [{**game, "running": game["id"] in active_ids,
+              "deletable": game["id"] not in active_ids}
+             for game in game_library.list_games(username)
+             if not game["save_deleted_at"] and game["status"] not in game_library.TERMINAL_STATUSES
+             and (game["loadable"] or game["id"] in active_ids)]
+    return dict(games=games, player_id=game_library.account_id(username))
 
 
 class LibrarySocketMethods:
@@ -28,15 +75,41 @@ class LibrarySocketMethods:
         if not self.username:
             self.send_message("game_library", games=[], player_id=None)
             return
-        active_ids = running_game_ids()
-        game_library.purge_fallen_saves(self.username, active_ids)
-        games = [{**game, "running": game["id"] in active_ids,
-                  "deletable": game["id"] not in active_ids}
-                 for game in game_library.list_games(self.username)
-                 if not game["save_deleted_at"] and game["status"] not in game_library.TERMINAL_STATUSES
-                 and (game["loadable"] or game["id"] in active_ids)]
-        self.send_message("game_library", games=games,
-                          player_id=game_library.account_id(self.username))
+        self.send_message("game_library", **library_payload(self.username, running_game_ids()))
+
+    def library_fetch_async(self, **kwargs):
+        """library_fetch with its SQLite and file work off the IOLoop."""
+        self._start_library_fetch()
+
+    def _start_library_fetch(self, on_sent=None):
+        """Answer game_library from the library worker, then call on_sent.
+
+        The reply is dropped if this socket closed, logged out, started a game
+        or asked again before the worker answered, so replies never arrive
+        out of order or after the lobby is gone."""
+        self._library_fetch_seq = getattr(self, "_library_fetch_seq", 0) + 1
+        if not self.username:
+            self.send_message("game_library", games=[], player_id=None)
+            if on_sent is not None:
+                on_sent()
+            return
+        sequence, username = self._library_fetch_seq, self.username
+        identifiers, unnamed_owners = running_game_snapshot()
+        future = run_in_db_thread(library_payload, username, identifiers, unnamed_owners)
+
+        def deliver(done):
+            try:
+                payload = done.result()
+            except Exception:
+                logging.warning("Save library lookup failed for %s", username, exc_info=True)
+                return
+            if (getattr(self, "client_closed", False) or self.username != username
+                    or sequence != self._library_fetch_seq or self.process is not None):
+                return
+            self.send_message("game_library", **payload)
+            if on_sent is not None:
+                on_sent()
+        when_done(future, deliver)
 
     def library_error(self, message):
         self.send_message("library_error", message=message)

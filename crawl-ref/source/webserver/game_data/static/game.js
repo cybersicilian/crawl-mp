@@ -205,7 +205,7 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
                     .off("mousedown focusout")
                     .on("mousedown", mobile_input_click);
                 // the following requires a fairly modern browser
-                $(document).on("visibilitychange",
+                $(document).off("visibilitychange.mobileInput").on("visibilitychange.mobileInput",
                     function(ev)
                     {
                         // try to regularize the behavior, on iOS it's flaky

@@ -131,7 +131,10 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
                     y: Math.floor(scaled.height / cell_size.height) + this.view.y
                 };
 
-                view_data.place_cursor(enums.CURSOR_MOUSE, loc);
+                // Pointer motion inside one cell repaints nothing.
+                var mouse_cursor = view_data.cursor_locs[enums.CURSOR_MOUSE];
+                if (!mouse_cursor || mouse_cursor.x !== loc.x || mouse_cursor.y !== loc.y)
+                    view_data.place_cursor(enums.CURSOR_MOUSE, loc);
                 presence.point(loc, ev);
 
                 if (game.can_target() && ev.type !== "contextmenu" && !(ev.type === "mousedown" && (ev.which === 3 || ev.ctrlKey)))

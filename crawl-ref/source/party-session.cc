@@ -26,6 +26,8 @@ const char* const floor_key = "multiplayer_aut_floor";
 const char* const region_clock_key = "multiplayer_region_clock";
 const char* const region_id_key = "multiplayer_region_id";
 const char* const last_action_key = "multiplayer_last_action_aut";
+int region_snapshot_depth = 0;
+bool region_snapshot_valid = false;
 
 string floor_name(const player& member)
 {
@@ -263,8 +265,25 @@ int member_last_action_aut(int slot)
     return props.exists(last_action_key) ? props[last_action_key].get_int() : 0;
 }
 
+scoped_region_snapshot::scoped_region_snapshot()
+{
+    if (++region_snapshot_depth == 1)
+        region_snapshot_valid = false;
+}
+
+scoped_region_snapshot::~scoped_region_snapshot()
+{
+    if (--region_snapshot_depth <= 0)
+    {
+        region_snapshot_depth = 0;
+        region_snapshot_valid = false;
+    }
+}
+
 void reconcile_floor_regions()
 {
+    if (region_snapshot_depth > 0 && region_snapshot_valid)
+        return;
     const int count = player_count();
     int old_reg_id[MAX_PARTY_PLAYERS] = {};
     int old_reg_clock[MAX_PARTY_PLAYERS] = {};
@@ -368,6 +387,8 @@ void reconcile_floor_regions()
             p.props[clock_key] = fl_clk;
         }
     }
+    if (region_snapshot_depth > 0)
+        region_snapshot_valid = true;
 }
 
 int member_region_id(int slot)

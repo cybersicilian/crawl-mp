@@ -6,6 +6,7 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
             names: ""
     };
     var history_limit = 25;
+    var log_limit = 500;
     var message_history = [];
     var unsent_message = { text: "", tags: [] };
     var draft_tags = [];
@@ -71,6 +72,8 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
         var visible = $("#chat").is(":visible") && $("#chat_body").is(":visible");
         if (visible) history_position = scrollback.capture(histcon, histcon.querySelectorAll(".chat-line"));
         $("#chat_history").append(msg);
+        var lines = $("#chat_history").children(".chat-line");
+        if (lines.length > log_limit) lines.slice(0, lines.length - log_limit).remove();
         if (visible) scrollback.restore(histcon, history_position);
         if ($("#chat_body").css("display") === "none" && !data.meta)
         {
