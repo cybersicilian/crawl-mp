@@ -69,7 +69,7 @@
 .enemy-timing:is([data-injury='1'], [data-injury='2']) .enemy-health-track i { background: linear-gradient(#d6c06d, #9a8438); }
 .enemy-timing:is([data-injury='3'], [data-injury='4']) .enemy-health-track i { background: linear-gradient(#e0905c, #a85a2d); }
 .enemy-timing:is([data-injury='5'], [data-injury='6']) .enemy-health-track i { background: linear-gradient(#e36a66, #8b3e41); }
-.enemy-timing small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.enemy-timing small { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; white-space: normal; overflow-wrap: anywhere; line-height: 1.25; }
 .enemy-timing[data-ready='true'] small { color: #f1d68d; }
 .creature-category > summary { padding: 5px 7px; font-size: 10.5px; }
 .creature-category > summary .creature-count { padding: 0 5px; border: 1px solid #a8906766; border-radius: 8px; font-size: 9.5px; line-height: 1.4; }

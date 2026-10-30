@@ -45,7 +45,7 @@
 .plan-progress { position: relative; height: 14px; margin-bottom: 6px; border-radius: 2px; overflow: hidden;
     background: var(--ui-page-inset, #0a1115); border: 1px solid var(--ui-rule, #91886672); }
 .plan-progress[hidden] { display: none; }
-.plan-progress-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in srgb, var(--cf-good) 45%, transparent); transition: width .25s ease-out; }
+.plan-progress-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in srgb, var(--cf-good) 45%, transparent); transition: width .12s ease-out; }
 .plan-progress-text { position: relative; display: block; line-height: 12px; text-align: center; font-size: 9px; letter-spacing: .04em; color: var(--ui-text, #d5d4bf); }
 
 .plan-tools { display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap; }

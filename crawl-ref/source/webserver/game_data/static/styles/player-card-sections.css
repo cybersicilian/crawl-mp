@@ -5,6 +5,14 @@
 #normal .is-controlled-card > .party-member-meta {
     grid-column: 2; grid-row: 1; align-items: center; margin: 0;
 }
+/* The hero's name leads the readings row at full width; the initiative reading sits at its right. */
+#normal .is-controlled-card > .party-member-meta > .party-member-name {
+    order: -1; flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; border: 0; background: none;
+    white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere;
+    font: 700 13px/1.25 var(--tt-font-title, Georgia, serif); letter-spacing: .01em;
+}
+#normal .is-controlled-card > .party-member-meta > :not(.party-member-name):not(.party-member-timing) { order: 1; }
+#normal .is-controlled-card > .party-member-meta > .party-hero-identity { flex: 1 1 100%; }
 #normal .is-controlled-card .party-def-badges { display: none; }
 #normal .is-controlled-card .party-member-timing { margin-top: 0; }
 #normal .is-controlled-card > .party-bars { grid-column: 2; grid-row: 2; }
@@ -102,7 +110,10 @@
 }
 
 /* ---- Compact roster: portrait, meters and initiative only ---- */
-.workflow-compact-roster #normal .party-card :is(.party-hero-identity, .party-faith-row, .party-icon-utility, .party-effect-names, .party-member-effects, .party-sidebar-extra, .party-sidebar-pack, .party-self-details .hud-stat-cluster, .party-self-details .personal-stat-context) { display: none !important; }
+/* Compact keeps the controlled hero's Defense cluster so AC/EV/SH read like the companions' rows. */
+.workflow-compact-roster #normal .party-card :is(.party-hero-identity, .party-faith-row, .party-icon-utility, .party-effect-names, .party-member-effects, .party-sidebar-extra, .party-sidebar-pack, .party-self-details .hud-stat-cluster:not(.hud-defense-cluster), .party-self-details .personal-stat-context) { display: none !important; }
+.workflow-compact-roster #normal .party-card .party-self-details .hud-defense-cluster { margin: 0; padding-top: 0; }
+.workflow-compact-roster #normal .party-card .party-self-details .hud-defense-cluster .hud-stat-cluster-title { display: none; }
 .workflow-compact-roster #normal .party-card .party-member-meta { display: flex; }
 .workflow-compact-roster #normal .party-card .party-icon-meta > :not(.party-defense-cluster) { display: none; }
 .workflow-compact-roster #normal .party-card .party-member-timing { display: inline-flex; margin-left: auto; }
@@ -122,7 +133,7 @@
     #normal .party-card-sections :is(.hud-item-slot, .hud-power-button) { height: 34px; min-height: 34px; }
     #normal .party-card-sections .hud-item-grid { grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 3px; }
     #normal #party_turn_order { padding: 4px 6px 5px; }
-    #normal .turn-order-entry { min-height: 24px; font-size: 10px; max-width: 120px; }
+    #normal .turn-order-entry { min-height: 24px; font-size: 10px; }
     #normal #hud_sidebar_scroll { overscroll-behavior: contain; }
 }
 @media (max-height: 800px) {

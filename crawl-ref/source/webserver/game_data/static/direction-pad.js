@@ -20,7 +20,7 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
     function highlight(direction) {
         clearHighlight();
         $("#direction_pad [data-direction='" + direction.name.toLowerCase() + "']").addClass("is-activated");
-        highlightTimer = setTimeout(clearHighlight, 180);
+        highlightTimer = setTimeout(clearHighlight, 120);
     }
     function onKey(event) {
         if (event.isDefaultPrevented() || event.ctrlKey || event.altKey || event.metaKey || event.shiftKey

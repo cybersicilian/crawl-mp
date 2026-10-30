@@ -1,6 +1,6 @@
 /* Labels live in accessible hover/focus help; native values stay on every card. */
 #normal .party-icon-first > .party-member-meta { display: flex; align-items: center; }
-#normal .party-icon-first .party-member-meta > :not(.party-icon-meta):not(.party-member-timing):not(.party-hero-identity):not(.party-faith-row) { display: none; }
+#normal .party-icon-first .party-member-meta > :not(.party-icon-meta):not(.party-member-timing):not(.party-hero-identity):not(.party-faith-row):not(.party-member-name) { display: none; }
 .party-icon-meta, .party-icon-utility, .party-loadout { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; }
 .party-icon-meta { flex: 1 1 auto; gap: 2px; }
 #normal .party-icon-reading { display: inline-flex; align-items: center; gap: 2px; min-width: 0; min-height: 20px; padding: 1px; box-sizing: border-box; color: #d9d8c8; }
@@ -98,8 +98,10 @@
 .party-effect-name.is-unknown { border-style: dashed; color: var(--ui-muted, #c0b296); }
 .party-effect-more { color: var(--ui-muted, #c0b296); font-family: var(--tt-font-mono); }
 /* Initiative meter keeps its label in words. */
-#normal .party-member-timing { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
-.initiative-reading { font: 600 9.5px/1.2 var(--tt-font-mono); color: #d9d8c8; white-space: nowrap; }
+#normal .party-member-timing { display: inline-flex; align-items: center; gap: 5px; flex: 0 1 auto; min-width: 0; }
+/* Long readings ("+10 banked · −1020 recovering") break at the dot onto a second line. */
+.initiative-reading { display: inline-block; max-width: 17ch; font: 600 9.5px/1.15 var(--tt-font-mono); color: #d9d8c8; white-space: normal; text-align: right; }
+#normal .party-card:not(.is-controlled-card) .party-member-identity > .party-member-name { flex: 1 1 auto; min-width: 0; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
 .initiative-reading[data-timing-state='ready'] { color: #b5dfb1; }
 .initiative-reading[data-timing-state='banked'] { color: #b5dfb1; }
 .initiative-reading[data-timing-state='debt'], .initiative-reading[data-timing-state='mixed'] { color: #f4c474; }

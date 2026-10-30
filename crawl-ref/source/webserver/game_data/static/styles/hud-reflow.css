@@ -1,7 +1,6 @@
 /* Portrait stack, personal details, and a compact map/log footer. */
 #normal .party-card { grid-template-columns: 60px minmax(0, 1fr); }
 #normal .party-portrait { justify-self: center; height: 79px; }
-#normal .party-portrait .party-member-name { position: absolute; top: 66px; left: -9px; width: 60px; font-size: 10px; line-height: 12px; text-align: center; }
 #normal .party-member-identity { min-height: 20px; align-items: flex-start; }
 #normal .party-member-identity .party-card-status { flex: 1 1 auto; }
 #normal .party-member-timing { margin-top: 2px; }
@@ -42,5 +41,4 @@
 #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating):has(#message_pane.hud-floating) { height: 0; flex-basis: 0; border: 0; }
 @media (pointer: coarse) {
     #normal .party-portrait { height: 93px; }
-    #normal .party-portrait .party-member-name { top: 80px; }
 }

@@ -34,6 +34,12 @@
     --ui-magic: #286065;
     /* Tactics vocabulary on dark chrome. Paper surfaces re-declare these below. */
     --ui-focus: #f0d29a;
+    /* Gilded frames, leather and engraved rules (Baldur's Gate flourish). */
+    --ui-gilt: #d9b56a;
+    --ui-gilt-deep: #8a6a33;
+    --ui-gilt-glow: #f2d58a66;
+    --ui-leather: radial-gradient(ellipse at 18% 0, #4a3a2a33, transparent 60%), linear-gradient(135deg, #2c231b, #1b1511 60%, #221a14);
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-gilt) 50%, var(--ui-gilt-deep) 86%, transparent);
     --ui-hero: #f5c96a;
     --ui-hero-ink: #2a1c08;
     --ui-ally: #86cfa5;
@@ -105,6 +111,12 @@ html[data-ui-theme="dungeon"] {
     --ui-magic: #9be0df;
     /* Tactics vocabulary on dark chrome. Dungeon pages are dark, so no paper override. */
     --ui-focus: #dfedff;
+    /* Cold steel instead of gold on the dungeon theme. */
+    --ui-gilt: #b9c9dc;
+    --ui-gilt-deep: #6d7f95;
+    --ui-gilt-glow: #b9c9dc55;
+    --ui-leather: linear-gradient(135deg, #243040, #16202c 60%, #1c2836);
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-gilt) 50%, var(--ui-gilt-deep) 86%, transparent);
     --ui-hero: #ffd98a;
     --ui-hero-ink: #2a1c08;
     --ui-ally: #86cfa5;
@@ -175,6 +187,12 @@ html[data-ui-theme="contrast"] {
     --ui-magic: #a8ffff;
     /* Tactics vocabulary: solid, saturated hues on pure black. */
     --ui-focus: #ffe66d;
+    /* Solid, flat frames on pure black: no gradients, no glow. */
+    --ui-gilt: #ffe66d;
+    --ui-gilt-deep: #fff;
+    --ui-gilt-glow: transparent;
+    --ui-leather: #000;
+    --ui-engraved: linear-gradient(90deg, #fff, #fff);
     --ui-hero: #ffe66d;
     --ui-hero-ink: #000;
     --ui-ally: #9effb8;
@@ -227,6 +245,10 @@ html[data-ui-theme="folio"] :is(#ui-stack .workflow-surface, #dcss_rich_tooltip,
     dialog.character-starting-sheet, #party_lobby_panel, #coop_chronicle_panel,
     #play_now, #lobby_body, #game_library_panel, .tr-on-page) {
     --ui-focus: var(--ui-chapter);
+    --ui-gilt: #9c7a3b;
+    --ui-gilt-deep: #6f5424;
+    --ui-gilt-glow: #c9a35a40;
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-chapter) 50%, var(--ui-gilt-deep) 86%, transparent);
     --ui-hero: #7a5311;
     --ui-hero-ink: #fff5df;
     --ui-ally: #2d633a;

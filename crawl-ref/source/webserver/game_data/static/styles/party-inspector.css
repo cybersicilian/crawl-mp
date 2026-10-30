@@ -97,20 +97,25 @@ dialog#party_inspector_modal .party-insp-body {
 }
 .party-insp-panel[hidden] { display: none !important; }
 dialog#party_inspector_modal .party-insp-section-title {
-    margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 2px solid var(--sheet-rule);
+    display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 0;
+    background: linear-gradient(90deg, var(--sheet-chapter), var(--sheet-rule) 40%, transparent) left bottom / 100% 1px no-repeat;
     color: var(--sheet-chapter); font: 600 16px/1.3 var(--sheet-title-font); font-variant-caps: normal; letter-spacing: 0;
 }
+dialog#party_inspector_modal .party-insp-section-title::before { content: "\2756"; font-size: 11px; color: var(--ui-gilt, #9c7a3b); }
 dialog#party_inspector_modal .workflow-hero-context { margin-bottom: 12px; color: var(--sheet-quiet); }
 
 /* Overview banner: portrait · identity · attributes. */
 dialog#party_inspector_modal .party-insp-banner {
     display: grid; grid-template-columns: auto minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start;
-    padding: 14px 16px; border: 1px solid var(--sheet-rule); border-left: 4px solid var(--hero-accent, var(--sheet-edge));
+    padding: 14px 16px; border: 1px solid var(--ui-gilt-deep, var(--sheet-rule)); border-left: 4px solid var(--hero-accent, var(--sheet-edge));
     border-radius: 4px; background: var(--sheet-raised);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 35%, transparent);
 }
+/* Portrait medallion: hero colour ring inside a gilt ring. */
 .party-insp-portrait {
     display: flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 50%;
     border: 2px solid var(--hero-accent, var(--sheet-rule)); background: radial-gradient(ellipse, color-mix(in srgb, var(--hero-accent, #c39a5a) 25%, transparent), transparent 70%), var(--sheet-inset);
+    box-shadow: 0 0 0 2px var(--sheet-raised), 0 0 0 3px var(--ui-gilt, #9c7a3b), 0 0 0 4px color-mix(in srgb, var(--ui-gilt-deep, #6f5424) 60%, transparent), 0 4px 10px #0003;
 }
 .party-insp-portrait-art { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; }
 .party-insp-portrait-art canvas { width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 4px 2px #0006); }
@@ -132,16 +137,22 @@ dialog#party_inspector_modal .party-insp-hero-meta { color: var(--sheet-quiet); 
 .party-insp-meter-label { color: var(--sheet-quiet); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; }
 /* Page variant of the shared .tr-meter: light track, colour from --tr-meter-color. */
 .party-insp-meter-bar { position: relative; display: block; height: 8px; border-radius: 4px; background: var(--sheet-inset); border: 1px solid var(--sheet-rule); box-shadow: none; overflow: hidden; }
-.party-insp-meter-fill { position: absolute; inset: 0 auto 0 0; display: block; height: 100%; border-radius: inherit; background: var(--tr-meter-color, var(--sheet-good)); transition: width 220ms ease; }
+.party-insp-meter-fill { position: absolute; inset: 0 auto 0 0; display: block; height: 100%; border-radius: inherit; background: var(--tr-meter-color, var(--sheet-good)); transition: width 120ms ease; }
 .party-insp-meter[data-meter="hp"] { --tr-meter-color: var(--ui-res-hp, #c3434e); }
 .party-insp-meter[data-meter="resource"] { --tr-meter-color: var(--ui-res-mp, #3e7cbb); }
 .party-insp-meter[data-threshold="low"] { --tr-meter-color: var(--ui-threat-high, #c2561f); }
 .party-insp-meter.is-low .party-insp-meter-value { color: var(--sheet-danger); }
 .party-insp-meter-value { font-variant-numeric: tabular-nums; color: var(--sheet-ink); }
-dialog#party_inspector_modal .party-insp-stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; align-content: start; }
+/* Twelve tracks: four attributes, three defenses, then the weapon on a full-width row so its
+   name never breaks mid-word. */
+dialog#party_inspector_modal .party-insp-stat-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 5px; align-content: start; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(-n+4) { grid-column: span 3; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(n+5):nth-child(-n+7) { grid-column: span 4; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) { grid-column: span 12; }
 dialog#party_inspector_modal .party-insp-stat-box { padding: 6px 8px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-paper); }
 dialog#party_inspector_modal .party-insp-stat-box .lbl { display: block; color: var(--sheet-quiet); font: 600 9px/1.5 var(--sheet-copy-font); letter-spacing: .06em; text-transform: uppercase; }
-dialog#party_inspector_modal .party-insp-stat-box .val { color: var(--sheet-ink); font: 700 15px/1.3 var(--sheet-title-font); font-variant-numeric: tabular-nums; }
+dialog#party_inspector_modal .party-insp-stat-box .val { display: block; min-width: 0; color: var(--sheet-ink); font: 700 15px/1.3 var(--sheet-title-font); font-variant-numeric: tabular-nums; overflow-wrap: break-word; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) .val { font-size: 13px; line-height: 1.3; }
 dialog#party_inspector_modal .party-insp-aut-strip {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin-top: 10px;
     padding: 8px 12px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-inset); color: var(--sheet-ink); font-size: 11px;

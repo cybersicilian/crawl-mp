@@ -84,15 +84,17 @@
 #normal .party-card {
     display: grid; grid-template-columns: 42px minmax(0, 1fr);
     gap: 3px 7px; box-sizing: border-box; position: relative; padding: 7px; margin-bottom: 5px;
-    border: 1px solid #85724e4d; border-left: 1px solid #85724e4d !important;
+    border: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent); border-left: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent) !important;
     border-radius: 4px;
-    background: linear-gradient(125deg, #31332c33, #171c2266);
-    box-shadow: inset 0 1px 0 #e8c9910a;
+    background: var(--ui-leather, linear-gradient(125deg, #31332c33, #171c2266));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9b56a) 22%, transparent), inset 0 1px 0 #e8c9910a;
 }
+/* The controlled hero's card carries a stronger gilt line; the acting hero is lit. */
+#normal .party-card.is-controlled-card { border-color: var(--ui-gilt-deep, #8a6a33); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9b56a) 40%, transparent), inset 0 1px 0 #e8c9910a; }
 #normal .party-card.active-turn {
-    border-color: #c1a56b;
-    background: radial-gradient(ellipse at 0 30%, #b48e4433, transparent 75%), linear-gradient(120deg, #30332f, #22272c);
-    box-shadow: inset 0 0 0 1px #d9ba7620, 0 0 10px #ad874a0c;
+    border-color: var(--ui-gilt, #c1a56b);
+    background: radial-gradient(ellipse at 0 30%, #b48e4433, transparent 75%), var(--ui-leather, linear-gradient(120deg, #30332f, #22272c));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9ba76) 45%, transparent), 0 0 10px var(--ui-gilt-glow, #ad874a1c);
 }
 #normal .party-card.downed-haunting { border-color: #a17d9d; background: #302330; }
 #normal .party-member-top { grid-column: 2; grid-row: 1; min-width: 0; margin: 0; }
@@ -119,10 +121,10 @@
     grid-column: 1; grid-row: 1 / span 3; position: relative; width: 42px; height: 50px; padding: 0;
     align-self: start; overflow: hidden; cursor: pointer;
     background: radial-gradient(ellipse at 50% 40%, #58534266, #171b20 75%);
-    border: 1px solid #968054; border-radius: 45% 45% 4px 4px;
-    box-shadow: inset 0 0 0 2px #0b0f14, inset 0 0 0 3px #b4975c35, 0 2px 4px #0008;
+    border: 1px solid var(--ui-gilt-deep, #968054); border-radius: 45% 45% 4px 4px;
+    box-shadow: inset 0 0 0 2px #0b0f14, inset 0 0 0 3px color-mix(in srgb, var(--ui-gilt, #d9b56a) 40%, transparent), 0 2px 4px #0008;
 }
-#normal .active-turn .hud-hero-medallion { border-color: #e1c383; box-shadow: inset 0 0 0 2px #151719, 0 0 8px #d2ae542a; }
+#normal .active-turn .hud-hero-medallion { border-color: var(--ui-gilt, #e1c383); box-shadow: inset 0 0 0 2px #151719, inset 0 0 0 3px color-mix(in srgb, var(--ui-gilt, #d9b56a) 60%, transparent), 0 0 8px var(--ui-gilt-glow, #d2ae542a); }
 .hud-hero-medallion img { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; margin-top: 1px; }
 .hud-hero-medallion > .tt-icon { width: 16px; height: 16px; color: #d9c28f; margin-top: 4px; }
 .hud-hero-medallion small { position: absolute; bottom: 3px; left: 0; right: 0; font: 8px/1 var(--tt-font-ui); color: #d7c392; text-align: center; }

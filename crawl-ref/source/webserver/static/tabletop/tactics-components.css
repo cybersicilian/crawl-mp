@@ -62,7 +62,7 @@
 .tr-meter-fill {
     position: absolute; inset: 0 auto 0 0; width: var(--tr-meter-pct);
     max-width: 100%; border-radius: inherit; background: var(--tr-meter-color);
-    transition: width var(--tt-motion-base, 180ms) ease-out;
+    transition: width var(--tt-motion-fast, 100ms) ease-out;
 }
 .tr-meter-ghost {
     position: absolute; inset: 0 auto 0 0; width: var(--tr-meter-ghost-pct, 0%);
@@ -293,4 +293,34 @@
     .tr-meter-track { border-color: CanvasText; background: Canvas; }
     .tr-meter-fill { background: Highlight; }
     .tr-card.is-active, .tr-active-ring { outline: 2px solid Highlight; box-shadow: none !important; }
+}
+
+/* ---- Gilded frames, medallions and engraved rules ----------------------- */
+/* Tokens: --ui-gilt, --ui-gilt-deep, --ui-gilt-glow, --ui-leather, --ui-engraved (ui-themes.css).
+   .tr-gilded: a leather panel with a double gilt hairline. .is-lit: the illuminated state
+   (controlled hero, active initiative entry). .tr-medallion: the arched portrait frame.
+   .tr-rule-engraved: a title whose rule tapers to the edges. */
+.tr-gilded {
+    position: relative; border: 1px solid var(--ui-gilt-deep, #8a6a33);
+    background: var(--ui-leather, var(--ui-panel, #241e18)); color: var(--ui-text, #f0e5cd);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9b56a) 38%, transparent), inset 0 1px 0 #ffffff10, 0 2px 6px #0006;
+}
+.tr-gilded.is-lit {
+    border-color: var(--ui-gilt, #d9b56a);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9b56a) 70%, transparent), inset 0 1px 0 #ffffff14,
+        0 0 10px var(--ui-gilt-glow, #f2d58a66), 0 2px 6px #0006;
+}
+.tr-medallion {
+    position: relative; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; overflow: hidden;
+    border: 1px solid var(--ui-gilt-deep, #8a6a33); border-radius: 45% 45% 6px 6px;
+    background: radial-gradient(ellipse at 50% 38%, #58534266, var(--ui-recess, #100d0b) 76%);
+    box-shadow: inset 0 0 0 1px #0b0f14, inset 0 0 0 2px color-mix(in srgb, var(--ui-gilt, #d9b56a) 45%, transparent), 0 2px 4px #0008;
+}
+.tr-medallion.is-lit { border-color: var(--ui-gilt, #d9b56a); box-shadow: inset 0 0 0 1px #0b0f14, inset 0 0 0 2px var(--ui-gilt, #d9b56a), 0 0 8px var(--ui-gilt-glow, #f2d58a66); }
+.tr-rule-engraved { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.tr-rule-engraved::after { content: ""; flex: 1 1 auto; height: 1px; min-width: 16px; background: var(--ui-engraved, linear-gradient(90deg, var(--ui-gilt-deep, #8a6a33), transparent)); opacity: .9; }
+.tr-rule-engraved.is-centered::before { content: ""; flex: 1 1 auto; height: 1px; min-width: 16px; background: var(--ui-engraved, linear-gradient(90deg, transparent, var(--ui-gilt-deep, #8a6a33))); opacity: .9; }
+@media (forced-colors: active) {
+    .tr-gilded, .tr-medallion { border-color: CanvasText; background: Canvas; box-shadow: none; }
+    .tr-rule-engraved::before, .tr-rule-engraved::after { background: CanvasText; }
 }

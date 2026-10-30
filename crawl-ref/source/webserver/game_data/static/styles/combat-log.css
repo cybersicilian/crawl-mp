@@ -26,13 +26,19 @@
 }
 #normal #message_pane .game_message .prefix_glyph { display: inline-block; width: 7px; margin-left: -4px; color: var(--log-muted); }
 /* Turn separators: the first line of a turn carries a labelled rule. */
-#normal #message_pane .game_message.is-turn-start { margin-top: 5px; }
+#normal #message_pane .game_message.is-turn-start { margin-top: 7px; }
 #normal #message_pane .game_message.is-turn-start::before {
-    content: "Turn " attr(data-turn) " —"; display: flex; align-items: center; gap: 6px; margin: 0 0 2px -6px;
-    font: 600 9px/1.3 var(--log-font); letter-spacing: .08em; text-transform: uppercase; color: var(--log-muted);
+    content: "Turn " attr(data-turn); position: relative; z-index: 1; display: flex; width: max-content; max-width: 100%; align-items: center; gap: 6px; margin: 0 0 2px -6px; padding-right: 6px;
+    background: var(--log-panel); font: 600 9px/1.3 var(--log-font); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-gilt, var(--log-muted));
     text-shadow: none; white-space: nowrap;
 }
-#normal #message_pane .game_message.msg-hero.is-turn-start::before { content: "Turn " attr(data-turn) " · " attr(data-hero-name) " —"; }
+/* Engraved rule behind the turn label. */
+#normal #message_pane .game_message.is-turn-start::after {
+    content: ""; position: absolute; left: -6px; right: 0; top: 6px; height: 1px; pointer-events: none;
+    background: var(--ui-engraved, linear-gradient(90deg, var(--log-rule), transparent));
+    opacity: .7;
+}
+#normal #message_pane .game_message.msg-hero.is-turn-start::before { content: "Turn " attr(data-turn) " · " attr(data-hero-name); }
 #normal #message_pane .game_message:first-child.is-turn-start { margin-top: 0; }
 /* Hero tagging in co-op: the recipient's slot colour marks the line. */
 #normal #message_pane .game_message.msg-hero { --msg-hero: var(--ui-hero, #f5c96a); border-left-color: var(--msg-hero); }
@@ -40,7 +46,8 @@
 /* Danger: damage taken and serious threats stand out; warnings are quieter. */
 #normal #message_pane .game_message.is-damage {
     border-left-color: var(--log-danger);
-    background: color-mix(in srgb, var(--log-danger) 14%, transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--log-danger) 22%, transparent), color-mix(in srgb, var(--log-danger) 8%, transparent));
+    text-shadow: 0 1px 1px #000, 0 0 6px color-mix(in srgb, var(--log-danger) 45%, transparent);
 }
 #normal #message_pane .game_message.msg-danger { font-weight: 600; }
 #normal #message_pane .game_message.msg-warn,

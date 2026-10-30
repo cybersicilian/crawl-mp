@@ -39,7 +39,7 @@
     border-radius: 5px;
     color: var(--menu-ink);
     background: radial-gradient(ellipse at 20% 0, var(--menu-raised), transparent 70%), var(--menu-paper);
-    box-shadow: inset 0 0 0 3px var(--menu-inset), 0 18px 60px #000a;
+    box-shadow: inset 0 0 0 3px var(--menu-inset), inset 0 0 0 4px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 55%, transparent), 0 18px 60px #000a;
     color-scheme: var(--ui-page-scheme, light);
 }
 #ui-stack .ui-popup-outer:has(.workflow-table-menu) { width: min(860px, calc(100vw - 48px)); }
@@ -81,7 +81,7 @@
 #game #ui-stack .workflow-surface > :is(.header, .menu_title) {
     display: flex; align-items: center; gap: 12px;
     margin: 0 0 10px; padding: 0 0 10px !important;
-    border-bottom: 1px solid var(--menu-rule);
+    border-bottom: 0; background: linear-gradient(90deg, var(--menu-chapter), var(--menu-rule) 45%, transparent) left bottom / 100% 1px no-repeat;
     color: var(--menu-chapter);
     font: 600 24px/1.2 var(--menu-title-font);
     white-space: normal; overflow-wrap: anywhere; letter-spacing: -.01em;

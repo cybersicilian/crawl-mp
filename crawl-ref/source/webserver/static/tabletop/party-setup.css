@@ -125,8 +125,15 @@
 .party-builder-side { display: grid; gap: 16px; }
 
 /* Roster strip: four seats as tabs. */
-.party-roster-strip { display: flex; align-items: stretch; gap: 10px; margin: 0 0 14px; }
+.party-roster-strip { display: flex; align-items: stretch; gap: 10px; margin: 0 0 14px; container-type: inline-size; }
 .party-roster-tabs { display: grid; flex: 1; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; min-width: 0; }
+/* Four across needs about 260px a seat for a full hero name and "Gargoyle Earth Elementalist";
+   narrower strips show two rows of two, and phones scroll whole 220px seats sideways. */
+@container (max-width: 1079px) { .party-roster-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 539px) {
+    .party-roster-tabs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr); overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+    #lobby .party-seat-tab { scroll-snap-align: start; }
+}
 #lobby .party-seat-tab {
     --slot-accent: var(--ui-accent, #c39a5a);
     display: flex;
@@ -143,20 +150,31 @@
     font: 12px/1.35 var(--tt-font-ui);
     text-align: left;
     cursor: pointer;
-    box-shadow: none;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 18%, transparent);
     transition: border-color .12s ease, box-shadow .12s ease;
 }
 #lobby .party-seat-tab:hover { border-color: var(--ui-chapter, var(--tt-folio-crimson)); }
-#lobby .party-seat-tab[aria-selected="true"] { border-color: var(--ui-chapter, var(--tt-folio-crimson)); box-shadow: inset 0 0 0 1px var(--ui-chapter, var(--tt-folio-crimson)); background: var(--ui-selection, #e9dac4); }
+/* The chosen seat is illuminated: gilt hairline inside the crimson frame. */
+#lobby .party-seat-tab[aria-selected="true"] {
+    border-color: var(--ui-chapter, var(--tt-folio-crimson)); background: var(--ui-selection, #e9dac4);
+    box-shadow: inset 0 0 0 1px var(--ui-chapter, var(--tt-folio-crimson)), inset 0 0 0 2px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 55%, transparent), 0 0 10px var(--ui-gilt-glow, #c9a35a40);
+}
 #lobby .party-seat-tab:focus-visible { outline: 2px solid var(--ui-chapter, var(--tt-folio-crimson)); outline-offset: 2px; }
 #lobby .party-seat-tab.is-inactive { border-style: dashed; border-top-style: solid; opacity: .78; }
-.party-seat-portrait { display: inline-flex; flex: 0 0 auto; }
-.party-seat-portrait:empty { width: 44px; height: 44px; border-radius: 4px; background: color-mix(in srgb, var(--ui-rule, #ac9470) 30%, transparent); }
+/* Portrait medallion: arched gilt frame around the native doll. */
+.party-seat-portrait {
+    display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; box-sizing: border-box; width: 48px; height: 52px; overflow: hidden;
+    border: 1px solid var(--ui-gilt-deep, #6f5424); border-radius: 45% 45% 5px 5px;
+    background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--slot-accent) 22%, transparent), var(--ui-page-inset, #e2d3b5) 78%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 40%, transparent);
+}
+.party-seat-portrait:empty { background: color-mix(in srgb, var(--ui-rule, #ac9470) 30%, transparent); }
 .party-seat-portrait .native-player-tile { width: 44px; height: 44px; }
 .party-seat-portrait .native-player-tile :is(img, canvas) { width: 40px; height: 40px; }
 .party-seat-copy { display: grid; gap: 2px; min-width: 0; }
-.party-seat-name { font: 600 15px/1.2 var(--tt-font-title); color: var(--ui-chapter, var(--tt-folio-crimson)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.party-seat-build { color: var(--ui-quiet, var(--tt-folio-muted)); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Names and builds wrap to a second line rather than truncate. */
+.party-seat-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font: 600 15px/1.2 var(--tt-font-title); color: var(--ui-chapter, var(--tt-folio-crimson)); white-space: normal; overflow-wrap: anywhere; }
+.party-seat-build { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; color: var(--ui-quiet, var(--tt-folio-muted)); font-size: 11px; line-height: 1.35; white-space: normal; overflow-wrap: anywhere; }
 .party-seat-meta { display: flex; flex-wrap: wrap; gap: 2px 8px; color: var(--ui-quiet, var(--tt-folio-muted)); font-size: 10px; }
 .party-seat-ready[data-state="ready"] { color: var(--ui-good, #2d633a); font-weight: 600; }
 .party-seat-ready[data-state="waiting"] { color: var(--ui-warn, #805019); font-weight: 600; }

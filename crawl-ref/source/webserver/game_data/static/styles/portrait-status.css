@@ -91,6 +91,6 @@
 }
 @media (prefers-reduced-motion: no-preference) {
     #normal .party-portrait .portrait-cooldown-ring {
-        transition: --cooldown-pct 160ms linear;
+        transition: --cooldown-pct 120ms linear;
     }
 }

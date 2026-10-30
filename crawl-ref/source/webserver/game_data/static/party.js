@@ -201,7 +201,8 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                         "data-tip-title": m.name, "data-tip-meta": "Inspect character" });
                 $name.on("click", function (event) { event.stopPropagation(); open_party_inspector(m.slot, "overview"); });
                 $name.text(m.name);
-                if (m.slot === controlled_slot) $card.find(".party-portrait").append($name);
+                // The controlled hero's name leads its readings row (the portrait is 42px wide).
+                if (m.slot === controlled_slot) $meta.append($name);
                 else $leftInfo.append($name);
 
                 var char_code = format_char_abbrev(m.species, m.job);

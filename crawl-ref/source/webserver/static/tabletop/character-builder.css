@@ -133,7 +133,7 @@
 }
 #lobby.has-chapter-index #party_slots_grid option:disabled { color: #897c6d; }
 #lobby.has-chapter-index #party_slots_grid .character-choice-note { grid-template-columns: 1fr; gap: 5px; }
-#lobby.has-chapter-index #party_slots_grid .character-choice-copy { min-height: 0; margin: 0; color: var(--ui-quiet, #6b5944); font: 12px/1.5 var(--tt-font-ui); -webkit-line-clamp: 2; }
+#lobby.has-chapter-index #party_slots_grid .character-choice-copy { min-height: 0; margin: 0; color: var(--ui-quiet, #6b5944); font: 12px/1.5 var(--tt-font-ui); -webkit-line-clamp: 3; }
 #lobby.has-chapter-index #party_slots_grid .character-choice-details { justify-self: start; min-height: 36px; padding: 6px 10px; color: var(--ui-chapter, var(--tt-folio-crimson)); font-size: 11px; }
 #lobby.has-chapter-index #party_slots_grid .party-weapon-row > span { color: var(--ui-quiet, var(--tt-folio-muted)); font: 11px/1.5 var(--tt-font-ui); }
 
