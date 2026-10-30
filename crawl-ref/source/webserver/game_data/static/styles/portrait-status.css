@@ -3,7 +3,7 @@
 #normal .party-portrait.has-portrait-status .hud-hero-medallion { z-index: 1; background: transparent; }
 #normal .party-portrait .portrait-status-interior {
     position: absolute; left: 1px; top: 1px; width: 40px; height: 48px; z-index: 0;
-    overflow: hidden; border-radius: 48% 48% 3px 3px; pointer-events: none;
+    overflow: hidden; border-radius: 20px 20px 2px 2px / 19px 19px 2px 2px; pointer-events: none;
     background: radial-gradient(ellipse at 50% 45%, #30352f, #12191d 80%);
 }
 .party-portrait .portrait-status-layer,
@@ -81,7 +81,7 @@
 }
 #normal .party-portrait .portrait-cooldown-ring {
     position: absolute; left: 1px; top: 1px; width: 40px; height: 48px; z-index: 2;
-    border-radius: 48% 48% 3px 3px; pointer-events: none;
+    border-radius: 20px 20px 2px 2px / 19px 19px 2px 2px; pointer-events: none;
     background: conic-gradient(from 0deg, rgba(233, 185, 110, 0.78) var(--cooldown-pct, 0%), transparent 0%);
     -webkit-mask-image: radial-gradient(ellipse at 50% 50%, transparent 62%, #000 66%);
     mask-image: radial-gradient(ellipse at 50% 50%, transparent 62%, #000 66%);

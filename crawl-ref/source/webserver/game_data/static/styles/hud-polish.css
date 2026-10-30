@@ -119,8 +119,9 @@
     grid-column: 1; grid-row: 1 / span 3; position: relative; width: 42px; height: 50px; padding: 0;
     align-self: start; overflow: hidden; cursor: pointer;
     background: radial-gradient(ellipse at 50% 40%, #58534266, #171b20 75%);
-    border: 1px solid #968054; border-radius: 45% 45% 4px 4px;
-    box-shadow: inset 0 0 0 2px #0b0f14, inset 0 0 0 3px #b4975c35, 0 2px 4px #0008;
+    /* Match the shrine frame's arch (rx 22 / ry 20) so the button fills it without corners. */
+    border: 1px solid #968054; border-radius: 21px 21px 3px 3px / 20px 20px 3px 3px;
+    box-shadow: inset 0 0 0 2px #0b0f14, inset 0 0 0 3px #b4975c35;
 }
 #normal .active-turn .hud-hero-medallion { border-color: #e1c383; box-shadow: inset 0 0 0 2px #151719, 0 0 8px #d2ae542a; }
 .hud-hero-medallion img { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; margin-top: 1px; }
