@@ -224,10 +224,25 @@ sub load_aptitudes
     open my $inf, '<', $skillfile or die "Can't read $skillfile: $!\n";
     my $seen_skill_start;
     my $species;
+    # species-gen.py emits a species twice when its enum has a legacy save
+    # position under TAG_MAJOR_VERSION == 34 and a new one otherwise. Only
+    # the block the current major version compiles counts here.
+    my $inactive_depth = 0;
 
     while (<$inf>)
     {
         last if /\*{40,}/;
+        if ($inactive_depth)
+        {
+            $inactive_depth++ if /^\s*#\s*if/;
+            $inactive_depth-- if /^\s*#\s*endif/;
+            next;
+        }
+        if (/^\s*#\s*if\s+TAG_MAJOR_VERSION\s*!=\s*34\b/)
+        {
+            $inactive_depth = 1;
+            next;
+        }
         if (!$seen_skill_start)
         {
             $seen_skill_start = 1 if /species_skill_aptitudes\[/;
@@ -274,7 +289,10 @@ sub load_mods
     {
         my $sp = $_;
         $sp =~ s/Base //;
-        my ($xp, $hp, $mp, $wl) = $file =~ /$sp.*\n.*\n *(-?\d), (-?\d), (-?\d), (\d),/;
+        # Enum words may be joined by a hyphen in the display name
+        # (SP_TWO_HEADED_OGRE is "Two-Headed Ogre").
+        my $name_re = join '[ -]', map { quotemeta } split / /, $sp;
+        my ($xp, $hp, $mp, $wl) = $file =~ /$name_re.*\n.*\n *(-?\d), (-?\d), (-?\d), (\d),/;
 
         $SPECIES_SKILLS{$_}{"Experience"} = $xp;
         $SPECIES_SKILLS{$_}{"Hit Points"} = $hp;
