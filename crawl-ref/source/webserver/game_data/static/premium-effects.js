@@ -24,7 +24,7 @@ function ($, layers, model, terrain, map, options, game, enums, field, presentat
             proxy.draw_main(index, 0, 0);
             source = shader.prepare(context.getImageData(0, 0, 32, 32).data, 32, 32);
             originals.set(index, source);
-            if (originals.size > 96) originals.delete(originals.keys().next().value);
+            if (originals.size > 256) originals.delete(originals.keys().next().value);
         }
         var animated = presentation.animated() && !motion.matches && options.get("tile_realtime_anim") && options.get("tile_misc_anim");
         var now = Number.isFinite(renderer.frame_time) ? renderer.frame_time : window.performance.now();
@@ -41,7 +41,7 @@ function ($, layers, model, terrain, map, options, game, enums, field, presentat
             var pixels = ctx.createImageData(32, 32);
             pixels.data.set(shader.shade(source, profile, cx, cy, phase, lights)); ctx.putImageData(pixels, 0, 0);
             frames.set(key, frame);
-            if (frames.size > 192) frames.delete(frames.keys().next().value);
+            if (frames.size > 1024) frames.delete(frames.keys().next().value);
         }
         var size = renderer.scaled_size();
         renderer.ctx.save();
@@ -56,10 +56,13 @@ function ($, layers, model, terrain, map, options, game, enums, field, presentat
     $(document).on("game_init.premiumEffects game_cleanup.premiumEffects map_knowledge_cleared.premiumEffects visual_presentation_changed.premiumEffects texture_pack_changed.premiumEffects art_materials_ready.premiumEffects", clear);
     motion.addEventListener("change", function () { clear(); $(document).trigger("premium_animation_cadence_changed"); });
     return { draw: draw, clear: clear, fast: fast, animated: function (cell) {
-        var material = cell && terrain.describe({ t: cell });
-        return fast() && options.get("tile_misc_anim")
-            && Boolean(cell && (presentation.enabled("clouds") && cell.cloud && model.describe(typeof cell.cloud === "number" ? cell.cloud : cell.cloud.value, "cloud")
-                || presentation.enabled("spells") && (cell.ov || []).some(function (id) { return model.describe(id, "overlay"); })
-                || presentation.enabled("materials") && material && material.solid && (material.shading === "crystal" || material.shading === "glass")));
+        // The shared gate is checked first: classic presentations never
+        // describe terrain for every visible cell on each animation tick.
+        if (!cell || !fast() || !options.get("tile_misc_anim")) return false;
+        if (presentation.enabled("clouds") && cell.cloud && model.describe(typeof cell.cloud === "number" ? cell.cloud : cell.cloud.value, "cloud")) return true;
+        if (presentation.enabled("spells") && (cell.ov || []).some(function (id) { return model.describe(id, "overlay"); })) return true;
+        if (!presentation.enabled("materials")) return false;
+        var material = terrain.describe({ t: cell });
+        return Boolean(material && material.solid && (material.shading === "crystal" || material.shading === "glass"));
     } };
 });
