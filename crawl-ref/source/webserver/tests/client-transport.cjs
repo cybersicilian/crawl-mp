@@ -174,4 +174,14 @@ for (const content of ['<div>legacy client</div>', '<script>game_loading</script
     assert.deepEqual(f.received, ['new-state'], 'Reset discards stale input barriers and queued updates');
     assert.equal(f.timers.size, 0, 'Stale asset callbacks cannot start polling the new session');
 }
+{
+    const f = fixture();
+    const content = '<script>game_loading</script>';
+    f.client.receive_game_client({ version: 'current', content });
+    f.client.receive_game_client({ version: 'current', content });
+    f.enqueue(message('state'));
+    f.imagesReady(); f.window.game_loading = true; f.tick();
+    assert.deepEqual(f.received, ['state'], 'A client replaced while loading cannot strand its barrier');
+    assert.equal(f.timers.size, 0);
+}
 console.log('Transport ordering, interruptible delays, loading barriers, yielding and legacy messages passed.');

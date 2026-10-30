@@ -5,6 +5,9 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
         var send_message = comm.send_message;
 
         var chronicle_state = { ghosts: [], party_comps: [], cool_items: [] };
+        // party_rooms_list and coop_chronicle arrive in the same frame; the
+        // lists are only rebuilt when the recorded data actually changed.
+        var rendered_signature = null;
 
         function format_chronicle_category(rawCat)
         {
@@ -36,6 +39,11 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
             var comps = chronicle_state.party_comps || [];
             var ghosts = chronicle_state.ghosts || [];
             var items = chronicle_state.cool_items || [];
+
+            var signature = JSON.stringify([comps, ghosts, items]);
+            if (signature === rendered_signature)
+                return;
+            rendered_signature = signature;
 
             $("#chronicle_comps_count").text("(" + comps.length + ")");
             $("#chronicle_ghosts_count").text("(" + ghosts.length + ")");

@@ -8,7 +8,22 @@ function ($, createViews, browser, overview, discovery) {
         { id: "chronicle", title: "Chronicle", sections: ["coop_chronicle_panel"] }
     ];
     var root, nav, primary, controller, pending = false, hadRoom = false, leftLobby = false, returnedFromGame = false;
-    var settingsSignature = null;
+    var settingsSignature = null, observers = [];
+    // Steady-state churn that never changes navigation state: the one-second
+    // idle-time ticker and the milestone roll-in animation.
+    var ignoredSelector = ".idle_time, .milestone_col";
+    function ignores(records) {
+        for (var i = 0; i < records.length; i++) {
+            var target = records[i].target;
+            var node = target && target.nodeType === 1 ? target : target && target.parentNode;
+            if (!node || typeof node.closest !== "function" || !node.closest(ignoredSelector)) return false;
+        }
+        return true;
+    }
+    function observe(target, options) {
+        var observer = new MutationObserver(function (records) { if (!ignores(records)) schedule(); });
+        observer.observe(target, options); observers.push(observer);
+    }
     function element(tag, className, text) {
         var node = document.createElement(tag);
         if (className) node.className = className;
@@ -122,6 +137,9 @@ function ($, createViews, browser, overview, discovery) {
         var nextHeight = Math.ceil(nav.getBoundingClientRect().height) + "px";
         if (root.style.getPropertyValue("--lobby-navigation-height") !== nextHeight)
             root.style.setProperty("--lobby-navigation-height", nextHeight);
+        // Mutations made by this pass reflect state already read; drop them
+        // instead of scheduling a second identical pass.
+        observers.forEach(function (observer) { observer.takeRecords(); });
     }
     function schedule() {
         if (pending) return;
@@ -185,12 +203,11 @@ function ($, createViews, browser, overview, discovery) {
             } else controller.show(target.dataset.workspaceTarget, keyboard);
             schedule();
         });
-        new MutationObserver(schedule).observe(root, { childList: true, subtree: true,
+        observe(root, { childList: true, subtree: true,
             characterData: true, attributes: true, attributeFilter: ["style"] });
-        new MutationObserver(schedule).observe(root.querySelector(".welcome-entry"), {
-            attributes: true, attributeFilter: ["class"] });
+        observe(root.querySelector(".welcome-entry"), { attributes: true, attributeFilter: ["class"] });
         window.addEventListener("resize", schedule, { passive: true }); update();
     }
     $(document).ready(init);
-    return { init: init };
+    return { init: init, ignores: ignores };
 });

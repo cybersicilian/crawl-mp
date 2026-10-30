@@ -1,3 +1,4 @@
+import copy
 import unittest
 import json
 from types import SimpleNamespace
@@ -49,6 +50,22 @@ class MapSnapshotTest(unittest.TestCase):
         self.assertIsNone(snapshot._packet)
         self.assertIs(snapshot.cells[(40, 1)], unchanged)
         self.assertEqual(len(snapshot.packet()["cells"]), 80)
+
+    def test_ingested_values_are_shared_without_copying_and_inputs_stay_immutable(self):
+        snapshot = MapSnapshot()
+        first = dict(vgrdc=dict(x=1, y=1), cells=[dict(x=4, y=5, reset=True, t=dict(bg=1, ov=[5]),
+                                                       mon=dict(id=9, name="orc"))])
+        second = dict(cells=[dict(x=4, y=5, t=dict(fg=2), mon=dict(id=9, hp=3))])
+        retained = copy.deepcopy((first, second))
+        snapshot.update(first, "D:1")
+        self.assertIs(snapshot.cells[(4, 5)]["t"]["ov"], first["cells"][0]["t"]["ov"])
+        self.assertIs(snapshot.metadata["vgrdc"], first["vgrdc"])
+        old_cell = snapshot.cells[(4, 5)]
+        snapshot.update(second, "D:1")
+        self.assertEqual(snapshot.cells[(4, 5)]["t"], dict(bg=1, ov=[5], fg=2))
+        self.assertEqual(snapshot.cells[(4, 5)]["mon"], dict(id=9, name="orc", hp=3))
+        self.assertEqual(old_cell["t"], dict(bg=1, ov=[5]), "Merging rebuilds a cell; it never edits one")
+        self.assertEqual((first, second), retained)
 
 
 class StreamDeltaTest(unittest.TestCase):
