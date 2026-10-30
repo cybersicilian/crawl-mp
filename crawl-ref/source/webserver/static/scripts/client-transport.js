@@ -17,7 +17,7 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
         var loaded_modules = null;
 
         var generation = 0, load_interval;
-        var cancel_assets;
+        var cancel_assets, client_inhibited = false;
         var state_stream = createStateStream(function (channel) {
             comm.send_message("transport_resync", { channel: channel });
         });
@@ -184,7 +184,12 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
             var client_generation = generation;
             if (cancel_assets) cancel_assets();
             clearInterval(load_interval);
-            inhibit_messages();
+            // A replaced client keeps one barrier; a cancelled wait never releases.
+            if (!client_inhibited)
+            {
+                inhibit_messages();
+                client_inhibited = true;
+            }
             // Older versioned clients retain their native loader contract.
             if (data.content.indexOf('data-loading-readiness="dungeon"') !== -1)
                 loading.begin();
@@ -197,7 +202,7 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
             {
                 // old version, uninhibit can happen too early
                 cancel_assets = waitForAssets(document.getElementById("game"), function () {
-                    if (generation === client_generation) uninhibit_messages();
+                    if (generation === client_generation) release_client();
                 }, asset_failure);
             }
             else
@@ -218,10 +223,17 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
                             // Release this poll before that client owns a new timer.
                             clearInterval(load_interval);
                             load_interval = undefined;
+                            release_client();
                             uninhibit_messages();
                         }
                     }
                 }, asset_failure);
+            }
+
+            function release_client() {
+                if (!client_inhibited) return;
+                client_inhibited = false;
+                uninhibit_messages();
             }
 
             function asset_failure(error) {
@@ -249,6 +261,7 @@ define(["jquery", "comm", "game-loading", "client-connection", "state-stream", "
             delay_timeout = drain_timeout = load_interval = undefined;
             message_queue = [];
             queue_head = message_inhibit = 0;
+            client_inhibited = false;
             fast_forward = false;
             game_version = null;
             loading.cancel();

@@ -263,16 +263,27 @@ void TilesFramework::finish_message()
         return;
     }
 
-    if (party::multiplayer_enabled() && m_msg_buf.front() != '*')
+    if (!m_raw_frame && party::multiplayer_enabled() && m_msg_buf.front() != '*')
     {
-        const string payload = m_msg_buf;
+        // Wrap in place: large snapshots (party_state, baseline maps) must not
+        // be copied three times just to add the envelope.
         const int slot = m_viewer_slot >= 0 ? m_viewer_slot : party::active_slot();
-        m_msg_buf = make_stringf("{\"msg\":\"party_packet\",\"slot\":%d,\"view\":%s,\"floor\":\"%s\",\"payload\":",
+        const string header = make_stringf("{\"msg\":\"party_packet\",\"slot\":%d,\"view\":%s,\"floor\":\"%s\",\"payload\":",
             slot, m_projecting_view ? "true" : "false",
             (you.depth > 0 ? level_id::current().describe() : string()).c_str());
-        m_msg_buf += payload + "}";
+        m_msg_buf.insert(0, header);
+        m_msg_buf.push_back('}');
     }
-    m_msg_buf.append("\n");
+    if (!m_raw_frame)
+        m_msg_buf.append("\n");
+    if (m_frame_sink)
+    {
+        // Divert the complete frame to the caller, which decides whether an
+        // unchanged personal snapshot needs the socket at all.
+        m_frame_sink->append(m_msg_buf);
+        m_msg_buf.clear();
+        return;
+    }
     const char* fragment_start = m_msg_buf.data();
     const char* data_end = m_msg_buf.data() + m_msg_buf.size();
 #ifdef DEBUG_WEBSOCKETS
@@ -289,7 +300,13 @@ void TilesFramework::finish_message()
 
         for (unsigned int i = 0; i < m_dest_addrs.size(); ++i)
         {
-            int retries = 200;
+            // Back-pressure: the Python side can stall for seconds (GC, large
+            // fan-out) without being gone. Keep the frame and its ordering,
+            // retry with bounded sleeps, and only give up on a dead peer or
+            // after a long window.
+            const int max_wait_usec = 60 * 1000 * 1000;
+            int waited_usec = 0;
+            int attempts = 0;
             ssize_t sent = 0;
             while (sent < fragment_size)
             {
@@ -304,22 +321,26 @@ void TilesFramework::finish_message()
                 {
                     const char *errmsg = retval == 0 ? "No bytes sent"
                                                      : strerror(errno);
-                    if (--retries <= 0)
-                        die("Socket write error: %s", errmsg);
-
                     if (retval == 0 || errno == ENOBUFS || errno == EWOULDBLOCK
                         || errno == EINTR || errno == EAGAIN)
                     {
+                        if (waited_usec >= max_wait_usec)
+                        {
+                            die("Socket write error after %ds: %s",
+                                waited_usec / 1000000, errmsg);
+                        }
                         // Wait briefly for the Python server to drain queued
-                        // datagrams before retrying.
-                        const int sleep_time = retries > 150 ? 1 * 1000
-                                             : retries > 50  ? 10 * 1000
+                        // datagrams before retrying; back off to 100ms.
+                        ++attempts;
+                        const int sleep_time = attempts <= 50  ? 1 * 1000
+                                             : attempts <= 150 ? 10 * 1000
                                              : 100 * 1000;
 #ifdef DEBUG_WEBSOCKETS
                         fprintf(stderr, "failed (%s), sleeping for %dms.\n",
                                                     errmsg, sleep_time / 1000);
 #endif
                         usleep(sleep_time);
+                        waited_usec += sleep_time;
                     }
                     else if (errno == ECONNREFUSED || errno == ENOENT)
                     {
@@ -357,6 +378,25 @@ void TilesFramework::finish_message()
     fprintf(stderr, "websocket: Sent %d bytes in %d fragments.\n",
                                                 initial_buf_size, fragments);
 #endif
+}
+
+void TilesFramework::_send_captured_frame(string& frame)
+{
+    // frame already carries its envelope and newline (see m_frame_sink).
+    if (frame.empty())
+        return;
+    unwind_bool raw(m_raw_frame, true);
+    m_msg_buf.swap(frame);
+    finish_message();
+    frame.clear();
+}
+
+void TilesFramework::_reset_personal_frames()
+{
+    for (auto& frame : m_personal_party_frames)
+        frame.clear();
+    for (auto& frame : m_personal_ai_frames)
+        frame.clear();
 }
 
 void TilesFramework::send_message(const char *format, ...)
@@ -408,7 +448,10 @@ wint_t TilesFramework::_receive_control_message()
     if (m_sock_name.empty())
         return 0;
 
-    char buf[4096]; // Should be enough for client->server messages
+    // Control packets can carry large payloads (queued text, AI decisions,
+    // menu ranges). The data is copied out before any recursion, so one
+    // static buffer is safe and keeps the frame off the stack.
+    static char buf[65536];
     sockaddr_un srcaddr;
     socklen_t srcaddr_len;
     memset(&srcaddr, 0, sizeof(struct sockaddr_un));
@@ -423,6 +466,16 @@ wint_t TilesFramework::_receive_control_message()
     if (len == -1)
         die("Socket read error: %s", strerror(errno));
 
+    if (len >= (int) sizeof(buf))
+    {
+        // A datagram at least as large as the buffer has very likely been
+        // truncated by recvfrom; the JSON below will not parse. Say so in the
+        // process log rather than only in debug builds.
+        fprintf(stderr, "websocket: control message of %d+ bytes exceeds the"
+                        " %d byte receive buffer; dropping it.\n",
+                len, (int) sizeof(buf));
+    }
+
     string data(buf, len);
     try
     {
@@ -430,7 +483,20 @@ wint_t TilesFramework::_receive_control_message()
     }
     catch (JsonWrapper::MalformedException&)
     {
-        dprf("Malformed control message!");
+        fprintf(stderr, "websocket: dropped malformed control message"
+                        " (%d bytes).\n", len);
+        // A packet that claimed the command token (pending_activity_request)
+        // and then failed a field check never reaches the ordinary command
+        // boundary, so the server would wait on that token forever (probes
+        // answer "busy"). Mirror the idle-rejection rule in
+        // _handle_control_message and finish it at the boundary.
+        if (pending_activity_request
+            && mouse_control::current_mode() == MOUSE_MODE_COMMAND
+            && m_menu_stack.empty() && !has_pending_input()
+            && m_pending_text_input.empty())
+        {
+            return CK_MOUSE_CMD;
+        }
         return 0;
     }
 }
@@ -599,7 +665,16 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
     JsonWrapper msg = json_find_member(obj.node, "msg");
     msg.check(JSON_STRING);
     string msgtype(msg->string_);
-    m_personal_dirty = true;
+    // Menu hover/scroll/range requests and activity probes only read or touch
+    // the shared menu widget; they cannot change any hero's map, player or
+    // party state, so they must not trigger a full per-hero re-projection.
+    const bool view_only_packet = msgtype == "party_activity_probe"
+        || msgtype == "menu_hover" || msgtype == "menu_scroll"
+        || msgtype == "menu_category" || msgtype == "*request_menu_range"
+        || msgtype == "formatted_scroller_scroll"
+        || msgtype == "outer_menu_focus";
+    if (!view_only_packet)
+        m_personal_dirty = true;
     const JsonNode* sender = json_find_member(obj.node, "player_id");
     unwind_var<int> sender_view(m_viewer_slot,
         sender && sender->tag == JSON_NUMBER ? static_cast<int>(sender->number_) : -1);
@@ -686,7 +761,18 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
     if (party::multiplayer_enabled() && m_viewer_slot >= 0)
     {
         if (m_viewer_slot >= party::player_count())
-            return 0;
+        {
+            // Silently dropping the packet would strand its completion token.
+            // Claim the token exactly as the ordinary path below does, then
+            // reject at the same command boundary as other rejections.
+            const JsonNode* stale_activity = json_find_member(obj.node, "activity_id");
+            if (stale_activity && stale_activity->tag == JSON_NUMBER
+                && mouse_control::current_mode() == MOUSE_MODE_COMMAND)
+            {
+                pending_activity_request = static_cast<int>(stale_activity->number_);
+            }
+            return action_error("This hero is no longer available.");
+        }
         // Late UI acknowledgements cannot change another hero's native UI.
         if (msgtype == "ui_state_sync" && m_viewer_slot != party::active_slot())
             return 0;
@@ -694,7 +780,10 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         {
             if (msgtype == "text_input")
                 return 0;
-            if (msgtype != "ui_state_sync")
+            // A hero on another floor switching in here would save and load
+            // floors just to move a menu hover; view-only packets act on the
+            // shared menu widget in the current hero's context.
+            if (msgtype != "ui_state_sync" && !view_only_packet)
                 party::switch_to_player(m_viewer_slot);
         }
     }
@@ -815,6 +904,7 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
     {
         party::set_multiplayer(true);
         m_origin = coord_def(0, 0);
+        _reset_personal_frames();
         _send_personal_views();
     }
     else if (msgtype == "view_player")
@@ -836,6 +926,8 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
 
         m_dest_addrs.push_back(addr);
         m_controlled_from_web = primary->bool_;
+        // A new peer has no copy of the last personal snapshots.
+        _reset_personal_frames();
     }
     else if (msgtype == "toggle_friendly_fire"
              || msgtype == "toggle_simultaneous_turns"
@@ -1925,11 +2017,24 @@ void TilesFramework::update_input_mode(mouse_mode mode, bool force)
     if (prev_mode == mode && !force)
         return;
 
+    // Personal-view COMMAND snapshots are not command acknowledgements.
+    // Echo the exact plan token only at the native action boundary.
+    const bool command_complete = mode == MOUSE_MODE_COMMAND
+        && prev_mode != MOUSE_MODE_COMMAND && !m_projecting_view
+        && !control_message_depth && !has_pending_input()
+        && m_pending_text_input.empty();
+
     // we skip redrawing in this case because it happens on every key input,
-    // and is very heavy on held down keys
+    // and is very heavy on held down keys. A tracked command is the exception:
+    // its post-turn state must reach the server before the completion token,
+    // or the next dispatched step observes the previous turn. redraw() clears
+    // its dirty flags, so the input loop's following redraw sends no map or
+    // personal projection again.
     if (force
         || !(prev_mode == MOUSE_MODE_COMMAND && mode == MOUSE_MODE_NORMAL
-             || prev_mode == MOUSE_MODE_NORMAL && mode == MOUSE_MODE_COMMAND))
+             || prev_mode == MOUSE_MODE_NORMAL && mode == MOUSE_MODE_COMMAND)
+        || (command_complete
+            && (pending_activity_request || pending_plan_request)))
     {
         redraw();
     }
@@ -1937,12 +2042,6 @@ void TilesFramework::update_input_mode(mouse_mode mode, bool force)
     json_open_object();
     json_write_string("msg", "input_mode");
     json_write_int("mode", mode);
-    // Personal-view COMMAND snapshots are not command acknowledgements.
-    // Echo the exact plan token only at the native action boundary.
-    const bool command_complete = mode == MOUSE_MODE_COMMAND
-        && prev_mode != MOUSE_MODE_COMMAND && !m_projecting_view
-        && !control_message_depth && !has_pending_input()
-        && m_pending_text_input.empty();
     if (command_complete && pending_activity_request)
     {
         completed_activity_request = pending_activity_request;
@@ -3224,6 +3323,8 @@ void TilesFramework::_send_party_state()
     rng::generator snapshot_rng(rng::UI);
     if (!in_bounds(you.pos()) && !party::is_enabled())
         return;
+    // Nothing moves while a snapshot is serialised; reconcile regions once.
+    party::scoped_region_snapshot regions;
 
     if (m_origin.equals(-1, -1))
         m_origin = you.position;
@@ -4094,6 +4195,9 @@ void TilesFramework::redraw()
 
     m_text_menu.send();
 
+    // One redraw pass serialises the actor's snapshot and every personal
+    // projection against the same frozen world: reconcile regions once.
+    party::scoped_region_snapshot regions;
     _send_player();
     _send_party_state();
     _send_messages();

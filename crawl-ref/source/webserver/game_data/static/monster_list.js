@@ -4,6 +4,10 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
     "use strict";
 
     var monsters, $list, monster_groups, max_rows;
+    // Dirty tracking: display.js calls update() on every painted frame, but
+    // the rows only change when a dirty map cell holds (or held) a monster or
+    // when the environment the rows are rendered against changes.
+    var monsters_dirty, paint_signature;
 
     function init()
     {
@@ -11,6 +15,8 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         $list = $("#monster_list");
         monster_groups = [];
         max_rows = 5;
+        monsters_dirty = true;
+        paint_signature = null;
     }
     $(document).bind("game_init", init);
 
@@ -18,10 +24,47 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
     {
         var map_cell = map_knowledge.get(loc.x, loc.y);
         var mon = map_cell.mon;
+        var key = [loc.x, loc.y];
         if (mon && map_knowledge.visible(map_cell))
-            monsters[[loc.x,loc.y]] = { mon: mon, loc: loc };
-        else
-            delete monsters[[loc.x,loc.y]];
+        {
+            // A dirty cell with a monster may carry new tile overlays
+            // (damage, status) even when the monster object is shared.
+            monsters[key] = { mon: mon, loc: loc };
+            monsters_dirty = true;
+        }
+        else if (key in monsters)
+        {
+            delete monsters[key];
+            monsters_dirty = true;
+        }
+    }
+
+    // Inputs outside the monster map that change what the rows look like.
+    function environment_signature(show_inv)
+    {
+        var rail = document.getElementById("enemy_initiative_rail");
+        var mode = options.get("tile_display_mode");
+        var parts = [show_inv || "", rail && rail.dataset.creatureGroups === "true" ? 1 : 0,
+                     max_rows, mode, dungeon_renderer.cell_width, dungeon_renderer.cell_height,
+                     dungeon_renderer.ui_state];
+        if (mode != "tiles")
+        {
+            for (var key in dungeon_renderer)
+            {
+                if (key.match(/^glyph_mode/) && typeof dungeon_renderer[key] !== "function")
+                    parts.push(key, dungeon_renderer[key]);
+            }
+        }
+        var party = window.crawl_party && window.crawl_party.state;
+        if (party && Array.isArray(party.members))
+        {
+            parts.push(party.members.length);
+            party.members.forEach(function (hero) {
+                if (hero.on_same_level === true && hero.alive === true && !hero.ghost_haunting && hero.pos)
+                    parts.push(hero.pos.x, hero.pos.y);
+            });
+        }
+        return parts.join("\u0001");
     }
 
     function can_combine(monster1, monster2)
@@ -155,6 +198,11 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
 
     function update(show_inv)
     {
+        var signature = environment_signature(show_inv);
+        if (!monsters_dirty && signature === paint_signature)
+            return;
+        monsters_dirty = false;
+        paint_signature = signature;
         $(document).trigger("nearby_creatures_changed");
         var rail = document.getElementById("enemy_initiative_rail");
         // The grouped rail owns visible contacts. Do not paint a second hidden
@@ -323,6 +371,8 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         $list.empty();
         monster_groups = [];
         monsters = {};
+        monsters_dirty = true;
+        paint_signature = null;
         $(document).trigger("nearby_creatures_changed");
     }
 

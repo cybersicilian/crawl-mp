@@ -10,6 +10,7 @@ import json
 import os
 import shutil
 import sqlite3
+import threading
 import uuid
 
 from webtiles.record_visibility import is_test_account
@@ -21,6 +22,8 @@ TERMINAL_STATUSES = frozenset(EXIT_STATUSES.values())
 GAME_SELECT = ("SELECT games.*, deleted_saves.deleted_at AS save_deleted_at FROM games "
                "LEFT JOIN deleted_saves ON games.id = deleted_saves.game_id")
 _ingested_versions = {}
+# ingest() runs on the library worker and on the IOLoop (tests, callers).
+_ingested_lock = threading.Lock()
 
 
 def now():
@@ -194,8 +197,9 @@ def ingest(identifier, base_dir=BASE_DIR):
     path = os.path.join(base_dir, "events", identifier + ".json")
     try:
         version = os.stat(path).st_mtime_ns
-        if _ingested_versions.get(os.path.abspath(path)) == version:
-            return
+        with _ingested_lock:
+            if _ingested_versions.get(os.path.abspath(path)) == version:
+                return
         with open(path, encoding="utf-8") as source:
             snapshot = json.load(source)
     except (OSError, ValueError):
@@ -204,7 +208,7 @@ def ingest(identifier, base_dir=BASE_DIR):
         return
     with connect(base_dir) as conn:
         if not conn.execute("SELECT 1 FROM games WHERE id = ?", (identifier,)).fetchone():
-            return
+            return False
         timestamp = now()
         conn.execute("UPDATE games SET snapshot_json = ?, updated_at = ? WHERE id = ?",
                      (json.dumps(snapshot), timestamp, identifier))
@@ -222,7 +226,9 @@ def ingest(identifier, base_dir=BASE_DIR):
         saved_at = snapshot.get("saved_at")
         if saved_at:
             conn.execute("UPDATE games SET saved_at = ? WHERE id = ?", (saved_at, identifier))
-    _ingested_versions[os.path.abspath(path)] = version
+    with _ingested_lock:
+        _ingested_versions[os.path.abspath(path)] = version
+    return True
 
 
 def public_game(game):
@@ -235,13 +241,20 @@ def public_game(game):
 
 def list_games(owner=None, base_dir=BASE_DIR, include_test=False):
     with connect(base_dir) as conn:
-        rows = conn.execute(GAME_SELECT + " ORDER BY updated_at DESC").fetchall()
+        if owner is None:
+            rows = conn.execute(GAME_SELECT + " ORDER BY updated_at DESC").fetchall()
+        else:
+            # Filter in SQL instead of walking every account's rows in Python.
+            rows = conn.execute(GAME_SELECT + " WHERE owner = ? COLLATE NOCASE "
+                                "ORDER BY updated_at DESC", (owner,)).fetchall()
     result = []
     for row in rows:
-        if (owner is None and (include_test or not is_test_account(row["owner"]))) or \
-                (owner is not None and row["owner"].lower() == owner.lower()):
-            ingest(row["id"], base_dir)
-            result.append(public_game(get_game(row["id"], base_dir)))
+        if owner is None and not include_test and is_test_account(row["owner"]):
+            continue
+        if ingest(row["id"], base_dir):
+            # Only re-read the row when a newer event snapshot was just merged.
+            row = get_game(row["id"], base_dir)
+        result.append(public_game(row))
     return result
 
 

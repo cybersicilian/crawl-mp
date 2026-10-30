@@ -13,6 +13,8 @@ class GameplayProtocolTest(unittest.TestCase):
         self.game = SimpleNamespace(username="Host", party_members={"Host": 0, "Guest": 1},
                                     party_mode=True, conn=Mock(open=True), process=Mock())
         self.game.party_control = PartyControl("Host", self.game.party_members)
+        # Raw "input" strings are normalised through handle_input recursively.
+        self.game.handle_input = lambda *args, **kwargs: CrawlProcessHandler.handle_input(self.game, *args, **kwargs)
         self.game.party_control.state = {"msg": "party_state", "active_slot": 1, "members": [
             {"slot": slot, "alive": True} for slot in range(4)]}
 

@@ -125,6 +125,7 @@ void TilesFramework::_send_personal_views(bool force_full, int force_slot)
         return;
     unwind_bool projection(m_projecting_view, true);
     rng::generator ui_rng(rng::UI);
+    party::scoped_region_snapshot regions;
     const level_id floor = level_id::current();
     const int native_actor = party::active_slot();
     const auto shared_invis = env.invis_knowledge;
@@ -261,7 +262,19 @@ void TilesFramework::_send_personal_views(bool force_full, int force_slot)
 
         m_current_player_info = player_info();
         _send_player(true);
-        _send_party_state();
+        // Serialise the hero's party snapshot into a scratch frame and only
+        // use the socket when it differs from the last frame this hero
+        // received. A baseline (first view, explicit refresh) always sends.
+        string frame;
+        {
+            unwind_var<string*> sink(m_frame_sink, &frame);
+            _send_party_state();
+        }
+        if (baseline || frame != m_personal_party_frames[slot])
+        {
+            m_personal_party_frames[slot] = frame;
+            _send_captured_frame(frame);
+        }
         if (slot != native_actor || mouse_control::current_mode() == MOUSE_MODE_COMMAND)
         {
             send_message("{\"msg\":\"input_mode\",\"mode\":%d}", MOUSE_MODE_COMMAND);

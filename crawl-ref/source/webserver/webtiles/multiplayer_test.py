@@ -2,13 +2,15 @@
 import json
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from webtiles import party_roster
 from webtiles.activity_pump import ActivityPump
 from webtiles.party_control import PartyControl
 from webtiles.player_stream import PlayerStreams
-from webtiles.process_handler import CrawlProcessHandler
+from webtiles import process_handler
+from webtiles.process_handler import CrawlProcessHandler, CrawlProcessHandlerBase
+from webtiles.ws_handler import CrawlWebSocket
 from webtiles.tile_presence import TilePresence
 
 
@@ -199,6 +201,60 @@ class MultiplayerTest(unittest.TestCase):
                              dict(slot=1, floor="D:2"), self.clients)
         self.assertEqual(self.presence.pointers, {})
 
+    def legacy_game(self, fresh=()):
+        game = object.__new__(CrawlProcessHandler)
+        game.party_control, game.player_streams = self.control, self.streams
+        game._receivers, game._fresh_watchers = self.clients, set(fresh)
+        return game
+
+    def test_legacy_union_maps_are_rejected_from_their_prefix_without_decoding(self):
+        stale_socket = Mock(username="Spectator", id=3)
+        game = self.legacy_game(fresh=[stale_socket])
+        union = json.dumps(dict(msg="map", clear=True, cells=[dict(x=1, y=1, mon="hidden")] * 50))
+        with patch("webtiles.process_handler.json_decode", side_effect=AssertionError("decoded")):
+            game.handle_process_message(union, True)
+            game.handle_process_message(json.dumps(dict(msg="player", name="Union")), True)
+        for client in self.clients:
+            client.append_message.assert_not_called()
+        self.assertEqual(game._fresh_watchers, set(), "spectator_joined was answered; drop the sockets")
+        game.handle_process_message(json.dumps(dict(msg="layout", message_pane=dict(height=7))), True)
+        self.assertEqual([p["msg"] for p in self.received(self.watch)], ["layout"])
+        self.assertIn("layout", self.streams.bootstrap)
+
+    def test_multiplayer_joins_do_not_retain_sockets_for_a_legacy_full_map(self):
+        game = self.legacy_game()
+        game.conn, game.client_path, game.last_watcher_join = Mock(open=True), None, 0
+        game.tile_presence, game.update_watcher_description = self.presence, Mock()
+        game._receivers = set()
+        watcher = Mock(username="Guest", id=7, watched_game=game)
+        CrawlProcessHandler.add_watcher(game, watcher)
+        self.assertEqual(game._fresh_watchers, set())
+        self.assertIn(watcher, game._receivers)
+        self.assertIn(1, self.streams.pending)
+        game.conn.send_message.assert_called_once_with('{"msg":"spectator_joined"}')
+
+    def test_repeated_stop_requests_keep_one_hangup_and_one_kill_deadline(self):
+        game = SimpleNamespace(process=Mock(), kill_timeout=None, logger=Mock(), kill=Mock())
+        with patch("webtiles.process_handler.IOLoop.current") as loop, \
+                patch("webtiles.process_handler.config.get", return_value=5):
+            CrawlProcessHandlerBase.stop(game)
+            CrawlProcessHandlerBase.stop(game)
+        game.process.send_signal.assert_called_once()
+        loop.return_value.add_timeout.assert_called_once()
+        self.assertIs(game.kill_timeout, loop.return_value.add_timeout.return_value)
+
+    def test_view_request_survives_a_socket_closing_on_its_first_send(self):
+        game = SimpleNamespace(party_slot_specs={})
+        conn = Mock(open=True)
+
+        def refused(_packet):
+            conn.open, game.conn = False, None
+        conn.send_message.side_effect = refused
+        game.conn = conn
+        self.assertTrue(CrawlProcessHandlerBase._request_native_view(game, 1))
+        self.assertIsNone(game.conn)
+        self.assertFalse(CrawlProcessHandlerBase._request_native_view(game, 1))
+
     def test_browser_cannot_request_private_views_or_change_native_mode(self):
         game = SimpleNamespace(conn=Mock())
         for kind in ("view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step"):
@@ -218,6 +274,80 @@ class MultiplayerTest(unittest.TestCase):
         game.conn.send_message.assert_not_called()
         CrawlProcessHandler.handle_input(game, json.dumps(dict(msg="key", keycode=27)), self.guest)
         self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
+
+
+class PendingStartTest(unittest.TestCase):
+    """A handler that never started an engine must not outlive its socket."""
+
+    def unstarted(self, hup="hup"):
+        game = object.__new__(CrawlProcessHandler)
+        game.process = game.conn = game.kill_timeout = None
+        game._process_hup_timeout, game._stale_pid, game._stale_lockfile = hup, 4242, "lock"
+        game._purging_timer, game._receivers, game.end_callback = 10, set(), Mock()
+        game.idle_checker, game.activity_timer = Mock(), Mock()
+        game.idle_checker.is_running.return_value = True
+        return game
+
+    def test_release_stops_timers_and_polling_and_runs_the_end_callback_once(self):
+        game = self.unstarted()
+        with patch("webtiles.process_handler.IOLoop.current") as loop:
+            self.assertTrue(game.release_unstarted())
+        loop.return_value.remove_timeout.assert_called_once_with("hup")
+        for timer in (game.idle_checker, game.activity_timer):
+            timer.stop.assert_called_once()
+        game.end_callback.assert_called_once()
+        self.assertIsNone(game._stale_pid)
+        self.assertIsNone(game._process_hup_timeout)
+        # The 1 s _check_stale_process chain finds no pid to signal.
+        with patch("webtiles.process_handler.IOLoop.current") as loop:
+            game._check_stale_process()
+        loop.return_value.add_timeout.assert_not_called()
+        game.idle_checker.is_running.return_value = False
+        self.assertFalse(game.release_unstarted())
+        game.end_callback.assert_called_once()
+
+    def test_running_engines_are_left_to_stop(self):
+        game = self.unstarted(hup=None)
+        game.process = Mock()
+        self.assertFalse(game.release_unstarted())
+        game.idle_checker.stop.assert_not_called()
+
+    def test_browser_closing_during_the_stale_lock_dialog_releases_the_handler(self):
+        game = Mock(process=None)
+        game.release_unstarted.return_value = True
+        socket = SimpleNamespace(process=game, close_code=1001, username="Host",
+            is_running=lambda partial=False: False, try_cleanup=Mock(), logger=Mock(),
+            total_message_bytes=0, failed_messages=0, failed_on_messages=0, close_handled=False)
+        with patch("webtiles.ws_handler.sockets", set()), \
+                patch("webtiles.ws_handler._schedule_party_presence_check", create=True):
+            CrawlWebSocket.on_close(socket)
+        game.release_unstarted.assert_called_once_with()
+        game.stop.assert_not_called()
+
+    def test_refused_unowned_socket_releases_the_handler_it_created(self):
+        processes = {}
+        handler = Mock()
+        handler.connect.side_effect = ConnectionRefusedError()
+        with patch("webtiles.process_handler.processes", processes), \
+                patch("webtiles.process_handler.find_game_info", return_value={"id": "coop"}), \
+                patch("webtiles.process_handler.CrawlProcessHandler", return_value=handler):
+            process_handler.handle_new_socket("/tmp/sockets/Host:now.sock", process_handler.DirectoryWatcher.CREATE)
+        handler.handle_process_end.assert_called_once_with()
+        self.assertEqual(processes, {})
+
+
+class DecodedInputTest(unittest.TestCase):
+    def test_handle_input_accepts_the_decoded_frame_and_leaves_it_unmodified(self):
+        control = PartyControl("Host", {"Host": 0})
+        game = SimpleNamespace(party_control=control, conn=Mock(open=True), process=True,
+                               party_mode=False, username="Host", _receivers=set())
+        frame = dict(msg="key", keycode=106, activity_id=7)
+        with patch("webtiles.process_handler.json_decode", side_effect=AssertionError("decoded twice")):
+            CrawlProcessHandler.handle_input(game, frame, SimpleNamespace(username="Host"))
+        self.assertEqual(frame, dict(msg="key", keycode=106, activity_id=7))
+        sent = json.loads(game.conn.send_message.call_args.args[0])
+        self.assertEqual((sent["msg"], sent["keycode"], sent["player_id"]), ("key", 106, 0))
+        self.assertNotIn("activity_id", sent)
 
 
 if __name__ == "__main__":

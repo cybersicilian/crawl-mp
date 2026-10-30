@@ -1,5 +1,6 @@
 import fcntl
 import errno
+import functools
 import os
 import os.path
 import socket
@@ -29,6 +30,8 @@ class WebtilesSocketConnection(object):
         self.socket = None
         self.socketpath = None
         self.open = False
+        self.closed = False
+        self.connect_timeout = None
         self.close_callback = None
         self.username = ""
 
@@ -37,9 +40,14 @@ class WebtilesSocketConnection(object):
         self.write_blocked = False
 
     def connect(self, primary = True):
+        self.connect_timeout = None
+        if self.closed:
+            # The game ended (or never started) before its socket appeared.
+            return
         if not os.path.exists(self.crawl_socketpath):
             # Wait until the socket exists
-            IOLoop.current().add_timeout(time.time() + 1, self.connect)
+            self.connect_timeout = IOLoop.current().add_timeout(
+                time.time() + 1, functools.partial(self.connect, primary))
             return
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
@@ -150,7 +158,13 @@ class WebtilesSocketConnection(object):
                     self.logger.warning("Game socket closed during sendto", exc_info=True)
                     self.close()
                     return
-                raise
+                # A packet the kernel will never accept (e.g. EMSGSIZE) must not
+                # stay at the head of the queue, or every later keystroke from
+                # every player would fail behind it.
+                self.logger.warning("Dropping %d-byte game packet after sendto error",
+                                    len(self.pending_messages[0]), exc_info=True)
+                self.pending_messages.popleft()
+                continue
             self.pending_messages.popleft()
         if self.socket is not None and self.write_blocked:
             self.write_blocked = False
@@ -158,12 +172,19 @@ class WebtilesSocketConnection(object):
 
     def close(self):
         self.open = False
+        self.closed = True
         self.pending_messages.clear()
         self.write_blocked = False
+        if self.connect_timeout is not None:
+            IOLoop.current().remove_timeout(self.connect_timeout)
+            self.connect_timeout = None
         if self.socket:
             IOLoop.current().remove_handler(self.socket.fileno())
             self.socket.close()
-            os.remove(self.socketpath)
+            try:
+                os.remove(self.socketpath)
+            except OSError:
+                pass
             self.socket = None
         if self.close_callback:
             self.close_callback()
