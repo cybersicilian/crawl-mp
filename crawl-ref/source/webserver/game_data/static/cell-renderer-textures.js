@@ -4,9 +4,15 @@ define(["jquery", "./tileinfo-gui", "./tileinfo-main", "./tileinfo-player",
 function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_sizes, art) {
     "use strict";
 
+    // Atlas elements are static for a game; resolving them per drawn tile
+    // through a selector was a measurable share of every frame.
+    var images = {};
     function get_img(id)
     {
-        return art.image(id, $("#" + id)[0]);
+        var image = images[id];
+        if (!image || image.isConnected === false)
+            images[id] = image = (typeof document === "object" && document.getElementById ? document.getElementById(id) : $("#" + id)[0]) || undefined;
+        return art.image(id, image);
     }
 
     // Texture coordinates, integer pixel scaling, clipping, and overlap bookkeeping.
