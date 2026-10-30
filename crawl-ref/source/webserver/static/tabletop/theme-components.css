@@ -11,9 +11,11 @@ html[data-ui-theme] #normal :is(#dcss_quick_dock, .party-member-card, #quickbar_
 html[data-ui-theme] #normal .party-member-card.is-controlled-card {
     background: var(--ui-raised); border-color: var(--ui-accent);
 }
-html[data-ui-theme] #normal :is(.hud-item-slot, .party-member-state, .party-portrait) {
+html[data-ui-theme] #normal :is(.hud-item-slot, .party-member-state) {
     background: var(--ui-recess); border-color: var(--ui-edge);
 }
+/* The portrait column is shaped by its arch and shrine frame; a recess box behind it reads as black corners. */
+html[data-ui-theme] #normal .party-portrait { background: transparent; border-color: transparent; }
 html[data-ui-theme] #normal :is(.dcss-dock-btn, .hud-quick-slot, .quickbar-catalog-action,
     .hud-icon-button, .party-mini-btn, .hud-power-button, #quickbar_more > summary) {
     background: var(--ui-panel); color: var(--ui-text); border-color: var(--ui-edge);
