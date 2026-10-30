@@ -20,7 +20,6 @@ define([], function () {
         // equipment slots. Resolve against the hero's current inventory below.
         if (value.kind === "item" && value.id < 0) return null;
         var valid = { kind: value.kind, id: value.id };
-        if (value.kind === "spell" && value.quick_cast === true) valid.quick_cast = true;
         if (value.kind === "item" && value.action !== undefined) {
             if (!["prototype", "overclock", "breakthrough", "overclock_finite"].includes(value.action)
                 || !Number.isSafeInteger(value.uid) || value.uid <= 0) return null;

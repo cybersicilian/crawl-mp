@@ -25,11 +25,10 @@ bool valid(const state& memory, const base_profile& source, std::uint64_t source
         && destination(memory, level, policy) >= 0 && !candidates(source, policy).empty();
 }
 bool insert(state& memory, const base_profile& source, std::uint64_t source_id,
-            std::int64_t now, int level, const limits& policy, bool assimilated,
-            int selected_slot = -1)
+            std::int64_t now, int level, const limits& policy, bool assimilated)
 {
     if (!valid(memory, source, source_id, now, level, policy)) return false;
-    const int slot = selected_slot < 0 ? destination(memory, level, policy) : selected_slot;
+    const int slot = destination(memory, level, policy);
     memory.stored[slot] = { memory.next_id++, source_id, source.group,
                             candidates(source, policy), now, assimilated };
     return true;
@@ -57,23 +56,16 @@ int slot_count(int level, const limits& policy)
     return std::count_if(policy.slot_levels.begin(), policy.slot_levels.end(),
                          [level](int threshold) { return threshold > 0 && level >= threshold; });
 }
-std::vector<int> destinations(const state& memory, int level, const limits& policy)
+int destination(const state& memory, int level, const limits& policy)
 {
-    std::vector<int> open;
     int oldest = -1;
     for (int slot = 0; slot < slot_count(level, policy); ++slot)
     {
         const auto found = memory.stored.find(slot);
-        if (found == memory.stored.end()) open.push_back(slot);
-        else if (oldest < 0 || found->second.id < memory.stored.at(oldest).id) oldest = slot;
+        if (found == memory.stored.end()) return slot;
+        if (oldest < 0 || found->second.id < memory.stored.at(oldest).id) oldest = slot;
     }
-    if (open.empty() && oldest >= 0) open.push_back(oldest);
-    return open;
-}
-int destination(const state& memory, int level, const limits& policy)
-{
-    const auto choices = destinations(memory, level, policy);
-    return choices.empty() ? -1 : choices.front();
+    return oldest;
 }
 std::vector<property> candidates(const base_profile& source, const limits& policy)
 {
@@ -186,19 +178,23 @@ progress advance(work& task, bool source_valid, bool owner_can_act, bool interru
     return task.remaining_turns == 0 ? progress::ready : progress::working;
 }
 bool complete(state& memory, work& task, std::int64_t now, int level,
-              const limits& policy, const std::function<bool(std::uint64_t)>& consume,
-              int selected_slot)
+              const limits& policy, const std::function<bool(std::uint64_t)>& consume)
 {
     if (!task.active || task.remaining_turns != 0) return false;
     const base_profile source = { task.group, task.intrinsic };
-    const auto choices = destinations(memory, level, policy);
-    if (selected_slot == -1 && !choices.empty()) selected_slot = choices.front();
-    if (!consume || !valid(memory, source, task.source, now, level, policy)
-        || std::find(choices.begin(), choices.end(), selected_slot) == choices.end()
-        || !consume(task.source))
+    if (!consume || !valid(memory, source, task.source, now, level, policy) || !consume(task.source))
     { cancel(task); return false; }
-    const bool result = insert(memory, source, task.source, now, level, policy, true, selected_slot);
+    const bool result = insert(memory, source, task.source, now, level, policy, true);
     cancel(task);
     return result;
+}
+int weapon_corrosion_stage(int progress_aut, int lifetime_aut)
+{
+    if (lifetime_aut <= 0) return 4;
+    return std::max(0, std::min(4, static_cast<int>(static_cast<std::int64_t>(progress_aut) * 4 / lifetime_aut)));
+}
+int weapon_damage_percent(int progress_aut, int lifetime_aut)
+{
+    return 100 - std::min(3, weapon_corrosion_stage(progress_aut, lifetime_aut)) * 25;
 }
 }

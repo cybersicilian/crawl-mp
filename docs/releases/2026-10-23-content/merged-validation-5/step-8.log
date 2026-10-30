@@ -1,1 +1,0 @@
-{"passed": true, "checks": ["native stats", "world-seed isolation", "equipped doll", "companion portraits", "native entry descriptions", "hero-specific spell details", "species restrictions", "memorized spells", "Wanderer determinism", "party compaction", "no native saves"]}

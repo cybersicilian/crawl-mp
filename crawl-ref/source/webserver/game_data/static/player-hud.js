@@ -502,7 +502,7 @@ function ($, options, util, stat_tips, icons) {
                     desc_html,
                     false
                 );
-                var glyph = icons.resolve(status_inf.text || clean_light);
+                var glyph = icons.effectKey({ iconKey: status_inf.icon_key, name: status_inf.text || clean_light }) || "question";
                 status.empty().attr({ role: "img", tabindex: "0",
                     "aria-label": status_title + ". " + status_badge,
                     "data-status-icon": glyph }).toggleClass("is-bad", is_bad_col)

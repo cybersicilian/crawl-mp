@@ -18,7 +18,7 @@ define([], function () {
         schema = next; fields = candidate; return true;
     }
     function defaults() {
-        var result = { mode: "classic", motion: "system", ui_theme: "folio" };
+        var result = { mode: "classic", motion: "system" };
         Object.keys(fields).forEach(function (key) { result[key] = fields[key].default; });
         return result;
     }
@@ -32,19 +32,14 @@ define([], function () {
         Object.keys(fields).forEach(function (key) { if (value && valid(fields[key], value[key])) result[key] = value[key]; });
         return result;
     }
-    function preset(id, current) {
+    function preset(id) {
         var found = schema.presets.find(function (entry) { return entry.id === id; });
-        if (!found) return null;
-        var result = normalize(found.settings), previous = normalize(current);
-        Object.keys(fields).forEach(function (key) {
-            if (fields[key].presetIndependent) result[key] = previous[key];
-        });
-        return result;
+        return found ? normalize(found.settings) : null;
     }
     function matching(value) {
         var found = schema.presets.find(function (entry) {
             var values = preset(entry.id);
-            return Object.keys(fields).every(function (key) { return fields[key].presetIndependent || values[key] === value[key]; });
+            return Object.keys(fields).every(function (key) { return key === "motion" || values[key] === value[key]; });
         });
         return found ? found.id : "custom";
     }

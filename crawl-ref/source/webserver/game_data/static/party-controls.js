@@ -32,7 +32,8 @@ function ($, comm, dungeon_renderer, minimap, inspector, model, pings) {
                     event.preventDefault(); event.stopPropagation();
                     var state = window.crawl_party.state;
                     var own = state.members.find(function (member) { return member.slot === model.controlledSlot(state); });
-                    comm.send_message("party_activity", { action: own.activity ? "cancel" : "yield" });
+                    if (!own) return;
+                    comm.send_message("party_activity", { action: own.activity || own.queued_action ? "cancel" : "yield" });
                     this.blur();
                 }).prependTo("#dcss_quick_dock");
         }

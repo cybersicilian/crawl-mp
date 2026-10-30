@@ -10,25 +10,24 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
     }
     function mount(root) {
         var id = "graphics" + (++nextId), signature = "", inputs = new Map(), presets = new Map();
-        var heading = node("div", "graphics-heading"), title = node("h2", "", "Appearance & graphics");
+        var heading = node("div", "graphics-heading"), title = node("h2", "", "Graphics settings");
         title.id = id + "-title"; heading.appendChild(title);
         var badge = node("span", "graphics-current"); heading.appendChild(badge);
         root.replaceChildren(heading, node("p", "graphics-intro",
             "Saved to your account across browsers. Changes apply immediately to your open games. Party members keep their own view."));
-        var appearance = node("div", "graphics-appearance"), choices = node("div", "graphics-presets"), groups = node("div", "graphics-groups");
-        var renderingTitle = node("h3", "graphics-rendering-title", "Dungeon graphics");
+        var choices = node("div", "graphics-presets"), groups = node("div", "graphics-groups");
         choices.setAttribute("role", "group"); choices.setAttribute("aria-label", "Graphics preset");
         var status = node("p", "graphics-save-status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
         var retry = node("button", "graphics-retry", "Retry connection"); retry.type = "button";
         retry.addEventListener("click", function () { preferences.refresh(); });
-        root.append(appearance, renderingTitle, choices, groups, status, retry);
+        root.append(choices, groups, status, retry);
         function build(schema) {
-            appearance.replaceChildren(); choices.replaceChildren(); groups.replaceChildren(); inputs.clear(); presets.clear();
+            choices.replaceChildren(); groups.replaceChildren(); inputs.clear(); presets.clear();
             schema.presets.forEach(function (preset) {
                 var button = node("button", "graphics-preset"); button.type = "button"; button.dataset.graphicsPreset = preset.id;
                 button.append(node("strong", "", preset.label), node("span", "", preset.description));
                 button.addEventListener("click", function () {
-                    var value = model.preset(preset.id, preferences.snapshot().settings);
+                    var value = model.preset(preset.id); value.motion = preferences.snapshot().settings.motion;
                     preferences.change(value);
                 });
                 choices.appendChild(button); presets.set(preset.id, button);
@@ -38,8 +37,7 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
                 var fieldset = fieldsets.get(field.group);
                 if (!fieldset) {
                     fieldset = node("fieldset", "graphics-group"); fieldset.appendChild(node("legend", "", field.group));
-                    fieldsets.set(field.group, fieldset);
-                    (field.id === "ui_theme" ? appearance : groups).appendChild(fieldset);
+                    fieldsets.set(field.group, fieldset); groups.appendChild(fieldset);
                 }
                 var label = node("label", "graphics-setting"), input = node(field.type === "boolean" ? "input" : "select");
                 input.id = id + "-" + field.id; input.dataset.graphicsField = field.id;
@@ -50,12 +48,6 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
                 var copy = node("span", "graphics-setting-copy"), help = node("span", "graphics-help", field.description);
                 help.id = input.id + "-help"; input.setAttribute("aria-describedby", help.id);
                 copy.append(node("strong", "", field.label), help); label.append(copy, input); fieldset.appendChild(label);
-                if (field.id === "ui_theme") {
-                    var preview = node("div", "graphics-theme-preview"); preview.setAttribute("aria-hidden", "true");
-                    preview.append(node("span", "graphics-preview-binding", "Expedition"),
-                        node("span", "graphics-preview-page", "Your adventurer's journal"));
-                    fieldset.appendChild(preview);
-                }
                 input.addEventListener("change", function () {
                     var value = field.type === "boolean" ? input.checked : input.value, patch = {}; patch[field.id] = value;
                     var settings = Object.assign({}, preferences.snapshot().settings, patch);

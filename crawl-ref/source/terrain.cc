@@ -189,9 +189,6 @@ bool feat_is_hell_subbranch_exit(dungeon_feature_type feat)
  */
 FEATFN_MEMOIZED(feat_is_branch_entrance, feat)
 {
-    for (const auto& link : branch_connections)
-        if (feat == link.downstairs)
-            return true;
     for (branch_iterator it; it; ++it)
     {
         if (it->entry_stairs == feat
@@ -208,9 +205,6 @@ FEATFN_MEMOIZED(feat_is_branch_entrance, feat)
  */
 FEATFN_MEMOIZED(feat_is_branch_exit, feat)
 {
-    for (const auto& link : branch_connections)
-        if (feat == link.upstairs)
-            return true;
     for (branch_iterator it; it; ++it)
     {
         if (it->exit_stairs == feat
@@ -453,15 +447,7 @@ bool feat_has_solid_floor(dungeon_feature_type feat)
  */
 bool feat_has_dry_floor(dungeon_feature_type feat)
 {
-    return feat_has_solid_floor(feat) && !feat_is_water(feat)
-           && feat != DNGN_MUD && feat != DNGN_SHALLOW_HONEY;
-}
-
-// Flat walking costs shared by actors. Water's anatomy-dependent rules stay
-// with the actors; swimming does not remove the stickiness of honey.
-int feat_grounded_movement_penalty(dungeon_feature_type feat)
-{
-    return feat == DNGN_SHALLOW_HONEY ? BASELINE_DELAY : 0;
+    return feat_has_solid_floor(feat) && !feat_is_water(feat) && feat != DNGN_MUD;
 }
 
 /** Is this feature a variety of door?

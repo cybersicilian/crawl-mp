@@ -1,4 +1,0 @@
-Both authenticated owners resume the exact saved multiplayer campaign
-The current game menu saves the native campaign and returns to the lobby
-Native save/resume preserves both character IDs, resources, positions, floors and inventories
-{"passed":true,"game_id":"e813e777-feac-4221-9b97-4c875be376a9","checks":["Both authenticated owners resume the exact saved multiplayer campaign","The current game menu saves the native campaign and returns to the lobby","Native save/resume preserves both character IDs, resources, positions, floors and inventories"],"errors":[],"identities":[{"slot":0,"player_id":"a914097c-2852-4ebd-8b24-2e3754636275","name":"Perf0mvr3l91d","hp":19,"hp_max":19,"mp":0,"mp_max":0,"pos":{"x":87,"y":43},"floor":"D:1"},{"slot":1,"player_id":"220358b1-fcc3-426d-a167-5ad7a0923008","name":"Perf1mvr3l91d","hp":10,"hp_max":10,"mp":6,"mp_max":6,"pos":{"x":86,"y":43},"floor":"D:1"}],"test_game_saved":true}

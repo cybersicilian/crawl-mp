@@ -3,10 +3,6 @@
 The game dock provides **Save** (continue playing) and **Save & lobby**.
 The lobby's **Saved games** panel resumes a specific expedition. Starting a new
 party allocates a separate native save directory and leaves earlier games intact.
-Resuming a running expedition on another computer transfers its existing process
-to the authenticated owner and disconnects the previous host session. The game
-continues at its current state, including unsaved actions and other party members.
-Automatic network recovery waits for an active host instead of taking control back.
 Each expedition also has **Delete save**, with a confirmation describing the
 permanent loss of saved progress. Only its logged-in owner can delete it, from
 the lobby, while that expedition is stopped (including in other tabs). Deletion

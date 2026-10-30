@@ -1,0 +1,62 @@
+/* Shared, scalable class insignia in creation, party management and discovery. */
+.class-emblem { display: block; width: 46px; height: 46px; flex: 0 0 auto; overflow: visible; }
+.class-emblem-ring { fill: #1c2225; stroke: var(--class-tint, #c2a883); stroke-width: 1; }
+.class-emblem-symbol { fill: none; stroke: var(--class-tint, #c2a883); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.visual-choice-art:has(.class-emblem) { border: 0; background: transparent; }
+.visual-choice-art .class-emblem { width: 43px; height: 43px; }
+
+#lobby .party-manager { margin: 16px 0 22px; color: #e9dfcc; border: 1px solid #9b8055; background: linear-gradient(115deg, #302a26, #1e2425 75%); box-shadow: 0 5px 16px #211a1720; }
+.party-manager-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 14px; padding: 13px 16px; border-bottom: 1px solid #9b805550; }
+#lobby .party-manager-heading h3 { margin: 0; color: #f1d7a6; font: 500 24px/1.2 var(--tt-font-title); }
+.party-manager-heading > span { font: 12px/1.5 var(--tt-font-ui); color: #cbb998; }
+.party-manager-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+#lobby .party-manager-table { width: 100%; border-collapse: collapse; text-align: left; background: transparent; font: 12px/1.4 var(--tt-font-ui); }
+#lobby .party-manager-table :is(th, td) { padding: 10px 12px; border: 0; border-bottom: 1px solid #9b805533; vertical-align: middle; color: #e9dfcc; background: transparent; }
+#lobby .party-manager-table thead th { padding-top: 8px; padding-bottom: 8px; color: #bda988; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+#lobby .party-manager-table tbody tr:last-child > * { border-bottom: 0; }
+#lobby .party-manager-table .is-inactive { background: #141a1c50; }
+#lobby .party-manager-table .is-inactive .party-manager-hero { opacity: .65; }
+.party-manager-hero > div { display: inline-block; vertical-align: middle; }
+.party-manager-hero strong { display: block; color: #f4e2be; font-size: 13px; font-weight: 600; }
+.party-manager-hero small { display: block; margin-top: 3px; color: #bfaf95; font-weight: 400; }
+.party-manager-portrait { position: relative; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; width: 48px; height: 52px; margin-right: 12px; border: 1px solid #8b7655; background: radial-gradient(ellipse, #65533c, #222627); }
+.party-manager-portrait .native-player-tile, .party-manager-portrait .native-player-tile :is(img, canvas) { width: 48px; height: 48px; background: transparent; }
+.party-manager-portrait > .class-emblem { position: absolute; bottom: -5px; right: -9px; width: 25px; height: 25px; }
+#lobby .party-manager-control select { min-height: 36px; max-width: 100%; padding: 6px 8px; color: #e9dfcc; background: #202627; border: 1px solid #8b7655; font: inherit; }
+#lobby .party-manager-action { min-height: 36px; padding: 6px 10px; color: #e7d5b1; border: 1px solid #897452; border-radius: 3px; background: #373027; font: 600 11px/1.3 var(--tt-font-ui); cursor: pointer; }
+#lobby .party-manager-action:hover:not(:disabled) { color: #fff1d6; background: #56432c; border-color: #d2af71; }
+#lobby .party-manager-action:disabled { opacity: .55; cursor: default; }
+.party-manager-actions { white-space: nowrap; }
+.party-manager-actions button + button { margin-left: 5px; }
+#lobby .party-manager-readiness [data-ready="true"]:not(:disabled) { color: #c8e3b6; border-color: #7f9b64; background: #2e3c2b; }
+#lobby :is(.party-manager, .lobby-listing-filters, .party-room-listing) :is(button, select, a):focus-visible { outline: 2px solid #d6b26c; outline-offset: 3px; }
+.party-slot-box[data-seat-editable="false"] :is(input:disabled, select:disabled) { opacity: .65; }
+
+#lobby .lobby-listing-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 13px 0 4px; }
+#lobby .lobby-listing-filters button { min-height: 36px; padding: 6px 12px; color: #635645; background: #f5efe3; border: 1px solid #b7a486; border-radius: 3px; font: 600 12px/1.3 var(--tt-font-ui); cursor: pointer; }
+#lobby .lobby-listing-filters button[aria-pressed="true"] { color: #f8e6be; border-color: #6d5233; background: #4f3d2c; }
+#lobby #party_rooms_table { width: 100%; border-collapse: collapse; font: 12px/1.5 var(--tt-font-ui); }
+#lobby #party_rooms_table th { color: #79674c; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+#lobby #party_rooms_table td { padding: 12px 10px; vertical-align: top; border-bottom: 1px solid #baab8c65; }
+.room-name strong, .room-seats strong { display: block; font-weight: 600; }
+.room-name strong { color: #4e3528; font: 600 17px/1.3 var(--tt-font-title); }
+.room-phase, .room-seats small { display: block; margin-top: 5px; color: #79674f; font-size: 11px; }
+.room-roster-hero { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+.room-roster-hero .class-emblem { width: 27px; height: 27px; }
+.room-actions { min-width: 130px; }
+.room-actions .party-room-seat { display: block; max-width: 210px; width: 100%; min-height: 36px; padding: 6px; margin-bottom: 6px; border: 1px solid #a18c6d; background: #fffaf0; color: #4c3c2b; font: inherit; }
+.room-actions button { white-space: normal; }
+.live-expedition-actions { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.coop-watch-table-btn { display: inline-block; padding: 6px 9px; color: #6c5136; text-decoration: underline; text-underline-offset: 3px; }
+#lobby .party-room-listing[hidden] { display: none !important; }
+@media (max-width: 680px) {
+    #lobby .party-manager-table :is(th, td) { padding: 8px; }
+    .party-manager-table { min-width: 590px; }
+    .party-manager-portrait { margin-right: 8px; }
+    .party-manager-heading { padding: 12px; }
+    .room-actions { min-width: 0; }
+}
+@media (forced-colors: active) {
+    .class-emblem-symbol, .class-emblem-ring { stroke: CanvasText; }
+    .class-emblem-ring { fill: Canvas; }
+}

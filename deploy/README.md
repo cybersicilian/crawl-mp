@@ -9,7 +9,7 @@ Cloudflare DNS is managed separately from the deployment script.
 ## Minimal runtime
 
 - One Ubuntu 24.04 Compute Engine `e2-medium` in `us-central1-a`.
-- 40 GiB balanced boot disk and a separate 10 GiB balanced state disk.
+- 20 GiB balanced boot disk and a separate 10 GiB balanced state disk.
 - A reserved public IPv4 address, plus an existing-provider DNS A record.
 - Caddy handles HTTPS, certificate renewal, and WebSocket proxying.
 - The native game and Python/Tornado WebTiles run under a dedicated service user.
@@ -357,59 +357,3 @@ menus and deterministic legacy-plugin startup. The native binary is unchanged;
 no recompilation was performed. Public asset hashes and menu actions passed
 with zero JavaScript errors. Refresh an existing game tab to load the update.
 See [deployment details](../docs/deployment-2026-10-18-context-menus.md).
-
-## Blood Liturgist release — 19 October 2026
-
-Release `20261019T174900Z-blood-liturgist` renames Blood Hunter to Blood Liturgist
-(`BL`) and starts new characters worshipping Vorr at 35 piety. The original
-equipment, spells and saved-job ID are preserved. The scoped overlay retains
-the deployed Tortle changes and excludes unrelated later workspace work.
-
-The Ubuntu build, 28 scoped native cases, 76 backend tests, native catalogue,
-runtime-user previews and fresh isolated/public character creation passed.
-Public gameplay confirmed Vorr worship, one-star piety and Rupture. Eight
-retained checkpoints remained compatible; all 13,212 frozen file hashes matched.
-Snapshot `dcss-pre-liturgist-20261019t175027z` reached READY before activation;
-`20261019T162535Z-tortle-dash` remains the previous release. Health and recovery
-passed, and all task-owned remote helper groups closed. Refresh an existing tab.
-
-See [the bloodcraft verification record](../docs/bloodcraft.md#validation).
-
-## Vorr corpse fuel and self-exsanguination — 19 October 2026
-
-Release `20261019T183400Z-vorr-rites` adds intact blood-bearing corpses as
-one-unit ritual fuel. Each missing blood unit can instead cost 10% of maximum
-HP, rounded up per unit, with a nonlethal confirmation after targeting. Native
-descriptions now explain effects, damage, ranges and payment. Three-star Blood
-Communion shortens attack delay by 2% per nearby fresh blood unit, capped at 20%.
-
-The scoped 15-file overlay passed 40 native cases (439 assertions), 76 backend
-tests, runtime-user previews, and unchanged metadata/loadability on 11 copied
-checkpoints. Isolated and public HTTPS fresh-game checks confirmed starting Vorr
-worship and the actual corpse/maximum-HP tooltip, with no JavaScript errors.
-All 13,215 frozen file hashes matched after activation. Snapshot
-`dcss-pre-vorr-rites-20261019t183432z` reached READY first; the Blood Liturgist
-release remains available through `/opt/dcss/previous`. Health and recovery
-passed, and all task-owned remote helper groups closed.
-
-See [the Vorr implementation record](../docs/design/vorr/implementation-status.md#corpse-fuel-self-exsanguination-and-attack-speed--19-october).
-
-## Uncapped Vorr speed and vampiric starting weapons — 19 October 2026
-
-Release `20261019T184637Z-vorr-speed` gives three-star Blood Communion uncapped
-+2% attack and movement speed per visible fresh blood unit within four cells.
-Delay is divided by the speed multiplier; engine action time stays positive.
-New Blood Liturgists receive vampirism on their selected starting weapon.
-Self-exsanguination requires both a blood-bearing species and current body;
-bloodless characters see that the health substitution is unavailable.
-
-The scoped 16-source-file overlay and regenerated catalogue passed 44 native
-cases (624 assertions), 76 backend tests and runtime-user previews. Twelve
-copied checkpoints retained loadability and identical metadata. Isolated and
-public HTTPS Human/Gargoyle starts verified vampiric weapons, Vorr worship and
-species-correct costs, with no JavaScript errors. All 13,215 frozen file hashes
-matched after activation. Snapshot `dcss-pre-vorr-speed-20261019t184709z` reached
-READY first; `20261019T183400Z-vorr-rites` remains the previous release.
-Health and recovery passed, and task-owned helper groups closed.
-
-See [the current Vorr implementation record](../docs/design/vorr/implementation-status.md#uncapped-speed-and-vampiric-starting-weapons--19-october).

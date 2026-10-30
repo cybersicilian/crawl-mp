@@ -5625,32 +5625,11 @@ static void _tag_read_you_dungeon(reader &th)
     {
         brdepth[j] = branches[j].numlevels;
         brentry[j] = level_id(branches[j].parent_branch, branches[j].mindepth);
-        // Do not add a third Lair rune branch to an existing character.
-        if (is_random_subbranch(static_cast<branch_type>(j)))
-            brentry[j].clear();
         branch_bribe[j] = 0;
         branch_uniq_map_tags[j].clear();
     }
 
 #if TAG_MAJOR_VERSION == 34
-    // New branch routes are a new-game choice. Do not add exits to branches
-    // whose parent floors may already have been generated in an old save.
-    if (th.getMinorVersion() < TAG_MINOR_BURROWS_ROUTE)
-    {
-        brentry[BRANCH_WORMLANDS].clear();
-        brentry[BRANCH_HIVE].clear();
-    }
-
-    if (th.getMinorVersion() < TAG_MINOR_BURROWS
-        && crawl_state.game_is_descent()
-        && you.props.exists(DESCENT_POIS_BRANCH_KEY))
-    {
-        // Old Descent saves recorded the excluded member of the pair.
-        const int excluded = you.props[DESCENT_POIS_BRANCH_KEY].get_int();
-        you.props[DESCENT_POIS_BRANCH_KEY] =
-            excluded == BRANCH_SPIDER ? BRANCH_SNAKE : BRANCH_SPIDER;
-    }
-
     // Deepen the Abyss; this is okay since new abyssal stairs will be
     // generated as the place shifts.
     if (crawl_state.game_is_normal() && th.getMinorVersion() <= TAG_MINOR_ABYSS_SEVEN)

@@ -344,7 +344,6 @@ colour_t rune_colour(int type)
         case RUNE_CEREBOV: return RED;
         case RUNE_GLOORX_VLOQ: return DARKGRAY;
         case RUNE_SPIDER: return BROWN;
-        case RUNE_BURROWS: return BROWN;
         default: return GREEN;
     }
 }

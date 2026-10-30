@@ -1724,6 +1724,8 @@ void makhleb_tyrant_buff()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_MAKHLEB, ally.religion);
             if (party::are_gods_concordant(GOD_MAKHLEB, ally.religion))
             {
                 const duration_type chosen = random_choose(
@@ -1733,7 +1735,16 @@ void makhleb_tyrant_buff()
                     "Makhleb's tyrannical onslaught spurs on");
                 break;
             }
-
+            else if ((rel == party::pantheon_relation_type::RIVAL
+                      || rel == party::pantheon_relation_type::ANATHEMA)
+                     && coinflip())
+            {
+                party::debuff_or_harm_party_member(
+                    i, 2 + random2(4), 0, DUR_WEAK, 4 + random2(5),
+                    "Makhleb's tyrannical bloodlust drains",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 1 : 0);
+                break;
+            }
         }
     }
 }
@@ -1872,6 +1883,8 @@ void tso_maybe_bless_follower()
                 && member.depth == you.depth
                 && you.see_cell(member.pos()))
             {
+                const auto rel = party::get_god_political_relation(
+                    GOD_SHINING_ONE, member.religion);
                 if (party::are_gods_concordant(GOD_SHINING_ONE, member.religion)
                     && !(member.holiness() & (MH_UNDEAD | MH_DEMONIC)))
                 {
@@ -1889,7 +1902,18 @@ void tso_maybe_bless_follower()
                     }
                     break;
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA
+                         || (member.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                {
+                    party::debuff_or_harm_party_member(
+                        i,
+                        rel == party::pantheon_relation_type::ANATHEMA ? 3 + random2(4) : 1 + random2(2),
+                        1 + random2(2), DUR_CORONA, 6 + random2(5),
+                        "The Shining One's judgmental glare sears and outlines",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 1 : 0);
+                    break;
+                }
             }
         }
     }

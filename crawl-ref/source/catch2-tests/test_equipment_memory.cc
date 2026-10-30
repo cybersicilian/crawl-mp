@@ -67,65 +67,6 @@ TEST_CASE("FIFO replacement removes one entire oldest bundle", "[equipment-memor
     CHECK(destination(memory,3,policy) == 1);
     CHECK(destination(memory,7,policy) == 2);
 }
-TEST_CASE("Assimilation may fill every open unlocked slot without replacing occupied slots",
-          "[equipment-memory][oozle]")
-{
-    limits policy;
-    for (int selected = 0; selected < 6; ++selected)
-    {
-        state memory;
-        work task;
-        REQUIRE(begin(memory, task, ring(ARTP_FIRE), 1, 25, policy));
-        finish(task);
-        int consumed = 0;
-        REQUIRE(complete(memory, task, 50, 25, policy,
-            [&](std::uint64_t) { ++consumed; return true; }, selected));
-        CHECK(consumed == 1);
-        REQUIRE(memory.stored.size() == 1);
-        CHECK(memory.stored.at(selected).source == 1);
-        const auto choices = destinations(memory, 25, policy);
-        CHECK(choices.size() == 5);
-        for (int slot : choices) CHECK(slot != selected);
-    }
-}
-TEST_CASE("Invalid or newly locked destinations cannot consume an item",
-          "[equipment-memory][oozle]")
-{
-    limits policy;
-    for (int selected : {-2, 0, 2, 5, 6})
-    {
-        state memory;
-        work task;
-        REQUIRE(absorb(memory, ring(ARTP_FIRE), 1, 0, 3, policy));
-        REQUIRE(begin(memory, task, ring(ARTP_COLD), 2, 25, policy));
-        finish(task);
-        int consumed = 0;
-        CHECK_FALSE(complete(memory, task, 50, 3, policy,
-            [&](std::uint64_t) { ++consumed; return true; }, selected));
-        CHECK(consumed == 0);
-        CHECK_FALSE(task.active);
-        REQUIRE(memory.stored.size() == 1);
-        CHECK(memory.stored.at(0).source == 1);
-    }
-}
-TEST_CASE("A full randomly filled pool still replaces its oldest bundle",
-          "[equipment-memory][oozle]")
-{
-    state memory;
-    limits policy;
-    work task;
-    REQUIRE(begin(memory, task, ring(ARTP_FIRE), 1, 3, policy));
-    finish(task);
-    REQUIRE(complete(memory, task, 50, 3, policy, [](std::uint64_t) { return true; }, 1));
-    REQUIRE(absorb(memory, ring(ARTP_COLD), 2, 60, 3, policy));
-    CHECK(destinations(memory, 3, policy) == std::vector<int>{1});
-    REQUIRE(begin(memory, task, ring(ARTP_AC), 3, 3, policy));
-    finish(task);
-    REQUIRE(complete(memory, task, 100, 3, policy, [](std::uint64_t) { return true; }, 1));
-    CHECK(memory.stored.at(1).source == 3);
-    CHECK(memory.stored.at(0).source == 2);
-    CHECK(destinations(memory, 0, policy).empty());
-}
 TEST_CASE("Active assimilation consumes one item once after five owner actions", "[equipment-memory][oozle]")
 {
     state memory;
@@ -238,7 +179,7 @@ TEST_CASE("Native passive queries are qualitative owner effects with distinct id
     }
     CHECK(project(peer, 3, policy).empty());
 }
-TEST_CASE("Active work rechecks the oldest memory when the pool changes", "[equipment-memory][oozle]")
+TEST_CASE("Active work replaces the oldest memory after passive digestion fills the pool", "[equipment-memory][oozle]")
 {
     state memory;
     limits policy;
@@ -250,6 +191,17 @@ TEST_CASE("Active work rechecks the oldest memory when the pool changes", "[equi
     REQUIRE(complete(memory,task,50,3,policy,[](std::uint64_t){return true;}));
     CHECK(memory.stored.at(0).source == 3);
     CHECK(memory.stored.at(1).source == 4);
+}
+TEST_CASE("Weapon corrosion weakens through four stages before deferred dissolution", "[equipment-memory][oozle]")
+{
+    CHECK(weapon_damage_percent(0,3000) == 100);
+    CHECK(weapon_damage_percent(749,3000) == 100);
+    CHECK(weapon_damage_percent(750,3000) == 75);
+    CHECK(weapon_damage_percent(1500,3000) == 50);
+    CHECK(weapon_damage_percent(2250,3000) == 25);
+    CHECK(weapon_corrosion_stage(3000,3000) == 4);
+    CHECK(weapon_damage_percent(3000,3000) == 25); // Valid until end-of-action removal.
+    CHECK(weapon_corrosion_stage(-10,3000) == 0);
 }
 TEST_CASE("Native unique identities and egos remain distinct and unscaled", "[equipment-memory][oozle]")
 {

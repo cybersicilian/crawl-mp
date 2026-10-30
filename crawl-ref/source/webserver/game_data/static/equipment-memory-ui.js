@@ -20,7 +20,7 @@ define(["jquery"], function ($) {
         return root;
     }
     function slots(data, heroSlot) {
-        var root = $("<ol class='assimilation-slots' aria-label='Stored properties, eligible assimilation slots marked'></ol>");
+        var root = $("<ol class='assimilation-slots' aria-label='Stored properties, oldest marked for replacement'></ol>");
         data.slots.forEach(function (slot) {
             var memory = slot.memory, next = slot.next && slot.unlocked;
             var effects = memory && Array.isArray(memory.effects) ? memory.effects : memory ? [memory] : [];
@@ -31,7 +31,7 @@ define(["jquery"], function ($) {
                 + ". All " + effects.length + " properties share this slot. Stored → applied: "
                 + effects.map(function (effect) { return (effect.source_label || effect.label) + " → " + effect.label; }).join(", ")
                 + ". The whole bundle lasts until overwritten."
-                : slot.unlocked ? "Assimilation chooses a random unlocked empty slot when it completes."
+                : slot.unlocked ? "The next completed digestion or Assimilation can fill this slot."
                 : "Unlocks at experience level " + slot.unlock_xl + ".";
             if (memory && !slot.unlocked) { meta += " · inactive until XL " + slot.unlock_xl; explanation += " Inactive until XL " + slot.unlock_xl + "."; }
             if (next && memory) explanation += " This is the oldest memory and will be replaced next.";
@@ -41,7 +41,7 @@ define(["jquery"], function ($) {
                     "data-tip-title": label + " · " + meta, "data-tip-body": explanation,
                     "aria-label": label + ". " + meta + ". " + explanation })
                 .append($("<strong></strong>").text(label), $("<small></small>").text(meta));
-            if (next) row.append($("<span class='assimilation-next'></span>").text(memory ? "Oldest → next" : "Open"));
+            if (next) row.append($("<span class='assimilation-next'></span>").text(memory ? "Oldest → next" : "Next"));
             root.append(row);
         });
         return root;

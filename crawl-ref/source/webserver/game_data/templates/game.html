@@ -15,7 +15,7 @@
 <link
   rel="stylesheet"
   type="text/css"
-  href="/gamedata/{{ version }}/style.css"
+  href="/gamedata/{{ version }}/style.css?ui=effects-01a18e68-r1"
 />
 <link
   rel="stylesheet"
@@ -66,7 +66,7 @@
         data-tip-meta="Click any party card's [Cam] button to peek at allies"
       >Center camera</button>
     </div>
-    <div id="dungeon_viewport"><canvas id="dungeon"></canvas></div>
+    <canvas id="dungeon"></canvas>
     <div id="mobile_input" style="display: none">
       <input
         autocomplete="off"
@@ -304,9 +304,6 @@
 
 <!-- Tile images -->
 <div style="display: none">
-  <img id="illustrated_materials" src="/static/tabletop/assets/painted-stone.png" alt="" />
-  <img id="illustrated_wilds" src="/static/tabletop/assets/painted-wilds-v1.png" alt="" />
-  <img id="illustrated_woodland" src="/static/tabletop/assets/woodland-sprites-v1.png" alt="" />
   <img id="floor" src="/gamedata/{{ version }}/floor.png" />
   <img id="wall" src="/gamedata/{{ version }}/wall.png" />
   <img id="feat" src="/gamedata/{{ version }}/feat.png" />

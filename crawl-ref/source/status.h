@@ -76,10 +76,11 @@ enum status_type
 
 struct status_info
 {
-    status_info() : light_colour(0)
+    status_info() : id(-1), light_colour(0)
     {
     };
 
+    int id;
     int light_colour;
     string light_text; // status light
     string light_text_formatted; // status light (if using multi-colour)

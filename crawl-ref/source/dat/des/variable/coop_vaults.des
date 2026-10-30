@@ -1,19 +1,16 @@
 ###############################################################################
-# coop_vaults.des: Multiplayer Multi-Wing Vaults and
+# coop_vaults.des: Tactical Co-op & Solo-Compatible Multi-Wing Vaults and
 #                  Paired Boss Arenas.
 #
 # Includes:
 #   1. The Twin Crucible (D:9-13 / Lair:2-5)
 #   2. The Sunken Reliquary (Vaults:1-4 / Depths:1-3)
-#   3. The Divided Reliquary (Vaults:2-4 / Depths:1-4) featuring paired bosses
-#      Vaelen the Dawn-Warden and Nyx the Dusk-Cantor.
+#   3. The Concordat Sanctum (Vaults:2-4 / Depths:1-4) featuring paired bosses
+#      Vaelen, Dawn-Warden and Nyx, Dusk-Cantor.
 ###############################################################################
 
 : crawl_require("dlua/dungeon.lua")
 : crawl_require("dlua/vault.lua")
-
-# The saved multiplayer mode is authoritative even before every hero spawns.
-
 
 ###############################################################################
 # 1. The Twin Crucible
@@ -26,7 +23,6 @@ NAME:   coop_twin_crucible
 TAGS:   transparent no_monster_gen
 DEPTH:  D:9-13, Lair:2-5
 WEIGHT: 15
-veto {{ return not you.multiplayer() }}
 MONS:   fire elemental / lindwurm, ice beast / rime drake
 MONS:   crimson imp / fire bat, white imp / simulacrum
 MONS:   orc sorcerer / efreet, freezing wraith / bog body
@@ -60,7 +56,6 @@ NAME:   coop_sunken_reliquary
 TAGS:   transparent
 DEPTH:  Vaults:1-4, Depths:1-3
 WEIGHT: 15
-veto {{ return not you.multiplayer() }}
 MONS:   chain-warden, void-tether stalker, deep dwarf
 MONS:   ironbound preserver, vault sentinel, silver star
 KITEM:  * = star_item / any good_item
@@ -82,16 +77,15 @@ ccWWWcccc+++ccccWWWcc
 ENDMAP
 
 ###############################################################################
-# 3. The Divided Reliquary (Paired Boss Encounter: Vaelen & Nyx)
-# Vaelen the Dawn-Warden (fire-branded warden) and Nyx the Dusk-Cantor (death mage)
-# guard two ruined archways and a central reliquary cache.
+# 3. The Concordat Sanctum (Paired Boss Encounter: Vaelen & Nyx)
+# Vaelen the Dawn-Warden (solar paladin) and Nyx the Dusk-Cantor (shadow mage)
+# guard twin altars and a central reliquary cache.
 ###############################################################################
 
 NAME:   coop_concordat_sanctum_vaelen_nyx
 TAGS:   transparent no_monster_gen uniq_concordat_sanctum
 DEPTH:  Vaults:2-4, Depths:1-3
 WEIGHT: 15
-veto {{ return not you.multiplayer() }}
 KMONS:  V = vault warden name:Vaelen_the_Dawn-Warden n_rpl col:yellow \
             ; broad axe ego:flaming | broad axe good_item . \
               plate armour good_item . tower shield
@@ -99,8 +93,8 @@ KMONS:  N = deep elf death mage name:Nyx_the_Dusk-Cantor n_rpl col:lightmagenta 
             ; demon blade ego:draining | rapier ego:chaos . \
               robe ego:resistance
 MONS:   chain-warden, void-tether stalker, deep dwarf, peacekeeper
-KFEAT:  A = stone_arch
-KFEAT:  B = stone_arch
+KFEAT:  A = altar_the_shining_one
+KFEAT:  B = altar_dithmenos
 KFEAT:  m = iron_grate
 KITEM:  | = acquire any / star_item
 MAP

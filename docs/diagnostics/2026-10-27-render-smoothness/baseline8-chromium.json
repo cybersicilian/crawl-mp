@@ -1,6 +1,0 @@
-{
-  "passed": false,
-  "errors": [],
-  "scenarios": [],
-  "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/profile.cjs:37:20"
-}

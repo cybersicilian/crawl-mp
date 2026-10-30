@@ -639,8 +639,6 @@ enter_elf DNGN_ENTER_ELF
 exit_elf DNGN_EXIT_ELF
 enter_lair DNGN_ENTER_LAIR
 exit_lair DNGN_EXIT_LAIR
-enter_burrows DNGN_ENTER_BURROWS
-exit_burrows DNGN_EXIT_BURROWS
 enter_snake DNGN_ENTER_SNAKE
 exit_snake DNGN_EXIT_SNAKE
 enter_swamp DNGN_ENTER_SWAMP
@@ -1125,8 +1123,3 @@ east_wind OVERLAY_EAST_WIND
 %rim 0
 %sdir dngn/altars
 vellum DNGN_ALTAR_VELLUM
-
-# Restore the native Hive doorway art.
-%sdir UNUSED/features
-hive_portal DNGN_ENTER_HIVE
-hive_gone DNGN_EXIT_HIVE

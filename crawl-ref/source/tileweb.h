@@ -16,7 +16,6 @@
 #include <sys/un.h>
 
 #include "cursor-type.h"
-#include "json.h"
 #include "map-cell.h"
 #include "map-knowledge.h"
 #include "status.h"
@@ -243,10 +242,6 @@ protected:
     string m_msg_buf;
     int m_viewer_slot = -1;
     bool m_projecting_view = false;
-    string m_ai_snapshots[4];
-    string m_ai_guards[4];
-    int m_ai_revisions[4] = {};
-    int m_ai_slots = 0;
     bool m_personal_dirty = true;
     struct personal_view_cache;
     struct personal_floor_cache;
@@ -365,10 +360,6 @@ protected:
                     bool force_full);
     void _send_messages();
     void _send_party_state();
-    string _ai_state_json();
-    string _ai_guard();
-    void _send_ai_state();
-    bool _handle_ai_action(const JsonNode* obj);
     void _send_enemy_initiative();
     void _write_item_training(const item_def &item);
     void _send_personal_views(bool force_full = false, int force_slot = -1);

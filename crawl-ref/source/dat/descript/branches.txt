@@ -35,8 +35,7 @@ And indeed, there is something to be said about getting gored, mauled and eaten
 rather than sliced, burnt or stabbed.
 
 The Lair contains the entrances to one of the Swamp or the Shoals, one of the
-Snake Pit or Spider Nest, and to the Pits of Slime. Its lowest floor always
-contains a tunnel into the Burrows.
+Snake Pit or the Spider Nest, and to the Pits of Slime.
 %%%%
 Swamp
 
@@ -58,14 +57,14 @@ Snake Pit
 The corridors of the Snake Pit are home to all varieties of serpent, and are
 inhabited by a society of powerful nagas and salamanders.
 
-A dungeon features only one of the Snake Pit and Spider Nest.
+A dungeon features only one of the Snake Pit and Spider Nest branches.
 %%%%
 Spider Nest
 
 The crumbling, web-choked caverns of the Spider Nest are packed with poisonous
 arthropods and assorted creepy-crawlies.
 
-A dungeon features only one of the Snake Pit and Spider Nest.
+A dungeon features only one of the Spider Nest and Snake Pit branches.
 %%%%
 Slime Pits
 
@@ -321,34 +320,3 @@ detested alike are made to sanctify themselves in blood. No sane mortal would
 ever choose to come here, and yet even victims of the Destroyer's greatest ire
 may be granted passage out once more, should they mete out mutilation equal to
 the demonic torturers of this realm.
-
-%%%%
-Burrows
-
-Beneath the roots of the Lair, great beasts have hollowed the earth into dens
-and galleries. Deep trolls inhabit the older tunnels, piling their treasures
-beneath stones too heavy for lesser creatures to move.
-
-The Burrows always descend from the bottom of the Lair. The Hive opens from
-their second floor; the Wormlands begin below their deepest dens. No rune of
-Zot lies here.
-%%%%
-Wormlands
-
-Great worms have bored long galleries through the deep rock. Narrow cuts open
-into moss-carpeted caverns and dense mushroom groves. Pale fungi stir when
-unwatched, and deathcaps feed on life among the deeper roots. Trolls and dragons
-hunt between the groves. Diggers open new angles of attack, while constrictors
-can hold a traveller within reach of fungal spores and draining magic.
-
-The Wormlands descend from the Burrows to a passage into the Depths. Guarded
-hoards reward those who venture away from the main galleries.
-%%%%
-Hive
-
-A warm maze of wax combs opens into busy flight chambers. Bees and wasps can
-quickly surround an intruder through the connecting cells. Poison is common,
-while the deeper combs shelter wasps whose stings carry lightning.
-
-The two floors of the Hive branch from the Burrows. Treasure lies in the
-guarded inner combs.

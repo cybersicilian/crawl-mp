@@ -80,7 +80,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Fire
-    SPELL_STEAM_BARRIER,
     SPELL_FOXFIRE,
     SPELL_BOLT_OF_MAGMA,
     SPELL_PLASMA_BEAM,
@@ -89,7 +88,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Ice
-    SPELL_ICICLE_BURST,
     SPELL_FREEZING_CLOUD,
     SPELL_BOLT_OF_COLD,
     SPELL_OZOCUBUS_REFRIGERATION,
@@ -97,13 +95,13 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Spatial Translocations
+    SPELL_AURA_OF_PASSAGE,
     SPELL_BLINK,
     SPELL_SHROUD_OF_GOLUBRIA,
     SPELL_MOMENTUM_STRIKE,
     SPELL_BECKONING,
-    SPELL_AURA_OF_PASSAGE,
-    SPELL_FORCE_LANCE,
     SPELL_AURA_OF_SANCTUARY,
+    SPELL_FORCE_LANCE,
 },
 
 {   // Book of Hexes
@@ -117,7 +115,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Young Poisoner's Handbook
-    SPELL_OLGREBS_LAST_MERCY,
     SPELL_POISONOUS_VAPOURS,
     SPELL_FULSOME_DISTILLATION,
     SPELL_MERCURY_ARROW,
@@ -143,8 +140,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Misfortune
-    SPELL_SHACKLE,
-    SPELL_FALSE_IMAGE,
     SPELL_JINXBITE,
     SPELL_SCARLET_FETTERS,
     SPELL_STOLEN_SIGHT,
@@ -167,7 +162,6 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Fen Folio
-    SPELL_ERINGYAS_ROOTSPIKE,
     SPELL_SUMMON_FOREST,
     SPELL_NOXIOUS_BOG,
     SPELL_SUMMON_HYDRA,
@@ -206,12 +200,12 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Book of Air
+    SPELL_AURA_OF_RESONANCE,
     SPELL_SHOCK,
     SPELL_SWIFTNESS,
-    SPELL_AURA_OF_RESONANCE,
     SPELL_AIRSTRIKE,
-    SPELL_AURA_OF_SANCTUARY,
     SPELL_DEFLECT_MISSILES,
+    SPELL_AURA_OF_SANCTUARY,
     SPELL_CLOUD_CONE,
 },
 
@@ -236,7 +230,6 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Book of Unlife
-    SPELL_BLIGHT,
     SPELL_SOUL_SPLINTER,
     SPELL_MARTYRS_KNELL,
     SPELL_DEATH_CHANNEL,
@@ -281,7 +274,6 @@ static const vector<spell_type> spellbook_templates[] =
 #endif
 
 {   // Book of Power
-    SPELL_MANA_RUPTURE,
     SPELL_BATTLESPHERE,
     SPELL_BOMBARD,
     SPELL_FORTRESS_BLAST,
@@ -296,7 +288,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Party Tricks
-    SPELL_ELEMENTAL_WEAPON,
     SPELL_APPORTATION,
     SPELL_JINXBITE,
     SPELL_INTOXICATE,
@@ -337,7 +328,6 @@ static const vector<spell_type> spellbook_templates[] =
 },
 
 {   // Book of Transmutation
-    SPELL_SCORPION_FORM,
     SPELL_PETRIFY,
     SPELL_IRRADIATE,
     SPELL_FULSOME_FUSILLADE,
@@ -523,8 +513,8 @@ static const vector<spell_type> spellbook_templates[] =
 { // There-And-Back Book
     SPELL_TELEPORT_OTHER,
     SPELL_AEGIS_LINK,
-    SPELL_PHASE_SHIFT,
     SPELL_GELLS_GAVOTTE,
+    SPELL_PHASE_SHIFT,
     SPELL_DISPERSAL,
 },
 

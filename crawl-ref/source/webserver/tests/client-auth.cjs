@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const source = fs.readFileSync(process.env.CLIENT_AUTH_SOURCE || path.join(__dirname, '../static/scripts/client-auth.js'), 'utf8');
+const source = fs.readFileSync(path.join(__dirname, '../static/scripts/client-auth.js'), 'utf8');
 
 function fixture() {
     let create, cookie, online = true;
@@ -22,14 +22,12 @@ function fixture() {
     const state = {}, api = {};
     for (const name of ['hide_prompt', 'hide_dialog', 'render_party_lobby', 'hash_changed', 'set_layer'])
         api[name] = () => calls.push(name);
-    vm.runInNewContext(source, { URLSearchParams, location: { search: '', reload() { calls.push('reload'); } },
+    vm.runInNewContext(source, { location: { reload() { calls.push('reload'); } },
         define(dependencies, factory) {
-            const modules = { jquery: $, chat: { reset_visibility() {} }, comm: { send_message(kind, fields) {
+            create = factory($, { reset_visibility() {} }, { send_message(kind, fields) {
                 if (!online) return false;
                 sent.push({ kind, fields }); return true;
-            } }, 'texture-pack': { bindUser() {} }, 'graphics-preferences': {
-                bindUser(user) { calls.push('graphics:' + user); }, refresh() { calls.push('graphics:refresh'); } } };
-            create = factory(...dependencies.map(name => modules[name]));
+            } });
         } });
     Object.assign(api, create(api, state));
     return { $, api, state, sent, calls, setCookie: value => { cookie = value; }, offline: () => { online = false; } };
@@ -68,10 +66,6 @@ function fixture() {
     assert(f.$('.welcome-entry').classes.has('signed-in'));
     assert.equal(f.$('#password').val(), '', 'Clear entered credentials after sign-in');
     assert(f.calls.includes('hash_changed'), 'The requested expedition continues after sign-in');
-    assert(!f.calls.includes('graphics:Adventurer'), 'Account HTTP reads wait for the authenticated cookie');
-    f.api.set_login_cookie({ cookie: 'fixture-session' });
-    assert(f.calls.includes('graphics:Adventurer'));
-    assert(f.calls.includes('graphics:refresh'));
     f.api.login_failed({ reason: 'Session expired' });
     assert.equal(f.state.current_user, null);
     assert.equal(f.$('.welcome-entry').classes.has('signed-in'), false);

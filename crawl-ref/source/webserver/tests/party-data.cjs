@@ -27,18 +27,6 @@ assert.equal(model.normalize({ floor_items: [], floor_items_known: false }).floo
 assert.equal(unavailable.abilities_known, false);
 assert.equal(unavailable.abilities.length, 0);
 assert.equal(model.display(undefined), 'Unavailable');
-assert.equal(model.speciesName({ species: 'Human', trait: 'mummy' }), 'Mummy Human');
-assert.equal(model.speciesName({ species: 'Minotaur', trait: 'none' }), 'Minotaur');
-assert.equal(model.speciesName({ species: 'Poltergeist' }), 'Poltergeist');
-assert.equal(model.speciesName({ species: 'Hydra', heads: 1 }), 'Hydra (1 head)');
-assert.equal(model.speciesName({ species: 'Hydra', trait: 'ghost', heads: 7 }), 'Ghost Hydra (7 heads)');
-assert.equal(model.speciesName({ species: 'Hydra' }), 'Hydra');
-assert.deepEqual(JSON.parse(JSON.stringify(model.magicResource({ species: 'Automaton', mp: 12, mp_max: 20 }))),
-    { label: 'Heat', value: 8, max: 20, percent: 40 });
-assert.deepEqual(JSON.parse(JSON.stringify(model.magicResource({ species: 'Human', mp: 12, mp_max: 20 }))),
-    { label: 'MP', value: 12, max: 20, percent: 60 });
-assert.equal(model.magicResource({ species: 'Automaton', mp: 0, mp_max: 0 }).percent, 0);
-assert.equal(model.magicResource({ species: 'Automaton' }).value, null);
 assert.equal(model.display(0), '0');
 assert.equal(model.percentage('12%'), '12%');
 assert.equal(model.percentage(12), '12%');
@@ -77,8 +65,6 @@ for (const change of [
     state => { state.members[0].hp = 9; },
     state => { state.members[0].poison_survival = 4; },
     state => { state.members[0].real_hp_max = 20; },
-    state => { state.members[0].trait = 'ghost'; },
-    state => { state.members[0].heads = 4; },
     state => { state.members[0].xl_next = 23; },
     state => { state.members[0].spells[0].name = 'Foxfire'; },
     state => { state.members[0].piety_rank = 4; },
@@ -106,8 +92,3 @@ assert.equal(model.relativePosition(directions, { slot: 1, place: 'D:2', pos: { 
 assert.equal(model.relativePosition(directions, { slot: 1, place: 'D:1' }).kind, 'unknown');
 assert.equal(model.relativePosition(directions, directions.members[0]).kind, 'self');
 console.log('Party compass floor and direction contracts passed.');
-assert.equal(model.inCombat({ multiplayer: true, combat_locked: true }, { region_combat: false }), false);
-assert.equal(model.inCombat({ multiplayer: true, combat_locked: false }, { region_combat: true }), true);
-assert.equal(model.inCombat({ multiplayer: true, combat_locked: true }, {}), true);
-assert.equal(model.inCombat({ combat_locked: false }, { region_combat: true }), false);
-console.log('Personal encounter state overrides broad flags, with legacy and solo fallback.');

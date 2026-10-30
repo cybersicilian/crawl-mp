@@ -1,57 +1,4 @@
 #include "test_oozle_memory_fixture.h"
-#include "oozle-memory-effects.h"
-
-TEST_CASE_METHOD(memory_fixture, "Assimilation fills random open slots and preserves their source identities",
-                 "[oozle-memory][oozle]")
-{
-    rng::subgenerator random(728109);
-    you.experience_level = 25;
-    std::set<int> first_slots;
-    for (int attempt = 0; attempt < 32; ++attempt)
-    {
-        you.props.erase("oozle_memories_v1");
-        carry(0, "ring of protection from fire");
-        assimilate_item(0);
-        const auto memory = oozle::memories();
-        REQUIRE(memory.stored.size() == 1);
-        const int slot = memory.stored.begin()->first;
-        REQUIRE(slot >= 0);
-        REQUIRE(slot < 6);
-        first_slots.insert(slot);
-        CHECK(oozle::source_name(slot).find("fire") != string::npos);
-        CHECK(memory.stored.at(slot).assimilated);
-        REQUIRE(oozle::effect_sources().size() == 1);
-        CHECK(oozle::effect_sources().front()->sub_type == RING_PROTECTION_FROM_FIRE);
-        const auto before = rng::peek_uint64();
-        JsonWrapper first(oozle::memory_json()), second(oozle::memory_json());
-        CHECK(first.to_string() == second.to_string());
-        CHECK(rng::peek_uint64() == before);
-    }
-    CHECK(first_slots.size() > 1);
-}
-
-TEST_CASE_METHOD(memory_fixture, "Equipment remains physical despite legacy passive exposure",
-                 "[oozle-memory][oozle]")
-{
-    you.experience_level = GENERATE(1, 25);
-    auto& weapon = carry(0, "broad axe");
-    auto& ring = carry(1, "ring of protection from fire");
-    wear(0, SLOT_WEAPON);
-    wear(1, SLOT_RING);
-    weapon.props["oozle_corrosion_aut"] = 3000;
-    ring.props["oozle_corrosion_aut"] = 3000;
-    you.time_taken = 3000;
-    oozle::world_effects();
-    CHECK(weapon.defined());
-    CHECK(ring.defined());
-    CHECK(item_is_equipped(weapon));
-    CHECK(item_is_equipped(ring));
-    CHECK(oozle::memories().stored.empty());
-    JsonWrapper display(oozle::memory_json());
-    CHECK(display.to_string().find("digesting") == string::npos);
-    CHECK(display.to_string().find("weapon_penalty") == string::npos);
-}
-
 TEST_CASE_METHOD(memory_fixture, "Unequippable inventory armour can supply an intrinsic memory",
                  "[oozle-memory][oozle]")
 {
@@ -65,10 +12,30 @@ TEST_CASE_METHOD(memory_fixture, "Unequippable inventory armour can supply an in
     CHECK(choices.front().type == ARTP_AC);
     CHECK(choices.front().value == property(plate, PARM_AC));
 }
+TEST_CASE_METHOD(memory_fixture, "Corrosion preserves progress through unequipping and consumes at the threshold",
+                 "[oozle-memory][oozle]")
+{
+    carry(0, "ring of protection from fire");
+    wear(0, SLOT_RING);
+    oozle::digest_equipment(10);
+    REQUIRE(you.inv[0].defined());
+    CHECK(you.inv[0].props[oozle::corrosion_key].get_int() == 10);
+    you.equipment.items.clear();
+    oozle::digest_equipment(100);
+    CHECK(you.inv[0].props[oozle::corrosion_key].get_int() == 10);
+    CHECK(oozle::memories().stored.empty());
+    wear(0, SLOT_RING);
+    oozle::digest_equipment(oozle::digestion_aut - 10);
+    CHECK_FALSE(you.inv[0].defined());
+    const auto memory = oozle::memories();
+    REQUIRE(memory.stored.size() == 1);
+    CHECK(memory.stored.at(0).effects.front().type == ARTP_FIRE);
+    CHECK(oozle::source_name(0).find("fire") != string::npos);
+}
 TEST_CASE_METHOD(memory_fixture, "Ring memories strengthen the ooze regardless of its equipment",
                  "[oozle-memory][oozle]")
 {
-    assimilate_fire_ring();
+    digest_fire_ring();
     REQUIRE(oozle::memories().stored.size() == 1);
     CHECK(you.scan_artefacts(ARTP_FIRE) == 1);
     CHECK(you.res_fire() == 0); // Cancels the innate fire weakness without a ring.
@@ -97,10 +64,81 @@ TEST_CASE_METHOD(memory_fixture, "Ring memories strengthen the ooze regardless o
     you.species = SP_HUMAN;
     CHECK(you.scan_artefacts(ARTP_FIRE) == 0);
 }
+TEST_CASE_METHOD(memory_fixture, "Full memories pause passive digestion and weapon wear",
+                 "[oozle-memory][oozle][memory-capacity]")
+{
+    digest_fire_ring();
+    const auto original = oozle::memories().stored.at(0);
+    auto& axe = carry(1, "broad axe");
+    wear(1, SLOT_WEAPON);
+    auto& ring = carry(2, "ring of protection from cold");
+    wear(2, SLOT_RING);
+    const int progress = GENERATE(0, oozle::digestion_aut / 2, oozle::digestion_aut);
+    axe.props[oozle::corrosion_key] = progress;
+    ring.props[oozle::corrosion_key] = progress;
+    const int damage = oozle::weapon_damage_percent(axe);
+
+    oozle::note_weapon_use(&axe);
+    oozle::digest_equipment(oozle::digestion_aut);
+    oozle::digest_equipment(oozle::digestion_aut);
+
+    REQUIRE(axe.defined());
+    REQUIRE(ring.defined());
+    CHECK(axe.quantity == 1);
+    CHECK(ring.quantity == 1);
+    CHECK(item_is_equipped(axe));
+    CHECK(item_is_equipped(ring));
+    CHECK(axe.props[oozle::corrosion_key].get_int() == progress);
+    CHECK(ring.props[oozle::corrosion_key].get_int() == progress);
+    CHECK(oozle::weapon_damage_percent(axe) == damage);
+    REQUIRE(oozle::memories().stored.size() == 1);
+    CHECK(oozle::memories().stored.at(0).id == original.id);
+    CHECK(oozle::memories().stored.at(0).source == original.source);
+    CHECK(oozle::source_name(0).find("fire") != string::npos);
+}
+TEST_CASE_METHOD(memory_fixture, "Passive digestion stops as soon as the last memory fills",
+                 "[oozle-memory][oozle][memory-capacity]")
+{
+    auto& fire = carry(0, "ring of protection from fire");
+    wear(0, SLOT_RING);
+    auto& cold = carry(1, "ring of protection from cold");
+    wear(1, SLOT_RING);
+    cold.props[oozle::corrosion_key] = oozle::digestion_aut - 10;
+    oozle::digest_equipment(oozle::digestion_aut);
+    CHECK_FALSE(fire.defined());
+    REQUIRE(cold.defined());
+    CHECK(item_is_equipped(cold));
+    CHECK(cold.props[oozle::corrosion_key].get_int() == oozle::digestion_aut - 10);
+    REQUIRE(oozle::memories().stored.size() == 1);
+    CHECK(oozle::source_name(0).find("fire") != string::npos);
+
+    // A newly unlocked slot resumes saved exposure instead of resetting it.
+    you.experience_level = 3;
+    oozle::digest_equipment(10);
+    CHECK_FALSE(cold.defined());
+    REQUIRE(oozle::memories().stored.size() == 2);
+    CHECK(oozle::source_name(0).find("fire") != string::npos);
+    CHECK(oozle::source_name(1).find("cold") != string::npos);
+}
+TEST_CASE_METHOD(memory_fixture, "Full memories preserve previously unexposed equipment",
+                 "[oozle-memory][oozle][memory-capacity]")
+{
+    digest_fire_ring();
+    auto& weapon = carry(1, "dagger");
+    wear(1, SLOT_WEAPON);
+    oozle::note_weapon_use(&weapon);
+    oozle::digest_equipment(oozle::digestion_aut);
+    REQUIRE(weapon.defined());
+    CHECK_FALSE(weapon.props.exists(oozle::corrosion_key));
+    CHECK(oozle::weapon_damage_percent(weapon) == 100);
+    you.experience_level = 3;
+    oozle::note_weapon_use(&weapon);
+    CHECK(weapon.props[oozle::corrosion_key].get_int() == 2 * BASELINE_DELAY);
+}
 TEST_CASE_METHOD(memory_fixture, "Extraction excludes inherited properties and inspection preserves RNG",
                  "[oozle-memory][oozle]")
 {
-    assimilate_fire_ring();
+    digest_fire_ring();
     auto& ring = carry(1, "ring of strength");
     ring.plus = 4;
     wear(1, SLOT_RING);
@@ -116,6 +154,7 @@ TEST_CASE_METHOD(memory_fixture, "Extraction excludes inherited properties and i
     CHECK(first.to_string().find("rF+") != string::npos);
     JsonWrapper item(oozle::item_memory_json(ring));
     CHECK(item.to_string().find("rF+") == string::npos);
+    CHECK(oozle::item_memory_description(ring).empty());
 }
 
 TEST_CASE_METHOD(memory_fixture, "Armour memory protects the body without clothing and improves as skill rises",
@@ -124,7 +163,7 @@ TEST_CASE_METHOD(memory_fixture, "Armour memory protects the body without clothi
     auto& hat = carry(0, "hat");
     hat.plus = 2;
     wear(0, SLOT_HELMET);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE_FALSE(you.inv[0].defined());
     REQUIRE(oozle::memories().stored.size() == 1);
     CHECK(oozle::passive_bonus(ARTP_AC) == 1);
@@ -142,7 +181,7 @@ TEST_CASE_METHOD(memory_fixture, "An absorbed axe retains its full bundle and te
     axe.plus = 3;
     axe.brand = SPWPN_FLAMING;
     wear(0,SLOT_WEAPON);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     const auto memory = oozle::memories();
     REQUIRE(memory.stored.size() == 1);
     CHECK(memory.stored.at(0).effects.size() >= 4);
@@ -175,13 +214,13 @@ TEST_CASE_METHOD(memory_fixture, "Shield and amulet memories grant body shieldin
     shield.plus = 6;
     const int expected = property(shield, PARM_AC) + shield.plus;
     wear(0, SLOT_OFFHAND);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE(you.shield() == nullptr);
     CHECK(you.scan_artefacts(ARTP_SHIELDING) == expected);
     CHECK(player_shield_class() > original_sh);
     carry(1, "amulet of reflection");
     wear(1, SLOT_AMULET);
-    assimilate_item(1);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE(oozle::memories().stored.size() == 2);
     CHECK(you.equipment.items.empty());
     CHECK(you.scan_artefacts(ARTP_SHIELDING) == max(expected, 5));
@@ -189,14 +228,14 @@ TEST_CASE_METHOD(memory_fixture, "Shield and amulet memories grant body shieldin
 TEST_CASE_METHOD(memory_fixture, "Duplicate body effects use the strongest memory across source families",
                  "[oozle-memory][oozle]")
 {
+    you.experience_level = 3;
     set_skill_level(SK_SHAPESHIFTING, 27, true);
     carry(0, "hat").plus = 4;
     wear(0, SLOT_HELMET);
-    assimilate_item(0);
-    you.experience_level = 3;
+    oozle::digest_equipment(oozle::digestion_aut);
     carry(1, "ring of protection").plus = 3;
     wear(1, SLOT_RING);
-    assimilate_item(1);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE(oozle::memories().stored.size() == 2);
     CHECK(you.scan_artefacts(ARTP_AC) == 4);
     CHECK(oozle::body_property(ARTP_AC) == 4);
@@ -204,12 +243,31 @@ TEST_CASE_METHOD(memory_fixture, "Duplicate body effects use the strongest memor
     you.experience_level = 1;
     CHECK(you.scan_artefacts(ARTP_AC) == 4);
 }
+TEST_CASE_METHOD(memory_fixture, "Weapon use accumulates wear without deleting a live attack's weapon",
+                 "[oozle-memory][oozle]")
+{
+    auto& axe = carry(0,"broad axe");
+    wear(0,SLOT_WEAPON);
+    const int original_damage = property(axe,PWPN_DAMAGE);
+    axe.props[oozle::corrosion_key] = oozle::digestion_aut / 2;
+    CHECK(oozle::weapon_damage_percent(axe) == 50);
+    CHECK(oozle::weapon_corrosion_penalty(axe) == 4);
+    CHECK(property(axe,PWPN_DAMAGE) == original_damage);
+    axe.props[oozle::corrosion_key] = oozle::digestion_aut - 1;
+    oozle::note_weapon_use(&axe);
+    CHECK(axe.defined()); // Pointer remains valid through all followup attacks.
+    CHECK(axe.props[oozle::corrosion_key].get_int() == oozle::digestion_aut);
+    oozle::digest_equipment(1);
+    CHECK_FALSE(axe.defined());
+    CHECK(you.weapon() == nullptr);
+    CHECK(oozle::memories().stored.size() == 1);
+}
 TEST_CASE_METHOD(memory_fixture, "Absorbed polearm reach follows the ooze through weapon changes",
                  "[oozle-memory][oozle]")
 {
     carry(0, "spear");
     wear(0, SLOT_WEAPON);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE_FALSE(you.inv[0].defined());
     CHECK(oozle::inherited_reach() == 2);
     CHECK(you.reach_range() == 2);
@@ -268,13 +326,13 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed Acrobat and Faith work without an amu
     you.experience_level = 3;
     carry(0, "amulet of the acrobat");
     wear(0, SLOT_AMULET);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.equipment.items.empty());
     CHECK(player_acrobatic());
     CHECK(you.scan_artefacts(ARTP_ACROBAT) == 1);
     carry(1, "amulet of faith");
     wear(1, SLOT_AMULET);
-    assimilate_item(1);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.equipment.items.empty());
     CHECK(you.wearing_jewellery(AMU_FAITH) == 1);
     CHECK(you.faith() == 1);
@@ -291,7 +349,7 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed Reflection preserves reflection and a
     carry(0, "amulet of reflection");
     wear(0, SLOT_AMULET);
     const int worn_sh = player_shield_class(1, false);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.reflection());
     CHECK(you.equipment.items.empty());
     CHECK(player_shield_class(1, false) == worn_sh);

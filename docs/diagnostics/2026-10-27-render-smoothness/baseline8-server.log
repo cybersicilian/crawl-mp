@@ -1,3 +1,0 @@
-WARN:root:Skipping game definitions in `games.d/` based on config
-WARN:root:User database '/tmp/dcss-smooth-4xc_85w7/accounts.db3' didn't exist; creating it now.
-WARN:root:User settings database didn't exist at '/tmp/dcss-smooth-4xc_85w7/settings.db3'; creating it now.

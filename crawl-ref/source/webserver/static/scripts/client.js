@@ -11,10 +11,10 @@ define(["exports", "jquery", "key_conversion", "chat", "comm",
         "client-staging-controls",
         "client-staging",
         "client-tooltips",
-        "client-chronicle", "game-loading", "connection-quality", "expedition-url", "character-name"],
+        "client-chronicle", "game-loading", "connection-quality", "expedition-url", "character-name", "party-url"],
 function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforimages,
           transportFactory, inputFactory, dialogsFactory, authFactory, accountFactory,
-          lobbyFactory, stagingControlsFactory, stagingFactory, tooltipsFactory, chronicleFactory, loading, quality, expeditionURL, characterName) {
+          lobbyFactory, stagingControlsFactory, stagingFactory, tooltipsFactory, chronicleFactory, loading, quality, expeditionURL, characterName, partyURL) {
     window.current_layer = "crt";
 
     window.debug_mode = false;
@@ -195,6 +195,7 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
     {
         api.finish_recovery();
         var was_watching = state.watching;
+        var was_party_member = state.party_member_active;
 
         cleanup();
         state.current_hash = "#lobby";
@@ -204,8 +205,9 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
 
         if (state.exit_reason)
         {
-            if (was_watching || normal_exit.indexOf(state.exit_reason) === -1
-                || state.exit_message && state.exit_message.length > 0)
+            var party_pause = was_watching && was_party_member && state.exit_reason === "saved";
+            if (!party_pause && (was_watching || normal_exit.indexOf(state.exit_reason) === -1
+                || state.exit_message && state.exit_message.length > 0))
             {
                 api.show_exit_dialog(state.exit_reason, state.exit_message, state.exit_dump,
                                  was_watching ? state.watching_username : null);
@@ -341,7 +343,12 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
         var watch = location.hash.match(/^#watch-(.+)/i);
         var play = location.hash.match(/^#play-(.+)/i);
         var expedition = expeditionURL.parse(location.hash);
-        if (expedition)
+        var lobby = partyURL.parse(location.hash);
+        if (lobby) {
+            if (!state.playing && !state.watching) { loading.cancel(); api.hide_dialog(); api.set_layer("lobby"); }
+            send_message("party_room_open", lobby);
+        }
+        else if (expedition)
         {
             send_message("expedition_open", {
                 id: expedition.id,

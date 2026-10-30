@@ -11,14 +11,20 @@ from webtiles.player_update import merge_player, player_update
 
 
 class PlayerStreams:
+    bootstrap_order = ("version", "options", "layout")
     shared = {"version", "options", "set_option", "layout"}
     projected = {"map", "player", "party_state", "record_identity"}
-    global_member_fields = {"hp", "hp_max", "mp", "mp_max", "alive", "ghost_haunting", "zot_clock"}
+    global_member_fields = {"hp", "hp_max", "mp", "mp_max", "xl_cap", "alive", "ghost_haunting", "zot_clock", "bribe_fund", "banes"}
+    # These facts require the recipient's loaded floor. Off-floor native
+    # snapshots deliberately report false danger/readiness and compare regions
+    # with their own viewer, so they cannot replace a local teammate's facts.
+    local_member_fields = {"region_id", "region_aut_clock", "region_combat",
+                           "same_region", "can_act", "aut_lead"}
     public_member_fields = {"slot", "name", "species", "job", "place", "pos", "turns",
-                            "hp", "hp_max", "mp", "mp_max", "xl", "alive", "ghost_haunting", "gold", "activity",
+                            "hp", "hp_max", "mp", "mp_max", "xl", "xl_cap", "alive", "ghost_haunting", "gold", "activity",
                             "aut_clock", "aut_lead", "last_action_aut", "region_id", "region_aut_clock",
                             "region_combat", "same_region", "can_act", "move_delay_aut", "atk_aut",
-                            "cooldown_ms", "cooldown_remaining_ms", "queued_action", "zot_clock"}
+                            "cooldown_ms", "cooldown_remaining_ms", "queued_action", "queued_action_count", "zot_clock", "bribe_fund", "banes"}
 
     def __init__(self, control, presence, request_view=None):
         self.control = control
@@ -35,16 +41,16 @@ class PlayerStreams:
         slot = self.slot(receiver)
         self.pending.add(slot)
         self.requested.discard(slot)
-        self._request_pending()
+        self.flush_requests()
 
     def note_mode(self, packet):
         if packet.get("msg") == "input_mode":
             self.native_ready = packet.get("mode") == 1  # Native COMMAND mode.
             if not self.native_ready:
                 self.requested.clear()
-            self._request_pending()
+            self.flush_requests()
 
-    def _request_pending(self):
+    def flush_requests(self):
         if self.native_ready and self.request_view:
             for slot in sorted(self.pending - self.requested):
                 if self.request_view(slot):
@@ -75,21 +81,31 @@ class PlayerStreams:
             for update in packet.get("members", []):
                 target = update["slot"]
                 member = members.setdefault(target, dict(slot=target))
+                was_here = member.get("place") == view.get("floor")
+                is_here = update.get("place", member.get("place")) == view.get("floor")
+                # Downing/revival changes sight and the teammate's proxy even
+                # when no hero changes floors. Ask native for the affected
+                # personal projection instead of retaining stale perception.
+                if (target == slot or was_here or is_here) and any(
+                        key in member and key in update and member[key] != update[key]
+                        for key in ("alive", "ghost_haunting")):
+                    refresh_floor = True
                 if target == slot:
                     # Global deadlines can affect this hero while their floor is
                     # unloaded. Keep their spatial and private projection intact.
                     member.update({key: value for key, value in update.items()
                                    if key in self.global_member_fields})
                     continue
-                was_here = member.get("place") == view.get("floor")
-                member.update({key: value for key, value in update.items() if key in self.public_member_fields})
+                member.update({key: value for key, value in update.items()
+                               if key in self.public_member_fields
+                               and not (is_here and key in self.local_member_fields)})
                 member["on_same_level"] = member.get("place") == view.get("floor")
                 if not member["on_same_level"]:
                     if "same_region" in member:
                         member["same_region"] = False
                     if "can_act" in member:
                         member["can_act"] = False
-                refresh_floor = refresh_floor or (was_here and not member["on_same_level"])
+                refresh_floor = refresh_floor or (was_here != member["on_same_level"])
             for member in members.values():
                 if "gold" in view:
                     member["gold"] = view["gold"]
@@ -118,7 +134,7 @@ class PlayerStreams:
                     if clock_update is not None:
                         self.deliver(receiver, clock_update, view.get("floor"), send)
                     append_snapshot(receiver, self.control, self.control.snapshot(receiver), send)
-        self._request_pending()
+        self.flush_requests()
 
     def slot(self, receiver):
         selected = self.control.selected(receiver)
@@ -223,7 +239,7 @@ class PlayerStreams:
         # Layout must precede the first map so its render can satisfy client
         # readiness. Every game-client attachment needs complete baselines,
         # including another attachment to the same native process.
-        for kind in ("version", "options", "layout"):
+        for kind in self.bootstrap_order:
             if kind in self.bootstrap:
                 receiver.append_message(json.dumps(self.bootstrap[kind]), True)
         slot = self.slot(receiver)

@@ -149,9 +149,8 @@ async function checkGeometry(page, width, height) {
     assert.deepEqual(await page.evaluate(() => window.qaInspectorEngineMessages), [], 'Inspector keys cannot reach engine input');
     await page.evaluate(() => { WebSocket.prototype.send = window.qaInspectorSocketSend; });
     await page.keyboard.press('Home');
-    assert.equal(await page.locator('.party-insp-res-row .resistance-icons').count(), 10);
-    assert.equal(await page.locator('.party-insp-res-pips, .resistance-gem, .resistance-value').count(), 0,
-        'Defense levels use repeated icons, with exact ratings available in tooltips');
+    assert.equal(await page.locator('.party-insp-res-row .resistance-symbol svg').count(), 10);
+    assert.equal(await page.locator('.party-insp-res-pips').count(), 0, 'Resistance levels should use visual gems');
     const ratings = await page.evaluate(() => window.crawl_party.state.members.find(m => m.slot === 1).resists);
     assert.equal(await page.locator('[data-resistance="Will"] .is-filled').count(), Math.min(5, Math.floor(ratings.Will / 40)));
     assert.equal(await page.locator('[data-resistance="Stlth"] .is-filled').count(), Math.min(10, Math.ceil(ratings.Stlth / 50)));

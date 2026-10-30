@@ -5,11 +5,6 @@ define(["./tileinfo-gui", "item-properties", "./shell-dash-art"], function (gui,
     // Dynamic ability variants require the authoritative snapshot tile field.
     var spells = {
         "Engraved Laser": "BOLT_OF_LIGHT",
-        "Shackle": "SHACKLE", "False Image": "FALSE_IMAGE",
-        "Mana Rupture": "GRAVITAS", "Icicle Burst": "ICICLE_BURST",
-        "Steam Barrier": "STEAM_BARRIER", "Blight": "BLIGHT",
-        "Scorpion Form": "SCORPION_FORM", "Eringya's Rootspike": "ERINGYAS_ROOTSPIKE",
-        "Olgreb's Last Mercy": "OLGREBS_LAST_MERCY", "Elemental Weapon": "ELEMENTAL_WEAPON",
         "Kindled Veins": "FLAMING_CLOUD", "Winter's Due": "FREEZE",
         "Borrowed Thunder": "SHOCK", "Scarlet Fetters": "SIGIL_OF_BINDING",
         "Stolen Sight": "ENFEEBLE",
@@ -225,27 +220,30 @@ define(["./tileinfo-gui", "item-properties", "./shell-dash-art"], function (gui,
         "Dragon Vein (Air)": "DRAGON_VEINS", "Dragon Vein (Earth)": "DRAGON_VEINS",
         "Ice Thorns": "ICE_THORNS", "Sirocco": "SIROCCO",
         "Fulsome Distillation": "FULSOME_DISTILLATION", "Evaporate": "EVAPORATE",
-        "Linked Ward": "PASSAGE_OF_GOLUBRIA", "Song of Fellowship": "FUGUE_OF_THE_FALLEN",
-        "Cleansing Mist": "REGENERATION", "Aura of Protection": "PASSAGE_OF_GOLUBRIA",
+        "Aegis Link": "PASSAGE_OF_GOLUBRIA", "Ballad of the Vanguard": "FUGUE_OF_THE_FALLEN",
+        "Sanctuary Chorus": "REGENERATION", "Aura of Protection": "PASSAGE_OF_GOLUBRIA",
         "Aura of Zeal": "FUGUE_OF_THE_FALLEN", "Aura of Rime": "FROZEN_RAMPARTS",
         "Aura of Vitality": "REGENERATION", "Aura of Sanctuary": "PASSAGE_OF_GOLUBRIA",
-        "Aura of Passage": "SWIFTNESS", "Aura of Resonance": "SPELLSPARK_SERVITOR",
         "Controlled Blink": "BLINK", "Regeneration": "REGENERATION",
         "Shroud of Golubria": "PASSAGE_OF_GOLUBRIA", "Song of Slaying": "FUGUE_OF_THE_FALLEN",
         "Scattershot": "METAL_SPLINTERS", "Cloud Cone": "CLOUD_CONE",
         "Conjure Flame": "FLAMING_CLOUD"
     };
     var abilities = {
-        "Chain Lash": "ABILITY_CHAIN_LASH", "Reel In": "ABILITY_REEL_IN",
-        "Pinning Chain": "ABILITY_PINNING_CHAIN", "Release Chain": "ABILITY_RELEASE_CHAIN",
-        "Profane Altar": "ABILITY_PROFANE_ALTAR", "Invoke Elder Rites": "ABILITY_ELDER_RITE",
+        "Weave Enchantments": "ABILITY_VELLUM_WEAVE",
+        "Stolen Dazzle": "ABILITY_IMUS_PRISMATIC_PRISM", "Borrowed Resistance": "ABILITY_WYRM_CITRINITAS",
+        "Call Redback": "ABILITY_AGRAPHEDE_SUMMON_SPIDER",
+        "Prismatic Prism": "ABILITY_IMUS_PRISMATIC_PRISM", "Spectrum": "ABILITY_IMUS_SPECTRUM", "Fragmentation": "ABILITY_IMUS_FRAGMENTATION",
+        "Infuse Essence": "ABILITY_WYRM_INFUSE", "Nigredo": "ABILITY_WYRM_NIGREDO", "Albedo": "ABILITY_WYRM_ALBEDO",
+        "Citrinitas": "ABILITY_WYRM_CITRINITAS", "Viriditas": "ABILITY_WYRM_VIRIDITAS", "Rubedo": "ABILITY_WYRM_RUBEDO",
+        "Fulsome Distillation": "ABILITY_WYRM_FULSOME_DISTILLATION", "Evaporate": "ABILITY_WYRM_EVAPORATE",
+        "Create Web": "ABILITY_AGRAPHEDE_WEB", "Convert Curing Potion": "ABILITY_AGRAPHEDE_CONVERT_POISON",
+        "Enchant Poison": "ABILITY_AGRAPHEDE_ENCHANT_POISON", "Ball of Web": "ABILITY_AGRAPHEDE_TRAP",
+        "Hornet Sting": "ABILITY_AGRAPHEDE_HORNET_STING", "Summon Spider": "ABILITY_AGRAPHEDE_SUMMON_SPIDER",
         "Delete Spell": "ABILITY_SIF_MUNA_AMNESIA", "Crab Walk": "ABILITY_HOP",
         "Molt": "SPLINTERFROST_SHELL", "Passwall": "ABILITY_ENT_PASSWALL",
         "Burialize Weapon": "ABILITY_BURIALIZE", "Release Buried Weapon": "ABILITY_RELEASE_CHAIN",
         "Charm Monsters": "CHARMING", "Invoke Smite": "SMITING", "Step Behind": "ABILITY_BLINK",
-        "Weave Enchantments": "ABILITY_VELLUM_WEAVE",
-        "Assimilate": "ABILITY_ASSIMILATE", "Retract into Shell": "SPLINTERFROST_SHELL",
-        "Shell Dash": "ABILITY_SHELL_DASH",
         "Dismiss Rite": "ABILITY_END_TRANSFORMATION",
         "Amplify Scarlet Fetters": "SIGIL_OF_BINDING", "Amplify Stolen Sight": "ENFEEBLE",
         "Spit Poison": "ABILITY_SPIT_POISON", "Golden Breath": "ABILITY_GOLDEN_BREATH",
@@ -329,7 +327,7 @@ define(["./tileinfo-gui", "item-properties", "./shell-dash-art"], function (gui,
         "Fiery Armour": "ABILITY_IGNIS_FIERY_ARMOUR", "Foxfire Swarm": "ABILITY_IGNIS_FOXFIRE",
         "Rising Flame": "ABILITY_IGNIS_RISING_FLAME", "Quick Charge": "ABILITY_SIF_MUNA_CHANNEL",
         "Device Surge": "ABILITY_OKAWARU_FINESSE", "Capacitor Overcharge": "ABILITY_QAZLAL_ELEMENTAL_FORCE",
-        "Prayer of Fellowship": "ABILITY_ELYVILON_HEAL_SELF", "Lay on Hands & Intervene": "ABILITY_ELYVILON_AURA_OF_VIGOUR",
+        "Pantheon Convergence": "ABILITY_OKAWARU_HEROISM", "Lay on Hands & Intervene": "ABILITY_ELYVILON_AURA_OF_VIGOUR",
         "Aura of Crusader's Zeal": "ABILITY_TSO_CLEANSING_FLAME", "Aura of Vitality & Warding": "ABILITY_TSO_DIVINE_SHIELD",
         "Renounce Religion": "ABILITY_RENOUNCE_RELIGION", "Convert to Beogh": "ABILITY_CONVERT_TO_BEOGH",
         "Build terrain": "ABILITY_WIZ_BUILD_TERRAIN", "Set terrain to build": "ABILITY_WIZ_SET_TERRAIN",
@@ -352,13 +350,10 @@ define(["./tileinfo-gui", "item-properties", "./shell-dash-art"], function (gui,
 
     function resolve(power, kind) {
         if (!power || (kind !== "spell" && kind !== "ability")) return null;
-        var name = typeof power.name === "string" ? power.name.replace(/[‘’]/g, "'") : "";
-        // Compatibility with servers predating the dedicated native shell tile.
-        if (kind === "ability" && name === "Shell Dash" && power.tile === gui.ABILITY_JUMP)
-            return gui.ABILITY_SHELL_DASH;
         if (Number.isInteger(power.tile) && allowed[kind].has(power.tile)
             && gui.get_tile_info(power.tile)) return power.tile;
         var catalog = kind === "spell" ? spells : abilities;
+        var name = typeof power.name === "string" ? power.name.replace(/[‘’]/g, "'") : "";
         if (!Object.prototype.hasOwnProperty.call(catalog, name)) return null;
         var index = gui[catalog[name]];
         return Number.isInteger(index) && gui.get_tile_info(index) ? index : null;

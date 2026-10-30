@@ -1,7 +1,0 @@
-{
-  "passed": false,
-  "checks": [
-    "direction-pad-feedback"
-  ],
-  "production_mutation": false
-}

@@ -118,8 +118,6 @@ namespace quiver
 
     bool is_autofight_combat_ability(ability_type ability);
     bool is_autofight_combat_spell(spell_type spell);
-    // Offensive spells whose native quiver targeter supports a quick cast.
-    bool can_quick_cast(spell_type spell);
 
     bool toss_validate_item(int selected, string *err=nullptr);
     shared_ptr<action> find_ammo_action();

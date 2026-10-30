@@ -1,4 +1,0 @@
-{"type":"party_comp","player_count":1,"friendly_fire":true,"seed":"2026102701","place":"D:1","party_spec":"Route_caster:Deep Elf/Earth Elementalist","members":[{"slot":0,"name":"Route_caster","species":"Deep Elf","job":"Earth Elementalist","weapon":"","xl":1}]}
-{"type":"cool_item","item_name":"a +2 robe","category":"ego_gear","finder_name":"Route_caster","finder_species":"Deep Elf","finder_job":"Earth Elementalist","slot":0,"place":"D:1","value_score":120}
-{"type":"cool_item","item_name":"a +2 devious dagger","category":"ego_gear","finder_name":"Route_caster","finder_species":"Deep Elf","finder_job":"Earth Elementalist","slot":0,"place":"D:1","value_score":120}
-{"type":"ghost","hero_name":"Route_caster","slot":0,"species":"Deep Elf","job":"Earth Elementalist","xl":20,"god":"Vehumet","place":"Tomb:1","killer":"guardian sphinx (10)","hp_max":122,"ac":8,"ev":2,"sh":0,"weapon":"+2 devious dagger","down_type":"permadeath_ghost","bones_saved":true}

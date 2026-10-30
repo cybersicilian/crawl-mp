@@ -131,7 +131,6 @@ static map<enchant_type, monster_info_flags> trivial_ench_mb_mappings = {
     { ENCH_ANGUISH,         MB_ANGUISH },
     { ENCH_TP,              MB_TELEPORTING },
     { ENCH_BOUND,           MB_BOUND },
-    { ENCH_SHACKLE,         MB_BOUND },
     { ENCH_BULLSEYE_TARGET, MB_BULLSEYE_TARGET },
     { ENCH_VITRIFIED,       MB_VITRIFIED },
     { ENCH_CURSE_OF_AGONY,  MB_CURSE_OF_AGONY },
@@ -560,8 +559,6 @@ monster_info::monster_info(const monster* m, int milev)
             if (_is_public_key(entry.first))
                 props[entry.first] = entry.second;
     }
-    if (type == MONS_FALSE_IMAGE)
-        props["false_image_owner"] = static_cast<int>(m->summoner);
 
     // Translate references to tentacles into just their locations
     if (mons_is_tentacle_or_tentacle_segment(type))

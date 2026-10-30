@@ -1,7 +1,7 @@
 define(["jquery", "./workflow-actions", "./equipment-memory-ui", "./frame-update"],
 function ($, actions, memoryUI, frameUpdate) {
     "use strict";
-    var panelExpanded = Object.create(null), focusToRestore = "";
+    var expanded = Object.create(null), focusToRestore = "";
     function isolate(event) {
         if (event.key !== "Tab") event.stopPropagation();
     }
@@ -12,17 +12,11 @@ function ($, actions, memoryUI, frameUpdate) {
         var controlled = hero.slot === actions.controlledSlot();
         var signature = JSON.stringify([data, controlled, actions.reason(hero), hero.abilities]);
         if (previous.attr("data-signature") === signature) return;
-        var panelOpen = previous.length ? previous.prop("open") : panelExpanded[hero.slot] !== false;
+        var digestionOpen = previous.length ? previous.find("details").prop("open") : expanded[hero.slot];
         var focusId = previous[0] && previous[0].contains(document.activeElement) ? document.activeElement.id : focusToRestore;
-        var root = $("<details class='assimilation-panel' aria-label='Oozle memory'></details>")
-            .prop("open", panelOpen).attr("data-signature", signature)
-            .on("click contextmenu keydown keypress keyup", isolate)
-            .on("toggle", function () {
-                panelExpanded[hero.slot] = this.open;
-                $(document).trigger("hud_workspace_changed");
-            });
-        var heading = $("<summary><strong>Assimilation</strong></summary>")
-            .attr("id", "assimilation_toggle_" + hero.slot)
+        var root = $("<section class='assimilation-panel' aria-label='Oozle memory'></section>")
+            .attr("data-signature", signature).on("click contextmenu keydown keypress keyup", isolate);
+        var heading = $("<header><strong>Assimilation</strong></header>")
             .append($("<span></span>").text(data.used + " / " + data.capacity));
         root.append(heading);
         if (Number.isFinite(data.numeric_percent)) root.append($("<p class='assimilation-quality'></p>")
@@ -46,10 +40,27 @@ function ($, actions, memoryUI, frameUpdate) {
             var ability = (hero.abilities || []).find(function (entry) { return entry.name === "Assimilate"; });
             var blocked = ability ? actions.powerReason(hero, ability, "ability") : "Assimilation is unavailable.";
             root.append($("<button type='button' class='assimilation-start'>Assimilate an item…</button>")
-                .attr({ id: "assimilation_start_" + hero.slot, title: blocked || "Choose an inventory item. Five owner turns; random empty slot, or oldest memory replaced when full." })
+                .attr({ id: "assimilation_start_" + hero.slot, title: blocked || "Choose an inventory item. Five owner turns; full extracted bundle; oldest memory replaced." })
                 .prop("disabled", Boolean(blocked)).on("click", function () { actions.usePower(hero, ability, "ability"); }));
         }
-        root.append($("<p class='assimilation-rule'></p>").text("Assimilate to fill a random empty slot. When full, the oldest memory is replaced."));
+        var digesting = Array.isArray(data.digesting) ? data.digesting : [];
+        if (digesting.length) {
+            var details = $("<details class='assimilation-digestion'></details>").prop("open", Boolean(digestionOpen))
+                .on("toggle", function () { expanded[hero.slot] = this.open; });
+            details.append($("<summary></summary>").attr("id", "assimilation_digestion_" + hero.slot)
+                .text("Digesting equipment · " + digesting.length));
+            digesting.forEach(function (item) {
+                var line = $("<div></div>").append($("<span></span>").text(item.name));
+                line.append($("<small></small>").text(item.protected ? "Protected" : Math.ceil(item.remaining_aut / 10) + " exposure turns left"));
+                if (Number.isFinite(item.weapon_damage_percent)) line.append($("<small class='assimilation-weapon-wear'></small>")
+                    .text(item.weapon_damage_percent + "% base damage · −" + item.weapon_penalty + " accuracy"));
+                if (!item.protected) line.append($("<progress max='100'></progress>")
+                    .attr({ value: item.progress, "aria-label": "Digestion of " + item.name }));
+                details.append(line);
+            });
+            root.append(details);
+        }
+        root.append($("<p class='assimilation-rule'></p>").text("One slot holds the whole extracted bundle. Oldest memory is replaced first."));
         if (previous.length) previous.replaceWith(root);
         else card.children(".party-card-sections").length ? root.insertBefore(card.children(".party-card-sections")) : card.append(root);
         if (focusId) { var target = document.getElementById(focusId); if (target) { target.focus({ preventScroll: true }); focusToRestore = ""; } }
@@ -70,16 +81,9 @@ function ($, actions, memoryUI, frameUpdate) {
             .on("party_cards_rebuilding.assimilationPanel", function () {
                 var target = document.activeElement;
                 if ($(target).closest(".assimilation-panel").length) focusToRestore = target.id;
-                $("#party_hud_members > .party-card").each(function () {
-                    var card = $(this), panel = card.children(".assimilation-panel");
-                    if (!panel.length) return;
-                    var slot = card.attr("data-party-slot");
-                    panelExpanded[slot] = panel.prop("open");
-                });
             })
             .on("game_cleanup.assimilationPanel", function () {
-                panelExpanded = Object.create(null);
-                focusToRestore = ""; refresh.cancel();
+                expanded = Object.create(null); focusToRestore = ""; refresh.cancel();
             });
         mount();
     }

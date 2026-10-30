@@ -84,6 +84,12 @@ define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "rc
                         window.pending_auto_join_party = true;
                     });
             }
+            if (!state.current_user || data.username !== state.current_user)
+            {
+                var watch = $(make_watch_link(data)).addClass("coop-watch-table-btn").text("Watch");
+                watch.on("click", function () { window.pending_auto_join_party = false; });
+                $coop_btn = $("<span class='live-expedition-actions'></span>").append($coop_btn, watch);
+            }
             set("coop_join", $coop_btn);
             entry.find(".game_id").text(catalogue.label(data.game_id));
             set("xl", data.xl);

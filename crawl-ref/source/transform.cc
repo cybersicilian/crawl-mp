@@ -1554,22 +1554,6 @@ public:
     }
 };
 
-class FormScorpion : public Form
-{
-private:
-    FormScorpion() : Form(transformation::scorpion) { }
-    DISALLOW_COPY_AND_ASSIGN(FormScorpion);
-public:
-    static const FormScorpion &instance() { static FormScorpion inst; return inst; }
-
-    int get_ac_bonus(int skill = -1) const override
-    {
-        const int power = you.props.exists("scorpion_form_power")
-                            ? you.props["scorpion_form_power"].get_int() : 0;
-        return Form::get_ac_bonus(skill) + 22 * max(0, power);
-    }
-};
-
 static const Form* forms[] =
 {
     &FormNone::instance(),
@@ -1620,7 +1604,6 @@ static const Form* forms[] =
     &FormJademantle::instance(),
     &FormHypnogecko::instance(),
     &FormMistmane::instance(),
-    &FormScorpion::instance(),
 };
 
 const Form* get_form(transformation xform)

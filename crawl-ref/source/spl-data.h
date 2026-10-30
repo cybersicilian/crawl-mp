@@ -30,38 +30,6 @@ struct spell_desc
 static const struct spell_desc spelldata[] =
 {
 
-// Curated fork spell ports; IDs are appended for save compatibility.
-{ SPELL_SHACKLE, "Shackle", spschool::hexes,
-  spflag::dir_or_target | spflag::not_self | spflag::WL_check,
-  2, 200, LOS_RADIUS, LOS_RADIUS, 2, TILEG_SHACKLE },
-{ SPELL_FALSE_IMAGE, "False Image", spschool::summoning | spschool::hexes,
-  spflag::target | spflag::not_self | spflag::aim_at_space,
-  3, 100, 2, 2, 2, TILEG_FALSE_IMAGE },
-{ SPELL_MANA_RUPTURE, "Mana Rupture", spschool::conjuration | spschool::hexes,
-  spflag::dir_or_target | spflag::not_self | spflag::needs_tracer | spflag::chaotic,
-  7, 200, 3, 3, 7, TILEG_GRAVITAS },
-{ SPELL_ICICLE_BURST, "Icicle Burst", spschool::conjuration | spschool::ice,
-  spflag::dir_or_target | spflag::not_self | spflag::needs_tracer,
-  7, 200, 5, 5, 9, TILEG_ICICLE_BURST },
-{ SPELL_STEAM_BARRIER, "Steam Barrier", spschool::auramancy | spschool::fire,
-  spflag::selfench | spflag::no_ghost,
-  5, 200, -1, -1, 7, TILEG_STEAM_BARRIER },
-{ SPELL_BLIGHT, "Blight", spschool::necromancy | spschool::alchemy,
-  spflag::dir_or_target | spflag::unholy | spflag::needs_tracer,
-  7, 150, 4, 4, 8, TILEG_BLIGHT },
-{ SPELL_SCORPION_FORM, "Scorpion Form", spschool::alchemy,
-  spflag::helpful | spflag::chaotic | spflag::no_ghost,
-  7, 200, -1, -1, 5, TILEG_SCORPION_FORM },
-{ SPELL_ERINGYAS_ROOTSPIKE, "Eringya's Rootspike", spschool::alchemy | spschool::conjuration,
-  spflag::target | spflag::not_self,
-  5, 200, 3, 6, 2, TILEG_ERINGYAS_ROOTSPIKE },
-{ SPELL_OLGREBS_LAST_MERCY, "Olgreb's Last Mercy", spschool::alchemy,
-  spflag::target | spflag::not_self,
-  7, 200, LOS_RADIUS, LOS_RADIUS, 5, TILEG_OLGREBS_LAST_MERCY },
-{ SPELL_ELEMENTAL_WEAPON, "Elemental Weapon", spschool::auramancy,
-  spflag::helpful | spflag::no_ghost,
-  3, 200, -1, -1, 3, TILEG_ELEMENTAL_WEAPON },
-
 {
     SPELL_AUTOMATON_LASER, "Engraved Laser",
     spschool::conjuration,
@@ -4884,8 +4852,8 @@ static const struct spell_desc spelldata[] =
 },
 
 {
-    SPELL_AEGIS_LINK, "Linked Ward",
-    spschool::translocation | spschool::auramancy,
+    SPELL_AEGIS_LINK, "Aegis Link",
+    spschool::translocation | spschool::hexes,
     spflag::helpful | spflag::selfench,
     4,
     150,
@@ -4895,8 +4863,8 @@ static const struct spell_desc spelldata[] =
 },
 
 {
-    SPELL_BALLAD_OF_THE_VANGUARD, "Song of Fellowship",
-    spschool::hexes | spschool::auramancy,
+    SPELL_BALLAD_OF_THE_VANGUARD, "Ballad of the Vanguard",
+    spschool::hexes | spschool::translocation,
     spflag::helpful | spflag::selfench,
     4,
     150,
@@ -4906,8 +4874,8 @@ static const struct spell_desc spelldata[] =
 },
 
 {
-    SPELL_SANCTUARY_CHORUS, "Cleansing Mist",
-    spschool::auramancy | spschool::alchemy,
+    SPELL_SANCTUARY_CHORUS, "Sanctuary Chorus",
+    spschool::translocation | spschool::alchemy,
     spflag::helpful | spflag::selfench | spflag::recovery,
     5,
     200,

@@ -207,30 +207,51 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
         var res = m.resists || {};
         var res_defs = help.resistances.map(function (definition) {
             return { key: definition.key, label: definition.title, val: res[definition.key],
-                bool: definition.bool, desc: definition.body,
-                icon: definition.icon, shortLabel: definition.label, levels: help.levels(definition, res[definition.key]) };
+                max: definition.max, bool: definition.bool, desc: definition.body,
+                icon: definition.icon, shortLabel: definition.label };
         });
         var $resGrid = $("<div class='party-insp-res-grid'></div>");
         for (var ri = 0; ri < res_defs.length; ++ri)
         {
             var rd = res_defs[ri];
-            var known = rd.levels !== null;
+            var known = rd.val !== undefined && rd.val !== null;
             var value = known ? Number(rd.val) : 0;
-            var meta = !known ? "Current value unavailable"
-                : rd.bool ? (value > 0 ? "Active" : "Inactive") : "Current rating: " + value;
+            // Match native output.cc scales; Will and Stealth arrive as raw ratings.
+            var levels = rd.key === "Will" ? Math.floor(Math.abs(value) / 40)
+                : rd.key === "Stlth" ? Math.ceil(Math.max(0, value) / 50) : Math.abs(value);
+            var meta = rd.bool ? (value > 0 ? "Active" : "Inactive") : "Current rating: " + value;
             if (rd.key === "rPois" && value >= 3) meta += " · Immune to poison";
             var $rRow = $("<div class='party-insp-res-row'></div>")
                 .attr("data-resistance", rd.key)
                 .attr("data-tip-title", rd.label)
                 .attr("data-tip-body", rd.desc)
                 .attr("data-tip-meta", meta)
-                .attr({ tabindex: 0, role: "img", "aria-label": rd.label + ": " + (known ? value : "Unavailable") + ". " + rd.desc });
+                .attr({ tabindex: 0, role: "img", "aria-label": rd.label + ": " + model.display(rd.val) + ". " + rd.desc });
             var $label = $("<span class='party-insp-res-lbl'></span>")
-                .text(rd.shortLabel);
-            $rRow.append($label, properties.levelIcons(rd.icon, rd.levels));
+                .append($("<span class='resistance-symbol'></span>").append(properties.icon(rd.icon)),
+                    $("<span></span>").text(rd.shortLabel));
+            var maximum = rd.key === "rPois" && value >= 3 ? 3 : rd.max;
+            var $meter = $("<span class='resistance-meter' aria-hidden='true'></span>").toggleClass("is-negative", value < 0);
+            for (var gem = 0; known && gem < maximum; gem++)
+                $meter.append($("<span class='resistance-gem'></span>")
+                    .toggleClass("is-filled", gem < Math.min(maximum, levels))
+                    .toggleClass("is-negative", value < 0 && gem < levels));
+            $meter.append($("<span class='resistance-value'></span>").text(known ? value : "Unavailable"));
+            $rRow.append($label, $meter);
             $resGrid.append($rRow);
         }
         $panelOverview.append($resGrid);
+
+        var banes = statusModel.banes(m);
+        $panelOverview.append($("<div class='party-insp-section-title'>Banes</div>"));
+        var $baneTable = $("<table class='party-insp-table party-insp-banes'><thead><tr><th>Bane</th><th>Recovery</th><th>Effect</th></tr></thead><tbody></tbody></table>");
+        banes.entries.forEach(function (bane) {
+            $baneTable.find("tbody").append($("<tr></tr>").append($("<td></td>").append(icons.effectArt(bane), document.createTextNode(bane.name)),
+                $("<td></td>").text(bane.recovery), $("<td></td>").text(bane.description)));
+        });
+        if (!banes.entries.length) $baneTable.find("tbody").append($("<tr></tr>")
+            .append($("<td colspan='3'></td>").text(banes.known ? "No active banes." : "Bane information unavailable.")));
+        $panelOverview.append($baneTable);
 
         // Active Buffs & Status Effects
         $panelOverview.append($("<div class='party-insp-section-title'>Active Buffs &amp; Status Effects</div>"));

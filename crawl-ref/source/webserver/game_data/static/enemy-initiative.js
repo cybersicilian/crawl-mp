@@ -199,7 +199,6 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
     })
         .on("nearby_creatures_changed.enemyInitiative", renderFrame)
         .on("map_knowledge_changed.enemyInitiative dungeon_tiles_changed.enemyInitiative", function (event, changed) { portraits.changed(changed); })
-        .on("texture_pack_changed.enemyInitiative", function () { portraits.changed(); })
         .on("hud_workspace_changed.enemyInitiative", refresh)
         .on("game_cleanup.enemyInitiative", function () {
             clearTarget(); renderFrame.cancel(); refresh.cancel(); portraits.clear(); nodes.clear(); if (observer) observer.disconnect(); observer = null;

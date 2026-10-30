@@ -139,7 +139,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
     var lastMinimapWidth = 0;
     function update() {
         var state = party(), member = current();
-        if (!state || !member) return;
+        if (!state || !member || !document.getElementById("workflow_compact_btn")) return;
         var compact = compactChoice === null ? window.innerHeight <= 900 && state.members.length > 2 : compactChoice;
         document.body.classList.toggle("workflow-compact-roster", compact);
         var compactLabel = compact ? "Show details" : "Compact roster";

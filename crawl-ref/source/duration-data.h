@@ -7,7 +7,6 @@
 #include "areas.h"
 #include "act-iter.h"
 #include "cloud.h"
-#include "elemental-weapon.h"
 #include "item-name.h"
 #include "mon-death.h"
 #include "god-abil.h"
@@ -293,10 +292,6 @@ static const duration_def duration_data[] =
       "ice-armoured", "icy armour",
       "You are protected by a layer of icy armour.", D_DISPELLABLE | D_EXPIRES,
       {}, 6},
-    { DUR_STEAM_BARRIER, LIGHTGREY, "Steam", "steam-shrouded", "steam barrier",
-      "You are protected by a barrier of steam; your spell power and cold resistance are reduced.",
-      D_DISPELLABLE | D_EXPIRES,
-      {{ "Your steam barrier dissipates.", [](){ you.redraw_armour_class = true; } }}, 6},
     { DUR_FIERY_ARMOUR,
       0, "",
       "fiery-armoured", "fiery armour",
@@ -938,21 +933,21 @@ static const duration_def duration_data[] =
       "You fight and cast spells in harmonious concord with nearby allies.", D_DISPELLABLE | D_EXPIRES,
       {{ "Your sense of martial concord subsides." },
        { "Your sense of martial concord is fading.", 1 }}, 6},
-    { DUR_AEGIS_LINK, CYAN, "LinkedWard",
-      "linked by a ward", "linked ward",
+    { DUR_AEGIS_LINK, CYAN, "AegisLink",
+      "aegis-linked", "aegis link",
       "Your defences and vitality are linked with your party (+AC, +SH, shared damage).", D_DISPELLABLE | D_EXPIRES,
       {{ "Your aegis link dissolves." },
        { "Your aegis link begins to fray.", 1 }}, 6},
-    { DUR_BALLAD_VANGUARD, LIGHTRED, "Fellowship",
-      "singing with companions", "song of fellowship",
-      "Your battle song steadies your hands and steps (+4 Slay, +3 EV).", D_DISPELLABLE | D_EXPIRES,
-      {{ "Your companions' battle song fades into silence." },
-       { "Your companions' battle song grows faint.", 1 }}, 6},
-    { DUR_SANCTUARY_CHORUS, WHITE, "MistWard",
-      "sheltered by cleansing mist", "cleansing mist",
-      "An alchemical mist shelters you (+2 AC, regeneration, rN+).", D_DISPELLABLE | D_EXPIRES,
-      {{ "The cleansing mist disperses." },
-       { "The cleansing mist begins to thin.", 1 }}, 6},
+    { DUR_BALLAD_VANGUARD, LIGHTRED, "Vanguard",
+      "inspired by the Vanguard", "ballad of the vanguard",
+      "You are inspired by the Ballad of the Vanguard (+Slay, +EV, cleaving strikes).", D_DISPELLABLE | D_EXPIRES,
+      {{ "The Ballad of the Vanguard fades into silence." },
+       { "The strains of the Vanguard ballad grow faint.", 1 }}, 6},
+    { DUR_SANCTUARY_CHORUS, WHITE, "Sanctuary",
+      "warded by sanctuary", "sanctuary chorus",
+      "You are warded by a Sanctuary Chorus (+AC, +Regen, rN+, torment ward).", D_DISPELLABLE | D_EXPIRES,
+      {{ "The consecrated Sanctuary Chorus fades away." },
+       { "The Sanctuary Chorus begins to subside.", 1 }}, 6},
     { DUR_PALADIN_ZEAL, 0, "",
       "projecting an aura", "active aura",
       "You are projecting an active aura stance to yourself and nearby allies.", D_DISPELLABLE | D_EXPIRES,
@@ -999,9 +994,6 @@ static const duration_def duration_data[] =
     { DUR_ELDER_CHAOS, LIGHTMAGENTA, "ChaosTouch", "chaos touch", "chaos touch",
       "Your selected weapon carries temporary chaos.", D_EXPIRES,
       {{ "Chaos leaves your weapon." }}},
-    { DUR_ELEMENTAL_WEAPON, LIGHTBLUE, "ElemWpn", "elemental weapon", "elemental weapon",
-      "Your weapon resonates with the elements of spells you cast.", D_DISPELLABLE | D_EXPIRES,
-      {{ "Your weapon's elemental attunement ends.", elemental_weapon::end }}},
 
 #if TAG_MAJOR_VERSION == 34
     // And removed ones

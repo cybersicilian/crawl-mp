@@ -1249,6 +1249,9 @@ potion of mutation
 A potion which mutates the drinker, removing several mutations then
 granting a few random mutations, which are likely (but not guaranteed) to be
 beneficial.
+
+It can strengthen innate mutations up to their normal limits. Only the added
+levels can be removed; innate abilities are preserved.
 %%%%
 potion of resistance
 
@@ -1990,27 +1993,21 @@ A warm, rose-tinted draught that weaves a vital tether between the drinker and
 every living companion on the floor. While bonded, half of any healing received
 by one bonded party member overflows to the others, and forty percent of heavy
 blows are dispersed across healthy bonded allies.
-
-Available only in multiplayer.
 %%%%
 potion of soul ambrosia
 
-A golden distillate of ambrosia, bound to the souls of a travelling company. Drinking it suffuses the
+A luminous golden nectar distilled for fellowship. Drinking it suffuses the
 drinker and every living companion in sight with rapid health and magic
 regeneration without inducing confusion. If any party member is haunting the
 floor as a downed ghost, the draught's excess life-force immediately restores
 them to flesh and blood.
-
-Available only in multiplayer.
 %%%%
 potion of concord
 
-An amber draught that lends an uncanny awareness of nearby companions. It
+A harmonic elixir that resonates with the presence of comrades-in-arms. It
 grants the drinker and all visible companions a chorus of martial and arcane
 harmony, boosting slaying, evasion, and spellcasting power in proportion to the
 number of living allies within sight.
-
-Available only in multiplayer.
 %%%%
 potion of transfusion
 
@@ -2018,8 +2015,6 @@ A volatile crimson-and-azure draught that equalizes the vital and magical
 reserves of the entire party on the current floor, raising everyone to at least
 the party's average health and magic percentages before surging with a
 protective ward and fresh vitality.
-
-Available only in multiplayer.
 %%%%
 scroll of soul recall
 
@@ -2028,8 +2023,6 @@ lifeline across the threshold of death, immediately resurrecting any downed
 party ghosts at half health and magic without draining the survivors' vitality.
 If all companions are already alive, it instead recalls separated allies to the
 reader's side and envelops the party in a brief sanctuary ward.
-
-Available only in multiplayer.
 %%%%
 scroll of rallying
 
@@ -2037,8 +2030,6 @@ A martial proclamation that rings like a clarion horn when read aloud. All
 living companions on the floor are freed from constriction, fear, sleep, and
 mesmerisation, pulled into formation around the reader, and bolstered with
 temporary might, elemental resistance, and missile deflection.
-
-Available only in multiplayer.
 %%%%
 scroll of phase swap
 
@@ -2046,27 +2037,21 @@ A translocation scroll tuned to sympathetic resonance between allies. Reading it
 folds space to swap the reader's position with a targeted or most endangered
 companion on the floor, breaking constriction on both and granting each a brief
 surge of swiftness and a protective phase shield.
-
-Available only in multiplayer.
 %%%%
 scroll of shared vigour
 
-A scroll whose interwoven sigils draw on a company's strongest reserves. Reading it elevates every living party
+A scroll of vital and arcane communion. Reading it elevates every living party
 member on the floor to match the highest health and magic percentages in the
 party, cleanses debilitating ailments, restores drained attributes, and grants
-rapid health and magic regeneration.
-
-Available only in multiplayer.
+sustained regeneration and divine vigour.
 %%%%
 aegis standard
 
 A battle-scarred iron banner etched with interlocking runes of fellowship.
 Evoking it plants a radiant standard of valour that rallies the party, granting
-all living companions in sight armour, shield protection, and willpower
+all living companions in sight heroism, bonus shield protection, and willpower
 while redirecting a portion of the damage they suffer to the standard-bearer.
 Recharges with experience.
-
-Available only in multiplayer.
 %%%%
 astral beacon
 
@@ -2074,8 +2059,6 @@ A crystal lantern housing a tether of starlight. Evoking it bathes the party in
 astral radiance, restoring health and magic to all visible companions and
 calling any downed party ghosts back across the threshold of death. Recharges
 with experience.
-
-Available only in multiplayer.
 %%%%
 twin-spark conduit
 
@@ -2083,17 +2066,13 @@ A two-pronged copper resonator that hums in the presence of allies. Evoking it
 arcs a high-voltage chain of lightning between the evoker and every living
 companion in sight, electrocuting and dazzling hostile creatures caught along
 the ley-lines or adjacent to the party. Recharges with experience.
-
-Available only in multiplayer.
 %%%%
 amulet of the vanguard
 
-An iron gorget marked with the names of its former bearers. While worn in a co-op party, it
+A heavy gorget-amulet of star-forged iron. While worn in a co-op party, it
 draws thirty percent of the damage suffered by nearby companions onto the
 wearer, where it is mitigated by the wearer's own armour class before taking
 effect.
-
-Available only in multiplayer.
 %%%%
 ring of camaraderie
 
@@ -2101,22 +2080,14 @@ A braided band of silver and electrum that rewards fighting side-by-side. It
 grants the wearer bonus evasion and slaying for each living companion within
 three paces, and further empowers melee and ranged strikes against foes that
 are flanked by an ally.
-
-Available only in multiplayer.
 %%%%
 horn of the Vanguard
 
 A curved war-horn of rune-etched brass and mammoth ivory. Sounding it unleashes
 a concussive shockwave that batters and dazes adjacent foes while inspiring the
-evoker and all companions in sight with slaying, evasion and swiftness.
+evoker and all companions in sight with cleaving strikes and swiftness.
 Recharges with experience.
-
-Available only in multiplayer.
 %%%%
-clay rune of Zot
-
-A small tablet of hard-baked clay, worn smooth at the edges. The sign of Zot
-is pressed deep into its surface.
 %%%%
 ancient crate
 
@@ -2127,4 +2098,3 @@ dusty tome
 
 An old tome recovered with an ancient crate. Its owner can decipher it upon
 reaching experience level 3, beginning the study needed to open the crate.
-%%%%

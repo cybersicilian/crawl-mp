@@ -20,7 +20,6 @@ from webtiles import config, connection, game_data_handler, inotify, terminal, u
 from webtiles.chat_tags import chat_payload
 from webtiles.party_control import PartyControl
 from webtiles.activity_pump import ActivityPump
-from webtiles.ai_party import AIParty
 from webtiles.player_stream import PlayerStreams
 from webtiles.tile_presence import TilePresence
 from webtiles.state_transport import append_snapshot
@@ -37,6 +36,16 @@ try:
     from typing import Dict, Set, Tuple, Any
 except:
     pass
+
+def _send_input_error(source, request, message):
+    if source is None:
+        return
+    # Controls must complete on the result channel their client is awaiting.
+    if request.get("msg") == "record_save":
+        source.send_message("record_save_result", ok=False, error=message)
+    else:
+        source.send_message("game_action_error", message=message)
+
 
 last_game_id = 0
 
@@ -148,8 +157,6 @@ class CrawlProcessHandlerBase(object):
                     self.party_members[u] = int(s_idx)
             self.party_slot_specs = dict(spec_info.get("slot_specs", {}))
         self.party_control = PartyControl(username, self.party_members)
-        self.party_control.ai_slots = {int(slot) for slot in (spec_info or {}).get("ai_slots", [])
-                                       if str(slot) in {"1", "2", "3"}}
         self.tile_presence = TilePresence()
         self.player_streams = PlayerStreams(self.party_control, self.tile_presence, self._request_native_view)
 
@@ -159,19 +166,21 @@ class CrawlProcessHandlerBase(object):
 
         self.end_callback = None
         self._receivers = set()
+        self.party_control.connected_slots = lambda: {
+            self.party_control.reservation(receiver) for receiver in self._receivers
+            if not getattr(receiver, "client_closed", False)}
         self.last_activity_time = time.time()
         self.idle_checker = PeriodicCallback(self.check_idle, 10000)
         self.idle_checker.start()
         self.activity_pump = ActivityPump(self.party_control, self.player_streams,
-            lambda: {self.party_control.selected(receiver) for receiver in self._receivers} | self.party_control.ai_slots,
+            lambda: {self.party_control.selected(receiver) for receiver in self._receivers},
             self._step_native_activity, probe=self._probe_native_activity,
             restore_prompt=self._restore_native_prompt,
-            diagnostic=self._report_input_lifecycle)
+            diagnostic=self._report_input_lifecycle,
+            cancel_prompt=self._cancel_abandoned_prompt,
+            prompt_grace=config.get("reconnect_grace_period"))
         self.activity_timer = PeriodicCallback(self.activity_pump.tick, ActivityPump.tick_interval_ms)
         self.activity_timer.start()
-        self.ai_party = AIParty(self, self.party_control.ai_slots)
-        self.ai_timer = PeriodicCallback(self.ai_party.tick, 200)
-        self.ai_timer.start()
         self._was_idle = False
         self.last_watcher_join = 0
         self.receiving_direct_milestones = False
@@ -221,12 +230,14 @@ class CrawlProcessHandlerBase(object):
         self.send_to_all("chat", content=chat_msg)
         return slot
 
-    def publish_ai_status(self):
+    def publish_party_status(self):
         for receiver in self._receivers:
             if self.party_control.state or self.party_control.views:
                 append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
 
     def _request_native_view(self, slot):
+        if getattr(self, "activity_pump", None) and self.activity_pump.inflight:
+            return False
         if not getattr(self, "conn", None) or not self.conn.open:
             return False
         if slot >= 1:
@@ -292,13 +303,24 @@ class CrawlProcessHandlerBase(object):
         self.conn.send_message(utf8(json_encode(packet)))
         return True
 
+
     def _probe_native_activity(self, request_id):
         if self.conn and self.conn.open:
             self.conn.send_message(utf8(json_encode(dict(msg="party_activity_probe", request_id=request_id))))
 
+
     def _restore_native_prompt(self):
         if self.conn and self.conn.open:
             self.conn.send_message(utf8(json_encode(dict(msg="spectator_joined"))))
+
+    def _cancel_abandoned_prompt(self, slot, request_id, input_mode):
+        if not self.conn or not self.conn.open:
+            return False
+        # MORE acknowledges information; all decision prompts receive Escape.
+        # Native rejects this reply if its token/owner no longer has a prompt.
+        self.conn.send_message(utf8(json_encode(dict(msg="key", keycode=32 if input_mode == 5 else 27,
+            player_id=slot, prompt_activity_id=request_id))))
+        return True
 
     def _report_input_lifecycle(self, event):
         log = self.logger.warning if event["event"] in {"native_unknown", "native_unresponsive"} else self.logger.info
@@ -311,13 +333,6 @@ class CrawlProcessHandlerBase(object):
             if (envelope.get("view") is True
                     and payload.get("msg") in {"party_activity_ready", "party_activity_status"}):
                 return
-            if getattr(self, "ai_party", None):
-                self.ai_party.ingest(envelope.get("slot"), payload, envelope.get("view") is True)
-                if (envelope.get("view") is not True and payload.get("msg") == "input_mode"
-                        and payload.get("mode", 0) > 1 and self.activity_pump.owner in self.party_control.ai_slots):
-                    self.activity_pump.prompt_boundary()
-            if payload.get("msg") in {"ai_state", "ai_prompt_result"}:
-                return  # Semantic observations stay server-side.
             if payload.get("msg") == "party_activity_status" and getattr(self, "activity_pump", None):
                 pump = self.activity_pump
                 if (pump.inflight and type(payload.get("activity_id")) is int
@@ -334,17 +349,19 @@ class CrawlProcessHandlerBase(object):
                                 pump._view(owner).get("floor"), send)
                 self.activity_pump.recover(payload)
                 self.activity_pump.tick()
+                CrawlProcessHandlerBase.publish_party_status(self)
                 return
             if (envelope.get("view") is not True and getattr(self, "activity_pump", None)
                     and (payload.get("msg") in {"ui-push", "menu", "init_input"}
                          or payload.get("msg") == "input_mode" and payload.get("mode", 0) > 1)):
                 self.activity_pump.prompt_boundary()
-            if payload.get("msg") == "party_activity_ready" and getattr(self, "activity_pump", None):
+                CrawlProcessHandlerBase.publish_party_status(self)
+            if (envelope.get("view") is not True and payload.get("msg") == "party_activity_ready"
+                    and getattr(self, "activity_pump", None)):
                 request = payload.get("activity_id")
                 if type(request) is int and self.activity_pump.command_boundary(request):
-                    # Resume automation at its real completion, after the rest
-                    # of this socket batch refreshes personal eligibility. Yield
-                    # to the loop so queued stop/input events can run as well.
+                    CrawlProcessHandlerBase.publish_party_status(self)
+                    # Refresh personal eligibility and allow queued input first.
                     IOLoop.current().add_callback(self.activity_pump.tick)
                 return
             if payload.get("msg") == "party_state" and getattr(self, "activity_pump", None):
@@ -358,8 +375,6 @@ class CrawlProcessHandlerBase(object):
                     if self.activity_pump.queued_action:
                         self.activity_pump.tick()
             return
-        if getattr(self, "ai_party", None) and self.activity_pump.owner in self.party_control.ai_slots:
-            self.ai_party.ingest(self.activity_pump.owner, json_decode(msg))
         if getattr(self, "player_streams", None) and any(
                 '"%s"' % kind in msg[:60] for kind in PlayerStreams.shared | {"input_mode"}):
             packet = json_decode(msg)
@@ -565,9 +580,6 @@ class CrawlProcessHandlerBase(object):
         self.idle_checker.stop()
         if getattr(self, "activity_timer", None):
             self.activity_timer.stop()
-        if getattr(self, "ai_timer", None):
-            self.ai_timer.stop()
-            self.ai_party.close()
 
         # send game_ended message to watchers. The player is handled in cleanup
         # code in ws_handler.py.
@@ -806,6 +818,7 @@ class CrawlProcessHandlerBase(object):
         self._receivers.add(watcher)
         self.tile_presence.sync(watcher)
         self.update_watcher_description()
+        self.publish_party_status()
 
     def remove_watcher(self, watcher):
         # if both users quit around the same time, this can get out of sync;
@@ -814,6 +827,7 @@ class CrawlProcessHandlerBase(object):
             self._receivers.remove(watcher)
             self.tile_presence.remove(watcher, self._receivers)
             self.update_watcher_description()
+            self.publish_party_status()
 
     def watcher_count(self):
         return len([w for w in self._receivers if w.watched_game and not w.chat_hidden])
@@ -1314,24 +1328,21 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
 
         if self.conn and self.conn.open:
             self._fresh_watchers.add(watcher)
-            self.conn.send_message('{"msg":"spectator_joined"}')
+            streams = self.player_streams
+            cached_command_bootstrap = (
+                self.party_control.multiplayer and streams.native_ready
+                and all(kind in streams.bootstrap for kind in streams.bootstrap_order))
+            # COMMAND reattachments already restore shared bootstrap and request
+            # only their own native view. Prompts still need the legacy UI replay.
+            if not cached_command_bootstrap:
+                self.conn.send_message('{"msg":"spectator_joined"}')
         if self.party_control.multiplayer:
             self.player_streams.restore(watcher)
             self.player_streams.request(watcher)
 
     def handle_input(self, msg, source=None, queued_floor=None):
         obj = json_decode(msg)
-        if obj.get("msg") == "ai_control":
-            if not self.party_control.is_owner(source):
-                if source:
-                    source.send_message("game_action_error", message="Only the expedition owner can manage AI players.")
-                return
-            try:
-                self.ai_party.control(obj.get("slot"), obj.get("action"))
-            except ValueError as error:
-                source.send_message("game_action_error", message=str(error))
-            return
-        if obj.get("msg") in ("ai_configure", "ai_action", "ai_prompt", "ai_state", "view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
+        if obj.get("msg") in ("view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
             return
         obj.pop("activity_id", None)
         obj.pop("prompt_activity_id", None)
@@ -1352,43 +1363,79 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                     error = "Send at most 32 valid game keys at a time."
             if error:
                 if source:
-                    source.send_message("game_action_error", message=error)
+                    _send_input_error(source, obj, error)
                 return
         own_prompt = pump and pump.prompt and pump.owner == selected
         streams = getattr(self, "player_streams", None) or getattr(pump, "streams", None)
+        if self.party_control.multiplayer and obj.get("msg") == "input" and self.process and selected is not None:
+            keys = obj.get("data", []) + [ord(ch) for ch in obj.get("text", "")]
+            if keys and 27 not in keys and pump and pump.inflight and not own_prompt:
+                error = ("Another hero is finishing an action. Your view is unchanged." if pump.prompt
+                         else "Your hero is downed. Choose an action after revival."
+                         if not pump.input_eligible(selected) else
+                         "Input queue is full (32 commands). Escape clears it."
+                         if sum(entry.slot == selected for entry in pump.inputs) + len(keys) > 32 else None)
+                if error:
+                    _send_input_error(source, obj, error)
+                    return
+            # Normalize before buffering. Delaying a whole string would append
+            # its suffix behind newer keys when the first key takes ownership.
+            for keycode in keys:
+                self.handle_input(json_encode(dict(msg="key", keycode=keycode)), source,
+                                  queued_floor=queued_floor)
+            return
+        if obj.get("msg") == "record_save":
+            if not self.party_control.is_owner(source):
+                _send_input_error(source, obj, "Only the expedition owner can save this game.")
+                return
+            if not getattr(self, "conn", None) or not self.conn.open:
+                _send_input_error(source, obj,
+                    "The expedition is still connecting. Try saving after it finishes loading.")
+                return
         is_escape = (
             (obj.get("msg") == "key" and obj.get("keycode") == 27)
             or (obj.get("msg") == "input" and (obj.get("data") == [27] or obj.get("text") == "\x1b"))
         )
         if self.party_control.multiplayer and pump and is_escape and selected is not None:
             removed = pump.clear_queued_action(selected)
-            removed = pump.clear_queued_input(selected) or removed
+            removed = pump.clear_queued_input(selected, requires_alive_only=True) or removed
             if removed:
                 for receiver in getattr(self, "_receivers", ()):
                     if self.party_control.state or self.party_control.views:
                         append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
                 if not own_prompt and (pump.inflight or streams and streams.native_ready):
                     return
+            if pump.inflight and pump.owner != selected:
+                return
         if (pump and pump.inflight and not own_prompt and not cancel_activity and obj.get("msg") not in
                 {"party_hover", "party_ping", "ui_state_sync"}):
             if selected is None:
                 if source:
-                    source.send_message("game_action_error", message="Claim a party hero before sending game input.")
+                    _send_input_error(source, obj, "Claim a party hero before sending game input.")
                 return
             if pump.prompt:
                 if source:
-                    source.send_message("game_action_error", message="Another hero is finishing an action. Your view is unchanged.")
+                    _send_input_error(source, obj, "Another hero is finishing an action. Your view is unchanged.")
                 return
-            queued_floor = pump._view(selected).get("floor")
+            floor_bound = obj.get("msg") != "record_save"
+            queued_floor = pump._view(selected).get("floor") if floor_bound else None
+            requires_alive = obj.get("msg") in {
+                "key", "input", "click_cell", "target_cursor", "inv_item_action", "inv_item_use",
+                "power_action", "floor_item_action", "party_trade", "menu_action", "party_activity"}
             accepted = pump.queue_input(
                 lambda: self.handle_input(msg, source, queued_floor=queued_floor)
                 if source in getattr(self, "_receivers", ())
                 and self.party_control.selected(source) == selected
-                and pump._view(selected).get("floor") == queued_floor else None,
-                selected,
+                and (not floor_bound or pump._view(selected).get("floor") == queued_floor) else None,
+                selected, requires_alive=requires_alive,
             )
+            if accepted:
+                CrawlProcessHandlerBase.publish_party_status(self)
             if not accepted and source:
-                source.send_message("game_action_error", message="Input queue is full (32 commands). Escape clears it.")
+                message = ("Your hero is downed. Choose an action after revival."
+                           if requires_alive and not pump.input_eligible(selected)
+                           else "Input queue is full (32 commands). Escape clears it.")
+                _send_input_error(source, obj, message)
             return
 
         if obj.get("msg") == "party_hover":
@@ -1417,10 +1464,6 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                                         error="You can change training only for heroes you control.")
                 return
 
-        if obj.get("msg") == "record_save" and (not source or not source.username
-                or source.username.lower() != (self.username or "").lower()):
-            return
-
         if obj.get("msg") == "party_ping":
             x, y = obj.get("x"), obj.get("y")
             if any(type(value) is not int or abs(value) > 256 for value in (x, y)):
@@ -1446,7 +1489,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         player_id = self.party_control.selected(source)
         if player_id is None:
             if source:
-                source.send_message("game_action_error", message="Claim a party hero before sending game input.")
+                _send_input_error(source, obj, "Claim a party hero before sending game input.")
             return
         if (obj.get("msg") == "party_activity" and obj.get("action") == "cancel"
                 and self.party_control.multiplayer):
@@ -1462,24 +1505,22 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         party_rules = {"toggle_friendly_fire", "toggle_simultaneous_turns",
                        "add_party_member", "ensure_party_slot", "cycle_player", "force_terminate"}
         if self.party_control.multiplayer and action in {"add_party_member", "ensure_party_slot"}:
-            source.send_message("game_action_error", message="Only joining players add heroes to a multiplayer expedition.")
+            _send_input_error(source, obj, "Only joining players add heroes to a multiplayer expedition.")
             return
         wrong_hero = action == "switch_player" and obj.get("slot") != player_id
         if self.party_control.multiplayer and (wrong_hero or action == "cycle_player"):
             if source:
-                source.send_message("game_action_error",
-                                    message="In multiplayer, you stay with your assigned hero.")
+                _send_input_error(source, obj, "In multiplayer, you stay with your assigned hero.")
             return
         if not owner_input and ((isinstance(action, str) and action in party_rules) or wrong_hero):
             if source:
-                source.send_message("game_action_error",
-                                    message="Only the expedition owner can change party rules or control another hero.")
+                _send_input_error(source, obj, "Only the expedition owner can change party rules or control another hero.")
             return
 
         if owner_input and action in ("switch_player", "cycle_player"):
             target = self.party_control.next_slot(source) if action == "cycle_player" else obj.get("slot")
             if target not in self.party_control.controllable(source) or type(target) is not int:
-                source.send_message("game_action_error", message="Choose a companion that is not controlled by another player.")
+                _send_input_error(source, obj, "Choose a companion that is not controlled by another player.")
                 return
             obj.update(msg="switch_player", slot=target, control_owner=True)
             obj.pop("action", None)
@@ -1508,7 +1549,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                          and pump._view(player_id).get("floor") == queued_floor else None,
             )
             if not accepted and source:
-                source.send_message("game_action_error", message="Action queue is full (32 actions). Escape clears it.")
+                _send_input_error(source, obj, "Action queue is full (32 actions). Escape clears it.")
             for receiver in getattr(self, "_receivers", ()):
                 if self.party_control.state or self.party_control.views:
                     append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
@@ -1534,11 +1575,6 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 if not self.conn or not self.conn.open:
                     return
                 for ch in data:
-                    if self.party_control.multiplayer and pump:
-                        # Use the same ownership/serialization path as a single
-                        # key. Raw strings must not create untracked suffixes.
-                        self.handle_input(json_encode(dict(msg="key", keycode=ord(ch))), source, queued_floor=queued_floor)
-                        continue
                     packet = {
                         "msg": "key",
                         "keycode": ord(ch),

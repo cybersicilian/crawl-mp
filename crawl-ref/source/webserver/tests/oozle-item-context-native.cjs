@@ -8,7 +8,7 @@ async function confirmation(page) {
     const text = await page.locator('#ui-stack').innerText();
     assert.match(text, /Assimilate .*\?/);
     assert.match(text, /Stores its extracted properties in one memory\./);
-    assert.match(text, /Uses a random empty memory slot|Replaces the oldest memory/);
+    assert.match(text, /Uses an empty memory slot|Replaces the oldest memory/);
     assert(!text.includes('Assimilate which carried item?'), 'Direct selection must not reopen the picker');
     assert.match(text, /Yes/);
     assert.match(text, /No/);

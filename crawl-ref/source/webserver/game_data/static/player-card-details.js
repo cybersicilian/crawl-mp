@@ -94,6 +94,10 @@ define(["jquery", "item-properties"], function ($, properties) {
         [["#stats_hpline", ".party-bar-wrap.hp-track"], ["#stats_mpline", ".party-bar-wrap.mp-track"]].forEach(function (pair) {
             var source = document.querySelector(pair[0]), target = card.querySelector(pair[1]);
             if (!source || !target) return;
+            // The card's heat resource comes from its own hero snapshot. The
+            // personal stream may still describe a different hero after switching.
+            if (pair[1].indexOf("mp-track") !== -1
+                && (target.hasAttribute("data-tip-heat") || source.hasAttribute("data-tip-heat"))) return;
             Array.from(source.attributes).filter(function (attribute) { return attribute.name.indexOf("data-tip-") === 0; })
                 .filter(function (attribute) { return pair[1].indexOf("hp-track") === -1 || attribute.name !== "data-tip-body"; })
                 .forEach(function (attribute) { target.setAttribute(attribute.name, attribute.value); });

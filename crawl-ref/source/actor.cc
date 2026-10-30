@@ -27,7 +27,6 @@
 #include "mon-util.h"
 #include "religion.h"
 #include "spl-damage.h"
-#include "spl-kimjoy.h"
 #include "stepdown.h"
 #include "stringutil.h"
 #include "terrain.h"
@@ -767,10 +766,6 @@ void actor::constriction_damage_defender(actor &defender)
     DIAG_ONLY(const int acdam = damage);
     damage = timescale_damage(this, damage);
     DIAG_ONLY(const int timescale_dam = damage);
-
-    if (typ == CONSTRICT_ROOTS && defender.is_monster()
-        && defender.as_monster()->props.exists(ROOTSPIKE_CONSTRICTION_KEY))
-        damage = rootspike_constriction_damage(*this, *defender.as_monster(), damage);
 
     string exclamations;
     if (damage <= 0 && is_player()

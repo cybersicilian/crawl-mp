@@ -1015,7 +1015,6 @@ const char* rune_type_name(short p)
     case RUNE_SHOALS:      return "barnacled";
     case RUNE_SPIDER:      return "gossamer";
     case RUNE_FOREST:      return "mossy";
-    case RUNE_BURROWS:     return "clay";
 
     // pandemonium and abyss runes:
     case RUNE_DEMONIC:     return "demonic";

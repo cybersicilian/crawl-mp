@@ -16,7 +16,6 @@
 #include "god-pakellas.h"
 #include "god-vorr.h"
 #include "bloodcraft.h"
-#include "chain-devil.h"
 
 #include "player.h"
 #include "shell.h"
@@ -842,10 +841,8 @@ bool player::move_to(const coord_def& newpos, movement_type flags, bool defer_fi
     last_move_flags = flags;
 
     // Move the player to new location.
-    const coord_def previous = pos();
     crawl_view.set_player_at(newpos);
     set_position(newpos);
-    chains::owner_moved(*this, previous, flags);
 
     viewwindow();
     update_screen();
@@ -900,9 +897,6 @@ void player::finalise_movement(const actor* /*to_blame*/)
         }
         else if (props.exists(TEMP_WATERWALK_KEY))
             props.erase(TEMP_WATERWALK_KEY);
-
-        if (new_grid == DNGN_SHALLOW_HONEY && old_grid != DNGN_SHALLOW_HONEY)
-            mpr("You slog into the sticky honey. Moving through it is very slow.");
     }
 
     if (last_move_pos != pos())
@@ -1654,9 +1648,6 @@ int player_res_fire(bool allow_random, bool include_temp, bool items)
         if (you.duration[DUR_QAZLAL_FIRE_RES])
             rf++;
 
-        if (you.duration[DUR_STEAM_BARRIER])
-            rf++;
-
     }
 
     rf += cur_form(include_temp)->res_fire();
@@ -1711,9 +1702,6 @@ int player_res_cold(bool allow_random, bool include_temp, bool items)
 
         if (you.duration[DUR_QAZLAL_COLD_RES])
             rc++;
-
-        if (you.duration[DUR_STEAM_BARRIER])
-            rc--;
 
         if (party::has_active_aura_near(you.pos(), SPELL_AURA_OF_RIME, nullptr))
             rc++;
@@ -2064,9 +2052,6 @@ int player_spec_alchemy()
 {
     int sp = 0;
 
-    if (you.form == transformation::scorpion)
-        ++sp;
-
     if (you.wearing(OBJ_STAVES, STAFF_ALCHEMY))
         sp += 1 + you.wearing_ego(OBJ_ARMOUR, SPARM_ATTUNEMENT);
 
@@ -2182,9 +2167,6 @@ int player_movement_speed(bool check_terrain, bool include_temp, int scale)
         else if (you.in_water() && you.slow_in_water())
             mv += 6; // Wading through water is very slow.
     }
-
-    if (check_terrain && !you.airborne())
-        mv += feat_grounded_movement_penalty(env.grid(you.pos()));
 
     // moving on liquefied ground, or while maintaining the
     // effect takes longer
@@ -7191,8 +7173,6 @@ int player::armour_class_scaled(int scale) const
     int AC = base_ac(100);
 
     AC += hermit_crab::armour_bonus(*this) * 100;
-    if (duration[DUR_STEAM_BARRIER])
-        AC += duration[DUR_STEAM_BARRIER] * 20 / 3;
     if (species == SP_ENT)
         AC += (7 + experience_level) * 100;
     if (species == SP_FAERIE_DRAGON && has_mutation(MUT_BIG_WINGS))
@@ -8362,8 +8342,7 @@ bool player::has_tail(bool allow_tran) const
     {
         // these transformations bring a tail with them
         if (form == transformation::serpent
-            || form == transformation::dragon
-            || form == transformation::scorpion)
+            || form == transformation::dragon)
         {
             return true;
         }

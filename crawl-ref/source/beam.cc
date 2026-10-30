@@ -70,7 +70,6 @@
 #include "spl-damage.h"
 #include "spl-goditem.h"
 #include "spl-monench.h"
-#include "spl-rupture-blight.h"
 #include "spl-summoning.h"
 #include "spl-transloc.h"
 #include "spl-util.h"
@@ -3574,8 +3573,6 @@ void bolt::tracer_affect_player()
 {
     if (flavour == BEAM_UNRAVELLING && player_is_debuffable())
         is_explosion = true;
-    if (flavour == BEAM_MANA_RUPTURE)
-        is_explosion = true;
 
     const bool friendly = agent() ? agent()->wont_attack()
                                   : mons_att_wont_attack(attitude);
@@ -4155,14 +4152,6 @@ void bolt::affect_player_enchantment(bool resistible)
         debuff_player(agent() && agent()->is_player());
         _unravelling_explode(*this);
         obvious_effect = true;
-        break;
-
-    case BEAM_BLIGHT:
-        if (in_explosion_phase)
-        {
-            blight_player(agent(), ench_power);
-            obvious_effect = true;
-        }
         break;
 
     case BEAM_SOUL_SPLINTER:
@@ -5050,8 +5039,6 @@ void bolt::tracer_affect_monster(monster* mon)
     }
 
     if (flavour == BEAM_UNRAVELLING && monster_can_be_unravelled(*mon))
-        is_explosion = true;
-    if (flavour == BEAM_MANA_RUPTURE && !mon->is_summoned())
         is_explosion = true;
 
     // Trigger explosion on exploding beams.
@@ -5991,10 +5978,6 @@ bool bolt::ignores_monster(const monster* mon) const
     if (mon->props.exists("party_downed_ghost"))
         return true;
 
-    // A caster can fire through their own illusory double.
-    if (mon->type == MONS_FALSE_IMAGE && source_id == mon->summoner)
-        return true;
-
     // Player shadows (or a dummy for a shadow spell tracer) can shoot through
     // other shadows (ie: where they are currently standing while contemplating
     // being somewhere else).
@@ -6108,8 +6091,6 @@ bool bolt::has_saving_throw() const
     case BEAM_SAP_MAGIC:
     case BEAM_UNRAVELLING:
     case BEAM_UNRAVELLED_MAGIC:
-    case BEAM_MANA_RUPTURE:
-    case BEAM_BLIGHT:
     case BEAM_INFESTATION:
     case BEAM_IRRESISTIBLE_CONFUSION:
     case BEAM_VILE_CLUTCH:
@@ -6835,30 +6816,6 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
         _unravelling_explode(*this);
         return MON_AFFECTED;
 
-    case BEAM_MANA_RUPTURE:
-    {
-        if (mana_rupture_dismiss(*mon, agent()))
-            return MON_AFFECTED;
-        // Damage is based on the target's will before the weakening effect.
-        damage = mana_rupture_damage(mon->willpower(), ench_power);
-        mana_rupture_weaken(*mon, agent());
-        colour = ETC_MUTAGENIC;
-        flavour = BEAM_MAGIC;
-        ex_size = 1;
-        is_explosion = true;
-        obvious_effect = true;
-        return MON_AFFECTED;
-    }
-
-    case BEAM_BLIGHT:
-        if (in_explosion_phase)
-        {
-            blight_monster(*mon, agent(), ench_power);
-            obvious_effect = true;
-            return MON_AFFECTED;
-        }
-        return MON_UNAFFECTED;
-
     case BEAM_INFESTATION:
     {
         const int dur = (5 + random2avg(div_rand_round(ench_power,2), 2))
@@ -6998,12 +6955,6 @@ const map<spell_type, explosion_sfx> spell_explosions = {
         "The enchantments explode!",
         "a sharp crackling", // radiation = geiger counter
     } },
-    { SPELL_MANA_RUPTURE, {
-        "The unstable magic explodes!", "the sound of breaking glass",
-    } },
-    { SPELL_BLIGHT, {
-        "The area erupts with magical blight!", "a squelching noise",
-    } },
     { SPELL_ICEBLAST, {
         "The mass of ice explodes!",
         "an explosion",
@@ -7110,8 +7061,6 @@ void bolt::refine_for_explosion(const string& explode_msg)
         colour  = MAGENTA;
         ex_size = 2;
     }
-    else if (origin_spell == SPELL_BLIGHT)
-        ex_size = 2;
     else if (origin_spell == SPELL_EVAPORATE && !is_tracer())
         colour = _potion_beam_flavour_to_colour(flavour);
 
@@ -7741,9 +7690,8 @@ actor* bolt::agent(bool ignore_reflection) const
 
 bool bolt::is_enchantment() const
 {
-    return (flavour >= BEAM_FIRST_ENCHANTMENT
-            && flavour <= BEAM_LAST_ENCHANTMENT)
-           || flavour == BEAM_MANA_RUPTURE || flavour == BEAM_BLIGHT;
+    return flavour >= BEAM_FIRST_ENCHANTMENT
+           && flavour <= BEAM_LAST_ENCHANTMENT;
 }
 
 string bolt::get_short_name() const
@@ -7874,8 +7822,6 @@ static string _beam_type_name(beam_type type)
     case BEAM_DEATH_RATTLE:          return "breath of the dead";
     case BEAM_RESISTANCE:            return "resistance";
     case BEAM_UNRAVELLING:           return "unravelling";
-    case BEAM_MANA_RUPTURE:          return "magical disruption";
-    case BEAM_BLIGHT:                return "vile blight";
     case BEAM_UNRAVELLED_MAGIC:      return "unravelled magic";
     case BEAM_SHARED_PAIN:           return "shared pain";
     case BEAM_IRRESISTIBLE_CONFUSION:return "confusion";
@@ -8066,19 +8012,6 @@ void player_beam_tracer::player_hit(bool /*was_friendly*/) noexcept
 
 void player_beam_tracer::monster_hit(const bolt& beam, const monster& mon)
 {
-    if (party::is_proxy_monster(mon))
-    {
-        const int slot = party::proxy_slot(mon);
-        if (slot < 0 || slot >= party::player_count()
-            || mon.props.exists("party_downed_ghost")
-            || !you.can_see(party::get_player(slot)) || beam.is_harmless(&mon))
-            return;
-        for (const bad_target& target : bad_attack_targets)
-            if (target.mon == &mon)
-                return;
-        bad_attack_targets.push_back({ &mon, "", "", false });
-        return;
-    }
     if (!you.aware_of(mon))
         return;
 
@@ -8118,30 +8051,6 @@ void player_beam_tracer::monster_hit(const bolt& beam, const monster& mon)
         if (!reason.empty())
             bad_charm_target = &mon;
     }
-}
-
-string player_beam_tracer::describe_attack_targets() const
-{
-    attacked_monster_list monsters;
-    vector<string> companions;
-    for (const bad_target& target : bad_attack_targets)
-    {
-        if (party::is_proxy_monster(*target.mon))
-        {
-            const int slot = party::proxy_slot(*target.mon);
-            if (slot >= 0 && slot < party::player_count())
-                companions.push_back("your ally " + party::get_player(slot).your_name);
-        }
-        else
-            monsters.add(*target.mon, target.adj, target.suffix, target.penance);
-    }
-    string result = monsters.empty() ? "" : monsters.describe();
-    if (!companions.empty())
-    {
-        const string names = comma_separated_line(companions.begin(), companions.end());
-        result = result.empty() ? names : result + " and " + names;
-    }
-    return result;
 }
 
 // Returns true if there is anything this tracer might possibly want to prompt
@@ -8241,7 +8150,7 @@ bool cancel_beam_prompt(const bolt& beam, const player_beam_tracer& tracer)
         for (auto& target : tracer.bad_attack_targets)
             victims.add(*target.mon, target.adj, target.suffix, target.penance);
 
-        string mon_name = tracer.describe_attack_targets();
+        string mon_name = victims.describe();
         string verb = "fire ";
         if (tracer.bad_attack_targets.size() == 1)
         {

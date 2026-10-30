@@ -12,7 +12,7 @@
 @import url("tabletop/typography.css");
 @import url("tabletop/chat.css");
 @import url("tabletop/properties.css");
-@import url("tabletop/tooltip-content.css");
+@import url("tabletop/tooltip-content.css?v=heat-help-01a18da4-r1");
 @import url("tabletop/rich-text.css");
 @import url("tabletop/welcome.css");
 @import url("tabletop/lobby-experience.css");

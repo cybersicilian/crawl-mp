@@ -101,14 +101,14 @@
 #normal .active-turn .party-member-name { color: #f4d997 !important; }
 #normal .party-slot-tag { display: none; }
 #normal .party-member-timing { margin-left: auto; }
-#normal .party-member-timing .party-buff-pill:not(.status-icon-frame) { font: 9px/1.2 var(--tt-font-ui); padding: 1px 3px; border-color: #6a8c6550; background: #26352c; }
+#normal .party-member-timing .party-buff-pill { font: 9px/1.2 var(--tt-font-ui); padding: 1px 3px; border-color: #6a8c6550; background: #26352c; }
 #normal .party-member-meta { grid-column: 2; font-size: 10px; gap: 2px 6px; margin: 2px 0 0; }
 #normal .party-def-badges { margin-left: 0; font-size: 9px; }
 #normal .party-bars { grid-column: 2; gap: 5px; margin: 0; align-self: start; }
 #normal .party-bar-wrap { height: 12px; border: 1px solid #8c75413d; border-radius: 2px; }
 #normal .party-bar-label { font-size: 9px; line-height: 10px; }
 #normal .party-buff-strip { grid-column: 2; gap: 3px; margin: 0; }
-#normal .party-buff-pill:not(.status-icon-frame) { font-size: 9px; padding: 1px 3px; border-radius: 2px; background: #12161b; }
+#normal .party-buff-pill { font-size: 9px; padding: 1px 3px; border-radius: 2px; background: #12161b; }
 #normal .party-member-footer { grid-column: 2; display: contents; }
 #normal .party-member-equipment { grid-column: 2; font-size: 10px; margin: 0; }
 #normal .party-card-actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; align-self: start; }
@@ -124,6 +124,10 @@
 }
 #normal .active-turn .hud-hero-medallion { border-color: #e1c383; box-shadow: inset 0 0 0 2px #151719, 0 0 8px #d2ae542a; }
 .hud-hero-medallion img { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; margin-top: 1px; }
+.hud-hero-appearance { width: 34px; height: 34px; margin-top: 1px; }
+.hud-hero-appearance img { margin-top: 0; }
+.hud-hero-appearance canvas { width: 100%; height: 100%; image-rendering: pixelated; }
+.hud-hero-appearance > .tt-icon { width: 16px; height: 16px; color: #d9c28f; }
 .hud-hero-medallion > .tt-icon { width: 16px; height: 16px; color: #d9c28f; margin-top: 4px; }
 .hud-hero-medallion small { position: absolute; bottom: 3px; left: 0; right: 0; font: 8px/1 var(--tt-font-ui); color: #d7c392; text-align: center; }
 #normal .party-ping-bar { gap: 5px; padding-top: 7px; margin-top: 6px; border-color: #ae92563d; }
@@ -178,10 +182,8 @@
 .hud-equipped-mark { width: 6px; height: 6px; background: #e0be72; transform: rotate(45deg); font-size: 0; bottom: 3px; left: 3px; box-shadow: 0 0 4px #d5ac5488; }
 .hud-slot-quantity { font-size: 10px; right: 3px; top: 3px; }
 #hud_powers > .hud-panel-body { padding: 3px 10px 10px; gap: 5px; background: #12171c33; }
-#normal .hud-power-button { display: grid; grid-template-columns: 29px minmax(0, 1fr); column-gap: 6px; row-gap: 2px; min-height: 43px; padding: 5px 8px 5px 5px; border-color: #84718f; background: radial-gradient(ellipse at 0 0, #9b7cac22, transparent 85%), linear-gradient(#30313b, #22252c); }
-.hud-power-button > .tt-icon { grid-row: 1 / 3; width: 16px; height: 16px; color: #cbb4de; filter: drop-shadow(0 1px 2px #000c); }
-.hud-power-button > span { font-size: 11px; line-height: 1.2; }
-.hud-power-button > small { font-size: 9px; line-height: 1.1; color: #b2a2bd; }
+#normal .hud-power-button { border-color: #84718f; background: radial-gradient(ellipse at 0 0, #9b7cac22, transparent 85%), linear-gradient(#30313b, #22252c); }
+.hud-power-button > .tt-icon { color: #cbb4de; filter: drop-shadow(0 1px 2px #000c); }
 #hud_powers .hud-empty { box-sizing: border-box; margin: 0; display: flex; align-items: center; min-height: 28px; font-size: 10px; line-height: 1.4; color: #9c9b95; }
 #normal #message_pane { padding: 9px 12px; border-top: 1px solid #b3996322; background: linear-gradient(130deg, #151b20, #101419); box-shadow: inset 0 3px 8px #0004; }
 #normal #messages { font-size: 13px; line-height: 1.45; }
@@ -208,7 +210,7 @@
     #normal :is(button, a, summary) { transition: none !important; }
 }
 
-#normal #hud_powers > .hud-panel-body { align-items: flex-start; align-content: flex-start; }
+#normal #hud_powers > .hud-panel-body { align-items: stretch; align-content: start; }
 #normal .hud-inventory-tools { flex: 0 0 auto; }
 /* The command banks remain semantic groups; their names live in hover/help. */
 #normal .workflow-action-group::before { display: none; }

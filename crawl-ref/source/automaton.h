@@ -44,6 +44,9 @@ bool safe_passwall_destination(const coord_def& dest);
 bool passwall_escape_aim(coord_def& aim);
 coord_def area_engraving_aim(spell_type spell, const coord_def& origin);
 bool trigger_attack(const coord_def& target, bool ranged = false);
+// One offensive opportunity after the active hero's time-consuming action.
+// Reuses attack safety checks, without requiring a weapon attack first.
+void react_to_action();
 bool trigger_escape();
 void observe_encounter();
 }

@@ -1,7 +1,7 @@
 /* Discovery presents existing room/live rows; it never owns party or game state. */
-define(function () {
+define(["text-query"], function (textQuery) {
     "use strict";
-    var root, search, count, empty, notice;
+    var root, search, clear, count, empty, notice, listingFilter = "all", filters;
     function el(tag, className, text) {
         var node = document.createElement(tag); node.className = className || "";
         if (text) node.textContent = text;
@@ -17,7 +17,19 @@ define(function () {
         search = el("input"); search.type = "search"; search.placeholder = "Search host, hero, or expedition…";
         search.addEventListener("input", refresh); label.appendChild(search);
         count = el("span", "lobby-discovery-count"); count.setAttribute("role", "status"); tools.append(label, count);
-        header.appendChild(tools);
+        clear = el("button", "dcss-btn collection-clear", "Clear filters"); clear.type = "button";
+        clear.disabled = true;
+        clear.addEventListener("click", function () { search.value = ""; listingFilter = "all"; refresh(); search.focus(); });
+        search.addEventListener("keydown", function (event) {
+            if (event.key !== "Escape" || !search.value) return;
+            event.preventDefault(); event.stopPropagation(); search.value = ""; refresh();
+        });
+        tools.appendChild(clear); header.appendChild(tools);
+        filters = el("div", "lobby-filter-group lobby-listing-filters"); filters.setAttribute("role", "group"); filters.setAttribute("aria-label", "Expedition listings");
+        [["all", "All listings"], ["open", "Open seats"], ["gathering", "Gathering parties"], ["live", "Live expeditions"]].forEach(function (item) {
+            var button = el("button", "", item[1]); button.type = "button"; button.dataset.listingFilter = item[0];
+            button.addEventListener("click", function () { listingFilter = item[0]; refresh(); }); filters.appendChild(button);
+        }); header.appendChild(filters);
         notice = el("p", "lobby-party-notice", "You have a party in preparation. ");
         var back = el("a", "", "Return to your party →"); back.href = "#party_lobby_panel";
         back.dataset.lobbySection = "party_lobby_panel"; notice.appendChild(back); header.appendChild(notice);
@@ -45,25 +57,30 @@ define(function () {
         // Input events pass an Event; room ownership is read from authoritative UI.
         room = typeof room === "boolean" ? room : document.getElementById("party_room_view").style.display !== "none";
         notice.hidden = !room; document.getElementById("lobby_rooms_panel").hidden = room;
-        var query = search.value.trim().toLocaleLowerCase(), matched = 0, total = 0;
+        var query = search.value.trim(), matches = textQuery.compile(query), matched = 0, total = 0;
+        clear.disabled = !search.value && listingFilter === "all";
+        filters.querySelectorAll("button").forEach(function (button) { button.setAttribute("aria-pressed", String(button.dataset.listingFilter === listingFilter)); });
         ["party_rooms_table", "player_list"].forEach(function (id) {
             var table = document.getElementById(id); if (!table) return;
             var headers = Array.from(table.querySelectorAll("thead th")).map(function (node) { return node.textContent.trim(); });
             table.querySelectorAll("tbody tr").forEach(function (row) {
-                var visible = !query || row.textContent.toLocaleLowerCase().includes(query);
-                row.hidden = !visible;
+                var enabled = listingFilter === "all" || listingFilter === "live" && id === "player_list"
+                    || listingFilter === "gathering" && id === "party_rooms_table" && row.dataset.roomStatus !== "launched"
+                    || listingFilter === "open" && id === "party_rooms_table" && row.dataset.joinable === "true";
+                var visible = enabled && matches(row.textContent);
+                if (row.hidden === visible) row.hidden = !visible;
                 row.querySelectorAll("td").forEach(function (cell, i) {
                     if (cell.dataset.label !== headers[i]) cell.dataset.label = headers[i] || "Details";
                 });
                 if (id === "player_list" || !room) { total++; if (visible) matched++; }
             });
         });
-        empty.hidden = !!document.querySelector("#player_list tbody tr") || !!query;
+        empty.hidden = !!document.querySelector("#player_list tbody tr") || !!query || !["all", "live"].includes(listingFilter);
         document.getElementById("lobby_body").classList.toggle("has-live-games", !!document.querySelector("#player_list tbody tr"));
-        var message = query ? matched + " matching " + (matched === 1 ? "result" : "results")
+        var message = query || listingFilter !== "all" ? matched + " matching " + (matched === 1 ? "result" : "results")
             : total ? total + " " + (total === 1 ? "listing" : "listings") + " available" : "No parties or expeditions available";
         if (count.textContent !== message) count.textContent = message;
-        root.querySelector(".lobby-discovery-no-results").hidden = !query || matched > 0;
+        root.querySelector(".lobby-discovery-no-results").hidden = (!query && listingFilter === "all") || matched > 0;
     }
     return { init: init, refresh: refresh };
 });

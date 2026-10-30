@@ -42,18 +42,6 @@ HUD and quick bar. HP casting requires strictly more HP than the cost, and
 native payment restrictions still apply. An empty MP pool never implies HP
 casting. Release the updated engine and client together to enable this contract.
 
-Spell snapshots also expose the native `quick_cast` eligibility boolean. The
-quiver module owns the policy: offensive spells suitable for automatic targeting,
-excluding spells that require manual placement. A spell binding may opt in with
-`quick_cast: true`; activation adds that flag to the existing `power_action`
-packet. The engine validates the flag's type, current hero, spell ID and letter,
-and current eligibility before triggering the existing native spell action.
-Unsupported requests fail without casting. Clients use ordinary manual casting
-when eligibility is absent. No client-selected target, synthetic confirmation,
-quiver mutation, repeated key, or alternate resource calculation is introduced.
-The preference and its single-cast Shift+number manual override share the existing
-quickbar input-ownership gates and per-hero storage.
-
 The reusable primitives are the structured list/category shell, action metadata,
 availability display, focus/return handling, and persistent help. DCSS adapters
 supply native commands, categories, per-hero authority, and game-specific rules.
@@ -194,15 +182,6 @@ Source changes, local native proof, and deployment remain separate claims.
 | G09: durable help | Previews accept the pointer immediately; Read details opens persistent help. Glossary terms support click, touch activation, focus and Enter/Space. Long descriptions scroll. |
 | G10: coordination | Gameplay chat opens on the left, leaving party health/readiness visible. Armed pings display their mode and Cancel/Escape; placement clears the mode. Existing chat drafts and item sharing remain intact. |
 | G11: tactical space | A stable context bar, compact roster option, deliberately budgeted dock/log/sidebar and optional level overview replace competing overlays. Item shortcut settings have a named route and isolated keyboard input. |
-
-HUD pointer focus yields to gameplay keys, including movement, auto-fight Tab,
-modified keys and numpad movement. Ordinary gameplay input releases HUD focus
-and rejoins the existing native translator after document capture hotkeys.
-Text editing, chat, native menus/dialogs and HUD arrangement retain local input;
-the non-modal quickbar palette yields to gameplay unless editing Search.
-Enter/Space still activate a focused control. Deliberate keyboard focus retains
-Tab traversal and visible focus outlines. `hud-input.js` supplies this shared
-HUD boundary rather than duplicating command translation in individual widgets.
 
 Keyboard commands remain native, including movement, auto-fight Tab, inventory
 letters and cycling, native `m`, `z`, `a`, `?`, and Escape. Within focused web

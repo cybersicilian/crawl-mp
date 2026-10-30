@@ -48,7 +48,6 @@ fs.mkdirSync(out, { recursive: true });
             ['key_conversion', 'static/scripts/key_conversion.js'],
             ['client-input', 'static/scripts/client-input.js'],
             ['./menu-keyboard', 'game_data/static/menu-keyboard.js'],
-            ['./hud-input', 'game_data/static/hud-input.js'],
             ['./focus-trap', 'game_data/static/focus-trap.js'],
             ['./session-menu', 'game_data/static/session-menu.js']
         ]) {
@@ -64,7 +63,6 @@ fs.mkdirSync(out, { recursive: true });
                 hide_lobby_tooltip() {}, hide_dialog() {} },
                 { watching: false, party_member_active: false });
             window.jQuery(document).on('keydown.client', input.handle_keydown).on('keypress.client', input.handle_keypress);
-            window.modules['./hud-input'].init();
             for (let index = 0; index < 3; index++) window.modules['./session-menu'].init();
         });
         const packets = () => page.evaluate(() => { const result = window.qaPackets; window.qaPackets = []; return result; });

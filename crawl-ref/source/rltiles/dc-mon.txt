@@ -116,7 +116,6 @@ hound MONS_HOUND
 howler MONS_HOWLER_MONKEY
 warg MONS_WARG
 wolf MONS_WOLF
-fire_fox MONS_FIRE_FOX
 raiju MONS_RAIJU
 inugami MONS_INUGAMI
 hell_hound MONS_HELL_HOUND
@@ -137,7 +136,6 @@ natasha MONS_NATASHA
 
 ## Bees ('y')
 killer_bee MONS_KILLER_BEE
-killer_bee_larva MONS_KILLER_BEE_LARVA
 queen_bee MONS_QUEEN_BEE
 %sdir mon/demihumanoids
 meliai MONS_MELIAI
@@ -722,7 +720,6 @@ maggie MONS_MAGGIE
 margery MONS_MARGERY
 %rim 0
 nikola MONS_NIKOLA
-rin MONS_RIN
 norris MONS_NORRIS
 rupert MONS_RUPERT
 sigmund MONS_SIGMUND
@@ -1227,7 +1224,6 @@ yaktaur_captain-melee MONS_YAKTAUR_CAPTAIN_MELEE
 %sdir mon/demihumanoids
 faun MONS_FAUN
 satyr MONS_SATYR
-greenwood_witch MONS_GREENWOOD_WITCH
 
 ## Elves ('e')
 %sdir mon/unique
@@ -1616,22 +1612,6 @@ mistmane_form_octopode TRAN_MISTMANE_OCTOPODE
 
 %rim 1
 
-%sdir mon/burrows
-%rim 0
-burrowing_beast MONS_BURROWING_BEAST
-crag_boar MONS_CRAG_BOAR
-shale_drake MONS_SHALE_DRAKE
-deep_troll_delver MONS_DEEP_TROLL_DELVER
-worldworm MONS_WORLDWORM
-gallery_worm MONS_GALLERY_WORM
-coil_worm MONS_COIL_WORM
-caustic_worm MONS_CAUSTIC_WORM
-wax_beetle MONS_WAX_BEETLE
-venom_wasp MONS_VENOM_WASP
-old_coil MONS_OLD_COIL
-vespara MONS_VESPARA
-
-# Hydra statue forms retain their visible heads.
 %sdir player/transform/hydra
 %rim 0
 statue_form_hydra1 TRAN_STATUE_HYDRA
@@ -1643,7 +1623,6 @@ statue_form_hydra6
 statue_form_hydra7
 statue_form_hydra8
 statue_form_hydra9
-
 %rim 1
 %sdir misc
 unseen_monster MONS_UNKNOWN

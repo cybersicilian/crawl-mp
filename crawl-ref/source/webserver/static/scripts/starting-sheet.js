@@ -15,7 +15,7 @@ define(["character-catalog", "item-properties", "native-start", "player-doll", "
             job: catalog.jobs[value(".party-slot-job")], weapon: value(".party-slot-weapon"), trait: value(".party-slot-trait") || "none",
             seed: card.dataset.startingSeed || "", gameId: card.dataset.gameId || "", companion: card.dataset.slot !== "0",
             multiplayer: card.dataset.multiplayer === "true",
-            modifiers: card.dataset.startingModifiers || "", active: !card.matches(".slot-state-open, .slot-state-closed")
+            modifiers: card.dataset.startingModifiers || "", active: card.dataset.seatActive === undefined ? !card.matches(".slot-state-open, .slot-state-closed") : card.dataset.seatActive === "true"
         };
     }
     function heading(parent, text) { parent.appendChild(el("h3", "party-insp-section-title", text)); }
@@ -38,11 +38,19 @@ define(["character-catalog", "item-properties", "native-start", "player-doll", "
         heading(parent, "Resistances & defenses");
         var grid = el("div", "party-insp-res-grid");
         help.resistances.filter(function (definition) { return definition.start; }).forEach(function (definition) {
-            var value = snapshot.resists[definition.start], levels = help.levels(definition, value), known = levels !== null;
+            var value = snapshot.resists[definition.start], known = Number.isFinite(value);
             var row = help.explain(el("div", "party-insp-res-row"), definition, known ? value : "Unavailable");
-            var label = el("span", "party-insp-res-lbl", definition.label);
+            var label = el("span", "party-insp-res-lbl"), symbol = el("span", "resistance-symbol");
+            symbol.appendChild(artwork.icon(definition.icon)); label.append(symbol, el("span", "", definition.label));
+            var meter = el("span", "resistance-meter" + (value < 0 ? " is-negative" : "")); meter.setAttribute("aria-hidden", "true");
+            var levels = definition.key === "Will" ? Math.floor(Math.abs(value) / 40) : Math.abs(value);
+            var maximum = definition.key === "rPois" && value >= 3 ? 3 : definition.max;
+            for (var gem = 0; known && gem < maximum; gem++) {
+                meter.appendChild(el("span", "resistance-gem" + (gem < levels ? " is-filled" : "") + (value < 0 && gem < levels ? " is-negative" : "")));
+            }
+            meter.appendChild(el("span", "resistance-value", known ? value : "Unavailable"));
             row.setAttribute("aria-label", definition.title + ": " + (known ? value : "Unavailable"));
-            row.append(label, artwork.levelIcons(definition.icon, levels)); grid.appendChild(row);
+            row.append(label, meter); grid.appendChild(row);
         });
         parent.appendChild(grid);
     }

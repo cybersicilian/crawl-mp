@@ -1419,7 +1419,6 @@ void game_options::set_default_activity_interrupts()
         "interrupt_transform = interrupt_equip_on",
         "interrupt_memorise = hp_loss, monster_attack",
         "interrupt_assimilation = interrupt_equip_on",
-        "interrupt_hermit_moult = hp_loss, monster_attack",
         "interrupt_imbue_servitor = interrupt_equip_on",
         "interrupt_imprint_weapon = interrupt_imbue_servitor",
         "interrupt_multidrop = hp_loss, monster_attack",

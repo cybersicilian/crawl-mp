@@ -64,19 +64,6 @@ async function main() {
         });
         assert.equal(await page.locator('.personal-stat-reading').count(), 6);
         assert.equal(await page.locator('#stats_ac').textContent(), '6');
-        await page.evaluate(() => {
-            Object.assign(window.fixturePlayer, { species: 'Automaton', mp: 12, mp_max: 20 });
-            window.renderNativeStats();
-        });
-        assert.equal(await page.locator('#stats_mpline > .stats_caption').textContent(), 'Heat:');
-        assert.equal(await page.locator('#stats_mp').textContent(), '8');
-        assert.match(await page.locator('#stats_mpline').getAttribute('data-tip-title'), /Heat: 8 \/ 20/);
-        assert.equal(await page.locator('#stats_mp_bar_full').evaluate(node => node.style.width), '40%');
-        await page.evaluate(() => {
-            Object.assign(window.fixturePlayer, { species: 'Human', mp: 12, mp_max: 20 });
-            window.renderNativeStats();
-        });
-        assert.equal(await page.locator('#stats_mpline > .stats_caption').textContent(), 'Magic:');
         assert(await page.locator('#stats_ac').evaluate(node => node.classList.contains('degenerated_defense')));
         assert.equal(await page.locator('.personal-stat-reading [role="meter"]').count(), 0, 'Unbounded stats never get invented capacity bars');
         assert.equal(await page.locator('.party-self-details [role="progressbar"]').count(), 0, 'XP belongs in the shared player level bar');

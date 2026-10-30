@@ -19,19 +19,16 @@
 #include "newgame-def.h"
 #include "ng-restr.h"
 #include "ng-setup.h"
-#include "options.h"
 #include "party.h"
 #include "player.h"
 #include "random.h"
 #include "skills.h"
-#include "species.h"
 #include "spl-book.h"
 #include "spl-cast.h"
 #include "spl-util.h"
 #include "tags.h"
 #include "stringutil.h"
 #include "test_player_fixture.h"
-#include "unwind.h"
 
 namespace
 {
@@ -377,71 +374,6 @@ TEST_CASE_METHOD(bloodcraft_fixture, "Native amplified casting pays both resourc
     you.turn_is_over = false;
     REQUIRE(bloodcraft::cast_amplified(SPELL_STOLEN_SIGHT, &target) == spret::success);
     REQUIRE(you.hp == 1);
-}
-
-TEST_CASE_METHOD(bloodcraft_fixture, "Irit bloodcraft combines discounted life and magic costs", "[bloodcraft][irit]")
-{
-    you.species = SP_IRIT;
-    you.experience_level = 10;
-    calc_hp(false);
-    you.hp = you.hp_max;
-    you.base_stats[STAT_INT] = 40;
-    set_skill_level(SK_HEXES, 27);
-    set_skill_level(SK_SPELLCASTING, 27);
-    you.magic_points = you.max_magic_points = 50;
-    REQUIRE(bloodcraft::player_reservation(100) == 9);
-    REQUIRE(bloodcraft::player_amplification_cost(100) == 5);
-    REQUIRE(spell_additional_hp(SPELL_MAGIC_DART, 3) == 3);
-    REQUIRE(spell_additional_hp(SPELL_STOLEN_SIGHT, 5) == 3);
-    REQUIRE(add_spell_to_memory(SPELL_STOLEN_SIGHT));
-    REQUIRE(raw_spell_fail(SPELL_STOLEN_SIGHT) == 0);
-    monster& mon = spawn(MONS_OGRE, coord_def(42, 35));
-    dist target;
-    target.target = mon.pos();
-    target.isTarget = true;
-    target.isValid = true;
-    target.interactive = false;
-    target.find_target = false;
-
-    const int total_hp = bloodcraft::player_amplification_cost(bloodcraft::unreserved_hp()) + 3;
-    // The combined amplification and casting cost must leave at least 1 HP.
-    you.hp = total_hp;
-    REQUIRE(bloodcraft::cast_amplified(SPELL_STOLEN_SIGHT, &target) == spret::abort);
-    REQUIRE(you.hp == total_hp);
-    REQUIRE(you.magic_points == 50);
-    you.hp = total_hp + 1;
-    REQUIRE(bloodcraft::cast_amplified(SPELL_STOLEN_SIGHT, &target) == spret::success);
-    REQUIRE(you.hp == 1);
-    REQUIRE(you.magic_points == 45);
-}
-
-TEST_CASE_METHOD(bloodcraft_fixture, "Irit ordinary casting spends both resources", "[bloodcraft][irit]")
-{
-    unwind_var<use_animations_type> no_animations(Options.use_animations, use_animations_type());
-    you.species = SP_IRIT;
-    you.experience_level = 10;
-    you.base_stats[STAT_INT] = 40;
-    set_skill_level(SK_AIR_MAGIC, 27);
-    set_skill_level(SK_SPELLCASTING, 27);
-    calc_hp(false);
-    you.hp = you.hp_max;
-    you.magic_points = you.max_magic_points = 50;
-    REQUIRE(add_spell_to_memory(SPELL_SWIFTNESS));
-    REQUIRE(raw_spell_fail(SPELL_SWIFTNESS) == 0);
-    const int initial_hp = you.hp;
-    const int cost = spell_mana(SPELL_SWIFTNESS);
-    REQUIRE(cast_a_spell(false, SPELL_SWIFTNESS) == spret::success);
-    CHECK(you.hp == initial_hp - cost);
-    CHECK(you.magic_points == 50 - cost);
-}
-
-TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Irits start with leather armour in place of robes", "[irit]")
-{
-    you.species = SP_IRIT;
-    REQUIRE(species::is_starting_species(SP_IRIT));
-    const item_def* armour = newgame_make_item(OBJ_ARMOUR, ARM_ROBE);
-    REQUIRE(armour);
-    CHECK(armour->is_type(OBJ_ARMOUR, ARM_LEATHER_ARMOUR));
 }
 
 TEST_CASE_METHOD(bloodcraft_fixture, "Native unarmed combat triggers a rite without changing its base attack", "[bloodcraft]")

@@ -66,7 +66,7 @@ define(["jquery", "character-catalog", "item-properties", "starting-sheet", "ric
     function renderDetails() {
         if (!activeCard || !dialog) return;
         var name = choice(activeCard, activeKind), data = record(activeKind, name);
-        dialog.dataset.choice = activeKind + "|" + name + "|" + sheet.read(activeCard).multiplayer;
+        dialog.dataset.choice = activeKind + "|" + name;
         var title = dialog.querySelector("#character_guide_title");
         title.textContent = activeKind === "build" ? sheet.read(activeCard).name : name || "Character guide";
         dialog.querySelector(".character-guide-eyebrow").textContent = activeKind === "build" ? "Starting character sheet" : activeKind === "species" ? "Species guide" : "Background guide";
@@ -113,14 +113,9 @@ define(["jquery", "character-catalog", "item-properties", "starting-sheet", "ric
             list(equipment, data.equipment);
             equipment.appendChild(element("p", "character-guide-note", "Your species and starting weapon choice can change the equipment you receive."));
         }
-        var multiplayer = sheet.read(activeCard).multiplayer;
-        var startingSpells = (data.spells || []).filter(function (name) {
-            var mode = (catalog.spell_modes || {})[name];
-            return multiplayer || !mode || !mode.multiplayer_only;
-        });
-        if (startingSpells.length) {
+        if ((data.spells || []).length) {
             var spells = section(body, "Starting spell access", "spark");
-            list(spells, startingSpells);
+            list(spells, data.spells);
             spells.appendChild(element("p", "character-guide-note", "These spells are available through the starting background. Native species rules determine which are memorized."));
         }
         if (data.skills && Object.keys(data.skills).length) {
@@ -270,7 +265,7 @@ define(["jquery", "character-catalog", "item-properties", "starting-sheet", "ric
         if (!grid) return;
         grid.querySelectorAll(".party-slot-box").forEach(updateCard);
         if (activeCard && dialog && dialog.open &&
-            dialog.dataset.choice !== activeKind + "|" + choice(activeCard, activeKind) + "|" + sheet.read(activeCard).multiplayer) renderDetails();
+            dialog.dataset.choice !== activeKind + "|" + choice(activeCard, activeKind)) renderDetails();
     }
     function init(grid) {
         if (!grid) return;

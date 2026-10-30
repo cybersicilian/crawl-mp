@@ -8,7 +8,7 @@ from webtiles import party_roster
 from webtiles.activity_pump import ActivityPump
 from webtiles.party_control import PartyControl
 from webtiles.player_stream import PlayerStreams
-from webtiles.process_handler import CrawlProcessHandler, CrawlProcessHandlerBase
+from webtiles.process_handler import CrawlProcessHandler
 from webtiles.tile_presence import TilePresence
 
 
@@ -173,45 +173,6 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(packet["members"][1]["floor_items"], [])
         self.assertIn(0, self.streams.pending, "The source floor must clear a departed hero's old proxy view")
 
-    def test_global_time_and_zot_reach_idle_floors_and_reconnects(self):
-        self.packet(0, "player", name="HostHero", time=40, time_last_input=35, hp=20, hp_max=20,
-                    inv={"a": {"name": "own gear"}})
-        own = dict(slot=0, place="D:1", hp=20, hp_max=20, can_act=True,
-                   zot_clock={"remaining_aut": 100}, inventory=["own gear"])
-        self.packet(0, "party_state", members=[own, dict(slot=1, place="D:2")],
-                    global_time=40, world_aut_clock=40, floor_time=40)
-        self.host.append_message.reset_mock()
-        self.packet(1, "party_state", floor="D:2", global_time=50,
-                    world_aut_clock=99, floor_time=99,
-                    members=[dict(slot=0, place="D:1", hp=18, hp_max=18,
-                                  can_act=False, zot_clock={"remaining_aut": 90},
-                                  inventory=["wrong context"]),
-                             dict(slot=1, place="D:2", zot_clock={"remaining_aut": 85})])
-        player, state = self.received(self.host)[-2:]
-        self.assertEqual(player["msg"], "player")
-        self.assertEqual(player["time"], 50)
-        self.assertEqual(player["time_last_input"], 45)
-        self.assertNotIn("name", player, "Unchanged identity is retained by the client")
-        self.assertNotIn("inv", player, "Idle floors must not resend or rebuild inventory")
-        self.assertEqual(player["hp_max"], 18)
-        self.assertEqual(state["global_time"], 50)
-        self.assertEqual(state["floor"], "D:1")
-        self.assertEqual(state["floor_time"], 40)
-        self.assertEqual(state["world_aut_clock"], 40)
-        self.assertEqual(state["members"][0]["zot_clock"]["remaining_aut"], 90)
-        self.assertEqual(state["members"][1]["zot_clock"]["remaining_aut"], 85)
-        self.assertTrue(state["members"][0]["can_act"])
-        self.assertEqual(state["members"][0]["inventory"], ["own gear"])
-        self.assertEqual(own["zot_clock"]["remaining_aut"], 100)
-        reconnect = self.client("Host", 100)
-        self.streams.restore(reconnect)
-        restored = {packet["msg"]: packet for packet in self.received(reconnect)}
-        self.assertEqual(restored["player"]["time"], 50)
-        self.assertEqual(restored["player"]["name"], "HostHero")
-        self.assertEqual(restored["player"]["inv"], {"a": {"name": "own gear"}})
-        self.assertEqual(restored["party_state"]["global_time"], 50)
-        self.assertEqual(restored["party_state"]["members"][0]["zot_clock"]["remaining_aut"], 90)
-
     def test_personal_snapshots_scrub_other_heroes_floor_items(self):
         members = [dict(slot=i, floor_items=["private"], trade_targets=[1-i]) for i in (0, 1)]
         self.packet(0, "party_state", members=members, floor="D:1")
@@ -257,67 +218,6 @@ class MultiplayerTest(unittest.TestCase):
         game.conn.send_message.assert_not_called()
         CrawlProcessHandler.handle_input(game, json.dumps(dict(msg="key", keycode=27)), self.guest)
         self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
-
-    def command_game(self):
-        streams = SimpleNamespace(native_ready=True)
-        pump = ActivityPump(self.control, streams, lambda: {0, 1}, Mock())
-        game = SimpleNamespace(party_control=self.control, activity_pump=pump,
-                               player_streams=streams, conn=Mock(open=True), process=True,
-                               party_mode=True, username="Host", _receivers=self.clients)
-        game.handle_input = lambda message, source, **bindings: CrawlProcessHandler.handle_input(game, message, source, **bindings)
-        return game, pump
-
-    def test_repeated_owner_keys_wait_for_exact_command_completion(self):
-        game, pump = self.command_game()
-        first = pump.start_manual(0)
-        game.handle_input(json.dumps(dict(msg="key", keycode=106)), self.host)
-        game.handle_input(json.dumps(dict(msg="key", keycode=108)), self.guest)
-        game.conn.send_message.assert_not_called()
-        self.assertEqual(len(pump.inputs), 2)
-        pump.command_boundary(first)
-        packets = [json.loads(call.args[0]) for call in game.conn.send_message.call_args_list]
-        self.assertEqual([(packet["player_id"], packet["activity_id"]) for packet in packets], [(0, first + 1)])
-        pump.command_boundary(pump.request_id)
-        self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
-
-    def test_automated_prompt_keeps_ownership_and_accepts_its_owners_response(self):
-        game, pump = self.command_game()
-        request = pump.start_manual(1)
-        pump.manual = False
-        pump.prompt_boundary()
-        game.handle_input(json.dumps(dict(msg="key", keycode=27)), self.guest)
-        response = json.loads(game.conn.send_message.call_args.args[0])
-        self.assertEqual(response["prompt_activity_id"], request)
-        self.assertEqual(response["player_id"], 1)
-        self.assertTrue(pump.inflight)
-        game.handle_input(json.dumps(dict(msg="key", keycode=106)), self.host)
-        self.host.send_message.assert_called_once()
-
-    def test_native_automation_prompt_does_not_release_the_command_token(self):
-        pump = ActivityPump(self.control, self.streams, lambda: {0, 1}, Mock())
-        self.streams.native_ready = True
-        request = pump.start_manual(1)
-        pump.manual = False
-        game = SimpleNamespace(party_control=self.control, activity_pump=pump,
-                               player_streams=self.streams, _receivers=self.clients)
-        CrawlProcessHandlerBase.handle_process_message(game, json.dumps(dict(
-            msg="party_packet", slot=1, floor="D:1", view=False,
-            payload=dict(msg="input_mode", mode=8))), True)
-        self.assertTrue(pump.inflight)
-        self.assertTrue(pump.prompt)
-        self.assertEqual(pump.request_id, request)
-        self.assertEqual(pump.owner, 1)
-        self.assertFalse(self.streams.native_ready)
-
-    def test_raw_input_uses_one_tracked_command_per_character(self):
-        game, pump = self.command_game()
-        game.handle_input(json.dumps(dict(msg="input", text="hj")), self.host)
-        self.assertEqual(game.conn.send_message.call_count, 1)
-        self.assertEqual(len(pump.inputs), 1)
-        pump.command_boundary(pump.request_id)
-        packets = [json.loads(call.args[0]) for call in game.conn.send_message.call_args_list]
-        self.assertEqual([packet["keycode"] for packet in packets], [104, 106])
-        self.assertEqual([packet["activity_id"] for packet in packets], [1, 2])
 
 
 if __name__ == "__main__":

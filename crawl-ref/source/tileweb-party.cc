@@ -262,7 +262,6 @@ void TilesFramework::_send_personal_views(bool force_full, int force_slot)
         m_current_player_info = player_info();
         _send_player(true);
         _send_party_state();
-        _send_ai_state();
         if (slot != native_actor || mouse_control::current_mode() == MOUSE_MODE_COMMAND)
         {
             send_message("{\"msg\":\"input_mode\",\"mode\":%d}", MOUSE_MODE_COMMAND);

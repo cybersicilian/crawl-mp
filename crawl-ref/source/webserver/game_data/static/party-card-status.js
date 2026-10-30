@@ -1,5 +1,5 @@
-define(["jquery", "./party-status-model", "./status-icons", "./party-faith", "./portrait-status", "item-properties"],
-function ($, model, icons, faith, portraitStatus, properties) {
+define(["jquery", "./party-status-model", "./status-icons", "./party-faith", "./portrait-status"],
+function ($, model, icons, faith, portraitStatus) {
     "use strict";
 
     function badge(className, hero, name, glyph, body, meta, activate) {
@@ -10,7 +10,7 @@ function ($, model, icons, faith, portraitStatus, properties) {
             .append(icons.icon(glyph))
             .on("click", function (event) { event.stopPropagation(); if (activate) activate(); })
             .on("keydown keypress keyup", function (event) { event.stopPropagation(); });
-        icons.frame($badge[0], { glyph: glyph, tone: "passive" });
+        icons.frame($badge[0], { glyph: glyph, tone: className.indexOf("is-vulnerable") >= 0 ? "bad" : "passive" });
         return $badge;
     }
     function passives(hero, inspect) {
@@ -23,16 +23,9 @@ function ($, model, icons, faith, portraitStatus, properties) {
         defenses.forEach(function (defense) {
             var value = hero.resists && hero.resists[defense[0]];
             if (!Number.isFinite(value) || value === 0) return;
-            var immune = defense[0] === "rElec" && value > 3;
-            var $defense = badge("is-passive" + (value < 0 ? " is-vulnerable" : ""), hero,
-                immune ? "Electricity immunity" : defense[1], defense[2],
-                immune ? "Immune to electrical damage." : "Native resistance level: " + value + ". Includes innate, equipment and temporary sources.",
-                (immune ? "Immune" : value < 0 ? "Vulnerability level " + Math.abs(value) : "Resistance level " + value)
-                    + " · Inspect full defenses", function () { inspect(hero.slot, "overview"); });
-            $defense.children("svg").remove();
-            icons.frame($defense[0], { tone: value < 0 ? "bad" : "passive" });
-            $defense.addClass("status-icon-levels");
-            $row.append($defense.append(properties.levelIcons(defense[2], value)));
+            $row.append(badge("is-passive" + (value < 0 ? " is-vulnerable" : ""), hero, defense[1], defense[2],
+                "Native resistance level: " + value + ". Includes innate, equipment and temporary sources.",
+                "Inspect full defenses", function () { inspect(hero.slot, "overview"); }));
         });
         if (Number.isFinite(hero.move_aut) && hero.move_aut !== 10)
             $row.append(badge("is-passive", hero, "Movement speed", hero.move_aut < 10 ? "speed" : "slow",
@@ -41,6 +34,19 @@ function ($, model, icons, faith, portraitStatus, properties) {
     }
     function create(hero) {
         var $root = $("<div class='party-card-status'></div>");
+        var banes = model.banes(hero);
+        var $banes = $("<div class='party-bane-strip' role='group' aria-label='Banes'></div>")
+            .append($("<span class='party-bane-heading'></span>").text("Banes"));
+        banes.entries.forEach(function (bane) {
+            $banes.append($("<span class='party-bane' role='img' tabindex='0'></span>")
+                .append(icons.effectArt(bane), $("<span></span>").text(bane.name)).attr({ "aria-label": hero.name + ": " + bane.name + ". " + bane.recovery,
+                    "data-tip-title": bane.name, "data-tip-body": bane.description,
+                    "data-tip-meta": bane.recovery })
+                .on("click keydown keypress keyup", function (event) { event.stopPropagation(); }));
+        });
+        if (!banes.entries.length) $banes.append($("<span class='party-bane-empty'></span>")
+            .text(banes.known ? "None" : "Unavailable"));
+        $root.append($banes);
         var $row = $("<div class='party-effect-strip' role='group' aria-label='Active effects'></div>");
         var $active = $("<div class='party-effect-group' role='group' aria-label='Buffs and active effects'></div>");
         var $harmful = $("<div class='party-effect-group' role='group' aria-label='Debuffs'></div>");
@@ -90,7 +96,8 @@ function ($, model, icons, faith, portraitStatus, properties) {
                 "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuetext": description,
                 "data-progress-state": capped ? "capped" : progress === null ? "unknown" : "known",
                 "data-tip-title": hero.name + " · " + label,
-                "data-tip-body": description + ".\n" + [hero.species, hero.job, hero.title, hero.place].filter(Boolean).join(" · "),
+                "data-tip-body": description + ".\n" + (current.description ? current.description + "\n" : "")
+                    + [hero.species, hero.job, hero.title, hero.place].filter(Boolean).join(" · "),
                 "data-tip-meta": timingNote })
             .on("click keydown keypress keyup", function (event) {
                 if (event.type.indexOf("key") === 0 && event.key === "Tab") return;

@@ -282,7 +282,6 @@ static const vector<pop_entry> population[] =
   { -2,  6,  310, SEMI, MONS_BASILISK },
   { -1,  3,   24, PEAK, MONS_SCORPION },
   { -1,  5,  310, SEMI, MONS_WOLF },
-  { -1,  5,   45, SEMI, MONS_FIRE_FOX },
   { -1,  8,  290, PEAK, MONS_RIME_DRAKE },
   { -1, 10,  380, SEMI, MONS_BLACK_MAMBA },
   {  0,  4, 1000, FLAT, MONS_BULLFROG },
@@ -851,7 +850,6 @@ POP_DEPTHS,
   {  1,  9,  235, SEMI, MONS_SPRIGGAN_BERSERKER },
   {  1,  8,  155, SEMI, MONS_SPRIGGAN_AIR_MAGE },
   {  3,  5,  115, RISE, MONS_SPRIGGAN_DEFENDER },
-  {  2,  5,   55, SEMI, MONS_GREENWOOD_WITCH },
   {  1,  7,   85, PEAK, MONS_APIS },
   {  2,  7,  165, SEMI, MONS_SHAMBLING_MANGROVE },
   {  1,  6,   85, SEMI, MONS_ANACONDA },
@@ -1230,38 +1228,6 @@ POP_DEPTHS,
   {  1,  1,   25, FLAT, MONS_SEWAGE_SOVEREIGN },
   {  1,  1,   25, FLAT, MONS_SCRAPSHELL_CHIMERA },
 },
-{ // Burrows: familiar supporting fauna, with no new swarm or support bands.
-  {  1,  4, 1400, FLAT, MONS_BURROWING_BEAST },
-  {  1,  4, 1100, FLAT, MONS_CRAG_BOAR },
-  {  1,  4,  950, RISE, MONS_SHALE_DRAKE },
-  {  1,  4,  650, RISE, MONS_DEEP_TROLL_DELVER },
-  {  1,  2,  350, FALL, MONS_KOMODO_DRAGON },
-  {  2,  4,  200, FLAT, MONS_BOULDER_BEETLE },
-  {  2,  4,  175, SEMI, MONS_EARTH_ELEMENTAL },
-},
-{ // Wormlands: sustained damage and fungal positioning; support bands stay in vaults.
-  {  1,  4, 1000, FLAT, MONS_GALLERY_WORM },
-  {  1,  4,  650, FLAT, MONS_COIL_WORM },
-  {  2,  4,  180, FLAT, MONS_CAUSTIC_WORM },
-  {  1,  4,  900, FLAT, MONS_WANDERING_MUSHROOM },
-  {  3,  4,  250, RISE, MONS_DEATHCAP },
-  {  1,  3,  250, FALL, MONS_DEEP_TROLL_DELVER },
-  {  1,  4,  250, FLAT, MONS_DEEP_TROLL },
-  {  1,  4,  250, FLAT, MONS_LINDWURM },
-  {  1,  4,  100, FLAT, MONS_EARTH_ELEMENTAL },
-  {  2,  4,  300, RISE, MONS_IRON_TROLL },
-  {  3,  4,  200, RISE, MONS_STONE_GIANT },
-  {  4,  4,  100, FLAT, MONS_IRON_DRAGON },
-},
-{ // Hive: fast flying packs, with poison and deeper electrical threats.
-  {  1,  2,  200, FALL, MONS_KILLER_BEE },
-  {  1,  2, 1000, FLAT, MONS_WAX_BEETLE },
-  {  1,  2,  750, FLAT, MONS_VENOM_WASP },
-  {  1,  2,  100, FLAT, MONS_QUEEN_BEE },
-  {  1,  2,  250, FLAT, MONS_HORNET },
-  {  1,  2,  150, RISE, MONS_MELIAI },
-  {  2,  2,  400, FLAT, MONS_SPARK_WASP },
-},
 };
 
 COMPILE_CHECK(ARRAYSZ(population) == NUM_BRANCHES);
@@ -1417,9 +1383,6 @@ static const vector<pop_entry> population_water[] =
     GENERIC_WATER_POP, // Crucible
     GENERIC_WATER_POP, // Necropolis
     GENERIC_WATER_POP, // Gulch
-    GENERIC_WATER_POP, // Burrows
-    GENERIC_WATER_POP, // Wormlands
-    GENERIC_WATER_POP, // Hive
 };
 COMPILE_CHECK(ARRAYSZ(population_water) == NUM_BRANCHES);
 
@@ -1525,9 +1488,6 @@ static const vector<pop_entry> population_lava[] =
     GENERIC_LAVA_POP, // Crucible
     GENERIC_LAVA_POP, // Necropolis
     GENERIC_LAVA_POP, // Gulch
-    GENERIC_LAVA_POP, // Burrows
-    GENERIC_LAVA_POP, // Wormlands
-    GENERIC_LAVA_POP, // Hive
 };
 
 COMPILE_CHECK(ARRAYSZ(population_lava) == NUM_BRANCHES);

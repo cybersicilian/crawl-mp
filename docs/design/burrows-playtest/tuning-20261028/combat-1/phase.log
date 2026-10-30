@@ -1,9 +1,0 @@
- Host slot is locked; no reservation change.
-
-{"runId": "707c5cc8-4329-47f8-8546-ab69a74a39a7", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS corrected baseline and six paired encounter replays", "requestId": "b6a69d5099665f5b754d6740aba676eb271a42680721e17d3a172c07eb88252e", "status": "reserved", "reservedAt": 1793196917.352416}
- 
-{"runId": "707c5cc8-4329-47f8-8546-ab69a74a39a7", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS corrected baseline and six paired encounter replays", "requestedAt": 1793196917.379915, "supervisorPid": 89864, "status": "running", "reservation": true, "requestId": "b6a69d5099665f5b754d6740aba676eb271a42680721e17d3a172c07eb88252e", "startedAt": 1793196917.3801868, "workerPid": 89865, "processGroup": 89865}
-baseline-caster 0
-baseline-fighter 0
-candidate 0
-{"runId": "707c5cc8-4329-47f8-8546-ab69a74a39a7", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS corrected baseline and six paired encounter replays", "requestedAt": 1793196917.379915, "supervisorPid": 89864, "status": "released", "reservation": true, "requestId": "b6a69d5099665f5b754d6740aba676eb271a42680721e17d3a172c07eb88252e", "startedAt": 1793196917.3801868, "workerPid": 89865, "processGroup": 89865, "exitCode": 0, "finishedAt": 1793197102.408017, "supervisedProcessGroupGone": true, "releasedAt": 1793197102.473887, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/combat-1/closure.json", "releaseEvidenceSha256": "7db6481e22fe01efae0c7709b4a106c62fa37ccea6a57c8fc00ce7277b56926d"}

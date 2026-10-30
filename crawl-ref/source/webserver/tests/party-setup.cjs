@@ -1,5 +1,5 @@
 const { signInTestAccount } = require('./helpers/test-account.cjs');
-/* Local-only acceptance for compact modes and the native-select enhancement. */
+/* Local-only acceptance for compact modes and visual character choices. */
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -14,10 +14,12 @@ async function fits() {
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No page overflow');
 }
 async function choose(selector, query, value) {
-    await page.locator(selector + '_picker').click();
-    await page.locator('.choice-picker-search').fill(query);
-    await page.locator('.choice-picker').getByRole('option', { name: new RegExp('^' + value + '(?:, recommended)?$') }).click();
+    const search = page.locator(selector + '_visual_search');
+    const list = page.locator(selector + '_visual_choices');
+    await search.fill(query);
+    await list.locator('.visual-choice').filter({ has: page.locator('.visual-choice-name', { hasText: value }) }).first().click();
     await page.waitForFunction(({ selector, value }) => document.querySelector(selector).value === value, { selector, value });
+    await search.fill('');
 }
 function quiet(start) {
     assert.deepEqual(sent.slice(start).filter(message => !['pong', 'latency_probe'].includes(message.msg)), []);
@@ -55,6 +57,12 @@ function quiet(start) {
     await page.locator('.lobby-chapters [data-workspace-target="play"]').click();
     await page.locator('#lobby_home [data-lobby-create]').click();
     await page.locator('#party_room_view').waitFor({ state: 'visible' });
+    const leader = page.locator('.party-slot-box[data-slot="0"]');
+    assert(await leader.locator('.build-overview').isVisible());
+    await leader.locator('.party-trait-guide summary').click();
+    assert.equal(await leader.locator('.party-trait-guide section').count(), 3);
+    assert.match(await leader.locator('[data-trait="mummy"]').innerText(), /cannot drink potions/i);
+    assert(await page.locator('#party_slot_species_0_visual_choices .visual-choice-image').first().isVisible());
     async function builds(slot) {
         return page.locator('.party-slot-box[data-slot="' + slot + '"] .party-archetype-btn:not([data-random])')
             .evaluateAll(buttons => buttons.map(button => ({ species: button.dataset.species, job: button.dataset.job })));
@@ -91,17 +99,15 @@ function quiet(start) {
     await page.waitForFunction(() => Array.from(document.querySelector('#party_slot_weapon_0').options)
         .some(option => option.value === 'war axe' && option.dataset.recommended === 'true'));
     assert((await page.locator('#party_slot_weapon_0 option').first().innerText()).startsWith('★ '));
-    const race = '#party_slot_species_0', trigger = page.locator(race + '_picker');
-    await trigger.click();
-    assert(await page.locator('.choice-picker-search').evaluate(node => node === document.activeElement));
-    let rect = await page.locator('.choice-picker').boundingBox();
-    assert(rect.height <= 366 && rect.y >= 0 && rect.y + rect.height <= 800, 'Picker fits desktop');
-    await page.locator('.choice-picker-search').fill('tro');
-    assert.equal(await page.locator('.choice-picker').getByRole('option').count(), 1);
-    await page.locator('.choice-picker-search').press('Enter');
+    const race = '#party_slot_species_0', search = page.locator(race + '_visual_search');
+    const list = page.locator(race + '_visual_choices');
+    await search.fill('tro');
+    assert.equal(await list.locator('.visual-choice').count(), 1);
+    await list.locator('.visual-choice').first().focus();
+    await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.querySelector('#party_slot_species_0').value === 'Troll');
-    assert((await trigger.getAttribute('aria-label')).includes('Troll'));
-    assert(await trigger.evaluate(node => node === document.activeElement));
+    assert.equal(await list.locator('.visual-choice').first().getAttribute('aria-pressed'), 'true');
+    await search.fill('');
     const first = page.locator('.party-slot-box[data-slot="0"]');
     assert((await builds(0)).every(build => build.species === 'Troll'));
     await first.locator('.party-archetype-btn[data-job="Gladiator"]').click();
@@ -115,46 +121,34 @@ function quiet(start) {
     assert.deepEqual(await builds(0), [{ species: 'Troll', job: 'Conjurer' }]);
     await recommendations(race, await page.evaluate(() => require('character-catalog').jobs.Conjurer.recommended));
     assert.equal(await page.locator(race).inputValue(), 'Troll', 'Nonrecommended species remain selected');
-    await trigger.click();
-    const firstRecommended = page.locator('.choice-picker').getByRole('option').first();
-    assert((await firstRecommended.innerText()).startsWith('★ '));
+    const firstRecommended = list.locator('.visual-choice').first();
+    assert((await firstRecommended.innerText()).includes('Recommended'));
     assert((await firstRecommended.getAttribute('aria-label')).endsWith(', recommended'));
-    assert(await page.evaluate(() => {
-        const list = document.querySelector('.choice-picker-results');
-        return list.firstElementChild.getBoundingClientRect().top >= list.getBoundingClientRect().top;
-    }));
-    assert((await page.locator('.choice-picker-count').innerText()).includes('★ Recommended'));
     await page.screenshot({ path: path.join(output, 'recommendations-desktop.png') });
-    await page.keyboard.press('Escape');
     await choose('#party_slot_job_0', 'bers', 'Berserker');
     const edited = sent.filter(message => message.msg === 'party_room_update_slot');
     assert(edited.some(message => message.species === 'Troll'));
     assert(edited.some(message => message.job === 'Berserker'));
     assert(!sent.some(message => message.msg === 'key' || message.msg === 'play'));
     const readOnly = sent.length;
-    await trigger.press('ArrowDown');
-    await page.locator('.choice-picker-search').fill('no-such-species');
-    assert.equal(await page.locator('.choice-picker').getByRole('option').count(), 0);
-    assert((await page.locator('.choice-picker-count').innerText()).includes('No matches'));
-    await page.locator('.choice-picker-search').press('Escape');
-    assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
-    assert(await trigger.evaluate(node => node === document.activeElement));
+    await search.fill('no-such-species');
+    assert.equal(await list.locator('.visual-choice').count(), 0);
+    assert((await leader.locator('.visual-choice-count').first().innerText()).includes('No available matches'));
     assert.equal(await page.locator(race).inputValue(), 'Troll');
-    await trigger.click();
-    await page.locator('.choice-picker-search').fill('elf');
-    await page.locator('.choice-picker-search').press('ArrowDown');
-    assert(await page.locator('.choice-picker-search').getAttribute('aria-activedescendant'));
-    await page.locator('.choice-picker-search').press('Escape');
+    await search.fill('elf');
+    assert((await list.locator('.visual-choice').count()) > 0);
+    await search.fill('');
     quiet(readOnly);
     await choose(race, 'fel', 'Felid');
-    await page.locator('#party_slot_job_0_picker').click();
     await recommendations('#party_slot_job_0', await page.evaluate(() => require('character-catalog').species.Felid.recommended));
-    const available = await page.locator('.choice-picker').getByRole('option').allTextContents();
-    const legal = await page.locator('#party_slot_job_0').evaluate(node => Array.from(node.options).filter(option => !option.disabled).map(option => option.text));
+    const jobControls = page.locator('#party_slot_job_0').locator('..').locator('.visual-choices');
+    await jobControls.locator('.visual-choice-toggle').click();
+    const available = await page.locator('#party_slot_job_0_visual_choices .visual-choice').evaluateAll(nodes => nodes.map(node => node.dataset.value));
+    const legal = await page.locator('#party_slot_job_0').evaluate(node => Array.from(node.options).filter(option => !option.disabled).map(option => option.value));
     assert.deepEqual(available, legal, 'Only legal backgrounds are offered');
-    await page.locator('.choice-picker-search').press('Escape');
+    await jobControls.locator('.visual-choice-toggle').click();
     await first.locator('.party-archetype-btn[data-species="Felid"]').click();
-    await page.waitForFunction(() => document.querySelector('#party_slot_species_0_picker').textContent.includes('Felid'));
+    await page.waitForFunction(() => document.querySelector('#party_slot_species_0_visual_choices [aria-pressed="true"]').dataset.value === 'Felid');
     await page.locator('.party-slot-box[data-slot="0"] .character-choice-details').first().click();
     await page.locator('#character_guide_dialog').waitFor({ state: 'visible' });
     await page.keyboard.press('Escape');
@@ -184,12 +178,11 @@ function quiet(start) {
         await fits();
         await page.mouse.move(1, 1);
         await page.screenshot({ path: path.join(output, 'party-' + width + '.png') });
-        await trigger.click();
-        await page.locator('.choice-picker-search').fill('dwarf');
-        rect = await page.locator('.choice-picker').boundingBox();
-        assert(rect.x >= 0 && rect.x + rect.width <= width && rect.y >= 0 && rect.y + rect.height <= height, 'Picker stays within ' + width + ' viewport');
+        await search.fill('dwarf');
+        const rect = await list.boundingBox();
+        assert(rect.x >= 0 && rect.x + rect.width <= width, 'Visual choices stay within ' + width + ' viewport');
         await page.screenshot({ path: path.join(output, 'picker-' + width + '.png') });
-        await page.locator('.choice-picker-search').press('Escape');
+        await search.fill('');
     }
     await page.locator('#btn_leave_party_room').click();
     await page.locator('#party_room_view').waitFor({ state: 'hidden' });

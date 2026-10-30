@@ -2128,7 +2128,7 @@ static void _DAWNFORGED_equip(item_def */*item*/, bool *show_msgs, bool unmeld)
         {
             if (!show_msgs || *show_msgs)
             {
-                mprf("Dawnforged answers the cold of %s's Duskweaver!",
+                mprf("Dawnforged blazes in an Eclipse Link with %s's Duskweaver!",
                      party::get_player(partner_slot).your_name.c_str());
             }
         }
@@ -2158,7 +2158,7 @@ static void _DAWNFORGED_melee_effects(item_def* /*weapon*/, actor* attacker,
         && one_chance_in(3))
     {
         const player &partner = party::get_player(partner_slot);
-        mprf("The paired blades erupt in fire and frost between you and %s!",
+        mprf("Solar fire and lunar frost collide between you and %s in an Eclipse Burst!",
              partner.your_name.c_str());
         for (adjacent_iterator ai(defender->pos(), false); ai; ++ai)
         {
@@ -2167,7 +2167,7 @@ static void _DAWNFORGED_melee_effects(item_def* /*weapon*/, actor* attacker,
                 continue;
             const int burst = 4 + random2(10);
             mon->hurt(attacker, burst, BEAM_FIRE, KILLED_BY_BEAM, "",
-                      "paired fire and frost");
+                      "solar-lunar eclipse");
         }
     }
 }
@@ -2181,7 +2181,7 @@ static void _DUSKWEAVER_equip(item_def */*item*/, bool *show_msgs, bool unmeld)
         {
             if (!show_msgs || *show_msgs)
             {
-                mprf("Duskweaver answers the heat of %s's Dawnforged!",
+                mprf("Duskweaver shimmers in an Eclipse Link with %s's Dawnforged!",
                      party::get_player(partner_slot).your_name.c_str());
             }
         }
@@ -2214,7 +2214,7 @@ static void _DUSKWEAVER_melee_effects(item_def* /*weapon*/, actor* attacker,
         && one_chance_in(3))
     {
         const player &partner = party::get_player(partner_slot);
-        mprf("The paired blades erupt in frost and fire between you and %s!",
+        mprf("Lunar frost and solar fire converge between you and %s in an Eclipse Burst!",
              partner.your_name.c_str());
         for (adjacent_iterator ai(defender->pos(), false); ai; ++ai)
         {
@@ -2223,7 +2223,7 @@ static void _DUSKWEAVER_melee_effects(item_def* /*weapon*/, actor* attacker,
                 continue;
             const int burst = 4 + random2(10);
             mon->hurt(attacker, burst, BEAM_COLD, KILLED_BY_BEAM, "",
-                      "paired fire and frost");
+                      "solar-lunar eclipse");
         }
     }
 }

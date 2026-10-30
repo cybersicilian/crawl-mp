@@ -65,9 +65,6 @@ enum class progress { inactive, waiting, working, ready, cancelled };
 // Skill in tenths. Only projection scales; original bundle values are preserved.
 limits shapeshifting_limits(int skill_tenths);
 int slot_count(int level, const limits& policy);
-// Empty unlocked slots, or the oldest unlocked memory when the pool is full.
-// Adapters choose among these without making inspection consume gameplay RNG.
-std::vector<int> destinations(const state& memory, int level, const limits& policy);
 int destination(const state& memory, int level, const limits& policy);
 std::vector<property> candidates(const base_profile& source, const limits& policy);
 property applied(property source, const limits& policy);
@@ -86,6 +83,7 @@ progress advance(work& task, bool source_valid, bool owner_can_act,
 void cancel(work& task);
 // Exactly one consumption callback and one FIFO replacement per bundle.
 bool complete(state& memory, work& task, std::int64_t now, int level,
-              const limits& policy, const std::function<bool(std::uint64_t)>& consume,
-              int selected_slot = -1);
+              const limits& policy, const std::function<bool(std::uint64_t)>& consume);
+int weapon_damage_percent(int progress_aut, int lifetime_aut);
+int weapon_corrosion_stage(int progress_aut, int lifetime_aut);
 }

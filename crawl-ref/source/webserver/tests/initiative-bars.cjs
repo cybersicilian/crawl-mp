@@ -116,10 +116,7 @@ async function browserProof() {
         assert.equal(await meters.count(), 4);
         assert.deepEqual(await meters.allTextContents(), ['', '', '', ''], 'No visible timing text');
         assert.equal(await meters.nth(1).getAttribute('data-timing-state'), 'mixed');
-        assert.match(await meters.nth(1).getAttribute('aria-label'), /Lyra.*Recovering with catch-up time/);
-        assert(await meters.evaluateAll(nodes => nodes.every(node =>
-            ['aria-label', 'data-tip-title', 'data-tip-body', 'data-tip-meta'].every(name =>
-                !/\d/.test(node.getAttribute(name) || '')))), 'Initiative labels and descriptions use no numeric timing');
+        assert.match(await meters.nth(1).getAttribute('aria-label'), /Lyra.*4 aut banked.*6 aut debt/);
         assert.equal(await meters.nth(0).locator('.initiative-bank i').evaluate(el => el.style.width), '50%');
         assert.equal(await meters.nth(2).locator('.initiative-debt i').evaluate(el => el.style.width), '50%');
         assert(await meters.nth(2).locator('.initiative-debt i').evaluate(el => getComputedStyle(el).backgroundImage.includes('repeating-linear-gradient')));
@@ -164,8 +161,7 @@ async function browserProof() {
             await renderMode({ ...snapshot, multiplayer: true });
             assert(await yieldButton.isVisible(), 'Multiplayer Yield remains directly available');
             assert(await timing.isVisible(), 'Multiplayer monster timing remains available');
-            assert.match(await timing.getAttribute('aria-label'), /World catching up/);
-            assert(!/\d/.test(await timing.textContent()), 'The shared tracker has no numeric readout');
+            assert.match(await timing.getAttribute('aria-label'), /10 aut credit.*0 aut debt/);
             await page.evaluate(() => { window.watching = true; });
             await renderMode({ ...snapshot, multiplayer: true });
             assert.equal(await yieldButton.isVisible(), false, 'Spectators cannot Yield');

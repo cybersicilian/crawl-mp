@@ -228,35 +228,6 @@ define([], function () {
         return node;
     }
 
-    // Signed levels share the existing artwork; each negative level gets its own X.
-    // Zero and unknown values retain a muted symbol so the defense stays identifiable.
-    function levelIcons(name, level) {
-        var known = Number.isFinite(level), count = known ? Math.abs(Math.trunc(level)) : 0;
-        var group = document.createElement("span");
-        group.className = "resistance-icons" + (known ? count ? "" : " is-zero" : " is-unknown");
-        group.setAttribute("aria-hidden", "true");
-        for (var i = 0; i < Math.max(1, count); i++) {
-            var glyph = icon(name);
-            glyph.classList.add(count ? "is-filled" : "is-empty");
-            if (known && level < 0) {
-                glyph.classList.add("is-vulnerable");
-                ["resistance-cross-outline", "resistance-cross"].forEach(function (className) {
-                    var cross = document.createElementNS(glyph.namespaceURI, "path");
-                    cross.setAttribute("class", className);
-                    cross.setAttribute("d", "M4 4L16 16M16 4L4 16");
-                    glyph.appendChild(cross);
-                });
-            }
-            group.appendChild(glyph);
-        }
-        if (!known) {
-            var unknown = document.createElement("span");
-            unknown.textContent = "?";
-            group.appendChild(unknown);
-        }
-        return group;
-    }
-
     function render(input, options) {
         var parsed = parse(input), node = document.createElement("span");
         node.className = "item-property-name";
@@ -279,7 +250,7 @@ define([], function () {
         return node;
     }
 
-    return { parse: parse, describe: describe, icon: icon, levelIcons: levelIcons, badge: badge, render: render, append: append,
+    return { parse: parse, describe: describe, icon: icon, badge: badge, render: render, append: append,
         iconNames: function () { return spriteNames.concat(Object.keys(iconAliases)); },
         iconAtlas: function () { return Object.assign({}, spriteAtlas); }, iconSprite: iconSprite,
         hasIcon: function (name) { return Object.prototype.hasOwnProperty.call(spriteFrames, name)

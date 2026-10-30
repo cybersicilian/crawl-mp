@@ -2141,6 +2141,12 @@ bool melee_attack::attack()
         return false;
     }
 
+    // Register wear once per committed swing, including misses. Derived cleave
+    // targets and multihit followups do not multiply wear. Dissolution happens
+    // in player reactions, after every pointer used by this attack is finished.
+    if (attacker->is_player() && !simu && !cleaving && !is_followup && !is_projected)
+        oozle::note_weapon_use(weapon);
+
     // Now that we finally know that this swing is really happening, count it.
     if (attacker->is_player())
     {
@@ -2442,8 +2448,6 @@ public:
 
     int get_damage(bool /*random*/) const override
     {
-        if (you.form == transformation::scorpion)
-            return 18;
         const int base = you.fishtail
                             || you.has_mutation(MUT_ARMOURED_TAIL)
                             || you.has_mutation(MUT_STINGER)
@@ -2457,8 +2461,7 @@ public:
 
     string get_name() const override
     {
-        if (you.form == transformation::scorpion
-            || you.has_mutation(MUT_STINGER) || you.has_mutation(MUT_WEAKNESS_STINGER))
+        if (you.has_mutation(MUT_STINGER) || you.has_mutation(MUT_WEAKNESS_STINGER))
             return "sting";
         else
             return "tail-slap";
@@ -2466,8 +2469,6 @@ public:
 
     int get_brand() const override
     {
-        if (you.form == transformation::scorpion)
-            return SPWPN_VENOM;
         if (you.get_mutation_level(MUT_WEAKNESS_STINGER) == 3)
             return SPWPN_WEAKNESS;
 
@@ -2476,8 +2477,7 @@ public:
 
     bool is_usable() const override
     {
-        return you.form == transformation::scorpion
-                || you.has_mutation(MUT_ARMOURED_TAIL)
+        return you.has_mutation(MUT_ARMOURED_TAIL)
                 || you.has_mutation(MUT_STINGER)
                 || you.has_mutation(MUT_WEAKNESS_STINGER)
                 || you.fishtail;

@@ -12,14 +12,7 @@ const visible = { id: 1, x: 4, y: 5, perception: 'visible', energy_deficit: 4, s
     damage_level: 2, health: 'moderately wounded' };
 assert.equal(model.project(visible).health, 70);
 assert.equal(model.project(visible).initiative, 60);
-assert.equal(model.project(visible).reading, 'Recovering');
-assert.equal(model.project({ ...visible, ready: true }).reading, 'Ready');
-assert.equal(model.project({ ...visible, speed: 0 }).reading, 'Paused');
-assert.equal(model.project({ ...visible, speed: undefined }).reading, 'Unknown');
-for (const energy_deficit of [0, 1, 4, 99]) {
-    assert(!/\d/.test(model.project({ ...visible, energy_deficit }).reading),
-        'Readiness uses words while the bar preserves native energy');
-}
+assert.equal(model.project(visible).reading, '~4 aut');
 assert.equal(model.project({ ...visible, energy_deficit: -3, ready: true }).initiative, 100);
 assert.equal(model.project({ ...visible, energy_deficit: 99 }).initiative, 0);
 assert.equal(model.project({ ...visible, damage_level: 9 }).health, null);
@@ -48,13 +41,7 @@ for (const width of [1440, 1024, 768]) {
 }
 assert(model.layout({ left: 42, top: 100 }, { left: 4, width: 30 }, { width: 390, height: 844 }).compact);
 assert(model.layout({ left: 100, top: 100 }, null, { width: 1000, height: 900 }).compact);
-for (const height of [120, 320, 720]) {
-    const layout = model.layout({ left: 900, top: height - 20 }, null, { width: 1440, height });
-    assert(layout.top + layout.maxHeight <= height - 12, 'The rail never extends below a short viewport');
-}
 assert(model.sameContact(visible, { ...visible, energy_deficit: 9 }), 'Live energy does not invalidate a menu');
 assert(!model.sameContact(visible, { ...visible, x: 6 }), 'Moving monsters invalidate their menu');
 assert(!model.sameContact(visible, { ...visible, perception: 'last_known' }));
-assert(!model.sameContact({ x: 1, y: 2, name: 'hound' }, { x: 1, y: 2, name: 'orc' }),
-    'Map contacts without native IDs cannot reuse a menu after replacement');
 console.log('Enemy banner injury, readiness, invisible-contact privacy, lane and stale-menu contracts passed.');

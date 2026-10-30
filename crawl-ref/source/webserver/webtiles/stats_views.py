@@ -333,9 +333,18 @@ def section_combos(ctx, key):
         if jk and jk not in known_jb:
             jobs.append({"key": jk, "name": gs[0].get("job") or jk})
             known_jb.add(jk)
-    species.sort(key=lambda s: s["name"])
-    jobs.sort(key=lambda j: j["name"])
     legal = set(ref.combo_by_pair) if ref.combos else None
+    def axis_rank(entry, axis, others):
+        pairs = [(entry["key"], other["key"]) if axis == "species"
+                 else (other["key"], entry["key"]) for other in others]
+        records = [game for pair in pairs for game in by_pair.get(pair, [])]
+        wins = summarize(records)["wins"] if records else 0
+        offered = sum(legal is None or pair in legal for pair in pairs)
+        # A win contributes extra weight without treating a single win as a
+        # reliable win rate. Alphabetical ties keep empty datasets stable.
+        return (-(len(records) + 2 * wins), -len(records), -wins, -offered, entry["name"].casefold())
+    species.sort(key=lambda s: axis_rank(s, "species", jobs))
+    jobs.sort(key=lambda j: axis_rank(j, "job", species))
     grid_rows, list_rows = [], []
     max_games = max([len(v) for v in by_pair.values()] or [0])
     for sp in species:

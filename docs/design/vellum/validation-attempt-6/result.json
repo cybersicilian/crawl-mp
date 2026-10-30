@@ -1,7 +1,0 @@
-{
-  "requestId": "ca81b6ae15fd78ea6e24eb166b11535969ec8fc3612e4e76d00518c6cbf738ab",
-  "complete": false,
-  "passed": false,
-  "error": "Source changed before snapshot: crawl-ref/source/webserver/tests/premium-materials.test.cjs",
-  "nativeBuildStarted": false
-}

@@ -1,7 +1,0 @@
-{
-  "activity_pump_test.py": "8615051960baccb0d24e92c917c2e4ec05a160a307365c6054feb545957ed637",
-  "backend.patch": "ec7af79e26455ed4d9782413fb7227a796d49bde3b1b529786196bd2b917b0ca",
-  "deploy_verified_fix.py": "874ecad35022b4f5a15903f73f6c8c76fc81bbf1490d975f297bdb1eb4d2764b",
-  "native-command-completion.py": "9b82692d75c8cfa2d2bf6e4e0ce40fea0d7038d1d596934e5f226a0dc7ae023e",
-  "native.patch": "9b674e630cd7cd9aa48c6e2f6747459baefe65444edbd3c097f3a703d74b4dd5"
-}

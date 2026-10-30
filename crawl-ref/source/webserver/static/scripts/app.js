@@ -22,3 +22,7 @@ require(['jquery'], function ($) {
 });
 
 require(['client', 'interface-polish', 'item-display', 'library-ui', 'lobby-navigation', 'loading-ui']);
+
+// Refresh native modules after the animation-settings readiness fix.
+
+// Refresh browser modules for Gozag-only branch bribe visibility.

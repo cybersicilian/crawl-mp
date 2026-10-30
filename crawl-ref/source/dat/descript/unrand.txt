@@ -970,52 +970,45 @@ Zonguldrok. Those slain by its edge are bound into unlife to serve its wielder.
 %%%%
 Aegis of Fellowship
 
-A battered shield whose overlapping wards were devised for the shield-lines
-of an old dwarven company. Its bearer shelters nearby companions, finding
-strength in the press of a shared defence.
-
-Available only in multiplayer.
+A gleaming kite shield forged for the vanguard of a legendary fellowship. It
+projects a protective ward (+6 SH) to every living companion within two paces,
+allows its bearer to block an additional attack each turn for every nearby ally,
+and mends the wounds of wounded comrades whenever the bearer's strikes connect.
 %%%%
 Conduit Staff
 
-A silver-veined staff carried by an expedition of wandering magicians. Its
-runes conduct the power of a blow or spell towards nearby companions, feeding
-their magic rather than hoarding it in the wood.
-
-Available only in multiplayer.
+A quarterstaff of silver-veined ash that hums with shared ley-lines. Its spell
+and melee power grow with every living companion in sight, and whenever its
+wielder casts a combat spell or strikes a foe in melee, resonant arcane pulses
+restore magic points to nearby allies.
 %%%%
 Twin-Soul Ring
 
-Two strands of silver twist through this ring without touching. Its old
-translocation charm needs no matching ring: a nearby companion completes the
-circuit, sharing the wearer's protection and the warmth of each successful
-strike.
-
-Available only in multiplayer.
+A band of intertwined sun-gold and moon-silver forged as a pair. When two
+companions in sight both wear a Twin-Soul Ring, their rings awaken in
+Sympathetic Resonance, granting both wearers +4 slaying, +4 AC, +4 EV, fire
+and cold resistance, and shared life-mending in battle.
 %%%%
 broad axe "Dawnforged"
 
-This axe was forged alongside Duskweaver for two adventurers who rarely
-agreed on anything except which monster to kill next. Its fire answers the
-other blade's frost; in the hands of companions their paired enchantments
-reinforce one another and burst against their quarry.
-
-Available only in multiplayer.
+Forged in the heart of a dying sun as the solar half of a legendary twin
+armoury, this gleaming broad axe radiates relentless heat. When its wielder
+fights within sight of a companion bearing its lunar twin, Duskweaver, both
+weapons awaken in an Eclipse Link that bolsters their bearers' armour and
+prowess while detonating solar-lunar cataclysms on every shared strike.
 %%%%
 demon blade "Duskweaver"
 
-The cold counterpart of Dawnforged, quenched in the same enchanter's workshop.
-It drinks warmth and magic from its victims. A companion bearing Dawnforged
-can awaken the answering enchantment, strengthening both wielders and
-bringing fire and frost together against their foes.
-
-Available only in multiplayer.
+Quenched in the frozen abyss between stars as the lunar counterpart to
+Dawnforged, this crescent-edged demon blade drinks the warmth and magic of
+those it cuts. When wielded in sight of Dawnforged's bearer, the two blades
+resonate across the battlefield, weaving frost and solar fire into devastating
+eclipse bursts.
 %%%%
 gauntlets of the Shieldmate
 
-The battered gauntlets of a dwarven caravan guard. Their maker considered a
-blow wasted if it did nothing for the person standing beside you. Each strike
-feeds the old wards sewn into the cuffs, sheltering nearby companions.
-
-Available only in multiplayer.
+Heavy gold-trimmed gauntlets worn by the sworn bodyguards of ancient dwarven
+shield-kings. Every blow struck while wearing them channels protective force
+and vital warmth into companions standing shoulder-to-shoulder with the wearer.
 %%%%
+

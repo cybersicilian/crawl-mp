@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/native-command-completion.py", line 189, in <module>
-    verify(arguments.source.resolve(), arguments.output.resolve(), arguments.expect_missing)
-    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/private/tmp/dcss-prompt-ownership-01a17b3b/scripts/native-command-completion.py", line 160, in verify
-    assert probe.until(lambda: request in probe.ready_tokens), "Macro completion blocked"
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: Macro completion blocked

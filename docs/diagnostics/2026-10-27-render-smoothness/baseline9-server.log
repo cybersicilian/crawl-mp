@@ -1,4 +1,0 @@
-WARN:root:Skipping game definitions in `games.d/` based on config
-WARN:root:User database '/tmp/dcss-smooth-v9b55uw_/accounts.db3' didn't exist; creating it now.
-WARN:root:User settings database didn't exist at '/tmp/dcss-smooth-v9b55uw_/settings.db3'; creating it now.
-QA_NATIVE_CALL ['/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/crawl', '-seed', '112358', '-name', 'Smoothmvrfz37d', '-rc', '/tmp/dcss-smooth-v9b55uw_/rcs/Smoothmvrfz37d.rc', '-macro', '/tmp/dcss-smooth-v9b55uw_/rcs/Smoothmvrfz37d.macro', '-morgue', '/tmp/dcss-smooth-v9b55uw_/rcs/Smoothmvrfz37d', '-party', '4,ff=on,Smoothmvrfz37d:Human/Fighter/war axe/4009423356139617,Lyra:Human/Fighter/war axe/407644920477469,Karn:Gargoyle/Fighter/war axe/5182198964566329,Vex:Human/Fighter/war axe/1809632637908216', '-extra-opt-last', 'restart_after_game=false', '-dir', '/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source']

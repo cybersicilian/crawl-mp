@@ -229,13 +229,6 @@ hit testing and the HUD's own scale are preserved. Zoom consumes no game time.
 explicit zoom factor. Existing layout, canvas sizing, and coordinate conversion
 remain authoritative; inventory icon rendering is unaffected.
 
-The dungeon now sits in `#dungeon_viewport`, whose exact available width and
-height stay fixed across zoom levels. Complete tiles extend at least 12px behind
-the surrounding panels. Odd grid dimensions keep the followed tile centered;
-the backing canvas uses whole device pixels per tile at fractional browser zoom.
-The dungeon canvas omits the shared gold focus outline, while HUD controls retain
-their keyboard focus indicators and the canvas retains its keyboard context menu.
-
 Fresh native workflows passed directly against port 8888 at normal and Retina
 density, covering the three HUD sizes, inventory inspection and use, equipment,
 Magic Dart, tooltip references, saved layout, keyboard isolation, and icon-only
@@ -318,28 +311,3 @@ The controlled browser suite, shared party
 data/transport checks, and all 17 gameplay protocol tests also passed. Browser
 code/style/test files changed for this feature remain below 600 lines.
 This is local validation; no hosted deployment was performed.
-
-## Adaptive player information sidebar, 19 October 2026
-
-Spare sidebar height now reveals companion inventories and each hero's native
-attributes and resistances. Companion items open that hero's equipment view;
-only the controlled hero retains native use, Shift-click, context menus and
-quickbar dragging. Both surfaces use the same item-button renderer and native
-art adapter. Missing companion art never borrows the controlled hero's atlas
-entry, even when the item names and inventory slots match.
-
-`party-sidebar.js` measures the existing sidebar, gives companion packs a first
-row when it fits, then spends remaining height on additional item and power
-rows. Native health, identity, equipment and action rails keep their space.
-Optional details collapse on smaller windows; inventories scroll when full.
-Resize, native snapshots, inventory art readiness and workspace changes trigger
-coalesced measurement. Pack scroll positions and keyboard focus survive updates;
-when a focused preview collapses, focus returns to that hero's inspect action.
-`character-stat-help` supplies the shared stat and resistance definitions.
-
-`tests/party-sidebar.cjs` checks the actual party, inventory, card-section and
-sidebar adapters with controlled snapshot fixtures. It covers normal and short
-viewports, two heroes, four full 52-item packs, native command dispatch contracts,
-inspection-only companion items, inventory-only updates, hero switching, unknown
-facts, and focus/scroll preservation. This is local browser presentation and
-contract evidence; it does not claim fresh native gameplay or hosted deployment.

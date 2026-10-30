@@ -10,14 +10,9 @@
     color: #e4ede5;
     font-size: 12px;
 }
-.assimilation-panel > summary { display: flex; align-items: center; gap: 8px; min-height: 28px; cursor: pointer; list-style: none; }
-.assimilation-panel > summary::-webkit-details-marker { display: none; }
-.assimilation-panel > summary::before { content: ""; border-left: 6px solid #b7e3b5; border-block: 4px solid transparent; }
-.assimilation-panel[open] > summary { margin-bottom: 8px; }
-.assimilation-panel[open] > summary::before { transform: rotate(90deg); }
-.assimilation-panel > summary strong { color: #b7e3b5; letter-spacing: .04em; }
-.assimilation-panel > summary > span { margin-left: auto; }
-.assimilation-panel > summary > span, .assimilation-unlock { color: #b9c7bd; }
+.assimilation-panel > header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.assimilation-panel > header strong { color: #b7e3b5; letter-spacing: .04em; }
+.assimilation-panel > header span, .assimilation-unlock { color: #b9c7bd; }
 .assimilation-slots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
 .assimilation-slot { border: 1px solid #43574d; border-radius: 3px; background: #203a31; padding: 6px 7px; min-width: 0; }
 .assimilation-slot strong, .assimilation-slot small { display: block; overflow-wrap: anywhere; }
@@ -35,6 +30,11 @@
 .assimilation-work strong { color: #f2cb80; }
 .assimilation-work small { overflow-wrap: anywhere; }
 .assimilation-panel progress { width: 100%; height: 6px; accent-color: #9fc986; }
+.assimilation-digestion { margin-top: 8px; }
+.assimilation-digestion summary { cursor: pointer; color: #c5d5c7; padding: 4px 0; }
+.assimilation-digestion > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 8px; padding: 5px 0; border-top: 1px solid #33473c; }
+.assimilation-digestion > div > span { overflow-wrap: anywhere; }
+.assimilation-digestion progress { grid-column: 1 / -1; }
 .assimilation-rule { color: #b6c5b8; font-size: 10px; margin: 8px 0 0; line-height: 1.45; }
 .equipment-memory-properties { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .equipment-memory-property { display: inline-block; border: 1px dashed #8cbf91; border-radius: 3px; color: #c7efbd; background: #1c3d30; padding: 2px 4px; font-size: 11px; }
@@ -45,3 +45,4 @@
 .assimilation-quality { margin: 0 0 7px; font-size: 11px; color: #e3ca96; }
 .assimilation-inheritance { margin-top: 7px; padding-top: 5px; border-top: 1px solid #3c5042; }
 .assimilation-inheritance > small { color: #b5cbb9; font-weight: bold; }
+.assimilation-weapon-wear { grid-column: 1 / -1; color: #f1c08b; }

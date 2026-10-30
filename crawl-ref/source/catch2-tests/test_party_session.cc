@@ -16,12 +16,10 @@
 #include "mon-act.h"
 #include "dgn-event.h"
 #include "mapmark.h"
-#include "hermit-crab.h"
 #include "timed-effects.h"
 #include "party.h"
 #include "player.h"
 #include "test_player_fixture.h"
-#include "test_vellum_fixture.h"
 
 namespace
 {
@@ -644,66 +642,4 @@ TEST_CASE_METHOD(session_fixture, "Rest, exploration and yield retain separate c
     REQUIRE(party::member_activity(0) == "yield");
     party::reset_activities();
     REQUIRE(party::member_activity(0).empty());
-}
-
-TEST_CASE_METHOD(vellum_fixture, "A pending extra life can save the party during the same monster turn",
-                 "[party-revival-death]")
-{
-    init_monsters();
-    dgn_reset_level(false);
-    for (int x = 1; x < GXM - 1; ++x)
-        for (int y = 1; y < GYM - 1; ++y)
-            env.grid[x][y] = DNGN_FLOOR;
-    you.where_are_you = BRANCH_DUNGEON;
-    you.depth = 1;
-    you.hp_max = 20;
-    you.hp = 0; // The last standing member is now falling.
-    you.religion = GOD_NO_GOD;
-    you.set_position(coord_def(40, 35));
-    party::set_player_count(2);
-    player &crab = party::get_player(1);
-    crab = you;
-    crab.mid = party::mid_for_slot(1);
-    crab.save = nullptr;
-    crab.species = SP_HERMIT_CRAB;
-    crab.your_name = "Crab Companion";
-    crab.set_position(coord_def(42, 35));
-    REQUIRE(hermit_crab::break_shell(crab));
-    crab.pending_revival = true;
-
-    SECTION("a pending shell is resolved before the survivor decision")
-    {
-        REQUIRE(party::prepare_survivor_for_death(0));
-        CHECK(party::active_slot() == 0);
-        CHECK(you.hp == 0);
-        CHECK(crab.hp > 0);
-        CHECK_FALSE(crab.pending_revival);
-        REQUIRE(party::get_proxy_monster(1));
-        CHECK(party::get_proxy_monster(1)->pos() == crab.pos());
-        CHECK_FALSE(party::resolve_pending_revivals());
-    }
-    SECTION("an off-floor pending shell is not a survivor")
-    {
-        crab.depth = 2;
-        CHECK_FALSE(party::prepare_survivor_for_death(0));
-        CHECK(crab.pending_revival);
-        CHECK(crab.hp == 0);
-    }
-    SECTION("a downed member is not a pending extra-life survivor")
-    {
-        party::set_player_downed(1, true);
-        CHECK_FALSE(party::prepare_survivor_for_death(0));
-        CHECK(crab.pending_revival);
-    }
-    SECTION("zero HP without a pending life is not a survivor")
-    {
-        crab.pending_revival = false;
-        CHECK_FALSE(party::prepare_survivor_for_death(0));
-        CHECK(crab.hp == 0);
-    }
-
-    party::set_player_downed(1, false);
-    party::remove_all_proxies();
-    crab.save = nullptr;
-    party::set_player_count(1);
 }

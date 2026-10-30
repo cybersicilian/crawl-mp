@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 #include "oozle-memory-effects.h"
 
 #include "potion.h"
@@ -974,7 +973,7 @@ public:
 
     bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             if (reason)
                 *reason = "You have no companions to bond with.";
@@ -985,7 +984,7 @@ public:
 
     bool effect(bool = true, int pow = 40, bool is_potion = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -997,11 +996,8 @@ public:
         const int count = party::player_count();
         for (int i = 0; i < count; ++i)
         {
-            if (party::slot_is_alive(i) && !party::is_player_downed(i)
-                && party::slot_is_on_current_floor(i))
-            {
+            if (!party::is_player_downed(i))
                 party::heal_or_buff_party_member(i, 6 + random2(7), NUM_DURATIONS, 0, false);
-            }
         }
 
         mprf(MSGCH_DURATION,
@@ -1023,7 +1019,7 @@ public:
 
     bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             if (reason)
                 *reason = "You have no companions to share soul ambrosia with.";
@@ -1034,7 +1030,7 @@ public:
 
     bool effect(bool = true, int pow = 40, bool is_potion = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -1076,7 +1072,7 @@ public:
 
     bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             if (reason)
                 *reason = "You have no companions to resonate with.";
@@ -1087,7 +1083,7 @@ public:
 
     bool effect(bool = true, int pow = 40, bool is_potion = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -1119,7 +1115,7 @@ public:
 
     bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             if (reason)
                 *reason = "You have no companions to transfuse with.";
@@ -1130,7 +1126,7 @@ public:
 
     bool effect(bool = true, int /*pow*/ = 40, bool /*is_potion*/ = true) const override
     {
-        if (!coop_content::enabled() || !party::is_enabled())
+        if (!party::is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -2423,3 +2419,4 @@ bool throw_potion(item_def &potion, dist *pre_target)
 
     return true;
 }
+

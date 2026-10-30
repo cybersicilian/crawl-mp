@@ -97,11 +97,7 @@ def generate(binary):
     mutations = mutation_text()
     spells = dict(re.findall(r'(SPELL_\w+),\s*"([^"]+)"',
                              (SOURCE / "spl-data.h").read_text()))
-    result = {"species": {}, "jobs": {}, "character_traits": {
-        name: {"description": species_descriptions[name.title() + " trait"]}
-        for name in ("mummy", "zombie", "ghost")
-    }, "spell_modes": {
-        name: {"multiplayer_only": True} for name in native["multiplayer_only_spells"]}}
+    result = {"species": {}, "jobs": {}}
     for item in native["species"]:
         name = item["name"]
         definition = species_data.get(name.casefold(), {})

@@ -145,11 +145,6 @@ inside the repository; runtime rendering needs no external asset service.
   engine's existing cross-training rules. Drafts, focus, hero and scroll context
   survive party updates. The native skill menu and WebTiles share
   `set_training_mode()`, including separate selections for each mode.
-- Skill snapshots keep species aptitude in `apt` and export `manual_bonus`
-  from the inspected hero's remaining native manual points (+4 while active,
-  otherwise 0). The aptitude cell shows the total with a visible base/manual
-  breakdown. Additional manuals extend duration; they do not stack the bonus.
-  Older snapshots without the field retain their species aptitude display.
 - Right-clicking eligible backpack, equipped, HUD or ground items offers their
   related skill targets. `Train [skill] to [level]` applies the native item goal
   and enables disabled training, retaining Focus and using no turn. `Set [skill]

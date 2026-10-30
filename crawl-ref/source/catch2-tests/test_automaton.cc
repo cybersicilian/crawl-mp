@@ -23,6 +23,7 @@
 #include "mutation.h"
 #include "ng-restr.h"
 #include "ouch.h"
+#include "options.h"
 #include "party.h"
 #include "player.h"
 #include "random.h"
@@ -50,8 +51,11 @@ namespace
 struct engraving_fixture : vellum_fixture
 {
     int old_max = env.max_mon_index;
+    use_animations_type old_animations = Options.use_animations;
     engraving_fixture()
     {
+        // Headless Catch2 fixtures do not initialize a terminal for beam drawing.
+        Options.use_animations &= ~UA_BEAM;
         init_monsters();
         if (str_to_colour("fire", -1, false, true) == -1)
             init_element_colours();
@@ -85,6 +89,7 @@ struct engraving_fixture : vellum_fixture
     }
     ~engraving_fixture()
     {
+        Options.use_animations = old_animations;
         party::set_multiplayer(false);
         for (int slot = 1; slot < party::MAX_PARTY_PLAYERS; ++slot)
             party::get_player(slot).save = nullptr;
@@ -425,18 +430,18 @@ TEST_CASE_METHOD(engraving_fixture, "Automatic blastmotes kindle safely and expl
     you.spell_no = 1;
     REQUIRE(automaton::has_automatic_trigger(SPELL_BLASTMOTE));
     CHECK(automaton::engraving_guidance(SPELL_BLASTMOTE).find("Move away") != string::npos);
-    REQUIRE(automaton::trigger_attack(target));
+    { INFO("blastmote stage: trigger attack"); REQUIRE(automaton::trigger_attack(target)); }
     REQUIRE(cloud_at(cell));
     CHECK(cloud_at(cell)->protects_nonhostiles());
     CHECK(cloud_at(cell)->source == you.mid);
-    actor_apply_cloud(&you);
+    { INFO("blastmote stage: owner cloud application"); actor_apply_cloud(&you); }
     REQUIRE(cloud_at(cell));
     you.props.erase(BLASTMOTE_IMMUNE_KEY);
     you.set_position(cell + coord_def(4, 4));
     invalidate_los();
     monster& visitor = spawn(1, cell, ATT_HOSTILE);
-    explode_blastmotes_at(cell);
-    fire_final_effects();
+    { INFO("blastmote stage: schedule explosion"); explode_blastmotes_at(cell); }
+    { INFO("blastmote stage: resolve explosion"); fire_final_effects(); }
     CHECK_FALSE(cloud_at(cell));
     CHECK(visitor.hit_points < visitor.max_hit_points);
 }
@@ -2378,4 +2383,175 @@ TEST_CASE_METHOD(engraving_fixture, "Each party member observes encounters in th
     CHECK(other.magic_points < other.max_magic_points);
     CHECK(you.props.exists("automaton_visible_threats"));
     CHECK(other.props.exists("automaton_visible_threats"));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Ranged engravings fire after an action without a weapon attack",
+                 "[automaton][automaton-action]")
+{
+    monster& foe = spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = 8;
+    you.turn_is_over = true;
+    you.last_cast_spell = SPELL_BLINK;
+    SECTION("waiting in place") {}
+    SECTION("moving before the reaction")
+    {
+        you.set_position(you.pos() + coord_def(0, 1));
+        invalidate_los();
+    }
+    const int before = you.magic_points;
+    rng::seed(8128);
+    automaton::react_to_action();
+    CHECK(foe.hit_points < foe.max_hit_points);
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    CHECK(you.time_taken == 8);
+    CHECK(you.turn_is_over);
+    CHECK(you.last_cast_spell == SPELL_BLINK);
+    CHECK(you.props["automaton_combat_heat_until"].get_int() > you.elapsed_time);
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    ++you.num_turns;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - spell_mana(SPELL_MAGIC_DART));
+    ++you.num_turns;
+    you.elapsed_time += 100;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before - 2 * spell_mana(SPELL_MAGIC_DART));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Summoning engravings work while distant foes are visible",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(5, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    const int before = you.magic_points;
+    automaton::react_to_action();
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+    ++you.num_turns;
+    you.elapsed_time += 100;
+    automaton::react_to_action();
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings require an action and a safe reachable threat",
+                 "[automaton][automaton-action]")
+{
+    const coord_def target = you.pos() + coord_def(4, 0);
+    monster& foe = spawn(0, target, ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    SECTION("zero time") { you.time_taken = 0; }
+    SECTION("menu or cancelled action") { you.turn_is_over = false; }
+    SECTION("paralysed") { you.duration[DUR_PARALYSIS] = 10; }
+    SECTION("no remaining thermal capacity") { you.magic_points = 0; }
+    SECTION("non automaton") { you.species = SP_HUMAN; }
+    SECTION("only friendly creatures") { foe.base_attitude = ATT_FRIENDLY; }
+    SECTION("only neutral creatures") { foe.base_attitude = ATT_NEUTRAL; }
+    SECTION("out of spell range") { you.spells[0] = SPELL_FREEZE; }
+    SECTION("an ally blocks the beam")
+    {
+        spawn(1, you.pos() + coord_def(2, 0), ATT_FRIENDLY);
+    }
+    SECTION("Manifold Assault needs a melee attack")
+    {
+        you.spells[0] = SPELL_MANIFOLD_ASSAULT;
+    }
+    const int before = you.magic_points;
+    automaton::react_to_action();
+    CHECK(you.magic_points == before);
+    CHECK(foe.hit_points == foe.max_hit_points);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings try another foe when the nearest target is unsafe",
+                 "[automaton][automaton-action]")
+{
+    monster& blocked = spawn(0, you.pos() + coord_def(3, 0), ATT_HOSTILE);
+    monster& ally = spawn(1, you.pos() + coord_def(2, 0), ATT_FRIENDLY);
+    monster& clear = spawn(2, you.pos() + coord_def(0, 4), ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    rng::seed(8128);
+    automaton::react_to_action();
+    CHECK(blocked.hit_points == blocked.max_hit_points);
+    CHECK(ally.hit_points == ally.max_hit_points);
+    CHECK(clear.hit_points < clear.max_hit_points);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Attacking cannot also gain an action engraving",
+                 "[automaton][automaton-action]")
+{
+    const coord_def target = you.pos() + coord_def(4, 0);
+    spawn(0, target, ATT_HOSTILE);
+    you.spells[0] = SPELL_MAGIC_DART;
+    you.spells[1] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 2;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    REQUIRE(automaton::trigger_attack(target, true));
+    const int after_attack = you.magic_points;
+    automaton::react_to_action();
+    CHECK(you.magic_points == after_attack);
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Encounter observation does not fire offensive engravings for another hero",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_PHALANX_BEETLE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    const int before = you.magic_points;
+    automaton::observe_encounter();
+    CHECK(you.magic_points == before);
+    CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 0);
+    party::set_player_count(2);
+    party::set_multiplayer(true);
+    player& other = party::get_player(1);
+    other = you;
+    other.mid = party::mid_for_slot(1);
+    other.save = nullptr;
+    other.set_position(you.pos() + coord_def(-2, 0));
+    automaton::react_to_action();
+    REQUIRE(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+    CHECK(other.magic_points == before);
+    {
+        party::scoped_player_context context(1, true);
+        automaton::react_to_action();
+        CHECK(count_summons(&you, SPELL_PHALANX_BEETLE) == 1);
+        CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+    }
+    CHECK(you.magic_points == before - spell_mana(SPELL_PHALANX_BEETLE));
+}
+
+TEST_CASE_METHOD(engraving_fixture, "Action engravings keep the bee's three-turn winding",
+                 "[automaton][automaton-action]")
+{
+    spawn(0, you.pos() + coord_def(4, 0), ATT_HOSTILE);
+    you.spells[0] = SPELL_CLOCKWORK_BEE;
+    you.spell_no = 1;
+    you.time_taken = BASELINE_DELAY;
+    you.turn_is_over = true;
+    automaton::react_to_action();
+    automaton::advance_bee_engraving();
+    REQUIRE(automaton::bee_winding_remaining(you) == 3 * BASELINE_DELAY);
+    for (int turns = 2; turns >= 0; --turns)
+    {
+        ++you.num_turns;
+        you.elapsed_time += BASELINE_DELAY;
+        automaton::react_to_action();
+        automaton::advance_bee_engraving();
+        CHECK(automaton::bee_winding_remaining(you) == turns * BASELINE_DELAY);
+    }
+    CHECK(count_summons(&you, SPELL_CLOCKWORK_BEE) == 1);
 }

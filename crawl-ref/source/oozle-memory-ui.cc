@@ -72,8 +72,7 @@ JsonNode* memory_json()
     number(result, "numeric_percent", policy.retention_percent);
     number(result, "shapeshifting_tenths", you.skill(SK_SHAPESHIFTING, 10, true, false));
     number(result, "next_xl", capacity < static_cast<int>(policy.slot_levels.size()) ? policy.slot_levels[capacity] : 0);
-    const auto choices = destinations(memory, you.experience_level, policy);
-    number(result, "destination", choices.size() == 1 ? choices.front() : -1);
+    number(result, "destination", destination(memory, you.experience_level, policy));
     auto* slots = json_mkarray();
     for (int slot = 0; slot < static_cast<int>(policy.slot_levels.size()); ++slot)
     {
@@ -81,7 +80,7 @@ JsonNode* memory_json()
         number(row, "slot", slot);
         number(row, "unlock_xl", policy.slot_levels[slot]);
         flag(row, "unlocked", slot < capacity);
-        flag(row, "next", std::find(choices.begin(), choices.end(), slot) != choices.end());
+        flag(row, "next", slot == destination(memory, you.experience_level, policy));
         const auto found = memory.stored.find(slot);
         if (found != memory.stored.end())
         {
@@ -108,6 +107,28 @@ JsonNode* memory_json()
     number(work, "total", policy.assimilation_turns);
     text(work, "source", assimilation_source());
     json_append_member(result, "work", work);
+    auto* digesting = json_mkarray();
+    for (const auto& entry : you.equipment.items)
+    {
+        if (entry.slot == SLOT_UNUSED || entry.melded || entry.is_overflow) continue;
+        const auto& item = entry.get_item();
+        family group;
+        if (!item_family(item, group)) continue;
+        auto* row = json_mkobject();
+        number(row, "inv_slot", entry.item);
+        text(row, "name", item.name(DESC_PLAIN));
+        const int progress = item.props.exists(corrosion_key) ? item.props[corrosion_key].get_int() : 0;
+        number(row, "progress", min(100, progress * 100 / digestion_aut));
+        number(row, "remaining_aut", max(0, digestion_aut - progress));
+        flag(row, "protected", item.is_critical() || item.summoned() || (item.cursed() && !is_weapon(item)));
+        if (is_weapon(item))
+        {
+            number(row, "weapon_damage_percent", oozle::weapon_damage_percent(item));
+            number(row, "weapon_penalty", weapon_corrosion_penalty(item));
+        }
+        json_append_element(digesting, row);
+    }
+    json_append_member(result, "digesting", digesting);
     return result;
 }
 JsonNode* item_memory_json(const item_def& item)
@@ -117,6 +138,15 @@ JsonNode* item_memory_json(const item_def& item)
     text(result, "assimilation_reason", eligibility(item));
     // Absorbed properties belong to the body, never to this physical item.
     json_append_member(result, "transient_properties", json_mkarray());
+    return result;
+}
+string item_memory_description(const item_def& item)
+{
+    if (!has_memory()) return "";
+    string result;
+    if (is_weapon(item) && oozle::weapon_damage_percent(item) < 100)
+        result = make_stringf("\n\nDigestive corrosion: %d%% base damage; -%d accuracy and enchantment damage. "
+                              "Continued use accelerates dissolution.", oozle::weapon_damage_percent(item), weapon_corrosion_penalty(item));
     return result;
 }
 }

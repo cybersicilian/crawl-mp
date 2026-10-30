@@ -1,7 +1,7 @@
 /* Read-only browsing controls for the Chronicle. Filters never send commands. */
-define(function () {
+define(["text-query"], function (textQuery) {
     "use strict";
-    var root, search, filter = 'all', result, lastSignature;
+    var root, search, clear, filter = 'all', result, lastSignature;
     var groups = [
         { id: 'chronicle_comps_list', key: 'builds', label: 'Party builds' },
         { id: 'chronicle_ghosts_list', key: 'heroes', label: 'Fallen heroes' },
@@ -14,26 +14,27 @@ define(function () {
     }
     function refresh() {
         if (!root) return;
-        var query = search.value.trim().toLocaleLowerCase(), total = 0;
+        var query = search.value.trim(), matches = textQuery.compile(query), total = 0, available = 0;
         groups.forEach(function (group) {
             var list = document.getElementById(group.id);
             if (!list) return;
             var box = list.closest('.chronicle-box'), enabled = filter === 'all' || filter === group.key;
             box.hidden = !enabled;
             list.querySelectorAll('.chronicle-entry').forEach(function (entry) {
-                var match = !query || entry.textContent.toLocaleLowerCase().includes(query);
-                entry.hidden = !match;
-                if (match && enabled) total++;
+                var match = matches(entry.textContent);
+                if (entry.hidden === match) entry.hidden = !match;
+                if (enabled) { available++; if (match) total++; }
             });
             list.querySelectorAll(':scope > .chronicle-entry-sub').forEach(function (empty) {
                 empty.hidden = !!query;
             });
         });
-        var signature = query + '|' + filter + '|' + total;
+        var signature = query + '|' + filter + '|' + total + '|' + available;
         if (signature !== lastSignature) {
             lastSignature = signature;
-            result.textContent = query ? total + ' matching ' + (total === 1 ? 'entry' : 'entries') : '';
+            result.textContent = total + ' of ' + available + (available === 1 ? ' entry' : ' entries');
         }
+        clear.disabled = !search.value && filter === 'all';
         root.querySelector('.chronicle-no-results').hidden = !query || total > 0;
         root.querySelectorAll('[data-chronicle-filter]').forEach(function (button) {
             button.setAttribute('aria-pressed', String(button.dataset.chronicleFilter === filter));
@@ -66,7 +67,14 @@ define(function () {
         search = el('input'); search.type = 'search'; search.placeholder = 'Search recipes, seasonings, heroes, discoveries…';
         search.addEventListener('input', refresh); label.appendChild(search); tools.appendChild(label);
         result = el('span', 'chronicle-search-count'); result.setAttribute('role', 'status');
-        tools.appendChild(result); intro.after(tools);
+        tools.appendChild(result);
+        clear = el('button', 'dcss-btn collection-clear', 'Clear filters'); clear.type = 'button';
+        clear.addEventListener('click', function () { search.value = ''; filter = 'all'; refresh(); search.focus(); });
+        search.addEventListener('keydown', function (event) {
+            if (event.key !== 'Escape' || !search.value) return;
+            event.preventDefault(); event.stopPropagation(); search.value = ''; refresh();
+        });
+        tools.appendChild(clear); intro.after(tools);
         var empty = el('p', 'chronicle-no-results', 'No entries match. Try another recipe, seasoning, or category.'); empty.hidden = true;
         root.querySelector('#coop_chronicle_grid').after(empty);
         groups.forEach(function (group) {

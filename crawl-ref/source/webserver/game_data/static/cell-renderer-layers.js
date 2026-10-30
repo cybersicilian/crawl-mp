@@ -1,6 +1,6 @@
 define(["jquery", "./tileinfo-main", "./tileinfo-icons", "./tileinfo-dngn",
-        "./enums", "./options", "./terrain-edges", "./environment-ground"],
-function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround) {
+        "./enums", "./options"],
+function ($, main, icons, dngn, enums, options) {
     "use strict";
     var terrainPainters = [], surfacePainters = [], actorPainters = [], effectPainters = [], regionPainters = [];
     function paintRegion(renderer, index, cx, cy, x, y) {
@@ -11,7 +11,7 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
     }
     function paintUnderlay(renderer, x, y, cell, cx, cy) {
         if (!cell.flv) return false;
-        if (!environmentGround.draw(renderer, cell.flv.f, x, y, cx, cy)) renderer.draw_dngn(cell.flv.f, x, y);
+        renderer.draw_dngn(cell.flv.f, x, y);
         (cell.ov || []).forEach(function (overlay) {
             if (overlay && overlay <= dngn.FLOOR_MAX) renderer.draw_dngn(overlay, x, y);
         });
@@ -157,11 +157,9 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
                         this.ctx.restore();
                     }
                 }
-                else if (!surfacePainters.some(function (paint) { return paint(renderer, cx, cy, x, y, cell); })
-                    && !environmentGround.draw(this, bg_idx, x, y, cx, cy))
+                else if (!surfacePainters.some(function (paint) { return paint(renderer, cx, cy, x, y, cell); }))
                     this.draw_dngn(bg_idx, x, y);
 
-                terrainEdges.draw(this, cx, cy, x, y);
                 terrainPainters.forEach(function (paint) { paint(renderer, cx, cy, x, y, cell); });
 
                 if (bg_idx > dngn.DNGN_UNSEEN)

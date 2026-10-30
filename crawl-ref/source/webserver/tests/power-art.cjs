@@ -22,19 +22,8 @@ vm.runInNewContext(artCode, {
 });
 
 // Keep the browser's exact-name fallback in sync with the engine's native art.
-const spells = [...read('spl-data.h').matchAll(/\{\s*(SPELL_\w+),\s*"([^"\n]+)"([^{}]*?)\}/g)];
+const spells = [...read('spl-data.h').matchAll(/\{\s*(SPELL_\w+),\s*"([^"\n]+)"([\s\S]*?)\n\}/g)];
 let spellCount = 0;
-const portSpells = {
-    'Shackle': 'SHACKLE', 'False Image': 'FALSE_IMAGE', 'Mana Rupture': 'GRAVITAS',
-    'Icicle Burst': 'ICICLE_BURST', 'Steam Barrier': 'STEAM_BARRIER', 'Blight': 'BLIGHT',
-    'Scorpion Form': 'SCORPION_FORM', "Eringya's Rootspike": 'ERINGYAS_ROOTSPIKE',
-    "Olgreb's Last Mercy": 'OLGREBS_LAST_MERCY', 'Elemental Weapon': 'ELEMENTAL_WEAPON'
-};
-for (const [name, symbol] of Object.entries(portSpells)) {
-    assert(Number.isInteger(gui[symbol]), `${name} has a generated atlas entry`);
-    assert.equal(art.resolve({ name }, 'spell'), gui[symbol], `${name} resolves by name`);
-    assert.equal(art.resolve({ name, tile: gui[symbol] }, 'spell'), gui[symbol], `${name} accepts native metadata`);
-}
 for (const [, , name, body] of spells) {
     const symbol = [...body.matchAll(/TILEG_(\w+)/g)].at(-1)[1];
     if (symbol === 'ERROR' || symbol === 'TODO') continue;
@@ -68,11 +57,6 @@ assert.equal(art.resolve({ name: 'Olgreb’s Toxic Radiance' }, 'spell'), gui.OL
 assert.equal(art.resolve({ name: 'Evoke Blink' }, 'ability'), gui.ABILITY_BLINK);
 assert.equal(art.resolve({ name: 'Blink' }, 'spell'), gui.BLINK);
 assert.notEqual(gui.ABILITY_BLINK, gui.BLINK, 'Spells and abilities retain their distinct native art');
-assert(Number.isInteger(gui.ABILITY_SHELL_DASH));
-assert.notEqual(gui.ABILITY_SHELL_DASH, gui.ABILITY_JUMP, 'Shell Dash owns a native atlas tile');
-assert.equal(art.resolve({ name: 'Shell Dash', tile: gui.ABILITY_JUMP }, 'ability'), gui.ABILITY_SHELL_DASH,
-    'Older server metadata uses the dedicated client art for the exact Shell Dash ability');
-assert.equal(art.resolve({ name: 'Jump', tile: gui.ABILITY_JUMP }, 'ability'), gui.ABILITY_JUMP);
 assert.equal(art.resolve({ name: 'Unleash Destruction' }, 'ability'), null,
     'State-dependent destruction art is unavailable without authoritative native metadata');
 assert.equal(art.resolve({ name: 'Accept Mark of the Tyrant', tile: gui.ABILITY_MAKHLEB_MARK_OF_THE_TYRANT }, 'ability'),
@@ -92,7 +76,7 @@ for (const power of [null, undefined, {}, { id: 1 }, { name: 'Fireball-esque cus
 assert.equal(art.ready(), false);
 const engine = read('tileweb.cc');
 assert.match(engine, /json_write_int\("id", tal\.which\);\s*json_write_int\("tile", tileidx_ability\(tal\.which\)\);/);
-assert.match(engine, /json_write_int\("id", sp\);\s*json_write_bool\("quick_cast",[^\n]+\);\s*json_write_int\("tile", tileidx_spell\(sp\)\);/);
+assert.match(engine, /json_write_int\("id", sp\);\s*json_write_int\("tile", tileidx_spell\(sp\)\);/);
 assert(artCode.split('\n').length <= 600);
 console.log(`Native artwork parity passed for ${spellCount} spells and ${abilityCount} static abilities; dynamic metadata and unknown art guards passed.`);
 

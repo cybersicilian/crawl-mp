@@ -1,6 +1,6 @@
-# Blood Liturgist and bloodcraft
+# Blood Hunter and bloodcraft
 
-Blood Liturgist is a starting background, not a permanent class. It grants no
+Blood Hunter is a starting background, not a permanent class. It grants no
 exclusive traits, advancement track or skill. All five spells are ordinary
 player spells, available in fixed books and the existing random-book/shop
 systems. Species learning rules and religious restrictions still apply.
@@ -8,14 +8,12 @@ systems. Species learning rules and religious restrictions still apply.
 ## Starting kit
 
 - Attributes: +4 Strength, +5 Intelligence, +3 Dexterity.
-- Selected starting weapon with the vampirism brand, leather armour, one potion of curing,
-  one scroll of fog. Species unable to wield weapons retain their native restrictions.
+- Plain weapon selection, leather armour, one potion of curing, one scroll of fog.
 - Fighting, chosen weapon skill, Dodging, Spellcasting, Necromancy and Hexes: 2 each,
   before the normal species aptitude adjustments.
 - Kindled Veins memorized; Winter's Due, Borrowed Thunder, Scarlet Fetters and
   Stolen Sight in the library. Innate casters retain their native learning rules.
-- Worships Vorr with 35 piety (one star); no active rite.
-- Species unable to worship cannot choose this background.
+- No starting god or active rite.
 
 ## Spells and costs
 
@@ -117,38 +115,15 @@ and the active rite displays its reservation in the native status list.
 
 Power continues scaling to 200 rather than ending at an early-game cap. There
 are no background-only bonuses or order unlocks. A fighter can adopt one rite,
-a Hexslinger can adopt one curse, and a Blood Liturgist can stop investing in either
+a Hexslinger can adopt one curse, and a Blood Hunter can stop investing in either
 school. Resistant and bloodless late-game enemies retain applicable soft curse
 effects, while immunity, automatic damage and crowds still require other tools.
 
 ## Validation
 
-The original bloodcraft native bundle passed 42 test cases with 1,937 assertions.
-A fresh local WebTiles game also verified background selection, actual starting gear,
+The focused native bundle passed 42 test cases with 1,937 assertions. A fresh
+local WebTiles game also verified background selection, actual starting gear,
 rite costs and status, and dismissal (16/16 HP to 14/14, then 14/16).
-
-The 19 October 2026 rename preserves the saved `JOB_BLOOD_HUNTER` ID and the
-starting kit, moves the background to Zealot, starts Vorr worship at 35 piety,
-and excludes species unable to worship. Release
-`20261019T174900Z-blood-liturgist` is active at
-[DCSS](https://dcss.iancaltabiano.com). Its Ubuntu native build passed with
-wizard mode disabled. The catalogue and weapon lookup were regenerated from
-that executable, and native character-option and runtime-user preview checks
-passed. The scoped Bloodcraft/Vorr suite passed 282 assertions in 28 cases;
-all 76 scoped backend tests passed.
-
-Fresh isolated and public HTTPS games both verified a Tortle Blood Liturgist
-worshipping Vorr with one-star piety, Rupture, Kindled Veins and the selected
-weapon. The browser checks saved and exited their disposable expeditions with
-no JavaScript errors. Both changed public catalogue assets matched their source
-bytes. Eight retained checkpoint copies preserved loadability and identical
-exported metadata. All 13,212 frozen release files matched after activation;
-state links, application health and recovery passed. The pre-deployment snapshot
-reached READY, and the preceding Tortle release remains available for rollback.
-
-This was an eight-file overlay on the verified Tortle release; unrelated later
-workspace changes were excluded. All owned remote helper process groups closed.
-[Deployment receipt](/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15525-ca03-79c2-92df-d410c872a87c/blood-liturgist-release/evidence/deployment-receipt.json).
 
 `catch2-tests/test_bloodcraft.cc` exercises the starting kit, ordinary book
 availability, reservation accounting, nonlethal combined HP payments, miscasts,

@@ -15,36 +15,6 @@ FixedVector<int, NUM_BRANCHES> brdepth;
 FixedVector<int, NUM_BRANCHES> branch_bribe;
 branch_type root_branch;
 
-const vector<branch_connection> branch_connections = {
-    { level_id(BRANCH_WORMLANDS, branches[BRANCH_WORMLANDS].numlevels),
-      level_id(BRANCH_DEPTHS, 1),
-      DNGN_WORMLANDS_TO_DEPTHS, DNGN_DEPTHS_TO_WORMLANDS },
-};
-
-level_id branch_connection_destination(dungeon_feature_type feat, level_id from)
-{
-    for (const auto& link : branch_connections)
-    {
-        if (feat == link.downstairs && from == link.from)
-            return link.to;
-        if (feat == link.upstairs && from == link.to)
-            return link.from;
-    }
-    return level_id();
-}
-
-dungeon_feature_type branch_connection_return(dungeon_feature_type feat)
-{
-    for (const auto& link : branch_connections)
-    {
-        if (feat == link.downstairs)
-            return link.upstairs;
-        if (feat == link.upstairs)
-            return link.downstairs;
-    }
-    return NUM_FEATURES;
-}
-
 /// A save-compat ordering for branches.
 static const branch_type logical_branch_order[] = {
     BRANCH_DUNGEON,
@@ -94,9 +64,6 @@ static const branch_type logical_branch_order[] = {
     BRANCH_CRUCIBLE,
     BRANCH_NECROPOLIS,
     BRANCH_GULCH,
-    BRANCH_BURROWS,
-    BRANCH_WORMLANDS,
-    BRANCH_HIVE,
 };
 COMPILE_CHECK(ARRAYSZ(logical_branch_order) == NUM_BRANCHES);
 
@@ -120,9 +87,6 @@ static const branch_type danger_branch_order[] = {
     BRANCH_SHOALS,
     BRANCH_SNAKE,
     BRANCH_SPIDER,
-    BRANCH_BURROWS,
-    BRANCH_HIVE,
-    BRANCH_WORMLANDS,
     BRANCH_VAULTS,
     BRANCH_ELF,
     BRANCH_CRYPT,
@@ -151,7 +115,9 @@ static const branch_type danger_branch_order[] = {
 };
 COMPILE_CHECK(ARRAYSZ(danger_branch_order) == NUM_BRANCHES);
 
-static const vector<branch_type> alternative_branches[] =
+static const int number_of_branch_swap_pairs = 2;
+
+static const branch_type swap_branches[number_of_branch_swap_pairs][2] =
 {
     {BRANCH_SHOALS, BRANCH_SWAMP},
     {BRANCH_SPIDER, BRANCH_SNAKE}
@@ -203,16 +169,12 @@ branch_iterator branch_iterator::operator++(int)
 
 vector<branch_type> random_choose_disabled_branches()
 {
-    // Select one water branch and one land branch.
+    // You will get one of Shoals/Swamp and one of Spider/Snake.
+    // This way you get one "water" branch and one "poison" branch.
     vector<branch_type> disabled_branch;
 
-    for (const auto &group : alternative_branches)
-    {
-        const branch_type selected = group[random2(group.size())];
-        for (branch_type branch : group)
-            if (branch != selected)
-                disabled_branch.push_back(branch);
-    }
+    for (int i=0; i < number_of_branch_swap_pairs; i++)
+        disabled_branch.push_back(swap_branches[i][random_choose(0,1)]);
 
     // Descent mode disables some other branches for dungeon structure reasons
     if (crawl_state.game_is_descent())
@@ -220,8 +182,7 @@ vector<branch_type> random_choose_disabled_branches()
         disabled_branch.push_back(BRANCH_TEMPLE);
         disabled_branch.push_back(BRANCH_TOMB);
         you.props[DESCENT_WATER_BRANCH_KEY] = random_choose(BRANCH_SWAMP, BRANCH_SHOALS);
-        you.props[DESCENT_POIS_BRANCH_KEY] =
-            random_choose(BRANCH_SPIDER, BRANCH_SNAKE);
+        you.props[DESCENT_POIS_BRANCH_KEY] = random_choose(BRANCH_SPIDER, BRANCH_SNAKE);
     }
 
     return disabled_branch;
@@ -260,24 +221,15 @@ bool is_hell_branch(branch_type branch)
 
 bool is_random_subbranch(branch_type branch)
 {
-    for (const auto &group : alternative_branches)
-        for (branch_type candidate : group)
-            if (branch == candidate)
-                return true;
-
-    return false;
-}
-
-bool branches_are_mutually_exclusive(branch_type first, branch_type second)
-{
-    if (first == second)
-        return false;
-    for (const auto &group : alternative_branches)
-        if (count(group.begin(), group.end(), first)
-            && count(group.begin(), group.end(), second))
+    for (int i=0; i < number_of_branch_swap_pairs; i++)
+    {
+        for (int j=0; j < 2; j++)
         {
-            return true;
+            if (branch == swap_branches[i][j])
+                return true;
         }
+    }
+
     return false;
 }
 

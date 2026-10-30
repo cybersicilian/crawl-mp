@@ -207,7 +207,5 @@ enum zap_type
     ZAP_ICE_THORNS,
     ZAP_SIROCCO,
     ZAP_AUTOMATON_LASER,
-    ZAP_MANA_RUPTURE,
-    ZAP_BLIGHT,
     NUM_ZAPS
 };

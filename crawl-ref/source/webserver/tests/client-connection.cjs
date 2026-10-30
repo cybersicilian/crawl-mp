@@ -10,12 +10,10 @@ function fixture() {
     const window = { WebSocket: class { constructor() { this.readyState = 1; } } };
     const state = { watching: true, party_member_active: true, party_slot: 2 };
     const calls = [], nodes = new Map();
-    const document = {};
     function jquery(selector) {
         if (!nodes.has(selector)) nodes.set(selector, { length: 0,
             remove() { this.length = 0; }, text(value) { this.value = value; return this; },
-            css() { return this; }, appendTo() { this.length = 1; return this; },
-            trigger(event) { calls.push(event); return this; } });
+            css() { return this; }, appendTo() { this.length = 1; return this; } });
         return nodes.get(selector);
     }
     jquery.cookie = () => cookie;
@@ -24,7 +22,7 @@ function fixture() {
         start_login() { calls.push('login'); state.logging_in = Boolean(cookie); },
         hash_changed() { calls.push('route'); }, set_layer() {}
     };
-    vm.runInNewContext(source, { window, document, socket_server: 'ws://example.invalid',
+    vm.runInNewContext(source, { window, socket_server: 'ws://example.invalid',
         clearTimeout: id => timers.delete(id),
         setTimeout: callback => { timers.set(1, callback); return 1; },
         define(deps, init) { create = init(jquery, options => { hooks = options; return {
@@ -55,7 +53,7 @@ function fixture() {
     assert.equal(f.window.pending_auto_join_slot, 2, 'Guests remember their assigned hero');
     assert.equal(f.state.connection_lost, true);
     f.hooks.connected();
-    assert.deepEqual(f.calls, ['login', 'game_connection_lost', 'reset', 'cleanup', 'reset', 'login']);
+    assert.deepEqual(f.calls, ['login', 'reset', 'cleanup', 'reset', 'login']);
     assert.equal(f.state.current_user, null, 'Stale account state is cleared before reauthentication');
     f.state.watching = f.state.party_member_active = true;
     f.state.party_slot = 1;

@@ -1,6 +1,6 @@
 /* Authoritative staging-room rendering and co-op join lifecycle.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "comm", "character-guide", "client-staging-weapons", "character-builder", "client-staging-modifiers"], function ($, comm, guide, weapons, builder, modifiers) {
+define(["jquery", "comm", "character-guide", "client-staging-weapons", "character-builder", "client-staging-modifiers", "party-room-list", "party-lobby-tools"], function ($, comm, guide, weapons, builder, modifiers, rooms, lobbyTools) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
@@ -42,12 +42,14 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                 $("#btn_create_party_room").hide();
 
                 var isHost = myRoom.host && myRoom.host.toLowerCase() === state.current_user.toLowerCase();
+                lobbyTools.render(myRoom, state.current_user);
+                $("#party_slots_grid").attr("data-saved-expedition", String(!!myRoom.resume_id)).attr("data-ai-available", String(myRoom.ai_available === true));
                 var ffOn = myRoom.friendly_fire !== false;
                 var roomSeasonings = Array.isArray(myRoom.seasonings) ? myRoom.seasonings : [];
-                modifiers.render(myRoom, isHost);
+                modifiers.render(myRoom, isHost && !myRoom.resume_id);
                 $("#btn_toggle_party_ff")
                     .text(ffOn ? "[FF: Spicy (ON)]" : "[FF: Mild (OFF)]")
-                    .prop("disabled", !isHost);
+                    .prop("disabled", !isHost || !!myRoom.resume_id);
 
                 $("#party_room_title_text").text(myRoom.name || (myRoom.host + "'s Expedition"));
                 var seedNote = myRoom.seed ? (" · Seed #" + myRoom.seed) : "";
@@ -59,7 +61,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                 $("#party_seasonings_bar .party-seasoning-chip").each(function () {
                     var key = $(this).attr("data-seasoning");
                     var on = roomSeasonings.indexOf(key) !== -1;
-                    $(this).attr("aria-pressed", String(on)).prop("disabled", !isHost);
+                    $(this).attr("aria-pressed", String(on)).prop("disabled", !isHost || !!myRoom.resume_id);
                 });
 
                 var slots = myRoom.slots || [];
@@ -92,6 +94,12 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                     $box.attr("data-starting-modifiers", (myRoom.seasonings || []).slice().sort().join(","));
                     $box.removeClass("slot-state-player slot-state-companion slot-state-ai slot-state-open slot-state-closed")
                         .addClass("slot-state-" + (slotData.state || "open"));
+                    var controlsSeat = isHost || (slotData.username || "").toLowerCase() === (state.current_user || "").toLowerCase();
+                    var canEdit = controlsSeat && !myRoom.resume_id;
+                    $box.attr({ "data-seat-state": slotData.state || "open", "data-seat-owner": slotData.username || "",
+                        "data-seat-active": String(launchSlots.includes(s)), "data-seat-ready": String(slotData.ready !== false),
+                        "data-seat-editable": String(canEdit), "data-seat-host": String(isHost),
+                        "data-saved-stats": JSON.stringify(slotData.saved_stats || {}) });
 
                     var occText = "Waiting for a friend";
                     var occColor = "#888a85";
@@ -132,22 +140,26 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                     });
 
                     var $nameInput = $box.find(".party-slot-name");
-                    if (document.activeElement !== $nameInput[0] && slotData.hero_name)
+                    if ((!canEdit || document.activeElement !== $nameInput[0]) && slotData.hero_name)
                         $nameInput.val(slotData.hero_name);
 
                     var $spSelect = $box.find(".party-slot-species");
-                    if (document.activeElement !== $spSelect[0] && slotData.species)
+                    if ((!canEdit || document.activeElement !== $spSelect[0]) && slotData.species)
                         $spSelect.val(builder.speciesName(slotData.species));
 
                     var $jobSelect = $box.find(".party-slot-job");
-                    if (document.activeElement !== $jobSelect[0] && slotData.job)
+                    if ((!canEdit || document.activeElement !== $jobSelect[0]) && slotData.job)
                         $jobSelect.val(slotData.job);
 
                     var $traitSelect = $box.find(".party-slot-trait");
-                    if (document.activeElement !== $traitSelect[0])
+                    if (!canEdit || document.activeElement !== $traitSelect[0])
                         $traitSelect.val(slotData.trait || "none");
 
                     weapons.render($box, slotData);
+                    $box.find(".party-slot-name, .party-slot-species, .party-slot-job, .party-slot-trait").prop("disabled", !canEdit);
+                    if (!canEdit) $box.find(".party-slot-weapon").prop("disabled", true);
+                    $box.find(".party-mode-btn").prop("disabled", !isHost || !!myRoom.resume_id);
+                    $box.find('.party-mode-btn[data-mode="ai"]').toggle(myRoom.ai_available === true);
 
                     $box.find(".party-slot-combo-summary").text(
                         builder.speciesName(slotData.species || "Minotaur") + " " + (slotData.job || "Fighter")
@@ -156,7 +168,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                     var $readyBadge = $box.find(".party-slot-ready");
                     $readyBadge.removeClass("waiting closed");
                     var inactive = !launchSlots.includes(s);
-                    $readyBadge.prop("disabled", inactive).attr("aria-pressed", String(!inactive && slotData.ready !== false));
+                    $readyBadge.prop("disabled", inactive || !controlsSeat).attr("aria-pressed", String(!inactive && slotData.ready !== false));
                     $readyBadge.attr("aria-label", "Hero " + (s + 1) + (inactive ? " is not active" : slotData.ready !== false ? " ready; mark as waiting" : " waiting; mark as ready"));
                     if (inactive && slotData.state !== "open")
                     {
@@ -174,13 +186,14 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                     {
                         $readyBadge.addClass("waiting").text("Waiting");
                     }
-                    builder.refresh($box[0]);
+                    if (!myRoom.resume_id) builder.refresh($box[0]);
+                    $box.find(".party-archetype-btn").prop("disabled", !canEdit);
                 }
 
                 if (isHost)
                 {
                     $("#btn_launch_party_room")
-                        .text("Begin expedition · " + activeCount + (activeCount === 1 ? " hero" : " heroes"))
+                        .text((myRoom.resume_id ? "Resume saved expedition" : "Begin expedition") + " · " + activeCount + (activeCount === 1 ? " hero" : " heroes"))
                         .removeClass("dcss-btn-gold")
                         .addClass("dcss-btn-primary");
                     $("#party_room_status_hint").text(waitingCount
@@ -198,6 +211,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
             }
             else
             {
+                lobbyTools.render(null, state.current_user);
                 state.current_party_room_id = null;
                 $("#party_slots_grid .party-slot-box").each(function () { builder.context(this, ""); });
                 $("#party_room_view").hide();
@@ -205,60 +219,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                 $("#btn_create_party_room").show();
                 $("#btn_toggle_party_ff").text("[FF: Classic | Safe]").prop("disabled", false);
 
-                var $tbody = $("#party_rooms_tbody");
-                $tbody.empty();
-
-                if (!state.party_rooms || state.party_rooms.length === 0)
-                {
-                    $("#party_rooms_empty").show();
-                    $("#party_rooms_table").hide();
-                }
-                else
-                {
-                    $("#party_rooms_empty").hide();
-                    $("#party_rooms_table").show();
-
-                    for (var rIdx = 0; rIdx < state.party_rooms.length; rIdx++)
-                    {
-                        var rm = state.party_rooms[rIdx];
-                        var rSlots = rm.slots || [];
-                        var rActive = 0;
-                        var rosterParts = [];
-                        for (var k = 0; k < rSlots.length; k++)
-                        {
-                            var st = rSlots[k];
-                            if ((rm.launch_slots || [0]).includes(k))
-                            {
-                                rActive++;
-                                var tag = (st.state === "player" && st.username) ? st.username : "Companion";
-                                rosterParts.push("P" + (k + 1) + " " + st.hero_name + " (" + st.species + " " + st.job + " - " + tag + ")");
-                            }
-                        }
-
-                        var $tr = $("<tr></tr>");
-                        $tr.append($("<td style='color: #fce94f; font-weight: bold;'></td>").text(rm.name || (rm.host + "'s Room")));
-                        $tr.append($("<td></td>").text(rm.host));
-                        $tr.append($("<td style='color: #8ae234;'></td>").text(rActive + "/4 Active"));
-                        $tr.append($("<td style='font-size: 12px;'></td>").text(rosterParts.join(" | ")));
-                        $tr.append($("<td></td>").html(
-                            rm.friendly_fire !== false
-                                ? "<span style='color:#ef2929;'>Friendly fire on</span>"
-                                : "<span style='color:#8ae234;'>Friendly fire off</span>"
-                        ));
-
-                        var btnLabel = (rm.status === "launched") ? "Join live expedition" : "Join party";
-                        var $joinBtn = $("<button type='button' class='dcss-btn dcss-btn-primary btn-join-party-room'></button>")
-                            .attr("data-room-id", rm.room_id)
-                            .attr("data-room-host", rm.host)
-                            .attr("data-room-status", rm.status || "staging")
-                            .attr("data-tip-title", btnLabel + " — " + (rm.name || (rm.host + "'s Room")))
-                            .attr("data-tip-body", "Host: " + rm.host + " | Roster: " + (rosterParts.join(" | ") || "Open") + " | Friendly Fire: " + (rm.friendly_fire !== false ? "Classic (ON)" : "Safe Shoot-Through (OFF)"))
-                            .attr("data-tip-meta", rm.status === "launched" ? "Click to drop directly into D:1 co-op session" : "Click to claim an open party slot in Staging")
-                            .text(btnLabel);
-                        $tr.append($("<td></td>").append($joinBtn));
-                        $tbody.append($tr);
-                    }
-                }
+                rooms.render(state.party_rooms);
             }
         }
 

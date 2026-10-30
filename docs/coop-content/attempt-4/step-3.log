@@ -1,8 +1,0 @@
-./dat/des/variable/coop_vaults.des:59: unknown monster: "fire elemental"
-[C], function err_trace, line -1
-dungeon.lua, function mons, line 214
-[string "dlmain"], function (null), line 5
-dungeon.lua, function (null), line 260
-
-Filters: [coop-content]
-Randomness seeded to: 3317235338

@@ -1,9 +1,4 @@
 %%%%
-Engraved Laser spell
-
-An automaton's mechanisms focus a powerful, non-elemental beam. The pattern
-must be engraved before it can fire automatically, and firing it generates heat.
-%%%%
 Abjuration spell
 
 Reduces the remaining duration of any nearby hostile summoned creatures.
@@ -2052,11 +2047,10 @@ body.
 %%%%
 Sigil of Binding spell
 
-Creates two sigils nearby. Ordinarily, anyone who passes over them will be
-bound, able to act and dodge normally but unable to move away. For bound
-creatures other than the caster, their movement speed will rebound when the
-effect wears off, giving them temporary swiftness. Swiftness from any source
-grants immunity to binding.
+Creates two sigils nearby. Anyone who passes over them will be bound, able to
+act and dodge normally but unable to move away. For bound creatures other than
+the caster, their movement speed will rebound when the effect wears off, giving
+them temporary swiftness. Swiftness from any source grants immunity to binding.
 
 Only one set of sigils can be maintained at a time, and they will expire
 prematurely if they leave your sight.
@@ -2687,34 +2681,27 @@ Scattershot spell
 Blasts a wide cone of metallic shrapnel at close range, tearing through foes
 with devastating physical force.
 %%%%
-Linked Ward spell
+Aegis Link spell
 
-Folds a protective ward around the caster and their nearest living companion
-in clear sight. Both gain +2 AC and +1 SH. While warded companions remain in
-sight of one another, the healthier companion can absorb 35% of the more
-wounded companion's damage. Spell power extends the ward's duration.
-
-A Translocations/Auramancy spell available only in multiplayer. A living
-companion on this floor must be in clear sight to cast it.
+Weaves threads of silver translocation around the caster and their nearest
+visible ally, granting both increased armour class and shielding (+2 AC, +2 SH
+in co-op; +3 AC, +3 SH in solo). While both linked partners are in sight of
+one another, 35% of damage suffered by the more wounded partner is redirected
+to the healthier partner.
 %%%%
-Song of Fellowship spell
+Ballad of the Vanguard spell
 
-A battle song in the tradition of the Skalds, matching the steps and strokes
-of the caster and living companions in clear sight. Those who take up the
-song gain +4 slaying and +3 evasion. Spell power extends its duration.
-
-A Hexes/Auramancy spell available only in multiplayer. A living companion on
-this floor must be in clear sight to cast it.
+Strikes up a stirring martial anthem that inspires the caster and all co-op
+teammates in sight. Those inspired by the Ballad gain +4 slaying, +3 evasion,
+and cleaving melee attacks for the duration of the song.
 %%%%
-Cleansing Mist spell
+Sanctuary Chorus spell
 
-Surrounds the caster and living companions in clear sight with a restorative
-alchemical mist. It removes poison, corrosion and slowness, then grants +2 AC,
-rN+ and accelerated health regeneration. Spell power extends its duration.
-The mist offers no special protection against smiting, damnation or torment.
-
-An Alchemy/Auramancy spell available only in multiplayer. A living companion
-on this floor must be in clear sight to cast it.
+Intones a consecrated chorus that immediately cleanses poison, corrosion, and
+slowness from the caster and all visible co-op teammates, while warding them
+with +2 AC, +1 negative energy resistance (rN+), accelerated health
+regeneration, and a 30% reduction in damage from poison, smiting, pain,
+torment, and damnation.
 %%%%
 Aura of Protection spell
 
@@ -2810,54 +2797,4 @@ if every other voice knows its note. Auramancy extends the radius from 2 to
 6 tiles, gaining one tile at skill 6, 12, 18 and 24. Clear line of sight and
 the same floor are required. Power extends duration from 12 to 32 turns. Each
 caster maintains one aura; copies use the strongest eligible source.
-%%%%
-
-Shackle spell
-
-Magically binds a creature in place. It can still act or teleport, carrying the binding to its new location. Insubstantial and gelatinous creatures resist the magic.
-%%%%
-
-False Image spell
-
-Creates a stationary, harmless illusion of the caster. The caster’s projectiles and spells can pass through their own image.
-%%%%
-
-Mana Rupture spell
-
-Destabilises a creature’s magic, causing an explosion whose strength depends on its resistance to enchantments. Surviving creatures that are not immune become more vulnerable to enchantments. Summoned creatures are dismissed instead.
-%%%%
-
-Icicle Burst spell
-
-Launches a spread of icy shards, trading accuracy and armour penetration for destructive power.
-%%%%
-
-Steam Barrier spell
-
-Surrounds the caster with viscous steam. It grants protection and fire resistance, but increases vulnerability to cold and reduces spell power.
-%%%%
-
-Blight spell
-
-Creates an explosion of vile blight, draining and poisoning creatures in its area and slowing or confusing them.
-%%%%
-
-Scorpion Form spell
-
-Transforms the caster into a giant scorpion, granting a venomous stinger and resistance to fire, poison and acid. Weapons and armour meld, casting becomes harder, and alchemy becomes more powerful.
-%%%%
-
-Eringya's Rootspike spell
-
-Raises poisonous, sharp roots from the ground. The roots can hurt enemies resistant to poison, and greater power extends their reach.
-%%%%
-
-Olgreb's Last Mercy spell
-
-Causes poison in a targeted creature to erupt. If the victim dies, a blast of poison engulfs nearby creatures.
-%%%%
-
-Elemental Weapon spell
-
-Infuses an unbranded weapon with elemental potential. Casting an elemental spell grants the weapon a temporary matching brand and slaying bonus.
 %%%%

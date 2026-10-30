@@ -1,6 +1,0 @@
-{
-  "passed": false,
-  "errors": [],
-  "cleanup_error": "Error: locator.click: Target page, context or browser has been closed",
-  "saved": false
-}

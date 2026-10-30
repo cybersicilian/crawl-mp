@@ -38,7 +38,7 @@ sys.stdout.buffer.write(Loader(sys.argv[1]).load('library.html').generate(
         assert.equal(await page.locator('[data-collection-entry]:visible').count(), 2);
         await search.fill('ivory');
         assert.equal(await page.locator('[data-collection-entry]:visible').count(), 1);
-        assert(await page.getByRole('link', { name: '<Ivory> Expedition', exact: true }).isVisible());
+        assert.equal(await page.locator('[data-collection-entry]:visible a').textContent(), '<Ivory> Expedition');
         await page.reload(); assert.equal(await search.inputValue(), 'ivory');
         assert.equal(await page.locator('[data-collection-entry]:visible').count(), 1);
         await search.fill('no-such-record'); assert(await page.locator('#archive_no_matches').isVisible());

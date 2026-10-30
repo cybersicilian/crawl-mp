@@ -26,32 +26,6 @@ assert(!choices.allowedJobs('Demigod').includes('Blood Liturgist'), 'Godless spe
 assert.equal(catalog.jobs['Blood Liturgist'].abbr, 'BL');
 assert.equal(catalog.jobs['Blood Liturgist'].category, 'Zealot');
 assert.match(catalog.jobs['Blood Liturgist'].description, /worship Vorr/);
-for (const [job, abbr] of [['Paladin', 'Pa'], ['Healer', 'He'],
-                           ['Preacher', 'Pc'], ['Sage', 'Sa']]) {
-    assert(choices.DCSS_BACKGROUNDS.includes(job), `${job} must be selectable`);
-    assert.equal(catalog.jobs[job].abbr, abbr);
-    assert.equal(catalog.jobs[job].category, 'Zealot');
-    assert(catalog.jobs[job].recommended.length > 0);
-    assert(!choices.allowedJobs('Demigod').includes(job), `${job} starts with a god`);
-}
-for (const trait of ['mummy', 'zombie', 'ghost']) {
-    assert(catalog.species.Human.trait_restrictions.Preacher[trait],
-        `Preachers cannot select the ${trait} trait`);
-    assert.equal(catalog.species.Human.trait_restrictions.Sage[trait], '');
-}
-assert.match(catalog.jobs.Sage.description, /random spellbook/);
-assert.deepEqual(Array.from(catalog.jobs.Sage.spells), ['Apportation'],
-    'Sage catalog must not pretend its random starting library is fixed');
-let gui;
-vm.runInNewContext(fs.readFileSync(path.join(source, 'webserver/game_data/static/tileinfo-gui.js'), 'utf8'), {
-    define: (_, factory) => { gui = factory({ TILEP_PLAYER_MAX: 0 }); }
-});
-const jobTileOffset = gui.LAST_JOB - gui.LAST_RECOMMENDED_JOB;
-for (const job of ['PALADIN', 'HEALER', 'PREACHER', 'SAGE']) {
-    assert(Number.isInteger(gui['JOB_' + job]), `${job} needs a native job tile`);
-    assert.equal(gui['JOB_' + job] - gui['JOB_RECOMMENDED_' + job], jobTileOffset,
-        `${job} recommended and normal job tiles must share the standard offset`);
-}
 assert.deepEqual(names(choices.allowedJobs('Djinn')), names(choices.allowedJobs('Djinni')));
 const combos = new Set(native.combos);
 for (const species of choices.DCSS_SPECIES) {

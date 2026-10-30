@@ -1,5 +1,5 @@
-/* Ordered legacy behavior, followed by the tabletop material system. */
 @import url("/static/styles/graphics-settings.css");
+/* Ordered legacy behavior, followed by the tabletop material system. */
 @import url("styles/game-base.css");
 @import url("styles/game-menus.css");
 @import url("styles/game-descriptions.css");
@@ -14,7 +14,7 @@
 @import url("/static/tabletop/typography.css");
 @import url("/static/tabletop/chat.css");
 @import url("/static/tabletop/properties.css");
-@import url("/static/tabletop/tooltip-content.css");
+@import url("/static/tabletop/tooltip-content.css?v=heat-help-01a18da4-r1");
 @import url("styles/nested-tips.css");
 @import url("styles/gameplay-workflows.css");
 @import url("styles/menu-surfaces.css");
@@ -37,7 +37,6 @@
 @import url("styles/party-progress.css");
 @import url("styles/portrait-status.css");
 @import url("styles/health-effects.css");
-@import url("styles/hero-feedback.css");
 @import url("styles/nearby-creatures.css");
 @import url("styles/party-card-readings.css");
 @import url("styles/party-sidebar.css");
@@ -46,8 +45,7 @@
 @import url("styles/session-menu.css");
 @import url("styles/context-menu.css");
 @import url("styles/menu-polish.css");
-@import url("/static/tabletop/art-direction-tokens.css");
-@import url("styles/art-direction-game.css");
-@import url("styles/art-direction-journal.css");
-@import url("/static/tabletop/status-icons.css");
+
 @import url("styles/premium-presentation.css");
+
+@import url("/static/tabletop/status-icons.css?ui=effects-01a18e68-r1");

@@ -37,19 +37,3 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Trog Meliai may smite while berserk
     CHECK(check_ability_possible(ABIL_MELIAI_SMITE, true));
 }
 
-TEST_CASE("Hive larvae replace brood encounter weight without inflating XP", "[meliai][hive]")
-{
-    init_monsters();
-    const monsterentry* queen = get_monster_data(MONS_QUEEN_BEE);
-    const monsterentry* bee = get_monster_data(MONS_KILLER_BEE);
-    const monsterentry* larva = get_monster_data(MONS_KILLER_BEE_LARVA);
-    REQUIRE(queen);
-    REQUIRE(bee);
-    REQUIRE(larva);
-    CHECK(string(larva->name) == "killer bee larva");
-    CHECK(larva->attack[0].damage > 0);
-    const int old_encounter = queen->exp + 2 * bee->exp;
-    const int new_encounter = queen->exp + bee->exp + 3 * larva->exp;
-    CHECK(new_encounter < old_encounter);
-    CHECK(new_encounter * 100 >= old_encounter * 80);
-}

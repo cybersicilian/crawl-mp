@@ -832,7 +832,7 @@ static vector<ability_def> &_get_ability_list()
         { ABIL_PAKELLAS_EVOKE_PROTOTYPE, "Evoke Prototype",
             0, 0, 0, -1, {}, abflag::silence_ok },
 #endif
-        { ABIL_PANTHEON_CONVERGENCE, "Prayer of Fellowship",
+        { ABIL_PANTHEON_CONVERGENCE, "Pantheon Convergence",
             4, 0, 6, -1, {fail_basis::invo, 45, 4, 20}, abflag::none },
         { ABIL_PALADIN_INTERVENE, "Lay on Hands & Intervene",
             3, 0, 0, -1, {fail_basis::invo, 30, 3}, abflag::none },
@@ -2864,7 +2864,13 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
         return true;
 
     case ABIL_PANTHEON_CONVERGENCE:
-        return coop_content::can_pray(quiet);
+        if (you_worship(GOD_NO_GOD))
+        {
+            if (!quiet)
+                mpr("You worship no god!");
+            return false;
+        }
+        return true;
 
     case ABIL_PALADIN_INTERVENE:
         return paladin::can_intervene(quiet);
@@ -3982,6 +3988,8 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (grid_distance(you.pos(), ally.pos()) > 2)
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_SHINING_ONE, ally.religion);
                 if (party::are_gods_concordant(GOD_SHINING_ONE, ally.religion)
                     && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
                 {
@@ -3989,7 +3997,17 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                         i, 8 + random2(10), 0, DUR_DIVINE_SHIELD, 4,
                         "The Shining One's golden flame invigoratingly washes over");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA
+                         || (ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                {
+                    party::debuff_or_harm_party_member(
+                        i,
+                        rel == party::pantheon_relation_type::ANATHEMA ? 7 + random2(8) : 4 + random2(5),
+                        0, DUR_WEAK, 6 + random2(6),
+                        "The Shining One's cleansing flame scorches",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 3 : 1);
+                }
             }
         }
         break;
@@ -4083,13 +4101,24 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_YREDELEMNUL, ally.religion);
                 if (party::are_gods_concordant(GOD_YREDELEMNUL, ally.religion))
                 {
                     party::heal_or_buff_party_member(
                         i, 4 + random2(6), 0, DUR_REGENERATION, 6 + random2(5),
                         "Yredelemnul's soul-harvest vitalises");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i,
+                        rel == party::pantheon_relation_type::ANATHEMA ? 5 + random2(6) : 3 + random2(4),
+                        0, DUR_SLOW, 6 + random2(5),
+                        "Yredelemnul's fathomless shackles chill and fetter",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+                }
             }
         }
         break;
@@ -4142,13 +4171,21 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_OKAWARU, ally.religion);
                 if (party::are_gods_concordant(GOD_OKAWARU, ally.religion))
                 {
                     party::heal_or_buff_party_member(
                         i, 0, 0, DUR_HEROISM, max(4, dur / 2),
                         "Okawaru's heroic battle-chant inspires");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 2 + random2(3), DUR_WEAK, 5 + random2(4),
+                        "Okawaru's imperious battle-cry rattles", 1);
+                }
             }
         }
         break;
@@ -4181,13 +4218,21 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_OKAWARU, ally.religion);
                 if (party::are_gods_concordant(GOD_OKAWARU, ally.religion))
                 {
                     party::heal_or_buff_party_member(
                         i, 0, 0, DUR_FINESSE, max(4, dur / 2),
                         "Okawaru's martial cadence quickens");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 2 + random2(3), DUR_SLOW, 4 + random2(4),
+                        "Okawaru's martial tempo throws off", 1);
+                }
             }
         }
         break;
@@ -4276,13 +4321,24 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_TROG, ally.religion);
                 if (party::are_gods_concordant(GOD_TROG, ally.religion))
                 {
                     party::heal_or_buff_party_member(
                         i, 0, 0, DUR_MIGHT, 8 + random2(8),
                         "Trog's primal war-cry bolsters");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i,
+                        rel == party::pantheon_relation_type::ANATHEMA ? 3 + random2(4) : 1 + random2(2),
+                        5 + random2(7), DUR_WEAK, 6 + random2(5),
+                        "Trog's anti-magic roar shatters the focus of",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+                }
             }
         }
         break;
@@ -4326,13 +4382,22 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_SIF_MUNA, ally.religion);
                 if (party::are_gods_concordant(GOD_SIF_MUNA, ally.religion))
                 {
                     party::heal_or_buff_party_member(
                         i, 0, 2 + random2(4), DUR_CHANNEL_ENERGY, max(2, dur / 2),
                         "Sif Muna's arcane ley-current flows into");
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 3 + random2(4), 2 + random2(4), DUR_WEAK, 5 + random2(4),
+                        "Sif Muna's arcane backlash scorches",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+                }
             }
         }
         break;
@@ -4367,6 +4432,8 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                 const player &ally = party::Member(i);
                 if (!you.see_cell_no_trans(ally.pos()))
                     continue;
+                const auto rel = party::get_god_political_relation(
+                    GOD_ELYVILON, ally.religion);
                 if (party::are_gods_concordant(GOD_ELYVILON, ally.religion)
                     && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
                 {
@@ -4378,7 +4445,14 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
                             "Elyvilon's soothing light mends");
                     }
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 1 + random2(3), DUR_WEAK, 4 + random2(4),
+                        "Elyvilon's reproachful light weighs guiltily upon",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+                }
             }
         }
         break;
@@ -4778,7 +4852,68 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
 #endif
 
     case ABIL_PANTHEON_CONVERGENCE:
-        return coop_content::pray(fail);
+    {
+        fail_check();
+        const int inv_pow = 10 + you.skill(SK_INVOCATIONS, 2) + you.experience_level;
+        const int dur = 7 + random2avg(inv_pow / 3, 2);
+
+        int partner_slot = -1;
+        const auto standing = party::is_enabled()
+            ? party::get_slot_pantheon_standing(party::active_slot(), &partner_slot)
+            : party::pantheon_relation_type::NONE;
+
+        if (standing == party::pantheon_relation_type::SHARED_COVENANT
+            || standing == party::pantheon_relation_type::ALLIED_CONCORDAT)
+        {
+            mprf(MSGCH_GOD, "Your deities' covenant converges in a blinding chorus of divine harmony!");
+            you.increase_duration(DUR_HEROISM, dur, 80);
+            you.increase_duration(DUR_CONCORD, dur + 4, 80);
+            you.increase_duration(DUR_SANCTUARY_CHORUS, dur, 80);
+            inc_hp(8 + random2(10), false);
+            party::apply_party_aura_buff(DUR_HEROISM, dur, LOS_RADIUS, false, you.religion);
+            party::apply_party_aura_buff(DUR_SANCTUARY_CHORUS, dur, LOS_RADIUS, false, you.religion);
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == party::active_slot() || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                if (you.see_cell_no_trans(party::Member(i).pos()))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 10 + random2(10), 3 + random2(4), DUR_CONCORD, dur,
+                        "Pantheon Convergence bathes", true);
+                }
+            }
+        }
+        else if (standing == party::pantheon_relation_type::RIVAL
+                 || standing == party::pantheon_relation_type::ANATHEMA)
+        {
+            mprf(MSGCH_GOD, "Your rival gods clash in a cataclysmic Eclipse Crossfire!");
+            you.increase_duration(DUR_MIGHT, dur, 80);
+            you.increase_duration(DUR_RESISTANCE, dur, 80);
+            for (monster_near_iterator mi(&you, LOS_NO_TRANS); mi; ++mi)
+            {
+                if (mi->wont_attack() || party::is_proxy_monster(**mi))
+                    continue;
+                const int blast = 10 + random2(inv_pow);
+                mprf("Eclipse Crossfire tears through %s!", mi->name(DESC_THE).c_str());
+                mi->hurt(&you, blast, BEAM_MMISSILE, KILLED_BY_BEAM, "", "eclipse crossfire");
+            }
+        }
+        else
+        {
+            mprf(MSGCH_GOD, "%s answers your convergence prayer with a halo of martial concord!",
+                 god_name(you.religion).c_str());
+            you.increase_duration(DUR_CONCORD, dur, 80);
+            you.increase_duration(DUR_SANCTUARY_CHORUS, dur, 80);
+            inc_hp(6 + random2(8), false);
+        }
+        you.redraw_armour_class = true;
+        you.redraw_evasion = true;
+        break;
+    }
 
     case ABIL_PALADIN_INTERVENE:
         return paladin::intervene(fail);
@@ -5570,7 +5705,8 @@ vector<ability_type> get_god_abilities(bool ignore_piety, bool ignore_penance)
         }
     }
 
-    if (coop_content::offers_fellowship_prayer()
+    if (!you_worship(GOD_NO_GOD)
+        && !you_worship(GOD_XOM)
         && (ignore_penance || !player_under_penance())
         && (ignore_piety || you.piety() >= piety_breakpoint(2)))
     {

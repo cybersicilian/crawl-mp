@@ -4,7 +4,7 @@ define([], function () {
     function valid(clock) {
         return clock && typeof clock.active === "boolean" && typeof clock.immune === "boolean"
             && Number.isFinite(clock.remaining_aut) && clock.remaining_aut >= 0
-            && Number.isFinite(clock.reference_aut) && clock.reference_aut > 0
+            && Number.isFinite(clock.capacity_aut) && clock.capacity_aut > 0
             && Number.isInteger(clock.warning) && clock.warning >= 0 && clock.warning <= 3
             && Number.isInteger(clock.short_lifespans) && clock.short_lifespans >= 0
             && Number.isInteger(clock.lifespan_divisor) && clock.lifespan_divisor >= 1;
@@ -24,7 +24,8 @@ define([], function () {
         });
         var clock = next.zot_clock;
         return { status: running.length ? "running" : "paused", hero: next.name, place: next.place,
-            turns: clock.remaining_aut / 10, fraction: Math.min(1, clock.remaining_aut / clock.reference_aut),
+            turns: clock.remaining_aut / 10,
+            fraction: 1 - Math.min(1, clock.remaining_aut / clock.capacity_aut),
             warning: clock.warning, pressure: clock.lifespan_divisor, shortLifespans: clock.short_lifespans };
     }
 

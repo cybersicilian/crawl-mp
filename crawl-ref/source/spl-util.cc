@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 #include "bloodcraft.h"
 
 #include "spl-util.h"
@@ -308,9 +307,6 @@ spell_type get_spell_by_letter(char letter)
 
 bool add_spell_to_memory(spell_type spell)
 {
-    if (!coop_content::spell_available(spell))
-        return false;
-
     if (vehumet_is_offering(spell))
         library_add_spells({ spell });
 
@@ -1361,13 +1357,6 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
 {
     if (spell == SPELL_AUTOMATON_LASER && you.species != SP_AUTOMATON)
         return "only an automaton can engrave this spell.";
-    if (!coop_content::spell_available(spell))
-        return "this spell requires a multiplayer game.";
-    if (temp && coop_content::exclusive_spell(spell)
-        && !coop_content::has_spell_companion())
-    {
-        return "you have no living companion in sight.";
-    }
 
     // prevent all of this logic during excursions / levelgen. This function
     // does get called during character creation, so allow it to run for !temp.

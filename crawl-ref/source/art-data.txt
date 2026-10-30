@@ -2146,10 +2146,10 @@ TILE_EQ: ARGA
 BRAND:   SPWPN_FLAMING
 FIRE:    2
 STR:     3
-INSCRIP: Flame, Paired
-DBRAND:  Flame: Striking foes sears them with fire, and if an ally
- in sight wields Duskweaver, the paired enchantments erupt in fire and frost.
-DESCRIP: Paired: While an ally in sight wields Duskweaver, both wielders
+INSCRIP: SolarCleave, EclipseLink
+DBRAND:  SolarCleave: Striking foes sears them with solar fire, and if an ally
+ in sight wields Duskweaver, your strikes unleash a twin solar-lunar explosion.
+DESCRIP: EclipseLink: While an ally in sight wields Duskweaver, both wielders
  gain +4 Slaying and +4 AC.
 
 ENUM:    DUSKWEAVER
@@ -2162,11 +2162,11 @@ TILE_EQ: BLOODBANE
 BRAND:   SPWPN_FREEZING
 COLD:    2
 DEX:     3
-INSCRIP: Rime, Paired
-DBRAND:  Rime: Striking foes chills their essence and siphons mana, and if
- an ally in sight wields Dawnforged, the paired enchantments erupt in fire
- and frost.
-DESCRIP: Paired: While an ally in sight wields Dawnforged, both wielders
+INSCRIP: LunarReap, EclipseLink
+DBRAND:  LunarReap: Striking foes chills their essence and siphons mana, and if
+ an ally in sight wields Dawnforged, your strikes unleash a twin solar-lunar
+ explosion.
+DESCRIP: EclipseLink: While an ally in sight wields Dawnforged, both wielders
  gain +4 Slaying and +4 AC.
 
 ENUM:    SHIELDMATE_GAUNTLETS

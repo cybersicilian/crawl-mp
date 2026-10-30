@@ -1,6 +1,0 @@
-{
-  "passed": false,
-  "errors": [],
-  "scenarios": [],
-  "error": "page.waitForFunction: Timeout 30000ms exceeded.\n    at signInTestAccount (/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/helpers/test-account.cjs:11:16)\n    at async /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/profile.cjs:28:9"
-}

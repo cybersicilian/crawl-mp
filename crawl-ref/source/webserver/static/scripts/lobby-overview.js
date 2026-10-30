@@ -37,7 +37,9 @@ define(function () {
         copy.append(title, el("p", "lobby-home-intro", "Continue your journey, gather a party, or join friends in the dungeon."));
         var actions = el("div", "lobby-home-actions"), create = el("button", "lobby-primary-action", "New expedition");
         create.type = "button"; create.dataset.lobbyCreate = "true";
-        actions.append(create, sectionLink("Join friends →", "lobby_friends_panel")); copy.appendChild(actions);
+        var access = el("select"); access.id = "lobby_creation_visibility"; access.setAttribute("aria-label", "New lobby access");
+        [["public", "Public lobby"], ["private", "Private lobby"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; access.appendChild(option); });
+        actions.append(access, create, sectionLink("Join friends →", "lobby_friends_panel")); copy.appendChild(actions);
         home.appendChild(copy);
         var art = el("div", "lobby-home-art"); art.setAttribute("aria-hidden", "true");
         art.appendChild(el("span", "", "Toss your pebble. Stir the pot.")); home.appendChild(art);
@@ -60,6 +62,10 @@ define(function () {
     function refresh() {
         if (!home) return;
         var entries = Array.from(document.querySelectorAll("#game_library_panel .game-library-entry"));
+        entries.sort(function (left, right) {
+            return Number(right.dataset.saved || 0) - Number(left.dataset.saved || 0)
+                || Number(left.dataset.order || 0) - Number(right.dataset.order || 0);
+        });
         var games = entries.filter(function (entry) { return entry.querySelector("[data-library-load]"); }).slice(0, 2);
         home.classList.toggle("has-recent-expeditions", games.length > 0);
         var tutorial = document.querySelector('#play_now a[href="#play-tut-web-trunk"]');

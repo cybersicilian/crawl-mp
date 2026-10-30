@@ -2,7 +2,6 @@
   "version": 1,
   "fields": [
     {"id":"mode","type":"choice","default":"classic","options":["classic","premium"],"hidden":true},
-    {"id":"ui_theme","type":"choice","default":"folio","group":"Interface theme","label":"UI theme","description":"Folio pairs leather and brass with parchment pages. Dungeon uses slate and silver. High Contrast uses solid surfaces and clear outlines. Applies to your interface independently of dungeon graphics.","options":["folio","dungeon","contrast"],"optionLabels":["Adventurer's Folio","Dungeon","High Contrast"],"presetIndependent":true},
     {"id":"lighting","type":"boolean","default":false,"group":"Light & terrain","label":"Soft tile lighting","description":"Coloured light with soft transitions into darkness."},
     {"id":"borders","type":"boolean","default":false,"group":"Light & terrain","label":"Terrain borders & blending","description":"Connected wall edges, shorelines and softer sand transitions."},
     {"id":"materials","type":"boolean","default":false,"group":"Light & terrain","label":"Wall material shaders","description":"Masonry relief, crystal facets and transparent wall refraction."},
@@ -16,7 +15,7 @@
     {"id":"movement","type":"boolean","default":false,"group":"Motion","label":"Creature movement","description":"Short glides and foot lift between confirmed native positions."},
     {"id":"particles","type":"boolean","default":false,"group":"Motion","label":"Environmental particles","description":"Embers, droplets, bubbles, dust and footstep ripples."},
     {"id":"interface","type":"boolean","default":false,"group":"Interface","label":"Interface polish","description":"Subtle panel relief, highlights and short interface transitions."},
-    {"id":"motion","type":"choice","default":"system","group":"Motion","label":"Motion preference","description":"Reduced motion freezes supplementary effects and disables movement glides. Your device's reduced-motion preference is always respected.","options":["system","reduced"],"optionLabels":["Follow device","Reduce motion"],"presetIndependent":true}
+    {"id":"motion","type":"choice","default":"system","group":"Motion","label":"Motion preference","description":"Reduced motion freezes supplementary effects and disables movement glides. Your device's reduced-motion preference is always respected.","options":["system","reduced"],"optionLabels":["Follow device","Reduce motion"]}
   ],
   "presets": [
     {"id":"classic","label":"Classic","description":"The original aesthetic. No Premium treatment.","settings":{}},

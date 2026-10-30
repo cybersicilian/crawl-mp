@@ -62,7 +62,7 @@ function () {
     // facts must never turn into plausible equipment, stats, or capabilities.
     function normalize_party_member(member) {
         if (!member) return member;
-        ["inventory", "floor_items", "abilities", "spells", "skills", "mutations", "statuses",
+        ["inventory", "floor_items", "abilities", "spells", "skills", "mutations", "statuses", "banes",
          "equipment_slots", "kills_top", "actions", "runes", "gems"].forEach(function (key) {
             var known = Array.isArray(member[key]);
             if (member[key + "_known"] === undefined) member[key + "_known"] = known;
@@ -85,6 +85,8 @@ function () {
     }
     function controlled_slot(state) {
         if (state && Number.isInteger(state.controlled_slot)) return state.controlled_slot;
+        // An explicit null means spectating the host's personal stream.
+        if (state && state.controlled_slot === null) return 0;
         return state && Number.isInteger(state.active_slot) ? state.active_slot : 0;
     }
     function in_combat(state, member) {
@@ -194,11 +196,12 @@ function () {
             data.combat_locked, data.simultaneous_turns, data.active_slot,
             (data.members || []).flatMap(function (m) {
                 return [
-                    m.slot, m.active, m.name, m.species, m.trait, m.heads, m.job, m.god, m.title, m.ai, data.ai_manage,
+                    m.slot, m.active, m.name, m.species, m.trait, m.heads, m.job, m.god, m.title,
                     m.xl, m.xl_next, m.str, m.intel, m.dex, m.place, m.on_same_level,
                     m.region_id, m.region_combat, m.same_region,
                     m.ac, m.ev, m.sh, m.hp, m.hp_max, m.real_hp_max, m.poison_survival, m.mp, m.mp_max,
-                    m.ghost_haunting, m.alive, m.statuses, m.statuses_known,
+                    m.ghost_haunting, m.alive, m.connected, m.activity, m.queued_action, m.queued_action_count,
+                    m.statuses, m.statuses_known, m.banes, m.banes_known,
                     m.move_aut, m.atk_aut, data.multiplayer && m.can_act,
                     m.god_relation, m.penance, m.god_politics, m.piety_rank, m.faith_description,
                     m.resists, m.defiance, m.elder_rites, m.elder_summary, m.chain_summary,

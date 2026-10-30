@@ -4,6 +4,7 @@
  **/
 
 #include "AppHdr.h"
+#include "oozle-memory.h"
 #include "chain-devil.h"
 #include "eldritch.h"
 #include "god-vellum.h"
@@ -706,11 +707,6 @@ static void _decrement_transform_duration(int delay)
     if (you.form == you.default_form || you.form == transformation::flux)
         return;
 
-    if (you.form == transformation::scorpion
-        && you.has_spell(SPELL_SCORPION_FORM)
-        && calc_spell_power(SPELL_SCORPION_FORM) >= 75)
-        return;
-
     // FIXME: [ds] Remove this once we've ensured durations can never go < 0?
     if (you.duration[DUR_TRANSFORMATION] <= 0
         && you.form != transformation::none)
@@ -784,8 +780,6 @@ static void _decrement_durations()
         dec_sticky_flame_player(delay);
 
     const bool melted = you.props.exists(MELT_ARMOUR_KEY);
-    if (you.duration[DUR_STEAM_BARRIER])
-        maintain_steam_barrier();
     if (_decrement_a_duration(DUR_ICY_ARMOUR, delay,
                               "Your icy armour evaporates.",
                               melted ? 0 : coinflip(),
@@ -1337,8 +1331,9 @@ void player_reacts()
     if (crawl_state.game_is_descent() && !env.properties.exists(DESCENT_STAIRS_KEY))
         return;
 
+    oozle::digest_equipment(you.time_taken);
+    automaton::react_to_action();
     automaton::advance_bee_engraving();
-
 
     if (you.did_east_wind > 0)
         --you.did_east_wind;

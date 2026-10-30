@@ -1507,8 +1507,11 @@ namespace party
         {
             player *saved_you = real_you;
             real_you = &p;
-            gd.ac = p.armour_class();
-            gd.ev = p.evasion(false);
+            // Proxies are refreshed by personal views and context switches.
+            // Snapshot display stats without the combat accessors' random
+            // rounding, so observing a hero cannot advance gameplay RNG.
+            gd.ac = p.armour_class_scaled(1);
+            gd.ev = p.evasion_scaled(1, false);
             real_you = saved_you;
         }
         mon->set_ghost(gd);
@@ -1622,6 +1625,19 @@ namespace party
                 p.duration[DUR_DIVINE_SHIELD] = max(p.duration[DUR_DIVINE_SHIELD], 5);
                 mprf(MSGCH_RECOVERY, "%s is invigorated by your magic!",
                      p.your_name.c_str());
+            }
+            else
+            {
+                const pantheon_relation_type rel =
+                    get_god_political_relation(src_god, p.religion);
+                if (rel == pantheon_relation_type::RIVAL
+                    || rel == pantheon_relation_type::ANATHEMA)
+                {
+                    debuff_or_harm_party_member(
+                        slot, rel == pantheon_relation_type::ANATHEMA ? 4 : 2,
+                        0, DUR_CORONA, 6,
+                        "The Shining One's rejected blessing sears and outlines");
+                }
             }
         }
     }
@@ -1783,6 +1799,81 @@ namespace party
             sync_player_to_proxy(slot);
     }
 
+    void debuff_or_harm_party_member(int slot, int hp_drain, int mp_drain,
+                                     duration_type debuff_dur,
+                                     int debuff_turns,
+                                     const char *msg_prefix,
+                                     int piety_loss)
+    {
+        if (!is_enabled() || slot < 0 || slot >= s_player_count)
+            return;
+        if (is_player_downed(slot) || s_players[slot].hp <= 0)
+            return;
+
+        player &p = s_players[slot];
+        bool did_effect = false;
+
+        if (hp_drain > 0 && p.hp > 1 && !p.duration[DUR_DEATHS_DOOR])
+        {
+            const int actual_drain = min(hp_drain, p.hp - 1);
+            if (actual_drain > 0)
+            {
+                p.hp -= actual_drain;
+                did_effect = true;
+            }
+        }
+
+        if (mp_drain > 0 && p.magic_points > 0)
+        {
+            const int actual_mp = min(mp_drain, p.magic_points);
+            if (actual_mp > 0)
+            {
+                p.magic_points -= actual_mp;
+                did_effect = true;
+            }
+        }
+
+        if (debuff_dur != NUM_DURATIONS && debuff_turns > 0)
+        {
+            if (debuff_dur == DUR_SLOW && p.stasis())
+                debuff_dur = DUR_WEAK;
+
+            const int aut_add = debuff_turns * BASELINE_DELAY;
+            p.duration[debuff_dur] = min(max(p.duration[debuff_dur], 60 * BASELINE_DELAY),
+                                         p.duration[debuff_dur] + aut_add);
+            did_effect = true;
+        }
+
+        if (piety_loss > 0
+            && p.religion != GOD_NO_GOD
+            && p.religion != GOD_XOM
+            && p.religion != GOD_GOZAG
+            && p.religion != GOD_RU
+            && p.raw_piety > 1)
+        {
+            scoped_player_context ctx(slot);
+            lose_piety(piety_loss);
+            did_effect = true;
+        }
+
+        if (did_effect && msg_prefix && *msg_prefix)
+            mprf(MSGCH_GOD, "%s %s!", msg_prefix, p.your_name.c_str());
+
+        if (slot != s_active_slot)
+        {
+            sync_player_to_proxy(slot);
+            if (monster *mon = get_proxy_monster(slot))
+            {
+                if (debuff_dur == DUR_WEAK)
+                    mon->add_ench(mon_enchant(ENCH_WEAK, nullptr, debuff_turns * BASELINE_DELAY));
+                else if (debuff_dur == DUR_SLOW)
+                    mon->add_ench(mon_enchant(ENCH_SLOW, nullptr, debuff_turns * BASELINE_DELAY));
+                else if (debuff_dur == DUR_CORONA)
+                    mon->add_ench(mon_enchant(ENCH_CORONA, nullptr, debuff_turns * BASELINE_DELAY));
+            }
+        }
+    }
+
     static bool _is_divine_aura_duration(duration_type dur)
     {
         return dur == DUR_DIVINE_SHIELD
@@ -1819,13 +1910,26 @@ namespace party
             if (grid_distance(s_players[i].pos(), you.pos()) > radius)
                 continue;
 
-            if (eff_god != GOD_NO_GOD && i != s_active_slot
-                && !are_gods_concordant(eff_god, s_players[i].religion))
+            if (eff_god != GOD_NO_GOD && i != s_active_slot)
             {
-                continue;
+                const pantheon_relation_type rel =
+                    get_god_political_relation(eff_god, s_players[i].religion);
+                if (!are_gods_concordant(eff_god, s_players[i].religion))
+                {
+                    if (rel == pantheon_relation_type::RIVAL
+                        || rel == pantheon_relation_type::ANATHEMA)
+                    {
+                        debuff_or_harm_party_member(
+                            i,
+                            rel == pantheon_relation_type::ANATHEMA ? 3 : 1,
+                            rel == pantheon_relation_type::ANATHEMA ? 2 : 1,
+                            DUR_WEAK, 4 + random2(4),
+                            make_stringf("%s's discordant divine aura lashes",
+                                         god_name(eff_god).c_str()).c_str());
+                    }
+                    continue;
+                }
             }
-            if (radius <= LOS_RADIUS && !you.see_cell_no_trans(s_players[i].pos()))
-                continue;
 
             heal_or_buff_party_member(i, 0, dur, turns, false);
         }
@@ -1990,32 +2094,6 @@ namespace party
         return true;
     }
 
-    bool resolve_pending_revivals()
-    {
-        if (!is_enabled())
-            return false;
-
-        bool revived = false;
-        const int active = s_active_slot;
-        for (int slot = 0; slot < s_player_count; ++slot)
-        {
-            if (slot == active || is_player_downed(slot)
-                || !s_players[slot].pending_revival
-                || !_same_floor(s_players[slot], s_players[active]))
-            {
-                continue;
-            }
-            {
-                scoped_player_context ctx(slot, true);
-                revive();
-                bring_to_safety();
-            }
-            mprf("%s returns to life.", s_players[slot].your_name.c_str());
-            revived = true;
-        }
-        return revived;
-    }
-
     bool is_player_downed(int slot)
     {
         if (slot < 0 || slot >= s_player_count)
@@ -2143,14 +2221,6 @@ namespace party
                 return true;
         }
         return false;
-    }
-
-    bool prepare_survivor_for_death(int falling_slot)
-    {
-        // Another member can have an extra life pending during the same
-        // monster turn in which the last standing member falls.
-        resolve_pending_revivals();
-        return any_other_player_alive(falling_slot);
     }
 
     void revive_downed_players(bool on_floor_transition, int hp_drain_percent)
@@ -2491,21 +2561,157 @@ namespace party
 
     static bool s_in_witness_conduct = false;
 
+    static bool _god_pair_matches(god_type a, god_type b, god_type g1, god_type g2)
+    {
+        return (a == g1 && b == g2) || (a == g2 && b == g1);
+    }
+
     pantheon_relation_type get_god_political_relation(god_type a, god_type b)
     {
-        if (a <= GOD_NO_GOD || b <= GOD_NO_GOD || a >= NUM_GODS || b >= NUM_GODS)
+        if (a == GOD_NO_GOD || b == GOD_NO_GOD
+            || a >= NUM_GODS || b >= NUM_GODS)
+        {
             return pantheon_relation_type::NONE;
+        }
+
         if (a == b)
             return pantheon_relation_type::SHARED_COVENANT;
-        // Only the good gods acknowledge one another in native religion.
-        // Similar portfolios do not establish alliances between other gods.
-        if (god_likes_your_god(a, b) && god_likes_your_god(b, a))
+
+        // 1. The Triumvirate of Good (Zin, TSO, Elyvilon)
+        if (is_good_god(a) && is_good_god(b))
             return pantheon_relation_type::ALLIED_CONCORDAT;
-        if ((is_good_god(a) && god_hates_your_god(a, b))
-            || (is_good_god(b) && god_hates_your_god(b, a)))
+        if ((is_good_god(a) && is_evil_god(b)) || (is_good_god(b) && is_evil_god(a)))
+            return pantheon_relation_type::ANATHEMA;
+
+        // Zin vs Chaos/Mutation (Xom, Jiyva) is Anathema; TSO/Ely vs Chaos is Rival
+        if ((a == GOD_ZIN && is_chaotic_god(b)) || (b == GOD_ZIN && is_chaotic_god(a)))
+            return pantheon_relation_type::ANATHEMA;
+        if ((is_good_god(a) && is_chaotic_god(b)) || (is_good_god(b) && is_chaotic_god(a)))
+            return pantheon_relation_type::RIVAL;
+
+        // Fiscal Schism: Zin (tithes & ascetic law) vs Gozag (greed & bribery)
+        if (_god_pair_matches(a, b, GOD_ZIN, GOD_GOZAG))
+            return pantheon_relation_type::RIVAL;
+
+        // Light vs. Primordial Shadow: TSO vs Dithmenos
+        if (_god_pair_matches(a, b, GOD_SHINING_ONE, GOD_DITHMENOS))
+            return pantheon_relation_type::ANATHEMA;
+
+        // Honourable Martial Accord: TSO with Okawaru / Wu Jian
+        if (_god_pair_matches(a, b, GOD_SHINING_ONE, GOD_OKAWARU)
+            || _god_pair_matches(a, b, GOD_SHINING_ONE, GOD_WU_JIAN))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+
+        // Cycle of Life: Elyvilon with Fedhas; Pacifist vs Bloodlust: Elyvilon vs Trog/Oka
+        if (_god_pair_matches(a, b, GOD_ELYVILON, GOD_FEDHAS))
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        if (_god_pair_matches(a, b, GOD_ELYVILON, GOD_TROG)
+            || _god_pair_matches(a, b, GOD_ELYVILON, GOD_OKAWARU))
+        {
+            return pantheon_relation_type::RIVAL;
+        }
+
+        // 2. Anti-Magic Crusade (Trog) vs Arcane Conclave (Sif Muna, Vehumet, Kiku, Ashenzari)
+        if (_god_pair_matches(a, b, GOD_TROG, GOD_SIF_MUNA)
+            || _god_pair_matches(a, b, GOD_TROG, GOD_VEHUMET))
         {
             return pantheon_relation_type::ANATHEMA;
         }
+        if (_god_pair_matches(a, b, GOD_TROG, GOD_KIKUBAAQUDGHA)
+            || _god_pair_matches(a, b, GOD_TROG, GOD_ASHENZARI)
+            || _god_pair_matches(a, b, GOD_TROG, GOD_OKAWARU)
+            || _god_pair_matches(a, b, GOD_TROG, GOD_WU_JIAN)
+            || _god_pair_matches(a, b, GOD_TROG, GOD_CHEIBRIADOS))
+        {
+            return pantheon_relation_type::RIVAL;
+        }
+        if (_god_pair_matches(a, b, GOD_TROG, GOD_MAKHLEB))
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+
+        // 3. The Arcane Conclave (Sif Muna, Vehumet, Ashenzari)
+        if (_god_pair_matches(a, b, GOD_SIF_MUNA, GOD_VEHUMET)
+            || _god_pair_matches(a, b, GOD_SIF_MUNA, GOD_ASHENZARI)
+            || _god_pair_matches(a, b, GOD_VEHUMET, GOD_IGNIS))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+        if (_god_pair_matches(a, b, GOD_SIF_MUNA, GOD_XOM))
+            return pantheon_relation_type::RIVAL;
+
+        // 4. Tempo & Contemplation (Cheibriados)
+        if (_god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_USKAYAW)
+            || _god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_WU_JIAN))
+        {
+            return pantheon_relation_type::RIVAL;
+        }
+        if (_god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_ASHENZARI)
+            || _god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_RU)
+            || _god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_ZIN)
+            || _god_pair_matches(a, b, GOD_CHEIBRIADOS, GOD_HEPLIAKLQANA))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+
+        // 5. Nature vs Undeath & Elemental Forces (Fedhas, Qazlal, Jiyva, Yred, Kiku)
+        if (_god_pair_matches(a, b, GOD_FEDHAS, GOD_YREDELEMNUL)
+            || _god_pair_matches(a, b, GOD_FEDHAS, GOD_KIKUBAAQUDGHA))
+        {
+            return pantheon_relation_type::ANATHEMA;
+        }
+        if (_god_pair_matches(a, b, GOD_FEDHAS, GOD_QAZLAL)
+            || _god_pair_matches(a, b, GOD_FEDHAS, GOD_JIYVA)
+            || _god_pair_matches(a, b, GOD_QAZLAL, GOD_IGNIS))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+
+        // Consumption Clash: Gozag (gold/shops) vs Jiyva (item-devouring jellies)
+        if (_god_pair_matches(a, b, GOD_GOZAG, GOD_JIYVA))
+            return pantheon_relation_type::RIVAL;
+
+        // 6. Necromancy, Hell, Abyss, Rhythm, & Fate
+        if (_god_pair_matches(a, b, GOD_KIKUBAAQUDGHA, GOD_YREDELEMNUL)
+            || _god_pair_matches(a, b, GOD_HEPLIAKLQANA, GOD_YREDELEMNUL)
+            || _god_pair_matches(a, b, GOD_HEPLIAKLQANA, GOD_BEOGH))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+        if (_god_pair_matches(a, b, GOD_MAKHLEB, GOD_LUGONU))
+            return pantheon_relation_type::RIVAL;
+        if (_god_pair_matches(a, b, GOD_XOM, GOD_NEMELEX_XOBEH))
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        if (_god_pair_matches(a, b, GOD_USKAYAW, GOD_WU_JIAN)
+            || _god_pair_matches(a, b, GOD_USKAYAW, GOD_OKAWARU)
+            || _god_pair_matches(a, b, GOD_USKAYAW, GOD_NEMELEX_XOBEH)
+            || _god_pair_matches(a, b, GOD_OKAWARU, GOD_WU_JIAN))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+        if (_god_pair_matches(a, b, GOD_RU, GOD_XOM)
+            || _god_pair_matches(a, b, GOD_RU, GOD_JIYVA)
+            || _god_pair_matches(a, b, GOD_IGNIS, GOD_DITHMENOS))
+        {
+            return pantheon_relation_type::RIVAL;
+        }
+
+        // 7. Pakellas the Inventive (Artifice & Evocations)
+        if (_god_pair_matches(a, b, GOD_PAKELLAS, GOD_SIF_MUNA)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_VEHUMET)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_GOZAG)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_NEMELEX_XOBEH)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_OKAWARU))
+        {
+            return pantheon_relation_type::ALLIED_CONCORDAT;
+        }
+        if (_god_pair_matches(a, b, GOD_PAKELLAS, GOD_TROG)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_FEDHAS)
+            || _god_pair_matches(a, b, GOD_PAKELLAS, GOD_JIYVA))
+        {
+            return pantheon_relation_type::RIVAL;
+        }
+
         return pantheon_relation_type::NEUTRAL;
     }
 
@@ -2533,8 +2739,8 @@ namespace party
     {
         switch (rel)
         {
-        case pantheon_relation_type::SHARED_COVENANT:  return "Shared faith";
-        case pantheon_relation_type::ALLIED_CONCORDAT: return "Good gods";
+        case pantheon_relation_type::SHARED_COVENANT:  return "Shared Covenant";
+        case pantheon_relation_type::ALLIED_CONCORDAT: return "Allied Concordat";
         case pantheon_relation_type::NEUTRAL:          return "Neutral";
         case pantheon_relation_type::RIVAL:            return "Rival";
         case pantheon_relation_type::ANATHEMA:         return "Anathema";
@@ -2559,7 +2765,7 @@ namespace party
     {
         if (partner_slot_out)
             *partner_slot_out = -1;
-        if (!coop_content::enabled() || !is_enabled() || slot < 0 || slot >= s_player_count)
+        if (!is_enabled() || slot < 0 || slot >= s_player_count)
             return pantheon_relation_type::NONE;
 
         const god_type my_god = s_players[slot].religion;
@@ -2605,9 +2811,9 @@ namespace party
         switch (rel)
         {
         case pantheon_relation_type::SHARED_COVENANT:
-            return make_stringf("Shared faith with %s", partner.your_name.c_str());
+            return make_stringf("Shared Covenant (w/ %s)", partner.your_name.c_str());
         case pantheon_relation_type::ALLIED_CONCORDAT:
-            return make_stringf("Good gods: %s serves %s",
+            return make_stringf("Concordat (w/ %s's %s)",
                                 partner.your_name.c_str(),
                                 god_name(partner.religion).c_str());
         case pantheon_relation_type::RIVAL:
@@ -2625,38 +2831,257 @@ namespace party
 
     void on_player_join_god(int slot, god_type new_god, god_type /*old_god*/)
     {
-        if (!coop_content::enabled() || !is_enabled()
-            || slot < 0 || slot >= s_player_count || new_god == GOD_NO_GOD)
+        if (!is_enabled() || slot < 0 || slot >= s_player_count
+            || new_god == GOD_NO_GOD)
         {
             return;
         }
-        // Companions do not convert when another hero joins a religion.
-        // Native apostasy and conduct rules own piety and divine punishment.
+
+        const player &joiner = s_players[slot];
         for (int i = 0; i < s_player_count; ++i)
-            if (i != slot && slot_is_alive(i) && !is_player_downed(i)
-                && are_gods_concordant(new_god, s_players[i].religion))
+        {
+            if (i == slot || is_player_downed(i) || s_players[i].hp <= 0)
+                continue;
+            const god_type other_god = s_players[i].religion;
+            if (other_god == GOD_NO_GOD)
+                continue;
+
+            const pantheon_relation_type rel =
+                get_god_political_relation(new_god, other_god);
+
+            if (rel == pantheon_relation_type::SHARED_COVENANT)
             {
-                mprf(MSGCH_GOD, "%s shares %s's faith with %s.",
-                     s_players[slot].your_name.c_str(), god_name(new_god).c_str(),
+                mprf(MSGCH_GOD,
+                     "%s rejoices as %s joins %s in a Shared Covenant!",
+                     god_name(new_god).c_str(),
+                     joiner.your_name.c_str(),
                      s_players[i].your_name.c_str());
+                if (new_god != GOD_XOM && new_god != GOD_GOZAG && new_god != GOD_RU)
+                {
+                    {
+                        scoped_player_context ctx(slot);
+                        gain_piety(12, 1, false);
+                    }
+                    {
+                        scoped_player_context ctx(i);
+                        gain_piety(8, 1, false);
+                    }
+                }
             }
+            else if (rel == pantheon_relation_type::ALLIED_CONCORDAT)
+            {
+                mprf(MSGCH_GOD,
+                     "%s and %s's %s seal an Allied Concordat of divine fellowship!",
+                     god_name(new_god).c_str(),
+                     s_players[i].your_name.c_str(),
+                     god_name(other_god).c_str());
+                if (new_god != GOD_XOM && new_god != GOD_GOZAG && new_god != GOD_RU)
+                {
+                    scoped_player_context ctx(slot);
+                    gain_piety(8, 1, false);
+                }
+                if (other_god != GOD_XOM && other_god != GOD_GOZAG && other_god != GOD_RU)
+                {
+                    scoped_player_context ctx(i);
+                    gain_piety(5, 1, false);
+                }
+            }
+            else if (rel == pantheon_relation_type::RIVAL)
+            {
+                mprf(MSGCH_GOD,
+                     "Bitter rivalry erupts between %s's %s and %s's %s! Both gods exact a jealous toll!",
+                     joiner.your_name.c_str(),
+                     god_name(new_god).c_str(),
+                     s_players[i].your_name.c_str(),
+                     god_name(other_god).c_str());
+                debuff_or_harm_party_member(
+                    slot, random_range(2, 4), random_range(2, 4),
+                    DUR_WEAK, random_range(5, 8), nullptr, random_range(4, 6));
+                debuff_or_harm_party_member(
+                    i, random_range(2, 4), random_range(2, 4),
+                    DUR_WEAK, random_range(5, 8), nullptr, random_range(4, 6));
+            }
+            else if (rel == pantheon_relation_type::ANATHEMA)
+            {
+                mprf(MSGCH_GOD,
+                     "A violent Pantheon Schism erupts as %s pledges to %s against %s's %s! Divine wrath sears both champions!",
+                     joiner.your_name.c_str(),
+                     god_name(new_god).c_str(),
+                     s_players[i].your_name.c_str(),
+                     god_name(other_god).c_str());
+                s_players[slot].hp_max_adj_temp -= random_range(2, 4);
+                s_players[i].hp_max_adj_temp -= random_range(2, 4);
+                debuff_or_harm_party_member(
+                    slot, random_range(5, 9), random_range(4, 7),
+                    DUR_WEAK, random_range(8, 14), nullptr, random_range(8, 12));
+                debuff_or_harm_party_member(
+                    slot, 0, 0, DUR_SLOW, random_range(6, 10));
+                debuff_or_harm_party_member(
+                    i, random_range(5, 9), random_range(4, 7),
+                    DUR_WEAK, random_range(8, 14), nullptr, random_range(8, 12));
+                debuff_or_harm_party_member(
+                    i, 0, 0, DUR_SLOW, random_range(6, 10));
+            }
+        }
     }
 
     int adjust_kill_piety_for_party_politics(int base_piety)
     {
-        // Judge the worshipper's deed, not a companion's choice of patron.
-        if (coop_content::enabled() && s_seasoning_chaotic_ladle
-            && base_piety > 0 && !s_in_witness_conduct)
+        if (!is_enabled() || base_piety <= 0 || s_in_witness_conduct
+            || you_worship(GOD_NO_GOD))
         {
-            base_piety += div_rand_round(base_piety * 15, 100);
+            return base_piety;
         }
+
+        const int cur_slot = active_slot();
+        const player &active = s_players[cur_slot];
+        bool has_anathema = false;
+        bool has_rival = false;
+        bool has_covenant_or_concordat = false;
+        int anathema_slot = -1;
+        int rival_slot = -1;
+
+        for (int i = 0; i < s_player_count; ++i)
+        {
+            if (i == cur_slot || is_player_downed(i) || s_players[i].hp <= 0)
+                continue;
+            if (!_same_floor(s_players[i], active) || s_players[i].religion == GOD_NO_GOD)
+                continue;
+            if (!in_bounds(s_players[i].pos()) || !in_bounds(active.pos()))
+                continue;
+            if (grid_distance(s_players[i].pos(), active.pos()) > LOS_RADIUS)
+                continue;
+
+            const pantheon_relation_type rel =
+                get_god_political_relation(active.religion, s_players[i].religion);
+            if (rel == pantheon_relation_type::ANATHEMA)
+            {
+                has_anathema = true;
+                anathema_slot = i;
+            }
+            else if (rel == pantheon_relation_type::RIVAL)
+            {
+                has_rival = true;
+                rival_slot = i;
+            }
+            else if (rel == pantheon_relation_type::SHARED_COVENANT
+                     || rel == pantheon_relation_type::ALLIED_CONCORDAT)
+            {
+                has_covenant_or_concordat = true;
+            }
+        }
+
+        if (has_anathema && anathema_slot >= 0)
+        {
+            // Anathema Tension: 60% of the time, the heretic's presence sours
+            // your offering and lashes both; 40% of the time, your god siphons
+            // piety & vitality directly from the Anathema teammate!
+            if (x_chance_in_y(3, 5))
+            {
+                const int penalty = max(1, div_rand_round(base_piety, 3));
+                if (one_chance_in(4))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s's worship of %s sours your offering to %s and sparks divine friction!",
+                         s_players[anathema_slot].your_name.c_str(),
+                         god_name(s_players[anathema_slot].religion).c_str(),
+                         god_name(active.religion).c_str());
+                    debuff_or_harm_party_member(anathema_slot, 1 + random2(3),
+                                                1 + random2(2), DUR_WEAK, 3,
+                                                nullptr, 1);
+                }
+                return max(0, base_piety - penalty);
+            }
+            else
+            {
+                const int siphoned = max(1, div_rand_round(base_piety, 4));
+                debuff_or_harm_party_member(anathema_slot, 2 + random2(3),
+                                            1 + random2(3), NUM_DURATIONS, 0,
+                                            nullptr, 1);
+                if (one_chance_in(4))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s siphons vitality and favour from %s's hated %s to fuel your triumph!",
+                         god_name(active.religion).c_str(),
+                         s_players[anathema_slot].your_name.c_str(),
+                         god_name(s_players[anathema_slot].religion).c_str());
+                }
+                return base_piety + siphoned;
+            }
+        }
+
+        if (has_rival && rival_slot >= 0)
+        {
+            // Rival Tension: volatile zero-sum contest! Either their rival god's
+            // interference taxes your piety, or you usurp piety from your rival.
+            if (coinflip())
+            {
+                const int tax = max(1, div_rand_round(base_piety, 4));
+                if (one_chance_in(6))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s's rivalry with %s's %s clouds your offering with spite.",
+                         god_name(active.religion).c_str(),
+                         s_players[rival_slot].your_name.c_str(),
+                         god_name(s_players[rival_slot].religion).c_str());
+                }
+                return max(0, base_piety - tax);
+            }
+            else
+            {
+                const int usurped = max(1, div_rand_round(base_piety, 5));
+                debuff_or_harm_party_member(rival_slot, 0, 1, NUM_DURATIONS, 0,
+                                            nullptr, 1);
+                if (one_chance_in(6))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s usurps devotion from %s's rival %s as you claim the kill!",
+                         god_name(active.religion).c_str(),
+                         s_players[rival_slot].your_name.c_str(),
+                         god_name(s_players[rival_slot].religion).c_str());
+                }
+                return base_piety + usurped;
+            }
+        }
+
+        if (has_covenant_or_concordat)
+        {
+            const int bonus = div_rand_round(base_piety, 6);
+            base_piety += bonus;
+        }
+
+        if (s_seasoning_chaotic_ladle)
+            base_piety += div_rand_round(base_piety * 15, 100);
+
         return base_piety;
+    }
+
+    static bool _is_god_specialty_kill_target(god_type god, const monster &mons)
+    {
+        const mon_holy_type holiness = mons.holiness();
+        switch (god)
+        {
+        case GOD_TROG:
+            return mons.is_actual_spellcaster();
+        case GOD_SHINING_ONE:
+        case GOD_ZIN:
+            return bool(holiness & (MH_UNDEAD | MH_DEMONIC))
+                   || mons.evil() || mons.how_chaotic() || mons.how_unclean();
+        case GOD_FEDHAS:
+            return bool(holiness & MH_UNDEAD);
+        case GOD_BEOGH:
+            return mons.is_priest();
+        case GOD_CHEIBRIADOS:
+            return cheibriados_thinks_mons_is_fast(mons);
+        default:
+            return false;
+        }
     }
 
     void broadcast_party_kill_conducts(const monster &mons, killer_type killer,
                                        int /*killer_index*/, bool gives_xp)
     {
-        if (!coop_content::enabled() || !is_enabled() || !gives_xp || is_proxy_monster(mons))
+        if (!is_enabled() || !gives_xp || is_proxy_monster(mons))
             return;
 
         const bool player_party_kill =
@@ -2720,10 +3145,60 @@ namespace party
                 yred_feed_torch(&mons);
             }
 
-            // Shared credit is possible only within the same faith or the
-            // good gods. Another hero's patron never creates a punitive hit.
+            // 3. If a teammate kills a holy creature in front of a Good god follower,
+            // the Good god punishes an Anathema/Rival killer and docks the witness's piety!
             if (mons.is_holy() && is_good_god(wit_god))
+            {
+                if (rel == pantheon_relation_type::ANATHEMA
+                    || rel == pantheon_relation_type::RIVAL)
+                {
+                    mprf(MSGCH_GOD,
+                         "%s sears %s for slaying the holy %s before %s!",
+                         god_name(wit_god).c_str(),
+                         active.your_name.c_str(),
+                         mons.name(DESC_PLAIN).c_str(),
+                         you.your_name.c_str());
+                    lose_piety(2);
+                    debuff_or_harm_party_member(killer_slot, 4 + random2(6), 0,
+                                                DUR_WEAK, 6 + random2(5));
+                }
+                else if (one_chance_in(3))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s mourns the slain %s, docking %s's favour.",
+                         god_name(wit_god).c_str(),
+                         mons.name(DESC_PLAIN).c_str(),
+                         you.your_name.c_str());
+                    lose_piety(1);
+                }
                 continue;
+            }
+
+            const bool specialty_target = _is_god_specialty_kill_target(wit_god, mons);
+
+            // Non-concordant party members never get free shared kill piety;
+            // instead, if a Rival or Anathema steals a specialty kill right in
+            // front of them, the witness's god fumes and penalizes both!
+            if (rel == pantheon_relation_type::RIVAL
+                || rel == pantheon_relation_type::ANATHEMA)
+            {
+                if (specialty_target && one_chance_in(3))
+                {
+                    mprf(MSGCH_GOD,
+                         "%s fumes as %s (%s) usurps the slaying of %s before %s!",
+                         god_name(wit_god).c_str(),
+                         active.your_name.c_str(),
+                         god_name(killer_god).c_str(),
+                         mons.name(DESC_THE).c_str(),
+                         you.your_name.c_str());
+                    lose_piety(rel == pantheon_relation_type::ANATHEMA ? 2 : 1);
+                    debuff_or_harm_party_member(
+                        killer_slot,
+                        rel == pantheon_relation_type::ANATHEMA ? 2 + random2(3) : 0,
+                        1 + random2(3), DUR_WEAK, 3 + random2(4));
+                }
+                continue;
+            }
 
             if (!are_gods_concordant(wit_god, killer_god))
                 continue;
@@ -2764,10 +3239,58 @@ namespace party
         }
     }
 
-    void on_party_hurt_monster(const monster &victim, int damage_done,
-                               beam_type /*flavour*/, kill_method_type /*kill_type*/)
+    static bool s_in_combo_reaction = false;
+
+    static int _classify_combo_element(beam_type flavour, const player &attacker)
     {
-        if (!coop_content::enabled() || !is_enabled() || damage_done <= 0 || victim.is_firewood()
+        switch (flavour)
+        {
+        case BEAM_FIRE:
+        case BEAM_LAVA:
+        case BEAM_STICKY_FLAME:
+        case BEAM_DAMNATION:
+        case BEAM_STEAM:
+            return 1; // Fire
+        case BEAM_COLD:
+        case BEAM_ICE:
+            return 2; // Cold
+        case BEAM_ELECTRICITY:
+        case BEAM_THUNDER:
+            return 3; // Elec
+        case BEAM_POISON:
+        case BEAM_POISON_ARROW:
+        case BEAM_WATER:
+        case BEAM_ACID:
+            return 4; // Poison / Water
+        case BEAM_FRAG:
+        case BEAM_MMISSILE:
+            return 5; // Earth / Shatter
+        default:
+            break;
+        }
+
+        if (const item_def *wpn = attacker.weapon())
+        {
+            if (wpn->base_type == OBJ_WEAPONS)
+            {
+                switch (get_weapon_brand(*wpn))
+                {
+                case SPWPN_FLAMING:       return 1;
+                case SPWPN_FREEZING:      return 2;
+                case SPWPN_ELECTROCUTION: return 3;
+                case SPWPN_VENOM:         return 4;
+                case SPWPN_HEAVY:         return 5;
+                default:                  break;
+                }
+            }
+        }
+        return 0;
+    }
+
+    void on_party_hurt_monster(const monster &victim, int damage_done,
+                               beam_type flavour, kill_method_type /*kill_type*/)
+    {
+        if (!is_enabled() || damage_done <= 0 || victim.is_firewood()
             || is_proxy_monster(victim))
         {
             return;
@@ -2796,8 +3319,103 @@ namespace party
             }
         }
 
-        // Elemental interactions belong to native beams, clouds and terrain.
-        // Backgrounds are starting kits, not permanent support classes.
+        // Elemental Cross-Combo Reactions between two different party members
+        if (!s_in_combo_reaction && s_player_count > 1 && victim.alive())
+        {
+            monster *mut_victim = monster_at(victim.pos());
+            if (mut_victim && mut_victim->mid == victim.mid)
+            {
+                const int cur_elem = _classify_combo_element(flavour, active);
+                const int now_aut = s_world_aut_clock;
+                int primer_slot = mut_victim->props.exists("coop_primer_slot")
+                    ? mut_victim->props["coop_primer_slot"].get_int() : -1;
+                const int primer_aut = mut_victim->props.exists("coop_primer_aut")
+                    ? mut_victim->props["coop_primer_aut"].get_int() : -1000;
+                int primer_elem = mut_victim->props.exists("coop_primer_elem")
+                    ? mut_victim->props["coop_primer_elem"].get_int() : 0;
+
+                if (primer_slot >= 0
+                    && primer_slot < s_player_count
+                    && primer_slot != attacker_slot
+                    && (now_aut - primer_aut) <= 25)
+                {
+                    unwind_bool combo_guard(s_in_combo_reaction, true);
+                    const player &partner = s_players[primer_slot];
+                    const bool thermal_shock =
+                        (primer_elem == 1 && (cur_elem == 2 || mut_victim->has_ench(ENCH_FROZEN)))
+                        || (primer_elem == 2 && (cur_elem == 1 || mut_victim->has_ench(ENCH_STICKY_FLAME)));
+                    const bool conductive_gale =
+                        (primer_elem == 3 && (cur_elem == 4 || mut_victim->has_ench(ENCH_POISON)))
+                        || (primer_elem == 4 && cur_elem == 3);
+                    const bool seismic_shatter =
+                        (cur_elem == 5 && (mut_victim->has_ench(ENCH_PETRIFYING)
+                                           || mut_victim->has_ench(ENCH_PETRIFIED)
+                                           || mut_victim->has_ench(ENCH_SLOW)
+                                           || mut_victim->is_constricted()));
+
+                    if (thermal_shock)
+                    {
+                        const int bonus = 4 + random2(7) + damage_done / 3;
+                        mprf(MSGCH_FRIEND_ACTION,
+                             "Thermal Shock! %s and %s shatter %s in a scalding burst of steam (%d dmg)!",
+                             partner.your_name.c_str(), active.your_name.c_str(),
+                             mut_victim->name(DESC_THE).c_str(), bonus);
+                        place_cloud(CLOUD_STEAM, mut_victim->pos(), 3 + random2(4), &you);
+                        mut_victim->corrode(&active, active.your_name.c_str(), 1);
+                        mut_victim->hurt(&you, bonus, BEAM_STEAM);
+                        mut_victim->props.erase("coop_primer_slot");
+                        ++s_support_acts[primer_slot];
+                    }
+                    else if (conductive_gale)
+                    {
+                        const int bonus = 3 + random2(6) + damage_done / 3;
+                        mprf(MSGCH_FRIEND_ACTION,
+                             "Conductive Gale! %s and %s arc chain-lightning through %s (%d dmg)!",
+                             partner.your_name.c_str(), active.your_name.c_str(),
+                             mut_victim->name(DESC_THE).c_str(), bonus);
+                        mut_victim->hurt(&you, bonus, BEAM_ELECTRICITY);
+                        int arcs = 0;
+                        for (adjacent_iterator ai(mut_victim->pos()); ai && arcs < 2; ++ai)
+                        {
+                            if (monster *adj = monster_at(*ai))
+                            {
+                                if (!adj->wont_attack() && !is_proxy_monster(*adj))
+                                {
+                                    adj->hurt(&you, max(2, bonus * 2 / 3), BEAM_ELECTRICITY);
+                                    ++arcs;
+                                }
+                            }
+                        }
+                        inc_mp(1, true);
+                        s_players[primer_slot].magic_points = min(
+                            s_players[primer_slot].max_magic_points,
+                            s_players[primer_slot].magic_points + 1);
+                        mut_victim->props.erase("coop_primer_slot");
+                        ++s_support_acts[primer_slot];
+                    }
+                    else if (seismic_shatter)
+                    {
+                        const int bonus = 5 + random2(8) + damage_done / 3;
+                        mprf(MSGCH_FRIEND_ACTION,
+                             "Seismic Shatter! %s and %s pulverise the hexed %s (%d dmg)!",
+                             partner.your_name.c_str(), active.your_name.c_str(),
+                             mut_victim->name(DESC_THE).c_str(), bonus);
+                        mut_victim->add_ench(mon_enchant(ENCH_DAZED, &you, random_range(20, 40)));
+                        mut_victim->hurt(&you, bonus, BEAM_FRAG);
+                        mut_victim->props.erase("coop_primer_slot");
+                        ++s_support_acts[primer_slot];
+                    }
+                }
+
+                if (mut_victim->alive() && cur_elem > 0)
+                {
+                    mut_victim->props["coop_primer_slot"] = attacker_slot;
+                    mut_victim->props["coop_primer_aut"] = now_aut;
+                    mut_victim->props["coop_primer_elem"] = cur_elem;
+                }
+            }
+        }
+
         for (int slot = 0; slot < s_player_count; ++slot)
         {
             if (slot == attacker_slot || is_player_downed(slot)
@@ -2809,6 +3427,26 @@ namespace party
                 continue;
 
             player &p = s_players[slot];
+            // Stoat Soup reserved-MP party chorus & BcadrenCrawl paired-strike resonance
+            if (in_bounds(p.pos()) && grid_distance(p.pos(), active.pos()) <= 3)
+            {
+                const bool chorus_job = (p.char_class == JOB_SKALD
+                                         || p.char_class == JOB_PRIEST
+                                         || p.char_class == JOB_HEALER
+                                         || p.char_class == JOB_JESTER);
+                const bool paired_flank = grid_distance(p.pos(), victim.pos()) <= 1;
+                if ((chorus_job && p.magic_points * 2 >= max(2, p.max_magic_points)
+                     && one_chance_in(9))
+                    || (paired_flank && one_chance_in(10)))
+                {
+                    ++s_support_acts[slot];
+                    heal_or_buff_party_member(
+                        attacker_slot, 0,
+                        chorus_job ? DUR_REGENERATION : DUR_SONG_OF_SLAYING,
+                        random_range(4, 7), false);
+                }
+            }
+
             if (p.religion != GOD_USKAYAW && p.religion != GOD_BEOGH)
                 continue;
             if (!are_gods_concordant(p.religion, active.religion))
@@ -2835,16 +3473,132 @@ namespace party
         }
     }
 
-    void on_party_witness_conduct(conduct_type, int, const monster *)
+    void on_party_witness_conduct(conduct_type thing_done, int /*level*/,
+                                  const monster * /*victim*/)
     {
-        // Native god conduct judges the acting worshipper. Merely seeing a
-        // companion cast, haste or receive a gift does not create divine wrath.
+        if (!is_enabled() || s_in_witness_conduct)
+            return;
+
+        if (thing_done != DID_SPELL_CASTING
+            && thing_done != DID_EVIL
+            && thing_done != DID_UNCLEAN
+            && thing_done != DID_CHAOS
+            && thing_done != DID_HASTY
+            && thing_done != DID_KILL_SLIME)
+        {
+            return;
+        }
+
+        unwind_bool witness_guard(s_in_witness_conduct, true);
+        const int actor_slot = active_slot();
+        player &active = s_players[actor_slot];
+
+        for (int slot = 0; slot < s_player_count; ++slot)
+        {
+            if (slot == actor_slot || is_player_downed(slot)
+                || s_players[slot].hp <= 0)
+            {
+                continue;
+            }
+            if (!_same_floor(s_players[slot], active))
+                continue;
+
+            player &p = s_players[slot];
+            if (p.religion == GOD_NO_GOD || !in_bounds(p.pos())
+                || !cell_see_cell(p.pos(), active.pos(), LOS_DEFAULT))
+            {
+                continue;
+            }
+
+            const pantheon_relation_type rel =
+                get_god_political_relation(p.religion, active.religion);
+            const bool is_hostile_pair =
+                (rel == pantheon_relation_type::RIVAL
+                 || rel == pantheon_relation_type::ANATHEMA);
+
+            if (thing_done == DID_SPELL_CASTING && p.religion == GOD_TROG)
+            {
+                if (x_chance_in_y(is_hostile_pair ? 1 : 1, is_hostile_pair ? 2 : 3))
+                {
+                    const int hp_lash = (rel == pantheon_relation_type::ANATHEMA)
+                        ? random_range(3, 6) : random_range(1, 3);
+                    const int mp_lash = random_range(3, 6);
+                    debuff_or_harm_party_member(
+                        actor_slot, hp_lash, mp_lash, DUR_WEAK,
+                        random_range(4, 7), nullptr,
+                        rel == pantheon_relation_type::ANATHEMA ? 1 : 0);
+                    mprf(MSGCH_GOD,
+                         "Trog roars at %s's hated spellcraft before %s, scorching %s's mana and strength!",
+                         active.your_name.c_str(),
+                         p.your_name.c_str(),
+                         active.your_name.c_str());
+                }
+            }
+            else if ((thing_done == DID_EVIL || thing_done == DID_UNCLEAN)
+                     && (is_good_god(p.religion) || p.religion == GOD_FEDHAS))
+            {
+                if (x_chance_in_y(1, is_hostile_pair ? 2 : 3))
+                {
+                    debuff_or_harm_party_member(
+                        actor_slot, random_range(3, 7), random_range(2, 4),
+                        p.religion == GOD_SHINING_ONE ? DUR_CORONA : DUR_WEAK,
+                        random_range(5, 8), nullptr,
+                        rel == pantheon_relation_type::ANATHEMA ? 2 : 1);
+                    debuff_or_harm_party_member(
+                        slot, 0, 0, NUM_DURATIONS, 0, nullptr, 1);
+                    mprf(MSGCH_GOD,
+                         "%s lashes %s for practicing foul arts in %s's sight, and docks %s's favour!",
+                         god_name(p.religion).c_str(),
+                         active.your_name.c_str(),
+                         p.your_name.c_str(),
+                         p.your_name.c_str());
+                }
+            }
+            else if (thing_done == DID_CHAOS && p.religion == GOD_ZIN)
+            {
+                if (x_chance_in_y(1, is_hostile_pair ? 2 : 3))
+                {
+                    debuff_or_harm_party_member(
+                        actor_slot, random_range(2, 5), random_range(2, 4),
+                        DUR_SLOW, random_range(4, 7), nullptr, 1);
+                    mprf(MSGCH_GOD,
+                         "Zin's lawful judgment weighs down %s for invoking chaos before %s!",
+                         active.your_name.c_str(),
+                         p.your_name.c_str());
+                }
+            }
+            else if (thing_done == DID_HASTY && p.religion == GOD_CHEIBRIADOS)
+            {
+                if (x_chance_in_y(1, is_hostile_pair ? 2 : 3))
+                {
+                    active.duration[DUR_HASTE] = max(0, active.duration[DUR_HASTE] / 2);
+                    active.duration[DUR_FINESSE] = max(0, active.duration[DUR_FINESSE] / 2);
+                    debuff_or_harm_party_member(
+                        actor_slot, random_range(1, 3), 0,
+                        DUR_SLOW, random_range(5, 9), nullptr, 1);
+                    mprf(MSGCH_GOD,
+                         "Cheibriados's crushing stillness punishes %s's frantic haste before %s!",
+                         active.your_name.c_str(),
+                         p.your_name.c_str());
+                }
+            }
+            else if (thing_done == DID_KILL_SLIME && p.religion == GOD_JIYVA)
+            {
+                debuff_or_harm_party_member(
+                    actor_slot, random_range(3, 6), random_range(2, 4),
+                    DUR_WEAK, random_range(4, 8), nullptr, 1);
+                mprf(MSGCH_GOD,
+                     "Jiyva's caustic tremor punishes %s for slaying slime before %s!",
+                     active.your_name.c_str(),
+                     p.your_name.c_str());
+            }
+        }
     }
 
     void apply_pantheon_gift_resonance(int recipient_slot, god_type god,
                                        const std::string &gift_desc)
     {
-        if (!coop_content::enabled() || !is_enabled() || recipient_slot < 0 || recipient_slot >= s_player_count
+        if (!is_enabled() || recipient_slot < 0 || recipient_slot >= s_player_count
             || god == GOD_NO_GOD)
         {
             return;
@@ -2866,8 +3620,97 @@ namespace party
             sync_shared_state_from_active();
         }
 
-        // The gift and its timeout belong to its recipient. Books still
-        // join the ordinary shared library; no bonus buffs or jealous backlash.
+        for (int i = 0; i < s_player_count; ++i)
+        {
+            if (i == recipient_slot || is_player_downed(i)
+                || s_players[i].hp <= 0)
+            {
+                continue;
+            }
+            if (!_same_floor(s_players[i], recipient))
+                continue;
+
+            player &ally = s_players[i];
+            const pantheon_relation_type rel =
+                get_god_political_relation(ally.religion, god);
+
+            if (rel == pantheon_relation_type::SHARED_COVENANT
+                || rel == pantheon_relation_type::ALLIED_CONCORDAT)
+            {
+                if (ally.gift_timeout > 0)
+                {
+                    const int reduction = min<int>(ally.gift_timeout,
+                                                   random_range(4, 8));
+                    ally.gift_timeout -= reduction;
+                }
+
+                if (god == GOD_TROG || god == GOD_OKAWARU)
+                {
+                    heal_or_buff_party_member(i, random_range(4, 8),
+                                              DUR_MIGHT, random_range(6, 10), false);
+                }
+                else if (god == GOD_VEHUMET || god == GOD_SIF_MUNA
+                         || god == GOD_KIKUBAAQUDGHA)
+                {
+                    if (ally.religion != GOD_TROG)
+                    {
+                        ally.magic_points = min(ally.max_magic_points,
+                                                ally.magic_points + random_range(4, 9));
+                        heal_or_buff_party_member(i, 0,
+                                                  DUR_BRILLIANCE, random_range(5, 8), false);
+                    }
+                }
+                else
+                {
+                    heal_or_buff_party_member(i, random_range(5, 10),
+                                              DUR_REGENERATION, random_range(5, 9), false);
+                }
+
+                mprf(MSGCH_GOD,
+                     "Divine resonance from %s's gift empowers %s (%s)!",
+                     god_name(god).c_str(),
+                     ally.your_name.c_str(),
+                     pantheon_relation_label(rel));
+            }
+            else if (rel == pantheon_relation_type::RIVAL)
+            {
+                // Rival Jealousy & Spite: both the rival ally and the gift
+                // recipient suffer spiteful divine friction!
+                ally.gift_timeout += random_range(2, 5);
+                debuff_or_harm_party_member(
+                    i, random_range(1, 3), random_range(2, 4),
+                    DUR_WEAK, random_range(4, 7), nullptr, random_range(2, 4));
+                debuff_or_harm_party_member(
+                    recipient_slot, random_range(1, 3), 0,
+                    DUR_SLOW, random_range(3, 5));
+                mprf(MSGCH_GOD,
+                     "Incensed by %s's gift to %s, %s lashes %s with jealous spite and hexes %s!",
+                     god_name(god).c_str(),
+                     recipient.your_name.c_str(),
+                     god_name(ally.religion).c_str(),
+                     ally.your_name.c_str(),
+                     recipient.your_name.c_str());
+            }
+            else if (rel == pantheon_relation_type::ANATHEMA)
+            {
+                // Anathema Wrath & Backlash: severe piety/vitality drain on the
+                // Anathema teammate and a retaliatory curse on the recipient!
+                ally.gift_timeout += random_range(4, 8);
+                debuff_or_harm_party_member(
+                    i, random_range(4, 8), random_range(3, 6),
+                    DUR_WEAK, random_range(6, 10), nullptr, random_range(4, 7));
+                debuff_or_harm_party_member(
+                    recipient_slot, random_range(3, 6), random_range(2, 4),
+                    DUR_WEAK, random_range(4, 7));
+                mprf(MSGCH_GOD,
+                     "Anathema backlash! %s's boon to %s provokes %s's fury, searing %s and cursing %s!",
+                     god_name(god).c_str(),
+                     recipient.your_name.c_str(),
+                     god_name(ally.religion).c_str(),
+                     ally.your_name.c_str(),
+                     recipient.your_name.c_str());
+            }
+        }
     }
 
     bool any_party_member_on_floor_worships(god_type god, int *slot_out)
@@ -3297,7 +4140,7 @@ namespace party
 
     bool scroll_soul_recall()
     {
-        if (!coop_content::enabled() || !is_enabled())
+        if (!is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -3405,7 +4248,7 @@ namespace party
 
     bool scroll_rallying()
     {
-        if (!coop_content::enabled() || !is_enabled())
+        if (!is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -3470,7 +4313,7 @@ namespace party
 
     bool scroll_phase_swap(const coord_def &preferred_target)
     {
-        if (!coop_content::enabled() || !is_enabled())
+        if (!is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -3573,7 +4416,7 @@ namespace party
 
     bool scroll_shared_vigour()
     {
-        if (!coop_content::enabled() || !is_enabled())
+        if (!is_enabled())
         {
             canned_msg(MSG_NOTHING_HAPPENS);
             return false;
@@ -3629,7 +4472,7 @@ namespace party
 
             const int turns = random_range(15, 25);
             heal_or_buff_party_member(i, 0, DUR_REGENERATION, turns, true);
-            heal_or_buff_party_member(i, 0, DUR_SOUL_AMBROSIA, turns, false);
+            heal_or_buff_party_member(i, 0, DUR_DIVINE_VIGOUR, turns, false);
         }
 
         sync_all_proxies();

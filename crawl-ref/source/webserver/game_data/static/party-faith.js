@@ -62,6 +62,10 @@ function ($, model, icons, tiles) {
             seal: "M0-5Q3-1 1 0L4-2Q7 4 0 5Q-6 4-3-2L-1 0Z", sides: "M5 53Q0 49 4 43Q8 39 4 34L6 29M55 53Q60 49 56 43Q52 39 56 34L54 29", crown: "M12 17Q5 13 10 6L15 11L21 4M48 17Q55 13 50 6L45 11L39 4" }
     };
     shrines.VORR = {"color": "#b76b77","arch": "M8 55V25L12 17V11L22 8H38L48 11V17L52 25V55","base": "M5 55H25L28 58H32L35 55H55L52 60V65L48 67H12L8 65V60Z","seal": "M0-5Q-5 0-3 3L-1 5V-2M1-2V5L3 3Q5 0 0-5","sides": "M4 51V29L7 26M4 39H7L8 44V51M56 51V29L53 26M56 39H53L52 44V51","crown": "M12 17V11L20 6H25M48 17V11L40 6H35M28 5L30 2L32 5"};
+    shrines.VELLUM = { color: "#d1bd8f", arch: "M8 55V24Q8 10 20 8H40Q52 10 52 24V55", base: "M5 55Q18 53 30 57Q42 53 55 55V65Q42 63 30 67Q18 63 5 65Z", seal: "M0-4Q-4-6-7-4V3Q-3 1 0 4Q3 1 7 3V-4Q4-6 0-4V4", sides: "M4 51V25L8 20M56 51V25L52 20", crown: "M12 16Q18 8 25 9M48 16Q42 8 35 9" };
+    shrines.IMUS_THEA = { color: "#9ed6df", arch: "M8 55V23L17 11L30 5L43 11L52 23V55", base: "M5 55H55L52 67H8Z", seal: "M0-5L5 0L0 5L-5 0ZM0-5V5M-5 0H5", sides: "M4 51L8 46L4 41V24M56 51L52 46L56 41V24", crown: "M16 13L22 6L30 2L38 6L44 13" };
+    shrines.GREAT_WYRM = { color: "#b3c88b", arch: "M8 55V24Q8 9 30 7Q52 9 52 24V55", base: "M5 55H55L51 67H9Z", seal: "M0-5A5 5 0 1 1-1-5L1-3", sides: "M5 52Q0 32 7 19M55 52Q60 32 53 19", crown: "M14 15Q20 4 30 5Q40 4 46 15" };
+    shrines.AGRAPHEDE = { color: "#a8ba78", arch: "M8 55V26Q8 9 30 7Q52 9 52 26V55", base: "M5 55L17 53L23 56L30 54L37 56L43 53L55 55L51 67H9Z", seal: "M0-5V5M-5 0H5M-4-4L4 4M4-4L-4 4", sides: "M5 51L10 43L5 34L11 26M55 51L50 43L55 34L49 26", crown: "M12 17L20 7L30 3L40 7L48 17" };
     var plain = { color: "#8e969a", arch: "M8 55V27a22 20 0 0 1 44 0V55", base: "M7 55H53V67H7Z" };
     // Visual atmosphere, never additional gameplay state. These small families
     // share a bounded particle renderer while each deity retains its own craft.
@@ -82,6 +86,10 @@ function ($, model, icons, tiles) {
         IGNIS: ["ember", "rise", 12]
     };
     atmosphere.VORR = ["drop", "fall", 13];
+    atmosphere.VELLUM = ["spark", "twinkle", 12];
+    atmosphere.IMUS_THEA = ["diamond", "twinkle", 12];
+    atmosphere.GREAT_WYRM = ["drop", "rise", 14];
+    atmosphere.AGRAPHEDE = ["spark", "twinkle", 12];
     var moteShapes = {
         spark: "M0-1.8V1.8M-1.8 0H1.8", ray: "M0-2L.6-.6L2 0L.6.6L0 2L-.6.6L-2 0L-.6-.6Z",
         ash: "M-.8-1L.8 1M.7-1L-.5.8", mist: "M-1.6.8Q-3-.2-1.2-1Q-.3-2 1-1Q3-.6 1.6.8Z",
@@ -124,6 +132,10 @@ function ($, model, icons, tiles) {
         IGNIS: ["brazier", "M-10-5L-5-3L0-7L5-3L10-5L7 4L3 5V7H-3V5L-7 4Z"]
     };
     idolSettings.VORR = ["blood-basin", "M-10-4L-7-6H7L10-4L8 4L4 7H-4L-8 4Z"];
+    idolSettings.VELLUM = ["book", "M0-5Q-5-7-9-5V4Q-4 2 0 5Q4 2 9 4V-5Q5-7 0-5V5"];
+    idolSettings.IMUS_THEA = ["prism", "M0-8L9 3L5 7H-5L-9 3Z"];
+    idolSettings.GREAT_WYRM = ["serpent", "M0-8A8 8 0 1 1-1-8L2-5L-1-3Z"];
+    idolSettings.AGRAPHEDE = ["spider", "M-4-3L-10-7M-4 0H-11M-4 3L-10 7M4-3L10-7M4 0H11M4 3L10 7M0-5A4 4 0 1 0 0 5A4 4 0 1 0 0-5Z"];
     var namespace = "http://www.w3.org/2000/svg";
     var craftId = 0;
 
@@ -245,7 +257,7 @@ function ($, model, icons, tiles) {
                 "data-tip-title": faith.name, "data-tip-body": [faith.summary, faith.description].filter(Boolean).join("\n"),
                 "data-tip-meta": "Inspect faith and divine abilities" })
             .append($("<span class='party-faith-art' aria-hidden='true'></span>")
-                .append(icons.icon(!faith.known ? "question" : faith.worships ? "faith" : "faith-none")))
+                .append(icons.icon(!faith.known ? "question" : faith.kind === "defiance" ? "spark" : faith.worships ? "faith" : "faith-none")))
             .on("click", function (event) { event.stopPropagation(); inspect(hero.slot, faith.worships || faith.kind === "defiance" ? "abilities" : "overview"); })
             .on("keydown keypress keyup", function (event) { event.stopPropagation(); });
         if (faith.worships) altar($button, faith);

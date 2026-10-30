@@ -5235,8 +5235,7 @@ bool monster::is_stationary() const
 
 bool monster::cannot_move() const
 {
-    return is_stationary() || has_ench(ENCH_BOUND) || has_ench(ENCH_SHACKLE)
-           || bloodcraft::bound(*this);
+    return is_stationary() || has_ench(ENCH_BOUND) || bloodcraft::bound(*this);
 }
 
 // Whether the monster has lost the focus and ability to continue channelling
@@ -6075,9 +6074,6 @@ int monster::action_energy(energy_use_type et) const
     // penalty when leaving it.
     if (floundering() || has_ench(ENCH_LIQUEFYING))
         move_cost += 6;
-
-    if (!airborne())
-        move_cost += feat_grounded_movement_penalty(env.grid(pos()));
 
     // To avoid UI annoyance, make long-term allies match the player's speed
     // if there are no enemies around.

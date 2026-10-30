@@ -7,7 +7,7 @@ engine. Ordinary turn changes never select a different hero for a connection.
 
 
 class PartyControl:
-    def __init__(self, owner, members):
+    def __init__(self, owner, members, connected_slots=None):
         self.owner = (owner or "").casefold()
         self.members = members
         self.owner_slot = 0
@@ -15,6 +15,7 @@ class PartyControl:
         self.views = {}
         self.ai_slots = set()
         self.ai_status = {}
+        self.connected_slots = connected_slots
 
     @staticmethod
     def identity(source):
@@ -37,7 +38,7 @@ class PartyControl:
     def multiplayer(self):
         # Reservations survive disconnects, so leaving or reconnecting cannot
         # temporarily give the host control of somebody else's character.
-        return bool(self.ai_slots) or any(name.casefold() != self.owner for name in self.members)
+        return bool(self.ai_slots) or bool(self.state and self.state.get("multiplayer") is True) or any(name.casefold() != self.owner for name in self.members)
 
     def selected(self, source):
         if self.is_owner(source) and not self.multiplayer:
@@ -63,13 +64,16 @@ class PartyControl:
         if self.state and self.state.get("multiplayer_protocol") == 1:
             count = self.state.get("player_count", len(self.state.get("members", [])))
             reserved_count = len(self.members) + len(self.ai_slots)
-            if count > reserved_count + 1:
+            if count > reserved_count + 1 and self.state.get("multiplayer") is not True:
                 raise ValueError("This saved solo party has unclaimed companions. Start a human-only expedition to play multiplayer.")
             # Reserved joins can be queued before the native count is
             # acknowledged. They already belong to humans, so remain seats.
             count = max(count, reserved_count)
             available = [slot for slot in range(1, count + (count == reserved_count))
                          if slot < 4 and not self.occupied(slot, source)]
+            if self.state.get("multiplayer") is True and requested in available:
+                self.members[identity] = requested
+                return requested
             if not available:
                 raise ValueError("Every party hero is already claimed.")
             target = available[0]
@@ -116,12 +120,16 @@ class PartyControl:
     def snapshot(self, source):
         selected = self.selected(source)
         state = self.views.get(selected if selected is not None else 0, self.state)
-        state = dict(state)
+        state = dict(state, members=[dict(member) for member in state.get("members", [])])
         if self.multiplayer:
             state["members"] = [dict(member, floor_items=[], floor_items_known=False, trade_targets=[])
                                 if member["slot"] != selected else member
                                 for member in state.get("members", [])]
         state["members"] = [dict(member, ai=self.ai_status.get(member["slot"]))
                             for member in state.get("members", [])]
+        if self.multiplayer and self.connected_slots is not None:
+            connected = self.connected_slots() | self.ai_slots
+            state["members"] = [dict(member, connected=member["slot"] in connected)
+                                for member in state["members"]]
         return dict(state, controlled_slot=selected, ai_manage=self.is_owner(source),
                     controllable_slots=self.controllable(source))

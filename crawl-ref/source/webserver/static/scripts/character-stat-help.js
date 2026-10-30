@@ -14,25 +14,15 @@ define(function () {
     var resistances = [
         { key: "rFire", start: "rF", label: "Fire", title: "rFire (Fire Resistance)", icon: "fire", max: 3, body: "Reduces damage from fire, steam, and fiery blasts (up to 3 pips)." },
         { key: "rCold", start: "rC", label: "Cold", title: "rCold (Cold Resistance)", icon: "cold", max: 3, body: "Reduces damage from ice, frost, and freezing attacks (up to 3 pips)." },
-        { key: "rElec", start: "rElec", label: "Lightning", title: "rElec (Electricity)", icon: "electricity", max: 1, bool: true, body: "Ordinary resistance reduces lightning damage by two-thirds. Full immunity prevents electrical damage." },
+        { key: "rElec", start: "rElec", label: "Lightning", title: "rElec (Electricity)", icon: "electricity", max: 1, bool: true, body: "Reduces lightning and electrical discharge damage by two-thirds." },
         { key: "rPois", start: "rPois", label: "Poison", title: "rPois (Poison)", icon: "poison", max: 1, body: "Protects against poison and venom; Gargoyles possess complete poison immunity." },
         { key: "rNeg", start: "rN", label: "Negative energy", title: "rNeg (Life Protection)", icon: "life", max: 3, body: "Protects against negative energy, draining, and torment side-effects." },
         { key: "rCorr", start: "rCorr", label: "Acid", title: "rCorr (Corrosion)", icon: "corrosion", max: 1, bool: true, body: "Resists acid damage and equipment corrosion." },
-        { key: "Will", start: "Will", label: "Willpower", title: "Willpower (Will)", icon: "will", max: 5, body: "Resists hexes, paralysis, confusion, banishment, and mental enchantments. Each icon represents 40 willpower, up to five icons; the exact rating is in the tooltip." },
-        { key: "Stlth", label: "Stealth", title: "Stealth (Stlth)", icon: "stealth", max: 10, body: "Reduces the chance that sleeping or wandering monsters notice you. Each icon represents 50 stealth, rounded up, to a maximum of ten icons; the exact rating is in the tooltip." },
+        { key: "Will", start: "Will", label: "Willpower", title: "Willpower (Will)", icon: "will", max: 5, body: "Resists hexes, paralysis, confusion, banishment, and mental enchantments. Each gem represents 40 willpower; the exact rating is shown beside it." },
+        { key: "Stlth", label: "Stealth", title: "Stealth (Stlth)", icon: "stealth", max: 10, body: "Reduces the chance that sleeping or wandering monsters notice you. Each gem represents 50 stealth, rounded up; the exact rating is shown beside it." },
         { key: "SeeInvis", start: "See invisible", label: "See invisible", title: "See Invisible (sInv)", icon: "see-invisible", max: 1, bool: true, body: "Allows perceiving invisible monsters without penalties." },
         { key: "Fly", label: "Flight", title: "Flight (Fly)", icon: "flight", max: 1, bool: true, body: "Allows crossing deep water and lava and evading ground traps." }
     ];
-    function levels(definition, value) {
-        if (typeof value === "boolean") value = Number(value);
-        if (!Number.isFinite(value)) return null;
-        // Match native output.cc scales; elemental defenses already arrive as levels.
-        if (definition.key === "Will")
-            return Math.sign(value) * Math.min(definition.max, Math.floor(Math.abs(value) / 40));
-        if (definition.key === "Stlth")
-            return Math.min(definition.max, Math.ceil(Math.max(0, value) / 50));
-        return value;
-    }
     function explain(node, definition, value, context) {
         node.tabIndex = 0;
         node.setAttribute("data-tip-title", definition.title + (value === undefined ? "" : ": " + value));
@@ -41,5 +31,5 @@ define(function () {
         node.setAttribute("data-tip-meta", context || "Native starting value · Before temporary effects");
         return node;
     }
-    return { stats: stats, combat: ["hp", "mp", "ac", "ev", "sh"], resistances: resistances, levels: levels, explain: explain };
+    return { stats: stats, combat: ["hp", "mp", "ac", "ev", "sh"], resistances: resistances, explain: explain };
 });

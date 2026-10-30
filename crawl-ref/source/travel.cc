@@ -264,9 +264,6 @@ static inline bool _is_safe_cloud(const coord_def& c)
     const cloud_type ctype = env.map_knowledge(c).cloud();
     if (ctype == CLOUD_NONE)
         return true;
-    const cloud_struct* actual = you.see_cell(c) ? cloud_at(c) : nullptr;
-    if (actual && actual->type == ctype && cloud_dissipates_for(*actual, you))
-        return true;
 
     // We can also safely run through smoke, or any of our own clouds if
     // following Qazlal.
@@ -280,12 +277,6 @@ static inline int _feature_traverse_cost(dungeon_feature_type feature)
     const bool safe_trap = (feature == DNGN_TRAP_WEB || feature == DNGN_TRAP_NET)
                            && you.is_web_immune()
                            || feature == DNGN_TRAP_SHAFT;
-    if (!you.airborne())
-    {
-        const int penalty = feat_grounded_movement_penalty(feature);
-        if (penalty)
-            return 1 + (penalty + BASELINE_DELAY - 1) / BASELINE_DELAY;
-    }
     if (feat_is_closed_door(feature)
         // Higher cost for shallow water if species doesn't like water
         || feature == DNGN_SHALLOW_WATER && (!player_likes_water(true)))
@@ -3598,11 +3589,6 @@ level_id level_id::next_level_id(const coord_def &pos) const
 {
     int gridc = env.grid(pos);
     level_id id = *this;
-
-    const level_id connection = branch_connection_destination(
-        static_cast<dungeon_feature_type>(gridc), *this);
-    if (connection.is_valid())
-        return connection;
 
     if (gridc == branches[id.branch].exit_stairs)
     {

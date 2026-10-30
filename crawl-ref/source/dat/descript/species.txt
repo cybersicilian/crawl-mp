@@ -1,91 +1,4 @@
 %%%%
-Meliai
-
-Meliai are the winged bee-folk of the Hive. Swift but frail, they are deeply
-faithful and can call down a smite at the cost of temporary maximum health.
-Their sting is venomous, but they are vulnerable to poison themselves.
-%%%%
-Kitsune
-
-Kitsune are nimble fox-folk with an affinity for subtle magic. They can
-charm hostile minds in sight, but must recover from the effort before doing so
-again. Their fox ears prevent them from wearing headgear. Rin the nine-tailed
-is a renowned Kitsune whose power is spoken of
-among her people.
-%%%%
-Automaton
-
-Automata are magical constructs whose spells are engraved into their bodies.
-Their mechanisms build heat as they unleash magic automatically.
-Mutagenic effects and magical contamination corrode their bodies instead of
-changing them or causing magical glow.
-Each spell's description explains its automatic trigger. Some spells have no
-automatic trigger and will not fire when engraved.
-At experience level 5, automata discover Engraved Laser in their spell library.
-They can learn this level 6 pattern from experience level 6, after which it can
-fire automatically.
-%%%%
-Wight
-
-Wights are ancient warriors animated by negative energy. As they gain
-experience their melee attacks drain living enemies, and they can bind their
-memories to a weapon to strengthen it, temporarily draining their maximum
-health until they gain more experience.
-%%%%
-Sparkborn
-
-Sparkborn are distant kin of raiju, with living lightning coursing through
-their bodies. They are immune to electricity, but water attacks drain their
-magic and grounded water prevents spellcasting. Injury can release a blinkbolt,
-letting them choose a nearby destination and shock creatures along the way.
-Suppressing this reaction causes magical contamination.
-%%%%
-Irit
-
-Irits are armoured spellcasters who spend their own health as well as magic to
-cast. Armour and shields impede their lower-level spells less, and their
-bloodcraft requires less life. A magical shield shares incoming damage between
-their health and magic reserves.
-%%%%
-Hermit Crab
-
-Hermit Crabs are clever crustaceans who shelter in shells that grow with them.
-When a shell breaks, they can escape and find a smaller one. Their molting and
-sideways movement reflect their crustacean heritage.
-%%%%
-Ent
-
-Ents are ancient, slow-moving treefolk protected by thickening bark. Their
-branches can wield most two-handed weapons alongside a shield, and they can
-pass through walls and trees. Their rooted bodies cannot wear body armour or boots and
-cannot change form.
-%%%%
-Faerie Dragon
-
-Faerie Dragons are small winged spellcasters. Their spells cost less magic,
-and their bright scales provide armour and shielding as they grow, at the cost
-of stealth. While flying, they gain 10% evasion, with a minimum bonus of 1 EV.
-Their wings prevent them from wearing body armour.
-%%%%
-Protean
-
-Proteans are amoeboid people whose acquired mutations increase their health.
-Their maximum health determines their size, and their protean flesh cannot
-change form. They begin too small to wield weapons or wear most armour, but
-can use larger equipment as their bodies grow.
-%%%%
-Hydra
-
-Hydras grow heads as they gain experience. They gain a bite against their
-chosen target and an amulet slot at one head, and another of each at four,
-seven, ten heads, and so on. Their remaining heads may bite adjacent foes.
-Their bodies cannot wield weapons or carry shields.
-%%%%
-Two-Headed Ogre
-
-Two-headed ogres are powerful, noisy fighters. Each head can wear an amulet,
-and their two hands can wield weapons together, but they cannot use shields.
-%%%%
 Barachi
 
 Barachim are slow-moving, amphibious humanoids who can hop long distances.
@@ -124,7 +37,8 @@ a colour.
 Formicid
 
 Formicids are humanoid ants adept at digging. Their limbs are exceptionally
-strong and they live in a state of permanent stasis.
+strong and they live in a state of permanent stasis. Their four arms allow them
+to wear two pairs of gloves and four rings.
 %%%%
 Felid
 
@@ -133,7 +47,8 @@ Felids are many-lived sentient cats. They cannot use armour or weapons.
 Gale Centaur
 
 Powerful equine hybrids who trace their ancestry to the four winds themselves,
-Gale Centaurs are at their strongest while galloping swiftly towards foes.
+Gale Centaurs are at their strongest while galloping swiftly towards foes. They
+can wear two pairs of boots as well as barding.
 %%%%
 Gargoyle
 
@@ -197,13 +112,12 @@ Their gelatinous bodies grow more protective with experience, resist poison
 and corrosion, and slip through nets, webs and constricting coils. They can
 wear hats and scarves, hold weapons and shields, and suspend ordinary jewellery
 within their gel. Their light bodies have reduced health and are vulnerable
-to fire. They deliberately assimilate carried equipment, preserving extracted
-property bundles in random empty memory slots. Worn gear never dissolves
-passively. All absorbed properties strengthen the ooze itself,
+to fire. They dissolve their own equipment, preserving extracted property
+bundles as memories. All absorbed properties strengthen the ooze itself,
 independently of equipped items. Weapon memories can improve natural unarmed
 attacks, including cleaving. Shapeshifting
 increases the strength of numeric memory bonuses. They are especially adept
-at Alchemy, but learn all manufactured-weapon skills poorly.
+at Alchemy.
 %%%%
 Oni
 
@@ -311,6 +225,19 @@ Eldritch
 
 Eldritch worship no god. Instead they can profane up to three gods' own altars, permanently stealing one benefit from each and enduring its wrath. Their shared Defiance is replenished by ordinary combat experience. Elder Rites at XL9, XL15 and XL21 strengthen those same benefits through short fights with unrewarding trial monsters. They are living, blood-bearing humanoids who use ordinary equipment and receive ordinary stat growth.
 %%%%
+Irit
+
+Irits are armoured spellcasters who spend their own health as well as magic to
+cast. Armour and shields impede their lower-level spells less, and their
+bloodcraft requires less life. A magical shield shares incoming damage between
+their health and magic reserves.
+%%%%
+Hermit Crab
+
+Hermit Crabs are clever crustaceans who shelter in shells that grow with them.
+When a shell breaks, they can escape and find a smaller one. Their molting and
+sideways movement reflect their crustacean heritage.
+%%%%
 Mummy trait
 
 A deathless body bound by an ancient curse. Mummies resist cold, negative
@@ -318,11 +245,81 @@ energy, poison and torment, but are vulnerable to fire and cannot drink
 potions. Their innate faith aids worship, and their Necromancy is enhanced,
 with a further enhancement at experience level 13.
 %%%%
+Hydra
+
+Hydras grow heads as they gain experience. They gain a bite against their
+chosen target and an amulet slot at one head, and another of each at four,
+seven, ten heads, and so on. Their remaining heads may bite adjacent foes.
+Their bodies cannot wield weapons or carry shields.
+%%%%
+Kitsune
+
+Kitsune are nimble fox-folk with an affinity for subtle magic. They can
+charm hostile minds in sight, but must recover from the effort before doing so
+again. Their fox ears prevent them from wearing headgear. Rin the nine-tailed
+is a renowned Kitsune whose power is spoken of
+among her people.
+%%%%
+Ent
+
+Ents are ancient, slow-moving treefolk protected by thickening bark. Their
+branches can wield most two-handed weapons alongside a shield, and they can
+pass through walls and trees. Their rooted bodies cannot wear body armour or boots and
+cannot change form.
+%%%%
+Protean
+
+Proteans are amoeboid people whose acquired mutations increase their health.
+Their maximum health determines their size, and their protean flesh cannot
+change form. They begin too small to wield weapons or wear most armour, but
+can use larger equipment as their bodies grow.
+%%%%
+Wight
+
+Wights are ancient warriors animated by negative energy. As they gain
+experience their melee attacks drain living enemies, and they can bind their
+memories to a weapon to strengthen it, temporarily draining their maximum
+health until they gain more experience.
+%%%%
+Meliai
+
+Meliai are the winged bee-folk of the Hive. Swift but frail, they are deeply
+faithful and can call down a smite at the cost of temporary maximum health.
+Their sting is venomous, but they are vulnerable to poison themselves.
+%%%%
 Zombie trait
 
 An animated dead body retains its species' anatomy and equipment, but cannot
 heal naturally while threatened by nearby enemies. Zombies resist cold,
 negative energy, poison and torment.
+%%%%
+Two-Headed Ogre
+
+Two-headed ogres are powerful, noisy fighters. Each head can wear an amulet,
+and their two hands can wield weapons together, but they cannot use shields.
+%%%%
+Sparkborn
+
+Sparkborn are distant kin of raiju, with living lightning coursing through
+their bodies. They are immune to electricity, but water attacks drain their
+magic and grounded water prevents spellcasting. Injury can release a blinkbolt,
+letting them choose a nearby destination and shock creatures along the way.
+Suppressing this reaction causes magical contamination.
+%%%%
+Automaton
+
+Automata are magical constructs whose spells are engraved into their bodies.
+Their mechanisms build heat as they unleash magic automatically.
+Offensive and summoning engravings can activate after your actions when a
+visible threat is present, including moving or waiting; no weapon attack is
+required. Each spell still needs a safe target or effect and time to cool.
+Mutagenic effects and magical contamination corrode their bodies instead of
+changing them or causing magical glow.
+Each spell's description explains its automatic trigger. Some spells have no
+automatic trigger and will not fire when engraved.
+At experience level 5, automata discover Engraved Laser in their spell library.
+They can learn this level 6 pattern from experience level 6, after which it can
+fire automatically.
 %%%%
 Ghost trait
 
@@ -330,3 +327,10 @@ A spectral remnant retains the abilities and equipment of its host species.
 Its insubstantial body resists certain hazards, and it resists negative energy,
 poison and torment. It does not inherit the Poltergeist's equipment-haunting
 abilities.
+%%%%
+Faerie Dragon
+
+Faerie Dragons are small winged spellcasters. Their spells cost less magic,
+and their bright scales provide armour and shielding as they grow, at the cost
+of stealth. While flying, they gain 10% evasion, with a minimum bonus of 1 EV.
+Their wings prevent them from wearing body armour.

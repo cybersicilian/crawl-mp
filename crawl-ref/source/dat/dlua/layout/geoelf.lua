@@ -361,8 +361,7 @@ end
 
 function geoelf.generate (e, room_data, corridor_data,
                           extra_fraction, fancy_room_fraction,
-                          only_trees, force_open_room_edge,
-                          in_slime, stone_room_fraction)
+                          only_trees, force_open_room_edge)
   if (room_data == nil) then
     crawl.mpr("Error: No room data array")
   end
@@ -418,10 +417,9 @@ function geoelf.generate (e, room_data, corridor_data,
   if (geoelf.debug) then print("Drawing rooms:") end
   for i = 0, room_data.count - 1 do
     if (not room_data[draw_order[i]].is_dummy) then
-      local stone = in_slime and crawl.random_real() < stone_room_fraction
       geoelf.rooms.draw(e, room_data, corridor_data, draw_order[i],
                         (crawl.random_real() < fancy_room_fraction),
-                        force_open_room_edge, in_slime, stone)
+                        force_open_room_edge)
     end
   end
 
@@ -433,17 +431,12 @@ function geoelf.generate (e, room_data, corridor_data,
                                open    = (geoelf.glyphs.ALL_FLOORLIKE ..
                                           geoelf.glyphs.ALL_DOORS),
                                replace = geoelf.glyphs.FLOOR }
-  if not in_slime then
-    e.add_windows {wall   = geoelf.glyphs.ALL_WALLLIKE,
-                   open   = geoelf.glyphs.ALL_FLOORLIKE,
-                   window = geoelf.glyphs.GLASS }
-    geoelf.make_glass_doors(e)
-  end
+  e.add_windows {wall   = geoelf.glyphs.ALL_WALLLIKE,
+                 open   = geoelf.glyphs.ALL_FLOORLIKE,
+                 window = geoelf.glyphs.GLASS }
+  geoelf.make_glass_doors(e)
   geoelf.glyphs.assign_glyphs(e, only_trees)
   e.subst(geoelf.glyphs.FOUNTAIN .. " = TTUV")
-  if in_slime then
-    e.kfeat("c = stone_wall")
-  end
 
   if (geoelf.debug) then
     -- print the map to console

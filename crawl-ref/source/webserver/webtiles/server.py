@@ -29,7 +29,6 @@ from webtiles.crash_reports import CrashReportHandler
 from webtiles.character_preview_http import CharacterPreviewHandler, CharacterPreviewAtlasHandler
 from webtiles.asset_revision import revision as asset_revision
 from webtiles.auth_http import LogoutHandler
-from webtiles.profile_http import ProfilePageHandler, AppearanceAPIHandler
 from webtiles.graphics_http import GraphicsAPIHandler, GraphicsPageHandler
 
 
@@ -293,10 +292,8 @@ def bind_server(nonsecure_sockets, secure_sockets):
     handlers = [
             (r"/", MainHandler),
             (r"/logout", LogoutHandler),
-            (r"/profile/?", ProfilePageHandler),
-            (r"/api/profile/appearance", AppearanceAPIHandler),
-            (r"/api/profile/graphics", GraphicsAPIHandler),
             (r"/settings/graphics/?", GraphicsPageHandler),
+            (r"/api/profile/graphics", GraphicsAPIHandler),
             (r"/socket", ws_handler.CrawlWebSocket),
             (r"/api/character-preview", CharacterPreviewHandler),
             (r"/api/character-preview/atlas/([a-f0-9]{24})\.png", CharacterPreviewAtlasHandler),

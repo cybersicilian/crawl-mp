@@ -3,7 +3,6 @@
 #include <string>
 #include "ability-type.h"
 #include "coord-def.h"
-#include "movement-type.h"
 #include "spl-cast.h"
 
 class monster;
@@ -30,8 +29,6 @@ bool may_step(monster& target, coord_def destination);
 bool strain(monster& target);
 bool attachment_eligible(monster& target);
 void release(player& owner);
-// Resolve tension once per committed physical move, before view projection.
-void owner_moved(player& owner, coord_def previous, movement_type flags);
 void refresh();
 std::string reason(ability_type ability);
 std::string summary();

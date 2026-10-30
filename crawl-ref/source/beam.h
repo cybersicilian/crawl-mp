@@ -114,7 +114,6 @@ struct player_beam_tracer : beam_tracer
     void player_hit(bool was_friendly) noexcept override;
     void monster_hit(const bolt& bolt, const monster& mon) override;
     bool has_any_warnings() noexcept;
-    string describe_attack_targets() const;
 };
 
 // Used to check if casting a spell might be useful

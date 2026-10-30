@@ -9,7 +9,6 @@
 #include "player.h"
 #include "player-equip.h"
 #include "species.h"
-#include "skills.h"
 #include "test_player_fixture.h"
 #include "transform.h"
 #ifdef USE_TILE
@@ -33,21 +32,6 @@ void setup_oozle()
     you.set_position(coord_def(GXM / 2, GYM / 2));
     env.grid(you.pos()) = DNGN_FLOOR;
 }
-}
-
-TEST_CASE_METHOD(MockPlayerYouTestsFixture,
-                 "Oozles learn manufactured weapons poorly but retain natural combat aptitude",
-                 "[oozle]")
-{
-    setup_oozle();
-    for (const auto skill : {SK_SHORT_BLADES, SK_LONG_BLADES, SK_AXES,
-         SK_MACES_FLAILS, SK_POLEARMS, SK_STAVES, SK_RANGED_WEAPONS, SK_THROWING})
-    {
-        CAPTURE(skill);
-        CHECK(species_apt(skill) == -2);
-    }
-    CHECK(species_apt(SK_UNARMED_COMBAT) == 1);
-    CHECK(species_apt(SK_SHAPESHIFTING) == 2);
 }
 
 TEST_CASE_METHOD(MockPlayerYouTestsFixture,

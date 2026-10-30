@@ -173,21 +173,6 @@ void tile_default_flv(branch_type br, tile_flavour &flv)
         flv.floor = TILE_FLOOR_ORC;
         return;
 
-    case BRANCH_WORMLANDS:
-        flv.wall = TILE_WALL_LAB_ROCK;
-        flv.floor = TILE_FLOOR_MOSS;
-        return;
-
-    case BRANCH_HIVE:
-        flv.wall = TILE_WALL_WAX;
-        flv.floor = TILE_FLOOR_ROUGH_YELLOW;
-        return;
-
-    case BRANCH_BURROWS:
-        flv.wall  = TILE_WALL_BURROWS;
-        flv.floor = TILE_FLOOR_BURROWS;
-        return;
-
     case BRANCH_LAIR:
         flv.wall  = TILE_WALL_LAIR;
         flv.floor = TILE_FLOOR_LAIR;
@@ -1028,7 +1013,7 @@ static void _tile_place_monster(const coord_def &gc, const monster_info& mon)
     tileidx_t t0 = t.tile();
 
     if (mons_class_is_stationary(mon.type)
-        && mon.type != MONS_TRAINING_DUMMY && mon.type != MONS_FALSE_IMAGE)
+        && mon.type != MONS_TRAINING_DUMMY)
     {
         // If necessary add item brand.
         if (env.map_knowledge(gc).item())

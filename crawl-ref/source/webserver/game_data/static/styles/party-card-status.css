@@ -26,7 +26,13 @@
 #normal .party-card-toolbar .party-card-actions .tt-icon { width: 16px; height: 16px; }
 #normal .party-card-toolbar .party-member-state { height: var(--party-control-size); min-height: var(--party-control-size); max-height: var(--party-control-size); align-self: start; padding-top: 0; padding-bottom: 0; }
 #normal .party-card-toolbar .party-card-actions::after { content: ''; position: absolute; right: -6px; top: 0; bottom: 0; border-right: 1px solid #ac966255; }
-.party-effect-strip, .party-effect-group, .party-passive-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.party-effect-strip, .party-effect-group, .party-passive-strip { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; }
+.party-bane-strip { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin-bottom: 5px; font: 11px/1.4 var(--tt-font-ui); }
+.party-bane-heading { color: #d9bd9c; font-weight: bold; }
+.party-bane { display: inline-flex; align-items: center; gap: 4px; min-width: 0; color: #f1b3b7; border-bottom: 1px dotted #c97a83; cursor: help; overflow-wrap: anywhere; }
+.party-bane > .tt-icon { width: 24px; height: 24px; flex: 0 0 24px; margin: 0; }
+.party-bane-empty { color: #a8acae; }
+.party-bane:focus-visible { outline: 2px solid #ead6a1; outline-offset: 2px; }
 .party-effect-strip { column-gap: 0; }
 .party-effect-group + .party-effect-group { margin-left: 4px; padding-left: 4px; border-left: 1px solid #ac966240; }
 #normal .party-status-icon:not(.status-icon-frame) {

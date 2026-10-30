@@ -3,9 +3,6 @@
 #include "cloud-type.h"
 #include "spl-cast.h"
 
-spret cast_steam_barrier(int power, bool fail);
-void maintain_steam_barrier();
-
 struct bolt;
 class dist;
 class actor;

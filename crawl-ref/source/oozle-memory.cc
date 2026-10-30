@@ -26,6 +26,7 @@
 namespace oozle
 {
 using namespace equipment_memory;
+const char* const corrosion_key = "oozle_corrosion_aut";
 namespace
 {
 const char* const memory_key = "oozle_memories_v1";
@@ -62,7 +63,7 @@ void save(const state& memory, int source_slot, const string& source, item_def s
     source_item.link = NON_ITEM;
     source_item.pos = coord_def();
     source_item.quantity = 1;
-    source_item.props.erase("oozle_corrosion_aut"); // Discard legacy passive wear.
+    source_item.props.erase(corrosion_key);
     vector<string> names(6);
     for (int slot = 0; slot < 6; ++slot) names[slot] = source_name(slot);
     if (source_slot >= 0) names[source_slot] = source;
@@ -136,9 +137,7 @@ class AssimilationDelay final : public Delay
         if (advance(task, true, true) != progress::ready) return;
         auto memory = memories();
         const auto policy = current_policy();
-        const auto choices = destinations(memory, you.experience_level, policy);
-        const int slot = choices.empty() ? -1
-            : choices.size() == 1 ? choices.front() : choices[random2(static_cast<int>(choices.size()))];
+        const int slot = destination(memory, you.experience_level, policy);
         const item_def original = you.inv[index];
         if (complete(memory, task, you.elapsed_time, you.experience_level, policy,
                      [&](std::uint64_t) {
@@ -146,7 +145,7 @@ class AssimilationDelay final : public Delay
                          item_was_destroyed(you.inv[index]);
                          dec_inv_item_quantity(index, 1);
                          return true;
-                     }, slot))
+                     }))
         {
             save(memory, slot, source, original);
             mprf("You assimilate %s, preserving its extracted properties in one memory.", source.c_str());
@@ -316,7 +315,7 @@ spret assimilate(int inventory_slot)
     const int slot = destination(memory, you.experience_level, policy);
     const auto old = memory.stored.find(slot);
     const string replacement = old == memory.stored.end()
-        ? "Uses a random empty memory slot when complete."
+        ? "Uses an empty memory slot when complete."
         : "Replaces the oldest memory when complete.\nCurrent oldest: " + source_name(slot) + ".";
     item_def consumed = item;
     consumed.quantity = 1;
@@ -339,6 +338,97 @@ spret assimilate(int inventory_slot)
     start_delay<AssimilationDelay>(index, std::move(task));
     mpr("You begin assimilating. All extracted properties will share one memory slot.");
     return spret::success;
+}
+namespace
+{
+bool protected_item(const item_def& item)
+{
+    return item.is_critical() || item.summoned() || (item.cursed() && !is_weapon(item));
+}
+bool has_free_memory()
+{
+    const auto memory = memories();
+    const int slot = destination(memory, you.experience_level, current_policy());
+    return slot >= 0 && !memory.stored.count(slot);
+}
+void expose(item_def& item, int elapsed_aut)
+{
+    const int before = item.props.exists(corrosion_key) ? item.props[corrosion_key].get_int() : 0;
+    const int after = min(digestion_aut, before + elapsed_aut);
+    item.props[corrosion_key] = after;
+    if (is_weapon(item) && equipment_memory::weapon_corrosion_stage(before, digestion_aut)
+        != equipment_memory::weapon_corrosion_stage(after, digestion_aut))
+    {
+        you.wield_change = true;
+        if (after < digestion_aut)
+            mprf("Your %s corrodes further (%d%% base damage remains).", item.name(DESC_PLAIN).c_str(),
+                 equipment_memory::weapon_damage_percent(after, digestion_aut));
+    }
+}
+}
+int weapon_corrosion_penalty(const item_def& item)
+{
+    if (!has_memory() || !is_weapon(item) || protected_item(item)) return 0;
+    const int progress = item.props.exists(corrosion_key) ? item.props[corrosion_key].get_int() : 0;
+    return min(3, equipment_memory::weapon_corrosion_stage(progress, digestion_aut)) * 2;
+}
+int weapon_damage_percent(const item_def& item)
+{
+    if (!has_memory() || !is_weapon(item) || protected_item(item)) return 100;
+    const int progress = item.props.exists(corrosion_key) ? item.props[corrosion_key].get_int() : 0;
+    return equipment_memory::weapon_damage_percent(progress, digestion_aut);
+}
+void note_weapon_use(const item_def* item)
+{
+    if (!has_memory() || !item || !is_weapon(*item) || protected_item(*item)) return;
+    if (!has_free_memory()) return;
+    for (const auto& entry : you.equipment.items)
+        if (entry.slot != SLOT_UNUSED && !entry.melded && !entry.is_overflow && &entry.get_item() == item)
+        {
+            expose(entry.get_item(), 2 * BASELINE_DELAY);
+            return;
+        }
+}
+void digest_equipment(int elapsed_aut)
+{
+    if (!has_memory() || elapsed_aut <= 0) return;
+    const auto policy = current_policy();
+    vector<int> items;
+    for (const auto& entry : you.equipment.items)
+        if (entry.slot != SLOT_UNUSED && !entry.melded && !entry.is_overflow)
+            items.push_back(entry.item);
+    for (int index : items)
+    {
+        // A previous item may have filled the last slot during this action.
+        // Only deliberate Assimilation may replace an existing memory.
+        if (!has_free_memory()) break;
+        auto& item = you.inv[index];
+        family group;
+        if (!item.defined() || !item_family(item, group) || protected_item(item)) continue;
+        expose(item, elapsed_aut);
+        if (item.props[corrosion_key].get_int() < digestion_aut) continue;
+        // Snapshot intrinsic properties before removing native equipment effects.
+        const item_def original = item;
+        const auto profile = intrinsic_profile(item);
+        const auto available = candidates(profile, policy);
+        const string source = item.name(DESC_PLAIN);
+        const bool learns_flight = std::any_of(available.begin(), available.end(), [](const equipment_memory::property& effect) {
+            return effect.query.item_class == OBJ_UNASSIGNED && effect.trait == weapon_trait::none
+                   && effect.type == ARTP_FLY;
+        });
+        // Preserve flight while its physical source becomes a body memory.
+        unwind_var<int> flight(you.duration[DUR_FLIGHT], learns_flight
+                              ? max(1, you.duration[DUR_FLIGHT]) : you.duration[DUR_FLIGHT]);
+        if (!unequip_item(item, true, false, false)) continue;
+        item_was_destroyed(item);
+        dec_inv_item_quantity(index, 1);
+        auto memory = memories();
+        const int slot = destination(memory, you.experience_level, policy);
+        if (!available.empty()
+            && absorb(memory, profile, new_source(), you.elapsed_time, you.experience_level, policy)) save(memory, slot, source, original);
+        else changed();
+        mprf("Your body finishes dissolving %s.", source.c_str());
+    }
 }
 int assimilation_remaining()
 {

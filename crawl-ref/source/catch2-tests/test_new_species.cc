@@ -14,7 +14,6 @@
 #include "mon-death.h"
 #include "mutation.h"
 #include "ng-restr.h"
-#include "random.h"
 #include "species.h"
 #include "status.h"
 #include "store.h"
@@ -204,113 +203,6 @@ TEST_CASE_METHOD(content_fixture, "Pin doubles its cap without extending a short
     CHECK(chains::snapshot().pinned);
     CHECK(chains::snapshot().anchor == target.pos());
     CHECK(chains::snapshot().radius == 1);
-}
-
-TEST_CASE_METHOD(content_fixture, "Strength makes a taut retreat more likely to keep its chain", "[new-species][chains][chain-strength]")
-{
-    const coord_def origin = you.pos();
-    monster& target = spawn(origin + coord_def(2, 0));
-    std::vector<int> retained;
-    for (int strength : {5, 20, 40})
-    {
-        rng::subgenerator samples(0x434841494e535452ULL);
-        you.base_stats[STAT_STR] = strength;
-        REQUIRE(you.strength() == strength);
-        int kept = 0;
-        for (int attempt = 0; attempt < 300; ++attempt)
-        {
-            you.set_position(origin);
-            you.duration[DUR_CHAIN_RECOVERY] = 0;
-            target.props.erase(bloodcraft::recovery_key);
-            REQUIRE(chains::attach(target));
-            const int expires = target.props["living_chain"].get_table()["expires"].get_int();
-            you.set_position(origin - coord_def(1, 0));
-            chains::owner_moved(you, origin, MV_DELIBERATE);
-            if (chains::held(target))
-            {
-                ++kept;
-                CHECK(chains::snapshot().radius == 3);
-                CHECK(target.props["living_chain"].get_table()["expires"].get_int() == expires);
-                CHECK(target.pos() == origin + coord_def(2, 0));
-                chains::release(you);
-            }
-            CHECK(you.duration[DUR_CHAIN_RECOVERY] == 50);
-            CHECK(bloodcraft::binding_recovery(target));
-        }
-        CHECK(kept > 0);
-        CHECK(kept < 300);
-        retained.push_back(kept);
-    }
-    CHECK(retained[0] < retained[1]);
-    CHECK(retained[1] < retained[2]);
-    // Broad seeded bounds distinguish a useful Strength roll from always
-    // breaking, always holding, or ignoring the current Strength score.
-    CHECK(retained[0] > 60);
-    CHECK(retained[0] < 140);
-    CHECK(retained[2] > 200);
-}
-
-TEST_CASE_METHOD(content_fixture, "Committed movement resolves tension once before repeated projection", "[new-species][chains][chain-strength]")
-{
-    rng::subgenerator samples(0x52455452454154ULL);
-    const coord_def origin = you.pos();
-    const int initial_reach = GENERATE(1, 4);
-    monster& target = spawn(origin + coord_def(initial_reach, 0));
-    you.base_stats[STAT_STR] = 30;
-    int kept = 0;
-    for (int attempt = 0; attempt < 20; ++attempt)
-    {
-        you.set_position(origin);
-        you.duration[DUR_CHAIN_RECOVERY] = 0;
-        target.props.erase(bloodcraft::recovery_key);
-        REQUIRE(chains::attach(target));
-        // The unit fixture has no terminal. Commit the position and invoke the
-        // same movement hook that player::move_to calls before viewwindow().
-        you.set_position(origin - coord_def(1, 0));
-        chains::owner_moved(you, origin, MV_DELIBERATE);
-        if (chains::held(target))
-        {
-            ++kept;
-            CHECK(chains::snapshot().radius == initial_reach + 1);
-            CHECK(chains::summary().find("75% (Str 30)") != std::string::npos);
-            const auto before = rng::peek_uint64();
-            for (int redraw = 0; redraw < 10; ++redraw)
-            {
-                CHECK(chains::snapshot().active);
-                chains::summary();
-                chains::refresh();
-            }
-            CHECK(rng::peek_uint64() == before);
-            chains::release(you);
-        }
-    }
-    CHECK(kept > 0);
-    CHECK(kept < 20);
-}
-
-TEST_CASE_METHOD(content_fixture, "Slack, pins and translocations never make a tension roll", "[new-species][chains][chain-strength]")
-{
-    rng::subgenerator samples(0x534c41434bULL);
-    const coord_def origin = you.pos();
-    monster& target = spawn(origin + coord_def(3, 0));
-    REQUIRE(chains::attach(target));
-    const auto before = rng::peek_uint64();
-    you.set_position(origin + coord_def(1, 0));
-    chains::owner_moved(you, origin, MV_DELIBERATE);
-    CHECK(chains::held(target));
-    CHECK(chains::snapshot().radius == 3);
-    CHECK(rng::peek_uint64() == before);
-    REQUIRE(chains::invoke(ABIL_PINNING_CHAIN) == spret::success);
-    const auto pinned_rng = rng::peek_uint64();
-    you.set_position(origin);
-    chains::owner_moved(you, origin + coord_def(1, 0), MV_DELIBERATE);
-    CHECK(chains::snapshot().pinned);
-    CHECK(chains::snapshot().radius == 1);
-    CHECK(rng::peek_uint64() == pinned_rng);
-    chains::owner_moved(you, origin + coord_def(1, 0), MV_TRANSLOCATION);
-    CHECK_FALSE(chains::held(target));
-    CHECK(you.duration[DUR_CHAIN_RECOVERY] == 50);
-    CHECK(rng::peek_uint64() == pinned_rng);
 }
 
 TEST_CASE("Eldritch policies cover every concrete god exactly once", "[new-species][eldritch]")

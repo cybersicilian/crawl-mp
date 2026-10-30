@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "makeitem.h"
 
@@ -1346,7 +1345,7 @@ static void _generate_potion_item(item_def& item, int force_type,
         for (int i = 0; i < NUM_POTIONS; ++i)
         {
             const potion_type pot = (potion_type) i;
-            if (!coop_content::enabled() && party::is_coop_potion(pot))
+            if (!party::is_enabled() && party::is_coop_potion(pot))
                 continue;
             const int weight = _potion_weight(consumable_rarity(OBJ_POTIONS,
                                                                 pot));
@@ -1396,7 +1395,7 @@ static void _generate_scroll_item(item_def& item, int force_type, int agent)
         {
             const scroll_type scr = (scroll_type) i;
 
-            if (!coop_content::enabled() && party::is_coop_scroll(scr))
+            if (!party::is_enabled() && party::is_coop_scroll(scr))
                 continue;
 
             // Only generate the scroll types chosen for this game.
@@ -1510,7 +1509,6 @@ spell_type choose_parchment_spell(int item_level, spschool school,
         const spell_type spell = (spell_type) i;
 
         if (!is_player_book_spell(spell)
-            || !coop_content::spell_available(spell)
             || school != spschool::none && !spell_typematch(spell, school)
             || fixed_spell_level > 0 && spell_difficulty(spell) != fixed_spell_level)
         {
@@ -1655,7 +1653,7 @@ jewellery_type get_random_amulet_type()
     vector<jewellery_type> valid_types;
     for (int i = AMU_FIRST_AMULET; i < NUM_JEWELLERY; i++)
     {
-        if (i == AMU_VANGUARD && !coop_content::enabled())
+        if (i == AMU_VANGUARD && !party::is_enabled())
             continue;
         if (!item_type_removed(OBJ_JEWELLERY, (jewellery_type)i))
             valid_types.push_back((jewellery_type)i);
@@ -1668,7 +1666,7 @@ jewellery_type get_random_ring_type()
     vector<jewellery_type> valid_types;
     for (int i = RING_FIRST_RING; i < NUM_RINGS; i++)
     {
-        if (i == RING_CAMARADERIE && !coop_content::enabled())
+        if (i == RING_CAMARADERIE && !party::is_enabled())
             continue;
         if (!item_type_removed(OBJ_JEWELLERY, (jewellery_type)i))
             valid_types.push_back((jewellery_type)i);
@@ -1858,11 +1856,6 @@ static void _generate_talisman_item(item_def& item, int force_type, int item_lev
 
 misc_item_type get_misc_item_type(int force_type, bool exclude)
 {
-    if (!coop_content::enabled()
-        && coop_content::exclusive_item(OBJ_MISCELLANY, force_type))
-    {
-        return NUM_MISCELLANY;
-    }
     if (force_type != OBJ_RANDOM)
         return (misc_item_type)force_type;
 
@@ -1891,7 +1884,7 @@ misc_item_type get_misc_item_type(int force_type, bool exclude)
         };
     }
 
-    if (coop_content::enabled())
+    if (party::is_enabled())
     {
         choices.insert(MISC_AEGIS_STANDARD);
         choices.insert(MISC_ASTRAL_BEACON);
@@ -2061,16 +2054,6 @@ int items(bool allow_uniques,
           monster *mons)
 {
     rng::subgenerator item_rng;
-
-    // Explicit vault/shop/acquirement requests obey the same mode policy as
-    // random generation. Reject before allocating an item or marking uniques.
-    if (!coop_content::enabled()
-        && (coop_content::exclusive_item(force_class, force_type)
-            || (force_ego < SP_FORBID_EGO
-                && coop_content::exclusive_unrand(-force_ego))))
-    {
-        return NON_ITEM;
-    }
 
     ASSERT(force_ego <= 0
            || force_class == OBJ_WEAPONS

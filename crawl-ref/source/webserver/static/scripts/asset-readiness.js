@@ -75,7 +75,10 @@ define([], function () {
             function listen() {
                 asset.addEventListener("load", loaded);
                 asset.addEventListener("error", retry);
-                timer = setTimeout(retry, 30000);
+                // Cold atlases can still be transferring after 30 seconds on
+                // a shared link. Restarting them wastes progress and occupies
+                // the connections needed by the native JavaScript modules.
+                timer = setTimeout(retry, attribute === "src" ? 120000 : 30000);
             }
 
             cleanups.push(cleanup);

@@ -1,7 +1,0 @@
-{
-  "reservationId": "772943b8-5f5f-4608-8ed7-7480626c505a",
-  "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/baseline3-binding.json",
-  "reason": "Source drift caught before any QA subprocess started"
-}

@@ -790,7 +790,10 @@ int zin_recite_power()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
-            if (party::are_gods_concordant(GOD_ZIN, ally.religion))
+            const auto rel = party::get_god_political_relation(
+                GOD_ZIN, ally.religion);
+            if (rel == party::pantheon_relation_type::SHARED_COVENANT
+                || rel == party::pantheon_relation_type::ALLIED_CONCORDAT)
             {
                 base += 3;
             }
@@ -1314,6 +1317,8 @@ bool zin_vitalisation()
             player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_ZIN, ally.religion);
             if (party::are_gods_concordant(GOD_ZIN, ally.religion))
             {
                 const int ally_stamina = max(1, (stamina_amt * 2) / 3);
@@ -1323,7 +1328,14 @@ bool zin_vitalisation()
                     i, 0, 0, DUR_DIVINE_STAMINA, dur / 2,
                     "Zin's lawful vitality fortifies", true);
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 0, 2 + random2(4), DUR_WEAK, 6 + random2(5),
+                    "Zin's lawful edict burdens and weakens",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 
@@ -1397,11 +1409,20 @@ void zin_sanctuary()
                 && member.depth == you.depth
                 && you.see_cell(member.pos()))
             {
+                const auto rel = party::get_god_political_relation(
+                    GOD_ZIN, member.religion);
                 if (party::are_gods_concordant(GOD_ZIN, member.religion))
                 {
                     party::heal_or_buff_party_member(i, 0, NUM_DURATIONS, 0, true);
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 3 + random2(5), DUR_SLOW, 5 + random2(5),
+                        "Zin's sanctuary choir rebukes and slows",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 3 : 1);
+                }
             }
         }
     }
@@ -1430,6 +1451,8 @@ void tso_divine_shield()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_SHINING_ONE, ally.religion);
             if (party::are_gods_concordant(GOD_SHINING_ONE, ally.religion)
                 && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
             {
@@ -1438,7 +1461,17 @@ void tso_divine_shield()
                     i, 0, 0, DUR_DIVINE_SHIELD, ally_charges,
                     "The Shining One extends a golden aegis around");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA
+                     || (ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+            {
+                party::debuff_or_harm_party_member(
+                    i,
+                    rel == party::pantheon_relation_type::ANATHEMA ? 4 + random2(5) : 2 + random2(3),
+                    0, DUR_CORONA, 8 + random2(6),
+                    "The blinding glare of The Shining One's aegis sears",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 }
@@ -1469,13 +1502,22 @@ void elyvilon_purification()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_ELYVILON, ally.religion);
             if (party::are_gods_concordant(GOD_ELYVILON, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 0, 0, NUM_DURATIONS, 0,
                     "Elyvilon's purifying light cleanses", true);
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 0, 2 + random2(3), DUR_WEAK, 6 + random2(5),
+                    "Elyvilon's pacifist rebuke saps the ferocity of",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 }
@@ -1565,12 +1607,20 @@ void elyvilon_divine_alms(monster& target)
                 && member.depth == you.depth
                 && you.see_cell(member.pos()))
             {
+                const auto rel = party::get_god_political_relation(
+                    GOD_ELYVILON, member.religion);
                 if (party::are_gods_concordant(GOD_ELYVILON, member.religion))
                 {
                     party::heal_or_buff_party_member(i, 12 + random2(15),
                                                      DUR_REGENERATION, 15, false);
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 0, DUR_WEAK, 5 + random2(4),
+                        "Elyvilon withholds mercy and weakens");
+                }
             }
         }
     }
@@ -1615,12 +1665,21 @@ void elyvilon_divine_vigour()
                 && member.depth == you.depth
                 && you.see_cell(member.pos()))
             {
+                const auto rel = party::get_god_political_relation(
+                    GOD_ELYVILON, member.religion);
                 if (party::are_gods_concordant(GOD_ELYVILON, member.religion))
                 {
                     party::heal_or_buff_party_member(i, 20 + random2(25),
                                                      DUR_REGENERATION, 20, true);
                 }
-
+                else if (rel == party::pantheon_relation_type::RIVAL
+                         || rel == party::pantheon_relation_type::ANATHEMA)
+                {
+                    party::debuff_or_harm_party_member(
+                        i, 0, 3 + random2(4), DUR_SLOW, 6 + random2(5),
+                        "Elyvilon's overwhelming peace stifles the aggression of",
+                        rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+                }
             }
         }
     }
@@ -1665,13 +1724,24 @@ void trog_do_trogs_hand(int pow)
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_TROG, ally.religion);
             if (party::are_gods_concordant(GOD_TROG, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 0, 0, DUR_TROGS_HAND, max(4, dur / 2),
                     "Trog's iron-willed vigour toughens");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i,
+                    rel == party::pantheon_relation_type::ANATHEMA ? 3 + random2(4) : 1 + random2(2),
+                    4 + random2(6), DUR_WEAK, 6 + random2(5),
+                    "Trog's anti-magic pulse burns away the mana of",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 }
@@ -3343,13 +3413,24 @@ spret dithmenos_nightfall(bool fail)
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_DITHMENOS, ally.religion);
             if (party::are_gods_concordant(GOD_DITHMENOS, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 0, 0, DUR_INVIS, 6 + random2(6),
                     "Dithmenos's primordial night cloaks");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i,
+                    rel == party::pantheon_relation_type::ANATHEMA ? 3 + random2(5) : 1 + random2(3),
+                    2 + random2(4), DUR_SLOW, 6 + random2(5),
+                    "Dithmenos's suffocating nightfall chills and slows",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 
@@ -3812,13 +3893,22 @@ bool gozag_potion_petition()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_GOZAG, ally.religion);
             if (party::are_gods_concordant(GOD_GOZAG, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 6 + random2(8), 2 + random2(4), DUR_REGENERATION, 6 + random2(5),
                     "Gozag's gilded elixir splashes onto");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 2 + random2(4), 2 + random2(3), DUR_WEAK, 5 + random2(4),
+                    "Gozag's gilded extravagance saps and taxes",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 
@@ -5898,6 +5988,8 @@ void ru_draw_out_power()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_RU, ally.religion);
             if (party::are_gods_concordant(GOD_RU, ally.religion))
             {
                 party::heal_or_buff_party_member(
@@ -5905,7 +5997,14 @@ void ru_draw_out_power()
                     NUM_DURATIONS, 0,
                     "Ru's transcendent focus flows into", true);
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 3 + random2(5), 3 + random2(4), DUR_WEAK, 6 + random2(5),
+                    "Ru's harsh ascetic truth drains the vitality from",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 }
@@ -6229,13 +6328,22 @@ bool uskayaw_stomp()
             const player &ally = party::Member(i);
             if (!you.see_cell_no_trans(ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_USKAYAW, ally.religion);
             if (party::are_gods_concordant(GOD_USKAYAW, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 0, 0, DUR_SWIFTNESS, 6 + random2(5),
                     "Uskayaw's rhythmic beat quickens");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 2 + random2(4), 0, DUR_SLOW, 5 + random2(5),
+                    "Uskayaw's jarring shockwave staggers",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 
@@ -6586,13 +6694,22 @@ spret hepliaklqana_idealise(bool fail)
             const player &ally = party::Member(i);
             if (!adjacent(ancestor->pos(), ally.pos()))
                 continue;
+            const auto rel = party::get_god_political_relation(
+                GOD_HEPLIAKLQANA, ally.religion);
             if (party::are_gods_concordant(GOD_HEPLIAKLQANA, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, max(4, healing / 2), 0, DUR_MIGHT, 6 + random2(5),
                     "Hepliaklqana's ancestral memory empowers");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 3 + random2(5), 2 + random2(3), DUR_WEAK, 5 + random2(5),
+                    "Hepliaklqana's ancestral wrath drains",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 
@@ -6992,13 +7109,22 @@ void wu_jian_heavenly_storm()
             {
                 continue;
             }
+            const auto rel = party::get_god_political_relation(
+                GOD_WU_JIAN, ally.religion);
             if (party::are_gods_concordant(GOD_WU_JIAN, ally.religion))
             {
                 party::heal_or_buff_party_member(
                     i, 0, 0, DUR_MIGHT, 8 + random2(6),
                     "The Wu Jian Council's golden storm empowers");
             }
-
+            else if (rel == party::pantheon_relation_type::RIVAL
+                     || rel == party::pantheon_relation_type::ANATHEMA)
+            {
+                party::debuff_or_harm_party_member(
+                    i, 2 + random2(4), 0, DUR_SLOW, 5 + random2(5),
+                    "The Wu Jian Council's whirling storm buffets and slows",
+                    rel == party::pantheon_relation_type::ANATHEMA ? 2 : 1);
+            }
         }
     }
 }

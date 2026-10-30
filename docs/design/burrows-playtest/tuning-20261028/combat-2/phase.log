@@ -1,7 +1,0 @@
-{"runId": "900b724f-c77e-40c4-8920-c6956b10042a", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final paired route and three late ending replays", "requestId": "de39fe9a30a2685ab98ec39aedd42ae601a932b14591254b564cf765c15aa02d", "status": "reserved", "reservedAt": 1793197782.2202199}
- 
-{"runId": "900b724f-c77e-40c4-8920-c6956b10042a", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final paired route and three late ending replays", "requestedAt": 1793197782.284998, "supervisorPid": 60547, "status": "running", "reservation": true, "requestId": "de39fe9a30a2685ab98ec39aedd42ae601a932b14591254b564cf765c15aa02d", "startedAt": 1793197782.285555, "workerPid": 60548, "processGroup": 60548}
-baseline-fighter 0
-candidate 0
-bottom 0
-{"runId": "900b724f-c77e-40c4-8920-c6956b10042a", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final paired route and three late ending replays", "requestedAt": 1793197782.284998, "supervisorPid": 60547, "status": "released", "reservation": true, "requestId": "de39fe9a30a2685ab98ec39aedd42ae601a932b14591254b564cf765c15aa02d", "startedAt": 1793197782.285555, "workerPid": 60548, "processGroup": 60548, "exitCode": 0, "finishedAt": 1793198108.418911, "supervisedProcessGroupGone": true, "releasedAt": 1793198108.455876, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/combat-2/closure.json", "releaseEvidenceSha256": "4b00928194328f8ea35cde9c86864271931d37a01d71a80d66999f5bef60c418"}

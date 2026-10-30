@@ -23,13 +23,6 @@ for (const invalid of [{ kind: 'command', id: 1 }, { kind: 'item', id: -1 },
     { kind: 'spell', id: '4' }, { kind: 'spell', id: Infinity }])
     assert.equal(model.binding(invalid), null);
 assert.deepEqual(json(model.binding({ kind: 'item', id: 0, unexpected: 'ignored' })), { kind: 'item', id: 0 });
-assert.deepEqual(json(model.normalize([{ kind: 'spell', id: 41, quick_cast: true }]))[0],
-    { kind: 'spell', id: 41, quick_cast: true }, 'Quick cast survives saved binding normalization');
-for (const kind of ['item', 'ability'])
-    assert.equal(model.binding({ kind, id: 0, quick_cast: true }).quick_cast, undefined,
-        'Only spells can retain a casting preference');
-for (const value of [false, 'true', 1, null])
-    assert.equal(model.binding({ kind: 'spell', id: 41, quick_cast: value }).quick_cast, undefined);
 const consumables = [{ kind: 'item', id: 52 }, { kind: 'item', id: 126 }];
 assert.deepEqual(json(model.normalize(consumables)).slice(0, 2), consumables, 'Consumable bindings survive storage normalization');
 const hero = { inventory: [{ slot: 0, name: '2 potions of healing', letter: 'a' }],

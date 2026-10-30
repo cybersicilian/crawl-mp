@@ -93,12 +93,12 @@ async function move(target) {
     check('Memory panel has readable native card and slot widths', layout);
     await move(host); await move(guest);
     check('Native Oozle selection, memory display and independent two-owner movement');
-    const assimilation = host.page.locator('#assimilation_toggle_0');
-    await assimilation.focus();
+    const digestion = host.page.locator('#assimilation_digestion_0');
+    await digestion.click(); await digestion.focus();
     await move(guest);
-    assert.equal(await host.page.locator('.assimilation-digestion').count(), 0);
-    assert.equal(await host.page.evaluate(() => document.activeElement.id), 'assimilation_toggle_0');
-    check('Memory display preserves keyboard focus across peer updates without passive digestion');
+    assert(await digestion.evaluate(element => element.parentElement.open));
+    assert.equal(await host.page.evaluate(() => document.activeElement.id), 'assimilation_digestion_0');
+    check('Memory display preserves expanded digestion and keyboard focus across peer updates');
 
     await send(host.page, 'inv_item_use', { expected_slot: 0, slot: weapon.slot,
         expected_name: weapon.name, action: 'unequip' });

@@ -1515,7 +1515,6 @@ LUAFN(you_jademantle_crystals_desc)
 }
 
 LUARET1(you_player_count, integer, party::player_count())
-LUARET1(you_multiplayer, boolean, party::multiplayer_enabled())
 
 static const struct luaL_Reg you_clib[] =
 {
@@ -1524,7 +1523,6 @@ static const struct luaL_Reg you_clib[] =
     { "time"        , you_time },
     { "real_time"   , you_real_time },
     { "player_count", you_player_count },
-    { "multiplayer", you_multiplayer },
     { "spells"      , l_you_spells },
     { "spell_letters", l_you_spell_letters },
     { "spell_table" , l_you_spell_table },
@@ -2021,7 +2019,6 @@ static const struct luaL_Reg you_dlib[] =
 { "ostracise",          you_ostracise },
 { "change_species",     you_change_species },
 { "player_count",       you_player_count },
-{ "multiplayer",        you_multiplayer },
 #ifdef WIZARD
 { "enter_wizard_mode",  you_enter_wizard_mode },
 { "set_xl",             you_set_xl },

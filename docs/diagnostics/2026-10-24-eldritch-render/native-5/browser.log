@@ -1,7 +1,0 @@
-Signed in to isolated QA account
-Launched Eldritch
-page.waitForFunction: Timeout 60000ms exceeded.
-    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-24-eldritch-render/verify-native.cjs:124:24 {
-  log: [],
-  name: 'TimeoutError'
-}

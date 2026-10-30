@@ -5,8 +5,6 @@
 
 #include "AppHdr.h"
 #include "character-trait.h"
-#include "coop-content.h"
-#include "spl-util.h"
 
 #include <algorithm>
 #include <vector>
@@ -260,19 +258,10 @@ static JsonNode *_starting_weapons_metadata()
  */
 string playable_metadata_json()
 {
-    init_spell_descs();
     JsonWrapper json(json_mkobject());
     json_append_member(json.node, "species", _species_metadata_array());
     json_append_member(json.node, "jobs", _job_metadata_array());
     json_append_member(json.node, "combos", _combo_array());
     json_append_member(json.node, "starting_weapons", _starting_weapons_metadata());
-    JsonNode *multiplayer_spells = json_mkarray();
-    for (int id = 0; id < NUM_SPELLS; ++id)
-    {
-        const auto spell = static_cast<spell_type>(id);
-        if (coop_content::exclusive_spell(spell))
-            json_append_element(multiplayer_spells, json_mkstring(spell_title(spell)));
-    }
-    json_append_member(json.node, "multiplayer_only_spells", multiplayer_spells);
     return json.to_string();
 }

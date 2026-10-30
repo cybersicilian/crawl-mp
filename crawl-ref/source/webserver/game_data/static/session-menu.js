@@ -30,8 +30,7 @@ function ($, client, library, actions, keyboard, focusTrap, graphics) {
             + "<button type='button' class='workflow-button' id='session_menu_resume' autofocus>Resume <kbd>Esc</kbd></button>"
             + "<button type='button' class='workflow-button' data-session-save='continue'>Save</button>"
             + "<button type='button' class='workflow-button' data-session-save='quit'>Save and Quit</button>"
-            + "<button type='button' class='workflow-button' data-session-graphics>Appearance &amp; graphics</button>"
-            + "<a class='workflow-button' href='/profile' target='_blank' rel='noopener'>Profile &amp; appearance ↗</a>"
+            + "<button type='button' class='workflow-button' data-session-graphics>Graphics settings</button>"
             + "</div></dialog>").appendTo("body")[0];
         $(dialog).on("keydown.sessionMenu keypress.sessionMenu keyup.sessionMenu", function (event) {
             event.stopPropagation();

@@ -44,3 +44,29 @@
 @media (forced-colors: active) {
     .tip-fact, .tip-state { border-color: CanvasText; }
 }
+
+/* Heat fills toward a limit; spare capacity stays visibly empty. */
+.heat-help { margin: 0 0 12px; padding: 10px; border: 1px solid #8c652850; border-radius: 4px; background: #fffaf060; }
+.heat-help-heading { font-weight: 650; margin-bottom: 9px; }
+.heat-help-legend { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3px 10px; font-size: .85em; }
+.heat-help-track { height: 12px; margin: 5px 0; background: #424a5020; border: 1px solid #76634380; border-radius: 2px; overflow: hidden; }
+.heat-help-fill { display: block; height: 100%; background: repeating-linear-gradient(120deg, #b75c1f 0 7px, #dd8c36 7px 10px); }
+.heat-help-state { margin: 4px 0 10px; font-size: .85em; }
+.heat-help-example-title { border-top: 1px solid #8c652838; padding-top: 8px; font-size: .8em; }
+.heat-help-example { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.heat-help-stage { flex: 1; min-width: 0; text-align: center; font-size: .75em; }
+.heat-help-stage > span { display: block; min-height: 2.5em; }
+.heat-help-stage .heat-help-track { height: 8px; }
+.heat-help-arrow { font-size: 1.1em; }
+.party-heat-guidance { grid-column: 1 / -1; color: #e3cda5; font-size: 11px; line-height: 1.35; padding: 2px 0; }
+#normal .mp-track[data-tip-heat] { background: #262a28; border-color: #b5884f; }
+#normal .mp-track[data-tip-heat] .party-mp-fill,
+#normal #stats_mpline[data-tip-heat] #stats_mp_bar_full { background: repeating-linear-gradient(120deg, #aa4c19 0 7px, #d38132 7px 10px); }
+#normal .mp-track[data-heat-state='full'] .party-mp-fill,
+.heat-help[data-heat-state='full'] > .heat-help-track .heat-help-fill { background: repeating-linear-gradient(120deg, #8e2925 0 7px, #c24a35 7px 10px); }
+#normal .mp-track[data-tip-heat]:focus-visible { outline: 2px solid #f6d192; outline-offset: 2px; }
+@media (forced-colors: active) {
+    .heat-help, .heat-help-track { border-color: CanvasText; }
+    .heat-help-fill, #normal .mp-track[data-tip-heat] .party-mp-fill { background: Highlight; }
+    .party-heat-guidance { color: CanvasText; }
+}

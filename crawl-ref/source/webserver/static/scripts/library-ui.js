@@ -1,7 +1,6 @@
-define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
+define(["jquery", "comm", "expedition-url", "library-browser", "require"], function ($, comm, expeditionURL, browser, require) {
     "use strict";
     var accountId = null, identity = null, saving = false, ready = false, noticeTimer;
-    var libraryQuery = "";
     var deleting = null;
 
     function deletionControls() {
@@ -11,15 +10,6 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
         });
     }
 
-    function filterGames() {
-        var query = libraryQuery.trim().toLocaleLowerCase(), count = 0;
-        document.querySelectorAll(".game-library-entry").forEach(function (entry) {
-            entry.hidden = !!query && !entry.textContent.toLocaleLowerCase().includes(query);
-            if (!entry.hidden) count++;
-        });
-        var empty = document.getElementById("library_no_matches");
-        if (empty) empty.hidden = !query || count > 0;
-    }
     function savedTime(value) {
         if (!value) return "No manual save yet";
         var date = new Date(value);
@@ -95,7 +85,11 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
     function render(data) {
         saving = false;
         accountId = data.player_id;
-        var restoreSearch = document.activeElement && document.activeElement.classList.contains("library-search");
+        var focused = document.activeElement;
+        var restoreAction = focused && focused.closest(".game-library-entry");
+        var focusId = restoreAction && restoreAction.dataset.gameId;
+        var action = focused && (focused.hasAttribute("data-library-load") ? "[data-library-load]"
+            : focused.hasAttribute("data-library-delete") ? "[data-library-delete]" : "a:not([data-library-load])");
         var focusAfterDelete = deleting && data.games.every(function (game) { return game.id !== deleting; });
         if (focusAfterDelete) deleting = null;
         var panel = document.getElementById("game_library_panel");
@@ -108,7 +102,12 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
             if (anchor) anchor.parentNode.insertBefore(panel,
                 anchor.id === "party_lobby_panel" ? anchor.nextSibling : anchor);
         }
-        $(panel).empty();
+        if (!panel.querySelector("header")) {
+            panel.appendChild(document.createElement("header"));
+            browser.init(panel);
+            $(panel).append($("<div class='game-library-list'></div>"),
+                $("<p id='library_no_matches' hidden>No expeditions match. Try another search or clear filters.</p>"));
+        }
         var accountMenu = document.querySelector(".lobby-account-menu");
         if (accountId && accountMenu) {
             var profile = accountMenu.querySelector(".library-own-record");
@@ -127,13 +126,15 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
         if (accountId) tools.append(link("players", accountId, "My history"));
         tools.append($("<button type='button' class='dcss-btn' id='library_refresh_btn'>Refresh</button>"));
         var header = $("<header></header>").append(heading, tools);
-        $(panel).append(header);
-        if (data.games.length || libraryQuery) {
-            var search = $("<input type='search' class='library-search' placeholder='Find an expedition…' aria-label='Find a saved expedition'>")
-                .val(libraryQuery).on("input", function () { libraryQuery = this.value; filterGames(); });
-            $(panel).append(search);
+        $(panel).children("header").replaceWith(header);
+        var list = $(panel).find(".game-library-list").empty();
+        var rows = $("<tbody id='library_rows'></tbody>");
+        if (data.games.length) {
+            var table = $("<table class='library-expeditions' role='table' aria-label='Saved expeditions'></table>");
+            table.append($("<thead><tr><th scope='col'>Expedition</th><th scope='col'>Progress</th>" +
+                "<th scope='col'>Last saved</th><th scope='col'>Actions</th></tr></thead>"), rows);
+            list.append(table);
         }
-        var list = $("<div class='game-library-list'></div>").appendTo(panel);
         if (!accountId) list.append($("<p>Log in to save and resume your expeditions.</p>"));
         else if (!data.games.length) {
             list.append($("<p class='library-empty-state'>No saved expeditions yet. Start a new adventure and your progress will be waiting here.</p>"));
@@ -141,24 +142,29 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
         }
         data.games.forEach(function (game) {
             var state = game.state || {};
-            var entry = $("<article class='game-library-entry'></article>").attr("data-game-id", game.id);
-            var summary = $("<div class='library-entry-summary'></div>");
+            var entry = $("<tr class='game-library-entry' role='row'></tr>").attr("data-game-id", game.id);
+            var summary = $("<td role='cell' class='library-entry-summary' data-label='Expedition'></td>");
             var title = $("<div class='library-entry-title'></div>").append($("<h3></h3>").text(game.name),
                 $("<span class='library-state'></span>").text(game.running ? "Running" : game.loadable ? "Saved" : "Unavailable"));
-            summary.append(title,
-                $("<small></small>").text((state.place || "Starting") + " · Turn " + (state.turns || 0) +
+            summary.append(title);
+            var progress = $("<td role='cell' class='library-progress' data-label='Progress'></td>").append($("<small></small>").text((state.place || "Starting") + " · Turn " + (state.turns || 0) +
                     " · " + ((state.players || []).length || 1) + ((state.players || []).length > 1 ? " heroes" : " hero")));
             var roster = (state.players || []).map(function (hero) {
                 return (hero.name || "Hero") + " · " + (hero.species || "") + " " + (hero.job || "");
             });
             if (roster.length) summary.append($("<p class='library-roster'></p>").text(roster.join(" / ")));
-            summary.append($("<p class='library-saved-time'></p>").text(savedTime(game.saved_at)));
+            var saved = $("<td role='cell' class='library-time' data-label='Last saved'></td>");
+            var time = $("<time class='library-saved-time'></time>").text(savedTime(game.saved_at));
+            if (game.saved_at) time.attr("datetime", game.saved_at);
+            saved.append(time);
             if (!game.running && !game.loadable) summary.append($("<p class='library-roster'></p>")
                 .text("This save cannot be resumed in the current game version. Its expedition record is still available."));
-            var actions = $("<div class='library-entry-actions'></div>");
+            var actions = $("<td role='cell' class='library-entry-actions' data-label='Actions'></td>");
             if (game.loadable || game.running) actions.append($("<a class='dcss-btn dcss-btn-primary'></a>")
                 .text(game.running ? "Return to game" : "Resume")
                 .attr({ href: expeditionURL.hash(game.id), "data-library-load": game.id }));
+            if (game.loadable && !game.running) actions.append($("<button type='button' class='dcss-btn'>Load into lobby</button>")
+                .attr({ "data-library-lobby": game.id, "data-save-name": game.name }));
             actions.append(link("games", game.id, "View record"));
             actions.append($("<button type='button' class='dcss-btn library-delete'>Delete save</button>")
                 .attr({ "data-library-delete": game.id, "data-library-name": game.name,
@@ -166,14 +172,22 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
                     "aria-label": "Delete save for " + game.name,
                     title: game.deletable === false ? "Return this expedition to the lobby before deleting its save"
                         : "Permanently delete saved progress; the public record remains" }));
-            entry.append(summary, actions);
-            list.append(entry);
+            entry.append(summary, progress, saved, actions);
+            rows.append(entry);
         });
-        $(panel).append($("<p id='library_no_matches' hidden role='status'>No expeditions match that search.</p>"));
-        filterGames();
+        browser.update(rows[0], data.games);
+        window.dispatchEvent(new CustomEvent("saved-expeditions-updated"));
         deletionControls();
-        if (restoreSearch) $(panel).find(".library-search").trigger("focus");
-        else if (focusAfterDelete) $("#library_refresh_btn").trigger("focus");
+        if (focusId && !focusAfterDelete) {
+            var row = Array.from(panel.querySelectorAll(".game-library-entry")).find(function (entry) {
+                return entry.dataset.gameId === focusId;
+            });
+            var replacement = row && row.querySelector(action);
+            if (replacement && !row.hidden) replacement.focus({ preventScroll: true });
+            else document.getElementById("library_refresh_btn").focus({ preventScroll: true });
+        }
+        if (focusAfterDelete || focused && focused.id === "library_refresh_btn")
+            $("#library_refresh_btn").trigger("focus");
         init();
     }
     document.addEventListener("click", function (event) {
@@ -226,7 +240,7 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
         record_save_result: function (data) {
             saving = false;
             init();
-            notice(data.ok ? "Expedition saved. You can keep playing." : "Close the current menu or prompt, then save again.");
+            notice(data.ok ? "Expedition saved. You can keep playing." : data.error || "Close the current menu or prompt, then save again.");
         },
         library_error: function (data) {
             saving = false; deleting = null; deletionControls(); init(); notice(data.message);
@@ -234,7 +248,7 @@ define(["jquery", "comm", "expedition-url"], function ($, comm, expeditionURL) {
     });
     $(document).ready(function () {
         if (!document.getElementById("library_styles"))
-            $("<link id='library_styles' rel='stylesheet' href='/static/tabletop/library.css'>").appendTo("head");
+            $("<link id='library_styles' rel='stylesheet'>").attr("href", require.toUrl("../tabletop/library.css")).appendTo("head");
     });
     return {
         init: init,

@@ -34,19 +34,31 @@
 .hud-slot-quantity { top: 3px; right: 3px; color: #fff6cb; background: #171c17b0; }
 .hud-equipped-mark { bottom: 2px; left: 2px; color: #d6c475; font-size: 8px; }
 .hud-empty { grid-column: 1 / -1; margin: 0; padding: 4px 0; color: var(--tt-muted); font-size: 11px; }
-#hud_powers > .hud-panel-body { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 10px 9px; max-height: 130px; overflow-y: auto; }
+#hud_powers > .hud-panel-body {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    align-items: stretch; align-content: start; gap: 5px; padding: 0 10px 9px; max-height: 130px; overflow-y: auto;
+}
 #normal #hud_powers > .hud-panel-heading { flex-wrap: wrap; }
-#normal #hud_spell_library { flex-shrink: 0; gap: 4px; height: auto; min-height: 34px; padding: 3px 5px; font: 10px/1.2 var(--tt-font-ui); }
-#hud_spell_library .hud-spell-library-label { display: block; text-align: left; }
+#normal #hud_spell_library { flex-shrink: 1; min-width: 0; max-width: 100%; gap: 4px; height: auto; min-height: 34px; padding: 3px 5px; font: 10px/1.2 var(--tt-font-ui); }
+#hud_spell_library .hud-spell-library-label { display: block; min-width: 0; overflow-wrap: anywhere; text-align: left; }
 #hud_spell_library .hud-spell-library-counts { color: var(--tt-muted); font: 9px/1.2 var(--tt-font-ui); }
 #normal #hud_spell_library:focus-visible { outline: 2px solid var(--tt-brass-light); outline-offset: 1px; }
 #normal .hud-power-button {
-    display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; min-height: 34px;
+    display: grid; grid-template-columns: 8px minmax(32px, 1fr) 8px; grid-template-rows: 32px auto;
+    align-items: center; align-content: start; justify-items: center; gap: 2px 0;
+    box-sizing: border-box; min-width: 0; min-height: 52px; height: auto; padding: 3px;
     color: var(--tt-vellum); border: 1px solid var(--hud-rule); border-radius: 4px;
     background: #30372b; font: 11px/1.25 var(--tt-font-ui); text-align: left; cursor: pointer;
 }
-.hud-power-button > .tt-icon { width: 16px; height: 16px; color: #cfb978; }
-.hud-power-button small { color: var(--tt-muted); }
+.hud-power-button > :is(.power-art, .tt-icon) { grid-column: 2; grid-row: 1; width: 32px; height: 32px; image-rendering: pixelated; }
+.hud-power-button > :is(.power-art-fallback, .tt-icon) { width: 16px; height: 16px; }
+/* Shortcuts, artwork and complete resource costs each keep their own space. */
+.hud-power-button > :is(.hud-power-key, .hud-power-cost) {
+    position: static; min-width: 0; max-width: 100%; margin: 0; padding: 0; border: 0;
+    font: 8px/1.2 var(--tt-font-ui); color: #f0e7cd; text-shadow: 0 1px 2px #000; background: transparent;
+}
+.hud-power-button > .hud-power-key { grid-column: 1; grid-row: 1; align-self: start; }
+.hud-power-button > .hud-power-cost { grid-column: 1 / -1; grid-row: 2; overflow-wrap: anywhere; text-align: center; color: #c4ddff; }
 #normal [aria-disabled='true'] { opacity: .5; cursor: default; }
 #normal .workflow-action-group { flex-wrap: wrap; }
 #normal #dcss_quick_dock { display: flex; flex-wrap: wrap; gap: 5px 12px; padding: 6px 10px; }

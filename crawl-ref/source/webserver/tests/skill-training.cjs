@@ -31,7 +31,7 @@ fs.mkdirSync(out, { recursive: true });
                 comm: { send_message(msg, fields) { window.packets.push({ msg, ...fields }); },
                     register_handlers(handlers) { Object.assign(window.handlers, handlers); } },
                 client: { is_watching: () => window.watching }, chat: { tag_item: noop },
-                './workflow-actions': { reason: () => '', inspectionReason: () => '', controlledSlot: () => 0,
+                './workflow-actions': { reason: () => '', controlledSlot: () => 0,
                     powerButton: () => null, context: () => null, describe: noop,
                     itemSecondaryHint: () => '', itemSecondaryAction: noop },
                 './chat-context': { inventory_item: item => item }
@@ -55,12 +55,9 @@ fs.mkdirSync(out, { recursive: true });
                 { id: 4, name: 'Maces & Flails', level: '2.8', base_level: '1.0', apt: 0, train: 1,
                     training: 40, can_train: true, target: 0, target_base: false,
                     cross_training: { bonus: '1.8', points: 120,
-                        sources: [{ id: 3, name: 'Axes', points: 80 }, { id: 6, name: 'Staves', points: 40 }] } },
-                { id: 12, name: 'Stealth', level: '0.0', apt: 2, manual_bonus: slot === 0 ? 4 : 0,
-                    train: 1, training: 0, can_train: true, target: 0, target_base: false }] });
+                        sources: [{ id: 3, name: 'Axes', points: 80 }, { id: 6, name: 'Staves', points: 40 }] } }] });
             window.crawl_party = { state: { active_slot: 0, members: [member(0), member(1)] } };
         });
-        await require('./helpers/rich-text-fixture.cjs').install(page);
         for (const [name, file] of [['spell-cost', 'static/scripts/spell-cost.js'],
             ['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'],
@@ -86,23 +83,6 @@ fs.mkdirSync(out, { recursive: true });
             document.getElementById('outside').onclick = () => window.modules.inspector.open(0, 'skills');
         });
         await page.locator('#outside').click();
-        const manualRow = page.locator("tr[data-skill-id='12']");
-        assert.equal(await manualRow.locator('.party-skill-apt-value').innerText(), '+6');
-        assert.equal(await manualRow.locator('.party-skill-apt-breakdown').innerText(), 'Base +2\nManual +4');
-        assert((await manualRow.locator('.party-skill-apt').getAttribute('aria-label')).includes('double training'));
-        assert.equal(await page.locator("tr[data-skill-id='0'] .party-skill-apt-value").innerText(), '0');
-        assert.equal(await page.locator("tr[data-skill-id='0'] .party-skill-manual-bonus").count(), 0,
-            'Older snapshots do not invent manual bonuses');
-        for (const [base, bonus, total] of [[-5, 4, '-1'], [-4, 4, '0'], [0, 4, '+4'], [2, 0, '+2'], [2, 4, '+6']]) {
-            await page.evaluate(({ base, bonus }) => {
-                const skill = window.crawl_party.state.members[0].skills.find(skill => skill.name === 'Stealth');
-                Object.assign(skill, { apt: base, manual_bonus: bonus });
-                window.modules.inspector.render();
-            }, { base, bonus });
-            assert.equal(await manualRow.locator('.party-skill-apt-value').innerText(), total);
-            assert.equal(await manualRow.locator('.party-skill-manual-bonus').count(), bonus ? 1 : 0,
-                'Depleted manuals remove the bonus and its explanation');
-        }
         const crossRow = page.locator("tr[data-skill-id='4']");
         assert.equal(await crossRow.locator('.party-skill-cross-bonus').innerText(), 'Cross-training: +1.8');
         assert((await crossRow.locator('.party-skill-cross-training').innerText()).includes('From Axes, Staves'));
@@ -178,9 +158,6 @@ fs.mkdirSync(out, { recursive: true });
         assert(await page.getByRole('spinbutton', { name: 'Long Blades stop level', exact: true }).isDisabled());
         // Hero selection retains independent targets; permissions apply on every render.
         await page.locator('#party_insp_hero_1').click();
-        assert.equal(await manualRow.locator('.party-skill-apt-value').innerText(), '+2');
-        assert.equal(await manualRow.locator('.party-skill-manual-bonus').count(), 0,
-            'Manual bonuses belong to the inspected hero');
         await target.fill('6.5'); await target.press('Enter');
         packet = await acknowledge(); assert.equal(packet.slot, 1);
         await page.locator('#party_insp_hero_0').click(); assert.equal(await target.inputValue(), '');
@@ -211,13 +188,10 @@ fs.mkdirSync(out, { recursive: true });
             assert(await page.locator('#party_insp_body').evaluate(node => node.scrollWidth <= node.clientWidth + 1), 'Training must fit at ' + width);
             await crossRow.scrollIntoViewIfNeeded();
             await page.screenshot({ path: path.join(out, 'training-' + width + '.png') });
-            await manualRow.scrollIntoViewIfNeeded();
-            await manualRow.screenshot({ path: path.join(out, 'manual-aptitude-' + width + '.png') });
         }
         assert.deepEqual(await page.evaluate(() => window.leaked), []);
         assert.deepEqual(errors, []);
         console.log(JSON.stringify({ success: true, targets: true, priorities: true, modes: true,
-            crossTraining: true, manualAptitudes: true, draftAndFocus: true, keyboardIsolation: true,
-            permissions: true, widths: [1280, 768, 390] }));
+            crossTraining: true, draftAndFocus: true, keyboardIsolation: true, permissions: true, widths: [1280, 768, 390] }));
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

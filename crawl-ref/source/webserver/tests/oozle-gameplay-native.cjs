@@ -141,7 +141,9 @@ async function move(target, code, expected) {
     const weapon = learned.inventory.find(entry => entry.equipped && /weapon/i.test(entry.kind_name));
     assert(weapon, 'Fighter must start with an equipped weapon');
     await setWear(host, weapon, 1500);
-    assert.equal(memory(await own(host)).digesting, undefined);
+    let wear = memory(await own(host)).digesting.find(entry => entry.inv_slot === weapon.slot);
+    assert.equal(wear.weapon_damage_percent, 50);
+    assert.equal(wear.weapon_penalty, 4);
     await equipmentAction(host, weapon, 'unequip');
     const replacementText = await itemContext.start(host, item(await own(host), weapon.name));
     assert.match(replacementText, /Replaces the oldest memory when complete\./);
@@ -150,14 +152,9 @@ async function move(target, code, expected) {
     await ready(host.page);
     await waitAction(host);
     await equipmentAction(host, item(await own(host), weapon.name), 'use');
-    await setWear(host, weapon, 3000);
-    await key(host.page, 190); // An owner wait must never consume worn gear.
-    await ready(host.page);
-    const afterWear = await own(host);
-    assert(afterWear.inventory.some(entry => entry.slot === weapon.slot && entry.equipped));
-    assert.equal(memory(afterWear).digesting, undefined);
-    assert.equal(memory(afterWear).used, armourMemory.used);
-    check('Legacy passive wear never consumes equipped gear or adds memories');
+    wear = memory(await own(host)).digesting.find(entry => entry.inv_slot === weapon.slot);
+    assert(wear.progress >= 50 && wear.progress < 60, 'Swapping preserves saved wear');
+    check('Native weapon wear reduces damage and accuracy and survives swapping', { wear });
 
     const saved = await state(host.page);
     await send(host.page, 'record_save', { exit: true });

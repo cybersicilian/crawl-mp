@@ -2,7 +2,7 @@ define(["jquery", "./party-model", "./quickbar-model", "./workflow-actions", "./
 function ($, party, model, actions, inventory, icons, powerCards, powerArt, spellCost, keyboard, client, frameUpdate, commands, menus, itemMenus, nativeArt) {
     "use strict";
     var slots = model.normalize(), heroKey = "", memory = {}, selected = null;
-    var kind = "command", query = "", signature = "", searchOnOpen = false;
+    var kind = "command", query = "", signature = "";
     var storagePrefix = "dcss.quickbar.v1.";
     var heldShortcuts = new Set();
     function releaseShortcuts() { heldShortcuts.clear(); }
@@ -15,19 +15,18 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
             keyboard.consume(event); return;
         }
         if (event.type !== "keydown" || event.defaultPrevented || event.isComposing
-            || event.ctrlKey || event.altKey || event.metaKey
+            || event.ctrlKey || event.altKey || event.metaKey || event.shiftKey
             || event.location === 3 || /^Numpad/.test(event.code || "")
             || keyboard.typing(event.target) || $(event.target).closest("#chat").length
             || !$("#dcss_quick_dock").is(":visible") || !actions.ready() || client.is_watching()
             || $("#ui-stack > *, dialog[open]").length) return;
-        var index = model.keyIndex(event.shiftKey && /^Digit[0-9]$/.test(event.code || "")
-            ? event.code.slice(-1) : event.key), hero = member();
+        var index = model.keyIndex(event.key), hero = member();
         if (index < 0 || !hero) return;
         load(hero);
-        if (!slots[index] || event.shiftKey && !quickCast(slots[index], model.resolve(hero, slots[index]))) return;
+        if (!slots[index]) return;
         heldShortcuts.add(physicalKey);
         keyboard.consume(event);
-        if (!event.repeat) activate(slots[index], event.shiftKey);
+        if (!event.repeat) activate(slots[index]);
     }
     function bindShortcuts(enabled) {
         var method = enabled ? "addEventListener" : "removeEventListener";
@@ -71,17 +70,14 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
             : "This inventory slot is empty or this power is no longer available.";
         return binding.kind === "item" ? actions.reason(hero) || (binding.action && entry.blocked_reason) : actions.powerReason(hero, entry, binding.kind);
     }
-    function quickCast(binding, entry) {
-        return binding && binding.kind === "spell" && binding.quick_cast === true && entry && entry.quick_cast === true;
-    }
-    function activate(binding, manualAim) {
+    function activate(binding) {
         var hero = member(), entry = model.resolve(hero, binding);
         if (!entry || blocked(hero, binding, entry)) return;
         var focused = document.activeElement;
         if (focused && $(focused).closest("#dcss_quick_dock").length) focused.blur();
         document.getElementById("quickbar_more").open = false;
         if (binding.kind === "item") actions.itemAction(hero, entry, false);
-        else actions.usePower(hero, entry, binding.kind, Boolean(!manualAim && quickCast(binding, entry)));
+        else actions.usePower(hero, entry, binding.kind);
     }
     function assign(index, value) {
         if (!member() || index < 0 || index >= model.count) return;
@@ -113,10 +109,8 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         var contextItem = binding && binding.action && entry
             ? hero.inventory.find(function (item) { return item.uid === entry.uid; }) : entry;
         var spec = binding && binding.kind === "item" && contextItem ? itemMenus.inventory(hero, contextItem)
-            : { title: entry ? entry.name : binding && binding.last_item ? binding.last_item.name : "Quick action", entries: entry ? [{ label: quickCast(binding, entry) ? "Quick cast" : binding.kind === "spell" ? "Cast" : "Use",
+            : { title: entry ? entry.name : binding && binding.last_item ? binding.last_item.name : "Quick action", entries: entry ? [{ label: binding.kind === "spell" ? "Cast" : "Use",
                 disabled: blocked(hero, binding, entry), run: function () { activate(binding); } }] : [] };
-        if (quickCast(binding, entry)) spec.entries.push({ label: "Aim spell manually", disabled: blocked(hero, binding, entry),
-            run: function () { activate(binding, true); } });
         var valid = spec.valid;
         spec.valid = function () {
             var latest = member();
@@ -125,14 +119,6 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         };
         spec.entries = spec.entries.concat(extras);
         return spec;
-    }
-    function castingPreference(index, binding, entry) {
-        if (!binding || binding.kind !== "spell" || !entry || entry.quick_cast !== true) return [];
-        return [{ label: binding.quick_cast ? "Use manual aiming" : "Enable Quick cast",
-            detail: "One activation uses the native target. Shift+number aims manually. Native warnings still apply.",
-            run: function () {
-                assign(index, Object.assign({}, binding, { quick_cast: !binding.quick_cast }));
-            } }];
     }
     function decorate($button, hero, binding, entry, remembered) {
         if (binding.kind !== "item") powerCards.attach($button, entry, binding.kind === "spell" ? "Spell" : "Ability");
@@ -154,15 +140,11 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
             var displayEntry = entry || binding && binding.last_item;
             var depleted = binding && binding.kind === "item" && !entry && displayEntry && hero.inventory_known;
             var key = model.shortcut(index);
-            var quick = quickCast(binding, entry);
             var label = !binding ? "Add quick action" : displayEntry ? displayEntry.name : "Unavailable action";
-            var hint = quick ? "Quick cast · Shift+" + key + " to aim · Right-click for actions · Shift+click to reassign"
-                : "Click to use · Right-click for actions · Shift+click to reassign";
             var $button = $("<button type='button' class='hud-quick-slot'></button>")
                 .attr({ id: "quickbar_slot_" + index, "data-quick-slot": index,
-                    "aria-label": label + (depleted ? " · 0 remaining" : "") + (binding ? " · quick slot " + (index + 1) + " · key " + key : "")
-                        + (quick ? " · Quick cast · Shift+" + key + " to aim manually" : ""),
-                    "aria-keyshortcuts": binding ? key + (quick ? " Shift+" + key : "") : "", "data-tip-key": binding ? key : "",
+                    "aria-label": label + (depleted ? " · 0 remaining" : "") + (binding ? " · quick slot " + (index + 1) + " · key " + key : ""),
+                    "aria-keyshortcuts": binding ? key : "", "data-tip-key": binding ? key : "",
                     "aria-disabled": String(Boolean(unavailable)), "data-tip-title": label,
                     "data-tip-meta": unavailable || "Click to use · Right-click for actions · Shift+click to reassign · Drag an item or power here" })
                 .toggleClass("is-empty", !binding).toggleClass("is-selected", selected === index)
@@ -174,16 +156,15 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                     if (event.shiftKey && event.key === "Enter") { event.preventDefault(); edit(index); }
                 });
             menus.bind($button, function () {
-                var spec = contextMenu(hero, binding, entry, castingPreference(index, binding, entry).concat([
+                var spec = contextMenu(hero, binding, entry, [
                     { label: binding ? "Reassign quick slot" : "Assign quick action", run: function () { edit(index); } }
-                ]));
+                ]);
                 if (binding) spec.entries.push({ label: "Clear quick slot", run: function () { assign(index, null); } });
                 return spec;
             });
             if (binding && displayEntry) {
                 decorate($button, hero, binding, displayEntry, !entry);
-                $button.attr("data-tip-meta", unavailable || hint);
-                if (quick) $button.append($("<span class='quickbar-cast-mode' aria-hidden='true'>Q</span>"));
+                $button.attr("data-tip-meta", unavailable || "Click to use · Right-click for actions · Shift+click to reassign");
                 if (binding.kind === "item" && (depleted || entry && entry.qty > 1))
                     $button.append($("<span class='quickbar-quantity quickbar-item-quantity'></span>").text(depleted ? 0 : entry.qty));
                 if (binding.kind === "spell") $button.append($("<span class='quickbar-quantity'></span>").text(spellCost.format(entry)));
@@ -276,11 +257,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 + "<div id='quickbar_catalog' role='group' aria-label='Available actions'></div>"
                 + "<div id='quickbar_commands' role='group' aria-label='Other game actions'></div></div>"
                 + "<div id='quickbar_help' tabindex='0' aria-label='Action help'></div></div></details>");
-            $more.find("summary").append(icons.icon("tray-expand")).on("click", function (event) {
-                // Pointer browsing leaves gameplay keys available. Keyboard
-                // activation explicitly enters the searchable command palette.
-                searchOnOpen = !(event.originalEvent && event.originalEvent.detail);
-            });
+            $more.find("summary").append(icons.icon("tray-expand"));
             $more.find("#quickbar_clear").empty().append(icons.icon("slot-clear"))
                 .attr({ "aria-label": "Clear quick action", "data-tip-title": "Clear quick action" });
             [["command", "Commands", "question"], ["item", "Items", "inventory"], ["ability", "Abilities", "abilities"], ["spell", "Spells", "spells"]].forEach(function (entry) {
@@ -292,9 +269,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 update(true);
                 fitTray();
                 if (window.dcss_tooltips) window.dcss_tooltips.hide();
-                if (this.open && selected === null && searchOnOpen && document.activeElement === this.querySelector("summary"))
-                    document.getElementById("quickbar_search").focus({ preventScroll: true });
-                searchOnOpen = false;
+                if (this.open && selected === null) document.getElementById("quickbar_search").focus({ preventScroll: true });
                 $(window).trigger("resize");
             });
             $more.find("#quickbar_search").on("input", function () { query = this.value; renderCatalog(); });
@@ -352,7 +327,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         }).on("party_state_rendered.quickbar game_actions_changed.quickbar player_state_changed.quickbar inventory_art_ready.quickbar", refresh)
             .on("game_cleanup.quickbar", function () {
                 refresh.cancel(); bindShortcuts(false); slots = model.normalize();
-                heroKey = ""; memory = {}; selected = null; signature = ""; searchOnOpen = false;
+                heroKey = ""; memory = {}; selected = null; signature = "";
             });
         signature = ""; update(true);
         $(window).off("resize.quickbar").on("resize.quickbar", fitTray);

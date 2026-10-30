@@ -35,27 +35,6 @@
 #include "terrain.h"
 #include "viewchar.h"
 
-void maintain_steam_barrier()
-{
-    maybe_melt_player_enchantments(BEAM_FIRE, 100);
-    you.redraw_armour_class = true;
-    noisy(6, you.pos());
-    if (cloud_at(you.pos()) && cloud_at(you.pos())->type == CLOUD_STEAM)
-        delete_cloud(you.pos());
-    for (adjacent_iterator ai(you.pos()); ai; ++ai)
-        if (!cell_is_solid(*ai) && !cloud_at(*ai))
-            place_cloud(CLOUD_STEAM, *ai, 1 + random2(6), &you);
-}
-
-spret cast_steam_barrier(int power, bool fail)
-{
-    fail_check();
-    you.duration[DUR_STEAM_BARRIER] = 60 + power + random2(max(1, power));
-    mpr("You begin emitting steam!");
-    maintain_steam_barrier();
-    return spret::success;
-}
-
 spret cast_putrefaction(monster* target, int pow, bool fail)
 {
     fail_check();

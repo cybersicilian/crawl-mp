@@ -1037,12 +1037,6 @@ namespace quiver
             || spell == SPELL_FOXFIRE; // not a direct attack, but has sensible autofight behavior
     }
 
-    bool can_quick_cast(spell_type spell)
-    {
-        return is_valid_spell(spell) && is_autofight_combat_spell(spell)
-            && !_spell_needs_manual_targeting(spell);
-    }
-
     struct spell_action : public action
     {
         spell_action(spell_type s = SPELL_NO_SPELL)

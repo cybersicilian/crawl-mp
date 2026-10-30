@@ -1,5 +1,0 @@
-{
-  "exitCode": 75,
-  "output": "Host slot is occupied: {\"runId\": \"2bafd562-4663-4bea-8724-2e5a4af492c8\", \"owner\": \"codex/01a15544-7afa-7e53-92a3-6ed4bfa99c02\", \"label\": \"DCSS layout and native menu acceptance\", \"requestId\": \"863c58fe96dac07c5f0ef818765aa4b1c4cc4fa3207f86e47cc7e06b8afa52e6\", \"status\": \"reserved\", \"reservedAt\": 1792432585.031528}\n",
-  "nativeCommandLaunched": false
-}

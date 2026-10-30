@@ -1,42 +1,4 @@
 %%%%
-Invoke Smite ability
-
-Call down a smite on a visible enemy. A successful invocation temporarily
-drains maximum health; the lost maximum health recovers with experience.
-%%%%
-Charm Monsters ability
-
-Attempt to charm hostile, thinking creatures in sight. Creatures can resist
-with willpower. The effort leaves you exhausted, preventing another use until
-you recover.
-%%%%
-Burialize Weapon ability
-
-Bind your wielded weapon in your memories and enhance it according to its
-base damage. This temporarily drains maximum health, which recovers as you
-gain experience. The binding prevents removing the weapon until released.
-%%%%
-Release Buried Weapon ability
-
-Release the Wight's binding from your wielded weapon, removing its burial
-enhancement. Any curse that was already on the weapon remains.
-%%%%
-Passwall ability
-
-Pass through a nearby wall or tree using an innate magic that costs one magic
-point. The passage takes time, and thicker barriers take longer to traverse.
-%%%%
-Molt ability
-
-Spend one molting opportunity to recover health and clear poison and
-confusion. Molting takes five turns and can be interrupted; a new opportunity
-is earned at each new experience level.
-%%%%
-Crab Walk ability
-
-For ten turns after escaping a broken shell, scuttle to a visible square in
-an L shape: two spaces in one direction and one at a right angle.
-%%%%
 No ability ability
 
 If you get this description, it is a bug.
@@ -545,11 +507,6 @@ that increases with Spellcasting skill.
 Forget Spell ability
 
 Removes a known spell from memory, so as to free memory to learn others.
-%%%%
-Delete Spell ability
-
-Removes an engraved spell from memory, freeing space for another. Rewriting the
-automaton's memory temporarily drains its maximum health.
 %%%%
 Divine Exegesis ability
 
@@ -1273,17 +1230,13 @@ Choose a wand of flame with six charges, iceblast with three, or paralysis with
 three. This finite gift is available once per character. Cancelling the choice
 leaves the offer available for later.
 %%%%
-Prayer of Fellowship ability
+Invoke Pantheon Convergence ability
 
-Offers a prayer to Zin, Elyvilon or The Shining One for faithful companions.
-The supplicant and living worshippers of the good gods in clear sight regain
-5 to (5 + half Invocations) HP and regenerate health for 5 + Invocations/3
-turns. Worshippers under penance cannot join the prayer. It cannot heal through
-Death's Door, restore magic, grant another god's powers or harm unbelievers.
-
-Available only in multiplayer, from three stars of piety. A living companion
-who serves one of the good gods and is free of penance must be in clear sight.
-Costs 4 MP and piety; Invocations improves the chance of success.
+Calls upon the combined divine authority of your party's gods. Concordant gods
+bestow a harmonious convergence of healing, Might, Brilliance, Resistance, and
+divine wrath against visible foes; Rival or Anathema gods unleash a violent
+Eclipse Crossfire that blasts every enemy in sight at the cost of minor divine
+backlash. In solo play, channels a focused avatar surge from your patron deity.
 %%%%
 Lay on Hands & Intervene ability
 
@@ -1359,8 +1312,7 @@ Assimilate
 Consume one chosen inventory item over five of your own turns and retain all
 its extracted properties together in one memory slot. Items need not fit your
 body. Remove worn items before actively assimilating them.
-A random empty unlocked slot fills; otherwise your oldest whole memory is replaced.
-Equipment is only consumed by this ability, never passively by wearing or using it.
+An empty slot fills first; otherwise your oldest whole memory is replaced.
 Memories last until overwritten. Slots unlock at XL 1, 3, 7, 13, 19 and 25.
 Shapeshifting scales numeric bonuses when applied, improving existing memories
 as the skill grows. Qualitative traits such as cleaving remain intact.
@@ -1389,7 +1341,7 @@ action. Overweave is not part of this ability.
 %%%%
 Chain Lash ability
 
-Strike one visible hostile within four tiles with a bodily chain. A successful physical hit deals 1d(5 + XL/3) damage before armour and may tether an eligible body, even if armour absorbs all the damage. The original distance sets the chain's reach; the foe can move within it and still attack or cast. When your movement pulls it beyond that reach, a Strength check determines whether you keep your grip. Success lengthens the tether to the new distance; failure releases it. Higher current Strength and smaller stretches improve your chance. Lash lasts eight, twelve or sixteen standard turns at XL1, XL7 or XL13. One chain can be maintained at a time. A miss or ended hold begins five turns of recovery.
+Strike one visible hostile within four tiles with a bodily chain. A successful physical hit deals 1d(5 + XL/3) damage before armour and may tether an eligible body, even if armour absorbs all the damage. The original distance becomes the chain's maximum length; the foe can move within it and still attack or cast. Lash lasts eight, twelve or sixteen standard turns at XL1, XL7 or XL13. One chain can be maintained at a time. A miss or ended hold begins five turns of recovery.
 %%%%
 Reel In ability
 
@@ -1401,7 +1353,7 @@ Replace your mobile tether with a fixed anchor at its target's current solid-flo
 %%%%
 Release Chain ability
 
-Release your one living chain instantly and begin the same five-turn recovery as any other ending. Moving beyond a mobile tether's reach makes a Strength check to keep your grip; a failed check releases it. Releasing never resets or shortens recovery.
+Release your one living chain instantly and begin the same five-turn recovery as any other ending. Walking beyond a mobile tether's reach releases it automatically. Releasing never resets or shortens recovery.
 %%%%
 Profane Altar ability
 
@@ -1411,10 +1363,45 @@ Invoke Elder Rites ability
 
 At XL9, XL15 and XL21, complete one short two-wave encounter to strengthen all your stolen benefits. Begin on safe open ground. The second wave arrives after four standard turns without waiting for the first wave to die. Trial actors grant no rewards. Killing or permanently banishing every trial actor wins; pacification, conversion and dismissal do not. Leaving the floor abandons the attempt, preserving completed rites. Only one party rite can be active on a floor.
 %%%%
-Step Behind ability
+Burialize Weapon ability
 
-Blink to the highlighted square immediately beyond a visible enemy. The square
-must be visible and clear. This costs 2 MP (or 2 HP for health-powered casters)
-and shares Blink's cooldown for five normal-speed turns. Stasis and the Orb's
-interference prevent the move.
+Bind your wielded weapon in your memories and enhance it according to its
+base damage. This temporarily drains maximum health, which recovers as you
+gain experience. The binding prevents removing the weapon until released.
 %%%%
+Charm Monsters ability
+
+Attempt to charm hostile, thinking creatures in sight. Creatures can resist
+with willpower. The effort leaves you exhausted, preventing another use until
+you recover.
+%%%%
+Crab Walk ability
+
+For ten turns after escaping a broken shell, scuttle to a visible square in
+an L shape: two spaces in one direction and one at a right angle.
+%%%%
+Delete Spell ability
+
+Removes an engraved spell from memory, freeing space for another. Rewriting the
+automaton's memory temporarily drains its maximum health.
+%%%%
+Invoke Smite ability
+
+Call down a smite on a visible enemy. A successful invocation temporarily
+drains maximum health; the lost maximum health recovers with experience.
+%%%%
+Molt ability
+
+Spend one molting opportunity to recover health and clear poison and
+confusion. Molting takes five turns and can be interrupted; a new opportunity
+is earned at each new experience level.
+%%%%
+Passwall ability
+
+Pass through a nearby wall or tree using an innate magic that costs one magic
+point. The passage takes time, and thicker barriers take longer to traverse.
+%%%%
+Release Buried Weapon ability
+
+Release the Wight's binding from your wielded weapon, removing its burial
+enhancement. Any curse that was already on the weapon remains.

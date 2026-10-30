@@ -1,32 +1,5 @@
 # Stats: gameplay statistics and reference encyclopedia
 
-## Website organization and monster KDR
-
-The dashboard leads with server totals and linked highlights. Collection tables
-separate server records, reference mechanics, and win/score associations using
-optional remembered views. Every column remains available without JavaScript.
-Account, mode, date, wizard and analytical-stage filters remain URL based;
-advanced date/wizard controls open automatically when active. The Chronicle has
-immediate status/type filters alongside text search, with its view remembered.
-
-**Mob KDR is heroes slain divided by times slain by heroes**, from the monster's
-perspective, over the selected recorded population. Both counts appear beside
-the ratio. A positive numerator with no recorded deaths displays `∞`; no kills
-or deaths displays `—`; zero kills with recorded deaths displays `0`. These are
-recorded totals, not encounter or survival odds. Alias resolution happens before
-aggregation, and the same filters apply to both counts.
-
-KDR cells in `/api/stats/monsters` have `numerator`, `denominator`, nullable
-`value`, `state` (`finite`, `unbounded`, `unobserved`), `text` and `sort` fields.
-Unbounded values use the string `Infinity` as a sort token, never non-standard
-JSON numbers. The generic ratio projection lives in `stats_metrics.py`.
-
-Shared resource links are scoped to archive pages and the lobby. Website-only
-releases preserve the installed native executable and all game assets; they
-must not pull in unrelated local game or HUD changes.
-
-## Sources and records
-
 `/stats` is a read-only section of the WebTiles site with two halves:
 
 1. **Gameplay stats** aggregated from every game played on this server
@@ -34,7 +7,7 @@ must not pull in unrelated local game or HUD changes.
 2. **Reference stats** dumped from the engine's own data tables, so every fork
    change (new monsters, items, species, jobs, spells...) is reflected exactly.
 
-The overview includes a **Best runs leaderboard**: the top 25 completed hero
+The overview starts with a **Best runs leaderboard**: the top 25 completed hero
 runs by recorded score, highest first. Equal scores share a rank, with newer
 runs first. Solo and party heroes are listed individually, using the existing
 game records and expedition links. Account, mode and date filters apply;

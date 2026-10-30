@@ -79,7 +79,7 @@
 :is(.party-mp-fill, .mp-bar .party-bar-fill) { height: 100%; background: var(--tt-mp-liquid); }
 .party-bar-label { font: 9px/1 var(--tt-font-mono); color: #fff4dd; text-shadow: 0 1px 2px #000, 0 0 2px #000; }
 .party-buff-strip { gap: 3px; align-items: center; margin: 3px 0 2px; }
-.party-buff-pill:not(.status-icon-frame) {
+.party-buff-pill {
     display: inline-flex;
     align-items: center;
     gap: 2px;
@@ -93,16 +93,16 @@
     white-space: nowrap;
     cursor: help;
 }
-:is(.party-buff-pill:not(.status-icon-frame).is-buff, .party-buff-pill:not(.status-icon-frame).is-ready, .party-buff-pill:not(.status-icon-frame).is-aut-ready) {
+:is(.party-buff-pill.is-buff, .party-buff-pill.is-ready, .party-buff-pill.is-aut-ready) {
     background: linear-gradient(180deg, #ffffff12, transparent), #223728;
     border-color: #64815b;
 }
-.party-buff-pill:not(.status-icon-frame).is-bad { background: linear-gradient(180deg, #a8453a, #57201e); border-color: #bf7560; }
-:is(.party-buff-pill:not(.status-icon-frame).is-speed, .party-buff-pill:not(.status-icon-frame).is-aut-recov) { background: #4e3421; border-color: #ad8748; }
-.party-buff-pill:not(.status-icon-frame).is-passive { background: #23373d; border-color: #6e909a; }
-.party-buff-pill:not(.status-icon-frame).is-trait { background: #3b2d1b; border-color: #a58a51; }
-.party-buff-pill:not(.status-icon-frame).is-clickable { cursor: pointer; }
-.party-buff-pill:not(.status-icon-frame).is-clickable:hover { border-color: var(--tt-brass-light); }
+.party-buff-pill.is-bad { background: linear-gradient(180deg, #a8453a, #57201e); border-color: #bf7560; }
+:is(.party-buff-pill.is-speed, .party-buff-pill.is-aut-recov) { background: #4e3421; border-color: #ad8748; }
+.party-buff-pill.is-passive { background: #23373d; border-color: #6e909a; }
+.party-buff-pill.is-trait { background: #3b2d1b; border-color: #a58a51; }
+.party-buff-pill.is-clickable { cursor: pointer; }
+.party-buff-pill.is-clickable:hover { border-color: var(--tt-brass-light); }
 :is(.party-member-footer, .party-card-foot) { gap: 4px; font-size: 9px; }
 :is(.party-weapon-text, .party-wpn) { color: var(--tt-muted); }
 .party-speed-meta { font: 9px/1.3 var(--tt-font-mono); color: var(--tt-vellum-aged); }

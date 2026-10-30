@@ -8,7 +8,7 @@
 
 namespace
 {
-void assimilate_unique(int id, int inventory_slot = 0, equipment_slot slot = SLOT_WEAPON)
+void dissolve_unique(int id, int inventory_slot = 0, equipment_slot slot = SLOT_WEAPON)
 {
     auto& item = you.inv[inventory_slot];
     item.quantity = 1;
@@ -18,14 +18,14 @@ void assimilate_unique(int id, int inventory_slot = 0, equipment_slot slot = SLO
     item.pos = ITEM_IN_INVENTORY;
     you.equipment.items.emplace_back(inventory_slot, slot, false, false, false);
     you.equipment.update();
-    assimilate_item(inventory_slot);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE_FALSE(you.inv[inventory_slot].defined());
 }
 }
 TEST_CASE_METHOD(memory_fixture, "Unique absorption retains native abilities without a carrier",
                  "[oozle-memory][oozle][native-effects]")
 {
-    assimilate_unique(UNRAND_OLGREB);
+    dissolve_unique(UNRAND_OLGREB);
     REQUIRE(you.equipment.items.empty());
     CHECK(you.unrand_equipped(UNRAND_OLGREB));
     CHECK(player_has_ability(ABIL_EVOKE_OLGREB));
@@ -49,7 +49,7 @@ TEST_CASE_METHOD(memory_fixture, "Unique absorption retains native abilities wit
 TEST_CASE_METHOD(memory_fixture, "Absorbed scripts mutate and retain their own item state",
                  "[oozle-memory][oozle][native-effects]")
 {
-    assimilate_unique(UNRAND_THERMIC_ENGINE);
+    dissolve_unique(UNRAND_THERMIC_ENGINE);
     auto* source = oozle::unrand_source(UNRAND_THERMIC_ENGINE);
     REQUIRE(source);
     CHECK(source->plus == 2);
@@ -79,7 +79,7 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed permanent growth survives other memor
                  "[oozle-memory][oozle][native-effects]")
 {
     init_monsters();
-    assimilate_unique(UNRAND_WYRMBANE);
+    dissolve_unique(UNRAND_WYRMBANE);
     auto* source = oozle::unrand_source(UNRAND_WYRMBANE);
     REQUIRE(source);
     CHECK(source->plus == 8);
@@ -94,7 +94,7 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed permanent growth survives other memor
     you.experience_level = 3;
     carry(1, "ring of protection from fire").rnd = 1;
     wear(1, SLOT_RING);
-    assimilate_item(1);
+    oozle::digest_equipment(oozle::digestion_aut);
     source = oozle::unrand_source(UNRAND_WYRMBANE);
     REQUIRE(source);
     CHECK(source->plus == 9);
@@ -108,15 +108,14 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed permanent growth survives other memor
     REQUIRE(source);
     CHECK(source->plus == 9);
 }
-TEST_CASE_METHOD(memory_fixture, "Worn equipment never replaces an assimilated unique power",
+TEST_CASE_METHOD(memory_fixture, "Full memories preserve unique powers during passive digestion",
                  "[oozle-memory][oozle][native-effects]")
 {
-    assimilate_unique(UNRAND_OLGREB);
+    dissolve_unique(UNRAND_OLGREB);
     CHECK(player_has_ability(ABIL_EVOKE_OLGREB));
     carry(0, "ring of protection from fire");
     wear(0, SLOT_RING);
-    you.time_taken = 3000;
-    oozle::world_effects();
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.inv[0].defined());
     CHECK(item_is_equipped(you.inv[0]));
     CHECK(you.unrand_equipped(UNRAND_OLGREB));
@@ -148,21 +147,21 @@ TEST_CASE_METHOD(memory_fixture, "Native source techniques remain usable by the 
 {
     carry(0, "quick blade");
     wear(0, SLOT_WEAPON);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(oozle::inherited_strikes(nullptr) == 2);
     auto& dagger = carry(1, "dagger");
     CHECK(oozle::inherited_strikes(&dagger) == 2);
     you.experience_level = 3;
     carry(2, "tower shield");
     wear(2, SLOT_OFFHAND);
-    assimilate_item(2);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.shield_block_limit() == 4);
 }
 
 TEST_CASE_METHOD(memory_fixture, "Absorbed projectile scripts apply their native effect",
                  "[oozle-memory][oozle][native-effects]")
 {
-    assimilate_unique(UNRAND_DAMNATION);
+    dissolve_unique(UNRAND_DAMNATION);
     bolt beam;
     oozle::launch_effects(beam);
     CHECK(beam.name == "damnation bolt");
@@ -177,7 +176,7 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed native brand passives and natural att
     auto& weapon = carry(0, "dagger");
     weapon.brand = SPWPN_ANTIMAGIC;
     wear(0, SLOT_WEAPON);
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     CHECK(you.damage_brand(nullptr) == SPWPN_ANTIMAGIC);
     CHECK(you.wearing_ego(OBJ_WEAPONS, SPWPN_ANTIMAGIC) == 1);
     auto& replacement = carry(1, "dagger");
@@ -188,7 +187,7 @@ TEST_CASE_METHOD(memory_fixture, "Absorbed native brand passives and natural att
 TEST_CASE_METHOD(memory_fixture, "A physical duplicate takes one native callback route",
                  "[oozle-memory][oozle][native-effects]")
 {
-    assimilate_unique(UNRAND_THERMIC_ENGINE);
+    dissolve_unique(UNRAND_THERMIC_ENGINE);
     auto* remembered = oozle::unrand_source(UNRAND_THERMIC_ENGINE);
     REQUIRE(remembered);
     you.inv[1] = *remembered;
@@ -217,7 +216,7 @@ TEST_CASE_METHOD(memory_fixture, "Neutral equipment remains neutral when absorbe
     wear(0, SLOT_RING);
     const int strength = you.strength();
     CHECK(oozle::eligibility(carry(1, "hat")).empty());
-    assimilate_item(0);
+    oozle::digest_equipment(oozle::digestion_aut);
     REQUIRE(oozle::memories().stored.size() == 1);
     CHECK(you.strength() == strength);
     CHECK(oozle::native_bonus(you, OBJ_JEWELLERY, RING_STRENGTH) == 0);

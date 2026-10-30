@@ -29,7 +29,7 @@ async function geometry(width, height) {
             const r = document.getElementById(id).getBoundingClientRect();
             return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
         };
-        return { canvas: rect('dungeon'), viewport: rect('dungeon_viewport'), header: rect('party_turn_banner'), sidebar: rect('right_column'),
+        return { canvas: rect('dungeon'), header: rect('party_turn_banner'), sidebar: rect('right_column'),
             dock: rect('dcss_quick_dock'), log: rect('message_pane'), party: rect('party_hud'),
             horizontalOverflow: document.documentElement.scrollWidth > innerWidth,
             transform: getComputedStyle(document.getElementById('dungeon')).transform,
@@ -44,11 +44,9 @@ async function geometry(width, height) {
     evidence[width + 'x' + height] = result;
     assert.equal(result.horizontalOverflow, false);
     assert.equal(result.transform, 'none', 'Canvas cannot be CSS scaled');
-    assert(result.viewport.y >= result.header.bottom - 1, 'Header owns space above dungeon');
-    assert(Math.abs(result.viewport.right - result.sidebar.x) < 1, 'Dungeon fills the width beside the sidebar');
-    assert(Math.abs(result.viewport.bottom - result.dock.y) < 1, 'Dungeon fills the height above the dock');
-    assert(result.canvas.y <= result.viewport.y - 12 && result.canvas.right >= result.viewport.right + 12,
-        'Rendered tiles bleed underneath surrounding panels');
+    assert(result.canvas.y >= result.header.bottom - 1, 'Header owns space above dungeon');
+    assert(result.canvas.right <= result.sidebar.x + 1, 'Dungeon cannot overlap sidebar');
+    assert(result.canvas.bottom <= result.dock.y + 1, 'Dock cannot overlap dungeon');
     assert(result.dock.bottom <= result.log.y + 1, 'Log cannot overlap actions');
     assert(result.log.bottom <= height + 1 && result.log.height >= 60, 'Keep messages readable');
     assert.deepEqual(result.clippedButtons, [], 'Every action label fits horizontally');
@@ -101,7 +99,7 @@ async function geometry(width, height) {
     await shot('controlled-initiative-balances');
     await page.locator('#party_hud').screenshot({ path: path.join(output, 'controlled-initiative-roster.png') });
     await meters.nth(1).focus();
-    await page.waitForFunction(() => document.querySelector('#dcss_rich_tooltip')?.textContent.includes('Recovering with catch-up time'));
+    await page.waitForFunction(() => document.querySelector('#dcss_rich_tooltip')?.textContent.includes('4 aut banked'));
     await page.evaluate(() => {
         window.initiativeFocused = document.activeElement;
         const state = structuredClone(window.crawl_party.state);
@@ -109,9 +107,7 @@ async function geometry(width, height) {
         window.renderInitiativeFixture(state);
     });
     assert(await page.evaluate(() => document.activeElement === window.initiativeFocused));
-    assert((await page.locator('#dcss_rich_tooltip').textContent()).includes('Recovering with catch-up time'));
-    assert.equal(await meters.nth(1).locator('.initiative-bank i').evaluate(node => node.style.width), '70%',
-        'Live clock changes update the visual fill while preserving the qualitative label');
+    assert((await page.locator('#dcss_rich_tooltip').textContent()).includes('14 aut banked'));
     await meters.nth(1).press('ArrowRight');
     await page.evaluate(() => {
         window.renderInitiativeFixture(window.initiativeOriginal);

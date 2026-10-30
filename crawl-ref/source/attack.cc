@@ -6,7 +6,6 @@
  */
 
 #include "AppHdr.h"
-#include "elemental-weapon.h"
 #include "god-vellum.h"
 #include "oozle-memory-effects.h"
 #include "oozle-memory.h"
@@ -217,7 +216,7 @@ int attack::calc_pre_roll_to_hit(bool random)
                 mhit += property(*weapon, PWPN_HIT);
         }
 
-        mhit += weapon ? oozle::body_property(ARTP_BASE_ACC)
+        mhit += weapon ? oozle::body_property(ARTP_BASE_ACC) - oozle::weapon_corrosion_penalty(*weapon)
                        : oozle::unarmed_property(ARTP_BASE_ACC);
 
         // slaying bonus
@@ -864,7 +863,8 @@ int attack::get_weapon_plus()
     {
         return 0;
     }
-    return effective_item_enchantment(*weapon);
+    return effective_item_enchantment(*weapon)
+        - (stat_source().is_player() ? oozle::weapon_corrosion_penalty(*weapon) : 0);
 }
 
 static int _core_apply_slaying(int damage, int plus)
@@ -882,7 +882,7 @@ int attack::player_apply_slaying_bonuses(int damage, bool aux)
 {
     int damage_plus = 0;
     if (!aux && using_weapon())
-        damage_plus = get_weapon_plus() + elemental_weapon::damage_bonus(*attacker, weapon);
+        damage_plus = get_weapon_plus();
 
     const bool throwing = wpn_skill == SK_THROWING;
     const bool ranged = throwing
@@ -1009,7 +1009,10 @@ int attack::adjusted_weapon_damage() const
         wdamage = wdamage + target_debuff_count() * 2; // up to 66% of base 6 damage!
 
     if (stat_source().is_player() && weapon)
+    {
+        wdamage = wdamage * oozle::weapon_damage_percent(*weapon) / 100;
         wdamage += oozle::body_property(ARTP_BASE_DAM);
+    }
     return brand_adjust_weapon_damage(wdamage, damage_brand, true);
 }
 

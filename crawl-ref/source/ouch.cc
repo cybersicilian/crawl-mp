@@ -1405,6 +1405,18 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
     else if (you.petrifying())
         dam = dam * 10 / 15;
 
+    // Pain and monster smiting use BEAM; divine smites have their own methods.
+    const bool spell_damage = death_type == KILLED_BY_BEAM
+                              || death_type == KILLED_BY_TSO_SMITING
+                              || death_type == KILLED_BY_BEOGH_SMITING;
+    if (you.duration[DUR_SANCTUARY_CHORUS] > 0 && dam > 1
+        && (death_type == KILLED_BY_POISON
+            || spell_damage
+            || (aux && (strstr(aux, "torment") || strstr(aux, "damnation")))))
+    {
+        dam = max(1, dam * 70 / 100);
+    }
+
     if (dam > 0 && _is_real_death(death_type)
         && death_type != KILLED_BY_POISON && death_type != KILLED_BY_ZOT)
     {
@@ -1940,7 +1952,7 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
     }
 
     if (party::is_enabled() && _is_real_death(death_type)
-        && (party::prepare_survivor_for_death(party::active_slot())
+        && (party::any_other_player_alive(party::active_slot())
             || party::try_last_stand_revive(party::active_slot())))
     {
         you.deaths++;

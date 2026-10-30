@@ -1,6 +1,0 @@
-# Preserve local receipts at their recorded host-gate paths.
-attempt-*/
-run*.py
-changes.patch
-implemented-files.json
-summary.json

@@ -4000,7 +4000,7 @@ static bool _make_monster_angry(const monster* mon, monster* targ, bool actual)
 
     if (you.can_see(*mon))
     {
-        if (mons_genus(mon->type) == MONS_KILLER_BEE && (targ->type == MONS_KILLER_BEE ||
+        if (mon->type == MONS_QUEEN_BEE && (targ->type == MONS_KILLER_BEE ||
                                             targ->type == MONS_MELIAI))
         {
             mprf("%s calls on %s to defend %s!",
@@ -4023,18 +4023,17 @@ static bool _incite_monsters(const monster* mon, bool actual)
     // Only things both in LOS of the inciter and within radius 3.
     const int radius = 3;
     int goaded = 0;
-    const bool bee_inciter = mons_genus(mon->type) == MONS_KILLER_BEE;
     for (monster_near_iterator mi(mon->pos(), LOS_NO_TRANS); mi; ++mi)
     {
         // XXX: Ugly hack to skip the spellcaster rules for meliai.
-        if (*mi == mon || !mi->needs_berserk(!bee_inciter))
+        if (*mi == mon || !mi->needs_berserk(mon->type != MONS_QUEEN_BEE))
             continue;
 
         // Cannot goad other moths of wrath!
         if (mon->type == MONS_MOTH_OF_WRATH
             && mi->type == MONS_MOTH_OF_WRATH
         // Queen bees can only incite bees.
-            || bee_inciter
+            || mon->type == MONS_QUEEN_BEE
                && mi->type != MONS_KILLER_BEE &&
                   mi->type != MONS_MELIAI)
         {
@@ -6563,12 +6562,6 @@ static branch_summon_pair _invitation_summons[] =
       {  1,   1,   80, FLAT, MONS_BLACK_MAMBA },
       {  1,   1,   40, FLAT, MONS_NAGA_WARRIOR },
       {  1,   1,   20, FLAT, MONS_MANA_VIPER },
-    }},
-  { BRANCH_BURROWS,
-    {
-      {  1,   1,   80, FLAT, MONS_BURROWING_BEAST },
-      {  1,   1,   60, FLAT, MONS_CRAG_BOAR },
-      {  1,   1,   20, FLAT, MONS_SHALE_DRAKE },
     }},
   { BRANCH_SPIDER,
     { // Spider enemies

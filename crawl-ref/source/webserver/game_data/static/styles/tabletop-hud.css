@@ -107,7 +107,7 @@
 #minimap_block { box-shadow: var(--tt-recess), inset 0 0 0 2px #d9b15f20; }
 #monster_list { padding: 5px 8px; }
 /* Keep fg0..fg15 and custom_text_colours owned by DCSS. Relief helps dark ink. */
-:is(#monster_list, #message_pane, #stats_status_lights, .party-buff-pill:not(.status-icon-frame)) {
+:is(#monster_list, #message_pane, #stats_status_lights, .party-buff-pill) {
     text-shadow: 0 1px 1px #000, 0 0 1px #e7d2a480;
 }
 #tooltip { background: var(--tt-hide); border-color: var(--tt-brass); }

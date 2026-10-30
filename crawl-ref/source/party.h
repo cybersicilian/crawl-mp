@@ -176,6 +176,11 @@ namespace party
                                    duration_type dur, int dur_turns,
                                    const char *msg_prefix = nullptr,
                                    bool cleanse_debuffs = false);
+    void debuff_or_harm_party_member(int slot, int hp_drain, int mp_drain,
+                                     duration_type debuff_dur = NUM_DURATIONS,
+                                     int debuff_turns = 0,
+                                     const char *msg_prefix = nullptr,
+                                     int piety_loss = 0);
     void apply_party_aura_buff(duration_type dur, int turns,
                                int radius = LOS_RADIUS,
                                bool include_active = false,
@@ -188,12 +193,9 @@ namespace party
 
     // Downed / Ghost Spectator & Revival mechanics
     bool is_player_downed(int slot);
-    // Resolve pending extra lives for inactive party members on this floor.
-    bool resolve_pending_revivals();
     void restore_downed_state();
     void set_player_downed(int slot, bool downed);
     bool any_other_player_alive(int excluding_slot);
-    bool prepare_survivor_for_death(int falling_slot);
     bool any_player_alive();
     void revive_downed_players(bool on_floor_transition, int hp_drain_percent = 35);
     // When the last standing player falls while teammates are downed, revive

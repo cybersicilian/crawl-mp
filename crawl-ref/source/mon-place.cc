@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 #include "level-time.h"
 
 #include "mon-place.h"
@@ -668,9 +667,6 @@ monster* place_monster(mgen_data mg, bool force_pos, bool dont_place)
     bool chose_ood_monster = place.absdepth() > mg.place.absdepth() + 5;
     if (want_band)
         mg.flags |= MG_PERMIT_BANDS;
-
-    if (!coop_content::enabled() && coop_content::exclusive_monster(mg.cls))
-        return nullptr;
 
     if (mg.cls == MONS_NO_MONSTER || mg.cls == MONS_PROGRAM_BUG)
         return 0;

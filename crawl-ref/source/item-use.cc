@@ -5,7 +5,6 @@
 
 #include "AppHdr.h"
 #include "god-vellum.h"
-#include "coop-content.h"
 #include "oozle-memory-effects.h"
 
 #include "item-use.h"
@@ -2938,13 +2937,6 @@ static spret _run_read_scroll_uncancel(uncancellable_type kind,
  */
 bool read(item_def* scroll, dist *target)
 {
-    if (scroll && !coop_content::enabled()
-        && coop_content::exclusive_item(scroll->base_type, scroll->sub_type))
-    {
-        mpr("This scroll requires a multiplayer game.");
-        return false;
-    }
-
     bool god_forbids = false;
     string failure_reason = cannot_read_item_reason(scroll, true, false,
                                                     &god_forbids);

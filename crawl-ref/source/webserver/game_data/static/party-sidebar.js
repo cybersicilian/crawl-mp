@@ -23,8 +23,7 @@ function ($, inventory, model, properties, help, frameUpdate) {
                 "data-tip-title": definition.title, "data-tip-body": definition.body,
                 "data-tip-meta": known ? "Current native value: " + text : "Current value unavailable",
                 "data-value-state": known ? value < 0 ? "negative" : "known" : "unknown" })
-            .append(definition.key ? properties.levelIcons(glyph, help.levels(definition, value))
-                : [properties.icon(glyph), $("<span></span>").text(text)])
+            .append(properties.icon(glyph), $("<span></span>").text(text))
             .on("click keydown keypress keyup", isolate);
     }
     function details(hero, controlled) {

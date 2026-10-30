@@ -26,7 +26,6 @@
 #include "describe.h"
 #include "directn.h"
 #include "english.h"
-#include "elemental-weapon.h"
 #include "env.h"
 #include "evoke.h"
 #include "exercise.h"
@@ -38,8 +37,6 @@
 #include "god-passive.h" // passive_t::shadow_spells
 #include "hints.h"
 #include "invent.h"
-#include "icicle-burst.h"
-#include "false-image.h"
 #include "items.h"
 #include "item-prop.h"
 #include "item-use.h"
@@ -72,8 +69,6 @@
 #include "spl-clouds.h"
 #include "spl-damage.h"
 #include "spl-goditem.h"
-#include "spl-kimjoy.h"
-#include "spl-shackle.h"
 #include "spl-miscast.h"
 #include "spl-monench.h"
 #include "spl-other.h"
@@ -557,8 +552,6 @@ int raw_spell_fail(spell_type spell, bool enkindled)
         chance2 += 10;
 
     chance2 += you.duration[DUR_VERTIGO] ? 7 : 0;
-    if (you.form == transformation::scorpion)
-        chance2 += 10;
 
     // Apply the effects of Vehumet and items of wizardry.
     chance2 = _apply_spellcasting_success_boosts(spell, chance2);
@@ -650,8 +643,6 @@ static int _spell_enhancement(spell_type spell)
 {
     const spschools_type typeflags = get_spell_disciplines(spell);
     int enhanced = you.form == transformation::shadow ? -2 : 0;
-    if (you.duration[DUR_STEAM_BARRIER])
-        --enhanced;
 
     if (typeflags & spschool::conjuration)
         enhanced += player_spec_conj();
@@ -1437,14 +1428,6 @@ unique_ptr<targeter> find_spell_targeter(spell_type spell, int pow, int range)
 {
     switch (spell)
     {
-    case SPELL_ICICLE_BURST:
-        return make_unique<icicle_burst_targeter>(&you, pow, range);
-    case SPELL_OLGREBS_LAST_MERCY:
-        return make_unique<targeter_smite>(&you, range, 0, 1);
-    case SPELL_MANA_RUPTURE:
-        return make_unique<targeter_beam>(&you, range, ZAP_MANA_RUPTURE, spell, pow, 1, 1);
-    case SPELL_BLIGHT:
-        return make_unique<targeter_beam>(&you, range, ZAP_BLIGHT, spell, pow, 2, 2);
     case SPELL_FIREBALL:
     case SPELL_ICEBLAST:
     case SPELL_FASTROOT:
@@ -2562,8 +2545,6 @@ spret your_spells(spell_type spell, int powc, bool actual_spell,
     case spret::success:
     {
         _apply_post_zap_effect(spell, orig_target_pos);
-        if (actual_spell && spell != SPELL_ELEMENTAL_WEAPON)
-            elemental_weapon::on_spell_cast(spell);
 
         const monster* victim = monster_at(orig_target_pos);
         if (actual_spell && original_mid && orig_target_pos != you.pos()
@@ -2654,39 +2635,6 @@ static spret _do_cast(spell_type spell, int powc, const dist& spd,
 
     switch (spell)
     {
-    case SPELL_SHACKLE:
-        return cast_shackle(powc, target, fail);
-    case SPELL_FALSE_IMAGE:
-        return cast_false_image(powc, beam.target, god, fail);
-    case SPELL_ICICLE_BURST:
-        return cast_icicle_burst(powc, target, fail);
-    case SPELL_STEAM_BARRIER:
-        return cast_steam_barrier(powc, fail);
-    case SPELL_ELEMENTAL_WEAPON:
-        return elemental_weapon::cast(powc, fail);
-    case SPELL_ERINGYAS_ROOTSPIKE:
-        return cast_eringyas_rootspike(powc, target, fail);
-    case SPELL_OLGREBS_LAST_MERCY:
-        return cast_olgrebs_last_mercy(powc, target, fail);
-    case SPELL_SCORPION_FORM:
-    {
-        if (!check_transform_into(transformation::scorpion))
-            return spret::abort;
-        fail_check();
-        const bool had_power = you.props.exists("scorpion_form_power");
-        const int previous_power = had_power ? you.props["scorpion_form_power"].get_int() : 0;
-        you.props["scorpion_form_power"] = powc;
-        const int duration = min(100, 20 + random2(powc) + random2(powc));
-        if (!transform(duration, transformation::scorpion))
-        {
-            if (had_power)
-                you.props["scorpion_form_power"] = previous_power;
-            else
-                you.props.erase("scorpion_form_power");
-            return spret::abort;
-        }
-        return spret::success;
-    }
     case SPELL_FREEZE:
         return cast_freeze(powc, monster_at(target), fail);
 

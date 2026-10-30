@@ -1,9 +1,5 @@
 # Multiplayer hero control
 
-The local [Jev AI-player extension](ai-players.md) adds reserved AI seats and
-native-validated action/prompt decisions. Its live acceptance and deployment
-remain separate from the historical human-player release described below.
-
 The current mechanics contract is documented in
 [Multiplayer mechanics](multiplayer-mechanics.md). It records the selected
 human-only multiplayer roster, shared-terrain/personal-vision rules and
@@ -48,19 +44,6 @@ engine responsibilities. This does not add simultaneous independent native
 menus or independent floor/map streams. Reservations survive browser reconnects
 within a running expedition; the existing launch/resume mechanism supplies the
 member map when creating a game process.
-
-Personal browser inspection stays available during initiative recovery and
-while the engine is busy. Inventory (`i`), known powers (`I`, `z`, `a`), skills,
-traits and character records use the existing hero snapshots when native input
-is unavailable. Item inspection shows its known description in a local dialog;
-using, equipping, dropping, trading and casting retain their action checks.
-The off-turn Map (`X`) view copies the connection's explored minimap at opening,
-and Message History (`Ctrl+P`) reads the browser's last 500 game messages. These
-views send no native input, acquire no shared prompt and spend no turns. Normal
-on-turn native inventory, map and history commands keep their existing behavior.
-The game log and expedition chat preserve a reader's visible entry as messages
-arrive. A focused log accepts scrolling keys without sending hero movement;
-closing and reopening chat retains the reading position.
 
 Trading is available from a companion's roster card, the Inventory header and
 the equipment folio. Choose a recipient and give a quantity or the whole stack;

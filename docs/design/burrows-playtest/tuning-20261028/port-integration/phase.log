@@ -1,9 +1,0 @@
-{"runId": "9774d09b-f661-4fc1-a7cb-d6b9a75b2e2e", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS combined curated port and Burrows native contracts", "requestId": "bcf12edce51a1a5abc5090d4c62198614a739d63592defec2dcfd005c41daec7", "status": "reserved", "reservedAt": 1793200811.2961202}
- 
-{"runId": "9774d09b-f661-4fc1-a7cb-d6b9a75b2e2e", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS combined curated port and Burrows native contracts", "requestedAt": 1793200811.324773, "supervisorPid": 8057, "status": "running", "reservation": true, "requestId": "bcf12edce51a1a5abc5090d4c62198614a739d63592defec2dcfd005c41daec7", "startedAt": 1793200811.32505, "workerPid": 8058, "processGroup": 8058}
-Filters: [burrows],[character-trait],[game-modifiers],"select_exactly_one_of_each_lair_group","create_brentry_validity"
-Randomness seeded to: 266399378
-===============================================================================
-All tests passed (1131 assertions in 22 test cases)
-
-{"runId": "9774d09b-f661-4fc1-a7cb-d6b9a75b2e2e", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS combined curated port and Burrows native contracts", "requestedAt": 1793200811.324773, "supervisorPid": 8057, "status": "released", "reservation": true, "requestId": "bcf12edce51a1a5abc5090d4c62198614a739d63592defec2dcfd005c41daec7", "startedAt": 1793200811.32505, "workerPid": 8058, "processGroup": 8058, "exitCode": 0, "finishedAt": 1793200811.359638, "supervisedProcessGroupGone": true, "releasedAt": 1793200811.391904, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/port-integration/closure.json", "releaseEvidenceSha256": "f578d373e18be99a250457693c4fe3f51358e61bd1fb14973746e1a41ffd07c2"}

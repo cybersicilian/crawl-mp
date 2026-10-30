@@ -450,7 +450,7 @@ function ($, model, properties, richText) {
         // 3. Party-Wide RPG Stat Comparison
         if (state && Array.isArray(state.members) && state.members.length > 0) {
             $panelOverview.append($("<div class='party-insp-section-title'>Party RPG Comparison (" + state.members.length + " Hero" + (state.members.length === 1 ? "" : "es") + ")</div>"));
-            var $cmpTable = $("<table id='companion_party_compare' class='party-insp-table companion-party-compare'><thead><tr><th>Hero</th><th>XL</th><th>HP / resource</th><th>AC / EV / SH</th><th>STR / INT / DEX</th><th>Slay &amp; Regen</th><th>Slain</th><th>Top Action</th></tr></thead><tbody></tbody></table>");
+            var $cmpTable = $("<table id='companion_party_compare' class='party-insp-table companion-party-compare'><thead><tr><th>Hero</th><th>XL</th><th>HP / MP</th><th>AC / EV / SH</th><th>STR / INT / DEX</th><th>Slay &amp; Regen</th><th>Slain</th><th>Top Action</th></tr></thead><tbody></tbody></table>");
             var $cmpBody = $cmpTable.find("tbody");
             state.members.forEach(function (hm) {
                 var $tr = $("<tr></tr>").toggleClass("is-selected-hero", hm.slot === m.slot);

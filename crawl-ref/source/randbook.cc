@@ -4,7 +4,6 @@
  **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 #include "game-record.h"
 
 #include "mpr.h"
@@ -107,7 +106,7 @@ spschool matching_book_theme(const vector<spell_type> &forced_spells)
 static bool _agent_spell_filter(int agent, spell_type spell)
 {
     // Only use actual player spells.
-    if (!is_player_book_spell(spell) || !coop_content::spell_available(spell))
+    if (!is_player_book_spell(spell))
         return false;
 
     // Don't include spells a god dislikes, if this is an acquirement

@@ -1,6 +1,0 @@
-{
-  "reservationId": "ba2d1257-147c-4355-a30d-2bea5ef56604",
-  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "Local real-dialog fixture and public live-site acceptance both exited 0. Each awaited browser.close; local fixture exit awaited; gate reports supervised group gone; worker/supervisor PIDs absent. QA preferences were restored and no native game was started."
-}

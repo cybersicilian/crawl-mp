@@ -177,7 +177,7 @@ const root = path.resolve(__dirname, '..');
         await page.addScriptTag({ path: path.join(root, 'game_data/static/party-model.js') });
         await page.evaluate(() => {
             const noop = () => {};
-            Object.assign(window.modules, { comm: { send_message: noop }, client: { is_party_member: () => false, is_watching: () => false }, './dungeon_renderer': {},
+            Object.assign(window.modules, { comm: { send_message: noop }, client: { is_party_member: () => false }, './dungeon_renderer': {},
                 './display': { invalidate: noop, display: noop }, './minimap': { update_overlay: noop, fit_to: noop },
                 './party-inspector': { open: noop, render: noop }, './party-controls': { bind: noop, toggle_drawer: noop },
                 './status-icons': window.modules['status-icons'], './chat-context': { update: noop },

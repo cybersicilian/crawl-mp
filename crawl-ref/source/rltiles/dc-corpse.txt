@@ -382,21 +382,4 @@ bunyip CORPSE_BUNYIP
 %sdir mon/humanoids/demonspawn
 demonspawn CORPSE_DEMONSPAWN
 
-# Burrows corpses use the same native collapse and blood-stain transform.
-%sdir mon/burrows
-%back blood_puddle_red blood_puddle_red1 blood_puddle_red2 blood_puddle_red3 blood_puddle_red4
-burrowing_beast CORPSE_BURROWING_BEAST
-crag_boar CORPSE_CRAG_BOAR
-shale_drake CORPSE_SHALE_DRAKE
-deep_troll_delver CORPSE_DEEP_TROLL_DELVER
-%back blood_green blood_green1 blood_green2 blood_green3 blood_green4
-worldworm CORPSE_WORLDWORM
-gallery_worm CORPSE_GALLERY_WORM
-coil_worm CORPSE_COIL_WORM
-caustic_worm CORPSE_CAUSTIC_WORM
-wax_beetle CORPSE_WAX_BEETLE
-venom_wasp CORPSE_VENOM_WASP
-old_coil CORPSE_OLD_COIL
-vespara CORPSE_VESPARA
-
 %corpse 0

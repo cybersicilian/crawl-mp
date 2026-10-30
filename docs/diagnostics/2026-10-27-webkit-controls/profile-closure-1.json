@@ -1,9 +1,0 @@
-{
-  "reservationId": "69a71557-c269-469a-b36a-cc3d766b2b5b",
-  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/webkit-baseline.json",
-  "browserClosed": true,
-  "passed": false,
-  "failure": "Measurements completed; fixture attempted to open Menu while the native Escape action had already opened it. Browser closed normally after the selector timeout; QA save-on-disconnect is being read back."
-}

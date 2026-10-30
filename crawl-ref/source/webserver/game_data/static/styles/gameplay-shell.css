@@ -1,7 +1,5 @@
 /* Gameplay hierarchy. Canvas pixels and game-state colors remain native. */
 #normal {
-    isolation: isolate;
-    overflow: clip;
     --hud-sidebar-width: clamp(300px, 27vw, 360px);
     --hud-surface: #20251f;
     --hud-raised: #2a3027;
@@ -17,11 +15,6 @@
     scrollbar-width: thin;
 }
 #normal #left_column { height: 100vh; max-height: 100vh; }
-/* Fixed layout bounds; whole tiles bleed behind the surrounding HUD. */
-#normal #dungeon_viewport { position: relative; z-index: 0; flex: 0 0 auto; min-height: 0; }
-#normal #dungeon { position: absolute; display: block; outline: none; }
-#normal #left_column > :not(#dungeon_viewport):not(.hud-floating) { position: relative; z-index: 1; }
-#normal #right_column { z-index: 1; }
 #normal :is(#stats, #party_hud, #monster_list) { width: 100% !important; }
 #normal :is(#stats, #party_hud, #message_pane, #monster_list, #minimap_block,
     #dcss_quick_dock, #party_turn_banner) {
@@ -113,7 +106,7 @@
 #normal .party-member-top { display: block; white-space: normal; margin-bottom: 5px; }
 .party-member-identity { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
 .party-member-timing { margin-left: auto; flex: 0 0 auto; }
-#normal .party-member-timing .party-buff-pill:not(.status-icon-frame) { font-size: 10px; padding: 1px 4px; }
+#normal .party-member-timing .party-buff-pill { font-size: 10px; padding: 1px 4px; }
 #normal .party-member-name {
     display: inline;
     min-width: 0;
@@ -134,7 +127,7 @@
 #normal .party-bar-wrap { height: 16px; border: 0; border-radius: 3px; box-shadow: none; }
 #normal .party-bar-label { font-size: 11px; }
 #normal .party-buff-strip { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 5px; }
-#normal .party-buff-pill:not(.status-icon-frame) { padding: 2px 5px; font-size: 11px; border-radius: 3px; box-shadow: none; }
+#normal .party-buff-pill { padding: 2px 5px; font-size: 11px; border-radius: 3px; box-shadow: none; }
 #normal .party-member-footer { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
 #normal .party-member-equipment { max-width: 100%; font-size: 11px; }
 #normal .party-card-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }

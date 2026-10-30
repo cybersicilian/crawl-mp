@@ -1,6 +1,6 @@
 /* Sign-in, session cookies, account bindings and administrator controls.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], function ($, chat, comm, texturePack, graphics) {
+define(["jquery", "chat", "comm", "graphics-preferences"], function ($, chat, comm, graphics) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
@@ -65,7 +65,6 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             $("#reg_link").show();
             $("#forgot_link").show();
             state.current_user = null;
-            texturePack.bindUser(null);
             graphics.bindUser(null);
             state.admin_user = false;
             api.set_layer("lobby");
@@ -78,8 +77,6 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             api.hide_prompt();
             $("#login_message").html("Logged in as " + username);
             state.current_user = username;
-            texturePack.bindUser(username);
-            // HTTP account settings wait for the matching session cookie.
             graphics.bindUser(null);
             state.admin_user = data.admin;
             api.hide_dialog();
@@ -114,12 +111,10 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
 
         function set_login_cookie(data)
         {
-            if (data)
-            {
+            if (data) {
                 $.cookie("login", data.cookie, { expires: data.expires });
                 graphics.bindUser(state.current_user); graphics.refresh();
                 if (new URLSearchParams(location.search).get("graphics") === "1") location.replace("/settings/graphics");
-                if (new URLSearchParams(location.search).get("profile") === "1") location.replace("/profile");
             }
             else
                 $.cookie("login", null);
@@ -146,7 +141,6 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
                 set_login_cookie(null);
             }
             state.current_user = null;
-            texturePack.bindUser(null);
             graphics.bindUser(null);
             state.admin_user = false;
             $("#login_form").show();

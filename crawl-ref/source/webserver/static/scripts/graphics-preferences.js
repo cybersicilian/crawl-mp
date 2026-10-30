@@ -1,5 +1,5 @@
 /* Account authority, optimistic field patches and serialized automatic saves. */
-define(["jquery", "comm", "graphics-settings-model", "ui-theme"], function ($, comm, model, theme) {
+define(["jquery", "comm", "graphics-settings-model"], function ($, comm, model) {
     "use strict";
     var user = null, epoch = 0, revision = 0, confirmed = model.defaults(), pending = {}, sending = null;
     var ready = false, available = false, error = "", refreshing = null;
@@ -8,10 +8,7 @@ define(["jquery", "comm", "graphics-settings-model", "ui-theme"], function ($, c
             saving: Boolean(sending || Object.keys(pending).length),
             settings: Object.assign({}, confirmed, sending || {}, pending), schema: model.schema() };
     }
-    function emit() {
-        var state = snapshot(); theme.apply(state.settings.ui_theme);
-        $(document).trigger("graphics_settings_changed", [state]);
-    }
+    function emit() { $(document).trigger("graphics_settings_changed", [snapshot()]); }
     function sameUser(value) { return user && typeof value === "string" && user.toLowerCase() === value.toLowerCase(); }
     function receive(data) {
         if (!data || !sameUser(data.username) || !Number.isSafeInteger(data.revision) || data.revision < 0
@@ -79,7 +76,6 @@ define(["jquery", "comm", "graphics-settings-model", "ui-theme"], function ($, c
         sending = refreshing = null; error = ""; ready = available = false; emit();
         if (user) { if (initial) receive(initial); refresh(); }
     }
-    theme.apply(confirmed.ui_theme);
     comm.register_handlers({ profile_graphics: receive });
     window.addEventListener("storage", function (event) {
         if (user && event.key === "dcss:graphics-update:" + user.toLowerCase()) refresh();

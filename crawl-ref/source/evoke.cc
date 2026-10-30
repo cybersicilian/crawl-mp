@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "evoke.h"
 #include "god-pakellas.h"
@@ -1064,12 +1063,6 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
         return "You cannot evoke magical items.";
 
     // is this really necessary?
-    if (!coop_content::enabled()
-        && coop_content::exclusive_item(item->base_type, item->sub_type))
-    {
-        return "This device requires a multiplayer game.";
-    }
-
     if (item_type_removed(item->base_type, item->sub_type))
         return "Sorry, this item was removed!";
     if (item->base_type != OBJ_WANDS && item->base_type != OBJ_MISCELLANY)
@@ -1488,7 +1481,7 @@ static spret _evoke_skald_horn(int plus, const evocation& activation)
         party::apply_party_aura_buff(DUR_BALLAD_VANGUARD, dur, LOS_RADIUS, false);
         party::apply_party_aura_buff(DUR_SWIFTNESS, dur, LOS_RADIUS, false);
         mprf(MSGCH_FRIEND_ACTION,
-             "Your companions take up the horn's call (Slay, EV, Swift)!");
+             "Your companions surge forward to the Vanguard's call (Cleave, Swift)!");
     }
 
     return spret::success;
@@ -1496,13 +1489,6 @@ static spret _evoke_skald_horn(int plus, const evocation& activation)
 
 spret evoke_device(item_def& item, dist* target, const evocation& activation)
 {
-    if (!coop_content::enabled()
-        && coop_content::exclusive_item(item.base_type, item.sub_type))
-    {
-        mpr("This device requires a multiplayer game.");
-        return spret::abort;
-    }
-
     const string blocked = cannot_evoke_item_reason(&item, true, true, nullptr,
                                                    activation.externally_funded);
     if (!blocked.empty())

@@ -113,6 +113,15 @@ class StagingWeaponTests(unittest.TestCase):
         self.socket.party_room_update_slot(slot=0, species="Felid", weapon="war axe")
         self.assertEqual(self.room["slots"][0]["weapon"], "unarmed")
 
+    def test_connected_player_controls_their_own_trait(self):
+        self.room["slots"][1].update(state="player", username="Guest", trait="ghost")
+        self.socket.party_room_update_slot(slot=1, trait="mummy")
+        self.assertEqual(self.room["slots"][1]["trait"], "ghost")
+        guest = StagingSocket()
+        guest.username = "Guest"
+        guest.party_room_update_slot(room_id="room-host", slot=1, trait="zombie")
+        self.assertEqual(self.room["slots"][1]["trait"], "zombie")
+
     def test_launch_carries_host_and_companion_weapons(self):
         with tempfile.TemporaryDirectory() as directory:
             self.socket.rc_path = str(Path(directory, "Host.rc"))

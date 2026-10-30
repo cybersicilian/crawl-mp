@@ -35,10 +35,6 @@ dialog#party_inspector_modal .party-skill-training input[aria-invalid='true'] { 
 .party-skill-cross-training span { display: block; }
 .party-skill-cross-training .party-skill-cross-bonus { color: #365d36; font-weight: bold; }
 .party-skill-base-level { white-space: nowrap; }
-.party-skill-apt-value { font-variant-numeric: tabular-nums; }
-.party-skill-apt-breakdown { display: block; margin-top: 3px; font-size: 11px; color: #6b5844; }
-.party-skill-apt-breakdown span { display: block; white-space: nowrap; }
-.party-skill-manual-bonus { color: #365d36; font-weight: bold; }
 .party-skill-priorities { display: flex; gap: 3px; }
 .party-skill-share { display: block; margin-top: 3px; color: #6b5844; }
 .party-skill-target-line { display: flex; gap: 5px; }

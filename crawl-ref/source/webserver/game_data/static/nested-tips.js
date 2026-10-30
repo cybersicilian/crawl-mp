@@ -117,7 +117,7 @@ function ($, glossary, help, placement, policy, content) {
         if (!title && !body) return null;
         return { title: title, body: body,
             badge: src.getAttribute("data-tip-key") || src.getAttribute("data-tip-badge") || "",
-            meta: src.getAttribute("data-tip-meta") || "" };
+            meta: src.getAttribute("data-tip-meta") || "", heat: src.getAttribute("data-tip-heat") };
     }
 
     function build_card(data, depth) {
@@ -143,7 +143,7 @@ function ($, glossary, help, placement, policy, content) {
         if (data.body || remainingMeta) {
             var body = document.createElement("div");
             body.className = "dcss-tip-body";
-            remainingMeta = content.render(body, data.body, remainingMeta);
+            remainingMeta = content.render(body, data.body, remainingMeta, data.heat);
             var exclude = {};
             if (data.id) exclude[data.id] = true;
             glossary.linkify(body, { exclude: exclude });
@@ -317,7 +317,8 @@ function ($, glossary, help, placement, policy, content) {
             var title = el.querySelector(".dcss-tip-title");
             var body = el.querySelector(".dcss-tip-body") || el;
             help.open({ title: title ? title.getAttribute("data-tip-reading-title") || title.textContent : "Details",
-                body: body.getAttribute("data-tip-reading") || body.textContent }, anchor || read);
+                body: body.getAttribute("data-tip-reading") || body.textContent,
+                heat: body.getAttribute("data-tip-reading-heat") }, anchor || read);
         });
         el.appendChild(read);
         var rect = el.getBoundingClientRect();

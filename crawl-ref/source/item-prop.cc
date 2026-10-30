@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "item-prop.h"
 
@@ -972,7 +971,6 @@ static const gem_def Gem_prop[] =
     { GEM_TOMB,    "sanguine",    BRANCH_TOMB,    6000 },
     { GEM_DEPTHS,  "midnight",    BRANCH_DEPTHS,  7500 }, // big, travel time
     { GEM_ZOT,     "prismatic",   BRANCH_ZOT,     2000 }, // often dived
-    { GEM_BURROWS, "ochre",       BRANCH_BURROWS, 6000 },
 };
 
 struct item_set_def
@@ -2521,7 +2519,7 @@ item_rarity_type consumable_rarity(const item_def &item)
 
 item_rarity_type consumable_rarity(object_class_type base_type, int sub_type)
 {
-    if (!coop_content::enabled())
+    if (!party::is_enabled())
     {
         if (base_type == OBJ_POTIONS && party::is_coop_potion(sub_type))
             return RARITY_NONE;

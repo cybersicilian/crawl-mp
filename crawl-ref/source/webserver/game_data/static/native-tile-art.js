@@ -1,12 +1,5 @@
-define(["jquery"], function ($) {
+define([], function () {
     "use strict";
-    var imageTransform = function (texture, source) { return source; };
-    var mounted = new WeakMap();
-    $(document).on("texture_pack_changed.nativeArt", function () {
-        document.querySelectorAll(".native-equipment-art").forEach(function (frame) {
-            var render = mounted.get(frame); if (render) render();
-        });
-    });
     // Both items and portraits use native atlas rectangles and layer clipping.
     // Atlas elements belong to the active game version; no guessed tile IDs.
     function images(art) {
@@ -30,8 +23,7 @@ define(["jquery"], function ($) {
         context.imageSmoothingEnabled = false;
         art.layers.forEach(function (layer, index) {
             context.save(); context.beginPath(); context.rect(0, 0, 32, layer.ymax); context.clip();
-            context.drawImage(imageTransform(layer.texture || art.texture, sources[index]),
-                layer.sx, layer.sy, layer.w, layer.h, layer.ox, layer.oy, layer.w, layer.h);
+            context.drawImage(sources[index], layer.sx, layer.sy, layer.w, layer.h, layer.ox, layer.oy, layer.w, layer.h);
             context.restore();
         });
         return true;
@@ -52,7 +44,6 @@ define(["jquery"], function ($) {
             if (!draw(canvas, art)) { frame.dataset.art = "unavailable"; return; }
             frame.replaceChildren(canvas); frame.dataset.art = "ready";
         }
-        mounted.set(frame, render);
         sources.forEach(function (image) {
             if (!image.complete) {
                 image.addEventListener("load", render, { once: true });
@@ -62,6 +53,5 @@ define(["jquery"], function ($) {
         render();
         return frame;
     }
-    return { create: create, draw: draw,
-        setImageTransform: function (transform) { imageTransform = transform; } };
+    return { create: create, draw: draw };
 });

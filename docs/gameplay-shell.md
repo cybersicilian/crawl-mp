@@ -46,13 +46,6 @@ top-left of the dungeon, replacing the legacy native item strip. The game retain
 turn and friendly-fire rules without in-play rule toggles. Level overview exposes
 the existing minimap; Map remains available through the action tray and native key.
 
-Character-panel and message-history keyboard shortcuts run only in native normal
-or command input mode. Native prompts, targeting, More and macro input keep their
-keys even when no popup is visible; in particular, uppercase `I` answers the
-level-up Intelligence prompt. Off-turn inspection remains available in normal
-and command mode. `tests/offturn-windows.cjs` checks these boundaries through the
-real client keyboard translator.
-
 Initiative is a text-free meter beside each hero's name. Solid green extends left
 from the zero diamond for banked catch-up time; hatched amber extends right for
 recovery debt. All heroes share a scale of at least 20 aut per half, expanding
@@ -109,11 +102,6 @@ description, alias or shortcut in every browsing category. It also reveals
 matching expedition links directly, preserving their original click handlers
 and confirmations. Enter uses the first available command; Down focuses it.
 Escape closes the palette. Assignment mode keeps the item and power picker.
-Opening the palette with the pointer leaves Search opt-in. Movement and other
-gameplay keys from its non-editing controls close the tray and resume play
-immediately. Keyboard activation of the chevron focuses Search; clicking Search
-also retains ordinary text entry. Enter/Space activation and deliberate Tab
-navigation remain available on palette controls.
 The macOS `Cmd+F` alias uses the same native Find Items action during gameplay;
 text fields, chat, native prompts and dialogs retain their own keyboard input.
 An empty native shopping list reports gold instead of opening a list.
@@ -139,23 +127,11 @@ ten. These override the native top-row digit only while assigned and accepting
 game commands. Clearing a position restores the native key immediately. Existing
 eight-position saves retain their assignments, with two new empty positions.
 
-Compatible offensive spell slots offer **Enable Quick cast** in their context
-menu (right-click or Shift+F10). This turn-free preference is saved per slot and
-hero. A `Q` badge marks enabled slots: one click or number key requests the native
-quiver targeter's default target without changing the hero's quivered action.
-`Shift+number` or **Aim spell manually** uses ordinary aiming for that cast;
-**Use manual aiming** disables the preference. Shift-click/Shift+Enter still
-reassign the slot. Existing bindings default to manual aiming. Missing native
-`quick_cast` capability falls back to manual aiming even for a saved preference.
-Native casting and autofight thresholds, costs, range, warning prompts and
-channel continuation remain authoritative. Placement spells stay manual.
-
 Quick shortcuts share the click action's legality, resource, and ownership gates.
 An unavailable assigned action consumes its key without triggering a different
 native command. Native prompts, targeting, menus, web dialogs, chat and text
 editing keep their own number input. Numpad movement and modified shortcuts stay
-native, except Shift+number on an enabled Quick cast slot. Holding a shortcut
-activates once, including when it enters targeting;
+native. Holding a shortcut activates once, including when it enters targeting;
 release and press again to supply a target or prompt digit. Starting an action
 also releases dock focus so native follow-up input works directly.
 

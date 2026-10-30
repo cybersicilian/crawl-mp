@@ -140,10 +140,6 @@ class ArchiveTests(unittest.TestCase):
             conn.executescript("""
                 CREATE TABLE mutesettings (username TEXT PRIMARY KEY, mutelist TEXT);
                 INSERT INTO mutesettings VALUES ('Rogue', ''), ('Discard', 'Rogue');
-                CREATE TABLE profile_graphics (username TEXT PRIMARY KEY, settings TEXT, revision INTEGER);
-                INSERT INTO profile_graphics VALUES ('Rogue', '{"shading": false}', 2), ('Discard', '{}', 1);
-                CREATE TABLE profile_appearance (username TEXT PRIMARY KEY, texture_pack TEXT);
-                INSERT INTO profile_appearance VALUES ('Rogue', 'illustrated'), ('Discard', 'classic');
             """)
         for name in ("Rogue", "Discard", "OldAccount"):
             (self.root / (name + ".rc")).write_text("preferences")
@@ -166,12 +162,6 @@ class ArchiveTests(unittest.TestCase):
                          [("Rogue", "preserved-hash")])
         self.assertEqual([r["token"] for r in module.rows(auth, "recovery_tokens")], ["keep-token"])
         self.assertEqual([r["username"] for r in module.rows(settings, "mutesettings")], ["Rogue"])
-        self.assertEqual([(r["username"], r["settings"], r["revision"])
-                          for r in module.rows(settings, "profile_graphics")],
-                         [("Rogue", '{"shading": false}', 2)])
-        self.assertEqual([(r["username"], r["texture_pack"])
-                          for r in module.rows(settings, "profile_appearance")],
-                         [("Rogue", "illustrated")])
         self.assertEqual(len(module.rows(self.base / "archive/databases/identity/accounts.db3", "dglusers")), 2)
         self.assertTrue((self.base / "archive/files/Discard.macro").is_file())
         self.assertTrue((self.root / "Rogue.rc").is_file())

@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "mon-poly.h"
 
@@ -132,9 +131,6 @@ void monster_drop_things(monster* mons,
 
 static bool _valid_type_morph(const monster &mons, monster_type new_mclass)
 {
-    if (!coop_content::enabled() && coop_content::exclusive_monster(new_mclass))
-        return false;
-
     // Shapeshifters cannot polymorph into glowing shapeshifters or
     // vice versa.
     if ((new_mclass == MONS_GLOWING_SHAPESHIFTER

@@ -129,3 +129,18 @@ TEST_CASE_METHOD(vellum_fixture, "Ent innate Passwall traverses trees for one MP
     CHECK_FALSE(you.delay_queue.empty());
     CHECK(you.props.exists(PASSWALL_ARMOUR_KEY));
 }
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Gale Centaur, Ent and Meliai preserve distinct foot anatomy", "[ent][anatomy-rebase]")
+{
+    you.species = SP_GALE_CENTAUR;
+    CHECK(get_player_equip_slot_count(SLOT_BOOTS) == 2);
+    CHECK(get_player_equip_slot_count(SLOT_BARDING) == 1);
+    you.species = SP_ENT;
+    string reason;
+    CHECK(get_player_equip_slot_count(SLOT_BOOTS, &reason) == 0);
+    CHECK(reason.find("roots") != string::npos);
+    you.species = SP_MELIAI;
+    reason.clear();
+    CHECK(get_player_equip_slot_count(SLOT_BOOTS, &reason) == 0);
+    CHECK(reason.find("no feet") != string::npos);
+}

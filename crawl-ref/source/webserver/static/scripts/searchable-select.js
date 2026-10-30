@@ -10,6 +10,9 @@ define(function () {
         var options = Array.from(select.options);
         options.forEach(function (option, index) {
             if (!optionLabels.has(option)) {
+                // A native option without a value attribute derives its value
+                // from its text; preserve it before adding recommendation marks.
+                if (!option.hasAttribute("value")) option.value = option.value;
                 optionLabels.set(option, option.text);
                 optionOrders.set(option, index);
             }
@@ -66,9 +69,16 @@ define(function () {
         });
         list.replaceChildren();
         matches.forEach(function (option, i) {
-            var row = el("div", "choice-picker-option", option.text);
+            var row = el("div", "choice-picker-option");
             row.id = "choice_picker_option_" + i; row.setAttribute("role", "option");
             if (option.hasAttribute("aria-label")) row.setAttribute("aria-label", option.getAttribute("aria-label"));
+            row.appendChild(el("span", "choice-picker-option-name", option.text));
+            if (option.dataset.choiceDescription) {
+                var description = el("span", "choice-picker-option-description", option.dataset.choiceDescription);
+                description.id = row.id + "_description";
+                row.setAttribute("aria-describedby", description.id);
+                row.appendChild(description);
+            }
             row.setAttribute("aria-selected", String(option.value === active.select.value));
             row.addEventListener("pointerdown", function (event) { event.preventDefault(); });
             row.addEventListener("click", function () { commit(i); });

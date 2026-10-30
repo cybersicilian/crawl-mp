@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 import pty
 import selectors
-import shutil
 import signal
 import socket
 import struct
@@ -33,12 +32,10 @@ class NativeLaunch:
                               "TokenThird:Human/Conjurer")
     accounts: tuple[str, ...] = ("Probe", "Peer", "Third")
     multiplayer: bool = True
-    defaults: tuple[str, ...] = ()
-    rc_options: tuple[str, ...] = ()
 
 
 class NativeProbe:
-    def __init__(self, source, root, players=2, launch=None, restore_from=None):
+    def __init__(self, source, root, players=2, launch=None):
         launch = launch or NativeLaunch()
         self.root = root
         self.source = source
@@ -52,12 +49,6 @@ class NativeProbe:
         self.packet_callback = None
         for name in ("saves", "morgue", "library"):
             (root / name).mkdir()
-        if restore_from is not None:
-            for name in ("saves", "library"):
-                shutil.copytree(restore_from / name, root / name, dirs_exist_ok=True)
-            record = restore_from / "record.json"
-            if record.exists():
-                shutil.copyfile(record, root / "record.json")
         self.peer = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
         self.peer.bind(str(root / "peer.sock"))
         self.peer.setblocking(False)
@@ -66,11 +57,8 @@ class NativeProbe:
         master, slave = pty.openpty()
         self.master = master
         fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 40, 120, 0, 0))
-        rc = root / 'probe.rc' if launch.rc_options else Path('/dev/null')
-        if launch.rc_options:
-            rc.write_text('\n'.join(launch.rc_options) + '\n')
         env = dict(os.environ, TERM="xterm", CRAWL_DIR=str(source),
-                   CRAWL_RC=str(rc), CRAWL_SAVE_DIR=str(root / "saves"),
+                   CRAWL_RC="/dev/null", CRAWL_SAVE_DIR=str(root / "saves"),
                    CRAWL_LIBRARY_DIR=str(root / "library"),
                    CRAWL_RECORD_PATH=str(root / "record.json"))
         for slot in range(4):
@@ -82,7 +70,7 @@ class NativeProbe:
         party = list(launch.party[:players])
         if launch.multiplayer:
             party.append("mp=on")
-        command = [str(source / "crawl"), "-dir", str(source), "-rc", str(rc),
+        command = [str(source / "crawl"), "-dir", str(source), "-rc", "/dev/null",
                    "-name", launch.name, "-species", launch.species, "-background", launch.job,
                    "-extra-opt-last", "show_more=false",
                    "-extra-opt-last", "restart_after_game=false",
@@ -92,8 +80,6 @@ class NativeProbe:
                    "-webtiles-socket", self.address, "-await-connection"]
         if launch.weapon:
             command += ["-extra-opt-last", "weapon=" + launch.weapon]
-        for option in launch.defaults:
-            command += ['-extra-opt-first', option]
         self.process = subprocess.Popen(command, cwd=root, env=env, stdin=slave,
                                         stdout=slave, stderr=slave, start_new_session=True)
         os.close(slave)

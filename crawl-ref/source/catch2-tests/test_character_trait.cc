@@ -7,7 +7,6 @@
 #include "ng-restr.h"
 #include "ng-setup.h"
 #include "party.h"
-#include "playable.h"
 #include "player.h"
 #include "species.h"
 #include "tags.h"
@@ -135,46 +134,6 @@ TEST_CASE_METHOD(vellum_fixture, "Hermit sacrifice belongs to its party member",
     CHECK(other.sacrifices[MUT_FRAIL] == 1);
     other.save = nullptr;
     party::set_player_count(1);
-}
-
-TEST_CASE_METHOD(vellum_fixture, "Hermit and Slime Priest effects fit eligible species",
-                 "[hermit-slime-species]")
-{
-    init_sac_index();
-    player baseline = you;
-    auto* const save = you.save;
-    baseline.save = nullptr;
-    for (const species_type sp : playable_species())
-    {
-        for (const job_type job : {JOB_HERMIT, JOB_SLIME_PRIEST})
-        {
-            if (!character_is_allowed(sp, job))
-                continue;
-            CAPTURE(sp, job);
-            you = baseline;
-            you.save = save;
-            you.species = sp;
-            you.char_class = job;
-            you.religion = job == JOB_HERMIT ? GOD_RU : GOD_JIYVA;
-            you.raw_piety = job == JOB_HERMIT ? 10 : 5;
-            give_basic_mutations(sp);
-            roll_demonspawn_mutations();
-            calc_hp();
-            you.hp = max(1, you.hp_max);
-            apply_starting_background_effects();
-            CHECK(you.props.exists("starting_background_effects_applied"));
-            if (job == JOB_HERMIT)
-                CHECK(you.props[NUM_SACRIFICES_KEY].get_int() == 1);
-            else
-            {
-                int slime_levels = 0;
-                for (int i = 0; i < NUM_MUTATIONS; ++i)
-                    if (is_slime_mutation(static_cast<mutation_type>(i)))
-                        slime_levels += you.mutation[i] - you.innate_mutation[i];
-                CHECK(slime_levels == 3);
-            }
-        }
-    }
 }
 
 TEST_CASE("Automaton is selectable while retaining its nonliving identity",

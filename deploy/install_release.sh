@@ -7,9 +7,7 @@ PORT="${3:-8080}"
 SOURCE="$RELEASE/crawl-ref/source"
 cd "$SOURCE"
 printf '0.33-coop\n' > util/release_ver
-# Keep production turn processing optimized even if a caller has debug build
-# variables in its environment. Debug engines belong in disposable QA builds.
-make "-j${BUILD_JOBS:-2}" WEBTILES=y NOWIZARD=y CFOPTIMIZE=-O2 crawl webserver docs
+make "-j${BUILD_JOBS:-2}" WEBTILES=y NOWIZARD=y crawl webserver docs
 ./crawl -version
 PYTHONPATH=webserver python3 -m unittest webtiles.chat_tags_test webtiles.game_library_test webtiles.character_preview_test webtiles.asset_revision_test webtiles.starting_weapons_test webtiles.gameplay_protocol_test webtiles.party_control_test webtiles.skill_training_test
 python3 webserver/tests/native-character-preview.py --binary "$SOURCE/crawl"

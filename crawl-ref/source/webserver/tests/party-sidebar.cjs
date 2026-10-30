@@ -67,7 +67,7 @@ function hero(slot, count = 18) {
             ['character-stat-help', 'static/scripts/character-stat-help.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
             ...['status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status', 'party-card-status',
                 'player-card-details', 'party-initiative', 'workflow-actions', 'party-navigation', 'party', 'native-tile-art', 'frame-update',
-                'party-power-cards', 'shell-dash-art', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography']
+                'party-power-cards', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])];
         for (const [name, file] of files) {
             await page.evaluate(name => { window.moduleName = name; }, name);
@@ -114,8 +114,6 @@ function hero(slot, count = 18) {
             });
         }
         await render();
-        assert.equal(await page.locator('.is-controlled-card .party-navigate-btn').evaluate(node => getComputedStyle(node).display), 'none');
-        assert.notEqual(await page.locator('[data-party-slot="1"] .party-navigate-btn').evaluate(node => getComputedStyle(node).display), 'none');
         assert.match(await page.locator('#party_detail_0_SeeInvis').getAttribute('aria-label'), /: 1$/,
             'Native true resistance facts are known and displayed as active');
         assert.match(await page.locator('#party_detail_1_SeeInvis').getAttribute('aria-label'), /: 0$/,
@@ -134,22 +132,6 @@ function hero(slot, count = 18) {
         }
         await page.setViewportSize({ width: 1440, height: 900 });
         await settled();
-        evidence.layoutCache = await page.evaluate(async () => {
-            const scroll = document.getElementById('hud_sidebar_scroll');
-            const getHeight = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollHeight').get;
-            let reads = 0;
-            Object.defineProperty(scroll, 'scrollHeight', { configurable: true,
-                get() { reads++; return getHeight.call(this); } });
-            try {
-                for (let index = 0; index < 10; index++) window.modules['./party-sidebar'].update();
-                const unchanged = reads;
-                window.dispatchEvent(new Event('resize'));
-                await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-                return { unchanged, afterResize: reads };
-            } finally { delete scroll.scrollHeight; }
-        });
-        assert.equal(evidence.layoutCache.unchanged, 0, 'Ordinary state refreshes reuse the sidebar allocation');
-        assert(evidence.layoutCache.afterResize > 0, 'Viewport changes still recalculate available rows');
         const companionItem = page.locator('#party_pack_1_0');
         await companionItem.click();
         assert.deepEqual(await page.evaluate(() => window.inspected.at(-1)), [1, 'equipment']);

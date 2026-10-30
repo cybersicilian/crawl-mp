@@ -539,7 +539,6 @@ static void _throw_noise(actor* act, const item_def &ammo)
     switch (launcher->sub_type)
     {
     case WPN_SLING:
-    case WPN_FUSTIBALUS:
         msg   = "You hear a sling whirr.";
         break;
     case WPN_SHORTBOW:
@@ -648,6 +647,7 @@ static void _fire_player_ranged_attacks(vector<ranged_attack_beam>& atks, bool a
     bool shot_at_enemy = false;
     for (ranged_attack_beam& atk : atks)
     {
+        oozle::note_weapon_use(atk.atk.weapon);
         _player_shoot(atk, allow_salvo);
         if (atk.beam.foes_hurt)
             shot_at_enemy = true;

@@ -1,4 +1,14 @@
 OBJECTS = \
+archaeologist.o \
+automaton.o \
+character-trait.o \
+coop-content.o \
+game-modifiers.o \
+hermit-crab.o \
+hydra-physiology.o \
+neckbeard.o \
+protean.o \
+ronin.o \
 wight.o \
 account-start.o \
 ability.o \
@@ -47,18 +57,11 @@ bloodcraft-curses.o \
 bloodcraft-combat.o \
 chardump.o \
 character-preview.o \
-character-trait.o \
-game-modifiers.o \
-automaton.o \
-hermit-crab.o \
-protean.o \
-hydra-physiology.o \
 equipment-profile.o \
 equipment-memory.o \
 equipment-memory-items.o \
 oozle-memory.o \
 oozle-memory-effects.o \
-elemental-weapon.o \
 oozle-memory-ui.o \
 cio.o \
 cloud.o \
@@ -230,7 +233,6 @@ outer-menu.o \
 output.o \
 package.o \
 party.o \
-coop-content.o \
 party-session.o \
 party-activity.o \
 party-trade.o \
@@ -257,9 +259,6 @@ random-var.o \
 ranged-attack.o \
 ray.o \
 religion.o \
-ronin.o \
-neckbeard.o \
-archaeologist.o \
 scroller.o \
 shopping.o \
 shout.o \
@@ -272,18 +271,13 @@ species.o \
 spl-book.o \
 spl-cast.o \
 spl-clouds.o \
-spl-kimjoy.o \
-spl-shackle.o \
-icicle-burst.o \
 spl-damage.o \
-spl-rupture-blight.o \
 spl-goditem.o \
 spl-miscast.o \
 spl-monench.o \
 spl-other.o \
 spl-selfench.o \
 spl-summoning.o \
-false-image.o \
 spl-transloc.o \
 spl-util.o \
 spl-vortex.o \
@@ -375,17 +369,18 @@ catch2-tests/test_meliai.o \
 catch2-tests/test_sparkborn.o \
 catch2-tests/test_character_trait.o \
 catch2-tests/test_ronin.o \
-catch2-tests/test_elemental_weapon.o \
-catch2-tests/test_steam_barrier.o \
-catch2-tests/test_kimjoy_poison.o \
-catch2-tests/test_scorpion_form.o \
-catch2-tests/test_shackle.o \
-catch2-tests/test_icicle_burst.o \
 catch2-tests/test_neckbeard.o \
-catch2-tests/test_false_image.o \
-catch2-tests/test_rupture_blight.o \
 catch2-tests/test_archaeologist.o \
 catch2-tests/test_game_modifiers.o \
+catch2-tests/test_two_headed_ogre.o \
+catch2-tests/test_automaton.o \
+catch2-tests/test_hermit_crab.o \
+catch2-tests/test_protean.o \
+catch2-tests/test_faerie_dragon.o \
+catch2-tests/test_ent.o \
+catch2-tests/test_high_elf.o \
+catch2-tests/test_hydra_physiology.o \
+catch2-tests/test_curated_backgrounds.o \
 catch2-tests/test_paladin.o \
 catch2-tests/test_vorr.o \
 catch2-tests/test_pakellas.o \
@@ -394,10 +389,6 @@ catch2-tests/test_vellum_integrations.o \
 catch2-tests/test_vellum_comparison.o \
 catch2-tests/test_bloodcraft.o \
 catch2-tests/test_branch.o \
-catch2-tests/test_slime_layout.o \
-catch2-tests/test_burrows.o \
-catch2-tests/test_branch_population.o \
-catch2-tests/test_honey.o \
 catch2-tests/test_coordit.o \
 catch2-tests/test_describe.o \
 catch2-tests/test_english.o \
@@ -409,10 +400,10 @@ catch2-tests/test_equipment_memory.o \
 catch2-tests/test_equipment_matrix.o \
 catch2-tests/test_party_trade.o \
 catch2-tests/test_party_session.o \
-catch2-tests/test_coop_content.o \
 catch2-tests/test_mon-util.o \
 catch2-tests/test_ng-init-branches.o \
 catch2-tests/test_player.o \
+catch2-tests/test_mutation.o \
 catch2-tests/test_player_fixture.o \
 catch2-tests/test_randbook.o \
 catch2-tests/test_stringutil.o \
@@ -423,14 +414,6 @@ catch2-tests/test_starting_accounts.o \
 catch2-tests/test_oozle_memory.o \
 catch2-tests/test_oozle_memory_effects.o \
 catch2-tests/test_tortle.o \
-catch2-tests/test_two_headed_ogre.o \
-catch2-tests/test_automaton.o \
-catch2-tests/test_hermit_crab.o \
-catch2-tests/test_protean.o \
-catch2-tests/test_faerie_dragon.o \
-catch2-tests/test_ent.o \
-catch2-tests/test_high_elf.o \
-catch2-tests/test_hydra_physiology.o \
 catch2-tests/test_shell.o \
 catch2-tests/test_new_species.o \
 catch2-tests/test_shopping.o \
@@ -448,7 +431,6 @@ catch2-tests/test_spl-util.o
 WEBTILES_OBJECTS = \
 tileweb.o \
 tileweb-party.o \
-tileweb-ai.o \
 tileweb-enemies.o \
 tileweb-text.o
 

@@ -1,7 +1,0 @@
-{
-  "reservationId": "1c9caf36-f6bd-45d3-8e5a-9b92898d8fb9",
-  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "Local browser passed and closed; public browser timed out before saving preferences and closed. Supervised group and owned worker/supervisor are gone.",
-  "exitCode": 1
-}

@@ -81,38 +81,6 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Kitsune have Charm and cannot wear 
     CHECK(reason.find("fox ears") != string::npos);
 }
 
-TEST_CASE("Rin and fire foxes have their own monster definitions", "[kitsune]")
-{
-    init_monsters();
-    const monsterentry* rin = get_monster_data(MONS_RIN);
-    const monsterentry* fox = get_monster_data(MONS_FIRE_FOX);
-    REQUIRE(rin);
-    REQUIRE(fox);
-    CHECK(string(rin->name) == "Rin the nine-tailed");
-    CHECK(rin->bitfields & M_UNIQUE);
-    CHECK(rin->genus == MONS_HUMAN);
-    CHECK(rin->species == MONS_HUMAN);
-    CHECK(rin->attack[0].type == AT_HIT);
-    CHECK(rin->attack[0].damage == 24);
-    CHECK(rin->attack[1].flavour == AF_ANTIMAGIC);
-    CHECK(rin->attack[1].damage == 14);
-    CHECK(rin->exp == 2438);
-    CHECK(rin->sec == MST_RIN);
-    CHECK(string(fox->name) == "fire fox");
-    CHECK(fox->genus == MONS_HOUND);
-    CHECK(fox->species == MONS_FIRE_FOX);
-    CHECK_FALSE(fox->bitfields & M_SEE_INVIS);
-    CHECK(fox->attack[0].type == AT_BITE);
-    CHECK(fox->attack[0].damage == 6);
-    CHECK(fox->exp == 180);
-    CHECK(fox->sec == MST_FIRE_FOX);
-    init_spell_descs();
-    init_mons_spells();
-    for (spell_type spell : {SPELL_FOXFIRE, SPELL_BLINK, SPELL_FORCE_LANCE,
-                             SPELL_BATTLESPHERE, SPELL_IOOD, SPELL_MESMERISE})
-        CHECK(is_valid_mon_spell(spell));
-}
-
 TEST_CASE_METHOD(kitsune_charm_fixture,
                  "Kitsune charm counters hostile control of an ally", "[kitsune]")
 {

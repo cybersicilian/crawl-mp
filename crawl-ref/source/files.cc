@@ -1062,9 +1062,6 @@ static void _write_tagged_chunk(const string &chunkname, tag_type tag)
 static int _get_dest_stair_type(dungeon_feature_type stair_taken,
                                 bool &find_first)
 {
-    const dungeon_feature_type counterpart = branch_connection_return(stair_taken);
-    if (counterpart != NUM_FEATURES)
-        return counterpart;
     // Order is important here.
     if (stair_taken == DNGN_EXIT_ABYSS)
     {
@@ -1846,9 +1843,6 @@ static const vector<branch_type> branch_generation_order =
     BRANCH_ORC,
     BRANCH_SPIDER,
     BRANCH_SNAKE,
-    BRANCH_BURROWS,
-    BRANCH_WORMLANDS,
-    BRANCH_HIVE,
     BRANCH_SHOALS,
     BRANCH_SWAMP,
     BRANCH_VAULTS,
@@ -1986,7 +1980,6 @@ bool pregen_dungeon(const level_id &stopping_point)
             {
             case BRANCH_SPIDER:
             case BRANCH_SNAKE:
-            case BRANCH_BURROWS:
                 status += "a lair branch";
                 break;
             case BRANCH_SHOALS:
@@ -3711,24 +3704,6 @@ static bool _convert_obsolete_species()
                 "if you want to remain a Vampire.");
         }
         change_species_to(SP_HUMAN);
-        return true;
-    }
-    else if (you.species == SP_ARMATAUR)
-    {
-        if (!yesno(
-            "This Armataur save game cannot be loaded as-is. If you load it now,\n"
-            "your character will be converted to a Gale Centaur. Continue?",
-                       false, 'N'))
-        {
-            you.save->abort(); // don't even rewrite the header
-            delete you.save;
-            you.save = 0;
-            game_ended(game_exit::abort,
-                "Please load the save in an earlier version "
-                "if you want to remain an Armataur.");
-        }
-        change_species_to(SP_GALE_CENTAUR);
-        you.duration[DUR_STAMPEDE] = 0; // Was DUR_ROLLPAGE
         return true;
     }
 #endif

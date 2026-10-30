@@ -58,9 +58,7 @@ const char* slot_key(equipment_slot slot)
 }
 string slot_label(equipment_slot slot)
 {
-    if (slot == SLOT_WEAPON_OR_OFFHAND)
-        return you.species == SP_TWO_HEADED_OGRE ? "Offhand weapon / orb"
-                                                 : "Offhand weapon / shield";
+    if (slot == SLOT_WEAPON_OR_OFFHAND) return "Offhand weapon / shield";
     if (slot == SLOT_HAUNTED_AUX) return "Haunted armour";
     if (slot == SLOT_TWOHANDER_ONLY) return "Two-handed weapon support";
     return equip_slot_name(slot);

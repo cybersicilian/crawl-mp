@@ -5,11 +5,11 @@
 
 #include "AppHdr.h"
 #include "archaeologist.h"
-#include "elemental-weapon.h"
+#include "automaton.h"
+#include "oozle-memory.h"
 #include "god-vellum.h"
 #include "god-pakellas.h"
 #include "bloodcraft.h"
-#include "automaton.h"
 #include "god-vorr.h"
 
 #include "describe.h"
@@ -2921,9 +2921,7 @@ string get_item_description(const item_def &item,
                             item_description_mode mode)
 {
     ostringstream description;
-    const string elemental = elemental_weapon::description(you, item);
-    if (!elemental.empty())
-        description << elemental << "\n\n";
+    description << oozle::item_memory_description(item);
     const string quest = archaeologist::item_description(item);
     if (!quest.empty())
         description << quest << "\n\n";
@@ -4616,12 +4614,12 @@ static string _player_spell_stats(const spell_type spell)
         return description; // all other info is player-dependent
     }
 
+
     const int additional_hp = spell_additional_hp(spell, spell_mana(spell));
     if (additional_hp)
         description += make_stringf("\nCasting cost: %d %s + %d HP",
             spell_mana(spell), you.has_mutation(MUT_HP_CASTING) ? "HP" : "MP",
             additional_hp);
-
 
     string failure;
     if (you.divine_exegesis)

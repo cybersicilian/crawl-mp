@@ -101,13 +101,8 @@ class Archive:
                         "_archive_rowid")
             self.select(self.accounts_db, "dglusers", lambda u: u["id"] in retained)
         if self.settings_db:
-            with closing(sqlite3.connect(self.settings_db)) as conn:
-                tables = {row[0] for row in conn.execute(
-                    "SELECT name FROM sqlite_master WHERE type = 'table'")}
-            for table in ("mutesettings", "profile_graphics", "profile_appearance"):
-                if table in tables:
-                    self.select(self.settings_db, table,
-                                lambda u: normalized(u["username"]) in self.keep, "username")
+            self.select(self.settings_db, "mutesettings", lambda u: normalized(u["username"]) in self.keep,
+                        "username")
 
     def keep_party(self, record):
         host = record.get("host")

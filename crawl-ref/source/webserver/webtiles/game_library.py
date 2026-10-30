@@ -24,7 +24,7 @@ _ingested_versions = {}
 
 
 def now():
-    return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds")
 
 
 def valid_id(value):

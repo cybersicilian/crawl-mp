@@ -49,7 +49,6 @@ enum class transformation
     jademantle,
     hypnogecko,
     mistmane,
-    scorpion,
     COUNT
 };
 constexpr int NUM_TRANSFORMS = static_cast<int>(transformation::COUNT);

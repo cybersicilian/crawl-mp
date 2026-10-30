@@ -1,8 +1,0 @@
-{
-  "reservationId": "15d052c1-c701-4102-94b5-9ae4a3ef0f4e",
-  "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-autoexplore/public-attempt1/public-result.json",
-  "test_game_saved": true,
-  "outcome": "First public check expected movement beside a visible enemy; safety stopped exploration; all browser processes closed."
-}

@@ -105,13 +105,9 @@ if (!chromium) {
                 comm: { register_handlers: noop, send_message: noop },
                 chat: { tag_item: noop },
                 './workflow-actions': {
-                    inspectionReason: () => '',
                     reason: () => '',
                     powerButton: () => document.createElement('button'),
                     context: () => document.createElement('div'),
-                    controlledSlot: () => 0,
-                    itemSecondaryHint: () => '',
-                    itemSecondaryAction: noop,
                     describe: noop
                 },
                 './chat-context': { inventory_item: item => item }
@@ -165,7 +161,7 @@ if (!chromium) {
                         },
                         {
                             slot: 1, player_id: 'p1', name: 'Lyra', title: 'Pyromancer',
-                            species: 'Automaton', job: 'Conjurer', god: 'Vehumet', piety_rank: 3,
+                            species: 'Deep Elf', job: 'Conjurer', god: 'Vehumet', piety_rank: 3,
                             xl: 9, xl_next: 40, hp: 46, hp_max: 46, mp: 28, mp_max: 32,
                             ac: 5, ev: 15, sh: 0, str: 6, intel: 25, dex: 14,
                             move_aut: 10, atk_aut: 10, aut_clock: 4120, aut_lead: 0,
@@ -240,11 +236,8 @@ if (!chromium) {
 
         // 4. Verify Party RPG Comparison Table & Hero Switching
         assert.equal(await page.locator('#companion_party_compare tbody tr').count(), 2);
-        assert.match(await page.locator('#companion_party_compare tbody tr').nth(1).innerText(), /Heat 4\/32/);
         await page.locator('#companion_party_compare .companion-hero-switch-btn').nth(1).click();
         assert.equal(await page.evaluate(() => window.crawl_party.inspector_slot), 1);
-        assert.match(await page.locator('#companion_rpg_metrics').innerText(), /COOLING\s*0\.95\/turn/);
-        assert.match(await page.locator('#party_insp_panel_overview').innerText(), /Heat 4\/32/);
         assert.match(await page.locator('#companion_rpg_ledger').innerText(), /Magic Dart ×78, Searing Ray ×34/);
         await page.locator('#companion_party_compare .companion-hero-switch-btn').nth(0).click();
         assert.equal(await page.evaluate(() => window.crawl_party.inspector_slot), 0);

@@ -1296,10 +1296,6 @@ level_id branch_exit_destination(dungeon_feature_type feat,
 level_id stair_destination(dungeon_feature_type feat, const string &dst,
                            bool for_real)
 {
-    const level_id connection =
-        branch_connection_destination(feat, level_id::current());
-    if (connection.is_valid())
-        return connection;
 #if TAG_MAJOR_VERSION == 34
     if (feat == DNGN_ESCAPE_HATCH_UP && player_in_branch(BRANCH_LABYRINTH))
         feat = DNGN_EXIT_LABYRINTH;

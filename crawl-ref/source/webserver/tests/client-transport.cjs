@@ -9,7 +9,7 @@ const loadingSource = fs.readFileSync(path.join(__dirname, '../static/scripts/ga
 function fixture() {
     let factory, beforeSend, imagesReady, now = 0, timerId = 0, loading, createStream;
     const timers = new Map(), received = [], immediate = [], errors = [];
-    const window = {}, document = { hidden: false, getElementById() { return {}; } };
+    const window = {}, document = { hidden: false };
     vm.runInNewContext(loadingSource, { define(deps, init) { loading = init(); } });
     vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../static/scripts/state-stream.js'), 'utf8'), {
         define(deps, init) { createStream = init(); }
@@ -29,8 +29,7 @@ function fixture() {
         }
     };
     vm.runInNewContext(source, { define(deps, init) {
-        factory = init(jquery, comm, loading, () => ({ connect() {}, stop() {} }), createStream,
-            (root, ready) => { imagesReady = ready; return () => {}; });
+        factory = init(jquery, comm, loading, () => ({ connect() {}, stop() {} }), createStream);
     },
         window, document, TextDecoder, Blob, Uint8Array, requirejs: { undef() {} },
         Date: { now: () => now }, console: { error: (...args) => errors.push(args) },
@@ -102,38 +101,6 @@ for (const input of ['key', 'input', 'text_input', 'click_cell', 'power_action',
     f.enqueue(message('bad'), message('after-error'));
     assert.equal(f.received.at(-1), 'after-error');
     assert(f.errors.length);
-}
-{
-    const f = fixture();
-    f.enqueue({ msg: 'delay', t: 250 }, message('slow'),
-        { msg: 'delay', t: 250 }, message('slow'), message('state'));
-    f.send('key');
-    assert.deepEqual(f.received, ['delay', 'slow'], 'Animation catch-up yields before sending input');
-    assert.equal(f.timers.size, 1);
-    f.tick();
-    assert.deepEqual(f.received, ['delay', 'slow', 'delay', 'slow'],
-        'Later catch-up slices skip old animation waits and keep their work budget');
-    f.tick();
-    assert.equal(f.received.at(-1), 'state');
-    f.client.delay(100);
-    f.enqueue(message('new-animation'));
-    assert.equal(f.received.at(-1), 'state', 'New animations resume after catch-up empties the queue');
-    f.tick();
-    assert.equal(f.received.at(-1), 'new-animation');
-}
-{
-    const f = fixture();
-    f.client.inhibit_messages();
-    f.client.delay(100); f.enqueue(message('slow'), { msg: 'delay', t: 100 }, message('state'));
-    f.send('key');
-    assert.deepEqual(f.received, [], 'Catch-up never bypasses client loading');
-    f.client.uninhibit_messages(); f.tick();
-    assert.deepEqual(f.received, ['slow', 'delay', 'state']);
-    f.client.delay(100); f.enqueue(message('slow'), message('old'));
-    f.send('key'); f.client.reset_transport();
-    f.client.delay(100); f.enqueue(message('new'));
-    assert.notEqual(f.received.at(-1), 'new', 'Reset clears the old catch-up mode');
-    f.tick(); assert.equal(f.received.at(-1), 'new');
 }
 {
     const f = fixture();

@@ -18,14 +18,6 @@ aptitudes:
   mp_mod: 0
   wl: 3
   armour: false
-  short_blades: -2
-  long_blades: -2
-  axes: -2
-  maces_and_flails: -2
-  polearms: -2
-  staves: -2
-  ranged weapons: -2
-  throwing: -2
   unarmed_combat: 1
   stealth: 2
   alchemy: 3

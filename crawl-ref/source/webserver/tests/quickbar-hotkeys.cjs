@@ -38,7 +38,7 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
             window.modules = {
                 jquery: window.jQuery,
                 comm: {
-                    send_message(msg, fields) { window.qaPackets.push(JSON.parse(JSON.stringify({ msg, ...fields }))); },
+                    send_message(msg, fields) { window.qaPackets.push({ msg, ...fields }); },
                     register_handlers(handlers) { Object.assign(window.qaHandlers, handlers); }
                 },
                 client: { is_watching: () => window.qaSession.watching }, chat: { focus() {} },
@@ -81,7 +81,6 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
             ['./enums', 'game_data/static/enums.js'],
             ['./party-model', 'game_data/static/party-model.js'],
             ['./menu-keyboard', 'game_data/static/menu-keyboard.js'],
-            ['./hud-input', 'game_data/static/hud-input.js'],
             ['./workflow-actions', 'game_data/static/workflow-actions.js'],
             ['./context-menu', 'game_data/static/context-menu.js'],
             ['./party-skill-training', 'game_data/static/party-skill-training.js'],
@@ -99,7 +98,6 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
             modules.key_conversion.enable_code_conversion();
             const input = modules['client-input']({ in_game: () => true }, window.qaSession);
             $(document).on('keydown.client', input.handle_keydown).on('keypress.client', input.handle_keypress);
-            modules['./hud-input'].init();
             $(document).on('click.qaInventory', '#qa_inventory', () => modules.comm.send_message('key', { keycode: 105 }));
             $(document).trigger('game_input_changed', modules['./enums'].mouse_mode.COMMAND);
             modules['./quickbar'].init(); modules['./quickbar'].init();
@@ -116,36 +114,6 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
             await page.locator('[data-quick-category="command"]').click();
             await page.locator('#quickbar_search').fill(query);
         };
-        // Mouse browsing must not turn the next movement key into a search.
-        const nativeLeft = await press('ArrowLeft');
-        assert.equal(nativeLeft.length, 1);
-        const palette = page.locator('#quickbar_more');
-        const opener = page.locator('#quickbar_more > summary');
-        await opener.click();
-        await page.waitForFunction(() => document.getElementById('quickbar_more').open);
-        await page.waitForTimeout(50); // Native details toggle is asynchronous.
-        assert(await opener.evaluate(node => node === document.activeElement), 'Pointer opening keeps search opt-in');
-        await packets(); await page.keyboard.press('h');
-        assert.deepEqual(await packets(), [{ msg: 'input', text: 'h' }], 'Movement resumes directly from the open palette');
-        assert.equal(await palette.getAttribute('open'), null, 'Gameplay closes the palette');
-        await opener.focus(); await page.keyboard.press('Enter');
-        await page.waitForFunction(() => document.activeElement.id === 'quickbar_search');
-        await packets(); await page.keyboard.type('shopping');
-        assert.deepEqual(await packets(), [], 'Keyboard opening still enters search');
-        await page.locator('#quickbar_search').press('Escape');
-        await opener.click(); await page.locator('[data-quick-category="item"]').click();
-        await packets(); await page.keyboard.press('ArrowLeft');
-        assert.deepEqual(await packets(), nativeLeft, 'Category clicks also yield to movement');
-        assert.equal(await palette.getAttribute('open'), null);
-        await openCommands(''); await page.locator('#quickbar_search').click();
-        await packets(); await page.keyboard.type('shopping');
-        assert.deepEqual(await packets(), [], 'Explicit pointer search keeps text local');
-        await page.locator('#quickbar_search').press('Escape');
-        await openCommands('game record');
-        await page.locator('.hud-expedition-menu > a').focus(); await packets();
-        await page.keyboard.press('h');
-        assert.deepEqual(await packets(), [{ msg: 'input', text: 'h' }], 'Nested expedition controls yield to gameplay too');
-        assert.equal(await palette.getAttribute('open'), null);
         assert.equal(await page.locator('[data-quick-category]').count(), 4);
         const commandCodes = { find: 6, shopping: 36, travel: 71, overview: 15, examine: 120,
             religion: 94, knowledge: 92, runes: 125, messages: 16, memorise: 77, help: 63 };
@@ -218,8 +186,7 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
         const expected = index => index === 1
             ? { msg: 'power_action', expected_slot: 0, id: 41, letter: 'a', kind: 'spell' }
             : index === 2 ? { msg: 'power_action', expected_slot: 0, id: 17, letter: 'b', kind: 'ability' }
-                : { msg: 'inv_item_use', slot: inventorySlots[index], expected_slot: 0,
-                    expected_name: 'Test item ' + index, action: 'use' };
+                : { msg: 'inv_item_use', slot: inventorySlots[index], expected_slot: 0, expected_name: 'Test item ' + index };
         for (const [index, key] of Array.from('1234567890').entries()) {
             assert.deepEqual(await press(key), [expected(index)], key + ' activates exactly its assigned action');
         }
@@ -244,49 +211,6 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
         assert.deepEqual(await packets(), [expected(1)], 'Holding a quick key dispatches once and never feeds targeting');
         assert.deepEqual(await press('2'), [{ msg: 'input', text: '2' }], 'Fresh targeting input stays native');
         await mode(true);
-
-        // Enable once without a gameplay packet, then use mouse and keyboard.
-        await page.evaluate(() => { window.crawl_party.state.members[0].spells[0].quick_cast = true;
-            window.modules['./quickbar'].update(true); });
-        await page.locator('#quickbar_slot_1').click({ button: 'right' });
-        await page.getByRole('menuitem', { name: 'Enable Quick cast' }).click();
-        assert.deepEqual(await packets(), [], 'Changing the casting preference spends no action');
-        assert.equal(await page.locator('#quickbar_slot_1 .quickbar-cast-mode').innerText(), 'Q');
-        assert.equal(await page.locator('#quickbar_slot_1').getAttribute('aria-keyshortcuts'), '2 Shift+2');
-        assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem(
-            'dcss.quickbar.v1.quickbar-test-hero'))[1].quick_cast), true);
-        const quickPacket = { ...expected(1), quick_cast: true };
-        assert.deepEqual(await press('2'), [quickPacket], 'One number requests native quick casting');
-        await page.locator('#quickbar_slot_1').click();
-        assert.deepEqual(await packets(), [quickPacket], 'One click requests native quick casting');
-        if (process.env.QUICKCAST_PROOF_DIR) await page.locator('#dcss_quick_dock').screenshot({
-            path: path.join(process.env.QUICKCAST_PROOF_DIR, 'quickcast-toolbar.png') });
-        await page.evaluate(() => { window.crawl_party.state.members[0].mp = 0; });
-        assert.deepEqual(await press('2'), [], 'Quick cast respects resource gates');
-        await page.evaluate(() => { window.crawl_party.state.members[0].mp = 10; });
-        assert.deepEqual(await press('Shift+2'), [expected(1)], 'Shift+number aims without disabling Quick cast');
-        await page.locator('#quickbar_slot_1').click({ button: 'right' });
-        await page.getByRole('menuitem', { name: 'Aim spell manually' }).click();
-        assert.deepEqual(await packets(), [expected(1)], 'Manual aiming is also available through the context menu');
-        await page.locator('#outside').focus();
-        await page.keyboard.down('2'); await mode(false); await page.keyboard.down('2'); await page.keyboard.up('2');
-        assert.deepEqual(await packets(), [quickPacket], 'Holding a Quick cast key never supplies a target or warning response');
-        await mode(true);
-        await page.evaluate(() => { delete window.crawl_party.state.members[0].spells[0].quick_cast;
-            window.modules['./quickbar'].update(true); });
-        assert.deepEqual(await press('2'), [expected(1)], 'Old engines retain ordinary manual casting');
-        assert.equal(await page.locator('#quickbar_slot_1 .quickbar-cast-mode').count(), 0);
-        await page.evaluate(() => {
-            const hero = window.crawl_party.state.members[0];
-            window.modules['./workflow-actions'].usePower(hero, hero.spells[0], 'spell', true);
-        });
-        assert.deepEqual(await packets(), [], 'Explicit unsupported quick casting cannot dispatch');
-        await page.evaluate(() => { window.crawl_party.state.members[0].spells[0].quick_cast = true;
-            window.modules['./quickbar'].update(true); });
-        await page.locator('#quickbar_slot_1').click({ button: 'right' });
-        await page.getByRole('menuitem', { name: 'Use manual aiming' }).click();
-        assert.deepEqual(await packets(), [], 'Disabling Quick cast spends no action');
-        assert.deepEqual(await press('2'), [expected(1)]);
 
         await page.evaluate(() => { window.crawl_party.state.members[0].mp = 0; });
         assert.deepEqual(await press('2'), [], 'An unaffordable assigned spell cannot fall through into a native command');
@@ -390,8 +314,6 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
         assert.deepEqual(errors, []);
         console.log(JSON.stringify({ success: true, assignedKeys: '1234567890', legacyStorage: true, consumableSlots: [52, 126],
             paletteCommands: Object.keys(commandCodes).length, paletteWidths: [1280, 768, 390, 320],
-            pointerGameplayResume: true, keyboardPaletteSearch: true,
-            quickCast: true, manualAimOverride: true, legacyCastingFallback: true,
             inputIsolation: true, nativeFallback: true, heroScope: true, lifecycle: true, singleActivation: true,
             depletedAppearance: true, depletedSessionRestore: true, automaticRestock: true }));
     } catch (error) {

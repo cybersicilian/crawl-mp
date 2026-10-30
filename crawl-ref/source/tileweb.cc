@@ -29,7 +29,6 @@
 #include "ability.h"
 #include "act-iter.h"
 #include "archaeologist.h"
-#include "elemental-weapon.h"
 #include "artefact.h"
 #include "branch.h"
 #include "chardump.h"
@@ -92,6 +91,9 @@
 #include "state.h"
 #include "stats-json.h"
 #include "status.h"
+#include "web-bane-keys.h"
+#include "web-effect-keys.h"
+#include "god-abil.h"
 #include "stringutil.h"
 #include "throw.h"
 #include "tile-flags.h"
@@ -681,23 +683,6 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         json_close_object();
         finish_message();
     };
-    if (msgtype == "ai_prompt")
-    {
-        const auto mode = json_find_member(obj.node, "mode");
-        const auto request = json_find_member(obj.node, "prompt_activity_id");
-        const auto key = json_find_member(obj.node, "keycode");
-        if (m_viewer_slot < 0 || m_viewer_slot != party::active_slot()
-            || mouse_control::current_mode() == MOUSE_MODE_COMMAND
-            || !(m_ai_slots & (1 << m_viewer_slot))
-            || !mode || mode->tag != JSON_NUMBER || mode->number_ != mouse_control::current_mode()
-            || !request || request->tag != JSON_NUMBER || request->number_ != pending_activity_request
-            || !pending_activity_request || !_training_integer(key, -100000, 1114111))
-        {
-            return action_error("The AI prompt changed. Request a fresh response.");
-        }
-        send_message("{\"msg\":\"ai_prompt_result\",\"keycode\":%d}", static_cast<int>(key->number_));
-        return static_cast<int>(key->number_);
-    }
     if (party::multiplayer_enabled() && m_viewer_slot >= 0)
     {
         if (m_viewer_slot >= party::player_count())
@@ -735,15 +720,6 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
             return action_error("The planned hero changed. Queue this action again.");
         }
         pending_plan_request = static_cast<int>(plan_id->number_);
-    }
-    if (msgtype == "ai_action")
-    {
-        if (!party::multiplayer_enabled() || m_viewer_slot < 0
-            || m_viewer_slot != party::active_slot()
-            || mouse_control::current_mode() != MOUSE_MODE_COMMAND
-            || !_handle_ai_action(obj.node))
-            action_error("The AI observation changed. Request a fresh decision.");
-        return CK_MOUSE_CMD;
     }
     if (msgtype == "party_activity_step" || msgtype == "party_activity")
     {
@@ -835,16 +811,7 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         }
     }
 
-    if (msgtype == "ai_configure")
-    {
-        const auto slots = json_find_member(obj.node, "slots");
-        if (_training_integer(slots, 0, 14) && !(static_cast<int>(slots->number_) & 1))
-        {
-            m_ai_slots = static_cast<int>(slots->number_);
-            _send_personal_views();
-        }
-    }
-    else if (msgtype == "party_session")
+    if (msgtype == "party_session")
     {
         party::set_multiplayer(true);
         m_origin = coord_def(0, 0);
@@ -1438,13 +1405,11 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         const JsonNode* identity = json_find_member(obj.node, "id");
         const JsonNode* kind = json_find_member(obj.node, "kind");
         const JsonNode* letter = json_find_member(obj.node, "letter");
-        const JsonNode* quick = json_find_member(obj.node, "quick_cast");
         bool found = false;
         if (_training_integer(expected, 0, party::player_count() - 1)
             && expected->number_ == party::active_slot()
             && identity && identity->tag == JSON_NUMBER
             && kind && kind->tag == JSON_STRING
-            && (!quick || quick->tag == JSON_BOOL)
             && letter && letter->tag == JSON_STRING && letter->string_[0]
             && !letter->string_[1] && isaalpha(letter->string_[0]))
         {
@@ -1455,18 +1420,10 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
                 {
                     found = true;
                     shell::emerge();
-                    if (quick && quick->bool_)
-                    {
-                        if (quiver::can_quick_cast(spell))
-                            quiver::spell_to_action(spell)->trigger();
-                        else
-                            action_error("This spell requires manual aiming.");
-                    }
-                    else
-                        cast_a_spell(true, spell);
+                    cast_a_spell(true, spell);
                 }
             }
-            else if (string(kind->string_) == "ability" && (!quick || !quick->bool_))
+            else if (string(kind->string_) == "ability")
             {
                 for (const talent& talent : your_talents())
                     if (talent.hotkey == letter->string_[0]
@@ -2060,6 +2017,7 @@ static bool _update_statuses(player_info& c)
                 // up until now, c.status has not changed. Does this dur differ
                 // from the counter-th element in c.status?
                 if (counter >= c.status.size()
+                    || inf.id != c.status[counter].id
                     || inf.light_text != c.status[counter].light_text
                     || inf.light_colour != c.status[counter].light_colour
                     || inf.short_text != c.status[counter].short_text)
@@ -2273,6 +2231,7 @@ void TilesFramework::_send_player(bool force_full)
         for (const status_info &status : c.status)
         {
             json_open_object();
+            json_write_string("icon_key", web_effect_key(status.id));
             if (!status.light_text.empty())
             {
                 if (!status.light_text_formatted.empty())
@@ -2680,7 +2639,9 @@ void TilesFramework::_send_cell(const coord_def &gc,
 
             json_write_name("fg");
             write_tile_with_flags(next_pc.fg);
-            if (get_tile_texture(fg_idx) == TEX_DEFAULT)
+            // Cached doll IDs are not atlas indices; send their layers below.
+            if (fg_idx < TILEP_MCACHE_START
+                && get_tile_texture(fg_idx) == TEX_DEFAULT)
                 json_write_int("base", (int) tileidx_known_base_item(fg_idx));
 
             // XXX: Encode spell school overlays for parchments.
@@ -3304,11 +3265,23 @@ void TilesFramework::_send_party_state()
     for (int slot = 0; slot < party::player_count(); ++slot)
     {
         player &p = party::get_player(slot);
-        // Keep the slot and global player pointer aligned: nested party
-        // queries restore the current slot, not an independently rebound you.
-        party::scoped_player_context snapshot_context(slot);
         const bool same_level = (p.where_are_you == active_branch
                                  && p.depth == active_depth);
+        json_open_object();
+        json_write_int("slot", slot);
+        // Scheduler queries reconcile encounters using the loaded floor.
+        // Capture them before the stat context selects an off-floor hero;
+        // observing that hero must not regroup their floor using this map.
+        json_write_int("aut_clock", party::get_player_aut_clock(slot));
+        json_write_int("aut_lead", party::get_player_aut_lead(slot));
+        json_write_int("last_action_aut", party::member_last_action_aut(slot));
+        json_write_int("region_id", party::member_region_id(slot));
+        json_write_int("region_aut_clock", party::member_region_clock(slot));
+        json_write_bool("region_combat", party::region_combat_locked(slot));
+        json_write_bool("same_region", same_level && party::same_region(slot, m_viewer_slot >= 0 ? m_viewer_slot : active_slot));
+        json_write_bool("can_act", same_level && party::member_can_act(slot));
+        // Character-stat accessors require the matching global player pointer.
+        party::scoped_player_context snapshot_context(slot);
         const bool downed = party::is_player_downed(slot);
 
         string god_str;
@@ -3321,8 +3294,6 @@ void TilesFramework::_send_party_state()
         if (item_def* wpn = p.weapon())
             weapon_str = wpn->name(DESC_PLAIN, true, false, false);
 
-        json_open_object();
-        json_write_int("slot", slot);
         json_write_string("activity", party::member_activity(slot));
         json_open_array("trade_targets");
         for (int target = 0; target < party::player_count(); ++target)
@@ -3409,14 +3380,6 @@ void TilesFramework::_send_party_state()
             party::pantheon_relation_label(party::get_slot_pantheon_standing(slot)));
         json_write_string("god_politics",
             party::describe_party_god_politics(slot));
-        json_write_int("aut_clock", party::get_player_aut_clock(slot));
-        json_write_int("aut_lead", party::get_player_aut_lead(slot));
-        json_write_int("last_action_aut", party::member_last_action_aut(slot));
-        json_write_int("region_id", party::member_region_id(slot));
-        json_write_int("region_aut_clock", party::member_region_clock(slot));
-        json_write_bool("region_combat", party::region_combat_locked(slot));
-        json_write_bool("same_region", same_level && party::same_region(slot, m_viewer_slot >= 0 ? m_viewer_slot : active_slot));
-        json_write_bool("can_act", same_level && party::member_can_act(slot));
         json_write_int("move_aut", player_movement_speed());
         // Rounded display delay includes the hero's action speed (haste/slow)
         // as well as movement modifiers. Keep the older base delay contract.
@@ -3446,6 +3409,8 @@ void TilesFramework::_send_party_state()
         json_close_object();
         json_write_int("exp_pool", p.exp_available);
         json_write_string("place", level_id(p.where_are_you, p.depth).describe());
+        // Hell subbranches draw on the Vestibule's shared bribe fund.
+        json_write_int("bribe_fund", branch_bribe[gozag_fixup_branch(p.where_are_you)]);
         json_write_bool("on_same_level", same_level);
         if (same_level && in_bounds(p.pos()))
         {
@@ -3499,6 +3464,7 @@ void TilesFramework::_send_party_state()
                 {
                     json_open_object();
                     json_write_int("id", (int)st);
+                    json_write_string("icon_key", web_effect_key(st));
                     json_write_string("light", !inf.light_text.empty() ? inf.light_text : inf.short_text);
                     json_write_string("text", !inf.short_text.empty() ? inf.short_text : inf.light_text);
                     json_write_string("desc", status_light_description(inf));
@@ -3513,6 +3479,25 @@ void TilesFramework::_send_party_state()
                         : (inf.light_colour == RED || inf.light_colour == LIGHTRED || inf.light_colour == MAGENTA));
                     json_close_object();
                 }
+            }
+            json_close_array(false);
+        }
+
+        {
+            party::scoped_player_context bane_context(slot);
+            json_open_array("banes");
+            for (int b = 0; b < NUM_BANES; ++b)
+            {
+                const bane_type bane = static_cast<bane_type>(b);
+                if (!p.has_bane(bane))
+                    continue;
+                json_open_object();
+                json_write_int("id", b);
+                json_write_string("icon_key", web_bane_key(b));
+                json_write_string("name", bane_name(bane));
+                json_write_string("desc", bane_desc(bane));
+                json_write_int("recovery_xl_tenths", xl_to_remove_bane(bane));
+                json_close_object();
             }
             json_close_array(false);
         }
@@ -3596,7 +3581,6 @@ void TilesFramework::_send_party_state()
                 json_open_object();
                 json_write_string("letter", string(1, sp_let));
                 json_write_int("id", sp);
-                json_write_bool("quick_cast", p.species != SP_AUTOMATON && quiver::can_quick_cast(sp));
                 json_write_int("tile", tileidx_spell(sp));
                 // The ordinary spell stays ordinary while an alternate cast
                 // is resolving; only its separate action displays amplification.
@@ -3628,12 +3612,12 @@ void TilesFramework::_send_party_state()
                 {
                     json_write_int("reserved_hp", bloodcraft::reserved_hp(bloodcraft::unreserved_hp()));
                     json_write_int("activation_hp", bloodcraft::active_rite() == SPELL_NO_SPELL
-                        ? bloodcraft::player_reservation(bloodcraft::unreserved_hp()) : 0);
+                        ? bloodcraft::reservation(bloodcraft::unreserved_hp()) : 0);
                     json_write_bool("active", bloodcraft::active_rite() == sp);
                 }
                 if (bloodcraft::is_curse(sp))
                 {
-                    json_write_int("amplification_hp", bloodcraft::player_amplification_cost(bloodcraft::unreserved_hp()));
+                    json_write_int("amplification_hp", bloodcraft::amplification_cost(bloodcraft::unreserved_hp()));
                     json_write_int("amplification_mp", bloodcraft::amplified_mana(sp));
                 }
                 json_write_int("level", spell_difficulty(sp));
@@ -3697,8 +3681,6 @@ void TilesFramework::_send_party_state()
                 json_close_array(false);
                 json_close_object();
                 json_write_int("apt", species_apt(sk, p.species));
-                // Manuals double learning (+4 aptitude), regardless of charges.
-                json_write_int("manual_bonus", p.skill_manual_points[sk] > 0 ? 4 : 0);
                 json_write_int("train", (int)p.train[sk]);
                 json_write_int("training", p.training[sk]);
                 json_write_bool("can_train", can_enable_skill(sk));
@@ -3757,9 +3739,6 @@ void TilesFramework::_send_party_state()
             const string quest_description = archaeologist::item_description(p.inv[i]);
             if (!quest_description.empty())
                 item_desc = quest_description + "\n\n" + item_desc;
-            const string elemental = elemental_weapon::description(p, p.inv[i]);
-            if (!elemental.empty())
-                item_desc = elemental + "\n\n" + item_desc;
             json_open_object();
             json_write_int("slot", i);
             json_write_string("letter", string(1, inv_let));

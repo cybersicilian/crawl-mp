@@ -25,7 +25,6 @@
 #include "options.h"
 #include "output.h"
 #include "religion.h"
-#include "skills.h"
 #include "state.h"
 #include "stringutil.h"
 #include "tilefont.h"
@@ -151,9 +150,6 @@ bool SkillMenuEntry::is_selectable(bool)
 
     if (is_set(SKMF_HELP))
         return true;
-
-    if (high_elf_skill_locked(you, m_sk))
-        return false;
 
     if (you.has_mutation(MUT_DISTRIBUTED_TRAINING))
         return false;
@@ -295,7 +291,7 @@ COLOURS SkillMenuEntry::get_colour() const
     }
     else if (mastered())
         return YELLOW;
-    else if (high_elf_skill_locked(you, m_sk) || !you.training[m_sk])
+    else if (!you.training[m_sk])
         return DARKGREY;
     else if (you.skill_manual_points[m_sk])
         return LIGHTBLUE;
@@ -315,8 +311,7 @@ string SkillMenuEntry::get_prefix()
     else
         letter = ' ';
 
-    const int sign = (is_useless_skill(m_sk) || mastered()
-                      || high_elf_skill_locked(you, m_sk)) ? ' ' :
+    const int sign = (is_useless_skill(m_sk) || mastered()) ? ' ' :
                                    (you.train[m_sk] == TRAINING_FOCUSED) ? '*' :
                                           you.train[m_sk] ? '+'
                                                           : '-';

@@ -1120,32 +1120,14 @@ static void _input()
     if (crawl_state.seen_hups)
         save_game(true, "Game saved, see you later!");
 
-    crawl_state.clear_mon_acting();
-
-    // Resolve extra lives before scheduling, which skips zero-HP members.
-    if (party::is_enabled())
-    {
-        bool revived = false;
-        if (you.pending_revival && !party::is_player_downed(party::active_slot()))
-        {
-            revive();
-            bring_to_safety();
-            revived = true;
-        }
-        revived |= party::resolve_pending_revivals();
-        if (revived)
-        {
-            redraw_screen();
-            update_screen();
-        }
-    }
-
     if (party::is_enabled() && !party::multiplayer_enabled()
         && (party::is_player_downed(party::active_slot())
             || (!party::simultaneous_turns_enabled() && !party::party_feels_safe())))
     {
         party::switch_to_player(party::select_next_acting_player());
     }
+
+    crawl_state.clear_mon_acting();
 
     disable_check player_disabled(you.incapacitated());
     religion_turn_start();
@@ -1156,8 +1138,7 @@ static void _input()
 
     reset_damage_counters();
 
-    if (you.pending_revival
-        && (!party::is_enabled() || !party::is_player_downed(party::active_slot())))
+    if (you.pending_revival)
     {
         revive();
         bring_to_safety();
@@ -2056,6 +2037,11 @@ static void _handle_autofight(command_type cmd, command_type prev_cmd)
         mprf(MSGCH_ERROR, "Lua error: %s", clua.error.c_str());
 }
 
+static bool _can_control_expedition_lifecycle()
+{
+    return !party::multiplayer_enabled() || party::active_slot() == 0;
+}
+
 class GameMenu : public Menu
 {
 // this could be easily generalized for other menus that select among commands
@@ -2130,11 +2116,12 @@ public:
         items[1]->add_tile(tileidx_command(CMD_GAME_MENU));
         // n.b. CMD_SAVE_GAME_NOW crashes on returning to the main menu if we
         // don't exit out of this popup now, not sure why
-        add_entry(new CmdMenuEntry(
-            (crawl_should_restart(game_exit::save)
-                            ? "Save and return to main menu"
-                            : "Save and exit"),
-            MEL_ITEM, 'S', CMD_SAVE_GAME_NOW, false));
+        if (_can_control_expedition_lifecycle())
+            add_entry(new CmdMenuEntry(
+                (crawl_should_restart(game_exit::save)
+                                ? "Save and return to main menu"
+                                : "Save and exit"),
+                MEL_ITEM, 'S', CMD_SAVE_GAME_NOW, false));
         add_entry(new CmdMenuEntry("Generate and view character dump",
             MEL_ITEM, '#', CMD_SHOW_CHARACTER_DUMP));
 #ifdef USE_TILE_LOCAL
@@ -2156,9 +2143,12 @@ public:
             MEL_ITEM, CK_F12, CMD_TOGGLE_KEYBOARD));
 #endif
         add_entry(new CmdMenuEntry("", MEL_SUBTITLE));
-        add_entry(new CmdMenuEntry(
-                            "Quit and <lightred>abandon character</lightred>",
-            MEL_ITEM, 'Q', CMD_QUIT, false));
+        if (_can_control_expedition_lifecycle())
+            add_entry(new CmdMenuEntry(
+                                "Quit and <lightred>abandon character</lightred>",
+                MEL_ITEM, 'Q', CMD_QUIT, false));
+        else
+            add_entry(new CmdMenuEntry("The host controls saving and ending this expedition.", MEL_SUBTITLE));
     }
 
     vector<MenuEntry *> show(bool reuse_selections = false) override
@@ -2183,6 +2173,16 @@ void process_command(command_type cmd, command_type prev_cmd)
         if (m.cmd == CMD_NO_CMD)
             return;
         cmd = m.cmd;
+    }
+
+    // The native command boundary covers keyboard remaps, macros and menus.
+    // A guest's personal command must not stop or abandon every hero's game.
+    if (!_can_control_expedition_lifecycle()
+        && (cmd == CMD_SAVE_GAME || cmd == CMD_SAVE_GAME_NOW
+            || cmd == CMD_QUIT || cmd == CMD_SUSPEND_GAME))
+    {
+        mpr("Only the expedition host can save and exit, abandon, or suspend this game.");
+        return;
     }
 
     shell::prepare_command(cmd);

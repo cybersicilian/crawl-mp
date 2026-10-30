@@ -1,5 +1,4 @@
 #include "AppHdr.h"
-#include "elemental-weapon.h"
 #include "eldritch.h"
 #include "god-vellum.h"
 #include "oozle-memory-effects.h"
@@ -169,9 +168,6 @@ brand_type effective_brand(const actor& owner, const item_def* item)
         return SPWPN_CHAOS;
     const auto native = item ? get_weapon_brand(*item) : SPWPN_NORMAL;
     if (native != SPWPN_NORMAL || !owner.is_player()) return native;
-    if (const auto elemental = elemental_weapon::brand(owner, item);
-        elemental != SPWPN_NORMAL)
-        return elemental;
     return static_cast<brand_type>(body_property(*owner.as_player(), ARTP_BRAND));
 }
 int inherited_strikes(const item_def* item)

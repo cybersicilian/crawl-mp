@@ -206,8 +206,6 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_DEEP_WATER;
     case DNGN_SHALLOW_WATER:
         return TILE_DNGN_SHALLOW_WATER;
-    case DNGN_SHALLOW_HONEY:
-        return TILE_DNGN_SHALLOW_HONEY;
     case DNGN_OPEN_SEA:
         return TILE_DNGN_OPEN_SEA;
     case DNGN_TOXIC_BOG:
@@ -366,16 +364,10 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_ENTER_SWAMP;
     case DNGN_ENTER_SPIDER:
         return TILE_DNGN_ENTER_SPIDER;
-    case DNGN_ENTER_WORMLANDS:
-    case DNGN_ENTER_BURROWS:
-        return TILE_DNGN_ENTER_BURROWS;
-    case DNGN_ENTER_HIVE:
-        return TILE_DNGN_ENTER_HIVE;
     case DNGN_ENTER_SHOALS:
         return TILE_DNGN_ENTER_SHOALS;
     case DNGN_ENTER_SLIME:
         return TILE_DNGN_ENTER_SLIME;
-    case DNGN_WORMLANDS_TO_DEPTHS:
     case DNGN_ENTER_DEPTHS:
         return TILE_DNGN_ENTER_DEPTHS;
     case DNGN_ENTER_VAULTS:
@@ -433,12 +425,6 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
         return TILE_DNGN_EXIT_SWAMP;
     case DNGN_EXIT_SPIDER:
         return TILE_DNGN_EXIT_SPIDER;
-    case DNGN_EXIT_WORMLANDS:
-    case DNGN_DEPTHS_TO_WORMLANDS:
-    case DNGN_EXIT_BURROWS:
-        return TILE_DNGN_EXIT_BURROWS;
-    case DNGN_EXIT_HIVE:
-        return TILE_DNGN_EXIT_HIVE;
     case DNGN_EXIT_SHOALS:
         return TILE_DNGN_EXIT_SHOALS;
     case DNGN_EXIT_SLIME:
@@ -723,11 +709,6 @@ static tileidx_t _apply_branch_tile_overrides(tileidx_t orig, coord_def gc)
     {
         if (orig == TILE_DNGN_STONE_WALL)
             orig = TILE_STONE_WALL_SLIME;
-    }
-    else if (player_in_branch(BRANCH_BURROWS))
-    {
-        if (orig == TILE_DNGN_STONE_WALL)
-            orig = TILE_STONE_WALL_BURROWS;
     }
     else if (player_in_branch(BRANCH_LAIR))
     {
@@ -3435,7 +3416,6 @@ static tileidx_t _tileidx_gem_base(const item_def &item)
     case GEM_TOMB:    return TILE_GEM_TOMB;
     case GEM_DEPTHS:  return TILE_GEM_DEPTHS;
     case GEM_ZOT:     return TILE_GEM_ZOT;
-    case GEM_BURROWS: return TILE_GEM_BURROWS;
     }
 }
 
@@ -3478,7 +3458,6 @@ static tileidx_t _tileidx_uncollected_rune(const item_def &item)
     case RUNE_SHOALS:      return TILE_UNCOLLECTED_RUNE_SHOALS;
     case RUNE_ELF:         return TILE_UNCOLLECTED_RUNE_ELVEN;
 
-    case RUNE_BURROWS:      return TILE_UNCOLLECTED_RUNE_BURROWS;
     case RUNE_FOREST:
     default:               return TILE_MISC_UNCOLLECTED_RUNE_OF_ZOT;
     }
@@ -3513,7 +3492,6 @@ static tileidx_t _tileidx_rune(const item_def &item)
     case RUNE_SHOALS:      return TILE_RUNE_SHOALS;
     case RUNE_ELF:         return TILE_RUNE_ELVEN;
 
-    case RUNE_BURROWS:      return TILE_RUNE_BURROWS;
     case RUNE_FOREST:
     default:               return TILE_MISC_RUNE_OF_ZOT;
     }
@@ -4498,7 +4476,7 @@ tileidx_t tileidx_ability(const ability_type ability)
     case ABIL_RETRACT_SHELL:
         return TILEG_SPLINTERFROST_SHELL;
     case ABIL_SHELL_DASH:
-        return TILEG_ABILITY_SHELL_DASH;
+        return TILEG_ABILITY_JUMP;
     case ABIL_SPIDER_JUMP:
         return TILEG_ABILITY_JUMP;
     case ABIL_BLINKBOLT:
@@ -4907,7 +4885,7 @@ tileidx_t tileidx_ability(const ability_type ability)
         return TILEG_ABILITY_QAZLAL_ELEMENTAL_FORCE;
 #endif
     case ABIL_PANTHEON_CONVERGENCE:
-        return TILEG_ABILITY_ELYVILON_HEAL_SELF;
+        return TILEG_ABILITY_OKAWARU_HEROISM;
     case ABIL_PALADIN_INTERVENE:
         return TILEG_ABILITY_ELYVILON_AURA_OF_VIGOUR;
     case ABIL_PALADIN_AURA_ZEAL:
@@ -4955,11 +4933,6 @@ tileidx_t tileidx_branch(const branch_type br)
         return TILE_DNGN_ENTER_SNAKE;
     case BRANCH_SPIDER:
         return TILE_DNGN_ENTER_SPIDER;
-    case BRANCH_WORMLANDS:
-    case BRANCH_BURROWS:
-        return TILE_DNGN_ENTER_BURROWS;
-    case BRANCH_HIVE:
-        return TILE_DNGN_ENTER_HIVE;
     case BRANCH_SLIME:
         return TILE_DNGN_ENTER_SLIME;
     case BRANCH_VAULTS:

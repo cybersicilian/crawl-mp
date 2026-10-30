@@ -11,6 +11,16 @@ def cancel(owner):
         owner.reconnect_timeout = None
 
 
+def has_connected_humans(process):
+    control = getattr(process, "party_control", None)
+    connected = getattr(control, "connected_slots", None)
+    if not control or not control.multiplayer or connected is None:
+        return False
+    ai_slots = getattr(control, "ai_slots", set())
+    return any(type(slot) is int and 0 <= slot < 4 and slot not in ai_slots
+               for slot in connected())
+
+
 def defer_stop(owner):
     delay = config.get("reconnect_grace_period")
     if not owner.username or delay <= 0:
@@ -19,9 +29,16 @@ def defer_stop(owner):
     owner.process.remove_watcher(owner)
 
     def expire():
+        process = owner.process
+        if has_connected_humans(process):
+            # The closed host socket remains the process's reclaim anchor.
+            # Keep its lease while humans still play; AI seats and spectators
+            # do not keep an abandoned expedition running indefinitely.
+            owner.reconnect_timeout = IOLoop.current().call_later(delay, expire)
+            return
         owner.reconnect_timeout = None
-        if owner.process is not None:
-            owner.process.stop()
+        if process is not None:
+            process.stop()
 
     owner.reconnect_timeout = IOLoop.current().call_later(delay, expire)
     return True

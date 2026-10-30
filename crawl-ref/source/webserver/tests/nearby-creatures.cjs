@@ -54,17 +54,6 @@ const root = path.resolve(__dirname, '..');
         });
         assert((await page.locator('#monster_list .name').allTextContents()).includes('unknown actor'),
             'Actors without type metadata remain visible during native state transitions');
-        await page.evaluate(() => {
-            window.place(5, 'plant', 0); window.cells['5,0'].mon.typedata.no_exp = true;
-            document.querySelector('#normal').insertAdjacentHTML('beforeend', '<aside id="enemy_initiative_rail" data-creature-groups="true"></aside>');
-            window.nearby.update('Unseen movement');
-        });
-        const contacts = await page.evaluate(() => window.nearby.contacts());
-        assert(contacts.some(contact => contact.name === 'plant' && contact.non_threatening));
-        assert(contacts.some(contact => contact.name === 'summoned hound' && contact.att === 4));
-        assert.equal(await page.locator('#monster_list .group:not(.is-unseen-warning)').count(), 0,
-            'The grouped rail replaces duplicate map rows without repainting them');
-        assert.equal(await page.locator('#monster_list .is-unseen-warning').count(), 1);
         await page.evaluate(() => window.nearby.clear());
         assert.equal(await page.locator('#monster_list').isVisible(), false);
         console.log('Duplicate party actors hidden; compact hostiles, summons, off-floor unknowns and unseen warnings preserved.');

@@ -1,5 +1,5 @@
 /* Character identity and legal choices use the same catalog as the native guide. */
-define(["character-catalog", "client-staging-data", "starting-sheet", "searchable-select", "client-staging-traits"], function (catalog, choices, sheet, picker, traits) {
+define(["character-catalog", "client-staging-data", "starting-sheet", "searchable-select", "client-staging-traits", "character-build-overview", "character-choices"], function (catalog, choices, sheet, picker, traits, overview, visualChoices) {
     "use strict";
     var selections = new WeakMap();
     function selection(card) {
@@ -7,8 +7,19 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         return selections.get(card);
     }
     function select(card, field) { selection(card)[field] = true; }
+    function describeOptions(select, records) {
+        Array.from(select.options).forEach(function (option) {
+            var entry = records[option.value], description = entry && entry.description || "";
+            var sentence = description.replace(/\s+/g, " ").trim().match(/^.*?[.!?](?:\s|$)/);
+            option.dataset.choiceDescription = sentence ? sentence[0].trim() : description;
+        });
+    }
     function context(card, key) {
-        if (selection(card).context !== key) selections.set(card, { context: key });
+        if (selection(card).context !== key) {
+            selections.set(card, { context: key });
+            visualChoices.reset(card.querySelector(".party-slot-species"));
+            visualChoices.reset(card.querySelector(".party-slot-job"));
+        }
     }
     function element(tag, className, text) {
         var node = document.createElement(tag);
@@ -42,6 +53,8 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         var abbreviation = mark.querySelector(".party-slot-abbreviation");
         if (abbreviation) abbreviation.textContent = race && job ? race.abbr + job.abbr : "?";
         var allowed = choices.allowedJobs(raceSelect.value);
+        describeOptions(raceSelect, catalog.species);
+        describeOptions(jobSelect, catalog.jobs);
         Array.from(jobSelect.options).forEach(function (option) {
             var disabled = allowed.indexOf(option.value) === -1;
             if (option.disabled !== disabled) option.disabled = disabled;
@@ -50,10 +63,13 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         picker.recommend(raceSelect, ((job && job.recommended) || []).map(speciesName).filter(function (name) {
             return choices.allowedJobs(name).indexOf(jobSelect.value) !== -1;
         }));
-        picker.enhance(raceSelect); picker.enhance(jobSelect);
+        visualChoices.refresh(raceSelect, "species", catalog.species);
+        visualChoices.refresh(jobSelect, "background", catalog.jobs);
         traits.refresh(card);
+        overview.refresh(card, build, preview);
         refreshBuilds(card, raceSelect.value, jobSelect.value);
         card.querySelectorAll(".party-archetype-btn").forEach(function (button) {
+            button.disabled = card.dataset.seatEditable === "false";
             if (button.dataset.random === "true") return;
             button.setAttribute("aria-pressed", String(button.dataset.species === raceSelect.value && button.dataset.job === jobSelect.value));
         });
@@ -91,7 +107,7 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
     }
     function speciesName(name) { return catalog.species[name] ? catalog.species[name].name : name; }
     window.addEventListener("native-start-updated", function () {
-        document.querySelectorAll("#party_slots_grid .party-slot-box").forEach(refresh);
+        document.querySelectorAll('#party_slots_grid:not([data-saved-expedition="true"]) .party-slot-box').forEach(refresh);
     });
     return { identity: identity, refresh: refresh, speciesName: speciesName, select: select, context: context };
 });

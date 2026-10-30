@@ -1,0 +1,31 @@
+{
+  "release": "/opt/dcss/releases/20261022T151837Z-account-graphics",
+  "baseline": "/opt/dcss/releases/20261021T194324Z-all-oozle-altars",
+  "overlayFiles": 72,
+  "preservedFiles": 13355,
+  "nativeSha256": "4be647f2df085bd578004a27c79bc998a9000bf26bcf0cd0a90e727324548e21",
+  "clientRevision": "70095f60038f96a8f2b6",
+  "nativeBuildRequired": false,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "webtiles.asset_revision_test"
+      ],
+      "exitCode": 0,
+      "output": ".\n----------------------------------------------------------------------\nRan 1 test in 0.006s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "/opt/dcss/account-graphics-staging/20261022T151837Z-account-graphics/runtime-check.py",
+        "/opt/dcss/releases/20261022T151837Z-account-graphics/crawl-ref/source"
+      ],
+      "exitCode": 0,
+      "output": "409 POST /api/profile/graphics (127.0.0.1): Your sign-in changed; reload graphics settings\n409 POST /api/profile/graphics (127.0.0.1) 1.65ms\n403 POST /api/profile/graphics (127.0.0.1): '_xsrf' argument missing from POST\n403 POST /api/profile/graphics (127.0.0.1) 4.76ms\n400 POST /api/profile/graphics (127.0.0.1): Choose valid graphics settings\n400 POST /api/profile/graphics (127.0.0.1) 0.72ms\n400 POST /api/profile/graphics (127.0.0.1): Choose valid graphics settings\n400 POST /api/profile/graphics (127.0.0.1) 1.20ms\n.401 GET /api/profile/graphics (127.0.0.1): Sign in to manage graphics settings\n401 GET /api/profile/graphics (127.0.0.1) 1.25ms\n.\n----------------------------------------------------------------------\nRan 2 tests in 0.967s\n\nOK\n"
+    }
+  ],
+  "passed": true
+}

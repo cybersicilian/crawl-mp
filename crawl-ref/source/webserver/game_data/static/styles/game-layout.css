@@ -305,7 +305,7 @@
   gap: 3px;
   margin: 3px 0;
 }
-.party-buff-pill:not(.status-icon-frame) {
+.party-buff-pill {
   padding: 0px 4px;
   font-size: 9.5px;
   border: 1px solid #4a4030;
@@ -313,10 +313,10 @@
   border-radius: 2px;
   cursor: help;
 }
-.party-buff-pill:not(.status-icon-frame).is-buff {
+.party-buff-pill.is-buff {
   border-color: #4e7a28;
 }
-.party-buff-pill:not(.status-icon-frame).is-bad {
+.party-buff-pill.is-bad {
   border-color: #a40000;
 }
 .party-member-footer {

@@ -4263,9 +4263,6 @@ colour_t item_def::rune_colour() const
         case RUNE_SPIDER:
             return ETC_BONE;
 
-        case RUNE_BURROWS:
-            return BROWN;
-
         case RUNE_SLIME:                    // slimy
             return ETC_SLIME;
 
@@ -4335,7 +4332,6 @@ colour_t item_def::gem_colour() const
     case GEM_SHOALS:  return ETC_ENCHANT;
     case GEM_SNAKE:   return ETC_POISON;
     case GEM_SPIDER:  return WHITE;
-    case GEM_BURROWS: return BROWN;
 
     case GEM_SLIME:   return ETC_AIR;
     case GEM_VAULTS:  return ETC_STEEL;

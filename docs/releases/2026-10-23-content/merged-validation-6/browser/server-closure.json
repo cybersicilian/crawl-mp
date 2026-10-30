@@ -1,8 +1,0 @@
-{
-  "native_pids_before_shutdown": [],
-  "native_pids_remaining": [],
-  "server_pid": 54096,
-  "server_exit": 0,
-  "runtime": "/private/tmp/dcss-content-qa-01a16a0f-6",
-  "production_touched": false
-}

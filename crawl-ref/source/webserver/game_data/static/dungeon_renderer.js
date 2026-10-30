@@ -1,7 +1,7 @@
 define(["jquery", "comm", "./cell_renderer", "./map_knowledge", "./options",
-    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view"],
+    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view"],
 function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
-    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains) {
+    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, movement, effects, regions, chains) {
     "use strict";
     var global_anim_counter = 0;
     var last_background_tick = -1;
@@ -365,6 +365,7 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
         animate: function ()
         {
+            if (!options.ready()) return;
             var tick = Math.floor(window.performance.now() / 250);
             var background = !options.get("tile_realtime_anim") || tick !== last_background_tick;
             if (background) {
@@ -422,8 +423,6 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
     traversal.attach(renderer);
     chains.attach(renderer);
     shells.attach(renderer);
-    feedback.attach(renderer);
-    encounters.attach(renderer);
     movement.attach(renderer);
     plannedRoute.attach(renderer);
     var anim_interval = null, animation_running = false;
@@ -435,7 +434,8 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
             clearTimeout(anim_interval);
             anim_interval = null;
         }
-        if (animation_running && options.get("tile_realtime_anim"))
+        // game_init runs before the native options packet is dispatched.
+        if (animation_running && options.ready() && options.get("tile_realtime_anim"))
         {
             anim_interval = setInterval(function () {
                 renderer.animate();

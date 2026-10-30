@@ -38,8 +38,7 @@ const root = path.resolve(__dirname, '..');
                 './hud-inventory': { init() {} }, './panel-workspace': { init() {} }, './hud-iconography': { init() {} }, './hud-polish': { init() {} }, './viewport-zoom': { init() {} }, './quickbar': { init() {} },
                 './player-card-details': { mount() {} }, './hud-bottom-strip': { init() {} },
                 './player-card-sections': { init() {} }, './party-progress': { init() {} },
-                './party-card-readings': { init() {} }, './floor-items': { init() {} }, './session-menu': { init() {} },
-                './assimilation-panel': { init() {} }, './premium-dungeon': { init() {} }
+                './party-card-readings': { init() {} }, './floor-items': { init() {} }, './session-menu': { init() {} }
             };
             window.define = (dependencies, factory) => {
                 window.qaModules[window.qaName] = typeof dependencies === 'function'
@@ -58,10 +57,6 @@ const root = path.resolve(__dirname, '..');
         await page.addScriptTag({ path: path.join(root, 'static/scripts/expedition-url.js') });
         await page.evaluate(() => { window.qaName = 'library-ui'; });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/library-ui.js') });
-        for (const name of ['menu-keyboard', 'hud-input']) {
-            await page.evaluate(name => { window.qaName = './' + name; }, name);
-            await page.addScriptTag({ path: path.join(root, 'game_data/static', name + '.js') });
-        }
         await page.evaluate(() => {
             window.qaHandlers.game_library({ player_id: 'qa-owner', games: [] });
             window.qaHandlers.record_identity({ owner_id: 'qa-owner', game_id: 'qa-game', player_id: 'qa-hero' });

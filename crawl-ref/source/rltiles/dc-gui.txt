@@ -422,12 +422,8 @@ enum:SP_RECOMMENDED_KITSUNE SP_KITSUNE
 enum:SP_RECOMMENDED_AUTOMATON SP_AUTOMATON
 %syn LAST_SPECIES
 
-# Append dedicated art to preserve all existing GUI tile indices.
-%sdir gui/abilities
-%texture none
-shell_dash ABILITY_SHELL_DASH
-
 # Custom species intrinsic abilities.
+%texture none
 %resetcol
 %rim 0
 %sdir gui/abilities

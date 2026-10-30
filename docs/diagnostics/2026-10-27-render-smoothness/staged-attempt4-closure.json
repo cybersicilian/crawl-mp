@@ -1,8 +1,0 @@
-{
-  "reservationId": "b3daa613-3a74-47ec-8e13-94526efcd00d",
-  "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/staged-attempt4/staged-browser-result.json",
-  "webkit_assets_and_rendering_passed": true,
-  "headless_multiwindow_focus_assertion_failed": true
-}

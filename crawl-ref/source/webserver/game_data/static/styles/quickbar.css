@@ -36,10 +36,6 @@
     position: absolute; bottom: 0; left: 1px; padding: 0 1px; border: 0; border-radius: 1px;
     background: #161b20db; color: #fff0ce; font: bold 9px/1.1 sans-serif; pointer-events: none;
 }
-.quickbar-cast-mode {
-    position: absolute; top: 0; left: 1px; padding: 0 2px; border-radius: 1px;
-    background: #152b35; color: #d6f2ff; font: bold 9px/1.1 sans-serif; pointer-events: none;
-}
 #normal #quickbar_more { flex: 0 0 auto; margin: 0; }
 #quickbar_more > summary { background: transparent; list-style: none; border-color: transparent; }
 #quickbar_more > summary::-webkit-details-marker { display: none; }

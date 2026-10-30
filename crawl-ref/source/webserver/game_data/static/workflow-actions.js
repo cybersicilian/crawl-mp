@@ -78,20 +78,16 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
         comm.send_message("inv_item_describe", { slot: item.slot, expected_slot: member.slot,
             expected_name: item.name });
     }
-    function power(member, entry, kind, quickCast) {
+    function power(member, entry, kind) {
         var unavailable = powerReason(member, entry, kind);
-        if (!unavailable && quickCast && (kind !== "spell" || entry.quick_cast !== true))
-            unavailable = "Quick cast is unavailable for this spell. Use manual aiming.";
         if (unavailable) { notice(unavailable); return; }
         if (!Number.isInteger(entry.id)) { notice("Power identity is unavailable."); return; }
         clearNotice();
         var picker = document.getElementById("power_picker_dialog");
         if (picker && picker.open) picker.close("native-action");
         leaveFolio(false);
-        var fields = { expected_slot: member.slot, id: entry.id,
-            letter: kind === "spell" ? entry.letter : entry.hotkey, kind: kind };
-        if (quickCast) fields.quick_cast = true;
-        comm.send_message("power_action", fields);
+        comm.send_message("power_action", { expected_slot: member.slot, id: entry.id,
+            letter: kind === "spell" ? entry.letter : entry.hotkey, kind: kind });
     }
     function powerReason(member, entry, kind) {
         var blocked = reason(member, true) || (!Number.isInteger(entry.id) ? "Power identity is unavailable." : "");

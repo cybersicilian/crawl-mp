@@ -11,7 +11,7 @@
   {% if handler.get_cookie('login') %}
   <details class="archive-account">
     <summary>Account</summary>
-    <div class="archive-account-menu"><a href="/profile">Profile &amp; textures</a><a href="/settings/graphics">Graphics &amp; interface</a>{% include "logout.html" %}</div>
+    <div class="archive-account-menu"><a href="/settings/graphics">Graphics &amp; interface</a>{% include "logout.html" %}</div>
   </details>
   {% else %}
   <a class="archive-sign-in" href="/?view=play#lobby">Sign in &amp; play</a>

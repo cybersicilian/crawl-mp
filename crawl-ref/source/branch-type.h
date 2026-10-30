@@ -74,9 +74,6 @@ enum branch_type                // you.where_are_you
     BRANCH_NECROPOLIS,
     BRANCH_GULCH,
 #endif
-    BRANCH_BURROWS, // Append new branches to preserve saved IDs.
-    BRANCH_WORMLANDS,
-    BRANCH_HIVE,
     NUM_BRANCHES,
 
     GLOBAL_BRANCH_INFO = 127,

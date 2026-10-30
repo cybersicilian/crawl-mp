@@ -425,7 +425,6 @@ enum rune_type
 
     RUNE_SPIDER,
     RUNE_FOREST, // only used in sprints
-    RUNE_BURROWS, // Legacy clay rune; no longer generated.
     NUM_RUNE_TYPES
 };
 
@@ -448,7 +447,6 @@ enum gem_type
     GEM_TOMB,
     GEM_DEPTHS,
     GEM_ZOT,
-    GEM_BURROWS,
     NUM_GEM_TYPES
 };
 

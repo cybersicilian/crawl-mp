@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "options.h"
 #include "spl-book.h"
@@ -132,25 +131,17 @@ vector<spell_type> spells_in_book(const item_def &book)
 {
     ASSERT(book.base_type == OBJ_BOOKS);
 
-    const auto available = [](vector<spell_type> spells)
-    {
-        erase_if(spells, [](spell_type spell)
-        {
-            return !coop_content::spell_available(spell);
-        });
-        return spells;
-    };
     vector<spell_type> ret;
 
     if (book.sub_type == BOOK_PARCHMENT && book.plus > 0)
     {
         ret.emplace_back(static_cast<spell_type>(book.plus));
-        return available(ret);
+        return ret;
     }
 
     const CrawlHashTable &props = book.props;
     if (!props.exists(SPELL_LIST_KEY))
-        return available(spellbook_template(static_cast<book_type>(book.sub_type)));
+        return spellbook_template(static_cast<book_type>(book.sub_type));
 
     const CrawlVector &spells = props[SPELL_LIST_KEY].get_vector();
 
@@ -162,7 +153,7 @@ vector<spell_type> spells_in_book(const item_def &book)
         if (spell != SPELL_NO_SPELL)
             ret.emplace_back(static_cast<spell_type>(spell));
 
-    return available(ret);
+    return ret;
 }
 
 vector<spell_type> spellbook_template(book_type book)
@@ -477,7 +468,7 @@ bool library_add_spells(vector<spell_type> spells, bool quiet)
     vector<spell_type> new_spells;
     for (spell_type st : spells)
     {
-        if (coop_content::spell_available(st) && !you.spell_library[st])
+        if (!you.spell_library[st])
         {
             you.spell_library.set(st, true);
             if (you_can_memorise(st))

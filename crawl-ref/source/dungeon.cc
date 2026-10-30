@@ -21,7 +21,6 @@
 #include "acquire.h"
 #include "artefact.h"
 #include "branch.h"
-#include "branch-population.h"
 #include "chardump.h"
 #include "cloud.h"
 #include "coordit.h"
@@ -1790,8 +1789,7 @@ static int _mon_die_size()
     if (you.where_are_you == BRANCH_LAIR && you.depth == 5)
         return DEFAULT_MON_DIE_SIZE + extra;
 
-    const int size = branch_population_die_size(you.where_are_you, you.depth,
-                                               branches[you.where_are_you].mon_die_size);
+    const int size = branches[you.where_are_you].mon_die_size;
     if (you.where_are_you != BRANCH_DUNGEON)
         return size + extra;
 
@@ -2410,22 +2408,9 @@ static bool _add_connecting_escape_hatches()
     if (branches[you.where_are_you].branch_flags & brflag::islanded)
         return true;
 
-    if (player_in_branch(BRANCH_HIVE)
-        && _process_disconnected_zones(false, {}, [](const coord_def& p)
-           {
-               return _dgn_square_is_passable(p)
-                      && env.grid(p) != DNGN_SHALLOW_HONEY;
-           }) > 1)
-    {
-        return false;
-    }
-
-    // Veto D:1, Elf:2 (for Blade), Burrows, or Pan if there are disconnected areas.
+    // Veto D:1, Elf:2 (for Blade), or Pan if there are disconnected areas.
     // Veto any non-abyss descent level with disconnected areas, too.
     if (player_in_branch(BRANCH_PANDEMONIUM)
-        || player_in_branch(BRANCH_BURROWS)
-        || player_in_branch(BRANCH_WORMLANDS)
-        || player_in_branch(BRANCH_HIVE)
         || (player_in_branch(BRANCH_DUNGEON) && you.depth == 1)
         || (player_in_branch(BRANCH_ELF) && you.depth == 2)
         || (crawl_state.game_is_descent() && !player_in_branch(BRANCH_ABYSS)))
@@ -4124,13 +4109,6 @@ static bool _place_vault_by_tag(const string &tag)
 
 bool in_descent_parent(branch_type branch)
 {
-    if (crawl_state.game_is_descent()
-        && you.props.exists(DESCENT_POIS_BRANCH_KEY)
-        && branches_are_mutually_exclusive(branch,
-            static_cast<branch_type>(you.props[DESCENT_POIS_BRANCH_KEY].get_int())))
-    {
-        return false;
-    }
     vector<branch_type> parents = descent_parents(branch);
     for (branch_type parent : parents)
         if (player_in_branch(parent))
@@ -4140,28 +4118,6 @@ bool in_descent_parent(branch_type branch)
 
 static void _place_branch_entrances(bool use_vaults)
 {
-    for (const auto& link : branch_connections)
-    {
-        if ((link.from.branch != root_branch && !brentry[link.from.branch].is_valid())
-            || (link.to.branch != root_branch && !brentry[link.to.branch].is_valid()))
-        {
-            continue;
-        }
-        const level_id here = level_id::current();
-        const dungeon_feature_type feat = here == link.from ? link.downstairs
-            : here == link.to ? link.upstairs : NUM_FEATURES;
-        if (feat == NUM_FEATURES)
-            continue;
-        bool placed = false;
-        for (rectangle_iterator ri(0); ri; ++ri)
-            placed |= env.grid(*ri) == feat;
-        if (!placed)
-        {
-            const coord_def pos = _place_specific_feature(feat);
-            env.level_map_mask(pos) |= MMT_VAULT;
-        }
-    }
-
     // Find what branch entrances are already placed, and what branch
     // entrances could be placed here.
     bool branch_entrance_placed[NUM_BRANCHES];
@@ -4191,14 +4147,6 @@ static void _place_branch_entrances(bool use_vaults)
             continue;
         if (!feat_is_branch_entrance(env.grid(*ri)))
             continue;
-
-        const level_id connection = branch_connection_destination(
-            env.grid(*ri), level_id::current());
-        if (connection.is_valid())
-        {
-            branch_entrance_placed[connection.branch] = true;
-            continue;
-        }
 
         for (branch_iterator it; it; ++it)
         {
@@ -4232,6 +4180,7 @@ static void _place_branch_entrances(bool use_vaults)
             brentry_allowed = it->entry_stairs != NUM_FEATURES
                 && in_descent_parent(it->id)
                 && it->id != you.props[DESCENT_WATER_BRANCH_KEY].get_int()
+                && it->id != you.props[DESCENT_POIS_BRANCH_KEY].get_int()
                 && at_branch_bottom();
         }
         else
@@ -5096,15 +5045,6 @@ static void _build_postvault_level(vault_placement &place)
         const int connchance = random_choose(0, 5, 20, 50, 100);
         const int top = random_choose(1, 20, 125, 500, 999999);
         delve(0, ngb_min, ngb_max, connchance, -1, top);
-    }
-    else if (player_in_branch(BRANCH_BURROWS)
-             || player_in_branch(BRANCH_WORMLANDS)
-             || player_in_branch(BRANCH_HIVE))
-    {
-        // Grow passages from the connected vault instead of cutting a room
-        // layout across its rock partitions. Keep the outer tunnels narrow.
-        const int cells = dgn_builder_x() * dgn_builder_y() / 6;
-        delve(nullptr, 2, 4, 10, cells, 20);
     }
     else
     {

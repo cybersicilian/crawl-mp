@@ -110,7 +110,7 @@ function ($, comm, nested, placement, policy, sources, content) {
                 if (html_body)
                     body_div.innerHTML = html_body;
                 else
-                    meta = content.render(body_div, body, meta);
+                    meta = content.render(body_div, body, meta, target.getAttribute("data-tip-heat"));
                 tip_node.appendChild(body_div);
             }
 

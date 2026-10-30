@@ -141,17 +141,6 @@ async function show(page, id, display) {
         await page.clock.runFor(6000);
         assert((await page.locator('#loader_text').innerText()).includes('Still preparing'));
 
-        await page.evaluate(() => {
-            window.qaReadiness.begin(); window.qaReadiness.setLayer('normal');
-            window.qaReadiness.fail('Return to the party hall and resume your expedition to try again.');
-        });
-        assert(await page.locator('#loading_return').isVisible());
-        assert.equal(await page.locator('#loader_text').innerText(), 'The dungeon view is unavailable.');
-        assert.equal(await page.locator('#game').getAttribute('aria-busy'), 'true');
-        await page.evaluate(() => window.qaReadiness.begin());
-        assert.equal(await page.locator('#loader_text').innerText(), 'Preparing your expedition…');
-        await page.evaluate(() => window.qaReadiness.cancel());
-
         // Native sign-in and process confirmation keep their own visibility,
         // controls, and keyboard routing. The new card yields to every prompt.
         await show(page, 'loader_text', 'none');

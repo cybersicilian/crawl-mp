@@ -1,6 +1,3 @@
-# Preserve independently managed applications on a shared host.
-import /etc/caddy/apps/*.caddy
-
 dcss.iancaltabiano.com {
     encode zstd gzip
     header {

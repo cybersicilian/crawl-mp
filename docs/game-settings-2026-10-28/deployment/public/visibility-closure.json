@@ -1,7 +1,0 @@
-{
-  "reservationId": "b5f40caa-d514-4f59-bc7a-4a30b9924eab",
-  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
-  "allOwnedProcessesGone": true,
-  "phaseClosureEvidence": "Read-only live visibility trace exited 0; browser closed, supervised group gone and worker/supervisor absent.",
-  "exitCode": 0
-}

@@ -55,97 +55,19 @@ struct revival_party_fixture : vellum_fixture
 };
 }
 
-TEST_CASE_METHOD(revival_party_fixture, "Pending party extra lives resolve on the current floor",
-                 "[hermit-crab][party-revival]")
+TEST_CASE_METHOD(revival_party_fixture, "Active Hermit Crab revival restores Crab Walk",
+                 "[hermit-crab]")
 {
-    player &other = party::get_player(1);
-    other.species = SP_HERMIT_CRAB;
-    REQUIRE(hermit_crab::break_shell(other));
-    other.hp = 0;
-    other.pending_revival = true;
-    const int active_hp = you.hp;
-
-    SECTION("an inactive crab revives once and restores its proxy")
-    {
-        REQUIRE(party::resolve_pending_revivals());
-        CHECK(party::active_slot() == 0);
-        CHECK(you.hp == active_hp);
-        CHECK(other.hp > 0);
-        CHECK_FALSE(other.pending_revival);
-        CHECK(hermit_crab::crab_walk_ready(other));
-        {
-            party::scoped_player_context context(1);
-            status_info status;
-            REQUIRE(fill_status_info(STATUS_CRAB_WALK, status));
-            CHECK(status.light_text == "Crab Walk 10");
-            CHECK(status_light_description(status).find("normal-speed") != string::npos);
-        }
-        status_info active_status;
-        CHECK_FALSE(fill_status_info(STATUS_CRAB_WALK, active_status));
-        CHECK(get_last_messages(20, true).find("Crab Companion returns to life.")
-              != string::npos);
-        REQUIRE(party::get_proxy_monster(1));
-        CHECK(party::get_proxy_monster(1)->pos() == other.pos());
-        CHECK_FALSE(party::resolve_pending_revivals());
-    }
-    SECTION("off-floor and downed members remain pending")
-    {
-        other.depth = 2;
-        CHECK_FALSE(party::resolve_pending_revivals());
-        CHECK(other.pending_revival);
-        other.depth = 1;
-        party::set_player_downed(1, true);
-        CHECK_FALSE(party::resolve_pending_revivals());
-        CHECK(other.pending_revival);
-    }
-    SECTION("another extra-life species uses the same path")
-    {
-        other.species = SP_FELID;
-        REQUIRE(party::resolve_pending_revivals());
-        CHECK(other.hp > 0);
-        CHECK_FALSE(other.pending_revival);
-    }
-    SECTION("a pending inactive crab survives a party save tag round trip")
-    {
-        vector<unsigned char> bytes;
-        {
-            party::scoped_player_context context(1, true);
-            writer output(&bytes);
-            tag_write(TAG_YOU, output);
-            you.hp = 10;
-            you.pending_revival = false;
-            reader input(bytes);
-            input.setMinorVersion(TAG_MINOR_VERSION);
-            tag_read(input, TAG_YOU);
-            CHECK(you.hp == 0);
-            CHECK(you.pending_revival);
-        }
-        CHECK(party::active_slot() == 0);
-        REQUIRE(other.pending_revival);
-        REQUIRE(party::resolve_pending_revivals());
-        CHECK(party::active_slot() == 0);
-        CHECK(other.hp > 0);
-        CHECK_FALSE(other.pending_revival);
-        REQUIRE(party::get_proxy_monster(1));
-        CHECK(party::get_proxy_monster(1)->pos() == other.pos());
-        CHECK_FALSE(party::resolve_pending_revivals());
-    }
-    SECTION("the active member remains on the normal revival path")
-    {
-        other.pending_revival = false;
-        you.species = SP_HERMIT_CRAB;
-        REQUIRE(hermit_crab::break_shell(you));
-        you.hp = 0;
-        you.pending_revival = true;
-        CHECK_FALSE(party::resolve_pending_revivals());
-        CHECK(you.pending_revival);
-        CHECK(you.hp == 0);
-        revive();
-        CHECK(bring_to_safety());
-        CHECK_FALSE(you.pending_revival);
-        CHECK(you.hp > 0);
-        CHECK(hermit_crab::crab_walk_ready(you));
-    }
+    you.species = SP_HERMIT_CRAB;
+    REQUIRE(hermit_crab::break_shell(you));
+    you.hp = 0;
+    you.pending_revival = true;
+    CHECK(you.hp == 0);
+    revive();
+    CHECK(bring_to_safety());
+    CHECK_FALSE(you.pending_revival);
+    CHECK(you.hp > 0);
+    CHECK(hermit_crab::crab_walk_ready(you));
 }
 
 TEST_CASE("Hermit Crab shells grow once per milestone and belong to each hero",

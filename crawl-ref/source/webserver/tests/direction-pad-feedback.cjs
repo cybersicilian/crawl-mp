@@ -42,8 +42,7 @@ const directions = [
             ['./frame-update', 'game_data/static/frame-update.js'],
             ['key_conversion', 'static/scripts/key_conversion.js'], ['client-input', 'static/scripts/client-input.js'],
             ['./enums', 'game_data/static/enums.js'], ['./party-model', 'game_data/static/party-model.js'],
-            ['./workflow-actions', 'game_data/static/workflow-actions.js'], ['./route-plan', 'game_data/static/route-plan.js'],
-            ['./direction-pad', 'game_data/static/direction-pad.js']
+            ['./workflow-actions', 'game_data/static/workflow-actions.js'], ['./direction-pad', 'game_data/static/direction-pad.js']
         ]) {
             await page.evaluate(name => { window.moduleName = name; }, name);
             await page.addScriptTag({ path: path.join(name === './direction-pad' ? overlay : root, file) });

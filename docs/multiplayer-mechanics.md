@@ -1,19 +1,10 @@
 # Multiplayer mechanics
 
-Local source extension (24 October 2026): explicitly selected Jev AI seats can
-join human seats. [AI players](ai-players.md) describes their state contract,
-prompt decisions, configuration and pending live acceptance. The release claims
-below describe the earlier human-only behavior and do not establish deployment
-of this extension.
-
 The multiplayer expedition has human characters only, fixed character ownership,
 shared explored terrain, personal live perception, and independent floor clocks.
 These mechanics are deployed in `20261018T035050Z-complete-multiplayer`.
 See the [complete release verification](deployment-2026-10-18-complete.md) for
 the production build, compatibility, smoke checks and recovery evidence.
-
-The global deadline rule below is a source update from 20 October 2026;
-deployment acceptance for that change is separate from the earlier release.
 
 ## Rules
 
@@ -31,11 +22,6 @@ deployment acceptance for that change is separate from the earlier release.
   nor relocate teammates, and do not automatically revive them.
 - Advance a floor only from actions processed there. Another floor's actions and
   elapsed wall time do not run its simulation or expire its effects.
-- Advance the global expedition clock to the greatest personal elapsed time.
-  An action behind that time costs no additional global time; an overtake costs
-  only the newly reached interval. Doom/Zot deadlines use that interval for every
-  living hero, including heroes in separate encounters, floors and branches.
-  Native branch immunity, god modifiers and short-lifespan pressure still apply.
 - Keep disconnected reservations. A disconnected character remains a participant
   on its floor; its required combat action can pause that floor's initiative.
   Players on other floors retain their own initiative and simulation.
@@ -102,7 +88,6 @@ entities, markers, clouds and time before processing the next action.
 | Floor scheduling | `party-session.cc` stores floor clocks and character recovery in native player properties. Eligibility considers living participants on that floor. Leaving a floor carries unpaid recovery; an earliest recovering participant cannot strand the remaining floor with no eligible actor. |
 | Cooperative automation | `party-activity.cc` reuses native run/rest delays and wait behavior. `ActivityPump` rotates connected owners' eligible tasks and prioritizes retained manual input. Native completion tokens protect the handoff. Travel continuation globals are isolated per character. |
 | Native time | `level-time.cc` provides floor time for native entities and events. `env.elapsed_time` persists it in each native floor package. Character timers retain character time. Exploration, initiative, monster actions and level events preserve their native action costs. |
-| Global deadlines | `party-session.cc` derives campaign time from the maximum saved personal `elapsed_time`, including downed members so time cannot rewind. `zot.cc` applies only newly reached time to living heroes' current-branch Zot deadlines and once to the acting branch's shared gem ledger. `world_reacts()` keeps this independent of encounter advancement; the WebTiles time reading and `party_state.global_time` use the same maximum. `PlayerStreams` forwards time, deadline and health updates to idle floors and reconnect caches while preserving their personal maps and inventories. Personal action timestamps remain independent and require no new save fields. |
 | Floor lifecycle | Native save/load skips off-floor catch-up in multiplayer, preserves clouds, and reactivates the loaded floor's event listeners. Secondary heroes record their initial floor visit. Native validation checks the actual acting hero's identity. |
 | Personal perception | `tileweb-party.cc` rebuilds native knowledge and tile memory for each hero on the loaded floor, using native sight and monster visibility. It restores shared simulation state afterward and uses the UI RNG domain. Hidden entities are absent from the projection. |
 | Transport | `PlayerStreams` routes character/floor envelopes, retains reconnect snapshots, and resets map and camera baselines across native restarts. Pending view requests wait for a native command boundary, including watchers who arrive before the socket is ready. Union-map packets are discarded in multiplayer. |

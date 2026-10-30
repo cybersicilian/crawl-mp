@@ -266,14 +266,16 @@ static int _mut_weight(const mutation_def &mut, mutflag flag)
         case mutflag::good:
         case mutflag::bad:
         default:
+            // Species- and demonspawn-only traits can be strengthened once
+            // innate, but must not appear on characters without that trait.
+            if (mut.weight == 0 && you.has_innate_mutation(mut.mutation))
+                return 1;
             return mut.weight;
     }
 }
 
 static int mut_index[NUM_MUTATIONS];
 static int category_mut_index[MUT_NON_MUTATION - CATEGORY_MUTATIONS];
-static map<mutflag, int> total_weight;
-
 static int bane_index[NUM_BANES];
 
 static const mutation_def& _get_mutation_def(mutation_type mut)
@@ -295,7 +297,6 @@ static bool _mut_has_flag(mutation_type mut, mutflag flag)
 
 void init_mut_index()
 {
-    total_weight.clear();
     for (int i = 0; i < NUM_MUTATIONS; ++i)
         mut_index[i] = -1;
 
@@ -305,11 +306,6 @@ void init_mut_index()
         ASSERT_RANGE(mut, 0, NUM_MUTATIONS);
         ASSERT(mut_index[mut] == -1);
         mut_index[mut] = i;
-        for (const auto flag : mutflags::range())
-        {
-            if (_mut_has_flag(mut_data[i], flag))
-                total_weight[flag] += _mut_weight(mut_data[i], flag);
-        }
     }
 
     // Add dummy data for removed mutations
@@ -1332,7 +1328,12 @@ static bool _accept_mutation(mutation_type mutat, bool temp, bool catalyst)
 
 static mutation_type _get_mut_with_flag(mutflag flag)
 {
-    const int tweight = lookup(total_weight, flag, 0);
+    // Weights depend on the player's current innate traits, including ones
+    // acquired after character creation, so do not cache the category total.
+    int tweight = 0;
+    for (const mutation_def &mutdef : mut_data)
+        if (_mut_has_flag(mutdef, flag))
+            tweight += _mut_weight(mutdef, flag);
     ASSERT(tweight);
 
     int cweight = random2(tweight);
@@ -2269,8 +2270,8 @@ bool _delete_single_mutation_level(mutation_type mutat,
         // Breathe poison replaces spit poison (so it takes the slot).
         if (you.mutation[mutat] < 2)
             for (int i = 0; i < 52; ++i)
-                if (you.ability_letter_table[i] == ABIL_SPIT_POISON)
-                    you.ability_letter_table[i] = ABIL_BREATHE_POISON;
+                if (you.ability_letter_table[i] == ABIL_BREATHE_POISON)
+                    you.ability_letter_table[i] = ABIL_SPIT_POISON;
         break;
 
     case MUT_NIGHTSTALKER:

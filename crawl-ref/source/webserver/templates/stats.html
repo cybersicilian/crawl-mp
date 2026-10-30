@@ -218,7 +218,7 @@
     {% set grid = data['grid'] %}
     <h2 id="grid_title">Species × background</h2>
     {% if grid['rows'] and grid['jobs'] %}
-    <p class="stats-hint">Shading shows how often a combo is played; the figure is games played (wins in brackets). Dots mark combos the game does not offer.</p>
+    <p class="stats-hint">Rows and columns are ordered by filtered games plus twice the wins, then by the number of offered pairings. Shading shows games played; wins appear in brackets. Dots mark pairings the game does not offer. Individual cells cannot all be ranked independently in a grid.</p>
     <div class="stats-table-wrap stats-grid-wrap" role="region" aria-labelledby="grid_title" tabindex="0">
       <table class="stats-grid">
         <thead><tr><td></td>

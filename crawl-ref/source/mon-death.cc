@@ -2375,6 +2375,7 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
                     {
                         continue;
                     }
+                    const auto rel = party::get_god_political_relation(you.religion, ally.religion);
                     if (party::are_gods_concordant(you.religion, ally.religion))
                     {
                         if (hp_heal > 1)
@@ -2385,7 +2386,18 @@ static void _player_on_kill_effects(monster& mons, killer_type killer,
                                                     ally.magic_points + mp_heal / 2);
                         }
                     }
-
+                    else if ((rel == party::pantheon_relation_type::RIVAL
+                              || rel == party::pantheon_relation_type::ANATHEMA)
+                             && one_chance_in(3))
+                    {
+                        party::debuff_or_harm_party_member(
+                            i,
+                            rel == party::pantheon_relation_type::ANATHEMA ? 2 + random2(3) : 1,
+                            1 + random2(2), DUR_WEAK, 3 + random2(3),
+                            make_stringf("%s's blood-harvest backlash sears",
+                                         god_name(you.religion).c_str()).c_str(),
+                            rel == party::pantheon_relation_type::ANATHEMA ? 1 : 0);
+                    }
                 }
             }
         }

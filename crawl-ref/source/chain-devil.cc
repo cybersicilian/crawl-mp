@@ -27,7 +27,6 @@ namespace
 {
 constexpr const char* relation_key = "living_chain";
 constexpr const char* target_key = "living_chain_target";
-constexpr int tension_per_tile = 10;
 
 player* source(monster& target)
 {
@@ -66,7 +65,7 @@ monster* owned(player& owner)
     return nullptr;
 }
 
-bool valid(monster& target, bool check_reach = true)
+bool valid(monster& target)
 {
     player* owner = source(target);
     if (!owner)
@@ -79,7 +78,7 @@ bool valid(monster& target, bool check_reach = true)
     return target.alive() && owner->alive() && owner->on_current_level
         && (slot < 0 || !party::is_player_downed(slot)) && has_body(*owner)
         && row["expires"].get_int() > level_elapsed_time(target)
-        && (!check_reach || grid_distance(target.pos(), anchor) <= row["radius"].get_int())
+        && grid_distance(target.pos(), anchor) <= row["radius"].get_int()
         && owner->can_see(target) && owner->see_cell_no_trans(target.pos());
 }
 
@@ -144,48 +143,6 @@ void release(player& owner)
 {
     if (monster* target = owned(owner))
         detach(*target);
-}
-
-void owner_moved(player& owner, coord_def previous, movement_type flags)
-{
-    if (owner.pos() == previous || (flags & MV_INTERNAL))
-        return;
-    monster* target = owned(owner);
-    if (!target)
-        return;
-    if (flags & MV_TRANSLOCATION)
-    {
-        detach(*target);
-        return;
-    }
-    auto& row = target->props[relation_key].get_table();
-    if (row["pinned"].get_bool())
-        return;
-    const int reach = row["radius"].get_int();
-    const int distance = grid_distance(owner.pos(), target->pos());
-    if (distance <= reach)
-        return;
-    // Only a still-valid tether may give under tension. A movement cannot
-    // rescue an expired, hidden or already overextended relationship.
-    if (!valid(*target, false) || grid_distance(previous, target->pos()) > reach)
-    {
-        detach(*target);
-        return;
-    }
-    const int strength = owner.strength();
-    if (x_chance_in_y(strength, strength + tension_per_tile * (distance - reach)))
-    {
-        row["radius"] = distance;
-        owner.redraw_status_lights = true;
-        if (&owner == &you)
-            mpr("You hold firm as your living chain stretches.");
-    }
-    else
-    {
-        if (&owner == &you)
-            mpr("Your grip fails as the chain pulls taut!");
-        detach(*target);
-    }
 }
 
 void refresh()
@@ -258,14 +215,10 @@ std::string summary()
     if (monster* target = owned(you))
     {
         const auto& row = target->props[relation_key].get_table();
-        const int strength = you.strength();
-        const std::string tension = mobile(*target)
-            ? make_stringf(" Retreat hold, one extra tile: %d%% (Str %d).",
-                100 * strength / (strength + tension_per_tile), strength) : "";
-        return make_stringf("%s: %s, %.1f turns remaining; reach %d.%s",
+        return make_stringf("%s: %s, %.1f turns remaining; reach %d.",
             mobile(*target) ? "Tether" : "Pin", target->name(DESC_THE).c_str(),
             (row["expires"].get_int() - level_elapsed_time(*target)) / 10.0,
-            row["radius"].get_int(), tension.c_str());
+            row["radius"].get_int());
     }
     return you.duration[DUR_CHAIN_RECOVERY]
         ? make_stringf("Chains recovering: %.1f turns.", you.duration[DUR_CHAIN_RECOVERY] / 10.0)

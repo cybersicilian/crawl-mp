@@ -20,6 +20,6 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
         enabled: function (feature) { return values.mode === "premium" && values[feature] === true; },
         animated: function () { return values.motion !== "reduced"; },
         select: function (mode) {
-            var settings = model.preset(mode, values); return settings ? preferences.change(settings) : false;
+            var settings = model.preset(mode); return settings ? preferences.change(settings) : false;
         } };
 });

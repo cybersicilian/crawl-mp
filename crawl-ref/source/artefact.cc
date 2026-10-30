@@ -1953,8 +1953,13 @@ int find_okay_unrandart(uint8_t aclass, uint8_t atype, int item_level,
             continue;
         }
 
-        if (!coop_content::enabled() && coop_content::exclusive_unrand(index))
+        if (!party::is_enabled()
+            && (index == UNRAND_AEGIS_OF_FELLOWSHIP
+                || index == UNRAND_CONDUIT_STAFF
+                || index == UNRAND_TWIN_SOUL_RING))
+        {
             continue;
+        }
 
         if (!_unrand_is_compatible(*entry, index, (object_class_type)aclass,
                                    atype, acquirement, mons))

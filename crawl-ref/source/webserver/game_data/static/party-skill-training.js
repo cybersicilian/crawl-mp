@@ -119,27 +119,6 @@ define(["jquery", "comm", "client", "./workflow-actions"], function ($, comm, cl
         return [$name, $level];
     }
 
-    function aptitudeCell(skill) {
-        var base = Number(skill.apt || 0), bonus = Number(skill.manual_bonus || 0);
-        var effective = base + bonus;
-        function signed(value) { return (value > 0 ? "+" : "") + value; }
-        var $cell = $("<td class='party-skill-apt'></td>");
-        $cell.append($("<span class='party-skill-apt-value'></span>")
-            .css("color", effective > 0 ? "var(--tt-ink-good)"
-                : effective < 0 ? "var(--tt-ink-danger)" : "var(--tt-ink-soft)")
-            .text(signed(effective)));
-        if (bonus > 0) {
-            var explanation = skill.name + " aptitude " + signed(effective)
-                + ": base " + signed(base) + ", manual " + signed(bonus)
-                + ". Manuals double training while they last; additional manuals extend the duration.";
-            $cell.attr({ title: explanation, "aria-label": explanation });
-            $cell.append($("<small class='party-skill-apt-breakdown'></small>")
-                .append($("<span></span>").text("Base " + signed(base)),
-                    $("<span class='party-skill-manual-bonus'></span>").text("Manual " + signed(bonus))));
-        }
-        return $cell;
-    }
-
     function render(member) {
         if (identities[member.slot] !== member.player_id) {
             var prefix = "party_training_" + member.slot + "_";
@@ -172,7 +151,9 @@ define(["jquery", "comm", "client", "./workflow-actions"], function ($, comm, cl
             var locked = disabled || skill.can_train !== true || !Number.isInteger(skill.id);
             var $row = $("<tr></tr>").attr("data-skill-id", skill.id);
             $row.append(skillCells(skill));
-            $row.append(aptitudeCell(skill));
+            var apt = Number(skill.apt || 0);
+            $row.append($("<td class='party-skill-apt'></td>").css("color", apt > 0 ? "var(--tt-ink-good)"
+                : apt < 0 ? "var(--tt-ink-danger)" : "var(--tt-ink-soft)").text((apt > 0 ? "+" : "") + apt));
             var $train = $("<td class='party-skill-priority'></td>");
             var $buttons = $("<div class='party-skill-priorities' role='group'></div>")
                 .attr("aria-label", skill.name + " training priority");

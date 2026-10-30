@@ -9,6 +9,7 @@
 #include "mon-util.h"
 #include "party.h"
 #include "player.h"
+#include "web-monster-effect-keys.h"
 
 void TilesFramework::_send_enemy_initiative()
 {
@@ -42,6 +43,7 @@ void TilesFramework::_send_enemy_initiative()
             {
                 json_open_object();
                 json_write_int("id", condition.id);
+                json_write_string("icon_key", web_monster_effect_key(condition.id));
                 json_write_string("text", condition.name);
                 json_write_string("desc", condition.description);
                 if (condition.kind != monster_condition_kind::neutral)

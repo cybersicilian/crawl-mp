@@ -4,7 +4,6 @@
 **/
 
 #include "AppHdr.h"
-#include "coop-content.h"
 
 #include "spl-selfench.h"
 
@@ -274,27 +273,22 @@ spret cast_phase_shift(int pow, bool fail)
 
 spret cast_aegis_link(int pow, bool fail)
 {
-    if (!coop_content::has_spell_companion())
-    {
-        mpr("This spell needs a living companion in sight in a multiplayer game.");
-        return spret::abort;
-    }
     fail_check();
 
     const int dur = 18 + random2avg(pow / 2, 2);
     you.increase_duration(DUR_AEGIS_LINK, dur, 90,
-                          "A linked ward folds around you and your companion.");
+                          "Threads of silver translocation ward your armour and shield.");
     you.redraw_armour_class = true;
 
     if (party::is_enabled())
     {
-        const int ally_slot = party::nearest_living_ally_slot(you.pos(), LOS_RADIUS, party::active_slot());
+        const int ally_slot = party::nearest_living_ally_slot(you.pos(), LOS_RADIUS);
         if (ally_slot >= 0)
         {
             party::heal_or_buff_party_member(ally_slot, 0, DUR_AEGIS_LINK, dur);
             party::get_player(ally_slot).redraw_armour_class = true;
             mprf(MSGCH_FRIEND_ACTION,
-                 "Your ward links your defences and vitality with %s!",
+                 "An aegis link tethers your defences and vitality with %s!",
                  party::get_player(ally_slot).your_name.c_str());
         }
     }
@@ -304,17 +298,12 @@ spret cast_aegis_link(int pow, bool fail)
 
 spret cast_ballad_of_the_vanguard(int pow, bool fail)
 {
-    if (!coop_content::has_spell_companion())
-    {
-        mpr("This spell needs a living companion in sight in a multiplayer game.");
-        return spret::abort;
-    }
     fail_check();
 
     if (you.duration[DUR_BALLAD_VANGUARD])
-        mpr("You renew your companions' battle song.");
+        mpr("You swell the chorus of the Vanguard!");
     else
-        mpr("You sing to steady your companions' hands and steps.");
+        mpr("You strike up the Ballad of the Vanguard!");
 
     const int dur = 18 + random2avg(pow / 2, 2);
     you.set_duration(DUR_BALLAD_VANGUARD, dur, 90);
@@ -324,8 +313,7 @@ spret cast_ballad_of_the_vanguard(int pow, bool fail)
     {
         for (int i = 0; i < party::player_count(); ++i)
         {
-            if (i == party::active_slot() || !party::slot_is_alive(i)
-                || party::is_player_downed(i) || !party::slot_is_on_current_floor(i))
+            if (i == party::active_slot())
                 continue;
             player &p = party::get_player(i);
             if (p.hp > 0 && you.see_cell_no_trans(p.pos()))
@@ -333,7 +321,7 @@ spret cast_ballad_of_the_vanguard(int pow, bool fail)
                 party::heal_or_buff_party_member(i, 0, DUR_BALLAD_VANGUARD, dur);
                 p.redraw_evasion = true;
                 mprf(MSGCH_FRIEND_ACTION,
-                     "%s takes up your battle song!",
+                     "%s's step quickens to the Ballad of the Vanguard!",
                      p.your_name.c_str());
             }
         }
@@ -344,16 +332,11 @@ spret cast_ballad_of_the_vanguard(int pow, bool fail)
 
 spret cast_sanctuary_chorus(int pow, bool fail)
 {
-    if (!coop_content::has_spell_companion())
-    {
-        mpr("This spell needs a living companion in sight in a multiplayer game.");
-        return spret::abort;
-    }
     fail_check();
 
     const int dur = 16 + random2avg(pow / 2, 2);
     you.increase_duration(DUR_SANCTUARY_CHORUS, dur, 90,
-                          "A cleansing mist gathers around you.");
+                          "A consecrated Sanctuary Chorus rings out around you!");
     you.duration[DUR_POISONING] = 0;
     you.duration[DUR_CORROSION] = 0;
     you.duration[DUR_SLOW] = 0;
@@ -363,20 +346,16 @@ spret cast_sanctuary_chorus(int pow, bool fail)
     {
         for (int i = 0; i < party::player_count(); ++i)
         {
-            if (i == party::active_slot() || !party::slot_is_alive(i)
-                || party::is_player_downed(i) || !party::slot_is_on_current_floor(i))
+            if (i == party::active_slot())
                 continue;
             player &p = party::get_player(i);
             if (p.hp > 0 && you.see_cell_no_trans(p.pos()))
             {
-                p.duration[DUR_POISONING] = 0;
-                p.duration[DUR_CORROSION] = 0;
-                p.duration[DUR_SLOW] = 0;
-                party::heal_or_buff_party_member(i, 0,
-                                                 DUR_SANCTUARY_CHORUS, dur);
+                party::heal_or_buff_party_member(i, 3 + random2(6),
+                                                 DUR_SANCTUARY_CHORUS, dur, true);
                 p.redraw_armour_class = true;
                 mprf(MSGCH_FRIEND_ACTION,
-                     "The cleansing mist surrounds %s!",
+                     "The Sanctuary Chorus cleanses and wards %s!",
                      p.your_name.c_str());
             }
         }

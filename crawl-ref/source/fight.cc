@@ -1238,7 +1238,8 @@ bool force_player_cleave(coord_def target)
 bool attack_cleaves(const actor &attacker, const item_def *weap, int attack_num)
 {
     if (attacker.is_player()
-        && (oozle::inherited_cleaving(weap) || you.form == transformation::storm || you.duration[DUR_CLEAVE]))
+        && (oozle::inherited_cleaving(weap) || you.form == transformation::storm || you.duration[DUR_CLEAVE]
+            || you.duration[DUR_BALLAD_VANGUARD]))
     {
         return true;
     }
@@ -1576,7 +1577,6 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
         return false;
 
     attacked_monster_list victims;
-    vector<string> party_victims;
     bool defender_ok = true;
     for (distance_iterator di(hitfunc.origin, false, true, LOS_RADIUS); di; ++di)
     {
@@ -1584,31 +1584,10 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
             continue;
 
         const monster* mon = monster_at(*di);
-        if (!mon)
+        if (!mon || !you.can_see(*mon))
             continue;
 
         if (affects && !affects(mon))
-            continue;
-
-        // Party members are represented by monster proxies on the map.
-        // Describe the actual player, and do not reveal an invisible ally.
-        if (party::is_proxy_monster(*mon))
-        {
-            const int slot = party::proxy_slot(*mon);
-            if (slot >= 0 && slot < party::player_count()
-                && !mon->props.exists("party_downed_ghost"))
-            {
-                const player& companion = party::get_player(slot);
-                if (you.can_see(companion))
-                {
-                    party_victims.push_back("your ally " + companion.your_name);
-                    if (defender == mon)
-                        defender_ok = false;
-                }
-            }
-            continue;
-        }
-        if (!you.can_see(*mon))
             continue;
 
         string adj, suffix;
@@ -1624,7 +1603,7 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
 
     const bool hits_player = include_player && hitfunc.is_affected(you.pos()) && affects(&you);
 
-    if (victims.empty() && party_victims.empty() && !hits_player)
+    if (victims.empty() && !hits_player)
         return false;
 
     // We have already determined that this attack *would* prompt, so stop here
@@ -1634,13 +1613,6 @@ bool stop_attack_prompt(targeter &hitfunc, const char* verb,
     // Listed in the form: "your rat", "Blorkula the orcula".
     string mon_name = !victims.empty() ? victims.describe() : "";
     const bool penance = victims.penance();
-
-    if (!party_victims.empty())
-    {
-        const string companions = comma_separated_line(party_victims.begin(),
-                                                        party_victims.end());
-        mon_name = mon_name.empty() ? companions : mon_name + " and " + companions;
-    }
 
     if (hits_player)
     {

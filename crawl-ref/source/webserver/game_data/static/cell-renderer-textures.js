@@ -1,12 +1,12 @@
 define(["jquery", "./tileinfo-gui", "./tileinfo-main", "./tileinfo-player",
         "./tileinfo-icons", "./tileinfo-dngn", "./tileinfos", "./options",
-        "./status-icon-sizes", "./tile-art-direction"],
-function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_sizes, art) {
+        "./status-icon-sizes"],
+function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_sizes) {
     "use strict";
 
     function get_img(id)
     {
-        return art.image(id, $("#" + id)[0]);
+        return $("#" + id)[0];
     }
 
     // Texture coordinates, integer pixel scaling, clipping, and overlap bookkeeping.

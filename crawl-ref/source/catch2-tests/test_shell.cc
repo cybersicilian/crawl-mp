@@ -48,8 +48,7 @@ struct shell_fixture : MockPlayerYouTestsFixture
     {
         static const bool ready = []() {
             msg::initialise_mpr_streams();
-            if (str_to_colour("fire", -1, false, true) == -1)
-                init_element_colours();
+            init_element_colours();
             init_duration_index();
             return true;
         }();

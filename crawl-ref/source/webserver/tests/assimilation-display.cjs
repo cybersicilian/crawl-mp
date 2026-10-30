@@ -50,33 +50,21 @@ const root = path.resolve(__dirname, '..');
         assert.match(tooltip, /Applies once to the ooze, independently of equipped items/);
         assert(!tooltip.includes('Applies to Amulets'));
         assert.equal(await page.locator('.assimilation-inheritance .equipment-memory-property').count(), 3);
-        assert.equal(await page.locator('.assimilation-digestion').count(), 0);
-        assert.match(await page.locator('.assimilation-rule').innerText(), /random empty slot/);
+        await page.locator('.assimilation-digestion summary').click();
         await page.locator('#assimilation_start_0').focus();
         await page.evaluate(() => {
             window.qaData.numeric_percent = 36;
             window.qaModules['./assimilation-panel'].mount();
         });
-        assert.equal(await page.locator('.assimilation-digestion').count(), 0);
+        assert(await page.locator('.assimilation-digestion').evaluate(element => element.open));
         assert.equal(await page.evaluate(() => document.activeElement.id), 'assimilation_start_0');
         await page.evaluate(() => {
             window.qaData.version = 2;
             window.qaModules['./assimilation-panel'].mount();
         });
         assert.equal(await page.locator('.assimilation-inheritance').count(), 2);
-        await page.evaluate(() => {
-            window.qaData.slots = [
-                { slot: 0, unlocked: true, next: true },
-                { slot: 1, unlocked: false, next: false, unlock_xl: 7 },
-                { slot: 2, unlocked: true, next: true }
-            ];
-            window.qaModules['./assimilation-panel'].mount();
-        });
-        assert.deepEqual(await page.locator('.assimilation-next').allTextContents(), ['Open', 'Open']);
-        assert.equal(await page.locator('.assimilation-slot[data-locked="true"] .assimilation-next').count(), 0);
-        assert.match(await page.locator('.assimilation-slot').first().getAttribute('data-tip-body'), /random unlocked empty slot/);
         assert.deepEqual(errors, []);
-        console.log('PASS: body display, 35% floor, native passive labels, legacy display, focus, random open-slot labels and no passive digestion');
+        console.log('PASS: body display, 35% floor, native passive labels, legacy display, focus and expansion');
     } finally {
         await browser.close();
     }

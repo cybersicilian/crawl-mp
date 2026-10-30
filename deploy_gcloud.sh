@@ -21,7 +21,7 @@ Usage: ./deploy_gcloud.sh [--project ID] [--zone ZONE] [--region REGION]
        [--instance NAME] [--machine-type TYPE] [--domain HOST] [--port PORT]
        [--mode gce|cloudrun] [--bundle DIRECTORY] [--dry-run]
 
-GCE: isolated network, reserved IP, 40 GB boot + 10 GB retained state disk,
+GCE: isolated network, reserved IP, 20 GB boot + 10 GB retained state disk,
 daily state snapshots (7 days), Caddy HTTPS, and atomic application releases.
 Cloud Run: ephemeral demonstration only; does not persist accounts or saves.
 DNS must point --domain to the reserved IP before HTTPS can become ready.
@@ -126,7 +126,7 @@ EXTERNAL_IP='<reserved-ip>'
 if ! "$DRY_RUN"; then
     EXTERNAL_IP="$(gcloud compute addresses describe "$ADDRESS" --project="$PROJECT_ID" --region="$REGION" --format='value(address)')"
 fi
-ensure_resource instances "$INSTANCE_NAME" "--zone=$ZONE" --zone="$ZONE" --machine-type="$MACHINE_TYPE" --image-family=ubuntu-2404-lts-amd64 --image-project=ubuntu-os-cloud --boot-disk-size=40GB --boot-disk-type=pd-balanced --subnet="$SUBNET" --address="$EXTERNAL_IP" --tags=dcss-coop --labels="$REQUIRED_LABELS" --no-service-account --no-scopes --metadata=serial-port-enable=FALSE --disk="name=$STATE_DISK,device-name=dcss-data,mode=rw,boot=no,auto-delete=no"
+ensure_resource instances "$INSTANCE_NAME" "--zone=$ZONE" --zone="$ZONE" --machine-type="$MACHINE_TYPE" --image-family=ubuntu-2404-lts-amd64 --image-project=ubuntu-os-cloud --boot-disk-size=20GB --boot-disk-type=pd-balanced --subnet="$SUBNET" --address="$EXTERNAL_IP" --tags=dcss-coop --labels="$REQUIRED_LABELS" --no-service-account --no-scopes --metadata=serial-port-enable=FALSE --disk="name=$STATE_DISK,device-name=dcss-data,mode=rw,boot=no,auto-delete=no"
 run_cmd gcloud compute disks add-labels "$INSTANCE_NAME" --project="$PROJECT_ID" --zone="$ZONE" --labels="$REQUIRED_LABELS"
 
 ARCHIVE="${TMPDIR:-/tmp}/dcss-$RELEASE_ID.tar.gz"

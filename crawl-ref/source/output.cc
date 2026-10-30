@@ -41,7 +41,6 @@
 #include "mutation.h"
 #include "notes.h"
 #include "ouch.h"
-#include "party.h"
 #include "player-equip.h"
 #include "player-stats.h"
 #include "prompt.h"
@@ -684,7 +683,7 @@ void update_turn_count()
 
     textcolour(HUD_VALUE_COLOUR);
     string time = Options.show_game_time
-        ? make_stringf("%.1f", party::global_elapsed_time() / 10.0)
+        ? make_stringf("%.1f", you.elapsed_time / 10.0)
         : make_stringf("%d", you.num_turns);
 
     if (!_is_using_small_layout())

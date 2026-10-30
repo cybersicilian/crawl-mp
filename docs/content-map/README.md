@@ -14,7 +14,6 @@ This is a design map, not an implementation plan approved for execution. No game
 | --- | --- |
 | [Progression and place atlas](progression.md) | Where does a normal or extended run go? What is optional? What is different in this fork? |
 | [Content systems, capabilities and gaps](systems.md) | Which mechanisms already exist, what roles does content play, and where are the underdeveloped combinations? |
-| [Species, backgrounds and connected content slate](../design/content-slate/README.md) | How do five proposed species, four starting backgrounds and their spells, loot and encounters fit the existing dungeon? Chain Devil is the next species design focus. |
 | [Co-op and metagame concepts](concepts.md) | What would new content actually make players choose, do, risk and change? |
 | [Company assets and campaign](company-campaign/README.md) | How do real equipment, capital, training and services change fresh solo/co-op runs? |
 | [Guild resources and buildings](company-campaign/guild-resources.md) | How do personal material finds fund shared facilities without surrendering private ownership? |

@@ -1535,19 +1535,6 @@ mcache_ghost::mcache_ghost(const monster_info& mon)
 {
     ASSERT(mcache_ghost::valid(mon));
 
-    if (mon.type == MONS_FALSE_IMAGE && mon.props.exists("false_image_owner"))
-    {
-        const auto owner = static_cast<mid_t>(mon.props["false_image_owner"].get_int());
-        const int slot = party::slot_for_mid(owner);
-        if (slot >= 0 && slot < party::player_count())
-        {
-            unwind_var<player*> unwind_you(real_you, &party::get_player(slot));
-            fill_player_equipment_doll(m_doll);
-            m_transparent = true;
-            return;
-        }
-    }
-
     if (mon.props.exists("party_player_slot"))
     {
         const int slot = mon.props["party_player_slot"].get_int();
@@ -1717,7 +1704,7 @@ const dolls_data *mcache_ghost::doll() const
 
 bool mcache_ghost::valid(const monster_info& mon)
 {
-    return mon.type == MONS_FALSE_IMAGE || mons_is_pghost(mon.type);
+    return mons_is_pghost(mon.type);
 }
 
 bool mcache_ghost::transparent() const

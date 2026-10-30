@@ -1,5 +1,4 @@
 #include "AppHdr.h"
-#include "elemental-weapon.h"
 #include "god-vellum.h"
 #include "coop-content.h"
 #include "hydra-physiology.h"
@@ -192,27 +191,35 @@ int count = 0;
         return count;
 
     case SLOT_BOOTS:
+    {
+        // Centaur boots are fitted to hooves; barding remains a separate slot.
+        const bool centaur = you.species == SP_GALE_CENTAUR
+#if TAG_MAJOR_VERSION == 34
+                             || you.species == SP_CENTAUR
+#endif
+                             ;
         if (you.species == SP_MELIAI)
             NO_SLOT("You have no feet for boots.")
         if (you.species == SP_ENT)
             NO_SLOT("Your roots cannot wear boots.")
-        if (species::wears_barding(you.species) || you.has_mutation(MUT_FORMLESS))
+        if ((species::wears_barding(you.species) && !centaur) || you.has_mutation(MUT_FORMLESS))
             NO_SLOT("You don't have any feet!")
         else if (player_size <= SIZE_LITTLE)
             NO_SLOT(make_stringf("Those are too big for your %s.", you.foot_name(true).c_str()))
-        else if (player_size >= SIZE_LARGE)
+        else if (player_size >= SIZE_LARGE && !centaur)
             NO_SLOT(make_stringf("Those are too small for your %s.", you.foot_name(true).c_str()))
         else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR)
                  || you.has_mutation(MUT_SOFT_EQUIPMENT))
             NO_SLOT("You can't wear boots.")
-        else if (you.get_mutation_level(MUT_HOOVES, false) >= 3)
+        else if (you.get_mutation_level(MUT_HOOVES, false) >= 3 && !centaur)
             NO_SLOT("Your hooves can't fit into boots.")
         else if (you.get_mutation_level(MUT_TALONS, false) >= 3)
             NO_SLOT("Your talons can't fit into boots.")
         else if (you.has_mutation(MUT_FLOAT))
             NO_SLOT("You have no feet!")
 
-        return 1;
+        return centaur ? 2 : 1;
+    }
 
     case SLOT_BARDING:
         if (species::wears_barding(you.species))
@@ -248,6 +255,8 @@ int count = 0;
         int ring_count = you.species == SP_HYDRA ? 0 : 2;
         if (you.species == SP_OCTOPODE)
             ring_count = 8;
+        else if (you.species == SP_FORMICID)
+            ring_count = 4;
 
         if (ring_count && you.has_mutation(MUT_MISSING_HAND))
             ring_count -= 1;
@@ -506,14 +515,6 @@ bool can_equip_item(const item_def& item, bool temp, string* veto_reason,
 
     if (you.species == SP_TWO_HEADED_OGRE && is_shield(item))
         NO_EQUIP("Your two weapon hands cannot carry a shield.")
-
-    if (!coop_content::enabled()
-        && (coop_content::exclusive_item(item.base_type, item.sub_type)
-            || (is_unrandom_artefact(item)
-                && coop_content::exclusive_unrand(item.unrand_idx))))
-    {
-        NO_EQUIP("This equipment requires a multiplayer game.")
-    }
 
     // Your god won't let you make use of gear they abhor.
     if (god_forbids_item(item, temp))
@@ -1773,8 +1774,6 @@ void unequip_effect(int item_slot, bool meld, bool msg, bool was_melded,
                     bool maybe_destroy)
 {
     item_def& item = you.inv[item_slot];
-
-    elemental_weapon::on_unequip(item);
 
     const interrupt_block block_meld_interrupts(meld);
     if (you.props.exists("vellum_bindings"))

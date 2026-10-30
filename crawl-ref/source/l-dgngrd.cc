@@ -89,14 +89,6 @@ static int dgn_max_bounds(lua_State *ls)
     return 2;
 }
 
-// Complete native grid dimensions, independent of player-scaled builder bounds.
-static int dgn_grid_bounds(lua_State *ls)
-{
-    lua_pushinteger(ls, GXM);
-    lua_pushinteger(ls, GYM);
-    return 2;
-}
-
 static int dgn_builder_bounds(lua_State *ls)
 {
     lua_pushinteger(ls, dgn_builder_x());
@@ -161,7 +153,6 @@ const struct luaL_Reg dgn_grid_dlib[] =
 { "grid", dgn_grid },
 { "max_bounds", dgn_max_bounds },
 { "builder_bounds", dgn_builder_bounds },
-{ "grid_bounds", dgn_grid_bounds },
 { "in_bounds", dgn_in_bounds },
 { "distance", dgn_distance },
 

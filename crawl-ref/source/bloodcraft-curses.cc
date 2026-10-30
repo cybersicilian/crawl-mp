@@ -147,7 +147,7 @@ spret cast_curse(spell_type spell, int power, const coord_def& target, bool fail
         mpr("That quarry cannot be bound again yet, or would be unaffected.");
         return spret::abort;
     }
-    const int hp = amp ? player_amplification_cost(unreserved_hp()) : 0;
+    const int hp = amp ? amplification_cost(unreserved_hp()) : 0;
     if (hp && !enough_hp(hp, false))
         return spret::abort;
     fail_check();
