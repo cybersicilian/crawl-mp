@@ -29,6 +29,9 @@ class AccountSocket(CrawlWebSocket):
     def library_fetch(self):
         pass
 
+    def library_fetch_async(self, **kwargs):
+        pass
+
     def reset_lobby_timeout(self):
         pass
 
@@ -113,6 +116,16 @@ class SignInRequiredTests(AsyncHTTPTestCase):
         returning = await self.connect()
         response = await self.exchange(returning, "token_login", "login_success", cookie=cookie["cookie"])
         self.assertEqual(response["username"], "Adventurer")
+
+    @gen_test
+    async def test_expired_remembered_session_is_rejected_before_the_purge(self):
+        self.assertIsNone(userdb.register_user("Adventurer", "private password", ""))
+        self.values["login_token_lifetime"] = 0
+        cookie = auth.log_in_as_user(Mock(), "Adventurer")
+        connection = await self.connect()
+        await self.exchange(connection, "token_login", "login_fail", cookie=cookie)
+        self.assertIsNone(self._app.socket.username)
+        self.assertEqual(auth.login_tokens, {})
 
     @gen_test
     async def test_explicit_registration_signs_in_with_a_personal_account(self):

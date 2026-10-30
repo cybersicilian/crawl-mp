@@ -43,7 +43,12 @@ def reclaim(receiver, sockets, reconnect=False):
         requested = getattr(receiver, "_library_resume_id", None)
         if requested and requested != getattr(process, "record_id", None):
             continue
-        if not previous.client_closed:
+        if not previous.client_closed or not getattr(previous, "close_handled", True):
+            # A live tab, or a server-initiated close whose on_close has not
+            # run yet: WebSocketHandler.close() clears ws_connection at once,
+            # but defer_stop only arms the grace timer from on_close, up to
+            # 5 s later when the close handshake completes. Neither state
+            # frees the engine, so never start a second process over it.
             if reconnect:
                 # The browser can notice a broken network before the server's
                 # protocol ping times out. Wait without taking over a live tab.

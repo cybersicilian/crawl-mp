@@ -343,6 +343,11 @@ class ActivityPump:
         # The exact native completion token also proves COMMAND readiness.
         # Rejected actions can complete without a separate input_mode packet.
         self.streams.native_ready = True
+        # Personal view requests queued while this command held the engine
+        # would otherwise wait for an input_mode packet that may never come.
+        request_views = getattr(self.streams, "_request_pending", None)
+        if callable(request_views):
+            request_views()
         # Local rejections/cancellations may consume no native command. Drain
         # those callbacks until one actually takes ownership of the engine.
         while self.inputs and not self.inflight and self.streams.native_ready:

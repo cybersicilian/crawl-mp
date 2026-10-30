@@ -1,6 +1,7 @@
 """Native menu contracts and staging-to-launch weapon propagation."""
 from copy import deepcopy
 import tempfile
+from types import SimpleNamespace
 from pathlib import Path
 import unittest
 from unittest.mock import Mock, patch
@@ -181,6 +182,25 @@ class StagingWeaponTests(unittest.TestCase):
         self.socket.party_room_apply_comp(members=[{"species": "Minotaur", "job": "Fighter",
                                                     "weapon": "flail"}])
         self.assertEqual(self.room["slots"][0]["weapon"], "flail")
+
+
+class LaunchNoticeTests(StagingWeaponTests):
+    def test_guests_hear_once_when_the_engine_is_already_registered(self):
+        self.room["slots"][1].update(state="player", username="Guest")
+        guest = Mock()
+        with patch.object(ws_handler, "find_user_sockets", return_value=[guest]), \
+                tempfile.TemporaryDirectory() as directory:
+            self.socket.rc_path = str(Path(directory, "Host.rc"))
+            self.socket.process = SimpleNamespace(process=object())
+            self.socket.party_room_launch()
+            ws_handler.IOLoop.current.return_value.call_later.assert_not_called()
+            self.assertEqual(guest.send_message.call_count, 1)
+            self.assertEqual(guest.send_message.call_args.args, ("party_room_launched",))
+            # Not registered yet (stale-lock dialog): the notice is repeated.
+            self.socket.process = None
+            self.socket.party_room_launch()
+            ws_handler.IOLoop.current.return_value.call_later.assert_called_once()
+            self.assertEqual(ws_handler.IOLoop.current.return_value.call_later.call_args.args[0], 0.35)
 
 
 if __name__ == "__main__":

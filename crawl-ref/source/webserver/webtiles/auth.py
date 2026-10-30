@@ -32,7 +32,9 @@ def purge_login_tokens():
 
 def purge_login_tokens_timeout():
     purge_login_tokens()
-    IOLoop.current().add_timeout(time.time() + 60 * 60 * 1000,
+    # add_timeout takes seconds; the old 60*60*1000 scheduled the next purge
+    # ~41 days out, so expired tokens stayed in memory (and valid) for weeks.
+    IOLoop.current().add_timeout(time.time() + 60 * 60,
                                  purge_login_tokens_timeout)
 
 
@@ -57,8 +59,14 @@ def _parse_login_cookie(cookie):
 
 def check_login_cookie(cookie):
     username, token = _parse_login_cookie(cookie)
-    ok = (token, username) in login_tokens and not account_disabled(username)
-    return username, ok
+    if (token, username) not in login_tokens or account_disabled(username):
+        return username, False
+    expires = login_tokens[(token, username)]
+    if expires is not None and datetime.datetime.now() > expires:
+        # Expiry is enforced here, not only by the periodic purge.
+        del login_tokens[(token, username)]
+        return username, False
+    return username, True
 
 
 def forget_login_cookie(cookie):
