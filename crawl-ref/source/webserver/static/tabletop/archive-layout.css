@@ -1,25 +1,37 @@
 /* Chronicle collections: distinct identity, state and progression at a glance. */
+/* Record pages are not themed server-side yet; --ui-* tokens apply when html[data-ui-theme] is present. */
+.library-page { --archive-paper: var(--ui-page-raised, #fffaf0); --archive-paper-2: var(--ui-page, #f4ecd9); --archive-rule: var(--ui-rule, #bca98a); --archive-accent: var(--ui-chapter, var(--book-burgundy)); --archive-muted: var(--ui-quiet, var(--book-muted)); --archive-ink: var(--ui-ink, var(--book-ink)); }
 .library-page:not(.stats-page) main { max-width: 1240px; }
-.library-page:not(.stats-page) .library-page-header { min-height: 0; padding: 26px 30px; background: #f3ebd9; border-bottom: 1px solid var(--book-rule); }
+.library-page:not(.stats-page) .library-page-header { min-height: 0; padding: 26px 30px; background: var(--archive-paper-2); border-bottom: 1px solid var(--book-rule); }
 .library-page:not(.stats-page) .library-page-header h1 { font-size: 34px; margin-bottom: 8px; }
 .archive-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--book-rule); border: 1px solid var(--book-rule); border-radius: 5px; overflow: hidden; margin: 8px 0 24px; }
-.archive-summary > div { display: grid; align-content: start; gap: 6px; padding: 16px; background: #fffaf0; }
-.archive-summary span { color: var(--book-muted); font-size: 12px; }
-.archive-summary strong { color: var(--book-burgundy); font: 600 28px/1.4 var(--tt-font-ui); font-variant-numeric: tabular-nums; }
+.archive-summary > div { display: grid; align-content: start; gap: 6px; padding: 16px; background: var(--archive-paper); }
+.archive-summary span { color: var(--archive-muted); font-size: 12px; }
+.archive-summary strong { color: var(--archive-accent); font: 600 28px/1.4 var(--tt-font-ui); font-variant-numeric: tabular-nums; }
 .archive-summary .archive-summary-copy { grid-column: span 2; }
 .archive-summary-copy p { margin: 0; font-size: 14px; }
-.archive-facet { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: var(--book-muted); font-size: 12px; }
-.archive-facet select { min-height: 40px; padding: 6px 12px; background: #fffaf0; border: 1px solid #bca98a; border-radius: 4px; color: var(--book-ink); font: 13px var(--tt-font-ui); }
-.archive-facet select:focus-visible { outline: 2px solid var(--book-burgundy); outline-offset: 3px; }
+.archive-facet { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: var(--archive-muted); font-size: 12px; }
+.archive-facet select { min-height: 40px; padding: 6px 12px; background: var(--archive-paper); border: 1px solid var(--archive-rule); border-radius: 4px; color: var(--archive-ink); font: 13px var(--tt-font-ui); }
+.archive-facet select:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 3px; }
 .library-page .library-records { display: block; padding: 0; border: 1px solid var(--book-rule); border-radius: 5px; overflow: hidden; }
-.library-page .archive-record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 22px; padding: 16px 18px; margin: 0; border: 0; border-radius: 0; background: #fffaf0; box-shadow: none; }
+.library-page .archive-record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 22px; padding: 16px 18px; margin: 0; border: 0; border-radius: 0; background: var(--archive-paper); box-shadow: none; }
 .library-page .archive-record-row + .archive-record-row { border-top: 1px solid var(--book-rule); }
-.library-page .archive-record-row:nth-child(even) { background: #f4ecd9; }
+.library-page .archive-record-row:nth-child(even) { background: var(--archive-paper-2); }
 .library-page .archive-record-row .library-record-title { font-size: 18px; line-height: 1.5; }
 .archive-record-row .library-record-title > span { font-size: 13px; margin-left: 8px; }
 .library-page .archive-record-row .library-record-meta { font-size: 12px; text-align: right; margin: 0; align-self: center; }
-.archive-record-detail, .archive-record-date { font-size: 12px; color: var(--book-muted); }
+.archive-record-detail, .archive-record-date { font-size: 12px; color: var(--archive-muted); }
 .archive-record-date { text-align: right; }
+
+/* Expedition party roster: hero records render as chips (name, then level · species · role · HP · place). */
+.library-page .library-records:has(> li > a[href^="/players/"]) { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; border: 0; border-radius: 0; overflow: visible; background: none; }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li { display: grid; gap: 3px; flex: 1 1 220px; max-width: 100%; margin: 0; padding: 10px 14px 10px 46px; position: relative; border: 1px solid var(--book-rule); border-left: 3px solid var(--archive-accent); border-radius: 5px; background: var(--archive-paper); }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li::before { content: ""; position: absolute; left: 12px; top: 12px; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--archive-rule); background: radial-gradient(circle at 50% 38%, var(--archive-accent) 0 5px, transparent 6px), radial-gradient(ellipse at 50% 100%, var(--archive-accent) 0 9px, transparent 10px), var(--archive-paper-2); }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li > .library-record-title { font-size: 15px; font-weight: 600; line-height: 1.4; }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li > .library-record-meta { margin: 0; font-size: 12px; color: var(--archive-muted); }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li.library-empty { flex-basis: 100%; padding-left: 14px; border-left-width: 1px; }
+.library-page .library-records:has(> li > a[href^="/players/"]) > li.library-empty::before { display: none; }
+
 @media (max-width: 600px) {
     .library-page:not(.stats-page) main { padding: 0 12px; }
     .library-page:not(.stats-page) .library-page-header { padding: 22px; }

@@ -133,6 +133,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
                 return { id: entry.mon.id, contact_key: "map:" + (entry.mon.id || entry.loc.x + "," + entry.loc.y),
                     name: entry.mon.name, type: entry.mon.type,
                     x: entry.loc.x, y: entry.loc.y, att: entry.mon.att,
+                    threat: Number.isInteger(entry.mon.threat) ? entry.mon.threat : undefined,
                     non_threatening: Boolean(is_excluded(entry.mon)), perception: "visible" };
             });
     }

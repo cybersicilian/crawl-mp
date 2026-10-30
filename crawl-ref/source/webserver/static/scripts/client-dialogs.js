@@ -54,13 +54,72 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
                 layers.push(name);
         }
 
+        // Modal shell for role="dialog" floaters: Escape closes, Tab is
+        // trapped inside, and focus returns to the opener. Native process
+        // prompts (#stale_processes_message, #force_terminate) keep their
+        // own key routing and are not role="dialog".
+        var dialog_opener = null;
+        var focusable = "a[href], button:not([disabled]), input:not([disabled]):not([type=hidden]), "
+            + "select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
+
+        function visible_focusables(elem)
+        {
+            return elem.find(focusable).filter(function () {
+                return this.getClientRects().length > 0;
+            });
+        }
+
+        function trap_keys(event)
+        {
+            var dialog = $(event.delegateTarget);
+            if (event.key === "Escape")
+            {
+                event.preventDefault();
+                event.stopPropagation();
+                hide_dialog();
+                return;
+            }
+            if (event.key !== "Tab") return;
+            var nodes = visible_focusables(dialog);
+            if (!nodes.length)
+            {
+                event.preventDefault();
+                dialog.focus();
+                return;
+            }
+            var first = nodes[0], last = nodes[nodes.length - 1];
+            var active = document.activeElement;
+            if (event.shiftKey && (active === first || !dialog[0].contains(active)))
+            {
+                event.preventDefault();
+                last.focus();
+            }
+            else if (!event.shiftKey && active === last)
+            {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+
         function show_dialog(id)
         {
-            $(".floating_dialog").hide();
+            $(".floating_dialog").hide().off("keydown.dialogshell");
             var elem = $(id);
+            var active = document.activeElement;
+            if (active && active !== document.body && !elem[0].contains(active))
+                dialog_opener = active;
             elem.stop(true, true).fadeIn(100, function () {
-                elem.focus();
+                if (elem.is("[role='dialog']"))
+                {
+                    var first = visible_focusables(elem).filter(".text, [autofocus]").first();
+                    if (first.length) first.focus();
+                    else elem.focus();
+                }
+                else
+                    elem.focus();
             });
+            if (elem.is("[role='dialog']"))
+                elem.on("keydown.dialogshell", trap_keys);
             center_element(elem);
             $("#overlay").show();
         }
@@ -80,8 +139,13 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
         function hide_dialog()
         {
             state.showing_close_message = false;
-            $(".floating_dialog").blur().hide();
+            var open = $(".floating_dialog:visible").length > 0;
+            $(".floating_dialog").off("keydown.dialogshell").blur().hide();
             $("#overlay").hide();
+            var opener = dialog_opener;
+            dialog_opener = null;
+            if (open && opener && opener.isConnected && opener.getClientRects().length > 0)
+                opener.focus();
         }
 
         function handle_dialog(data)

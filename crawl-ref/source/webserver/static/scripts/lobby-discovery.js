@@ -23,10 +23,14 @@ define(function () {
         back.dataset.lobbySection = "party_lobby_panel"; notice.appendChild(back); header.appendChild(notice);
         root.insertBefore(header, document.getElementById("lobby_body"));
         var rooms = el("section", "lobby-discovery-rooms"); rooms.id = "lobby_rooms_panel";
-        rooms.append(el("h2", "", "Gathering parties"), el("p", "lobby-section-intro", "Choose an open seat before the expedition begins."));
+        rooms.setAttribute("aria-labelledby", "lobby_rooms_title");
+        var roomsTitle = el("h2", "", "Gathering parties"); roomsTitle.id = "lobby_rooms_title";
+        rooms.append(roomsTitle, el("p", "lobby-section-intro", "Claim an open seat before the expedition sets out. The host chooses the friendly-fire rule."));
         rooms.appendChild(document.getElementById("party_rooms_list_view")); header.after(rooms);
-        var live = document.getElementById("lobby_body"), heading = live.querySelector(":scope > span");
-        heading.replaceWith(el("h2", "", "Live expeditions"));
+        var live = document.getElementById("lobby_body"), heading = live.querySelector(":scope > span, :scope > h2");
+        var liveTitle = el("h2", "", "Live expeditions"); liveTitle.id = "lobby_live_title";
+        if (heading) heading.replaceWith(liveTitle); else live.prepend(liveTitle);
+        live.setAttribute("aria-labelledby", liveTitle.id);
         var details = el("button", "lobby-live-details", "Show full details"); details.type = "button";
         details.setAttribute("aria-pressed", "false"); details.setAttribute("aria-controls", "player_list");
         details.addEventListener("click", function () {

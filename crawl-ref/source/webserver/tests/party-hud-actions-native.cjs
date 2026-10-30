@@ -123,8 +123,8 @@ fs.mkdirSync(output, { recursive: true });
         assert(!(await page.locator('#party_turn_banner').isVisible()));
         assert(await page.locator('#monster_list').evaluate(node => node.getBoundingClientRect().height <= 72),
             'Nearby creatures never create a large empty lower sidebar panel');
-        assert.equal(await page.locator('#hud_map_tools #hud_zoom_controls button').count(), 3);
-        assert.equal(await page.locator('#hud_map_tools #party_banner_cycle, #hud_map_tools #party_banner_center').count(), 2);
+        assert.equal(await page.locator('#mission_bar_tools #hud_zoom_controls button').count(), 3);
+        assert.equal(await page.locator('#mission_bar_tools #party_banner_cycle, #mission_bar_tools #party_banner_center').count(), 2);
         assert(await cards.first().evaluate(card => card.getBoundingClientRect().top
             - document.getElementById('party_hud').getBoundingClientRect().top <= 12), 'Roster starts directly with heroes');
         assert.equal(await page.locator('#quickbar_commands #workflow_compact_btn').count(), 1);

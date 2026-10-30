@@ -100,3 +100,32 @@
     #normal .party-card-sections .hud-inventory-tools .hud-icon-button { width: 28px; min-width: 28px; height: 28px; }
     #normal .party-card-sections :is(.hud-item-slot, .hud-power-button) { height: 42px; min-height: 42px; }
 }
+
+/* ---- Compact roster: portrait, meters and initiative only ---- */
+.workflow-compact-roster #normal .party-card :is(.party-hero-identity, .party-faith-row, .party-icon-utility, .party-effect-names, .party-member-effects, .party-sidebar-extra, .party-sidebar-pack, .party-self-details .hud-stat-cluster, .party-self-details .personal-stat-context) { display: none !important; }
+.workflow-compact-roster #normal .party-card .party-member-meta { display: flex; }
+.workflow-compact-roster #normal .party-card .party-icon-meta > :not(.party-defense-cluster) { display: none; }
+.workflow-compact-roster #normal .party-card .party-member-timing { display: inline-flex; margin-left: auto; }
+.workflow-compact-roster #normal .party-card.is-controlled-card .party-self-details { margin: 0; padding: 0; border: 0; }
+.workflow-compact-roster #normal .party-card .party-bar-wrap.tr-meter { height: 13px; }
+.workflow-compact-roster #normal .party-card .party-bar-wrap.tr-meter .party-bar-label { line-height: 13px; font-size: 9px; }
+/* ---- 1024×768 and short laptops: everything scrolls inside the right column ---- */
+@media (max-width: 1100px), (max-height: 800px) {
+    #normal .party-card { padding: 6px; margin-bottom: 4px; gap: 2px 6px; }
+    #normal .party-hero-identity { gap: 4px; }
+    #normal .party-hero-line { font-size: 9.5px; }
+    #normal .party-role-badge { min-height: 16px; padding: 0 5px 0 3px; font-size: 8.5px; }
+    #normal .party-faith-row { min-height: 14px; font-size: 9.5px; }
+    #normal .party-bar-wrap.tr-meter { height: 13px; }
+    #normal .party-bar-wrap.tr-meter .party-bar-label { line-height: 13px; font-size: 9px; }
+    #normal .party-card-sections .hud-item-grid, #normal .party-card-sections #hud_powers > .hud-panel-body { max-height: 96px; overflow-y: auto; }
+    #normal .party-card-sections :is(.hud-item-slot, .hud-power-button) { height: 34px; min-height: 34px; }
+    #normal .party-card-sections .hud-item-grid { grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 3px; }
+    #normal #party_turn_order { padding: 4px 6px 5px; }
+    #normal .turn-order-entry { min-height: 24px; font-size: 10px; max-width: 120px; }
+    #normal #hud_sidebar_scroll { overscroll-behavior: contain; }
+}
+@media (max-height: 800px) {
+    #normal .party-card:not(.is-controlled-card) .party-faith-row { display: none; }
+    #normal .party-card:not(.is-controlled-card) > .party-portrait { height: 60px; }
+}

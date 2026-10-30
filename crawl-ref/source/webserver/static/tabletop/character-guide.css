@@ -34,13 +34,23 @@
 #party_lobby_panel .character-choice-details:hover { background: #fffcf1; border-color: #9d7545; }
 #party_lobby_panel .character-choice-details:focus-visible { outline: 2px solid #a47a47; outline-offset: 2px; }
 #party_lobby_panel .character-choice-details:disabled { opacity: .45; cursor: default; }
-/* Keep the actual native launch action above the longer, explanatory folios. */
-#party_lobby_panel .character-guides-active #party_room_footer {
-    padding: 0 0 15px;
-    margin: 0 0 16px;
+/* Guides open as a side sheet in the top layer; the squad screen never reflows. */
+html .character-guide-dialog.character-side-sheet {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(640px, calc(100vw - 24px));
+    height: auto;
+    max-height: none;
+    margin: 0;
     border-top: 0;
-    border-bottom: 1px solid #a57b4452;
+    border-right: 0;
+    border-left: 4px solid var(--ui-chapter, #713b36);
+    border-radius: 0;
+    box-shadow: -18px 0 60px #0007;
 }
+.character-guide-dialog.character-side-sheet[open] { animation: character-side-sheet-in .18s ease-out; }
+@keyframes character-side-sheet-in { from { transform: translateX(28px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .character-guide-dialog.character-side-sheet[open] { animation: none; } }
 html .character-guide-dialog {
     box-sizing: border-box;
     width: min(720px, calc(100vw - 40px));
@@ -114,8 +124,8 @@ html .character-guide-dialog {
 @media (max-width: 680px) {
     #party_lobby_panel .character-choice-copy { min-height: 34px; font-size: 11px; }
     #party_lobby_panel .character-choice-details { min-height: 34px; padding: 5px 8px; font-size: 10px; }
-    #party_lobby_panel .character-guides-active #party_room_footer { padding-bottom: 15px; margin-bottom: 15px; }
     html .character-guide-dialog { width: calc(100vw - 20px); max-height: calc(100dvh - 28px); }
+    html .character-guide-dialog.character-side-sheet { width: 100vw; max-height: none; border-left-width: 0; }
     .character-guide-header { padding: 19px 17px 17px; gap: 10px; }
     .character-guide-crest { width: 34px; height: 40px; }
     .character-guide-crest .tt-icon { width: 16px; height: 16px; }
@@ -129,6 +139,13 @@ html .character-guide-dialog {
     .character-guide-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .character-guide-section h3 { font-size: 19px; }
 }
+/* Dark page themes: the guide reads from semantic page tokens instead of parchment inks. */
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog { background: var(--ui-page); color: var(--ui-ink); border-color: var(--ui-rule); color-scheme: var(--ui-page-scheme); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-header, .character-guide-tabs) { background: var(--ui-page-inset); border-color: var(--ui-rule); background-image: none; }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(h2, .character-guide-section h3, .character-guide-tabs button[aria-selected="true"]) { color: var(--ui-chapter); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-description, .character-guide-list, .character-guide-numbers dd, .character-guide-close, .character-guide-aptitudes summary) { color: var(--ui-ink); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-eyebrow, .character-guide-context, .character-guide-note, .character-guide-numbers dt, .character-guide-tabs button) { color: var(--ui-quiet); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-tabs button[aria-selected="true"], .character-guide-close, .character-guide-numbers > div, .character-guide-crest) { background: var(--ui-page-raised); border-color: var(--ui-rule); }
 @media (forced-colors: active) {
     .character-choice-details, .character-guide-dialog, .character-guide-numbers > div { border-color: CanvasText; }
     .character-guide-tabs button[aria-selected="true"] { border-bottom-color: Highlight; }

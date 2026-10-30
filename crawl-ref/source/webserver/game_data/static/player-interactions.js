@@ -97,7 +97,7 @@ function ($, comm, nested, placement, policy, sources, content) {
                 {
                     var b_span = document.createElement("span");
                     b_span.className = "dcss-tip-badge";
-                    b_span.textContent = badge.charAt(0) === "[" ? badge : "[" + badge + "]";
+                    b_span.textContent = badge.replace(/^\[|\]$/g, "");
                     hdr.appendChild(b_span);
                 }
                 tip_node.appendChild(hdr);

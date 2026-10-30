@@ -156,10 +156,20 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
                 if (shortcut) button.append($("<kbd class='hud-power-key' aria-hidden='true'></kbd>").text(shortcut));
                 if (kind === "spell")
                     button.append($("<small class='hud-power-cost' aria-hidden='true'></small>").text(spellCost.format(entry)));
+                // Failure chance is native; absent values stay unknown rather than zero.
+                var fail = entry.fail === undefined || entry.fail === null || entry.fail === "" ? null : parseFloat(entry.fail);
+                if (kind === "spell" || fail !== null)
+                    button.append($("<small class='hud-power-fail' aria-hidden='true'></small>")
+                        .attr("data-fail-tier", fail === null || !Number.isFinite(fail) ? "unknown" : fail >= 30 ? "risky" : fail >= 10 ? "caution" : "safe")
+                        .text(fail === null || !Number.isFinite(fail) ? "?%" : Math.round(fail) + "%"));
                 powerCards.attach(button, entry, kind === "spell" ? "Spell" : "Ability");
                 var blocked = actions.powerReason(hero, entry, kind);
                 if (blocked) button.attr("data-tip-meta", button.attr("data-tip-meta") + " · " + blocked);
-                button.attr({ "aria-label": label, tabindex: 0 });
+                var details = [spellCost.format(entry), fail !== null && Number.isFinite(fail) ? "fail " + Math.round(fail) + "%" : ""]
+                    .filter(function (part) { return part && part !== "Unavailable"; });
+                button.attr({ "aria-label": label + (kind === "spell" && details.length ? " (" + details.join(", ") + ")" : "")
+                    + (blocked ? ". Unavailable: " + blocked : ""), tabindex: 0 });
+                if (blocked) button.attr("data-blocked", "true"); else button.removeAttr("data-blocked");
                 // Keep disabled powers focusable so their cost/failure tooltip can be read.
                 if (button.prop("disabled")) button.prop("disabled", false).attr("aria-disabled", "true");
                 if (button.attr("aria-disabled") === "true") button[0].addEventListener("click", function (event) {
@@ -200,9 +210,12 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
                 .on("click", openSpellLibrary));
             var inventory = panel("hud_inventory", "Inventory", "inventory");
             var filters = $("<div class='hud-inventory-tools' role='group' aria-label='Inventory filters'></div>");
-            [["all", "filter-all", "All items"], ["equipped", "filter-equipped", "Equipped items"], ["pack", "filter-pack", "Unequipped items"]]
+            // Filters form one segmented control with short visible captions.
+            var segments = $("<span class='hud-segmented' role='group' aria-label='Show'></span>").appendTo(filters);
+            [["all", "filter-all", "All items", "All"], ["equipped", "filter-equipped", "Equipped items", "Worn"], ["pack", "filter-pack", "Unequipped items", "Pack"]]
                 .forEach(function (entry) {
-                    filters.append(iconButton(entry[1], entry[2]).attr("data-item-filter", entry[0])
+                    segments.append(iconButton(entry[1], entry[2]).addClass("hud-segment").attr("data-item-filter", entry[0])
+                        .append($("<span class='hud-segment-label' aria-hidden='true'></span>").text(entry[3]))
                         .on("click", function () { filter = entry[0]; update(true); }));
                 });
             filters.append(iconButton("inventory-open", "Open full inventory (i)").on("click", openInventory));

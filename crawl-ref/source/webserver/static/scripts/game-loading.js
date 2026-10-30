@@ -48,6 +48,11 @@ define([], function () {
             notify();
         },
         cancel: cancel,
+        // Read-only snapshot for the loading screen; readiness itself is unchanged.
+        progress: function () {
+            return { pending: pending, requirements: requirements.slice(),
+                ready: requirements.filter(function (key) { return !!ready[key]; }) };
+        },
         fail: function (message) { problem = message; notify(); },
         problem: function () { return problem; },
         blocking: blocking,

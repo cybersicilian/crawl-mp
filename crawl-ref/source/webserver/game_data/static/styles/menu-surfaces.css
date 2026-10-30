@@ -1,91 +1,111 @@
-/* One material and interaction contract for every engine popup family. */
-#ui-stack .ui-popup-outer:has(.workflow-surface) {
-    background: var(--workflow-paper); border-color: #a48a62; outline-color: #765b37;
-    padding: 16px; max-width: calc(100vw - 72px); box-sizing: border-box;
+/* One material and interaction contract for every engine popup family.
+   Native colours map onto page-safe ink; dark page themes use the bright set. */
+#ui-stack {
+    --menu-fg-ink: var(--ui-ink, #35291f);
+    --menu-fg-blue: #274c86; --menu-fg-green: #32602d; --menu-fg-cyan: #226061; --menu-fg-red: #9e2720;
+    --menu-fg-magenta: #763878; --menu-fg-brown: #775015; --menu-fg-grey: #706453;
+}
+html[data-ui-theme="dungeon"] #ui-stack, html[data-ui-theme="contrast"] #ui-stack {
+    --menu-fg-blue: #9fc1ff; --menu-fg-green: #a3e39a; --menu-fg-cyan: #8fe3e3; --menu-fg-red: #ffa59b;
+    --menu-fg-magenta: #ebb3f3; --menu-fg-brown: #f0c98a; --menu-fg-grey: #b9c0c8;
 }
 #ui-stack .ui-popup-inner:has(.workflow-surface) {
-    color: var(--workflow-ink); background: var(--workflow-paper); min-width: 0;
-    font: 14px/1.55 var(--tt-font-ui, sans-serif); text-shadow: none;
+    color: var(--menu-ink); background: transparent; min-width: 0;
+    font: 14px/1.55 var(--menu-copy-font); text-shadow: none;
 }
 #game #ui-stack .workflow-surface {
-    background: var(--workflow-paper); color: var(--workflow-ink); border-image: none;
-    border: 0; outline: 0; box-shadow: none; text-shadow: none; padding: 0; max-width: 100%; min-width: 0;
+    background: transparent; color: var(--menu-ink); border-image: none;
+    border: 0; outline: 0; box-shadow: none; text-shadow: none; padding: 0; max-width: 100%;
 }
-#game #ui-stack .workflow-surface :is(.body, .more, .footer, .status, .bar-text) {
-    color: var(--workflow-ink); text-shadow: none;
-}
+#game #ui-stack .workflow-surface :is(.body, .more, .footer, .status, .bar-text) { color: var(--menu-ink); text-shadow: none; }
 #game #ui-stack .workflow-surface .body :is(pre, p, div, span) { color: inherit; text-shadow: none; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg0, .fg7, .fg15) { color: #35291f; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg1, .fg9) { color: #274c86; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg2, .fg10) { color: #32602d; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg3, .fg11) { color: #226061; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg4, .fg12) { color: #9e2720; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg5, .fg13) { color: #763878; }
-#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg6, .fg14) { color: #775015; }
-#game #ui-stack .ui-popup-inner .workflow-surface .fg8 { color: #706453; }
-#game #ui-stack .workflow-surface :is(.bg7, .bg15) { background: #d8c6a4; }
-#game #ui-stack .workflow-surface .bg8 { background: #ded2bc; }
-#ui-stack .workflow-popup-tools { flex-wrap: wrap; align-items: center; gap: 8px; border-bottom: 1px solid var(--workflow-rule); margin-bottom: 12px; }
-.workflow-key-help { color: #6b5844; font: 12px/1.5 var(--tt-font-ui, sans-serif); }
+#game #ui-stack .workflow-surface :is(.menu_contents, .menu_more) :is(li, span) { color: inherit; }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg0, .fg7, .fg15) { color: var(--menu-fg-ink); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg1, .fg9) { color: var(--menu-fg-blue); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg2, .fg10) { color: var(--menu-fg-green); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg3, .fg11) { color: var(--menu-fg-cyan); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg4, .fg12) { color: var(--menu-fg-red); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg5, .fg13) { color: var(--menu-fg-magenta); }
+#game #ui-stack .ui-popup-inner .workflow-surface :is(.fg6, .fg14) { color: var(--menu-fg-brown); }
+#game #ui-stack .ui-popup-inner .workflow-surface .fg8 { color: var(--menu-fg-grey); }
+#game #ui-stack .workflow-surface :is(.bg7, .bg15) { background: var(--menu-selection); }
+#game #ui-stack .workflow-surface .bg8 { background: var(--menu-inset); }
+.workflow-key-help { color: var(--menu-quiet, #6b5844); font: 12px/1.5 var(--menu-copy-font, sans-serif); }
 .workflow-popup-tools .workflow-key-help { flex-basis: 100%; }
-#party_insp_key_help { margin: 0; padding: 8px 20px; background: #efe2c8; }
+#party_insp_key_help { margin: 0; padding: 8px 20px; }
 #game #ui-stack .workflow-surface :is(button, [role='button']) { cursor: pointer; }
-#game #ui-stack .workflow-surface button {
-    background: #fff8e8; color: var(--workflow-ink); border: 1px solid #947955;
-    border-radius: 4px; min-height: 32px; margin: 0; font: 600 12px/1.4 var(--tt-font-ui, sans-serif);
+#game #ui-stack .workflow-surface input {
+    color: var(--menu-ink); background-color: var(--menu-raised); border: 1px solid var(--menu-edge); border-radius: 4px;
+    min-height: 34px; padding: 4px 9px; font: 14px/1.4 var(--menu-copy-font);
 }
-#game #ui-stack .workflow-surface button:hover { background: #e5d4b3; }
-#game #ui-stack .workflow-surface :is(button, [role='button'], input, select):focus-visible {
-    outline: 2px solid #8b5918; outline-offset: 2px; background-color: #fff8e8;
-}
-#game #ui-stack .workflow-surface input { color: var(--workflow-ink); background-color: #fffaf0; }
+#game #ui-stack .workflow-surface input:focus-visible { background-color: var(--menu-raised); }
+
+/* Item rows: key cap · tile · name · status chips · right-aligned hint. */
 #ui-stack .workflow-surface .menu_contents li.selectable {
-    display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 4px 8px;
-    border: 1px solid transparent; border-bottom-color: #ccb99566; box-sizing: border-box; background: transparent;
+    display: flex; align-items: center; gap: 9px; min-height: 42px; padding: 5px 8px;
+    border: 1px solid transparent; border-bottom-color: var(--menu-rule); border-radius: 3px;
+    box-sizing: border-box; background: transparent; color: var(--menu-ink);
 }
+#ui-stack .workflow-surface .menu_contents li.selectable:not(.workflow-table-row) > kbd.workflow-key { order: -2; margin: 0; }
+#ui-stack .workflow-surface .menu_contents li.selectable:not(.workflow-table-row) > .workflow-selection-mark { order: -3; }
+#ui-stack .workflow-surface .menu_contents li.selectable:not(.workflow-table-row) > canvas { order: -1; }
+#ui-stack .workflow-surface .menu_contents li.selectable:not(.workflow-table-row) > :is(.workflow-state, .workflow-selection-state) { order: 1; }
+#ui-stack .workflow-surface .menu_contents li.selectable:not(.workflow-table-row)[data-row-hint]::after {
+    content: attr(data-row-hint); order: 2; margin-left: auto; flex: 0 0 auto;
+    color: var(--menu-quiet); font: 600 11px/1.4 var(--menu-copy-font); letter-spacing: .03em; opacity: 0;
+}
+#ui-stack .workflow-surface .menu_contents li.selectable:is(:hover, :focus-visible, .hovered)::after { opacity: 1; }
 #ui-stack .workflow-surface .menu_contents li.selectable:is(:hover, :focus-visible, .hovered) {
-    background: #e3d1af; border-color: #baa47f;
+    background: var(--menu-hover); border-color: var(--menu-rule); color: var(--menu-ink);
 }
+#ui-stack .workflow-surface .menu_contents li.selectable:focus-visible { outline-offset: -2px; }
 #game #ui-stack .workflow-surface .menu_contents li.selectable.workflow-selected {
-    background: #d9e5c6; border-color: #698545;
+    background: color-mix(in srgb, var(--menu-good) 14%, var(--menu-paper)); border-color: var(--menu-good);
+    box-shadow: inset 3px 0 0 var(--menu-good);
 }
 #game #ui-stack .workflow-surface .menu_contents li.selectable.workflow-selected:is(:hover, :focus-visible, .hovered) {
-    background: #ccddb1; border-color: #506c2c;
+    background: color-mix(in srgb, var(--menu-good) 22%, var(--menu-paper));
 }
+#ui-stack .workflow-surface .menu_contents li.level1 {
+    margin-top: 6px; padding: 8px 8px 4px; color: var(--menu-quiet);
+    font: 600 11px/1.5 var(--menu-copy-font); letter-spacing: .06em; text-transform: uppercase;
+}
+#ui-stack .workflow-surface .menu_contents li.placeholder { color: var(--menu-quiet); }
 .workflow-selection-mark {
     display: inline-flex; align-items: center; justify-content: center; flex: 0 0 18px;
-    width: 18px; height: 18px; box-sizing: border-box; border: 1px solid #947955;
-    border-radius: 3px; background: #fff8e8; font: bold 14px/1 var(--tt-font-ui, sans-serif);
+    width: 18px; height: 18px; box-sizing: border-box; border: 1px solid var(--menu-edge, #947955);
+    border-radius: 3px; background: var(--menu-raised, #fff8e8); font: bold 14px/1 var(--menu-copy-font, sans-serif);
 }
-#game #ui-stack .workflow-selected .workflow-selection-mark { background: #49632c; color: #fff; border-color: #49632c; }
-.workflow-selection-state { flex: 0 0 auto; font: 600 12px/1.4 var(--tt-font-ui, sans-serif); }
-.workflow-item-name { min-width: 0; white-space: normal; }
+#game #ui-stack .workflow-selected .workflow-selection-mark { background: var(--menu-good); color: #fff; border-color: var(--menu-good); }
+.workflow-selection-state { flex: 0 0 auto; color: var(--menu-good); font: 600 12px/1.4 var(--menu-copy-font); }
+#ui-stack .workflow-item-name { flex: 1 1 auto; min-width: 0; white-space: normal; font-weight: 500; }
 #ui-stack .workflow-surface .menu_contents li canvas { flex: 0 0 auto; }
-.workflow-entry-copy { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--tt-font-mono, monospace); }
+#ui-stack .workflow-entry-copy { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--menu-mono-font); }
 #ui-stack .workflow-surface .menu_title { white-space: normal; overflow-wrap: anywhere; }
-#ui-stack .workflow-surface .codex-chapter strong { color: var(--workflow-ink); }
-#ui-stack .workflow-surface .codex-chapter small { color: #6b5844; }
-#ui-stack .workflow-surface :is(.workflow-key, .tt-codex kbd) {
-    flex: 0 0 auto; margin-left: auto; border: 1px solid #bdab8c; border-radius: 3px;
-    padding: 1px 5px; color: #59442d; background: #fff7e5; opacity: 1;
+#ui-stack .workflow-state {
+    display: inline-flex; align-items: center; flex: 0 0 auto; padding: 1px 7px; border: 1px solid var(--menu-rule);
+    border-radius: 999px; background: var(--menu-raised); color: var(--menu-quiet);
+    font: 600 10px/1.6 var(--menu-copy-font); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
+}
+#ui-stack .workflow-state[data-state='equipped'] { color: var(--menu-good); border-color: color-mix(in srgb, var(--menu-good) 50%, var(--menu-rule)); }
+#ui-stack .workflow-state[data-state='quivered'] { color: var(--menu-arcane); border-color: color-mix(in srgb, var(--menu-arcane) 50%, var(--menu-rule)); }
+#ui-stack .workflow-state[data-state='cursed'] { color: var(--menu-danger); border-color: color-mix(in srgb, var(--menu-danger) 50%, var(--menu-rule)); }
+#ui-stack .workflow-state[data-state='unidentified'] { color: var(--menu-warn); border-style: dashed; }
+#ui-stack .workflow-surface .codex-chapter strong { color: var(--menu-ink); }
+#ui-stack .workflow-surface .codex-chapter small { color: var(--menu-quiet); }
+#ui-stack .workflow-surface .tt-codex kbd {
+    flex: 0 0 auto; margin-left: auto; border: 1px solid var(--menu-rule); border-radius: 3px;
+    padding: 1px 5px; color: var(--menu-quiet); background: var(--menu-raised); opacity: 1;
 }
 .workflow-pane-tabs, .workflow-dialog-actions { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
 #ui-stack .describe-monster:has(.workflow-pane-tabs) > .footer { display: none; }
-#game #ui-stack .workflow-surface .workflow-pane-tabs [aria-selected='true'] { background: #5e452d; color: #fff8e8; }
-#ui-stack .workflow-surface .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-#ui-stack .workflow-surface .actions [data-hotkey] { padding: 6px 10px; border: 1px solid #947955; border-radius: 4px; background: #fff8e8; }
-#ui-stack .workflow-surface .scroller-shade.top { background: linear-gradient(#f1e8d4, #f1e8d400); }
-#ui-stack .workflow-surface .scroller-shade.bot { background: linear-gradient(#f1e8d400, #f1e8d4); }
-#ui-stack .workflow-surface .simplebar-track { background: #e1d3b8; }
-#ui-stack .workflow-surface .simplebar-track.vertical::before { background: #cab795; }
-#ui-stack .workflow-surface .simplebar-scrollbar { border-color: #e1d3b8; background: #8e734d; }
-#ui-stack .workflow-surface .grid .button { background: #fff7e5; border-color: #ccb995; padding: 5px 7px; }
-#ui-stack .workflow-surface .grid .button.selected { background: #e3d1af; border-color: #8b5918; }
+#ui-stack .workflow-surface .grid .button { background: var(--menu-raised); border-color: var(--menu-rule); color: var(--menu-ink); padding: 5px 7px; }
+#ui-stack .workflow-surface .grid .button.selected { background: var(--menu-hover); border-color: var(--menu-chapter); }
 #ui-stack .workflow-surface.menu_txt { font-family: var(--crt-font, monospace); overflow: auto; }
 @media (max-width: 700px) {
-    #ui-stack .ui-popup-outer:has(.workflow-surface) { margin: 12px; padding: 12px; max-width: calc(100vw - 24px); }
     #ui-stack .workflow-surface .menu_contents li.selectable { gap: 6px; padding-inline: 4px; }
     .workflow-selection-state { flex-shrink: 1; max-width: 7em; white-space: normal; }
+    #ui-stack .workflow-surface .menu_contents li.selectable[data-row-hint]::after { display: none; }
     #ui-stack .workflow-surface :is(.body pre, .menu_more) { white-space: pre-wrap; overflow-wrap: anywhere; }
     #ui-stack .workflow-surface.menu_txt { font-size: 12px; }
 }

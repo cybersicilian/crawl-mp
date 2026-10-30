@@ -465,6 +465,7 @@ function ($, options, util, stat_tips, icons) {
             var place_desc = player.place;
             if (player.depth) place_desc += ":" + player.depth;
             $("#stats_place").text(place_desc);
+            $("#hud_minimap_floor").text(place_desc || "Floor unknown");
 
             var tooltip = $("#stats_status_lights_tooltip");
             // Hide the tooltip so that it goes away if expired.

@@ -312,14 +312,15 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         }
         // Move existing controls, preserving their handlers and native shortcuts.
         $dock.find(".workflow-action-group").appendTo("#quickbar_commands");
-        ["o", "\t", "5", "g"].forEach(function (key) {
+        // Primary row: the eight verbs a hero uses every floor, in play order.
+        ["o", "\t", "5", "g", "<", ">", "i", "z", "a"].forEach(function (key) {
             $dock.find("[data-dock-key]").filter(function () { return this.dataset.dockKey === key; }).appendTo("#quickbar_primary");
         });
         var $commands = $("#quickbar_commands");
         $commands.find("[data-action-group='combat']").children().appendTo($commands.find("[data-action-group='character']"));
         $("#dock_chat_btn, #dock_codex_btn, #dock_save_btn, #workflow_expedition_details")
             .appendTo($commands.find("[data-action-group='expedition']"));
-        var groupLabels = { exploration: "Travel", character: "Hero", expedition: "Game" };
+        var groupLabels = { exploration: "Move", character: "Inspect", expedition: "Expedition" };
         Object.keys(groupLabels).forEach(function (group) {
             $commands.find("[data-action-group='" + group + "']")
                 .attr({ "data-label": groupLabels[group], "aria-label": groupLabels[group] });

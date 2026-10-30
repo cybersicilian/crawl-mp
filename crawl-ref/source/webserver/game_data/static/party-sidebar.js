@@ -23,15 +23,16 @@ function ($, inventory, model, properties, help, frameUpdate) {
                 "data-tip-title": definition.title, "data-tip-body": definition.body,
                 "data-tip-meta": known ? "Current native value: " + text : "Current value unavailable",
                 "data-value-state": known ? value < 0 ? "negative" : "known" : "unknown" })
-            .append(definition.key ? properties.levelIcons(glyph, help.levels(definition, value))
-                : [properties.icon(glyph), $("<span></span>").text(text)])
+            .append($("<span class='party-sidebar-label' aria-hidden='true'></span>").text(definition.start || definition.label || definition.key || ""),
+                definition.key ? properties.levelIcons(glyph, help.levels(definition, value))
+                : [properties.icon(glyph), $("<span class='party-sidebar-value'></span>").text(text)])
             .on("click keydown keypress keyup", isolate);
     }
     function details(hero, controlled) {
         var root = $("<div class='party-sidebar-extra' role='group' hidden></div>")
             .attr("aria-label", "Attributes and defenses for " + hero.name);
         if (!controlled) {
-            var attributes = $("<div class='party-sidebar-attributes'></div>");
+            var attributes = $("<div class='party-sidebar-attributes' role='group' aria-label='Attributes'></div>");
             [["str", "str", "strength"], ["int", "intel", "intelligence"], ["dex", "dex", "dexterity"]]
                 .forEach(function (entry) {
                     attributes.append(reading(hero, entry[0], help.stats[entry[0]], hero[entry[1]], entry[2]));

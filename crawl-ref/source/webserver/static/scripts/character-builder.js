@@ -1,5 +1,5 @@
 /* Character identity and legal choices use the same catalog as the native guide. */
-define(["character-catalog", "client-staging-data", "starting-sheet", "searchable-select", "client-staging-traits"], function (catalog, choices, sheet, picker, traits) {
+define(["character-catalog", "client-staging-data", "starting-sheet", "searchable-select", "client-staging-traits", "hero-roles"], function (catalog, choices, sheet, picker, traits, roles) {
     "use strict";
     var selections = new WeakMap();
     function selection(card) {
@@ -22,7 +22,11 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         mark.setAttribute("aria-hidden", "true");
         header.appendChild(mark);
         var copy = element("div", "party-slot-identity");
-        copy.appendChild(element("span", "party-slot-title", "P" + (slot + 1) + (slot === 0 ? " · Party leader" : " · Party member")));
+        var title = element("div", "party-slot-title-row");
+        title.appendChild(element("span", "party-slot-title", "Seat " + (slot + 1) + (slot === 0 ? " · Host" : "")));
+        var badge = element("span", roles.badgeClasses("unknown"), "Hero"); badge.dataset.role = "unknown";
+        title.appendChild(badge);
+        copy.appendChild(title);
         copy.appendChild(element("h3", "party-slot-hero-name"));
         copy.appendChild(element("span", "party-slot-occupant"));
         header.appendChild(copy);
@@ -41,6 +45,11 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         card.querySelector(".party-slot-hero-name").textContent = card.querySelector(".party-slot-name").value || "Your hero";
         var abbreviation = mark.querySelector(".party-slot-abbreviation");
         if (abbreviation) abbreviation.textContent = race && job ? race.abbr + job.abbr : "?";
+        var role = roles.roleForBackground(job), badge = card.querySelector(".party-slot-identity .party-role-badge");
+        if (badge && badge.dataset.role !== role.key) {
+            badge.className = roles.badgeClasses(role.key); badge.dataset.role = role.key; badge.textContent = role.label;
+            badge.title = role.summary;
+        }
         var allowed = choices.allowedJobs(raceSelect.value);
         Array.from(jobSelect.options).forEach(function (option) {
             var disabled = allowed.indexOf(option.value) === -1;
@@ -78,7 +87,11 @@ define(["character-catalog", "client-staging-data", "starting-sheet", "searchabl
         random.dataset.tipBody = "Roll a random species and a legal background. Click again to reroll.";
         row.appendChild(random);
         builds.forEach(function (build) {
-            var button = element("button", "party-archetype-btn", build.species + " " + build.job);
+            var button = element("button", "party-archetype-btn");
+            var role = roles.roleForBackground(build.job);
+            button.appendChild(element("span", "party-archetype-name", build.species + " " + build.job));
+            var badge = element("span", roles.badgeClasses(role.key), role.label); badge.dataset.role = role.key;
+            button.appendChild(badge);
             button.type = "button";
             button.dataset.slot = card.dataset.slot;
             button.dataset.species = build.species;

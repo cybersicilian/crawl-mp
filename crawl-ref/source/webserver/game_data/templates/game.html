@@ -29,42 +29,58 @@
 
 <div id="normal" style="display: none" data-loading-readiness="dungeon">
   <div id="left_column" style="position: relative">
-    <div id="party_turn_banner" style="display: none">
-      <span id="party_banner_dot" class="party-banner-dot" style="display: none"></span>
-      <span class="party-banner-label">Controlling</span>
-      <span
-        id="party_banner_who"
-        data-tip-title="Active Party Hero"
-        data-tip-badge="[Turn]"
-        data-tip-body="The hero currently taking actions on this client view."
-        data-tip-meta="Click a hero card or [Next] to switch active hero"
-      >[P1] Host</span>
-      <span
-        id="party_banner_mode"
-        class="party-badge explore"
-        data-tip-title="Party Tactical Mode"
-        data-tip-badge="[Mode]"
-        data-tip-body="Free Explore lets party members act independently. Tactical Combat engages strict round-robin turn order when hostile monsters are in sight."
-        data-tip-meta="Automatically switches when enemies are spotted"
-      >Free Explore</span>
-      <button
-        id="party_banner_cycle"
-        class="party-banner-btn"
-        type="button"
-        data-tip-title="Cycle Active Hero"
-        data-tip-key="Next button"
-        data-tip-body="Switch control and camera focus to the next living party member."
-        data-tip-meta="Useful for coordinating multi-hero positioning"
-      >Next hero</button>
-      <button
-        id="party_banner_center"
-        class="party-banner-btn"
-        type="button"
-        data-tip-title="Center Camera"
-        data-tip-badge="[View]"
-        data-tip-body="Snap the dungeon viewport back to the currently active hero."
-        data-tip-meta="Click any party card's [Cam] button to peek at allies"
-      >Center camera</button>
+    <div id="party_turn_banner" class="mission-bar" role="region" aria-label="Mission status" style="display: none">
+      <div class="mission-hero">
+        <span id="mission_portrait" class="mission-portrait" aria-hidden="true"></span>
+        <span id="party_banner_dot" class="party-banner-dot" style="display: none"></span>
+        <span class="mission-hero-text">
+          <span class="party-banner-label mission-label">Controlling</span>
+          <span
+            id="party_banner_who"
+            class="mission-hero-name"
+            data-tip-title="Active Party Hero"
+            data-tip-badge="[Turn]"
+            data-tip-body="The hero currently taking actions on this client view."
+            data-tip-meta="Click a hero card or [Next] to switch active hero"
+          >[P1] Host</span>
+        </span>
+      </div>
+      <span class="mission-mode">
+        <span class="mission-label" aria-hidden="true">Mode</span>
+        <span
+          id="party_banner_mode"
+          class="party-badge explore"
+          data-tip-title="Party Tactical Mode"
+          data-tip-badge="[Mode]"
+          data-tip-body="Free Explore lets party members act independently. Tactical Combat engages strict round-robin turn order when hostile monsters are in sight."
+          data-tip-meta="Automatically switches when enemies are spotted"
+        >Free Explore</span>
+      </span>
+      <span id="mission_clock" class="mission-stat" role="img" tabindex="0" aria-label="World clock unavailable">
+        <span class="mission-label" aria-hidden="true">Turn</span>
+        <span id="mission_clock_value" class="mission-value" aria-hidden="true">?</span>
+      </span>
+      <span id="mission_status" class="mission-status"></span>
+      <span id="mission_bar_tools" class="mission-tools" role="group" aria-label="View controls">
+        <button
+          id="party_banner_cycle"
+          class="party-banner-btn"
+          type="button"
+          data-tip-title="Cycle Active Hero"
+          data-tip-key="Next button"
+          data-tip-body="Switch control and camera focus to the next living party member."
+          data-tip-meta="Useful for coordinating multi-hero positioning"
+        >Next hero</button>
+        <button
+          id="party_banner_center"
+          class="party-banner-btn"
+          type="button"
+          data-tip-title="Center Camera"
+          data-tip-badge="[View]"
+          data-tip-body="Snap the dungeon viewport back to the currently active hero."
+          data-tip-meta="Click any party card's [Cam] button to peek at allies"
+        >Center camera</button>
+      </span>
     </div>
     <div id="dungeon_viewport"><canvas id="dungeon"></canvas></div>
     <div id="mobile_input" style="display: none">
@@ -214,8 +230,8 @@
     {% include "character-sheet.html" %}
 
     {% include "party-roster.html" %}
-    <details id="hud_minimap" class="hud-disclosure">
-      <summary>Level overview</summary>
+    <details id="hud_minimap" class="hud-disclosure hud-minimap-frame">
+      <summary class="hud-minimap-summary"><span class="hud-minimap-label">Map</span><span id="hud_minimap_floor" class="hud-minimap-floor" aria-live="off">Floor unknown</span></summary>
     <div
       id="minimap_block"
       data-tip-title="Dungeon Minimap"
@@ -227,7 +243,7 @@
       <canvas id="minimap_overlay" aria-label="Dungeon minimap: left-click to travel, right-drag to preview"></canvas>
     </div>
     </details>
-    <div id="monster_list"></div>
+    <div id="monster_list" role="group" aria-label="Unseen creature warnings"></div>
   </div>
   <div id="tooltip" style="display: none"></div>
   <div id="dcss_rich_tooltip" style="display: none" aria-hidden="true"></div>

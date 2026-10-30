@@ -1,17 +1,63 @@
-define(["jquery", "./party-model", "./status-icons", "item-properties", "./folio-equipment", "./party-power-cards", "./party-skill-training", "./workflow-actions", "character-stat-help", "./party-status-model", "spell-cost", "rich-text"],
-function ($, model, icons, properties, equipment, powers, skillTraining, actions, help, statusModel, spellCost, richText) {
+define(["jquery", "./party-model", "./status-icons", "item-properties", "./folio-equipment", "./party-power-cards", "./party-skill-training", "./workflow-actions", "character-stat-help", "./party-status-model", "spell-cost", "rich-text", "./popup-controls", "./equipment-paperdoll", "./native-tile-art"],
+function ($, model, icons, properties, equipment, powers, skillTraining, actions, help, statusModel, spellCost, richText, controls, paperdoll, art) {
     "use strict";
 
     var party_slot_colours = model.colours;
     var normalize_party_member = model.normalize;
     var format_char_abbrev = model.abbreviation;
+    // Five tabs: the id/key contract is shared with tests and dock callers.
     var sections = [
-        { key: "overview", label: "Character" },
-        { key: "abilities", label: "Spells & abilities" },
-        { key: "mutations", label: "Traits" },
+        { key: "overview", label: "Overview" },
         { key: "equipment", label: "Equipment" },
-        { key: "skills", label: "Skills" }
+        { key: "abilities", label: "Powers" },
+        { key: "skills", label: "Skills" },
+        { key: "mutations", label: "Traits" }
     ];
+
+    function meter(label, value, max, kind)
+    {
+        var known = Number.isFinite(Number(value)) && Number.isFinite(Number(max)) && Number(max) > 0;
+        var ratio = known ? Math.max(0, Math.min(1, Number(value) / Number(max))) : 0;
+        var row = $("<div class='party-insp-meter tr-meter'></div>").attr({ "data-meter": kind,
+            "data-resource": kind === "hp" ? "hp" : "mp" });
+        row[0].style.setProperty("--tr-meter-pct", (ratio * 100).toFixed(1) + "%");
+        row.append($("<span class='party-insp-meter-label tr-meter-label'></span>").text(label));
+        var bar = $("<span class='party-insp-meter-bar tr-meter-track' aria-hidden='true'></span>")
+            .append($("<span class='party-insp-meter-fill tr-meter-fill'></span>").css("width", (ratio * 100).toFixed(1) + "%"));
+        if (known && ratio <= 0.25) row.addClass("is-low").attr("data-threshold", "low");
+        row.append(bar, $("<span class='party-insp-meter-value tr-meter-value'></span>")
+            .text(model.display(value) + "/" + model.display(max)));
+        return row.attr({ role: "img", "aria-label": label + " " + model.display(value) + " of " + model.display(max) });
+    }
+
+    function portrait(m, accent)
+    {
+        var profile = paperdoll.profile(m);
+        var fallback = $("<span class='party-insp-portrait-initial' aria-hidden='true'></span>")
+            .text(String(m.name || "?").charAt(0).toUpperCase())[0];
+        var frame = $(art.create(profile && profile.portrait, m.name + " portrait", "party-insp-portrait-art", fallback));
+        var wrap = $("<div class='party-insp-portrait'></div>").append(frame);
+        wrap[0].style.setProperty("--hero-accent", accent);
+        return wrap;
+    }
+
+    function faith_section(m)
+    {
+        var faith = statusModel.faith(m);
+        var card = $("<div class='party-insp-faith'></div>").attr("data-faith-kind", faith.kind || "none");
+        var head = $("<div class='party-insp-faith-head'></div>")
+            .append($("<strong></strong>").text(faith.name));
+        if (faith.rank !== null && faith.rank !== undefined)
+            head.append($("<span class='party-insp-faith-rank' aria-hidden='true'></span>")
+                .text("★".repeat(faith.rank) + "☆".repeat(Math.max(0, 6 - faith.rank))));
+        if (faith.penance) head.append($("<span class='party-insp-badge temp'>Penance</span>"));
+        if (faith.standing && faith.standing !== "none")
+            head.append($("<span class='party-insp-badge'></span>").addClass(faith.standing === "allied" ? "innate" : "temp")
+                .text(faith.standing === "allied" ? "Allied" : "Rival"));
+        card.append(head, $("<p class='party-insp-faith-summary'></p>").text(faith.summary));
+        if (faith.description) card.append($("<div class='party-insp-faith-desc'></div>").html(richText.render(faith.description)));
+        return card;
+    }
 
     function remember_scroll()
     {
@@ -30,7 +76,7 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
         if (remember !== false) remember_scroll();
         window.crawl_party.inspector_tab = tab;
         $("#party_inspector_modal").toggleClass("folio-equipment-open", tab === "equipment");
-        $("#party_inspector_heading").text(tab === "equipment" ? "Equipment" : "Party Hero Inspector");
+        $("#party_inspector_heading").text(tab === "equipment" ? "Equipment" : "Hero sheet");
         var selected;
         $("#party_insp_tab_bar .party-insp-tab-btn").each(function () {
             var active = this.getAttribute("data-insp-tab") === tab;
@@ -133,24 +179,27 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
 
         var $banner = $("<div class='party-insp-banner'></div>");
         $banner[0].style.setProperty("--hero-accent", m_col);
+        $banner.append(portrait(m, m_col));
 
-        var $bannerLeft = $("<div></div>");
+        var $bannerLeft = $("<div class='party-insp-identity'></div>");
         var headline = "P" + (m.slot + 1) + " · " + m.name + (m.title ? (", " + m.title) : "");
         $bannerLeft.append($("<div class='party-insp-hero-headline'></div>").text(headline));
+        var role = controls.role(m);
+        var $badges = $("<div class='party-insp-hero-badges'></div>");
+        if (role) $badges.append($("<span class='party-insp-role-badge tr-badge is-solid'></span>").attr("data-role", role.key).text(role.label));
+        $badges.append($("<span class='party-insp-level-badge'></span>").text("Level " + model.display(m.xl)));
+        $badges.append($("<span class='party-insp-hero-meta'></span>").text(model.display(model.speciesName(m)) + " " + model.display(m.job) +
+            " (" + format_char_abbrev(m.species, m.job) + ")"));
+        $bannerLeft.append($badges);
 
+        var resource = model.magicResource(m);
+        $bannerLeft.append($("<div class='party-insp-meters'></div>").append(
+            meter("HP", m.hp, m.hp_max, "hp"), meter(resource.label, resource.value, resource.max, "resource")));
         var shared_gold = (state.gold !== undefined)
             ? state.gold
             : model.display(m.gold);
-        var spec_line = model.display(model.speciesName(m)) + " " + model.display(m.job) +
-                        " (" + format_char_abbrev(m.species, m.job) + ") · Floor " + model.display(m.place) +
-                        " · Party gold " + shared_gold;
-        var resource = model.magicResource(m);
-        var god_line = "Faith: " + format_piety_pips(m) +
-                       (m.god_politics ? (" (" + m.god_politics + ")") : "") +
-                       " · HP " + m.hp + "/" + m.hp_max +
-                       " · " + resource.label + " " + model.display(resource.value) + "/" + model.display(resource.max);
-        $bannerLeft.append($("<div class='party-insp-hero-meta'></div>").text(spec_line));
-        $bannerLeft.append($("<div class='party-insp-hero-meta'></div>").text(god_line));
+        $bannerLeft.append($("<div class='party-insp-hero-meta'></div>")
+            .text("Floor " + model.display(m.place) + " · Party gold " + shared_gold + " · Faith: " + format_piety_pips(m)));
         if (m.elder_summary || m.chain_summary)
             $bannerLeft.append($("<div class='party-insp-hero-meta'></div>")
                 .text(m.elder_summary || m.chain_summary));
@@ -231,6 +280,9 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
             $resGrid.append($rRow);
         }
         $panelOverview.append($resGrid);
+
+        // Faith
+        $panelOverview.append($("<div class='party-insp-section-title'>Faith</div>"), faith_section(m));
 
         // Active Buffs & Status Effects
         $panelOverview.append($("<div class='party-insp-section-title'>Active Buffs &amp; Status Effects</div>"));

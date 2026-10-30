@@ -41,3 +41,11 @@
     #normal .party-sidebar-pack-open { min-height: 28px; }
     #normal .party-sidebar-items .hud-item-slot { height: 42px; min-height: 42px; }
 }
+/* Companion attribute and resistance readings carry a visible caption. */
+#normal .party-sidebar-reading { padding: 1px 4px 1px 2px; border: 1px solid #ad98611c; border-radius: 2px; background: #10161b42; }
+#normal .party-sidebar-reading .party-sidebar-label { line-height: 1; }
+#normal .party-sidebar-reading .party-sidebar-label:empty { display: none; }
+#normal .party-sidebar-attributes::before, #normal .party-sidebar-defenses::before {
+    content: attr(aria-label); flex: 1 1 100%; font: 600 8.5px/1.2 var(--tt-font-ui); letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ui-muted, #c0b296);
+}

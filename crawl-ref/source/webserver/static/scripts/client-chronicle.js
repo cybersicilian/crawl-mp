@@ -37,9 +37,9 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
             var ghosts = chronicle_state.ghosts || [];
             var items = chronicle_state.cool_items || [];
 
-            $("#chronicle_comps_count").text("(" + comps.length + ")");
-            $("#chronicle_ghosts_count").text("(" + ghosts.length + ")");
-            $("#chronicle_items_count").text("(" + items.length + ")");
+            $("#chronicle_comps_count").text(String(comps.length)).attr("aria-label", comps.length + " recorded");
+            $("#chronicle_ghosts_count").text(String(ghosts.length)).attr("aria-label", ghosts.length + " recorded");
+            $("#chronicle_items_count").text(String(items.length)).attr("aria-label", items.length + " recorded");
 
             var seasoningLabels = {
                 fast_boil: "Fast Boil",
@@ -94,21 +94,37 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
                         .attr("data-tip-body", compTipBody)
                         .attr("data-tip-meta", compTipMeta);
                     var $main = $("<div class='chronicle-entry-main'></div>");
-                    var $titleRow = $("<div class='chronicle-entry-title'></div>").text(compTitle + " ");
-                    $titleRow.append($("<span class='chronicle-score-pill'></span>").text(brothScore + " Broth pts"));
-                    $titleRow.append($("<span class='chronicle-mvp-badge'></span>").text("★ " + mvpLabel));
+                    var $titleRow = $("<div class='chronicle-entry-title'></div>").text(compTitle);
+                    var $badges = $("<div class='chronicle-entry-badges'></div>");
+                    $badges.append($("<span class='chronicle-score-pill tr-badge'></span>").text("Broth score " + brothScore));
+                    $badges.append($("<span class='chronicle-mvp-badge tr-badge'></span>").text("★ " + mvpLabel));
                     for (var sIdx = 0; sIdx < seasonings.length; sIdx++)
                     {
                         var sKey = seasonings[sIdx];
-                        $titleRow.append($("<span class='chronicle-seasoning-tag'></span>").text(seasoningLabels[sKey] || sKey));
+                        $badges.append($("<span class='chronicle-seasoning-tag tr-badge'></span>").text(seasoningLabels[sKey] || sKey));
                     }
                     $main.append($titleRow);
-                    $main.append($("<div class='chronicle-entry-sub'></div>").text(membersStr));
+                    var $roster = $("<ul class='chronicle-roster' aria-label='Party roster'></ul>");
+                    if (c.members && c.members.length)
+                    {
+                        for (var rIdx = 0; rIdx < c.members.length; rIdx++)
+                        {
+                            var member = c.members[rIdx];
+                            $roster.append($("<li class='chronicle-hero'></li>")
+                                .attr({ "data-hero-job": member.job || "", "data-hero-species": member.species || "", "data-hero-slot": String(rIdx) })
+                                .append($("<span class='chronicle-hero-name'></span>").text(member.name || member.hero_name || "Hero"),
+                                    $("<span class='chronicle-hero-meta'></span>").text(((member.species || "?") + " " + (member.job || "?")).trim())));
+                        }
+                        $main.append($roster);
+                    }
+                    else
+                        $main.append($("<div class='chronicle-entry-sub'></div>").text(membersStr));
+                    $main.append($badges);
                     $main.append($("<div class='chronicle-entry-meta'></div>").text((c.player_count || 2) + " heroes · " +
                         (c.friendly_fire ? "Friendly fire on" : "Friendly fire off") +
                         (c.seed ? (" · Seed #" + c.seed) : "") +
                         " · Reached " + (c.deepest_place || "D:1")));
-                    var $loadBtn = $("<button type='button' class='dcss-btn dcss-btn-gold btn-load-chronicle-comp'>Use build</button>")
+                    var $loadBtn = $("<button type='button' class='dcss-btn dcss-btn-primary tr-btn btn-load-chronicle-comp'>Use build</button>")
                         .attr("data-comp-idx", i)
                         .attr("data-tip-title", "Load Party Recipe: " + (c.comp_name || "Expedition"))
                         .attr("data-tip-body", compTipBody)
@@ -136,7 +152,6 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
                     var gEv = (g.ev !== undefined && g.ev !== null) ? g.ev : 0;
                     var gSh = (g.sh !== undefined && g.sh !== null) ? g.sh : 0;
                     var gWeapon = g.weapon || "unarmed";
-                    var gSub = killerRaw + " on " + gFloor + " | AC " + gAc + " EV " + gEv + " | " + gWeapon;
                     var gTipBody = killerFormatted + " on Floor " + gFloor +
                         " | AC/EV/SH: " + gAc + " / " + gEv + " / " + gSh +
                         " | Weapon: " + gWeapon +
@@ -148,10 +163,12 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
                         .attr("data-tip-body", gTipBody)
                         .attr("data-tip-meta", gTipMeta);
                     var $gMain = $("<div class='chronicle-entry-main'></div>");
-                    $gMain.append($("<div class='chronicle-entry-title' style='color:#ef2929;'></div>").text(gTitle));
-                    $gMain.append($("<div class='chronicle-entry-sub'></div>").text(gSub));
-                    var $gBadge = $("<span style='color:#ad7fa8; font-size:10px; font-weight:bold;'>[BONES]</span>");
-                    $gRow.append($gMain).append($gBadge);
+                    $gMain.append($("<div class='chronicle-entry-title chronicle-ghost-title'></div>").text(gTitle));
+                    $gMain.append($("<div class='chronicle-entry-sub'></div>").text(killerFormatted + " on " + gFloor));
+                    $gMain.append($("<div class='chronicle-entry-meta'></div>").text("AC " + gAc + " · EV " + gEv + " · SH " + gSh + " · " + gWeapon));
+                    var $gBadge = $("<span class='chronicle-kind-badge tr-badge' data-kind='ghost'>Ghost</span>")
+                        .attr("title", "Stored in bones files; may return as a hostile ghost on " + gFloor);
+                    $gRow.attr("data-hero-job", g.job || "").append($gMain).append($gBadge);
                     $ghostsList.append($gRow);
                 }
             }
@@ -182,11 +199,12 @@ define(["jquery", "comm", "item-display"], function ($, comm, itemDisplay) {
                         .attr("data-tip-body", itTipBody)
                         .attr("data-tip-meta", itTipMeta);
                     var $itMain = $("<div class='chronicle-entry-main'></div>");
-                    $itMain.append($("<div class='chronicle-entry-title' style='color:#fce94f;'></div>").text(it.item_name || "Unknown Relic"));
+                    $itMain.append($("<div class='chronicle-entry-title chronicle-relic-title'></div>").text(it.item_name || "Unknown Relic"));
                     $itMain.append($("<div class='chronicle-entry-sub'></div>").text(
-                        "Found by " + (it.finder_name || "Party") + " (" + (it.finder_species || "") + " " + (it.finder_job || "") + ") on " + discFloor
+                        "Found by " + (it.finder_name || "Party") + " (" + ((it.finder_species || "") + " " + (it.finder_job || "")).trim() + ") on " + discFloor
                     ));
-                    var $catBadge = $("<span style='color:#34e2e2; font-size:10px; font-weight:bold;'></span>").text("[" + catUpper + "]");
+                    var $catBadge = $("<span class='chronicle-kind-badge tr-badge'></span>")
+                        .attr("data-kind", catUpper.toLowerCase().replace(/[^a-z]+/g, "-")).text(catLabel);
                     $itRow.append($itMain).append($catBadge);
                     $itemsList.append($itRow);
                 }

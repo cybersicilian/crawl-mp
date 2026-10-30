@@ -35,8 +35,9 @@ function ($, comm, client, ui, cr, util, scroller, nested, format, descriptions,
     {
         var $popup = $(".templates > .msgwin-get-line").clone();
         $popup.children(".header").html(util.formatted_string_to_html(msg.prompt));
-        $popup.find("[data-hotkey='Enter']").replaceWith("<button type='button' class='workflow-button' data-hotkey='Enter'>Confirm <kbd>Enter</kbd></button>");
+        $popup.find("[data-hotkey='Enter']").replaceWith("<button type='button' class='workflow-button workflow-primary' data-hotkey='Enter'>Confirm <kbd>Enter</kbd></button>");
         $popup.find("[data-hotkey='Escape']").replaceWith("<button type='button' class='workflow-button' data-hotkey='Escape'>Cancel <kbd>Esc</kbd></button>");
+        $("<div class='workflow-dialog-actions'></div>").append($popup.children("[data-hotkey]")).appendTo($popup);
         return $popup;
     }
 
@@ -151,11 +152,11 @@ function ($, comm, client, ui, cr, util, scroller, nested, format, descriptions,
 
     function newgame_random_combo(msg)
     {
-        var $popup = $(".templates > .describe-generic").clone();
+        var $popup = $(".templates > .describe-generic").clone().addClass("workflow-prompt");
         $popup.find(".header > span").html(util.formatted_string_to_html(msg.prompt));
         $popup.find(".body").html("Do you want to play this combination? [Y/n/q]");
         $("<div class='workflow-dialog-actions'></div>").append(
-            "<button type='button' class='workflow-button' data-hotkey='Y'>Play <kbd>Y</kbd></button>",
+            "<button type='button' class='workflow-button workflow-primary' data-hotkey='Y'>Play <kbd>Y</kbd></button>",
             "<button type='button' class='workflow-button' data-hotkey='n'>Try another <kbd>n</kbd></button>",
             "<button type='button' class='workflow-button' data-hotkey='q'>Cancel <kbd>q</kbd></button>").appendTo($popup);
 

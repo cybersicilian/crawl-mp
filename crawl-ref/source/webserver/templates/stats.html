@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ui-theme="{{ data.get('ui_theme') or 'folio' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ data['title'] }} · Stats · Pebble Broth</title>
   <link rel="stylesheet" href="{{ static_url('tabletop/tokens.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/ui-themes.css') }}">
   <link rel="stylesheet" href="{{ static_url('fonts/fonts.css') }}">
   <link rel="stylesheet" href="{{ static_url('tabletop/typography.css') }}">
   <link rel="stylesheet" href="{{ static_url('tabletop/library.css') }}">
@@ -30,10 +31,16 @@
   {% include "outgame-navigation.html" %}
   <article class="library-book stats-book">
   <header class="library-page-header stats-header">
-    <p class="library-eyebrow">Pebble Broth · Stats{% if data['section'] != 'overview' %} · {{ data['section_label'] }}{% end %}</p>
-    <h1>{{ data['title'] }}</h1>
-    {% if data.get('intro') %}<p class="library-intro">{{ data['intro'] }}</p>{% end %}
-    <p class="stats-build-label">Game reference · {{ data['reference']['version'] or data['reference']['source'] }} <a href="#stats_data_sources">About the data</a></p>
+    <div class="stats-header-copy">
+      <p class="library-eyebrow">Pebble Broth · Records{% if data['section'] != 'overview' %} · {{ data['section_label'] }}{% end %}</p>
+      <h1>{{ data['title'] }}</h1>
+      {% if data.get('intro') %}<p class="library-intro">{{ data['intro'] }}</p>{% end %}
+    </div>
+    <dl class="stats-header-meta" aria-label="Page facts">
+      <div><dt>Recorded games</dt><dd>{{ '{:,}'.format(data['counts']['all_games']) }}</dd></div>
+      <div><dt>Reference</dt><dd>{{ data['reference']['version'] or data['reference']['source'] }}</dd></div>
+      <div class="stats-build-label"><dt>Data</dt><dd><a href="#stats_data_sources">About the data</a></dd></div>
+    </dl>
   </header>
   {% if data.get('navigation') %}
   <div class="stats-lookup">
@@ -200,7 +207,7 @@
             {% for i, col in enumerate(table['columns']) %}
               {% set v = row.get(col['key']) %}
               {% set tag = 'th' if i == 0 else 'td' %}
-              <{{ tag }}{% if i == 0 %} scope="row"{% end %} class="{{ 'is-num' if col['num'] else '' }}"{% if col.get('view') %} data-column-view="{{ col['view'] }}"{% end %}{% if col['num'] %} data-sort="{{ v.get('sort', '') if isinstance(v, dict) else '' if v is None else v }}"{% end %}{% if isinstance(v, dict) and v.get('title') %} title="{{ v['title'] }}"{% end %}>{% if isinstance(v, dict) %}{% if v.get('href') %}<a href="{{ v['href'] }}">{{ v.get('text', '') }}</a>{% else %}{{ v.get('text', '') }}{% end %}{% elif v is None or v == '' %}<span class="stats-nil" aria-label="not recorded">—</span>{% elif col['key'] == 'win_rate' %}{{ v }}%{% elif isinstance(v, int) %}{{ '{:,}'.format(v) }}{% else %}{{ v }}{% end %}</{{ tag }}>
+              <{{ tag }}{% if i == 0 %} scope="row"{% end %} class="{{ 'is-num' if col['num'] else '' }}" data-label="{{ col['label'] }}"{% if col.get('view') %} data-column-view="{{ col['view'] }}"{% end %}{% if col['num'] %} data-sort="{{ v.get('sort', '') if isinstance(v, dict) else '' if v is None else v }}"{% end %}{% if isinstance(v, dict) and v.get('title') %} title="{{ v['title'] }}"{% end %}>{% if isinstance(v, dict) %}{% if v.get('href') %}<a href="{{ v['href'] }}">{{ v.get('text', '') }}</a>{% else %}{{ v.get('text', '') }}{% end %}{% elif v is None or v == '' %}<span class="stats-nil" aria-label="not recorded">—</span>{% elif col['key'] == 'win_rate' %}{{ v }}%{% elif isinstance(v, int) %}{{ '{:,}'.format(v) }}{% else %}{{ v }}{% end %}</{{ tag }}>
             {% end %}
             </tr>
           {% end %}

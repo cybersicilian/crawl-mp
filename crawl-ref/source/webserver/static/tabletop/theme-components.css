@@ -179,12 +179,14 @@ html[data-ui-theme] #power_picker_dialog #power_picker_heading { color: var(--ui
 html[data-ui-theme] #power_picker_dialog .power-picker-cast-button {
     background: var(--ui-action); color: var(--ui-action-text); border-color: var(--ui-action);
 }
-html[data-ui-theme] :is(button, a, input, select, summary, textarea, [tabindex]):focus-visible {
-    outline-color: var(--ui-accent-bright);
+/* One focus ring everywhere: --ui-focus is gold on chrome and chapter ink on parchment
+   (ui-themes.css re-declares it on paper surfaces), so no per-surface overrides. */
+html[data-ui-theme] :is(button, a, input, select, summary, textarea, [tabindex], [role="button"]):focus-visible {
+    outline: var(--tt-focus-ring); outline-offset: var(--tt-focus-offset);
 }
 html[data-ui-theme] :is(#ui-stack .workflow-surface, dialog#party_inspector_modal,
     dialog.character-starting-sheet) :is(button, a, input, select, [tabindex]):focus-visible {
-    outline: 2px solid var(--ui-chapter); outline-offset: 2px;
+    outline: var(--tt-focus-ring); outline-offset: var(--tt-focus-offset);
 }
 html[data-ui-theme="contrast"] :is(.party-member-card, .ui-popup-outer,
     .graphics-dialog, #dcss_quick_dock, #party_inspector_modal) { box-shadow: none; border-image: none; }

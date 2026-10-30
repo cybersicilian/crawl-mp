@@ -5,12 +5,15 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
         if (event.type.indexOf("key") === 0 && event.key === "Tab") return;
         event.stopPropagation();
     }
+    // Short visible captions so no reading is a bare number; full names stay in hover/focus help.
+    var captions = { level: "Lv", floor: "Floor", ac: "AC", ev: "EV", sh: "SH", stealth: "Stealth", noise: "Noise", speed: "Move" };
     function chip(root, key, glyph) {
         var node = root.children("[data-reading='" + key + "']");
         if (node.length) return node;
         node = $("<span class='party-icon-reading' tabindex='0' role='img' data-tip-live></span>")
             .attr({ "data-reading": key, id: "party_reading_" + root.closest(".party-card").attr("data-party-slot") + "_" + key })
-            .append(icons.icon(glyph), $("<span class='party-reading-value'></span>"))
+            .append(icons.icon(glyph), $("<span class='party-reading-label' aria-hidden='true'></span>").text(captions[key] || ""),
+                $("<span class='party-reading-value'></span>"))
             .on("click keydown keypress keyup", isolate).appendTo(root);
         return node;
     }
@@ -23,10 +26,22 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
         node.children(".party-reading-value").text(text);
         return node;
     }
+    function cluster(meta, className, label) {
+        var node = meta.children("." + className);
+        if (node.length) return node;
+        return $("<span class='party-reading-cluster' role='group'></span>").addClass(className)
+            .attr("aria-label", label).appendTo(meta);
+    }
     function finite(value) { return Number.isFinite(value) ? value : null; }
     function metadata(card, hero) {
         var meta = card.children(".party-member-meta"), root = meta.children(".party-icon-meta");
-        if (!root.length) root = $("<span class='party-icon-meta'></span>").prependTo(meta);
+        if (!root.length) {
+            root = $("<span class='party-icon-meta'></span>");
+            var identity = meta.children(".party-hero-identity");
+            if (identity.length) root.insertAfter(identity); else root.prependTo(meta);
+        }
+        // The identity line already carries the level; keep the chip for tests
+        // and hover help but let the defense cluster own the visible numbers.
         reading(root, "level", "level-cap", "Experience level", finite(hero.xl));
         var floorBody = hero.place ? "Current floor: " + hero.place : "Current floor unavailable";
         if (Number.isInteger(hero.region_id)) {
@@ -45,9 +60,11 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
         } else {
             floorNode.removeAttr("data-region-id data-region-sync");
         }
-        if (!card.hasClass("is-controlled-card"))
+        if (!card.hasClass("is-controlled-card")) {
+            var defenses = cluster(root, "party-defense-cluster", "Defenses");
             [["ac", "armour", "Armour class"], ["ev", "evasion", "Evasion"], ["sh", "shield", "Shielding"]]
-                .forEach(function (entry) { reading(root, entry[0], entry[1], entry[2], finite(hero[entry[0]])); });
+                .forEach(function (entry) { reading(defenses, entry[0], entry[1], entry[2], finite(hero[entry[0]])); });
+        }
         var name = card.find(".party-member-name");
         if (!card.hasClass("is-controlled-card"))
             name.attr("data-tip-body", [hero.species, hero.job, hero.title, hero.place].filter(Boolean).join(" · "));
@@ -136,6 +153,8 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update"], func
             : Number.isFinite(hero.xl_next) ? Math.max(0, Math.min(100, hero.xl_next)) + "%" : "?";
         if (level.attr("data-reading-value") !== text) {
             level.attr("data-reading-value", text).empty().append(icons.icon("experience"), document.createTextNode(text));
+            if (!level.prev(".party-reading-label").length)
+                $("<span class='party-reading-label' aria-hidden='true'>XP</span>").insertBefore(level);
         }
         var activity = bar.find(".party-member-activity"), label = activity.text() || activity.attr("aria-label");
         var glyph = hero.alive === false || hero.ghost_haunting ? "skull" : hero.on_same_level === false ? "map"

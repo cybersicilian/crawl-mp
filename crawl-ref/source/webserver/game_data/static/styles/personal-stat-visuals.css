@@ -32,3 +32,25 @@
 @media (pointer: coarse) {
     #normal .party-self-details :is(.personal-stat-reading, #stats_noise, .personal-equipment, .personal-stat-hazard) { min-height: 26px; }
 }
+
+/* ---- Labelled clusters for the controlled hero's native readings ---- */
+.hud-stat-label { display: none; }
+#normal .party-self-details .hud-stat-label { display: inline; color: var(--ui-muted, #c0b296); }
+#normal .party-self-details .hud-stat-column { display: contents; }
+#normal .party-self-details .hud-stat-cluster {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; grid-column: 1 / -1; min-width: 0;
+    position: relative; padding-top: 11px;
+}
+#normal .party-self-details .hud-stat-cluster-title {
+    position: absolute; left: 1px; top: 0; font: 600 8.5px/1.2 var(--tt-font-ui); letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ui-muted, #c0b296); pointer-events: none;
+}
+#normal .party-self-details .hud-defense-cluster { order: 1; }
+#normal .party-self-details .hud-attribute-cluster { order: 2; }
+#normal .party-self-details .hud-stat-cluster .personal-stat-reading { order: 0; }
+#normal .party-self-details .personal-stat-reading > [id] { margin-left: auto; font-variant-numeric: tabular-nums; }
+#normal .party-self-details .hud-hazard-row:empty { display: none; }
+#normal .party-self-details .hud-progress-row { display: none; } /* level and XP live on the card's progress bar */
+#normal .party-self-details .hud-wizmode { float: none; grid-column: 1 / -1; color: #f3b6a2; font: 600 10px/1.3 var(--tt-font-mono); }
+#normal .party-self-details .hud-wizmode:empty { display: none; }
+#normal .party-self-details .personal-stat-hazard .hud-stat-label { margin-right: 2px; }

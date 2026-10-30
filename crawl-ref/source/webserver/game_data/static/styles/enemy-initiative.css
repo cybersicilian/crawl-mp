@@ -52,3 +52,26 @@
 .enemy-timing-empty { padding: 4px 7px; }
 .enemy-timing-effects { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
 .enemy-timing-effects:empty { display: none; }
+
+/* ---- Compact rows with threat tier, injury band and readiness ---- */
+#enemy_initiative_rail .enemy-timing { min-height: 46px; padding: 6px 8px 7px 16px; gap: 6px; }
+#enemy_initiative_rail .enemy-timing-icon { width: 28px; height: 28px; flex-basis: 28px; }
+.enemy-timing-name { margin-bottom: 2px; }
+.enemy-timing[data-threat='trivial'] .enemy-timing-name { color: var(--ui-threat-trivial, #b9c2b4); }
+.enemy-timing[data-threat='easy'] .enemy-timing-name { color: var(--ui-threat-easy, #e6e0c2); }
+.enemy-timing[data-threat='tough'] .enemy-timing-name { color: var(--ui-threat-tough, #f2c784); }
+.enemy-timing[data-threat='nasty'] .enemy-timing-name { color: var(--ui-threat-nasty, #f49b86); font-weight: 700; }
+.enemy-timing[data-threat='invisible'] .enemy-timing-name { color: var(--ui-threat-invisible, #cdb2e6); }
+.enemy-timing[data-threat='unknown'] .enemy-timing-name { color: #f0dec0; }
+#enemy_initiative_rail .enemy-timing[data-attitude='allies'] { background-color: #2f4338; }
+#enemy_initiative_rail .enemy-timing[data-attitude='neutrals'] { background-color: #3f3d33; }
+.enemy-timing[data-injury='0'] .enemy-health-track i { background: linear-gradient(#9bc48a, #5f8a56); }
+.enemy-timing:is([data-injury='1'], [data-injury='2']) .enemy-health-track i { background: linear-gradient(#d6c06d, #9a8438); }
+.enemy-timing:is([data-injury='3'], [data-injury='4']) .enemy-health-track i { background: linear-gradient(#e0905c, #a85a2d); }
+.enemy-timing:is([data-injury='5'], [data-injury='6']) .enemy-health-track i { background: linear-gradient(#e36a66, #8b3e41); }
+.enemy-timing small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.enemy-timing[data-ready='true'] small { color: #f1d68d; }
+.creature-category > summary { padding: 5px 7px; font-size: 10.5px; }
+.creature-category > summary .creature-count { padding: 0 5px; border: 1px solid #a8906766; border-radius: 8px; font-size: 9.5px; line-height: 1.4; }
+.creature-category[data-category='enemies'] > summary .creature-count { color: #f0a594; border-color: #a65c52; }
+.enemy-timing-list { gap: 4px; }
