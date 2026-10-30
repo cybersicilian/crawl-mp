@@ -83,7 +83,9 @@
 }
 .mission-stat .mission-value { font: 600 13px/1.2 var(--shell-font); font-variant-numeric: tabular-nums; }
 #normal #mission_clock:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 2px; }
-.mission-status { display: inline-flex; align-items: center; min-width: 0; flex: 1 1 auto; }
+/* Basis 0 so wide status content shrinks and wraps its own chips instead of
+   pushing the tools onto a second line over the enemy rail. */
+.mission-status { display: inline-flex; align-items: center; min-width: 0; flex: 1 1 0; }
 /* Expedition facts (party-progress.js) sit in the strip instead of floating over tiles. */
 #normal #party_turn_banner #party_progress {
     position: static; display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 6px;
@@ -111,7 +113,7 @@
     color: var(--shell-accent-bright); font: 600 11px/1.3 var(--shell-font); white-space: nowrap;
 }
 #normal #workflow_camera_context:empty { display: none; }
-.mission-tools { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+.mission-tools { display: inline-flex; align-items: center; flex: 0 0 auto; gap: 4px; margin-left: auto; }
 #normal #hud_zoom_controls {
     display: inline-flex; align-items: center; gap: 2px; margin: 0 6px 0 0; padding: 0 8px 0 0;
     border-right: 1px solid var(--shell-rule);

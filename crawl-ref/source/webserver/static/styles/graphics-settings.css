@@ -67,6 +67,8 @@
 .graphics-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .graphics-groups .graphics-group { padding: 14px 16px 4px; border: 1px solid var(--ui-edge); border-radius: 6px; background: var(--ui-recess); }
 .graphics-groups .graphics-group legend { float: left; width: 100%; padding: 0 0 6px; font-size: 17px; }
+/* The floated legend would otherwise shrink the first flex row beside it. */
+.graphics-groups .graphics-group .graphics-setting { clear: both; }
 .graphics-setting { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px 0; border-top: 1px solid color-mix(in srgb, var(--ui-edge) 45%, transparent); cursor: pointer; }
 .graphics-setting-copy { flex: 1; min-width: 0; }
 .graphics-setting strong { display: block; color: var(--ui-text); font: 14px/1.5 var(--ui-copy); font-weight: 600; }
