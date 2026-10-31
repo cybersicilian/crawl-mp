@@ -19,7 +19,9 @@ differ.
 - Production's server fixes as deployed: the 2026-10-30 performance and
   connectivity release, the per-turn multiplayer region reconcile (5688efc06b),
   -std=c++17 builds, gen-apt species tables, `games.d/base.yaml`, the tooltip ink
-  pin and its cache-tag bump.
+  pin and its cache-tag bump, and the shorter multiplayer combat pacing between
+  partner actions (master 4b2c9eaae3, cherry-picked as cd3b3ffdf5: 20 ms per aut
+  in combat, 10 ms otherwise, capped at 400 ms; `activity_pump_test` 22 OK).
 - The WebTiles UI overhaul lineage (`claude/trusting-brahmagupta-ba643d`, PR 3):
   tactics-RPG lobby and HUD, frame-cost cuts, multiplayer connectivity fixes,
   screenshot-pass fixes (graphics settings rows, mission bar, portrait arches)
