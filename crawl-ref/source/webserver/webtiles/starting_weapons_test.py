@@ -216,8 +216,11 @@ class LaunchNoticeTests(StagingWeaponTests):
             ws_handler.IOLoop.current.return_value.call_later.assert_not_called()
             self.assertEqual(guest.send_message.call_count, 1)
             self.assertEqual(guest.send_message.call_args.args, ("party_room_launched",))
-            # Not registered yet (stale-lock dialog): the notice is repeated.
-            self.socket.process = None
+            # Not registered yet (stale-lock dialog): the handler exists but no
+            # native pid is registered, so the notice is repeated.
+            self.room["status"] = "staging"
+            self.socket.start_crawl.side_effect = lambda game_id, **kwargs: setattr(
+                self.socket, "process", SimpleNamespace(process=None))
             self.socket.party_room_launch()
             ws_handler.IOLoop.current.return_value.call_later.assert_called_once()
             self.assertEqual(ws_handler.IOLoop.current.return_value.call_later.call_args.args[0], 0.35)
