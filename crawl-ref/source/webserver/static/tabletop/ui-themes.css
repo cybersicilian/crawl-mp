@@ -3,6 +3,7 @@
 @import url("art-direction-tokens.css");
 @import url("theme-components.css");
 @import url("theme-lobby.css");
+@import url("tactics-components.css");
 
 :root, html[data-ui-theme="folio"] {
     --ui-canvas: #15110e;
@@ -31,6 +32,48 @@
     --ui-arcane: #654277;
     --ui-cold: #2b568c;
     --ui-magic: #286065;
+    /* Tactics vocabulary on dark chrome. Paper surfaces re-declare these below. */
+    --ui-focus: #f0d29a;
+    /* Gilded frames, leather and engraved rules (Baldur's Gate flourish). */
+    --ui-gilt: #d9b56a;
+    --ui-gilt-deep: #8a6a33;
+    --ui-gilt-glow: #f2d58a66;
+    --ui-leather: radial-gradient(ellipse at 18% 0, #4a3a2a33, transparent 60%), linear-gradient(135deg, #2c231b, #1b1511 60%, #221a14);
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-gilt) 50%, var(--ui-gilt-deep) 86%, transparent);
+    --ui-hero: #f5c96a;
+    --ui-hero-ink: #2a1c08;
+    --ui-ally: #86cfa5;
+    --ui-enemy: #ff8f80;
+    --ui-neutral: #bfb5a2;
+    --ui-threat-low: #9bd48e;
+    --ui-threat-med: #f2c75c;
+    --ui-threat-high: #ff9d5c;
+    --ui-threat-lethal: #ff6f6f;
+    --ui-threat-trivial: var(--ui-threat-low);
+    --ui-threat-easy: var(--ui-threat-low);
+    --ui-threat-tough: var(--ui-threat-med);
+    --ui-threat-nasty: var(--ui-threat-high);
+    --ui-threat-invisible: var(--ui-neutral);
+    --ui-hero-1: #fce94f;
+    --ui-hero-2: #34e2e2;
+    --ui-hero-3: #8ae234;
+    --ui-hero-4: #ad7fa8;
+    --ui-init-banked: #8fd0ff;
+    --ui-init-debt: #ff9b6e;
+    --ui-mode-explore: #8fcfae;
+    --ui-mode-combat: #ff8f80;
+    --ui-mode-ink: #14100c;
+    --ui-res-hp: #e46a6c;
+    --ui-res-mp: #5ea4e3;
+    --ui-res-gold: #f2c75c;
+    --ui-res-xp: #c9a8f2;
+    --ui-meter-track: #0b0806;
+    --ui-danger-ink: #fff5df;
+    --ui-role-frontline: #eaa96c;
+    --ui-role-striker: #ff8f7a;
+    --ui-role-caster: #bda4f7;
+    --ui-role-support: #93d6a8;
+    --ui-role-scout: #84d3da;
     --ui-page-scheme: light;
     --ui-title: "Palatino Linotype", "Book Antiqua", Georgia, serif;
     --ui-copy: "DejaVu Sans", system-ui, sans-serif;
@@ -66,6 +109,48 @@ html[data-ui-theme="dungeon"] {
     --ui-arcane: #dcb4f3;
     --ui-cold: #a5c8ff;
     --ui-magic: #9be0df;
+    /* Tactics vocabulary on dark chrome. Dungeon pages are dark, so no paper override. */
+    --ui-focus: #dfedff;
+    /* Cold steel instead of gold on the dungeon theme. */
+    --ui-gilt: #b9c9dc;
+    --ui-gilt-deep: #6d7f95;
+    --ui-gilt-glow: #b9c9dc55;
+    --ui-leather: linear-gradient(135deg, #243040, #16202c 60%, #1c2836);
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-gilt) 50%, var(--ui-gilt-deep) 86%, transparent);
+    --ui-hero: #ffd98a;
+    --ui-hero-ink: #2a1c08;
+    --ui-ally: #86cfa5;
+    --ui-enemy: #ff8f80;
+    --ui-neutral: #bfb5a2;
+    --ui-threat-low: #9bd48e;
+    --ui-threat-med: #f2c75c;
+    --ui-threat-high: #ff9d5c;
+    --ui-threat-lethal: #ff6f6f;
+    --ui-threat-trivial: var(--ui-threat-low);
+    --ui-threat-easy: var(--ui-threat-low);
+    --ui-threat-tough: var(--ui-threat-med);
+    --ui-threat-nasty: var(--ui-threat-high);
+    --ui-threat-invisible: var(--ui-neutral);
+    --ui-hero-1: #fce94f;
+    --ui-hero-2: #34e2e2;
+    --ui-hero-3: #8ae234;
+    --ui-hero-4: #ad7fa8;
+    --ui-init-banked: #8fd0ff;
+    --ui-init-debt: #ff9b6e;
+    --ui-mode-explore: #8fcfae;
+    --ui-mode-combat: #ff8f80;
+    --ui-mode-ink: #14100c;
+    --ui-res-hp: #e46a6c;
+    --ui-res-mp: #5ea4e3;
+    --ui-res-gold: #f2c75c;
+    --ui-res-xp: #c9a8f2;
+    --ui-meter-track: #0b1017;
+    --ui-danger-ink: #2a0f0c;
+    --ui-role-frontline: #eaa96c;
+    --ui-role-striker: #ff8f7a;
+    --ui-role-caster: #bda4f7;
+    --ui-role-support: #93d6a8;
+    --ui-role-scout: #84d3da;
     --ui-page-scheme: dark;
     --ui-title: Georgia, "Palatino Linotype", serif;
     --ui-paper: linear-gradient(125deg, var(--ui-page-raised), var(--ui-page));
@@ -100,6 +185,48 @@ html[data-ui-theme="contrast"] {
     --ui-arcane: #e4c4ff;
     --ui-cold: #b5d8ff;
     --ui-magic: #a8ffff;
+    /* Tactics vocabulary: solid, saturated hues on pure black. */
+    --ui-focus: #ffe66d;
+    /* Solid, flat frames on pure black: no gradients, no glow. */
+    --ui-gilt: #ffe66d;
+    --ui-gilt-deep: #fff;
+    --ui-gilt-glow: transparent;
+    --ui-leather: #000;
+    --ui-engraved: linear-gradient(90deg, #fff, #fff);
+    --ui-hero: #ffe66d;
+    --ui-hero-ink: #000;
+    --ui-ally: #9effb8;
+    --ui-enemy: #ffb6b6;
+    --ui-neutral: #ddd;
+    --ui-threat-low: #9effb8;
+    --ui-threat-med: #ffe66d;
+    --ui-threat-high: #ffc28a;
+    --ui-threat-lethal: #ff9d9d;
+    --ui-threat-trivial: var(--ui-threat-low);
+    --ui-threat-easy: var(--ui-threat-low);
+    --ui-threat-tough: var(--ui-threat-med);
+    --ui-threat-nasty: var(--ui-threat-high);
+    --ui-threat-invisible: var(--ui-neutral);
+    --ui-hero-1: #fce94f;
+    --ui-hero-2: #34e2e2;
+    --ui-hero-3: #8ae234;
+    --ui-hero-4: #ad7fa8;
+    --ui-init-banked: #b5d8ff;
+    --ui-init-debt: #ffc28a;
+    --ui-mode-explore: #9effb8;
+    --ui-mode-combat: #ffb6b6;
+    --ui-mode-ink: #000;
+    --ui-res-hp: #ff9d9d;
+    --ui-res-mp: #b5d8ff;
+    --ui-res-gold: #ffe66d;
+    --ui-res-xp: #e4c4ff;
+    --ui-meter-track: #1b1b1b;
+    --ui-danger-ink: #000;
+    --ui-role-frontline: #ffc28a;
+    --ui-role-striker: #ffb6b6;
+    --ui-role-caster: #e4c4ff;
+    --ui-role-support: #9effb8;
+    --ui-role-scout: #a8ffff;
     --ui-page-scheme: dark;
     --ui-title: system-ui, sans-serif;
     --ui-copy: system-ui, sans-serif;
@@ -108,6 +235,80 @@ html[data-ui-theme="contrast"] {
     --tt-brass-corner: none;
     --tt-brass-rivet: none;
     --tt-stitch: transparent;
+}
+
+/* Folio reading surfaces are light parchment: the same vocabulary in ink weights.
+   Add .tr-on-page to any new parchment surface; .tr-on-panel restores chrome values. */
+html[data-ui-theme="folio"] :is(#ui-stack .workflow-surface, #dcss_rich_tooltip, #lobby_rich_tooltip,
+    #tooltip, .dcss-nested-tip, .dcss-tooltip-card, .lobby-tooltip, #session_menu,
+    #workflow_help_dialog, #power_picker_dialog, dialog#party_inspector_modal,
+    dialog.character-starting-sheet, #party_lobby_panel, #coop_chronicle_panel,
+    #play_now, #lobby_body, #game_library_panel, .tr-on-page) {
+    --ui-focus: var(--ui-chapter);
+    --ui-gilt: #9c7a3b;
+    --ui-gilt-deep: #6f5424;
+    --ui-gilt-glow: #c9a35a40;
+    --ui-engraved: linear-gradient(90deg, transparent, var(--ui-gilt-deep) 14%, var(--ui-chapter) 50%, var(--ui-gilt-deep) 86%, transparent);
+    --ui-hero: #7a5311;
+    --ui-hero-ink: #fff5df;
+    --ui-ally: #2d633a;
+    --ui-enemy: #a12d27;
+    --ui-neutral: #685742;
+    --ui-threat-low: #2d633a;
+    --ui-threat-med: #805019;
+    --ui-threat-high: #9a3f12;
+    --ui-threat-lethal: #a12d27;
+    --ui-threat-trivial: var(--ui-threat-low);
+    --ui-threat-easy: var(--ui-threat-low);
+    --ui-threat-tough: var(--ui-threat-med);
+    --ui-threat-nasty: var(--ui-threat-high);
+    --ui-threat-invisible: var(--ui-neutral);
+    --ui-hero-1: #fce94f;
+    --ui-hero-2: #34e2e2;
+    --ui-hero-3: #8ae234;
+    --ui-hero-4: #ad7fa8;
+    --ui-init-banked: #2b568c;
+    --ui-init-debt: #a3461b;
+    --ui-mode-explore: #2d633a;
+    --ui-mode-combat: #a12d27;
+    --ui-mode-ink: #fff5df;
+    --ui-res-hp: #a12d27;
+    --ui-res-mp: #2b568c;
+    --ui-res-gold: #805019;
+    --ui-res-xp: #654277;
+    --ui-meter-track: #d9c8a8;
+    --ui-role-frontline: #8a4e14;
+    --ui-role-striker: #a12d27;
+    --ui-role-caster: #654277;
+    --ui-role-support: #2d633a;
+    --ui-role-scout: #286065;
+}
+/* Explanatory cards mount inside whichever dialog opened them (client-tooltips.js appends
+   the card to dialog[open]); tooltip-content.css pins their --tt-* ink to the page tokens.
+   Folio cards stay parchment even over dark chrome: mirror the root page tokens above. */
+html[data-ui-theme="folio"] :is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip,
+    .dcss-nested-tip, .dcss-tooltip-card, .lobby-tooltip) {
+    --ui-page: #eee3cc;
+    --ui-page-raised: #fcf5e6;
+    --ui-page-inset: #e2d3b5;
+    --ui-ink: #30261e;
+    --ui-quiet: #685742;
+    --ui-rule: #ac9470;
+    --ui-chapter: #7a352d;
+    --ui-hover: #e4d2ad;
+    --ui-good: #2d633a;
+    --ui-paper: repeating-linear-gradient(12deg, #43301c04 0 1px, transparent 1px 5px),
+        linear-gradient(110deg, var(--ui-page-raised), var(--ui-page));
+}
+html[data-ui-theme="folio"] :is(.folio-equipment.is-crpg-layout, .tr-on-panel) {
+    --ui-focus: #f0d29a;
+    --ui-hero: #f5c96a; --ui-hero-ink: #2a1c08; --ui-ally: #86cfa5; --ui-enemy: #ff8f80; --ui-neutral: #bfb5a2;
+    --ui-threat-low: #9bd48e; --ui-threat-med: #f2c75c; --ui-threat-high: #ff9d5c; --ui-threat-lethal: #ff6f6f;
+    --ui-init-banked: #8fd0ff; --ui-init-debt: #ff9b6e;
+    --ui-mode-explore: #8fcfae; --ui-mode-combat: #ff8f80; --ui-mode-ink: #14100c;
+    --ui-res-hp: #e46a6c; --ui-res-mp: #5ea4e3; --ui-res-gold: #f2c75c; --ui-res-xp: #c9a8f2; --ui-meter-track: #0b0806;
+    --ui-role-frontline: #eaa96c; --ui-role-striker: #ff8f7a; --ui-role-caster: #bda4f7;
+    --ui-role-support: #93d6a8; --ui-role-scout: #84d3da;
 }
 
 /* Adapt both existing token families rather than introducing parallel skins. */
@@ -178,5 +379,13 @@ html[data-ui-theme] {
         --ui-chapter: LinkText; --ui-action: Highlight; --ui-action-text: HighlightText;
         --ui-hover: Canvas; --ui-selection: Canvas;
         --ui-binding: Canvas; --ui-paper: Canvas;
+        --ui-focus: Highlight; --ui-hero: Highlight; --ui-hero-ink: HighlightText;
+        --ui-ally: CanvasText; --ui-enemy: CanvasText; --ui-neutral: CanvasText;
+        --ui-threat-low: CanvasText; --ui-threat-med: CanvasText; --ui-threat-high: CanvasText; --ui-threat-lethal: CanvasText;
+        --ui-init-banked: CanvasText; --ui-init-debt: CanvasText; --ui-mode-explore: CanvasText; --ui-mode-combat: CanvasText;
+        --ui-mode-ink: Canvas; --ui-res-hp: Highlight; --ui-res-mp: Highlight; --ui-res-gold: Highlight; --ui-res-xp: Highlight;
+        --ui-meter-track: Canvas; --ui-danger-ink: Canvas;
+        --ui-role-frontline: CanvasText; --ui-role-striker: CanvasText; --ui-role-caster: CanvasText;
+        --ui-role-support: CanvasText; --ui-role-scout: CanvasText;
     }
 }

@@ -9,9 +9,16 @@ define(["texture-pack"], function (texturePack) {
     var desired = confirmed, saving = false;
     texturePack.bindUser(root.dataset.username); texturePack.select(confirmed);
     function render(message) {
-        options.forEach(function (input) { input.checked = input.value === desired; });
+        options.forEach(function (input) {
+            input.checked = input.value === desired;
+            // Selected-state class keeps the gallery readable where :has() is unavailable.
+            var card = input.closest(".texture-choice");
+            if (card) card.classList.toggle("is-selected", input.checked);
+        });
         status.textContent = message;
+        status.dataset.state = /^Could not/.test(message) ? "error" : /^Saving/.test(message) ? "saving" : "saved";
     }
+    render(status.textContent);
     function saveNext() {
         if (saving || desired === confirmed) return;
         saving = true;

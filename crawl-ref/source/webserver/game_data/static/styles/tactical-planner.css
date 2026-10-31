@@ -1,11 +1,89 @@
-#tactical_planner { margin-top: 6px; padding: 5px; border: 1px solid #9e98604f; border-radius: 3px; color: #d5d4bf; background: #10191e; font: 10px/1.3 var(--tt-font-ui); }
+/* Action queue: a labelled plan for the controlled hero, ordered chips with
+   estimated aut, one primary Go, quiet Clear. Party colours are local tokens
+   until the design system publishes --ui-hero-N. */
+#tactical_planner {
+    --cf-hero-1: #fce94f; --cf-hero-2: #34e2e2; --cf-hero-3: #8ae234; --cf-hero-4: #ad7fa8;
+    --cf-move: var(--ui-accent-bright, #89dce6); --cf-attack: var(--ui-enemy, var(--ui-danger, #ff8a76));
+    --cf-wait: var(--ui-muted, #adb8b6); --cf-power: var(--ui-arcane, #c9a6ff);
+    --cf-good: var(--ui-ally, var(--ui-good, #92e5ae)); --cf-warn: var(--ui-warn, #f0c36d);
+    margin-top: 8px; padding: var(--tt-hud-gutter, 8px); border: 1px solid var(--ui-rule, #9e98604f); border-radius: 4px;
+    color: var(--ui-text, #d5d4bf); background: var(--ui-recess, #10191e);
+    font: 11px/1.35 var(--tt-font-ui, system-ui, sans-serif); font-variant-numeric: tabular-nums;
+}
 #tactical_planner[hidden] { display: none; }
-#tactical_planner button { min-height: 25px; border: 1px solid #91886672; border-radius: 3px; padding: 3px 6px; background: #263039; color: #e6d3a6; font: inherit; cursor: pointer; }
-#tactical_planner button[aria-pressed='true'] { background: #284646; border-color: #74bebe; color: #d6ffff; }
+#tactical_planner[data-plan-state='planning'] { border-color: var(--cf-move); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cf-move) 35%, transparent); }
+#tactical_planner[data-plan-state='running'] { border-color: var(--cf-good); }
+#tactical_planner[data-plan-state='paused'] { border-color: var(--cf-warn); }
+
+.plan-header { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+.plan-title { font-size: var(--tt-type-caption, 10px); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-muted, #adb8b6); }
+.plan-title .plan-hero { font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--ui-title, #e6d3a6); font-size: 11px; }
+.plan-meta { display: inline-flex; gap: 6px; color: var(--ui-muted, #adb8b6); font-family: var(--tt-font-mono, monospace); font-size: 10px; white-space: nowrap; }
+.plan-meta .plan-cost:not(:empty)::before { content: "·"; margin-right: 6px; }
+
+.plan-actions { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; counter-reset: none; }
+.plan-actions:not(:empty) { margin-bottom: 6px; max-height: 96px; overflow-y: auto; }
+.plan-chip-item { display: contents; }
+#tactical_planner .plan-chip {
+    display: inline-flex; align-items: center; gap: 5px; min-height: 22px; padding: 1px 6px 1px 4px;
+    border: 1px solid var(--ui-rule, #91886672); border-left: 3px solid var(--cf-wait); border-radius: 3px;
+    background: var(--ui-panel, #1b252c); color: var(--ui-text, #e6d3a6); font: inherit; cursor: pointer; text-align: left;
+}
+#tactical_planner .plan-chip[data-kind='move'] { border-left-color: var(--cf-move); }
+#tactical_planner .plan-chip[data-kind='attack'] { border-left-color: var(--cf-attack); }
+#tactical_planner .plan-chip[data-kind='power'] { border-left-color: var(--cf-power); }
+.plan-chip-index { min-width: 1.4em; color: var(--ui-muted, #adb8b6); font-family: var(--tt-font-mono, monospace); font-size: 9px; text-align: right; }
+.plan-chip-label { font-weight: 600; }
+.plan-chip-cost { color: var(--ui-muted, #adb8b6); font-family: var(--tt-font-mono, monospace); font-size: 9px; }
+.plan-chip-remove { margin-left: 1px; color: var(--ui-muted, #adb8b6); opacity: .55; }
+#tactical_planner .plan-chip:is(:hover, :focus-visible) { border-color: var(--cf-attack); }
+#tactical_planner .plan-chip:is(:hover, :focus-visible) .plan-chip-remove { color: var(--cf-attack); opacity: 1; }
+
+.plan-callout { margin-bottom: 6px; padding: 4px 6px; border-left: 3px solid var(--cf-warn); border-radius: 2px;
+    background: color-mix(in srgb, var(--cf-warn) 14%, transparent); color: var(--ui-title, #ffe9b8); font-weight: 600; }
+.plan-callout[hidden] { display: none; }
+.plan-progress { position: relative; height: 14px; margin-bottom: 6px; border-radius: 2px; overflow: hidden;
+    background: var(--ui-page-inset, #0a1115); border: 1px solid var(--ui-rule, #91886672); }
+.plan-progress[hidden] { display: none; }
+.plan-progress-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in srgb, var(--cf-good) 45%, transparent); transition: width .12s ease-out; }
+.plan-progress-text { position: relative; display: block; line-height: 12px; text-align: center; font-size: 9px; letter-spacing: .04em; color: var(--ui-text, #d5d4bf); }
+
+.plan-tools { display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap; }
+#tactical_planner .plan-tools button {
+    min-height: 26px; border: 1px solid var(--ui-rule, #91886672); border-radius: 3px; padding: 3px 8px;
+    background: var(--ui-raised, #263039); color: var(--ui-text, #e6d3a6); font: inherit; font-weight: 600; cursor: pointer;
+}
+#tactical_planner .plan-tools button[aria-pressed='true'] { background: color-mix(in srgb, var(--cf-move) 22%, var(--ui-raised, #263039)); border-color: var(--cf-move); color: var(--ui-title, #d6ffff); }
+#tactical_planner .plan-tools .plan-primary { flex: 1 1 auto; min-width: 58px; order: 1; background: var(--ui-action, #3b6d4a); border-color: var(--ui-action, #3b6d4a); color: var(--ui-action-text, #f3ffe9); }
+#tactical_planner .plan-tools .plan-stop { flex: 1 1 auto; min-width: 58px; order: 1; background: color-mix(in srgb, var(--cf-warn) 28%, var(--ui-raised, #263039)); border-color: var(--cf-warn); }
+#tactical_planner .plan-tools .plan-quiet { order: 2; background: transparent; font-weight: 500; color: var(--ui-muted, #adb8b6); }
+#tactical_planner .plan-tools .plan-quiet kbd { font: 9px var(--tt-font-mono, monospace); padding: 0 3px; border: 1px solid var(--ui-rule, #91886672); border-radius: 2px; opacity: .8; }
 #tactical_planner button:disabled { opacity: .45; cursor: default; }
-#tactical_planner button:focus-visible { outline: 2px solid #d6c48f; outline-offset: 1px; }
-.plan-tools, .plan-actions { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.plan-actions:not(:empty) { margin-top: 5px; max-height: 90px; overflow-y: auto; }
-.plan-status { display: block; margin-top: 4px; color: #adb8b6; }
+#tactical_planner button:focus-visible { outline: 2px solid var(--ui-selection, #d6c48f); outline-offset: 1px; }
+.plan-status { display: block; margin-top: 5px; color: var(--ui-muted, #adb8b6); }
+
+/* Map overlays that live outside the dungeon canvas. */
 .planned-route { position: fixed; pointer-events: none; z-index: 22; }
-@media (pointer: coarse) { #tactical_planner button { min-height: 32px; } }
+.encounter-banner {
+    position: absolute; left: 50%; top: 10%; z-index: 24; transform: translate(-50%, 0); pointer-events: none;
+    padding: 6px 14px; border: 1px solid var(--ui-rule, #91886672); border-radius: 4px;
+    background: color-mix(in srgb, var(--ui-recess, #10191e) 88%, transparent); color: var(--ui-title, #e6d3a6);
+    font: 600 12px/1.3 var(--tt-font-ui, system-ui, sans-serif); letter-spacing: .08em; text-transform: uppercase;
+    box-shadow: 0 2px 10px #0008; opacity: 0; transition: opacity .25s ease-out, transform .25s ease-out;
+}
+.encounter-banner.is-shown { opacity: 1; transform: translate(-50%, -4px); }
+.encounter-banner[data-mode='combat'] { border-color: var(--ui-enemy, var(--ui-danger, #ff8a76)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-enemy, var(--ui-danger, #ff8a76)) 40%, transparent), 0 2px 10px #0008; }
+.encounter-banner[data-mode='clear'] { border-color: var(--ui-ally, var(--ui-good, #92e5ae)); }
+.encounter-banner small { display: block; margin-top: 2px; font-weight: 500; letter-spacing: .02em; text-transform: none; color: var(--ui-muted, #adb8b6); }
+body > .encounter-banner { position: fixed; top: 12%; }
+
+@media (pointer: coarse) { #tactical_planner .plan-tools button, #tactical_planner .plan-chip { min-height: 32px; } }
+@media (max-width: 1100px), (max-height: 800px) {
+    #tactical_planner { padding: 5px 6px 6px; }
+    .plan-actions:not(:empty) { max-height: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .plan-progress-fill, .encounter-banner { transition: none; }
+}
+html[data-ui-theme='contrast'] #tactical_planner { border-width: 2px; }
+html[data-ui-theme='contrast'] #tactical_planner .plan-chip { border-left-width: 4px; }

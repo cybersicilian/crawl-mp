@@ -1,159 +1,223 @@
-/* Shared menu chrome: a field journal inside the dungeon's brass frame. */
+/* Folio dialog shell: one header / tabs / body / footer frame for every native
+   popup family. Tokens fall back to the parchment folio when no theme is set. */
 #ui-stack {
     --menu-space: var(--tt-space-3, 12px);
-    --menu-edge: #93764e;
-    --menu-quiet: #6b5844;
+    --menu-paper: var(--ui-page, #f1e8d4);
+    --menu-raised: var(--ui-page-raised, #fff8e8);
+    --menu-inset: var(--ui-page-inset, #e2d3b5);
+    --menu-ink: var(--ui-ink, #35291f);
+    --menu-quiet: var(--ui-quiet, #6b5844);
+    --menu-rule: var(--ui-rule, #c6b38d);
+    --menu-edge: var(--ui-edge, #93764e);
+    --menu-chapter: var(--ui-chapter, #7a352d);
+    --menu-hover: var(--ui-hover, #e4d2ad);
+    --menu-selection: var(--ui-selection, #d9c59f);
+    --menu-action: var(--ui-action, #5e452d);
+    --menu-action-text: var(--ui-action-text, #fff8e8);
+    --menu-good: var(--ui-good, #2d633a);
+    --menu-warn: var(--ui-warn, #805019);
+    --menu-danger: var(--ui-danger, #a12d27);
+    --menu-arcane: var(--ui-arcane, #654277);
+    --menu-focus: var(--ui-chapter, #8b5918);
+    --menu-title-font: var(--ui-title, var(--tt-font-title, Georgia, serif));
+    --menu-copy-font: var(--ui-copy, var(--tt-font-ui, sans-serif));
+    --menu-mono-font: var(--tt-font-mono, monospace);
+    --workflow-paper: var(--menu-paper);
+    --workflow-ink: var(--menu-ink);
+    --workflow-rule: var(--menu-rule);
 }
 #ui-stack .ui-popup-overlay { background: #090c11b8; }
 #ui-stack .ui-popup { padding: 0; }
 #ui-stack .ui-popup-outer:has(.workflow-surface) {
     margin: clamp(12px, 4vh, 36px) 24px;
+    width: min(720px, calc(100vw - 48px));
     max-width: calc(100vw - 48px);
     max-height: calc(100dvh - clamp(24px, 8vh, 72px));
-    padding: 20px;
-    border: 1px solid #b49a70;
-    outline: 1px solid #59452e;
+    padding: 18px 24px 18px;
+    border: 1px solid var(--menu-edge);
+    outline: 1px solid #1b140e;
     border-radius: 5px;
-    background: radial-gradient(ellipse at 20% 0, #fffae880, transparent 70%), var(--workflow-paper);
-    box-shadow: inset 0 0 0 3px #fff8e54d, inset 0 0 0 4px #a58b6533, 0 18px 60px #000a;
+    color: var(--menu-ink);
+    background: radial-gradient(ellipse at 20% 0, var(--menu-raised), transparent 70%), var(--menu-paper);
+    box-shadow: inset 0 0 0 3px var(--menu-inset), inset 0 0 0 4px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 55%, transparent), 0 18px 60px #000a;
+    color-scheme: var(--ui-page-scheme, light);
 }
-#ui-stack .ui-popup-inner:has(.workflow-surface) {
-    min-height: 0; max-width: 100%; max-height: inherit;
-}
+#ui-stack .ui-popup-outer:has(.workflow-table-menu) { width: min(860px, calc(100vw - 48px)); }
+#ui-stack .ui-popup-outer:has(.workflow-prompt) { width: min(480px, calc(100vw - 48px)); }
+#ui-stack .ui-popup-outer:has(.formatted-scroller) { width: min(780px, calc(100vw - 48px)); }
+#ui-stack .ui-popup-outer:has(.workflow-surface.menu_txt) { width: auto; }
+#ui-stack .ui-popup-inner:has(.workflow-surface) { min-height: 0; width: 100%; max-width: 100%; max-height: inherit; }
 #game #ui-stack .workflow-surface {
-    min-height: 0; width: 100%;
-    font: 14px/1.5 var(--tt-font-ui, sans-serif);
+    display: flex; flex-direction: column; min-height: 0; width: 100%; min-width: 0;
+    font: 14px/1.5 var(--menu-copy-font);
 }
-#game #ui-stack .workflow-surface.menu { min-width: min(560px, calc(100vw - 90px)); }
-#game #ui-stack .workflow-surface.workflow-inventory { min-width: min(620px, calc(100vw - 90px)); }
-#game #ui-stack .workflow-surface.workflow-table-menu { min-width: 0; }
+#game #ui-stack .workflow-surface.menu_txt { width: auto; }
 #ui-stack .workflow-surface > :is(.header, .menu_title, .workflow-categories, .workflow-table-head,
     .workflow-menu-actions, .workflow-search-tools, .workflow-search-summary, .workflow-pane-tabs,
-    .workflow-popup-tools, .workflow-selection-tools, .menu_more, .workflow-popup-help, .actions, .footer) {
+    .workflow-popup-tools, .workflow-selection-tools, .menu_more, .workflow-popup-help, .actions, .footer,
+    .workflow-menu-caption, .workflow-dialog-actions, .share-link-controls) {
     flex-shrink: 0;
 }
-#ui-stack .workflow-menu-caption {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    flex-shrink: 0; margin: -4px 0 10px; color: var(--menu-quiet);
-    font: 12px/1.5 var(--tt-font-ui, sans-serif);
-}
-#game #ui-stack .workflow-menu-caption button { min-height: 28px; padding: 3px 7px; background: transparent; border-color: #b9a48088; box-shadow: none; }
-#ui-stack .workflow-surface > :is(.body, .menu_contents) {
-    min-height: 0; overscroll-behavior: contain;
-}
+#ui-stack .workflow-surface > :is(.body, .menu_contents) { min-height: 0; overscroll-behavior: contain; }
 #ui-stack .workflow-surface .menu_contents { flex: 1 1 auto; }
 #ui-stack .workflow-surface [data-simplebar='init'] { margin-right: 0; padding-right: 0; max-width: 100%; }
 #ui-stack .workflow-surface .menu_contents li { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* Header: eyebrow (hero context + Close), title, capacity caption. */
 #ui-stack .workflow-popup-tools {
-    align-items: center; flex-wrap: nowrap; gap: 12px;
-    margin: 0 0 12px; padding: 0; border: 0;
+    display: flex; align-items: center; flex-wrap: nowrap; gap: 12px;
+    margin: 0 0 8px; padding: 0 0 8px; border: 0; border-bottom: 1px solid var(--menu-rule);
 }
 #ui-stack .workflow-popup-hero {
-    min-width: 0; overflow-wrap: anywhere; color: var(--menu-quiet);
-    font: 600 10px/1.5 var(--tt-font-ui, sans-serif); letter-spacing: .06em; text-transform: uppercase;
+    flex: 1 1 auto; min-width: 0; margin: 0; overflow-wrap: anywhere; color: var(--menu-quiet);
+    font: 600 11px/1.5 var(--menu-copy-font); letter-spacing: .05em; text-transform: uppercase;
 }
+/* Role colour comes from the shared .tr-badge[data-role] component. */
+#ui-stack .workflow-popup-hero .workflow-hero-role { margin-left: 8px; vertical-align: middle; font-size: 10px; letter-spacing: .04em; }
 #game #ui-stack .workflow-popup-tools button {
-    flex: 0 0 auto; min-height: 30px; padding: 4px 8px;
-    color: #65513b; border-color: #b9a480; background: #fff8e866; box-shadow: none;
+    flex: 0 0 auto; min-height: 30px; padding: 4px 9px; margin: 0;
+    color: var(--menu-quiet); border-color: var(--menu-rule); background: transparent; box-shadow: none;
 }
 #game #ui-stack .workflow-surface > :is(.header, .menu_title) {
-    margin: 0 0 12px; padding: 0 0 12px !important;
-    border-bottom: 1px solid var(--workflow-rule);
-    font: 600 25px/1.25 var(--tt-font-title, Georgia, serif);
-    white-space: normal; overflow-wrap: anywhere; letter-spacing: -.015em;
+    display: flex; align-items: center; gap: 12px;
+    margin: 0 0 10px; padding: 0 0 10px !important;
+    border-bottom: 0; background: linear-gradient(90deg, var(--menu-chapter), var(--menu-rule) 45%, transparent) left bottom / 100% 1px no-repeat;
+    color: var(--menu-chapter);
+    font: 600 24px/1.2 var(--menu-title-font);
+    white-space: normal; overflow-wrap: anywhere; letter-spacing: -.01em;
 }
-#ui-stack .workflow-surface > .header > canvas { flex: 0 0 auto; margin-right: 12px; }
-#ui-stack .workflow-surface .workflow-categories {
-    gap: 5px; padding-bottom: 12px; margin: 0;
+#game #ui-stack .workflow-surface > :is(.header, .menu_title) span { color: inherit; }
+#ui-stack .workflow-surface > .header > canvas { flex: 0 0 auto; margin-right: 0; }
+#ui-stack .workflow-menu-caption {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: -4px 0 10px; color: var(--menu-quiet); font: 12px/1.5 var(--menu-copy-font);
 }
+#ui-stack .workflow-menu-caption > span {
+    display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--menu-rule);
+    border-radius: 999px; background: var(--menu-raised); font-weight: 600; font-variant-numeric: tabular-nums;
+}
+#game #ui-stack .workflow-menu-caption button { min-height: 28px; padding: 3px 7px; background: transparent; border-color: var(--menu-rule); box-shadow: none; }
+
+/* Segmented category / pane tabs. */
+#ui-stack .workflow-surface :is(.workflow-categories, .workflow-pane-tabs) {
+    display: flex; flex-wrap: wrap; gap: 3px; margin: 0 0 10px; padding: 3px;
+    border: 1px solid var(--menu-rule); border-radius: 5px; background: var(--menu-inset);
+}
+#game #ui-stack .workflow-surface :is(.workflow-categories, .workflow-pane-tabs) button {
+    flex: 1 1 auto; min-height: 32px; padding: 4px 10px; border-color: transparent; background: transparent;
+    color: var(--menu-quiet); box-shadow: none; font-weight: 600;
+}
+#game #ui-stack .workflow-surface :is(.workflow-categories, .workflow-pane-tabs) button:hover:not(:disabled) {
+    background: var(--menu-raised); color: var(--menu-ink); border-color: var(--menu-rule);
+}
+#game #ui-stack .workflow-surface :is(.workflow-categories [aria-selected='true'], .workflow-pane-tabs [aria-selected='true']) {
+    color: var(--menu-action-text); background: var(--menu-action); border-color: var(--menu-action);
+    box-shadow: inset 0 1px 0 #ffffff22;
+}
+
+/* Buttons and key caps. */
 #game #ui-stack .workflow-surface button {
-    align-items: center; justify-content: center; gap: 6px;
-    min-height: 36px; padding: 6px 11px; border-radius: 3px;
-    box-shadow: inset 0 1px 0 #fffaf0, 0 1px 1px #49351b12;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 36px; margin: 0; padding: 6px 11px; border: 1px solid var(--menu-edge); border-radius: 4px;
+    background: var(--menu-raised); color: var(--menu-ink); font: 600 12px/1.4 var(--menu-copy-font);
+    text-shadow: none; box-shadow: inset 0 1px 0 #ffffff55, 0 1px 1px #0000000f; cursor: pointer;
     transition: background-color 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
 }
-#game #ui-stack .workflow-surface button:hover:not(:disabled) { border-color: #76572e; background: #ead9b8; }
-#game #ui-stack .workflow-surface button:active:not(:disabled) { box-shadow: inset 0 2px 3px #49351b30; }
+#game #ui-stack .workflow-surface button:hover:not(:disabled) { border-color: var(--menu-chapter); background: var(--menu-hover); color: var(--menu-ink); }
+#game #ui-stack .workflow-surface button:active:not(:disabled) { box-shadow: inset 0 2px 3px #00000030; }
 #game #ui-stack .workflow-surface button:disabled { cursor: default; box-shadow: none; opacity: .5; }
-#game #ui-stack .workflow-surface :is(button, [role='button'], input, select, a):focus-visible {
-    outline: 2px solid #8b5918; outline-offset: 2px;
+#game #ui-stack .workflow-surface .workflow-primary,
+#game #ui-stack .workflow-surface .actions button:first-child:not(.workflow-quiet) {
+    color: var(--menu-action-text); background: var(--menu-action); border-color: var(--menu-action);
+    box-shadow: inset 0 1px 0 #ffffff30, inset 0 -2px 0 #00000033;
 }
-#game #ui-stack .workflow-surface :is(.workflow-categories [aria-selected='true'],
-    .workflow-pane-tabs [aria-selected='true'], .workflow-primary) {
-    color: #fff8e8; background: #5e452d; border-color: #5e452d;
-    box-shadow: inset 0 1px 0 #fff0d430, inset 0 -2px 0 #2b1e1666;
+#game #ui-stack .workflow-surface :is(.workflow-primary, .actions button:first-child):hover:not(:disabled) {
+    background: color-mix(in srgb, var(--menu-action) 85%, #fff); color: var(--menu-action-text); border-color: var(--menu-action);
 }
-#game #ui-stack .workflow-surface .workflow-primary:hover:not(:disabled) { background: #765535; }
-#ui-stack .workflow-surface :is(button kbd, .workflow-key) {
-    min-width: 18px; padding: 1px 4px; margin-left: 0; border-radius: 3px;
-    font: 11px/1.4 var(--tt-font-mono, monospace); text-align: center;
+#game #ui-stack .workflow-surface .workflow-primary kbd { border-color: currentColor; color: inherit; background: transparent; }
+#game #ui-stack .workflow-surface :is(button, [role='button'], input, select, a, li.selectable):focus-visible {
+    outline: 2px solid var(--menu-focus); outline-offset: 2px;
 }
-#ui-stack .workflow-surface button kbd { color: inherit; border: 1px solid currentColor; opacity: .7; }
-#ui-stack .workflow-surface .menu_contents li.selectable { min-height: 42px; padding: 6px 8px; border-radius: 3px; }
-#ui-stack .workflow-surface .menu_contents li.workflow-selected { box-shadow: inset 3px 0 0 #698545; }
-#ui-stack .workflow-surface .menu_contents li.selectable:focus-visible { outline-offset: -2px; }
-#ui-stack .workflow-surface .menu_contents li.level1 {
-    padding: 10px 8px 5px; color: var(--menu-quiet);
-    font: 600 11px/1.5 var(--tt-font-ui, sans-serif); letter-spacing: .04em;
+#ui-stack .workflow-surface :is(button kbd, .workflow-key, .actions kbd) {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px;
+    margin: 0; border: 1px solid var(--menu-rule); border-bottom-width: 2px; border-radius: 4px;
+    background: var(--menu-raised); color: var(--menu-quiet); font: 11px/1 var(--menu-mono-font); text-align: center; opacity: 1;
 }
+#ui-stack .workflow-surface button kbd { margin-left: 2px; }
+
+/* Footer: selection summary, native --more-- line, action bar, key hints. */
 #ui-stack .workflow-selection-tools {
     display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap;
-    margin-top: 12px; padding: 12px 0 0; border-top: 1px solid var(--workflow-rule);
+    margin-top: 10px; padding: 10px 0 0; border-top: 1px solid var(--menu-rule);
 }
-.workflow-selection-summary { min-width: 0; color: #4e6032; font: 600 12px/1.5 var(--tt-font-ui, sans-serif); }
+.workflow-selection-summary { min-width: 0; color: var(--menu-good); font: 600 12px/1.5 var(--menu-copy-font); }
 #ui-stack .workflow-selection-tools .workflow-primary { margin-left: auto; }
-#ui-stack .workflow-surface > .workflow-popup-help {
-    margin: 10px 0 0; padding: 8px 0 0; border-top: 1px solid #c6b38d66;
-    font: 11px/1.5 var(--tt-font-ui, sans-serif); white-space: normal; color: var(--menu-quiet);
-}
 #ui-stack .workflow-surface .menu_more {
-    padding: 8px 0 0 !important; margin-top: 8px;
-    font: 12px/1.6 var(--tt-font-ui, sans-serif); border-color: #c6b38d66;
-    white-space: pre-wrap; overflow-wrap: anywhere;
+    margin-top: 8px; padding: 8px 0 0 !important; border-top: 1px solid var(--menu-rule);
+    color: var(--menu-quiet); font: 12px/1.6 var(--menu-copy-font); white-space: pre-wrap; overflow-wrap: anywhere;
 }
-#ui-stack .workflow-surface .menu_more:not(.hidden) + .workflow-popup-help { margin-top: 5px; padding-top: 0; border: 0; }
-#ui-stack .workflow-surface :is(.workflow-menu-actions, .workflow-pane-tabs) { gap: 6px; margin: 0 0 12px; }
+#ui-stack .workflow-surface > .workflow-popup-help {
+    margin: 8px 0 0; padding: 8px 0 0; border-top: 1px solid var(--menu-rule);
+    font: 11px/1.5 var(--menu-copy-font); white-space: normal; color: var(--menu-quiet);
+}
+#ui-stack .workflow-surface > :is(.workflow-selection-tools, .menu_more, .actions) ~ .workflow-popup-help { margin-top: 5px; padding-top: 0; border: 0; }
+#ui-stack .workflow-surface > :is(.menu_more:not(.hidden)) + .workflow-popup-help { margin-top: 4px; }
+#ui-stack .workflow-surface .actions {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding: 12px 0 0; border-top: 1px solid var(--menu-rule);
+}
+#ui-stack .workflow-surface .actions [data-hotkey] { padding: 6px 10px; border: 1px solid var(--menu-edge); border-radius: 4px; background: var(--menu-raised); }
+#ui-stack .workflow-surface :is(.workflow-menu-actions, .workflow-dialog-actions) { gap: 6px; margin: 0 0 12px; }
+#ui-stack .workflow-surface .workflow-dialog-actions { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--menu-rule); }
 #ui-stack .workflow-surface .workflow-entry-actions { gap: 6px; margin-top: 2px; }
-#ui-stack .workflow-table-menu .menu_contents li.workflow-table-row { padding-block: 8px; }
 #ui-stack .workflow-surface .body .rich-text { line-height: 1.65; }
 #ui-stack .workflow-surface .body .rich-text > :is(p, ul, ol) { margin-block: 0 12px; }
 #ui-stack .workflow-surface .body .rich-text > :last-child { margin-bottom: 0; }
-#ui-stack .workflow-surface .actions { padding-top: 12px; border-top: 1px solid var(--workflow-rule); }
 #ui-stack .workflow-surface.menu_txt { font-family: var(--crt-font, monospace); }
-#ui-stack .workflow-surface .simplebar-scroll-content { overscroll-behavior: contain; }
-#ui-stack .workflow-surface .simplebar-scroll-content {
-    width: 100%; box-sizing: border-box !important; padding-right: 14px !important; margin-bottom: 0 !important;
-}
+
+/* Scroll region: browser bars hidden, custom track keeps a reading gutter. */
+#ui-stack .workflow-surface .simplebar-scroll-content { overscroll-behavior: contain; width: 100%; box-sizing: border-box !important; padding-right: 14px !important; margin-bottom: 0 !important; }
 #ui-stack .workflow-surface .simplebar-content { margin-right: 0 !important; }
 #ui-stack .workflow-surface :is(.simplebar-scroll-content, .simplebar-content) { scrollbar-width: none; }
 #ui-stack .workflow-surface :is(.simplebar-scroll-content, .simplebar-content)::-webkit-scrollbar { display: none; }
-#session_menu { padding: 24px; border-radius: 5px; box-shadow: inset 0 0 0 3px #fff8e54d, inset 0 0 0 4px #a58b6533, 0 18px 60px #000a; }
+#ui-stack .workflow-surface .scroller-shade.top { background: linear-gradient(var(--menu-paper), transparent); }
+#ui-stack .workflow-surface .scroller-shade.bot { background: linear-gradient(transparent, var(--menu-paper)); }
+#ui-stack .workflow-surface .simplebar-track { background: var(--menu-inset); }
+#ui-stack .workflow-surface .simplebar-track.vertical::before { background: var(--menu-rule); }
+#ui-stack .workflow-surface .simplebar-scrollbar { border-color: var(--menu-inset); background: var(--menu-edge); }
+
+/* Session menu shares the shell material. */
+#session_menu { padding: 24px; border-radius: 5px; box-shadow: inset 0 0 0 3px var(--menu-inset, #e2d3b5), 0 18px 60px #000a; }
 #session_menu_status { margin: 12px 0 16px; min-height: 0; }
 #session_menu .session-menu-actions { gap: 8px; }
-#session_menu #session_menu_resume { color: #fff8e8; background: #5e452d; border-color: #5e452d; font-weight: 700; }
-#session_menu #session_menu_resume:hover { background: #765535; }
-#session_menu .workflow-button:focus-visible { outline: 2px solid #8b5918; outline-offset: 3px; }
+#session_menu #session_menu_resume { color: var(--ui-action-text, #fff8e8); background: var(--ui-action, #5e452d); border-color: var(--ui-action, #5e452d); font-weight: 700; }
+#session_menu .workflow-button:focus-visible { outline: 2px solid var(--ui-chapter, #8b5918); outline-offset: 3px; }
+
 @media (max-width: 700px) {
+    #ui-stack .ui-popup, #ui-stack .ui-popup + .ui-popup { padding-top: 0; align-items: stretch; }
     #ui-stack .ui-popup-outer:has(.workflow-surface) {
-        margin: 10px; padding: 14px; max-width: calc(100vw - 20px); max-height: calc(100dvh - 20px);
+        margin: 0; width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh;
+        padding: 12px 16px; border: 0; border-radius: 0; outline: 0; box-shadow: none;
     }
-    #game #ui-stack .workflow-surface:is(.menu, .workflow-inventory) { min-width: 0; width: calc(100vw - 50px); }
-    #game #ui-stack .workflow-surface > :is(.header, .menu_title) { font-size: 22px; }
+    #ui-stack .ui-popup-outer:has(.workflow-prompt) { height: auto; margin: 16px 0 0; }
+    #ui-stack .ui-popup-inner:has(.workflow-surface) { max-height: 100%; }
+    #game #ui-stack .workflow-surface > :is(.header, .menu_title) { font-size: 21px; }
     #ui-stack .workflow-surface .menu_contents li.selectable { gap: 6px; padding-inline: 4px; }
-    #ui-stack .workflow-surface .workflow-categories button { padding-inline: 8px; }
+    #game #ui-stack .workflow-surface .workflow-categories button { padding-inline: 6px; font-size: 11px; }
     #ui-stack .workflow-selection-tools { gap: 8px; }
     #ui-stack .workflow-selection-summary { flex-basis: 100%; }
     #ui-stack .workflow-selection-tools .workflow-primary { width: 100%; }
     #ui-stack .workflow-surface .workflow-entry-actions button { min-height: 38px; }
+    #ui-stack .workflow-popup-hero { font-size: 10px; }
 }
 @media (max-height: 500px) {
     #ui-stack .ui-popup-outer:has(.workflow-surface) { margin-block: 8px; padding-block: 10px; max-height: calc(100dvh - 16px); }
-    #ui-stack .workflow-popup-tools { margin-bottom: 6px; }
-    #game #ui-stack .workflow-surface > :is(.header, .menu_title) { font-size: 21px; margin-bottom: 8px; padding-bottom: 8px !important; }
+    #ui-stack .workflow-popup-tools { margin-bottom: 6px; padding-bottom: 6px; }
+    #game #ui-stack .workflow-surface > :is(.header, .menu_title) { font-size: 20px; margin-bottom: 8px; padding-bottom: 8px !important; }
     #ui-stack .workflow-surface > .workflow-popup-help { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { #ui-stack .workflow-surface button { transition: none; } }
 @media (forced-colors: active) {
     #ui-stack .workflow-selected { border: 2px solid Highlight; }
     #ui-stack .workflow-selection-mark { forced-color-adjust: auto; }
+    #ui-stack .workflow-surface :is(.workflow-categories [aria-selected='true'], .workflow-pane-tabs [aria-selected='true'], .workflow-primary) { outline: 2px solid Highlight; }
 }

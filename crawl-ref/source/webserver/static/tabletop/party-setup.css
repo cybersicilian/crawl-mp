@@ -74,45 +74,11 @@
 .choice-picker-count { flex-shrink: 0; margin: 0; padding-top: 7px; border-top: 1px solid #dfd4bf; color: var(--tt-folio-muted); font-size: 11px; }
 :is(.choice-select-trigger, .choice-picker-search):focus-visible { outline: 2px solid var(--tt-folio-crimson); outline-offset: 2px; }
 
-/* A short setup header, then the work. Avoid equal-height, empty card interiors. */
+
+/* Squad screen: sticky command bar, roster strip as tabs, one seat editor, composition beside it. */
 #lobby.has-chapter-index.has-party-room #party_lobby_panel { padding: 22px 24px; }
 #lobby.has-chapter-index.has-party-room #party_lobby_panel > .party-hall-header { margin-bottom: 12px; padding-bottom: 12px; }
 #lobby.has-chapter-index.has-party-room #party_lobby_panel .party-hall-title { font-size: 25px; }
-#lobby .party-other-modes { color: var(--tt-folio-muted); font: 600 12px/1.4 var(--tt-font-ui); text-decoration: none; padding: 10px 4px; }
-#lobby .party-other-modes:hover { color: var(--tt-folio-crimson); text-decoration: underline; }
-#lobby.has-chapter-index #party_room_view .party-room-banner { margin-bottom: 4px; }
-#lobby.has-chapter-index #party_room_title_text { font: 600 15px/1.4 var(--tt-font-ui); color: var(--tt-folio-ink) !important; }
-#lobby.has-chapter-index #party_room_host_text { font-size: 11px; }
-#lobby.has-chapter-index .party-builder-intro { margin-bottom: 12px; font-size: 12px; }
-#lobby.has-chapter-index #party_room_footer { padding: 10px 0; margin-bottom: 8px; }
-.party-launch-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-#lobby .party-builder-views { margin-bottom: 12px; gap: 4px; }
-#lobby .party-builder-views button { padding: 8px 13px; min-height: 40px; }
-#lobby .party-seasonings-bar { margin-bottom: 16px; padding: 8px 12px; border-style: solid; background: #efe5cf80; }
-#lobby .party-seasoning-chip { min-height: 34px; }
-.party-setup-tools { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 14px; }
-.party-campaign-options { display: flex; flex: 1 1 100%; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
-.party-campaign-options label { display: inline-flex; align-items: center; gap: 6px; }
-.party-campaign-options small { color: #746650; line-height: 1.4; }
-#lobby .party-setup-tools .party-builder-views { flex-shrink: 0; margin: 0; border: 0; }
-#lobby .party-setup-tools .party-seasonings-bar { margin: 0; border: 0; padding: 0; background: transparent; gap: 6px; }
-#lobby .party-setup-tools .party-seasonings-label { display: none; }
-#lobby.has-chapter-index #party_slots_grid { align-items: start; gap: 16px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-box { gap: 12px; padding: 18px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-top { padding-bottom: 12px; gap: 12px; }
-#lobby .party-slot-monogram { flex-basis: 62px; height: 80px; border-radius: 4px 4px 14px 14px; }
-#lobby .party-slot-monogram .native-player-tile { width: 52px; height: 52px; }
-#lobby .party-slot-monogram .native-player-tile :is(img, canvas) { width: 48px; height: 48px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-hero-name { font-size: 24px; }
-#lobby .party-slot-identity { flex: 1; grid-template-columns: 1fr auto; gap: 3px 12px; align-items: center; }
-#lobby .party-slot-identity :is(.party-slot-title, .party-slot-occupant) { grid-column: 1; }
-#lobby .party-slot-identity .party-starting-sheet { grid-column: 2; grid-row: 1 / 4; margin: 0; align-self: center; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-modes { min-height: 36px; }
-#lobby.has-chapter-index #party_slots_grid .party-mode-btn { min-height: 36px; padding: 7px 10px; }
-#lobby.has-chapter-index #party_slots_grid .slot-p0 .party-slot-modes { display: none; }
-#lobby .party-slot-state-note:empty { display: none; }
-#lobby .party-character-fields { gap: 12px 14px; }
-
 /* Keep the consequences of the current selections beside their controls. */
 #lobby .build-overview { margin: 14px 0; padding: 12px; border: 1px solid #cabb9f; border-left: 3px solid var(--tt-folio-crimson); background: #fffaf0; color: var(--tt-folio-ink); font: 12px/1.45 var(--tt-font-ui); }
 #lobby .build-overview-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
@@ -128,23 +94,191 @@
 #lobby .party-trait-guide section { padding: 6px 0; border-bottom: 1px solid #e6dbc6; }
 #lobby .party-trait-guide p { margin: 2px 0; }
 #lobby .party-trait-availability { color: var(--tt-folio-muted); }
-.party-field-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
-#lobby.has-chapter-index #party_slots_grid .party-field-heading .character-choice-details {
-    display: inline-flex;
+
+/* Shared Fate keeps a native checkbox beside the rule chips. */
+#lobby .party-rule-shared-fate { cursor: default; }
+#lobby .party-rule-shared-fate .party-rule-name { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+#lobby .party-rule-shared-fate input { margin: 0; }
+
+#lobby .party-other-modes { color: var(--ui-quiet, var(--tt-folio-muted)); font: 600 12px/1.4 var(--tt-font-ui); text-decoration: none; padding: 10px 4px; }
+#lobby .party-other-modes:hover { color: var(--ui-chapter, var(--tt-folio-crimson)); text-decoration: underline; }
+#lobby.has-chapter-index #party_room_view #party_room_command {
+    position: sticky;
+    top: var(--lobby-navigation-height, 88px);
+    z-index: 30;
+    margin: 0 0 14px;
+    padding: 8px 0 10px;
+    background: var(--ui-page, var(--tt-folio-paper));
+    border-bottom: 1px solid var(--ui-rule, var(--tt-folio-rule));
+    box-shadow: 0 8px 12px -10px #00000066;
+}
+#lobby.has-chapter-index #party_room_view .party-room-banner { display: flex; align-items: center; justify-content: space-between; gap: 6px 16px; margin: 0 0 8px; padding: 0; border: 0; background: none; }
+.party-room-identity { display: flex; flex: 1 1 320px; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; min-width: 0; }
+#lobby.has-chapter-index #party_room_view #party_room_title_text { display: inline; margin: 0; font: 600 21px/1.25 var(--tt-font-title); color: var(--ui-chapter, var(--tt-folio-crimson)) !important; overflow-wrap: anywhere; }
+#lobby.has-chapter-index #party_room_view #party_room_host_text { display: inline; margin: 0 !important; font: 12px/1.5 var(--tt-font-ui); color: var(--ui-quiet, var(--tt-folio-muted)) !important; }
+.party-room-hero-count { padding: 2px 9px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 999px; color: var(--ui-ink, var(--tt-folio-ink)); font: 600 12px/1.5 var(--tt-font-ui); white-space: nowrap; }
+.party-room-hero-count:empty { display: none; }
+#lobby.has-chapter-index #party_room_view #party_room_footer {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 4px;
-    min-height: 28px;
-    padding: 3px 5px;
+    gap: 8px 16px;
+    margin: 0;
+    padding: 0;
     border: 0;
     background: transparent;
-    font: 600 11px/1.4 var(--tt-font-ui);
+    box-shadow: none;
 }
-#lobby .party-field-heading .character-choice-details svg { width: 13px; height: 13px; }
-#lobby.has-chapter-index #party_slots_grid .character-choice-copy { min-height: 0; margin: 0; font-size: 11px; -webkit-line-clamp: 2; }
-#lobby.has-chapter-index #party_slots_grid .party-archetype-row { margin-top: 2px; padding-top: 12px; }
-#lobby.has-chapter-index #party_slots_grid .party-archetype-btn { min-height: 38px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { padding-top: 10px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-box:hover { transform: none; box-shadow: none; border-color: var(--tt-folio-rule); }
+.party-launch-controls { display: flex; flex: 1 1 320px; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-width: 0; }
+#lobby.has-chapter-index #party_room_view #btn_launch_party_room { min-height: 44px; padding: 10px 18px; font-size: 13px; }
+#lobby.has-chapter-index #party_room_view #party_room_status_hint { max-width: 360px; color: var(--ui-quiet, var(--tt-folio-muted)) !important; font: 12px/1.45 var(--tt-font-ui) !important; }
+.party-rules-summary { display: flex; flex: 0 1 auto; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-width: 0; color: var(--ui-quiet, var(--tt-folio-muted)); font: 12px/1.4 var(--tt-font-ui); }
+.party-rules-summary-link { color: var(--ui-chapter, var(--tt-folio-crimson)); font-weight: 600; text-decoration: none; border-bottom: 1px dotted currentColor; }
+.party-rules-summary-link:hover { border-bottom-style: solid; }
+.party-rules-summary-text { max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.party-rules-score { padding: 1px 8px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 999px; font-weight: 600; white-space: nowrap; }
+.party-rules-score.is-bonus { color: var(--ui-good, #2d633a); border-color: color-mix(in srgb, var(--ui-good, #2d633a) 50%, transparent); background: color-mix(in srgb, var(--ui-good, #2d633a) 12%, transparent); }
+.party-room-leave { margin-left: auto; }
+#lobby.has-chapter-index #party_room_view #btn_leave_party_room { background: transparent; border-color: transparent; box-shadow: none; color: var(--ui-danger, #a12d27); }
+#lobby.has-chapter-index #party_room_view #btn_leave_party_room:hover { border-color: var(--ui-danger, #a12d27); background: color-mix(in srgb, var(--ui-danger, #a12d27) 10%, transparent); color: var(--ui-danger, #a12d27); }
+#lobby.has-chapter-index .party-builder-intro { margin: 0 0 12px; color: var(--ui-quiet, var(--tt-folio-muted)); font: 12px/1.6 var(--tt-font-ui); }
+.party-builder-workspace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+.party-builder-main, .party-builder-side { min-width: 0; }
+.party-builder-side { display: grid; gap: 16px; }
+
+/* Roster strip: four seats as tabs. */
+.party-roster-strip { display: flex; align-items: stretch; gap: 10px; margin: 0 0 14px; container-type: inline-size; }
+.party-roster-tabs { display: grid; flex: 1; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; min-width: 0; }
+/* Four across needs about 260px a seat for a full hero name and "Gargoyle Earth Elementalist";
+   narrower strips show two rows of two, and phones scroll whole 220px seats sideways. */
+@container (max-width: 1079px) { .party-roster-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 539px) {
+    .party-roster-tabs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr); overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+    #lobby .party-seat-tab { scroll-snap-align: start; }
+}
+#lobby .party-seat-tab {
+    --slot-accent: var(--ui-accent, #c39a5a);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 74px;
+    padding: 10px 12px;
+    border: 1px solid var(--ui-rule, var(--tt-folio-rule));
+    border-top: 3px solid var(--slot-accent);
+    border-radius: 6px;
+    background: var(--ui-page-raised, var(--tt-folio-raised));
+    color: var(--ui-ink, var(--tt-folio-ink));
+    font: 12px/1.35 var(--tt-font-ui);
+    text-align: left;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 18%, transparent);
+    transition: border-color .12s ease, box-shadow .12s ease;
+}
+#lobby .party-seat-tab:hover { border-color: var(--ui-chapter, var(--tt-folio-crimson)); }
+/* The chosen seat is illuminated: gilt hairline inside the crimson frame. */
+#lobby .party-seat-tab[aria-selected="true"] {
+    border-color: var(--ui-chapter, var(--tt-folio-crimson)); background: var(--ui-selection, #e9dac4);
+    box-shadow: inset 0 0 0 1px var(--ui-chapter, var(--tt-folio-crimson)), inset 0 0 0 2px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 55%, transparent), 0 0 10px var(--ui-gilt-glow, #c9a35a40);
+}
+#lobby .party-seat-tab:focus-visible { outline: 2px solid var(--ui-chapter, var(--tt-folio-crimson)); outline-offset: 2px; }
+#lobby .party-seat-tab.is-inactive { border-style: dashed; border-top-style: solid; opacity: .78; }
+/* Portrait medallion: arched gilt frame around the native doll. */
+.party-seat-portrait {
+    display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; box-sizing: border-box; width: 48px; height: 52px; overflow: hidden;
+    border: 1px solid var(--ui-gilt-deep, #6f5424); border-radius: 45% 45% 5px 5px;
+    background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--slot-accent) 22%, transparent), var(--ui-page-inset, #e2d3b5) 78%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 40%, transparent);
+}
+.party-seat-portrait:empty { background: color-mix(in srgb, var(--ui-rule, #ac9470) 30%, transparent); }
+.party-seat-portrait .native-player-tile { width: 44px; height: 44px; }
+.party-seat-portrait .native-player-tile :is(img, canvas) { width: 40px; height: 40px; }
+.party-seat-copy { display: grid; gap: 2px; min-width: 0; }
+/* Names and builds wrap to a second line rather than truncate. */
+.party-seat-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font: 600 15px/1.2 var(--tt-font-title); color: var(--ui-chapter, var(--tt-folio-crimson)); white-space: normal; overflow-wrap: anywhere; }
+.party-seat-build { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; color: var(--ui-quiet, var(--tt-folio-muted)); font-size: 11px; line-height: 1.35; white-space: normal; overflow-wrap: anywhere; }
+.party-seat-meta { display: flex; flex-wrap: wrap; gap: 2px 8px; color: var(--ui-quiet, var(--tt-folio-muted)); font-size: 10px; }
+.party-seat-ready[data-state="ready"] { color: var(--ui-good, #2d633a); font-weight: 600; }
+.party-seat-ready[data-state="waiting"] { color: var(--ui-warn, #805019); font-weight: 600; }
+.party-seat-ready:empty { display: none; }
+#lobby .party-seat-layout-toggle {
+    flex: 0 0 auto;
+    align-self: center;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1px solid var(--ui-rule, var(--tt-folio-rule));
+    border-radius: 5px;
+    background: transparent;
+    color: var(--ui-quiet, var(--tt-folio-muted));
+    font: 600 11px/1.3 var(--tt-font-ui);
+    cursor: pointer;
+}
+#lobby .party-seat-layout-toggle:hover, #lobby .party-seat-layout-toggle[aria-pressed="true"] { color: var(--ui-chapter, var(--tt-folio-crimson)); border-color: var(--ui-chapter, var(--tt-folio-crimson)); }
+
+/* Seat editors: all four stay mounted; focus mode shows the selected one. */
+#lobby.has-chapter-index #party_room_view #party_slots_grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0; align-items: start; }
+#lobby #party_slots_grid[data-seat-layout="focus"] .party-slot-box:not(.is-active-seat) { display: none !important; }
+#lobby #party_slots_grid[data-seat-layout="all"] .party-slot-box.is-active-seat { border-color: var(--ui-chapter, var(--tt-folio-crimson)); box-shadow: 0 0 0 1px var(--ui-chapter, var(--tt-folio-crimson)); }
+#lobby.has-chapter-index #party_slots_grid .party-slot-box:hover { transform: none; box-shadow: none; }
+
+/* Role badges: shared .tr-badge vocabulary with a local fallback. */
+#lobby .party-role-badge {
+    --tr-badge-color: var(--ui-quiet, #685742);
+    display: inline-flex;
+    align-items: center;
+    min-height: 18px;
+    padding: 0 7px;
+    border: 1px solid color-mix(in srgb, var(--tr-badge-color) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--tr-badge-color) 16%, transparent);
+    color: var(--tr-badge-color);
+    font: 600 10px/1.4 var(--tt-font-ui);
+    letter-spacing: .02em;
+    white-space: nowrap;
+    text-shadow: none;
+}
+#lobby .party-role-badge[data-role="frontline"] { --tr-badge-color: var(--ui-role-frontline, #a35a1f); }
+#lobby .party-role-badge[data-role="striker"] { --tr-badge-color: var(--ui-role-striker, #a8352d); }
+#lobby .party-role-badge[data-role="caster"] { --tr-badge-color: var(--ui-role-caster, #654277); }
+#lobby .party-role-badge[data-role="support"] { --tr-badge-color: var(--ui-role-support, #2d633a); }
+#lobby .party-role-badge[data-role="scout"] { --tr-badge-color: var(--ui-role-scout, #286065); }
+
+/* Expedition rules: toggle chips with one-line effects and the advertised score bonus. */
+.party-rules-panel { min-width: 0; }
+.party-expedition-rules { display: grid; gap: 12px; padding: 14px 16px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 6px; background: var(--ui-page-raised, var(--tt-folio-raised)); scroll-margin-top: 220px; }
+.party-rules-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+#lobby .party-rules-heading h3 { margin: 0; color: var(--ui-chapter, var(--tt-folio-crimson)); font: 600 18px/1.3 var(--tt-font-title); }
+.party-rules-heading small { color: var(--ui-quiet, var(--tt-folio-muted)); font: 11px/1.4 var(--tt-font-ui); }
+.party-expedition-rules.is-readonly .party-rules-heading small::after { content: " · Only the host can change these"; }
+#lobby .party-rule-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 0; padding: 0; border: 0; background: transparent; }
+#lobby .party-rule-chips .party-seasonings-label { grid-column: 1 / -1; margin: 0; color: var(--ui-quiet, var(--tt-folio-muted)); font: 700 10px/1.3 var(--tt-font-ui); letter-spacing: .12em; text-transform: uppercase; }
+#lobby .party-rule-chip, #lobby .party-rule-select {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3px 8px;
+    align-content: start;
+    min-height: 64px;
+    margin: 0;
+    padding: 9px 11px;
+    border: 1px solid var(--ui-rule, var(--tt-folio-rule));
+    border-radius: 6px;
+    background: var(--ui-page, var(--tt-folio-paper));
+    color: var(--ui-ink, var(--tt-folio-ink));
+    font: 600 12px/1.3 var(--tt-font-ui);
+    text-align: left;
+    cursor: pointer;
+    box-shadow: none;
+}
+#lobby .party-rule-chip:hover:not(:disabled) { border-color: var(--ui-chapter, var(--tt-folio-crimson)); }
+#lobby .party-rule-chip:focus-visible, #lobby .party-rule-select select:focus-visible { outline: 2px solid var(--ui-chapter, var(--tt-folio-crimson)); outline-offset: 2px; }
+#lobby .party-rule-chip[aria-pressed="true"] { border-color: var(--ui-action, #70442c); background: var(--ui-action, #70442c); color: var(--ui-action-text, #fff5df); }
+#lobby .party-rule-chip:disabled { cursor: default; opacity: .85; }
+.party-rule-name { grid-column: 1; }
+.party-rule-score { grid-column: 2; grid-row: 1; padding: 0 6px; border: 1px solid currentColor; border-radius: 999px; font: 600 10px/1.6 var(--tt-font-mono); opacity: .85; white-space: nowrap; }
+.party-rule-effect { grid-column: 1 / -1; color: inherit; font: 10px/1.45 var(--tt-font-ui); opacity: .85; }
+#lobby .party-rule-select { cursor: default; }
+#lobby .party-rule-select select { grid-column: 1 / -1; min-height: 36px; width: 100%; padding: 4px 8px; border: 1px solid var(--ui-rule, var(--tt-folio-rule)); border-radius: 4px; background: var(--ui-page-raised, var(--tt-folio-raised)); color: var(--ui-ink, var(--tt-folio-ink)); font: 12px/1.4 var(--tt-font-ui); }
 
 /* Mode choice belongs on Play. All original launch routes remain available. */
 #lobby.has-chapter-index #play_now { border-top-color: var(--tt-broth-sage); }
@@ -185,12 +319,11 @@
 #play_now .mode-party-link small { padding: 0 0 0 8px; margin: 0; }
 #play_now .mode-preferences { margin-top: 16px; padding-top: 12px; font-size: 11px; }
 #play_now .mode-preferences a { font-size: 12px; }
-@media (min-width: 901px) {
-    #lobby .party-character-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (min-width: 1100px) {
+    .party-builder-workspace { grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); }
 }
 @media (max-width: 1000px) {
-    #lobby .party-slot-identity { grid-template-columns: 1fr; }
-    #lobby .party-slot-identity .party-starting-sheet { grid-column: 1; grid-row: auto; padding: 4px 8px; min-height: 30px; }
     #play_now .mode-card .mode-card-tag { display: none; }
 }
 @media (max-width: 680px) {
@@ -198,22 +331,26 @@
     #lobby.has-chapter-index.has-party-room #party_lobby_panel { padding: 16px; }
     #lobby.has-chapter-index #party_turn_pacing_badge { display: none; }
     #lobby.has-chapter-index .party-builder-intro { display: none; }
-    #lobby.has-chapter-index #party_room_view .party-room-banner { margin-bottom: 10px; }
-    #lobby.has-chapter-index #party_room_host_text { display: block; margin: 4px 0 0 !important; }
-    #lobby.has-chapter-index #party_room_footer { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
-    #lobby.has-chapter-index #party_room_footer > div:first-child { display: contents; }
-    #lobby.has-chapter-index #btn_launch_party_room { grid-column: 1 / -1; width: 100%; }
-    #lobby.has-chapter-index #party_room_status_hint { grid-column: 1; font-size: 11px !important; align-self: center; }
-    #lobby.has-chapter-index #party_room_footer > div:last-child { grid-column: 2; grid-row: 2; }
-    #lobby.has-chapter-index #btn_leave_party_room { min-height: 34px; padding: 6px 8px; font-size: 11px; }
+    #lobby.has-chapter-index #party_room_view #party_room_command { margin-bottom: 10px; padding: 6px 0 8px; }
+    #lobby.has-chapter-index #party_room_view .party-room-banner { margin-bottom: 6px; }
+    #lobby.has-chapter-index #party_room_view #party_room_title_text { font-size: 17px; }
+    #lobby.has-chapter-index #party_room_view #party_room_host_text { display: none; }
+    #lobby.has-chapter-index #party_room_view #party_room_footer { display: grid; grid-template-columns: 1fr auto; gap: 6px 8px; }
+    .party-launch-controls { display: contents; }
+    #lobby.has-chapter-index #party_room_view #btn_launch_party_room { grid-column: 1; width: 100%; min-height: 42px; }
+    #lobby.has-chapter-index #party_room_view #party_room_status_hint { grid-column: 1 / -1; grid-row: 3; font-size: 11px !important; }
+    .party-rules-summary { grid-column: 1 / -1; grid-row: 2; }
+    .party-rules-summary-text { max-width: 100%; }
+    .party-room-leave { grid-column: 2; grid-row: 1; margin: 0; }
+    #lobby.has-chapter-index #party_room_view #btn_leave_party_room { min-height: 42px; padding: 6px 8px; font-size: 11px; }
+    .party-roster-strip { flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    .party-roster-tabs { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 4px; scrollbar-width: thin; }
+    #lobby .party-seat-tab { flex: 0 0 min(72vw, 240px); min-height: 66px; scroll-snap-align: start; }
+    #lobby .party-seat-layout-toggle { align-self: flex-end; }
+    .party-builder-workspace { gap: 14px; }
     #lobby.has-chapter-index #party_slots_grid .party-slot-box { padding: 14px; }
-    #lobby .party-slot-identity { grid-template-columns: 1fr auto; gap: 3px 8px; }
-    #lobby .party-slot-identity .party-starting-sheet { grid-column: 2; grid-row: 1; }
-    #lobby .party-slot-identity :is(.party-slot-hero-name, .party-slot-occupant) { grid-column: 1 / -1; }
     #lobby .party-character-fields { grid-template-columns: 1fr; }
-    .party-setup-tools { align-items: stretch; flex-direction: column; gap: 12px; }
-    #lobby .party-setup-tools .party-seasonings-bar { flex-wrap: nowrap; }
-    #lobby .party-setup-tools .party-seasoning-chip { flex: 1; flex-direction: column; gap: 2px; min-width: 0; padding: 6px 4px; border-radius: 5px; text-align: center; font-size: 11px; }
+    #lobby .party-rule-chips { grid-template-columns: 1fr 1fr; }
     .choice-select-trigger, .choice-picker-search { font-size: 16px; }
     #play_now .mode-grid { grid-template-columns: 1fr; }
     #play_now .mode-card .mode-card-tag { display: block; }
@@ -222,11 +359,22 @@
     #lobby #play_now .mode-party-link { flex: 1; justify-content: center; }
 }
 @media (max-width: 380px) {
-    #lobby .party-slot-identity { grid-template-columns: 1fr; }
-    #lobby .party-slot-identity .party-starting-sheet { grid-column: 1; grid-row: auto; }
     #play_now .mode-card .mode-card-tag { display: none; }
+    #lobby .party-rule-chips { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #lobby .party-seat-tab { transition: none; }
 }
 @media (forced-colors: active) {
     .choice-picker-option[aria-selected="true"] { outline: 1px solid Highlight; }
     .choice-picker-option.is-highlighted { outline: 2px solid Highlight; }
+    #lobby .party-seat-tab[aria-selected="true"], #lobby .party-rule-chip[aria-pressed="true"] { outline: 2px solid Highlight; }
+    #lobby .party-role-badge { border-color: CanvasText; }
 }
+
+/* The command-bar rules link must stay readable over the brass lobby link colour. */
+#lobby .party-rules-summary-link { color: var(--ui-chapter, var(--tt-folio-crimson)); }
+#lobby .party-rules-summary-link:hover { color: var(--ui-ink, var(--tt-folio-ink)); }
+
+/* Section headings in the right column share one size and colour (composition pass). */
+#lobby #party_expedition_rules h3, #lobby .party-composition-header h3 { margin: 0 0 4px; color: var(--ui-chapter, var(--tt-folio-crimson)); font: 600 20px/1.2 var(--tt-font-title); }

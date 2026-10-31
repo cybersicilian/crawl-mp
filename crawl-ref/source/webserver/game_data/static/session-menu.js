@@ -1,7 +1,17 @@
-define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "graphics-dialog"],
-function ($, client, library, actions, keyboard, focusTrap, graphics) {
+define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "graphics-dialog", "./common-hotkeys"],
+function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
     "use strict";
     var dialog, trap, opener, escapeHeld = false;
+    function heroContext() {
+        var state = window.crawl_party && window.crawl_party.state;
+        var slot = actions && typeof actions.controlledSlot === "function" ? actions.controlledSlot() : null;
+        var member = state && Array.isArray(state.members)
+            && state.members.find(function (entry) { return entry.slot === slot; });
+        if (!member || !member.name) return "";
+        return "Controlling P" + (member.slot + 1) + " · " + member.name
+            + (member.place ? " · " + member.place : "")
+            + (Number.isFinite(member.xl) ? " · Level " + member.xl : "");
+    }
 
     function available() {
         return client.in_game() && !client.is_watching() && actions.ready()
@@ -14,7 +24,10 @@ function ($, client, library, actions, keyboard, focusTrap, graphics) {
         var status = library.save_status();
         $(dialog).find("[data-session-save]").prop("disabled", Boolean(status.reason));
         document.getElementById("session_menu_status").textContent = status.reason
-            || "Save your expedition and return to the lobby. You can resume it later.";
+            || "The expedition is paused. Save keeps playing; Save and quit returns to the lobby.";
+        var hero = document.getElementById("session_menu_hero");
+        if (hero) { hero.textContent = heroContext(); hero.hidden = !hero.textContent; }
+        $(dialog).find("[data-session-hotkeys]").prop("disabled", !(hotkeys && typeof hotkeys.open === "function"));
     }
     function close() {
         trap.deactivate();
@@ -25,18 +38,31 @@ function ($, client, library, actions, keyboard, focusTrap, graphics) {
     function ensure() {
         if (dialog) return;
         dialog = $("<dialog id='session_menu' aria-labelledby='session_menu_title' aria-describedby='session_menu_status'>"
-            + "<p class='session-menu-eyebrow'>Expedition</p><h1 id='session_menu_title'>Game menu</h1>"
-            + "<p id='session_menu_status' role='status'></p><div class='session-menu-actions'>"
-            + "<button type='button' class='workflow-button' id='session_menu_resume' autofocus>Resume <kbd>Esc</kbd></button>"
-            + "<button type='button' class='workflow-button' data-session-save='continue'>Save</button>"
-            + "<button type='button' class='workflow-button' data-session-save='quit'>Save and Quit</button>"
+            + "<header class='session-menu-header'><p class='session-menu-eyebrow'>Expedition paused</p>"
+            + "<h1 id='session_menu_title'>Game menu</h1><p id='session_menu_hero' class='session-menu-hero' hidden></p></header>"
+            + "<p id='session_menu_status' role='status'></p>"
+            + "<div class='session-menu-actions session-menu-primary-actions'>"
+            + "<button type='button' class='workflow-button session-menu-primary' id='session_menu_resume' autofocus>"
+            + "<span>Resume expedition</span><kbd>Esc</kbd></button>"
+            + "<button type='button' class='workflow-button' data-session-save='continue'><span>Save and keep playing</span></button>"
+            + "</div>"
+            + "<div class='session-menu-actions session-menu-secondary-actions' role='group' aria-label='Settings and help'>"
             + "<button type='button' class='workflow-button' data-session-graphics>Appearance &amp; graphics</button>"
-            + "<a class='workflow-button' href='/profile' target='_blank' rel='noopener'>Profile &amp; appearance ↗</a>"
+            + "<button type='button' class='workflow-button' data-session-hotkeys>Common hotkeys</button>"
+            + "<a class='workflow-button' href='/profile' target='_blank' rel='noopener'>Profile ↗</a>"
+            + "</div>"
+            + "<div class='session-menu-actions session-menu-leave' role='group' aria-label='Leave the expedition'>"
+            + "<button type='button' class='workflow-button session-menu-danger' data-session-save='quit'>Save and quit to lobby</button>"
+            + "<small class='session-menu-note'>Saves first. The party confirms before anyone leaves; you can resume later.</small>"
             + "</div></dialog>").appendTo("body")[0];
         $(dialog).on("keydown.sessionMenu keypress.sessionMenu keyup.sessionMenu", function (event) {
             event.stopPropagation();
         }).on("click", "#session_menu_resume", close)
             .on("click", "[data-session-graphics]", function () { close(); graphics.open(); })
+            .on("click", "[data-session-hotkeys]", function () {
+                if (!hotkeys || typeof hotkeys.open !== "function") return;
+                close(); hotkeys.open();
+            })
             .on("click", "[data-session-save]", function () {
                 if (library.save(this.getAttribute("data-session-save") === "quit")) close();
             });

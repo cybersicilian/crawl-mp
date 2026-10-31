@@ -77,7 +77,7 @@ function fixtureHtml() {
         'tileinfo-gui', 'tileinfo-icons', 'tileinfos', 'map_knowledge', 'view_data', 'environment-art', 'environment-materials', 'environment-sprites',
         'terrain-materials', 'native-tile-art', 'tile-art-direction', 'terrain-edges', 'environment-ground', 'status-icon-sizes', 'cell-renderer-glyphs',
         'cell-renderer-overlays', 'cell-renderer-layers', 'cell-renderer-textures', 'shell-animation', 'cell_renderer', 'chunked-view', 'sprite-reach',
-        'party-model', 'party-hover', 'traversal-effects', 'frame-update', 'chain-painter', 'chain-view', 'party-status-model', 'hero-feedback-model',
+        'party-model', 'encounter-banner', 'party-hover', 'traversal-effects', 'frame-update', 'chain-painter', 'chain-view', 'party-status-model', 'hero-feedback-model',
         'map-effect-layer', 'hero-feedback', 'encounter-feedback-model', 'encounter-feedback-paint', 'encounter-feedback', 'premium-effect-model',
         'premium-terrain-model', 'premium-region-model', 'premium-light-field', 'premium-terrain', 'premium-effects', 'premium-regions',
         'premium-movement', 'dungeon_renderer', 'premium-dungeon', 'display'];

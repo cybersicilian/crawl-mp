@@ -75,15 +75,17 @@ function (require, $, model, powerArt, powers, actions, keyboard, spellCost, ric
         }) || { icon: spell ? "spark" : entry.is_god ? "holy" : "trait", tone: "arcane" };
         var blocked = actions.powerReason(member, entry, kind);
         var row = powers.attach($("<article class='power-picker-card'></article>"), entry, spell ? "Spell" : "Ability")
-            .attr({ "data-power-id": entry.id, "data-tone": school.tone });
+            .attr({ "data-power-id": entry.id, "data-tone": school.tone }).toggleClass("is-blocked", Boolean(blocked));
         var symbol = $("<span class='power-picker-symbol' aria-hidden='true'></span>").append(powerArt.create(entry, kind));
         var copy = $("<div class='power-picker-copy'></div>");
         copy.append($("<div class='power-picker-card-title'></div>").append(
             $("<kbd class='folio-letter'></kbd>").text((spell ? entry.letter : entry.hotkey) || "—"),
             $("<h2></h2>").text(entry.name || (spell ? "Spell" : "Ability"))));
-        copy.append($("<p class='power-picker-school'></p>").text(spell
+        var school_line = $("<p class='power-picker-school'></p>").text(spell
             ? "Level " + model.display(entry.level) + " · " + model.display(entry.schools)
-            : entry.is_god ? "Divine invocation" : "Innate ability"));
+            : entry.is_god ? "Divine invocation" : "Innate ability");
+        if (entry.quick_cast === true) school_line.append($("<span class='power-picker-badge'></span>").text("Quick cast"));
+        copy.append(school_line);
         copy.append($("<div class='power-picker-description'></div>").html(richText.render(entry.desc || entry.description || "Description unavailable.")));
         var stats = $("<div class='power-picker-stats'></div>");
         function stat(label, value, className) {

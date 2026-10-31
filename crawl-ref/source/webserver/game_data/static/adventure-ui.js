@@ -1,5 +1,5 @@
-define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys"],
-function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys) {
+define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys", "./mission-bar", "./action-feedback"],
+function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys, missionBar, feedback) {
     "use strict";
     var statusObserver;
 
@@ -7,6 +7,7 @@ function ($, comm, chat, client, icons, polish, encyclopedia, library, controls,
         var dock = document.getElementById("dcss_quick_dock");
         if (!dock) return;
         hudInput.init();
+        feedback.init();
         encyclopedia.init();
         library.init();
         // Control activation stays local; hud-input routes gameplay keys before
@@ -65,6 +66,7 @@ function ($, comm, chat, client, icons, polish, encyclopedia, library, controls,
         hotkeys.init();
         cardDetails.mount();
         progress.init();
+        if (missionBar) missionBar.init();
         cardReadings.init();
         assimilation.init();
     }

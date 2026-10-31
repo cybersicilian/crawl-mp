@@ -1,5 +1,7 @@
-/* Absent seats are configuration, never placeholder players in a roster. */
-#lobby #party_slots_grid .party-slot-box[data-seat-active="false"],
+/* Absent seats are configuration, never placeholder players in a roster. The seat the
+   roster strip has in focus (.is-active-seat) still shows its editor so an open seat can be
+   given a mode there, not only from the company table's "Manage open seats". */
+#lobby #party_slots_grid .party-slot-box[data-seat-active="false"]:not(.is-active-seat),
 #lobby .has-saved-expedition :is(#party_slots_grid, .party-setup-tools, #party_composition_view) { display: none !important; }
 .party-unused-seats { padding: 12px 16px; border-top: 1px solid #9b805544; font: 12px/1.5 var(--tt-font-ui); }
 .party-unused-seats summary { color: #ddc291; cursor: pointer; }

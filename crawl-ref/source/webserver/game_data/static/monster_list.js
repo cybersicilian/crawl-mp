@@ -179,6 +179,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
                     // Do not carry an aura reading on a remembered map cell.
                     aura_radius: map_knowledge.get(entry.loc.x, entry.loc.y).t.bg.OOR
                         ? undefined : entry.mon.aura_radius,
+                    threat: Number.isInteger(entry.mon.threat) ? entry.mon.threat : undefined,
                     non_threatening: Boolean(is_excluded(entry.mon)), perception: "visible" };
             });
     }

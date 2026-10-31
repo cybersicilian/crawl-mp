@@ -1,11 +1,14 @@
 /* Visual collections share the folio palette and the existing symbol library. */
 @import url("equipment-paperdoll.css");
 .folio-equipment, #power_picker_dialog {
-    --folio-control-ink: #352c24;
-    --folio-control-muted: #73624e;
-    --folio-control-rule: #d5c5a8;
-    --folio-control-paper: #fbf7ec;
-    --folio-control-accent: #963c28;
+    --folio-control-ink: var(--ui-ink, #352c24);
+    --folio-control-muted: var(--ui-quiet, #73624e);
+    --folio-control-rule: var(--ui-rule, #d5c5a8);
+    --folio-control-paper: var(--ui-page-raised, #fbf7ec);
+    --folio-control-accent: var(--ui-chapter, #963c28);
+    --folio-control-action: var(--ui-action, #8e412e);
+    --folio-control-action-text: var(--ui-action-text, #fffaf0);
+    --folio-control-hover: var(--ui-hover, #e9dcc0);
     color: var(--folio-control-ink);
     font: 13px/1.45 var(--tt-font-ui, system-ui, sans-serif);
 }
@@ -72,27 +75,32 @@ dialog#party_inspector_modal .folio-equipment button:disabled, #power_picker_dia
 .folio-equipment :is(button, input, a):focus-visible, #power_picker_dialog :is(button, input, article):focus-visible { outline: 2px solid #9a632b; outline-offset: 3px; }
 .folio-empty { margin: 0; padding: 18px 12px; border: 1px dashed var(--folio-control-rule); border-radius: 5px; text-align: center; color: var(--folio-control-muted); }
 dialog#power_picker_dialog {
-    width: min(680px, calc(100vw - 32px)); max-height: min(86vh, 850px); padding: 0;
-    border: 1px solid #a88a5e; border-top: 4px solid #963c28; border-radius: 8px;
-    background: radial-gradient(ellipse at 20% 0, #fffdf5, transparent 80%), #f6f0e1;
-    box-shadow: 0 25px 90px #0009; overflow: hidden;
+    width: min(720px, calc(100vw - 32px)); max-height: min(88dvh, 850px); padding: 0;
+    border: 1px solid var(--ui-edge, #a88a5e); border-top: 4px solid var(--folio-control-accent); border-radius: 6px;
+    background: var(--ui-paper, radial-gradient(ellipse at 20% 0, #fffdf5, transparent 80%) #f6f0e1);
+    color: var(--folio-control-ink); box-shadow: 0 25px 90px #0009; overflow: hidden; color-scheme: var(--ui-page-scheme, light);
 }
 dialog#power_picker_dialog[open] { display: flex; flex-direction: column; }
 dialog#power_picker_dialog::backdrop { background: #18110cbb; backdrop-filter: blur(4px); }
 .power-picker-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--folio-control-rule); }
-.power-picker-eyebrow { display: none; }
-#power_picker_heading { margin: 0 0 2px; color: #963c28; font: 600 22px/1.15 var(--tt-font-title, Georgia, serif); text-shadow: none; }
+.power-picker-eyebrow { display: block; color: var(--folio-control-muted); font: 600 10px/1.5 var(--tt-font-ui, sans-serif); letter-spacing: .08em; text-transform: uppercase; }
+#power_picker_heading { margin: 0 0 2px; color: var(--folio-control-accent); font: 600 22px/1.15 var(--tt-font-title, Georgia, serif); text-shadow: none; }
 #power_picker_hero { margin: 0; color: var(--folio-control-muted); font-size: 11px; }
 .power-picker-header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-#power_picker_mp { color: #655082; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+#power_picker_mp { padding: 2px 9px; border: 1px solid var(--folio-control-rule); border-radius: 999px; background: var(--folio-control-paper); color: var(--ui-cold, #655082); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
 .power-picker-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 9px 14px 5px; }
 #power_picker_search { width: auto; }
 .power-picker-affordable { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #67563f; white-space: nowrap; cursor: pointer; }
 .power-picker-affordable input { accent-color: #795d91; width: 16px; height: 16px; margin: 0; }
 #power_picker_context { margin: 2px 14px 7px; color: var(--folio-control-muted); font-size: 11px; }
-#power_picker_context.is-blocked { color: #9b3828; }
+#power_picker_context.is-blocked { color: var(--ui-danger, #9b3828); }
 .power-picker-list { min-height: 0; overflow-y: auto; margin: 0 14px 10px; padding: 0; border: 1px solid var(--folio-control-rule); border-radius: 4px; scrollbar-color: #c1a67b #f6f0e1; }
-.power-picker-card { --power-tone: #796293; display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 8px 10px; border-bottom: 1px solid var(--folio-control-rule); background: #fffdf766; }
+.power-picker-card { --power-tone: #796293; display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 8px 10px; border-bottom: 1px solid var(--folio-control-rule); background: var(--folio-control-paper); }
+.power-picker-card:has(.power-picker-cast-button:focus-visible) { background: var(--folio-control-hover); }
+.power-picker-card.is-blocked { background: transparent; }
+.power-picker-card.is-blocked :is(h2, .power-picker-school, .power-picker-stats strong) { color: var(--folio-control-muted); }
+.power-picker-card.is-blocked .power-picker-symbol { opacity: .6; }
+.power-picker-badge { display: inline-block; margin-left: 8px; padding: 0 6px; border: 1px solid var(--folio-control-rule); border-radius: 999px; color: var(--ui-good, #2d633a); font: 700 9px/1.7 var(--tt-font-ui, sans-serif); letter-spacing: .06em; text-transform: uppercase; vertical-align: middle; }
 .power-picker-card:last-of-type { border-bottom: 0; }
 .power-picker-card[data-tone='fire'] { --power-tone: #ad5238; }
 .power-picker-card[data-tone='ice'] { --power-tone: #48828a; }
@@ -112,12 +120,13 @@ dialog#power_picker_dialog::backdrop { background: #18110cbb; backdrop-filter: b
 .power-picker-stats > span { display: inline-flex; align-items: baseline; gap: 4px; }
 .power-picker-stats small { color: #857059; font-size: 10px; }
 .power-picker-stats strong { font-size: 11px; font-weight: 600; }
-.power-picker-stats .is-risky strong { color: #a23d2c; }
+.power-picker-stats .is-risky strong { color: var(--ui-danger, #a23d2c); }
 .power-picker-cast { display: grid; grid-template-columns: auto auto; align-items: center; gap: 3px 8px; max-width: 140px; }
-.power-picker-cost { font-size: 12px; font-weight: 700; color: #725b87; text-align: center; }
-#power_picker_dialog .power-picker-cast-button { min-height: 30px; min-width: 65px; padding: 5px 9px; border: 1px solid #805236; border-radius: 5px; background: #8e412e; color: #fffaf0; font: 600 12px var(--tt-font-ui, sans-serif); box-shadow: inset 0 1px 0 #ffffff25; text-shadow: none; cursor: pointer; }
-#power_picker_dialog .power-picker-cast-button:not(:disabled):hover { background: #a04d35; color: #fffaf0; }
-.power-picker-blocked { grid-column: 1 / -1; color: #9a4938; font-size: 10px; line-height: 1.3; text-align: right; }
+.power-picker-cost { font-size: 12px; font-weight: 700; color: var(--ui-cold, #725b87); text-align: center; }
+#power_picker_dialog .power-picker-cast-button { min-height: 30px; min-width: 65px; padding: 5px 9px; border: 1px solid var(--folio-control-action); border-radius: 5px; background: var(--folio-control-action); color: var(--folio-control-action-text); font: 600 12px var(--tt-font-ui, sans-serif); box-shadow: inset 0 1px 0 #ffffff25; text-shadow: none; cursor: pointer; }
+#power_picker_dialog .power-picker-cast-button:not(:disabled):hover { background: color-mix(in srgb, var(--folio-control-action) 85%, #fff); color: var(--folio-control-action-text); }
+#power_picker_dialog .power-picker-cast-button:disabled { opacity: 1; background: var(--folio-control-paper); color: var(--folio-control-muted); border-color: var(--folio-control-rule); }
+.power-picker-blocked { grid-column: 1 / -1; color: var(--ui-danger, #9a4938); font-size: 10px; line-height: 1.3; text-align: right; }
 .power-picker-footer { display: flex; justify-content: space-between; gap: 12px; padding: 7px 14px; border-top: 1px solid var(--folio-control-rule); color: var(--folio-control-muted); font-size: 10px; }
 #power_picker_count { flex-shrink: 0; font-weight: 600; }
 @media (max-width: 600px) {

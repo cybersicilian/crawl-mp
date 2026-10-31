@@ -2,8 +2,10 @@ define(["jquery", "comm", "client", "./workflow-actions", "./minimap", "./power-
 function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, inspection, game, enums) {
     "use strict";
     var camera = null, compactChoice = null;
-    var labels = { o: "Explore", "\t": "Auto-fight", "5": "Rest", g: "Pick up",
-        i: "Inventory", z: "Cast", a: "Abilities", m: "Skills", A: "Traits", "%": "Resistances", "<": "Up", ">": "Down" };
+    var labels = { o: "Explore", "\t": "Fight", "5": "Rest", g: "Pick up",
+        i: "Inventory", z: "Cast", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "<": "Up stairs", ">": "Down stairs" };
+    // Keys the engine only accepts for the controlling hero's own turn.
+    var turnKeys = ["o", "\t", "5", "g"];
     var sectionKeys = { i: "equipment", I: "abilities", "@": "overview", X: "map",
         m: "skills", A: "mutations", "%": "overview", z: "abilities", a: "abilities" };
     function party() { return window.crawl_party && window.crawl_party.state; }
@@ -57,7 +59,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         if (!dock) return;
         document.body.classList.add("workflow-playing");
         var groups = {};
-        var groupLabels = { exploration: "Travel", combat: "Combat", character: "Hero", expedition: "Session" };
+        var groupLabels = { exploration: "Move", combat: "Act", character: "Inspect", expedition: "Expedition" };
         ["exploration", "combat", "character", "expedition"].forEach(function (key) {
             var group = dock.querySelector("[data-action-group='" + key + "']");
             if (!group) {
@@ -166,16 +168,26 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         // text. Refreshing controls must not replace it with a floor-wide turn.
         if (!state.multiplayer) {
             var queued = state.combat_locked && !state.simultaneous_turns && member.slot !== state.active_slot;
-            $("#party_banner_mode").text(queued ? "Waiting for P" + (state.active_slot + 1)
-                : state.combat_locked ? "Combat" : "Exploring");
+            $("#party_banner_mode").text(queued ? "Tactical Combat · Waiting for P" + (state.active_slot + 1)
+                : state.combat_locked ? "Tactical Combat" : "Free Explore");
         }
         var viewing = camera && state.members.find(function (hero) {
             return hero.pos && hero.pos.x === camera.x && hero.pos.y === camera.y;
         });
         $("#workflow_camera_context").text(viewing && viewing.slot !== member.slot ? "Viewing " + viewing.name
             : camera && member.pos && (camera.x !== member.pos.x || camera.y !== member.pos.y) ? "Camera away from " + member.name : "");
+        var turnReason = actions.reason(member);
         $("#dcss_quick_dock [data-dock-key]").each(function () {
             var key = this.getAttribute("data-dock-key"), reason = "";
+            if (turnKeys.includes(key)) {
+                // Existing action guards decide; the engine still validates every key.
+                this.disabled = Boolean(turnReason);
+                var turnTip = turnReason || this.getAttribute("data-tip-meta") || "";
+                if (this.getAttribute("data-turn-reason") !== turnReason) {
+                    this.setAttribute("data-turn-reason", turnReason);
+                    this.setAttribute("title", turnTip);
+                }
+            }
             if (key === "<" || key === ">") {
                 var direction = key === "<" ? "up" : "down";
                 reason = actions.reason(member) || (member.stairs === undefined ? "Stair information unavailable."

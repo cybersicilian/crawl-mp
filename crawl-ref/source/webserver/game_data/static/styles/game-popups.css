@@ -476,3 +476,50 @@ div.settings-buttons button {
     outline: none;
 }
 
+
+/* Compact prompts: text input, line prompts, seed dialog, progress. The
+   folio shell (menu-polish.css) narrows the frame when .workflow-prompt is set. */
+#ui-stack .workflow-prompt { gap: 0; }
+#ui-stack #input_dialog { min-width: 0; width: 100%; white-space: normal; line-height: 1.5; font-family: var(--menu-copy-font, sans-serif); }
+#ui-stack #input_dialog .workflow-prompt { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+#ui-stack .workflow-prompt-label { display: block; color: var(--menu-ink, #35291f); font: 600 15px/1.4 var(--menu-title-font, Georgia, serif); }
+#ui-stack .input_dialog_box { display: block; }
+#ui-stack .input_dialog_box input, #ui-stack .seed-input input {
+    width: 100%; box-sizing: border-box; min-height: 38px; padding: 6px 10px;
+    color: var(--menu-ink, #35291f); background: var(--menu-raised, #fff8e8); border: 1px solid var(--menu-edge, #93764e);
+    border-radius: 4px; font: 15px/1.4 var(--menu-mono-font, monospace);
+}
+#ui-stack .input_dialog_box input:focus, #ui-stack .seed-input input:focus { outline: 2px solid var(--menu-focus, #8b5918); outline-offset: 2px; border-color: var(--menu-edge, #93764e); background: var(--menu-raised, #fff8e8); }
+#ui-stack .input_skill_target input, #ui-stack .input_travel_depth input, #ui-stack .input_repeat input { max-width: 9em; }
+#ui-stack .workflow-prompt-keys { color: var(--menu-quiet, #6b5844); font: 11px/1.5 var(--menu-copy-font, sans-serif); }
+#ui-stack .workflow-prompt-keys kbd {
+    display: inline-flex; align-items: center; min-width: 20px; height: 20px; padding: 0 5px; margin-right: 3px;
+    border: 1px solid var(--menu-rule, #c6b38d); border-bottom-width: 2px; border-radius: 4px;
+    background: var(--menu-raised, #fff8e8); font: 11px/1 var(--menu-mono-font, monospace);
+}
+#game #ui-stack .workflow-prompt.msgwin-get-line > .header { margin-bottom: 12px; padding-bottom: 0 !important; border: 0; font-size: 17px; }
+#ui-stack .msgwin-get-line > input { width: 100%; box-sizing: border-box; }
+#ui-stack .msgwin-get-line .workflow-dialog-actions { justify-content: flex-end; }
+#game #ui-stack .workflow-prompt.seed-selection > .header { font-size: 20px; }
+#ui-stack .seed-selection p { margin: 0 0 12px; }
+#ui-stack .seed-selection .seed-input { flex-wrap: wrap; gap: 8px; white-space: normal; line-height: 1.5; }
+#ui-stack .seed-selection .seed-input > span:first-child { flex-basis: 100%; font-weight: 600; }
+#ui-stack .seed-selection .seed-input input { flex: 1 1 180px; width: auto; }
+#ui-stack .seed-selection .pregen-toggle { margin-top: 12px; }
+#ui-stack .seed-selection .pregen-toggle label { align-items: center; gap: 8px; }
+#ui-stack .button-bar.workflow-dialog-actions { justify-content: flex-end; }
+#ui-stack .workflow-dialog-actions > button { margin: 0; }
+#game #ui-stack .workflow-prompt.progress-bar > .header { justify-content: center; border: 0; padding-bottom: 0 !important; }
+#ui-stack .progress-bar > .bar-text { margin: 12px 0; padding: 8px 12px; border: 1px solid var(--menu-rule, #c6b38d); border-radius: 4px; background: var(--menu-raised, #fff8e8); font-family: var(--menu-mono-font, monospace); white-space: pre-wrap; }
+#ui-stack .progress-bar > .status { color: var(--menu-quiet, #6b5844); }
+#ui-stack .workflow-surface.workflow-prompt > .workflow-popup-help { display: none; }
+#ui-stack .workflow-prompt .workflow-popup-tools { margin-bottom: 10px; }
+#game #ui-stack .workflow-prompt .workflow-popup-hero { font-size: 10px; }
+/* The newgame chooser keeps its native grid but shares the shell material. */
+#ui-stack .newgame-choice .grid .button { color: var(--menu-ink, #35291f); border-radius: 3px; }
+#ui-stack .newgame-choice .grid .button.selected { background: var(--menu-hover, #e4d2ad); border: 1px solid var(--menu-chapter, #7a352d); }
+#ui-stack .newgame-choice .grid .button.selected:is(.hlc-7, .hlc-1, .hlc-2) { border-color: var(--menu-chapter, #7a352d); }
+#ui-stack .newgame-choice .descriptions { color: var(--menu-quiet, #6b5844); }
+#ui-stack input[type=checkbox] { accent-color: var(--menu-action, #5e452d); }
+#ui-stack .workflow-surface input[type=checkbox]:after { display: none; }
+#ui-stack .workflow-surface input[type=checkbox] { width: 18px; height: 18px; min-height: 0; padding: 0; appearance: auto; }

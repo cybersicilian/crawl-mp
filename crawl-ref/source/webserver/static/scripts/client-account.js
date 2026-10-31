@@ -6,6 +6,7 @@ define(["jquery", "comm"], function ($, comm) {
 
         function start_register()
         {
+            $("#register_message").html("");
             api.show_dialog("#register");
             $("#reg_username").focus();
         }
@@ -217,8 +218,40 @@ define(["jquery", "comm"], function ($, comm) {
             $("#reset_pw_message").html(data.reason);
         }
 
+        // Non-blocking confirmation feedback while typing; submission still
+        // performs the authoritative comparison above.
+        var confirmations = [
+            ["#reg_password", "#reg_repeat_password", "#reg_repeat_hint"],
+            ["#change_new_password", "#change_repeat_password", "#chpw_repeat_hint"],
+            ["#reset_pw_password", "#reset_pw_repeat_password", "#reset_pw_repeat_hint"]
+        ];
+
+        function bind_password_confirmation()
+        {
+            confirmations.forEach(function (pair) {
+                var first = $(pair[0]), repeat = $(pair[1]), hint = $(pair[2]);
+                if (!first.length || !repeat.length || !hint.length) return;
+                function refresh()
+                {
+                    var a = first.val() || "", b = repeat.val() || "";
+                    hint.removeClass("is-mismatch is-match");
+                    repeat.removeAttr("aria-invalid");
+                    if (!b) { hint.text(""); return; }
+                    if (a === b) { hint.addClass("is-match").text("Passwords match."); return; }
+                    if (a.indexOf(b) === 0) { hint.text("Keep typing…"); return; }
+                    hint.addClass("is-mismatch").text("These passwords don't match yet.");
+                    repeat.attr("aria-invalid", "true");
+                }
+                first.on("input", refresh);
+                repeat.on("input", refresh);
+            });
+        }
+
+        $(bind_password_confirmation);
+
         return {
             start_register: start_register,
+            bind_password_confirmation: bind_password_confirmation,
             cancel_register: cancel_register,
             register: register,
             register_failed: register_failed,

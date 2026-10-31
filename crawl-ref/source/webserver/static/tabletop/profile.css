@@ -1,24 +1,41 @@
 @import url("/static/styles/graphics-settings.css");
+/* Profile: texture gallery with a selected state; shares the account page chrome. */
 * { box-sizing: border-box; }
 :root { color-scheme: dark; }
-body { margin: 0; background: var(--art-night); color: var(--art-ivory); font: 16px/1.6 var(--art-copy); }
-main { max-width: 960px; padding: clamp(20px, 5vw, 60px); margin: auto; }
-a { color: var(--art-brass-light); text-underline-offset: 4px; }
-header { margin: 40px 0 28px; }
-h1 { font: 44px/1.15 var(--art-title); margin: 6px 0; color: var(--art-brass-light); overflow-wrap: anywhere; }
-p { color: var(--art-muted); }
-.eyebrow { color: var(--art-teal); font-size: 12px; letter-spacing: 2px; }
-section { background: var(--art-frame); border: 1px solid var(--art-brass-dim); border-radius: 8px; padding: clamp(18px, 4vw, 32px); }
+body { margin: 0; background: var(--ui-canvas, var(--art-night)); color: var(--ui-text, var(--art-ivory)); font: 16px/1.6 var(--ui-copy, var(--art-copy)); }
+main { max-width: 980px; padding: clamp(16px, 4vw, 48px) clamp(16px, 4vw, 40px) 60px; margin: auto; }
+a { color: var(--ui-accent-bright); text-underline-offset: 4px; }
+p { color: var(--ui-muted); }
+section { background: var(--ui-panel); border: 1px solid var(--ui-edge); border-radius: 8px; padding: clamp(18px, 4vw, 30px); }
 fieldset { min-width: 0; border: 0; padding: 0; margin: 0; }
-legend { font: 28px var(--art-title); padding: 0; color: var(--art-ivory); }
-.texture-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
-.texture-choice { display: flex; align-items: flex-start; gap: 12px; padding: 20px; border: 1px solid var(--art-brass-dim); border-radius: 6px; cursor: pointer; background: var(--art-recess); }
-.texture-choice:has(input:checked) { border-color: var(--art-teal); background: #21342e; box-shadow: inset 0 0 0 1px var(--art-teal); }
-.texture-choice input { flex: 0 0 auto; margin: 6px 0 0; width: 18px; height: 18px; accent-color: var(--art-teal); }
-.texture-choice strong { display: block; font: 23px var(--art-title); margin-bottom: 8px; }
-.texture-choice span span { display: block; color: var(--art-muted); font-size: 14px; }
-.texture-choice:focus-within { outline: 3px solid var(--art-brass-light); outline-offset: 4px; }
-.profile-save-status { min-height: 3.2em; color: var(--art-teal); margin-bottom: 0; }
-.profile-note { font-size: 13px; margin-bottom: 0; }
-@media (max-width: 540px) { .texture-choices { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
-@media (forced-colors: active) { .texture-choice:has(input:checked) { border: 3px solid Highlight; } }
+legend { font: 26px/1.2 var(--ui-title); padding: 0; color: var(--ui-text); }
+.profile-help { margin: 8px 0 0; font-size: 14px; }
+.texture-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 14px; margin-top: 20px; }
+.texture-choice { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px 12px 16px; border: 1px solid var(--ui-edge); border-radius: 6px; cursor: pointer; background: var(--ui-recess); color: var(--ui-text); }
+.texture-choice input { position: absolute; top: 14px; left: 14px; z-index: 1; width: 20px; height: 20px; margin: 0; accent-color: var(--ui-accent-bright); }
+.texture-choice:has(input:checked), .texture-choice.is-selected { border-color: var(--ui-accent-bright); background: var(--ui-raised); box-shadow: inset 0 0 0 1px var(--ui-accent-bright); }
+.texture-choice-art { display: grid; grid-template-columns: repeat(4, 1fr); height: 92px; border: 1px solid var(--ui-edge); border-radius: 4px; overflow: hidden; background: #1c1612; }
+.texture-choice-swatch { display: block; }
+/* Gallery art: a four-tile strip suggesting each pack's materials without fetching assets. */
+.texture-choice[data-texture-pack="classic"] .texture-choice-swatch:nth-child(1) { background: repeating-linear-gradient(0deg, #4a4138 0 7px, #5a4f44 7px 8px), #4a4138; }
+.texture-choice[data-texture-pack="classic"] .texture-choice-swatch:nth-child(2) { background: repeating-linear-gradient(90deg, #6b6b60 0 9px, #45453c 9px 11px); }
+.texture-choice[data-texture-pack="classic"] .texture-choice-swatch:nth-child(3) { background: #24415e; }
+.texture-choice[data-texture-pack="classic"] .texture-choice-swatch:nth-child(4) { background: #7a2e20; }
+.texture-choice[data-texture-pack="illustrated"] .texture-choice-swatch:nth-child(1) { background: radial-gradient(circle at 30% 30%, #6a5b48, #3c3128 70%); }
+.texture-choice[data-texture-pack="illustrated"] .texture-choice-swatch:nth-child(2) { background: linear-gradient(160deg, #8b8572, #4d4a3a 60%, #2f2c22); }
+.texture-choice[data-texture-pack="illustrated"] .texture-choice-swatch:nth-child(3) { background: linear-gradient(180deg, #4d8aa8, #1f4a68 65%, #163549); }
+.texture-choice[data-texture-pack="illustrated"] .texture-choice-swatch:nth-child(4) { background: radial-gradient(circle at 50% 70%, #f0a640, #a83a1c 55%, #4d1a12); }
+.texture-choice-copy { display: grid; gap: 4px; padding: 0 4px; }
+.texture-choice-copy strong { font: 600 18px/1.3 var(--ui-title); }
+.texture-choice-copy span { color: var(--ui-muted); font-size: 13px; line-height: 1.5; }
+.texture-choice-mark { position: absolute; top: 14px; right: 14px; padding: 2px 8px; border-radius: 999px; background: var(--ui-accent-bright); color: var(--ui-recess); font: 700 10px/1.7 var(--ui-copy); letter-spacing: .06em; text-transform: uppercase; visibility: hidden; }
+.texture-choice:has(input:checked) .texture-choice-mark, .texture-choice.is-selected .texture-choice-mark { visibility: visible; }
+.texture-choice:focus-within { outline: 3px solid var(--ui-accent-bright); outline-offset: 3px; }
+.profile-save-status { display: flex; align-items: center; gap: 8px; min-height: 24px; margin: 20px 0 0; color: var(--ui-accent-bright); font-size: 13px; }
+.profile-save-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ui-good); flex: 0 0 auto; }
+.profile-save-status[data-state="saving"]::before { background: var(--ui-warn); }
+.profile-save-status[data-state="error"] { color: var(--ui-danger); }
+.profile-save-status[data-state="error"]::before { background: var(--ui-danger); }
+.profile-note { font-size: 13px; margin: 8px 0 0; }
+@media (max-width: 540px) { h1 { font-size: 30px; } .texture-choice-art { height: 72px; } }
+@media (forced-colors: active) { .texture-choice:has(input:checked), .texture-choice.is-selected { border: 3px solid Highlight; } .texture-choice-art, .texture-choice-swatch { forced-color-adjust: none; } }

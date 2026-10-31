@@ -76,3 +76,57 @@
 @media (pointer: coarse) {
     #normal .party-card-actions .party-mini-btn.hud-iconified { width: 28px; min-width: 28px; height: 28px; min-height: 28px; padding: 4px; }
 }
+
+/* ---- Projected turn-order rail at the top of the party panel ---- */
+#normal #party_turn_order {
+    display: flex; flex-direction: column; gap: 4px; box-sizing: border-box; width: 100%; min-width: 0;
+    margin: 0 0 6px; padding: 6px var(--tt-hud-gutter, 8px) 7px; border: 1px solid var(--ui-gilt-deep, var(--ui-edge, #8c714c));
+    border-radius: 4px; background: var(--ui-leather, linear-gradient(120deg, #1d2226, #141a1f));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #d9b56a) 30%, transparent), inset 0 1px 0 #e8c9910a;
+}
+#normal #party_turn_order[hidden] { display: none; }
+/* Illuminated heading: small caps with an engraved rule running to the edge. */
+.turn-order-title { display: flex; align-items: center; gap: 8px; font: 600 var(--tt-type-caption, 10px)/1.2 var(--tt-font-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-gilt, var(--ui-muted, #c0b296)); }
+.turn-order-title::after { content: ""; flex: 1 1 auto; height: 1px; min-width: 16px; background: var(--ui-engraved, linear-gradient(90deg, var(--ui-edge, #8c714c), transparent)); opacity: .8; }
+#party_turn_order[data-timing-known='false'] .turn-order-title::before { content: "timing unknown"; order: 2; text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--ui-muted, #c0b296); }
+/* Entries wrap onto further rows so every hero name stays whole; only a long rail scrolls. */
+.turn-order-track { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; max-height: 94px; overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; padding-bottom: 1px; }
+#normal .turn-order-entry {
+    --slot-accent: #c9a56a;
+    display: inline-flex; flex: 1 1 auto; align-items: center; gap: 5px; box-sizing: border-box;
+    max-width: 100%; min-width: 0; min-height: 28px; padding: 3px 7px 3px 4px;
+    border: 1px solid #8c714c66; border-radius: 14px; background: #23282c; color: var(--ui-text, #f0e5cd);
+    font: 10.5px/1.2 var(--tt-font-ui); text-align: left; cursor: pointer;
+}
+#normal .turn-order-entry:hover { border-color: var(--ui-accent, #c39a5a); background: #2e3338; }
+#normal .turn-order-entry:focus-visible { outline: 2px solid #f4d9a0; outline-offset: 1px; }
+.turn-order-marker {
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; box-sizing: border-box;
+    min-width: 20px; height: 20px; padding: 0 3px; border-radius: 50%; border: 1px solid var(--slot-accent);
+    background: #11161a; color: var(--slot-accent); font: 700 9px/1 var(--tt-font-mono);
+}
+.turn-order-marker .tt-icon { width: 14px; height: 14px; margin: 0; }
+.turn-order-entry[data-kind='enemy'] .turn-order-marker { border-color: #a65c52; color: #f0a594; }
+.turn-order-name { flex: 1 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.turn-order-reading { flex: 0 0 auto; font: 600 9.5px/1 var(--tt-font-mono); color: #d9d8c8; }
+.turn-order-entry[data-timing-state='ready'] .turn-order-reading { color: #b5dfb1; }
+.turn-order-entry[data-timing-state='recovering'] .turn-order-reading { color: #f4c474; }
+.turn-order-entry:is([data-timing-state='unknown'], [data-timing-state='remembered'], [data-timing-state='independent']) { border-style: dashed; }
+.turn-order-entry:is([data-timing-state='unknown'], [data-timing-state='remembered'], [data-timing-state='independent']) .turn-order-reading { color: #a8abb5; }
+#normal .turn-order-entry[data-active='true'] { border-color: var(--ui-gilt, var(--ui-accent-bright, #f0d29a)); background: linear-gradient(145deg, #4d4126, #2a2a22); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #f8d993) 45%, transparent), 0 0 8px var(--ui-gilt-glow, #f2d58a40); }
+#normal .turn-order-entry[data-position='1'] .turn-order-marker { box-shadow: 0 0 0 1px color-mix(in srgb, var(--slot-accent) 55%, transparent), 0 0 6px color-mix(in srgb, var(--slot-accent) 45%, transparent); }
+#normal .turn-order-entry[data-acting='true'] .turn-order-marker { box-shadow: 0 0 0 2px #f4d99766; }
+#normal .turn-order-entry[data-queued='true'] .turn-order-marker { border-color: #34e2e2; }
+.turn-order-entry[data-kind='enemy'][data-threat='trivial'] .turn-order-name { color: var(--ui-threat-trivial, #b9c2b4); }
+.turn-order-entry[data-kind='enemy'][data-threat='easy'] .turn-order-name { color: var(--ui-threat-easy, #d6d2b4); }
+.turn-order-entry[data-kind='enemy'][data-threat='tough'] .turn-order-name { color: var(--ui-threat-tough, #f2c784); }
+.turn-order-entry[data-kind='enemy'][data-threat='nasty'] .turn-order-name { color: var(--ui-threat-nasty, #f49b86); font-weight: 600; }
+.turn-order-entry[data-kind='enemy'][data-threat='invisible'] .turn-order-name { color: var(--ui-threat-invisible, #cdb2e6); }
+.workflow-compact-roster #normal #party_turn_order { padding: 4px var(--tt-hud-gutter, 8px) 5px; margin-bottom: 6px; }
+.workflow-compact-roster #normal .turn-order-entry { min-height: 24px; }
+@media (pointer: coarse) {
+    #normal .turn-order-entry { min-height: 32px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    #normal .turn-order-entry { transition: border-color 120ms ease, background-color 120ms ease; }
+}

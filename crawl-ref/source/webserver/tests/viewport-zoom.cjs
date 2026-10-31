@@ -34,8 +34,8 @@ function fixture(ratio) {
         './view_data': { place_cursor(type, location) { cursor = location; } },
         './game-context': { can_target: () => false },
         './party-hover': { attach: noop, point: noop }, './traversal-effects': { attach: noop },
-        './shell-animation': { attach: noop }, './chain-view': { attach: noop }, './planned-route': { attach: noop },
-        './hero-feedback': { attach: noop }, './encounter-feedback': { attach: noop }, './premium-movement': { attach: noop }, './premium-effects': { animated: () => false }, './premium-regions': { animated: () => false } };
+        './shell-animation': { attach: noop }, './planned-route': { attach: noop },
+        './hero-feedback': { attach: noop }, './chain-view': { attach: noop }, './encounter-banner': { attach: noop }, './encounter-feedback': { attach: noop }, './premium-movement': { attach: noop }, './premium-effects': { animated: () => false }, './premium-regions': { animated: () => false } };
     for (const name of ['util', 'dungeon_renderer']) {
         vm.runInNewContext(fs.readFileSync(path.join(root, name + '.js'), 'utf8'), {
             window: { devicePixelRatio: ratio }, document, clearTimeout,

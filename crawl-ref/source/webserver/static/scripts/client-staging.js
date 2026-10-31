@@ -45,24 +45,20 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                 lobbyTools.render(myRoom, state.current_user);
                 $("#party_slots_grid").attr("data-saved-expedition", String(!!myRoom.resume_id));
                 var ffOn = myRoom.friendly_fire !== false;
-                var roomSeasonings = Array.isArray(myRoom.seasonings) ? myRoom.seasonings : [];
+                // A saved expedition keeps its campaign rules; only a fresh party's host edits them.
                 modifiers.render(myRoom, isHost && !myRoom.resume_id);
                 $("#btn_toggle_party_ff")
-                    .text(ffOn ? "[FF: Spicy (ON)]" : "[FF: Mild (OFF)]")
+                    .text(ffOn ? "Friendly fire on" : "Friendly fire off")
+                    .attr("aria-pressed", String(ffOn))
                     .prop("disabled", !isHost || !!myRoom.resume_id);
 
                 $("#party_room_title_text").text(myRoom.name || (myRoom.host + "'s Expedition"));
                 var seedNote = myRoom.seed ? (" · Seed #" + myRoom.seed) : "";
-                $("#party_room_host_text").text("Head cook: " + myRoom.host + seedNote);
+                $("#party_room_host_text").text("Host: " + myRoom.host + seedNote);
                 $("#party_room_ff_badge")
-                    .text(ffOn ? "[SPICY POT · FF ON]" : "[MILD POT · FF OFF]")
-                    .css("color", ffOn ? "#ef2929" : "#8ae234");
-
-                $("#party_seasonings_bar .party-seasoning-chip").each(function () {
-                    var key = $(this).attr("data-seasoning");
-                    var on = roomSeasonings.indexOf(key) !== -1;
-                    $(this).attr("aria-pressed", String(on)).prop("disabled", !isHost || !!myRoom.resume_id);
-                });
+                    .text(ffOn ? "On" : "Off")
+                    .toggleClass("is-on", ffOn);
+                $("#party_room_view").toggleClass("is-host", !!isHost).toggleClass("is-guest", !isHost);
 
                 var slots = myRoom.slots || [];
                 var multiplayer = myRoom.multiplayer === true;
@@ -101,35 +97,37 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                         "data-seat-editable": String(canEdit), "data-seat-host": String(isHost),
                         "data-saved-stats": JSON.stringify(slotData.saved_stats || {}) });
 
-                    var occText = "Waiting for a friend";
-                    var occColor = "#888a85";
+                    var me = state.current_user.toLowerCase();
+                    var owner = (slotData.username || (s === 0 ? myRoom.host : "") || "").toLowerCase();
+                    var occText = "Waiting for a friend", seatKind = "open";
                     if (s === 0)
                     {
-                        occText = "Hosted by " + (slotData.username || myRoom.host);
-                        occColor = "#fce94f";
+                        seatKind = owner === me ? "you" : "host";
+                        occText = owner === me ? "You · Host" : "Hosted by " + (slotData.username || myRoom.host);
                     }
                     else if (slotData.state === "player" && slotData.username)
                     {
-                        occText = "Played by " + slotData.username;
-                        occColor = "#8ae234";
+                        seatKind = owner === me ? "you" : "friend";
+                        occText = owner === me ? "You" : "Played by " + slotData.username;
                     }
                     else if (slotData.state === "ai")
                     {
-                        occText = "Jev AI · Actions and prompt choices";
-                        occColor = "#34e2e2";
+                        seatKind = "ai";
+                        occText = "Jev AI · Chooses actions and prompt answers";
                     }
                     else if (slotData.state === "companion")
                     {
-                        occText = multiplayer ? "Solo companion · Excluded from multiplayer"
-                            : "Solo companion · A friend can claim this seat";
-                        occColor = "#34e2e2";
+                        seatKind = "companion";
+                        occText = multiplayer ? "Companion · Excluded from multiplayer"
+                            : "Companion · A friend can claim this seat";
                     }
                     else if (slotData.state === "closed")
                     {
+                        seatKind = "closed";
                         occText = "Not joining this expedition";
-                        occColor = "#555555";
                     }
-                    $box.find(".party-slot-occupant").text(occText).css("color", occColor);
+                    $box.attr("data-seat-kind", seatKind).attr("data-seat-owner", slotData.username || "");
+                    $box.find(".party-slot-occupant").text(occText);
 
                     $box.find(".party-mode-btn").each(function () {
                         var btnMode = $(this).attr("data-mode");
@@ -189,6 +187,8 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                     $box.find(".party-archetype-btn").prop("disabled", !canEdit);
                 }
 
+                $("#party_room_hero_count").text(activeCount + (activeCount === 1 ? " hero" : " heroes")
+                    + (openCount ? " · " + openCount + (openCount === 1 ? " open seat" : " open seats") : ""));
                 if (isHost)
                 {
                     $("#btn_launch_party_room")
@@ -197,7 +197,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                         .addClass("dcss-btn-primary");
                     $("#party_room_status_hint").text(waitingCount
                         ? waitingCount + (waitingCount === 1 ? " hero is" : " heroes are") + " not ready. Check with your party before beginning."
-                        : activeCount + (activeCount === 1 ? " hero ready" : " heroes ready") + (openCount ? " · " + openCount + (openCount === 1 ? " seat open for a friend." : " seats open for friends.") : " · Your party is ready to descend."));
+                        : activeCount + (activeCount === 1 ? " hero ready" : " heroes ready") + (openCount ? " · " + openCount + (openCount === 1 ? " seat open for a friend." : " seats open for friends.") : " · Ready to descend."));
                 }
                 else
                 {
@@ -205,7 +205,7 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                         .text("Toggle ready")
                         .removeClass("dcss-btn-primary")
                         .addClass("dcss-btn-gold");
-                    $("#party_room_status_hint").text("Waiting for Host (" + myRoom.host + ") to launch the expedition...");
+                    $("#party_room_status_hint").text("Waiting for the host (" + myRoom.host + ") to begin the expedition.");
                 }
             }
             else
@@ -216,9 +216,14 @@ define(["jquery", "comm", "character-guide", "client-staging-weapons", "characte
                 $("#party_room_view").hide();
                 $("#party_rooms_list_view").show();
                 $("#btn_create_party_room").show();
-                $("#btn_toggle_party_ff").text("[FF: Classic | Safe]").prop("disabled", false);
+                $("#btn_toggle_party_ff").text("Friendly fire on").attr("aria-pressed", "true").prop("disabled", false);
 
                 rooms.render(state.party_rooms);
+                // The home screen's friend cards read each room's seed from its row.
+                (state.party_rooms || []).forEach(function (rm) {
+                    $("#party_rooms_tbody .btn-join-party-room[data-room-id='" + rm.room_id + "']").closest("tr")
+                        .attr("data-room-seed", rm.seed || rm.starting_seed || "");
+                });
             }
         }
 

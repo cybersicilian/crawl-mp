@@ -6,6 +6,8 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
     var observedEnemies = new Set();
     var unsubscribe;
     var sequence = 0;
+    // Presentation only: how many actions the current Go started with.
+    var runTotal = 0;
     function state() { return window.crawl_party && window.crawl_party.state; }
     function hero() { var data = state(); return data && (data.members || []).find(function (member) { return member.slot === party.controlledSlot(data); }); }
     function tactical() {
@@ -66,6 +68,21 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
             expected: attack ? from : target, from: from, kind: attack ? "attack" : "move",
             packet: { keycode: keys.codes["Numpad" + direction.numpad] || direction.key.charCodeAt(0) }, msg: "key" };
     }
+    // Names come from the hero's own native spell/ability lists; letters stay the command.
+    function powerLabel(packet) {
+        var member = hero(), list = member && (packet.kind === "spell" ? member.spells : member.abilities);
+        var power = Array.isArray(list) && list.find(function (entry) { return entry && entry.letter === packet.letter; });
+        return (packet.kind === "spell" ? "Cast " : "Use ") + (power && power.name ? power.name : packet.letter);
+    }
+    // Estimated aut from the hero's native delays; powers are priced by the engine.
+    function cost(entry) {
+        var member = hero() || {};
+        if (entry.kind === "move") return Number.isFinite(member.move_aut) && member.move_aut > 0 ? member.move_aut : 10;
+        if (entry.kind === "attack") return Number.isFinite(member.atk_aut) && member.atk_aut > 0 ? member.atk_aut : 10;
+        if (entry.kind === "wait") return 10;
+        return null;
+    }
+    function startRun() { runTotal = queue.length + (pending ? 1 : 0); }
     function intercept(msg, packet) {
         if (sending || !active) return true;
         var keycode = msg === "key" ? packet.keycode : msg === "input"
@@ -90,8 +107,7 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
             }
         }
         if (msg === "power_action") {
-            add([{ label: packet.kind === "spell" ? "Cast " + packet.letter : "Ability " + packet.letter,
-                kind: "power", msg: msg, packet: Object.assign({}, packet) }]); return false;
+            add([{ label: powerLabel(packet), kind: "power", msg: msg, packet: Object.assign({}, packet) }]); return false;
         }
         return true;
     }
@@ -107,7 +123,7 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
         }) }] : routes.route(from, target, passable, 32 - queue.length - (pending ? 1 : 0));
         if (!route) { status = "No safe known route within 32 steps"; emit(); return true; }
         var entries = route.map(function (step) { var entry = directionEntry(step.direction, from); from = step.point; return entry; });
-        if (add(entries) && !event.shiftKey && !queueing) { running = true; advance(); }
+        if (add(entries) && !event.shiftKey && !queueing) { running = true; startRun(); advance(); }
         event.preventDefault(); return true;
     }
     function advance() {
@@ -165,36 +181,90 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
         var member = hero();
         return { origin: member && member.pos, pending: pending, entries: queue.slice(), running: running, queueing: queueing, status: status };
     }
-    function render() {
-        var root = document.getElementById("tactical_planner"); if (!root) return;
-        var data = state(), supported = Boolean(data && data.plan_acknowledgements === true);
-        root.hidden = !hero() || client.is_watching();
-        root.querySelector("[data-plan='toggle']").disabled = !supported;
-        root.querySelector("[data-plan='toggle']").setAttribute("aria-pressed", String(queueing));
-        root.querySelector("[data-plan='run']").textContent = running ? "Pause" : "Go";
-        root.querySelector("[data-plan='run']").disabled = !queue.length;
-        var label = !supported ? "Action queues need an updated engine" : status || (pending ? "Resolving " + pending.label : running ? "Executing in turn order"
-            : queueing ? "Choose moves, waits or powers · Shift-click adds waypoints" : "Shift-click a route, or Plan actions");
-        root.querySelector(".plan-status").textContent = label;
-        var list = root.querySelector(".plan-actions"), signature = JSON.stringify(queue);
+    // Interruptions the engine or the map forced; Go resumes, Clear discards.
+    function paused() { return /New enemy|Route changed|interrupted|Awaiting|rejected|did not spend|Connection/.test(status); }
+    function phase(supported) {
+        if (!supported) return "unsupported";
+        if (paused() && (queue.length || pending)) return "paused";
+        if (running || pending) return "running";
+        if (queueing) return "planning";
+        return queue.length ? "ready" : "idle";
+    }
+    function span(className, text) {
+        var node = document.createElement("span"); node.className = className; node.textContent = text; return node;
+    }
+    function renderChips(root, member) {
+        var list = root.querySelector(".plan-actions");
+        var signature = JSON.stringify([queue, member && member.move_aut, member && member.atk_aut]);
         if (list.dataset.signature === signature) return;
         list.dataset.signature = signature; list.replaceChildren();
         queue.forEach(function (entry, index) {
-            var button = document.createElement("button"); button.type = "button";
-            button.textContent = (index + 1) + " " + entry.label + " ×";
-            button.setAttribute("aria-label", "Remove action " + (index + 1) + ": " + entry.label);
+            var item = document.createElement("li"), button = document.createElement("button"), aut = cost(entry);
+            item.className = "plan-chip-item"; button.type = "button"; button.className = "plan-chip";
+            button.dataset.kind = entry.kind;
+            button.append(span("plan-chip-index", String(index + 1)), span("plan-chip-label", entry.label),
+                span("plan-chip-cost", aut === null ? "engine" : aut + " aut"), span("plan-chip-remove", "×"));
+            button.lastChild.setAttribute("aria-hidden", "true");
+            button.setAttribute("aria-label", "Remove action " + (index + 1) + ": " + entry.label
+                + (aut === null ? "" : ", about " + aut + " aut") + (entry.expected ? ". Later steps are removed too" : ""));
+            button.title = entry.expected ? "Remove this step and the steps after it" : "Remove this action";
             button.addEventListener("click", function () {
                 // Removing a movement invalidates the origin of later steps.
                 if (entry.expected) queue.splice(index); else queue.splice(index, 1);
                 running = false; emit();
-            }); list.appendChild(button);
+            });
+            item.appendChild(button); list.appendChild(item);
         });
+    }
+    function render() {
+        var root = document.getElementById("tactical_planner"); if (!root) return;
+        var data = state(), member = hero(), supported = Boolean(data && data.plan_acknowledgements === true);
+        root.hidden = !member || client.is_watching();
+        var mode = phase(supported), remaining = queue.length + (pending ? 1 : 0);
+        if (remaining > runTotal) runTotal = remaining;
+        if (!remaining) runTotal = 0;
+        root.dataset.planState = mode;
+        root.querySelector(".plan-hero").textContent = member ? member.name : "";
+        var known = 0, unknown = 0;
+        queue.forEach(function (entry) { var aut = cost(entry); if (aut === null) unknown++; else known += aut; });
+        root.querySelector(".plan-count").textContent = queue.length ? queue.length + (queue.length === 1 ? " action" : " actions") : "Empty";
+        root.querySelector(".plan-cost").textContent = queue.length ? "≈ " + known + (unknown ? " + ?" : "") + " aut" : "";
+        var toggle = root.querySelector("[data-plan='toggle']"), run = root.querySelector("[data-plan='run']");
+        toggle.disabled = !supported; toggle.setAttribute("aria-pressed", String(queueing));
+        run.textContent = running ? "Stop" : "Go"; run.disabled = !queue.length && !running;
+        run.classList.toggle("plan-primary", !running); run.classList.toggle("plan-stop", running);
+        run.setAttribute("aria-label", running ? "Stop after the current action" : "Go: execute the queue in turn order");
+        root.querySelector("[data-plan='wait']").disabled = !supported;
+        root.querySelector("[data-plan='clear']").disabled = !queue.length && !pending && !queueing;
+        var progress = root.querySelector(".plan-progress"), done = Math.max(0, runTotal - remaining);
+        progress.hidden = !(running || pending) || !runTotal;
+        progress.querySelector(".plan-progress-fill").style.width = runTotal ? Math.round(100 * done / runTotal) + "%" : "0%";
+        progress.setAttribute("aria-valuenow", String(done)); progress.setAttribute("aria-valuemax", String(runTotal));
+        progress.querySelector(".plan-progress-text").textContent = runTotal ? "Step " + Math.min(runTotal, done + 1) + " of " + runTotal : "";
+        var callout = root.querySelector(".plan-callout");
+        callout.hidden = !paused(); callout.textContent = paused() ? status : "";
+        var label = !supported ? "Action queues need an updated engine" : mode === "paused" ? "Paused · Go resumes, Clear discards"
+            : status || (pending ? "Resolving " + pending.label : running ? "Executing in turn order"
+            : queueing ? "Choose moves, waits or powers · Shift-click adds waypoints" : "Shift-click a route, or Plan actions");
+        root.querySelector(".plan-status").textContent = label;
+        renderChips(root, member);
     }
     function init() {
         if (unsubscribe) unsubscribe();
         unsubscribe = comm.register_send_filter(intercept);
-        active = true; reset(); $("#tactical_planner").remove();
-        var root = $("<section id='tactical_planner' aria-label='Action queue'><div class='plan-tools'><button type='button' data-plan='toggle' aria-pressed='false'>Plan</button><button type='button' data-plan='run'>Go</button><button type='button' data-plan='wait'>Wait +</button><button type='button' data-plan='clear'>Clear · Esc</button></div><div class='plan-actions'></div><small class='plan-status' role='status'></small></section>");
+        active = true; runTotal = 0; reset(); $("#tactical_planner").remove();
+        var root = $("<section id='tactical_planner' aria-label='Action queue' data-plan-state='idle'>"
+            + "<header class='plan-header'><span class='plan-title'>Plan for <b class='plan-hero'></b></span>"
+            + "<span class='plan-meta'><span class='plan-count'></span><span class='plan-cost'></span></span></header>"
+            + "<ol class='plan-actions' aria-label='Queued actions'></ol>"
+            + "<div class='plan-callout' role='alert' hidden></div>"
+            + "<div class='plan-progress' role='progressbar' aria-label='Queue progress' aria-valuemin='0' hidden>"
+            + "<span class='plan-progress-fill'></span><span class='plan-progress-text'></span></div>"
+            + "<div class='plan-tools'><button type='button' data-plan='toggle' aria-pressed='false' title='Collect moves, waits and powers without acting'>Plan</button>"
+            + "<button type='button' data-plan='wait' title='Queue a wait (10 aut)'>Wait</button>"
+            + "<button type='button' data-plan='run' class='plan-primary'>Go</button>"
+            + "<button type='button' data-plan='clear' class='plan-quiet'>Clear <kbd>Esc</kbd></button></div>"
+            + "<small class='plan-status' role='status'></small></section>");
         root.appendTo("#party_hud").on("keydown keypress keyup", function (event) { event.stopPropagation(); });
         root.on("click", "[data-plan]", function () {
             var operation = this.dataset.plan;
@@ -203,6 +273,7 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
             if (operation === "wait" && canPlan()) add([{ label: "Wait", kind: "wait", msg: "key", packet: { keycode: 46 } }]);
             if (operation === "run") {
                 running = !running; queueing = false; if (!pending) status = "";
+                if (running) startRun();
                 observedEnemies = new Set((state().enemy_initiative || []).map(function (enemy) { return enemy.id || enemy.name; }));
             }
             if (operation === "toggle") $(document).trigger("game_actions_changed");

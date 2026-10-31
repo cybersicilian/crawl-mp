@@ -1,0 +1,443 @@
+/* War-table gameplay shell: mission bar, command dock, quickbar, direction pad.
+   Loaded last so it settles the layered HUD files. Canvas pixels, pointer
+   conversion and every native action stay with the engine and renderer. */
+#normal {
+    --shell-panel: var(--ui-panel, #1b2024);
+    --shell-raised: var(--ui-raised, #2a3136);
+    --shell-recess: var(--ui-recess, #0f1316);
+    --shell-edge: var(--ui-edge, #8c714c);
+    --shell-rule: color-mix(in srgb, var(--shell-edge) 38%, transparent);
+    --shell-text: var(--ui-text, #ece2cc);
+    --shell-muted: var(--ui-muted, #b9ad94);
+    --shell-accent: var(--ui-accent, #c39a5a);
+    --shell-accent-bright: var(--ui-accent-bright, #f0d29a);
+    --shell-hero: var(--ui-hero, #f5c96a);
+    --shell-explore: var(--ui-mode-explore, #8fcfae);
+    --shell-combat: var(--ui-mode-combat, #ff8f80);
+    --shell-danger: var(--ui-danger, #c0392b);
+    --shell-action: var(--ui-action, #70442c);
+    --shell-action-text: var(--ui-action-text, #fff5df);
+    --shell-font: var(--tt-font-ui, "DejaVu Sans", system-ui, sans-serif);
+    --shell-mono: var(--tt-font-mono, monospace);
+}
+
+/* ---- Mission bar -------------------------------------------------------- */
+#normal #party_turn_banner.mission-bar {
+    display: flex; flex-wrap: nowrap; align-items: center; gap: 6px 10px;
+    position: relative; inset: auto; transform: none; width: 100%; max-width: none;
+    box-sizing: border-box; min-height: 44px; padding: 5px 12px 6px;
+    background: var(--ui-leather, linear-gradient(180deg, var(--shell-raised), var(--shell-panel)));
+    border: 0; border-bottom: 1px solid var(--shell-rule); border-radius: 0;
+    box-shadow: inset 0 -1px 0 #0009, inset 0 1px 0 #ffffff0c; color: var(--shell-text);
+    font: 12px/1.3 var(--shell-font); white-space: normal; text-shadow: none;
+}
+#normal #party_turn_banner.mission-bar::before { content: none; }
+/* Engraved gilt hairline along the bottom edge; red in combat. */
+#normal #party_turn_banner.mission-bar::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none;
+    background: var(--ui-engraved, linear-gradient(90deg, transparent, var(--shell-edge), transparent));
+}
+#normal #party_turn_banner[data-mode="combat"] {
+    box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--shell-combat) 70%, transparent), inset 0 1px 0 #ffffff0c;
+}
+#normal #party_turn_banner[data-mode="combat"]::after { background: linear-gradient(90deg, transparent, var(--shell-combat), transparent); }
+.mission-label {
+    font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; text-transform: uppercase;
+    color: var(--shell-muted); white-space: nowrap;
+}
+#normal #party_turn_banner .party-banner-label { font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; color: var(--shell-muted); }
+/* Vertical rules organise the strip into hero · mode · turn · facts · tools. */
+#normal #party_turn_banner.mission-bar > :is(.mission-mode, #mission_clock, .mission-status, .mission-tools) { position: relative; }
+#normal #party_turn_banner.mission-bar > :is(.mission-mode, #mission_clock, .mission-status, .mission-tools)::before {
+    content: ""; position: absolute; left: -5px; top: 50%; width: 1px; height: 22px; transform: translateY(-50%);
+    background: linear-gradient(180deg, transparent, var(--shell-rule) 20%, var(--shell-rule) 80%, transparent); pointer-events: none;
+}
+#normal #party_turn_banner.mission-bar > .mission-tools::before { left: -6px; }
+.mission-hero { display: inline-flex; align-items: center; gap: 8px; flex: 0 1 auto; min-width: 0; }
+.mission-portrait {
+    --mission-accent: var(--shell-hero);
+    position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    width: 34px; height: 34px; overflow: hidden; box-sizing: border-box;
+    border: 1px solid var(--mission-accent); border-radius: 45% 45% 5px 5px;
+    background: radial-gradient(ellipse at 50% 35%, #58534266, var(--shell-recess) 75%);
+    box-shadow: inset 0 0 0 1px #0b0f14, inset 0 0 0 2px color-mix(in srgb, var(--ui-gilt, var(--mission-accent)) 40%, transparent),
+        0 0 6px color-mix(in srgb, var(--mission-accent) 35%, transparent);
+}
+.mission-portrait img { width: 28px; height: 28px; object-fit: contain; image-rendering: pixelated; }
+.mission-portrait > .tt-icon { width: 16px; height: 16px; color: var(--shell-accent-bright); }
+.mission-portrait small {
+    position: absolute; right: 1px; bottom: 1px; padding: 0 2px; border-radius: 2px;
+    background: #0b0f14d9; color: var(--mission-accent); font: 700 8px/1.2 var(--shell-font);
+}
+.mission-hero-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+#normal #party_turn_banner #party_banner_who {
+    max-width: none; min-width: 7ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font: 600 13px/1.25 var(--shell-font); letter-spacing: .01em; text-shadow: none;
+}
+#normal #party_banner_dot { display: none !important; }
+.mission-mode { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+/* The pill names the mode itself; a separate "Mode" caption only spent width. */
+.mission-mode > .mission-label { display: none; }
+#normal #party_turn_banner #party_banner_mode {
+    display: inline-flex; align-items: center; gap: 5px; box-sizing: border-box; min-height: var(--tt-hud-row, 28px); padding: 2px 10px;
+    border: 1px solid color-mix(in srgb, var(--shell-explore) 55%, transparent); border-radius: 999px;
+    background: color-mix(in srgb, var(--shell-explore) 16%, transparent); color: var(--shell-explore);
+    font: 600 11px/1.3 var(--shell-font); letter-spacing: .02em; white-space: nowrap; text-shadow: none;
+}
+#normal #party_turn_banner #party_banner_mode::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 5px currentColor;
+}
+#normal #party_turn_banner #party_banner_mode.combat {
+    border-color: color-mix(in srgb, var(--shell-combat) 60%, transparent);
+    background: color-mix(in srgb, var(--shell-combat) 18%, transparent); color: var(--shell-combat);
+}
+.mission-stat {
+    display: inline-flex; align-items: center; gap: 5px; min-width: 0; min-height: var(--tt-hud-row, 28px); padding: 2px 8px; box-sizing: border-box;
+    border: 1px solid var(--shell-rule); border-radius: 3px;
+    background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
+}
+.mission-stat .mission-value { font: 600 13px/1.2 var(--shell-font); font-variant-numeric: tabular-nums; }
+#normal #mission_clock:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 2px; }
+/* Facts stay on the one row at desktop widths; below 1300px they take a second row of
+   their own (see Density) instead of stacking inside a squeezed column. */
+.mission-status { display: inline-flex; align-items: center; min-width: 0; flex: 0 0 auto; }
+.mission-status:empty { display: none; }
+/* Expedition facts (party-progress.js) sit in the strip instead of floating over tiles. */
+#normal #party_turn_banner #party_progress {
+    position: static; display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 4px 6px;
+    max-width: none; min-height: 0; padding: 0; border: 0; border-radius: 0;
+    background: none; box-shadow: none; color: var(--shell-text);
+}
+/* Connection chip (connection-quality.js) reads like the other facts, with its own caption. */
+#normal #party_turn_banner #connection_quality {
+    display: inline-flex; align-items: center; gap: 5px; min-height: var(--tt-hud-row, 28px); margin: 0; padding: 2px 8px; box-sizing: border-box;
+    border: 1px solid var(--shell-rule); border-radius: 3px; background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
+    color: var(--shell-text); font: 600 12px/1.2 var(--shell-font); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+#normal #party_turn_banner #connection_quality::before {
+    content: "Ping"; font: 600 var(--tt-type-caption, 10px)/1.2 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+}
+#normal #party_turn_banner #connection_quality .connection-quality-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--shell-explore); box-shadow: 0 0 5px currentColor; }
+#normal #party_turn_banner #connection_quality[data-connection="fair"] .connection-quality-dot { background: var(--ui-warn, #e0a84b); }
+#normal #party_turn_banner #connection_quality:is([data-connection="slow"], [data-connection="waiting"], [data-connection="disconnected"]) .connection-quality-dot { background: var(--shell-combat); }
+#normal #party_turn_banner #connection_quality:is([data-connection="measuring"]) .connection-quality-dot { background: var(--shell-muted); }
+#normal #party_turn_banner #party_progress .party-context-stat,
+#normal #party_turn_banner #party_progress_rune_group {
+    display: inline-flex; align-items: center; gap: 5px; min-height: var(--tt-hud-row, 28px); padding: 2px 8px; box-sizing: border-box;
+    border: 1px solid var(--shell-rule); border-left-width: 1px; border-radius: 3px;
+    background: color-mix(in srgb, var(--shell-recess) 70%, transparent);
+    font: 600 12px/1.2 var(--shell-font); font-variant-numeric: tabular-nums;
+}
+#normal #party_turn_banner #party_progress .tt-icon { width: 14px; height: 14px; color: var(--shell-accent-bright); }
+#normal #party_turn_banner #party_progress #party_hud_gold { font: 600 13px/1.2 var(--shell-font); color: var(--shell-text) !important; }
+#normal #party_turn_banner #party_progress .party-context-value { font-size: 13px; }
+#normal #party_turn_banner #party_progress_runes { gap: 3px; }
+#normal #party_turn_banner .party-progress-rune { width: 20px; height: 20px; }
+#normal #party_turn_banner .party-progress-rune :is(.party-rune-art, canvas) { width: 20px; height: 20px; }
+#normal #party_turn_banner #party_progress_monsters { min-height: var(--tt-hud-row, 28px); padding: 2px 8px; }
+#normal #party_turn_banner #party_progress_monsters .party-initiative { flex: 0 0 64px; }
+#normal #workflow_camera_context {
+    flex-basis: auto; padding: 2px 8px; border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--shell-accent) 45%, transparent);
+    color: var(--shell-accent-bright); font: 600 11px/1.3 var(--shell-font); white-space: nowrap;
+}
+#normal #workflow_camera_context:empty { display: none; }
+.mission-tools { display: inline-flex; align-items: center; flex: 0 0 auto; gap: 4px; margin-left: auto; }
+#normal #hud_zoom_controls {
+    display: inline-flex; align-items: center; gap: 2px; margin: 0 6px 0 0; padding: 0 8px 0 0;
+    border-right: 1px solid var(--shell-rule);
+}
+.hud-zoom-value {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 22px; padding: 0 4px;
+    border-radius: 3px; background: var(--shell-recess); color: var(--shell-muted);
+    font: 600 10px/1 var(--shell-mono); font-variant-numeric: tabular-nums;
+}
+#normal #hud_zoom_reset[aria-pressed="true"] { border-color: var(--shell-accent); color: var(--shell-accent-bright); }
+#normal #party_turn_banner :is(.party-banner-btn, .mission-tools button) {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    width: var(--tt-hud-row, 28px); min-width: var(--tt-hud-row, 28px); height: var(--tt-hud-row, 28px); min-height: var(--tt-hud-row, 28px); padding: 4px; margin: 0;
+    border: 1px solid var(--shell-edge); border-radius: 4px;
+    background: var(--shell-panel); color: var(--shell-text);
+    box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #00000066; text-shadow: none; cursor: pointer;
+}
+#normal #party_turn_banner :is(.party-banner-btn, .mission-tools button):hover:not(:disabled) {
+    background: var(--shell-raised); border-color: var(--shell-accent); color: var(--shell-accent-bright);
+}
+#normal #party_turn_banner :is(.party-banner-btn, .mission-tools button):disabled { opacity: .45; cursor: default; }
+#normal #party_turn_banner .tt-icon { width: 16px; height: 16px; }
+
+/* Action acknowledgement (action-feedback.js): every command shows what was sent the
+   instant it leaves the client, then ticks when the engine's next update lands.
+   Floats over the dungeon so it never reflows the bar. */
+.mission-ack {
+    position: absolute; left: 12px; top: 10px; z-index: 23; pointer-events: none;
+    display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 10px 2px 8px; box-sizing: border-box;
+    border: 1px solid var(--ui-gilt-deep, var(--shell-edge)); border-radius: 999px;
+    background: color-mix(in srgb, var(--shell-recess) 88%, transparent); color: var(--shell-accent-bright);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, var(--shell-accent)) 40%, transparent), 0 2px 8px #0009;
+    font: 600 11px/1.3 var(--shell-font); letter-spacing: .02em; white-space: nowrap;
+}
+.mission-ack[hidden] { display: none; }
+.mission-ack::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 5px currentColor; }
+.mission-ack .mission-ack-key {
+    display: inline-flex; align-items: center; min-width: 14px; height: 15px; padding: 0 4px; box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--shell-recess); color: var(--shell-muted); font: 600 9px/1 var(--shell-mono);
+}
+.mission-ack[data-state="done"] { color: var(--shell-explore); border-color: color-mix(in srgb, var(--shell-explore) 55%, transparent); }
+.mission-ack[data-state="done"]::after { content: "\2713"; font-weight: 700; }
+.mission-ack[data-state="blocked"] { color: var(--shell-combat); border-color: color-mix(in srgb, var(--shell-combat) 55%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+    .mission-ack[data-state="sent"]::before { animation: mission-ack-pulse 480ms ease-in-out infinite alternate; }
+    @keyframes mission-ack-pulse { from { opacity: .45; } to { opacity: 1; } }
+    .mission-ack { transition: color 120ms ease, border-color 120ms ease; }
+}
+/* Pressed/sent state shared by the dock, quick slots and view tools (action-feedback.js). */
+#normal :is(#quickbar_primary .dcss-dock-btn, .hud-quick-slot, #party_turn_banner .party-banner-btn, #party_turn_banner .mission-tools button, #quickbar_commands .dcss-dock-btn).is-activated:not(:disabled) {
+    background: var(--shell-accent-bright); border-color: var(--shell-accent-bright); color: #151b20;
+    box-shadow: 0 0 0 1px var(--shell-accent-bright), 0 0 8px color-mix(in srgb, var(--shell-accent-bright) 60%, transparent); transform: translateY(1px);
+}
+#normal #quickbar_primary .dcss-dock-btn.is-activated:not(:disabled) :is(.workflow-action-label, .dock-key, .tt-icon) { color: #151b20; }
+#normal .hud-hero-medallion.is-acting { border-color: var(--ui-gilt, #d9b56a); box-shadow: inset 0 0 0 2px #151719, 0 0 0 2px var(--ui-gilt, #d9b56a), 0 0 12px var(--ui-gilt-glow, #f2d58a66); }
+@media (prefers-reduced-motion: no-preference) {
+    #normal .hud-hero-medallion.is-acting { animation: medallion-acting 240ms ease-out; }
+    @keyframes medallion-acting { from { transform: scale(1.08); } to { transform: scale(1); } }
+}
+
+/* ---- Command dock ------------------------------------------------------- */
+#normal #dcss_quick_dock:not(.hud-floating) {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    width: 100%; max-width: none; height: auto; min-height: 48px; padding: 4px 10px; box-sizing: border-box;
+    align-self: stretch; margin-top: auto;
+    background: linear-gradient(180deg, var(--shell-raised), var(--shell-panel));
+    border-top: 1px solid var(--shell-rule); border-bottom: 1px solid #070b0f; box-shadow: inset 0 1px 0 #ffffff0c;
+}
+#normal #quickbar_primary { gap: 4px; }
+#normal #quickbar_primary::before {
+    content: "Act"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
+    font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+    writing-mode: vertical-rl; transform: rotate(180deg);
+}
+#normal #quickbar_primary .dcss-dock-btn {
+    position: relative; flex: 0 0 auto; flex-direction: column; justify-content: center; gap: 2px;
+    width: auto; min-width: 52px; height: 40px; min-height: 40px; padding: 4px 6px 3px; box-sizing: border-box;
+    border: 1px solid var(--shell-edge); border-radius: 5px;
+    background: var(--shell-panel); background-image: none; color: var(--shell-text);
+    box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #00000066; text-shadow: none;
+}
+#normal #quickbar_primary .dcss-dock-btn > .tt-icon { width: 16px; height: 16px; margin: 0; color: var(--shell-accent-bright); }
+#normal #quickbar_primary .dcss-dock-btn .workflow-action-label {
+    position: static; width: auto; height: auto; margin: 0; padding: 0; overflow: visible; clip-path: none;
+    font: 600 9px/1 var(--shell-font); letter-spacing: .02em; white-space: nowrap; color: var(--shell-text);
+}
+#normal #quickbar_primary .dcss-dock-btn .dock-key {
+    position: absolute; top: 2px; right: 3px; width: auto; height: auto; margin: 0; padding: 0 2px; overflow: visible; clip-path: none;
+    order: 0; border: 0; border-radius: 2px; background: none; box-shadow: none; text-shadow: none;
+    font: 600 8px/1.2 var(--shell-mono); color: var(--shell-muted); text-transform: none;
+}
+#normal #quickbar_primary .dcss-dock-btn:hover:not(:disabled) {
+    background: var(--shell-raised); border-color: var(--shell-accent); color: var(--shell-accent-bright);
+}
+#normal #quickbar_primary .dcss-dock-btn:hover:not(:disabled) .workflow-action-label { color: var(--shell-accent-bright); }
+#normal #quickbar_primary .dcss-dock-btn:active:not(:disabled) { background: var(--shell-recess); box-shadow: inset 0 2px 4px #000a; }
+#normal #quickbar_primary .dcss-dock-btn:disabled { opacity: .42; filter: saturate(.4); box-shadow: none; cursor: default; }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key="\9"] { border-color: color-mix(in srgb, var(--shell-combat) 55%, var(--shell-edge)); }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key="\9"] > .tt-icon { color: var(--shell-combat); }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key="o"] { border-color: color-mix(in srgb, var(--shell-explore) 55%, var(--shell-edge)); }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key="o"] > .tt-icon { color: var(--shell-explore); }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key=">"] { margin-right: 4px; }
+#normal #party_yield_btn { min-height: 32px; }
+#normal #party_yield_btn[hidden] { display: none; }
+
+/* Quick slots: icon, key number, cost; empty sockets read as empty. */
+#normal #quickbar_slots { gap: 4px; padding-left: 10px; border-left: 1px solid var(--shell-rule); }
+#normal #quickbar_slots::before {
+    content: "Quick"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
+    font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+    writing-mode: vertical-rl; transform: rotate(180deg);
+}
+#normal .hud-quick-slot {
+    flex-basis: 40px; width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 4px;
+    border: 1px solid var(--shell-edge); border-radius: 5px;
+    background: radial-gradient(ellipse at 50% 25%, var(--shell-raised), var(--shell-recess) 85%);
+    box-shadow: inset 0 0 0 1px #0b0f1480, inset 0 2px 4px #000a; color: var(--shell-text);
+}
+#normal .hud-quick-slot canvas { width: 28px; height: 28px; }
+#normal .hud-quick-slot canvas.power-art-fallback, #normal .hud-quick-slot > .tt-icon { width: 18px; height: 18px; }
+#normal .hud-quick-slot.is-empty {
+    border-style: dashed; border-color: color-mix(in srgb, var(--shell-edge) 55%, transparent);
+    background: transparent; box-shadow: none; opacity: .7;
+}
+#normal .hud-quick-slot.is-empty > .tt-icon { width: 16px; height: 16px; color: var(--shell-muted); opacity: 1; }
+#normal .hud-quick-slot.is-empty:hover { opacity: 1; border-style: solid; }
+#normal .hud-quick-slot.is-selected { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
+#normal .hud-quick-slot .quickbar-key {
+    left: 2px; bottom: 2px; min-width: 12px; padding: 0 3px; border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent);
+    border-bottom-width: 2px; border-radius: 3px; background: var(--shell-recess); color: var(--shell-muted);
+    font: 700 9px/1.2 var(--shell-mono);
+}
+#normal .hud-quick-slot .quickbar-quantity { right: 2px; bottom: 2px; font: 700 9px/1 var(--shell-font); color: var(--shell-accent-bright); }
+#normal .hud-quick-slot .quickbar-item-quantity { top: 2px; bottom: auto; }
+#normal .hud-quick-slot .quickbar-cast-mode { top: 2px; left: 2px; font-size: 8px; }
+#normal .hud-quick-slot[aria-disabled="true"] { opacity: .45; filter: saturate(.4); }
+#quickbar_more > summary {
+    width: 40px; height: 40px; min-width: 40px; min-height: 40px; border: 1px solid var(--shell-edge); border-radius: 5px;
+    background: var(--shell-panel); color: var(--shell-text);
+}
+#quickbar_more > summary:hover { border-color: var(--shell-accent); color: var(--shell-accent-bright); background: var(--shell-raised); }
+#quickbar_more[open] > summary { border-color: var(--shell-accent); background: var(--shell-raised); }
+#normal #dock_session_menu, #normal #dock_common_hotkeys {
+    height: 40px; min-height: 40px; padding: 4px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
+    background: var(--shell-panel); color: var(--shell-text); font: 600 11px/1.3 var(--shell-font);
+}
+#normal #dock_session_menu { margin-left: auto; }
+#normal :is(#dock_session_menu, #dock_common_hotkeys):hover { border-color: var(--shell-accent); background: var(--shell-raised); color: var(--shell-accent-bright); }
+#dock_session_menu kbd {
+    display: inline-flex; align-items: center; min-width: 16px; height: 16px; margin-left: 6px; padding: 0 4px; box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--shell-recess); color: var(--shell-muted); font: 600 9px/1 var(--shell-mono); opacity: 1;
+}
+#normal #workflow_action_notice {
+    flex-basis: 100%; margin: 0; padding: 6px 9px; border-radius: 4px;
+    border: 1px solid color-mix(in srgb, var(--shell-accent) 60%, transparent);
+    background: color-mix(in srgb, var(--shell-accent) 14%, var(--shell-panel)); color: var(--shell-text);
+}
+
+/* ---- Expanded tray: every other command, grouped -------------------------- */
+#quickbar_more_content {
+    width: 440px; border: 1px solid var(--shell-edge); border-radius: 6px;
+    background: var(--shell-panel); box-shadow: 0 -6px 24px #000a; color: var(--shell-text);
+}
+#quickbar_commands { gap: 8px; border-top-color: var(--shell-rule); }
+#normal #quickbar_commands.quickbar-command-view { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; }
+/* Column groups must not wrap: with wrap on, the full-width caption pushed every button
+   into a second column that ran off the tray. The list scrolls inside the tray instead. */
+#normal #quickbar_commands.quickbar-command-view { max-height: min(56vh, 460px); overflow-y: auto; scrollbar-width: thin; padding-right: 2px; }
+#normal #quickbar_commands.quickbar-command-view .workflow-action-group { display: flex; flex-direction: column; flex-wrap: nowrap; align-items: stretch; align-content: start; gap: 3px; min-width: 0; }
+#normal #quickbar_commands.quickbar-command-view .workflow-action-group::before { flex: 0 0 auto; width: auto; height: auto; }
+#normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a) { width: auto; flex: 0 0 auto; min-width: 0; white-space: normal; text-align: left; }
+#normal #quickbar_commands.quickbar-command-view .quickbar-command-name { min-width: 0; overflow-wrap: anywhere; }
+#normal #quickbar_commands.quickbar-command-view .workflow-action-group[data-action-group="expedition"] { grid-column: 1 / -1; }
+#normal #quickbar_commands .workflow-action-group::before {
+    width: 100%; flex-basis: 100%; margin: 0 0 2px; padding-bottom: 2px; border-bottom: 1px solid var(--shell-rule);
+    font: 600 var(--tt-type-caption, 10px)/1.3 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
+}
+#normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a) {
+    min-height: 30px; padding: 4px 8px; gap: 8px; border: 1px solid var(--shell-rule); border-radius: 4px;
+    background: color-mix(in srgb, var(--shell-recess) 60%, transparent); color: var(--shell-text);
+    font: 500 12px/1.3 var(--shell-font); text-shadow: none; box-shadow: none;
+}
+#normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a):hover:not(:disabled) {
+    border-color: var(--shell-accent); background: var(--shell-raised); color: var(--shell-accent-bright);
+}
+#normal #quickbar_commands.quickbar-command-view .dcss-dock-btn > .tt-icon { width: 16px; height: 16px; color: var(--shell-accent-bright); }
+#normal #quickbar_commands.quickbar-command-view .quickbar-command-name { font: 500 12px/1.3 var(--shell-font); }
+#normal #quickbar_commands.quickbar-command-view .quickbar-command-key {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--shell-recess); color: var(--shell-muted); font: 600 10px/1 var(--shell-mono);
+}
+#normal #quickbar_commands .dcss-dock-btn:disabled { opacity: .45; }
+#normal #quickbar_commands.quickbar-command-view .hud-expedition-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
+#normal #quickbar_commands.quickbar-command-view .workflow-expedition-details { flex: 1 0 100%; width: 100%; }
+#normal #quickbar_commands .dcss-dock-btn:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
+#quickbar_picker_hint, .quickbar-empty { color: var(--shell-muted); font: 11px/1.4 var(--shell-font); }
+#quickbar_help { color: var(--shell-text); border-top-color: var(--shell-rule); font: 11px/1.4 var(--shell-font); }
+#quickbar_help:empty::before { color: var(--shell-muted); }
+#quickbar_search, .quickbar-picker-tools button {
+    height: 26px; min-height: 26px; border: 1px solid var(--shell-rule); border-radius: 3px;
+    background: var(--shell-recess); color: var(--shell-text); font: 11px/1.3 var(--shell-font);
+}
+#quickbar_categories [aria-pressed="true"] { background: var(--shell-action); border-color: var(--shell-action); color: var(--shell-action-text); }
+#normal .quickbar-catalog-action { border-color: var(--shell-rule); background: color-mix(in srgb, var(--shell-recess) 60%, transparent); }
+
+/* ---- Direction pad ------------------------------------------------------ */
+#normal #direction_pad {
+    border: 1px solid var(--shell-rule); border-radius: 8px;
+    background: color-mix(in srgb, var(--shell-panel) 88%, transparent); color: var(--shell-text);
+    box-shadow: 0 3px 14px #0007; font-family: var(--shell-font);
+}
+#normal .direction-pad-button {
+    border: 1px solid color-mix(in srgb, var(--shell-edge) 40%, transparent); border-radius: 5px;
+    background: color-mix(in srgb, var(--shell-raised) 70%, transparent); color: var(--shell-text);
+}
+#normal .direction-pad-button:hover:not(:disabled) { background: var(--shell-raised); border-color: var(--shell-accent); color: var(--shell-accent-bright); }
+#normal .direction-pad-button:active:not(:disabled) { background: var(--shell-recess); }
+#normal .direction-pad-button.is-activated:not(:disabled) {
+    background: var(--shell-accent-bright); border-color: var(--shell-accent-bright); color: #151b20;
+    box-shadow: 0 0 0 1px var(--shell-accent-bright), 0 0 8px color-mix(in srgb, var(--shell-accent-bright) 60%, transparent);
+}
+#normal .direction-pad-button:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
+.direction-pad-keys { color: var(--shell-muted); }
+.direction-pad-keys kbd { font-family: var(--shell-mono); }
+.direction-pad-center { border-radius: 5px; background: color-mix(in srgb, var(--shell-recess) 70%, transparent); }
+
+/* ---- Mobile input helper and HUD arrangement mode ----------------------- */
+#normal #mobile_input { padding: 4px 8px; background: var(--shell-panel); border-top: 1px solid var(--shell-rule); }
+#normal #mobile_input input {
+    box-sizing: border-box; min-height: 36px; padding: 6px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
+    color: var(--shell-text); font: 13px/1.3 var(--shell-font);
+}
+#normal #mobile_input input:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
+#normal #workflow_ping_status, #normal #workflow_exclusion_status {
+    display: flex; align-items: center; gap: 10px; padding: 6px 12px;
+    border-top: 1px solid var(--shell-rule); background: color-mix(in srgb, var(--shell-accent) 14%, var(--shell-panel));
+    color: var(--shell-text); font: 12px/1.4 var(--shell-font);
+}
+#normal #workflow_ping_status[hidden] { display: none; }
+#normal :is(#workflow_ping_status, #workflow_exclusion_status) .workflow-button {
+    min-height: 28px; padding: 3px 10px; border-radius: 4px; border: 1px solid var(--shell-edge);
+    background: var(--shell-panel); color: var(--shell-text); font: 600 11px/1.3 var(--shell-font);
+}
+.hud-layout-editing #normal :is(.hud-panel-move, .hud-panel-resize) {
+    border-color: var(--shell-accent); background: var(--shell-raised); color: var(--shell-accent-bright);
+}
+#hud_layout_help {
+    background: var(--shell-panel); border: 1px solid var(--shell-accent); color: var(--shell-text); font-family: var(--shell-font);
+}
+#hud_layout_help button {
+    min-height: 28px; padding: 3px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
+    background: var(--shell-raised); color: var(--shell-text); font: 600 11px/1.3 var(--shell-font); cursor: pointer;
+}
+#normal .hud-floating#dcss_quick_dock { width: var(--panel-width) !important; min-height: 48px; }
+#normal .hud-floating#dcss_quick_dock #quickbar_primary::before, #normal .hud-floating#dcss_quick_dock #quickbar_slots::before { display: none; }
+
+/* ---- Density ------------------------------------------------------------ */
+@media (max-width: 1300px) {
+    /* Two deliberate rows: hero · mode · turn · tools, then the expedition facts. */
+    #normal #party_turn_banner.mission-bar { flex-wrap: wrap; gap: 4px 10px; padding: 4px 10px 5px; }
+    .mission-status { flex: 1 1 100%; order: 10; }
+    #normal #party_turn_banner #party_progress { flex-wrap: wrap; }
+}
+@media (max-width: 1150px) {
+    #normal #party_turn_banner.mission-bar { gap: 4px 8px; }
+    #normal #quickbar_primary .dcss-dock-btn { min-width: 46px; }
+    #quickbar_more_content { width: min(440px, calc(100vw - 16px)); }
+}
+@media (max-height: 800px) {
+    #normal #party_turn_banner.mission-bar { min-height: 40px; padding: 3px 10px; }
+    .mission-portrait { width: 30px; height: 30px; }
+    .mission-portrait img { width: 24px; height: 24px; }
+    #normal #dcss_quick_dock:not(.hud-floating) { min-height: 44px; padding: 3px 8px; }
+    #normal #quickbar_primary .dcss-dock-btn { height: 38px; min-height: 38px; }
+    #normal .hud-quick-slot, #quickbar_more > summary { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+}
+@media (max-width: 760px) {
+    #normal #quickbar_primary::before, #normal #quickbar_slots::before { display: none; }
+    #normal #quickbar_primary .dcss-dock-btn { min-width: 42px; }
+    .mission-tools { margin-left: 0; }
+}
+@media (pointer: coarse) {
+    #normal #quickbar_primary .dcss-dock-btn { min-width: 48px; height: 44px; min-height: 44px; }
+    #normal .hud-quick-slot, #quickbar_more > summary { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+    #normal #party_turn_banner :is(.party-banner-btn, .mission-tools button) { width: 36px; min-width: 36px; height: 36px; min-height: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #normal #party_turn_banner #party_banner_mode::before { box-shadow: none; }
+}
+@media (forced-colors: active) {
+    #normal #party_turn_banner #party_banner_mode, .mission-stat, #normal #party_turn_banner #party_progress .party-context-stat,
+    #normal #party_turn_banner #party_progress_rune_group { border-color: CanvasText; background: Canvas; color: CanvasText; }
+    #normal #quickbar_primary .dcss-dock-btn, #normal .hud-quick-slot { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+}

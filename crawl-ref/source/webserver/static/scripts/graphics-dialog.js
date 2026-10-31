@@ -14,7 +14,7 @@ define(["jquery", "graphics-controls", "graphics-preferences"], function ($, con
         if (dialog) return;
         dialog = document.createElement("dialog"); dialog.id = "graphics_settings_dialog"; dialog.className = "graphics-dialog";
         var top = document.createElement("div"), button = document.createElement("button"), root = document.createElement("section");
-        top.className = "graphics-dialog-actions"; button.type = "button"; button.textContent = "Done · Esc";
+        top.className = "graphics-dialog-actions"; button.type = "button"; button.className = "tr-btn"; button.textContent = "Done · Esc";
         button.addEventListener("click", close); top.appendChild(button); dialog.append(top, root); document.body.appendChild(dialog);
         content = controls.mount(root); dialog.setAttribute("aria-labelledby", content.titleId);
         dialog.addEventListener("cancel", function (event) { event.preventDefault(); close(); });

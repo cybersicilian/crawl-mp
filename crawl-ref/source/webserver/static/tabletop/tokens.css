@@ -11,6 +11,28 @@
     --tt-title-page: clamp(26px, 2.6vw, 34px);
     --tt-title-section: 23px;
     --tt-title-entry: 19px;
+    /* Tactics-RPG scale: labels never drop below 12px; 11px is for key hints only. */
+    --tt-type-key: 11px;
+    /* Composition: every HUD caption is 10px small caps; chips share a 28px row; panels share an 8px gutter. */
+    --tt-type-caption: 10px;
+    --tt-hud-row: 28px;
+    --tt-hud-gutter: 8px;
+    --tt-type-label: 12px;
+    --tt-type-body: 13px;
+    --tt-type-reading: 14px;
+    --tt-type-value: 15px;
+    --tt-type-entry: 19px;
+    --tt-type-section: 23px;
+    --tt-type-title: clamp(26px, 2.6vw, 34px);
+    --tt-radius-1: 3px;
+    --tt-radius-2: 5px;
+    --tt-radius-3: 8px;
+    --tt-motion-fast: 100ms;
+    --tt-motion-base: 180ms;
+    --tt-meter-height: 10px;
+    --tt-tip-width: 360px;
+    --tt-focus-ring: 2px solid var(--ui-focus, var(--tt-brass-light));
+    --tt-focus-offset: 2px;
     --tt-leather-deep: #181a16;
     --tt-leather: #222620;
     --tt-saddle: #2d3329;
