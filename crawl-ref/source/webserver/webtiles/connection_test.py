@@ -56,6 +56,33 @@ class InputBackpressureTest(unittest.TestCase):
         self.assertEqual(self.connection.socket.sendto.call_count, 2)
         self.assertFalse(self.connection.pending_messages)
 
+    def test_unsendable_packet_is_dropped_instead_of_wedging_later_input(self):
+        # macOS caps AF_UNIX datagrams at 2048 bytes: an oversized chat note
+        # used to stay at the head of the queue and fail every later keystroke.
+        sock = self.connection.socket
+        sock.sendto.side_effect = [OSError(errno.EMSGSIZE, 'too big'), 5, 5]
+        self.connection.send_message('x' * 4096)
+        self.assertFalse(self.connection.pending_messages)
+        self.connection.logger.warning.assert_called_once()
+        self.connection.send_message('key')
+        self.assertEqual(sock.sendto.call_args.args[0], b'key')
+        self.assertFalse(self.connection.pending_messages)
+        self.assertTrue(self.connection.open)
+
+    def test_close_cancels_the_socket_wait_and_keeps_primary_on_retry(self):
+        connection = WebtilesSocketConnection('/nonexistent/dcss-test/game.sock', Mock())
+        self.loop.add_timeout.return_value = 'pending-connect'
+        connection.connect(primary=False)
+        self.assertEqual(connection.connect_timeout, 'pending-connect')
+        retry = self.loop.add_timeout.call_args.args[1]
+        self.assertEqual(retry.args, (False,), 'The retry must not promote a spectated game to primary')
+        connection.close()
+        self.loop.remove_timeout.assert_called_once_with('pending-connect')
+        self.assertIsNone(connection.connect_timeout)
+        retry()
+        self.assertEqual(self.loop.add_timeout.call_count, 1, 'A closed connection never re-arms the wait')
+        self.assertIsNone(connection.socket)
+
     def test_closed_game_clears_pending_input_and_notifies_once(self):
         self.connection.close_callback = Mock()
         self.connection.socket.sendto.side_effect = FileNotFoundError()

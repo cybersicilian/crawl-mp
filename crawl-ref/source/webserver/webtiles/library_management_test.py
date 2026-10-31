@@ -4,13 +4,15 @@ import os
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 import uuid
+
+import concurrent.futures
 
 import tornado.web
 from tornado.testing import AsyncHTTPTestCase
 
-from webtiles import game_library as library, stats
+from webtiles import game_library as library, library_socket, stats, ws_handler
 from webtiles.game_library_test import Workspace
 from webtiles.library_http import LibraryAPIHandler, LibraryPageHandler
 from webtiles.library_socket import LibrarySocketMethods, running_game_ids
@@ -182,7 +184,7 @@ class RecordVisibilityHTTPTests(Workspace, AsyncHTTPTestCase):
         return tornado.web.Application([
             (r"/(games|players|randarts)(?:/([0-9a-f-]+))?", LibraryPageHandler),
             (r"/api/library/(games|players|randarts)(?:/([0-9a-f-]+))?", LibraryAPIHandler),
-        ], template_path=str(templates))
+        ], template_path=str(templates), static_path=str(templates.parent / "static"))
 
     def test_browse_pages_and_apis_hide_test_data_while_owner_links_work(self):
         normal = library.create_game("Contest", "coop", title="Real expedition")
@@ -201,6 +203,122 @@ class RecordVisibilityHTTPTests(Workspace, AsyncHTTPTestCase):
         self.assertEqual(self.fetch("/games/" + normal["id"]).code, 200)
         record = json.loads(self.fetch("/api/library/games/" + normal["id"]).body)
         self.assertFalse(record["loadable"])
+
+
+class LobbySocket(Socket):
+    """CrawlWebSocket's lobby load with the library worker under test control."""
+    send_lobby_data = ws_handler.CrawlWebSocket.send_lobby_data
+    _queue_chronicle = ws_handler.CrawlWebSocket._queue_chronicle
+    on_message = ws_handler.CrawlWebSocket.on_message
+    client_closed = False
+    _record_finish = None
+    watched_game = None
+    failed_on_messages = 0
+    logger = Mock()
+
+    def is_admin(self):
+        return False
+
+    def is_running(self, partial=False):
+        return self.process is not None
+
+    def queue_message(self, name, **payload):
+        self.messages.append((name, payload))
+
+
+class LobbyLoadTests(Workspace, unittest.TestCase):
+    """Lobby SQLite/file reads happen off the IOLoop and land in order."""
+
+    def setUp(self):
+        super().setUp()
+        self.game = library.create_game("Host", "coop")
+        Path(self.game["save_dir"], "Host.cs").write_bytes(b"save")
+        self.jobs, self.callbacks = [], []
+        loop = Mock()
+        loop.run_in_executor.side_effect = self.submit
+        loop.add_future.side_effect = lambda future, callback: self.callbacks.append((future, callback))
+        for module in (library_socket, ws_handler):
+            patcher = patch.object(module.IOLoop, "current", return_value=loop)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        for patcher in (patch("webtiles.process_handler.processes", {}),
+                        patch.object(ws_handler, "sockets", set()),
+                        patch.dict(ws_handler.PARTY_ROOMS, {}, clear=True)):
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def submit(self, executor, func, *args):
+        self.assertIs(executor, library_socket._db_executor)
+        future = concurrent.futures.Future()
+        self.jobs.append((future, func, args))
+        return future
+
+    def finish(self, index):
+        """Run job `index` on this thread, then deliver it like the IOLoop would."""
+        future, func, args = self.jobs[index]
+        future.set_result(func(*args))
+        for pending, callback in self.callbacks:
+            if pending is future:
+                callback(future)
+
+    def kinds(self, socket):
+        return [name for name, _payload in socket.messages]
+
+    def test_lobby_load_keeps_the_message_order_with_both_reads_off_loop(self):
+        socket = LobbySocket()
+        socket.send_lobby_data()
+        self.assertEqual(self.kinds(socket), ["lobby_clear", "party_rooms_list"])
+        self.assertEqual([func for _f, func, _a in self.jobs],
+                         [ws_handler._get_chronicle_payload, library_socket.library_payload])
+        self.finish(0)
+        self.finish(1)
+        self.assertEqual(self.kinds(socket), ["lobby_clear", "party_rooms_list", "coop_chronicle",
+                                              "game_library", "lobby_complete"])
+        self.assertEqual([g["id"] for g in socket.messages[3][1]["games"]], [self.game["id"]])
+
+    def test_replies_for_a_closed_socket_or_a_started_game_are_dropped(self):
+        closed, playing = LobbySocket(), LobbySocket()
+        closed.send_lobby_data()
+        playing.send_lobby_data()
+        closed.client_closed = True
+        playing.process = object()
+        for index in range(4):
+            self.finish(index)
+        for socket in (closed, playing):
+            self.assertEqual(self.kinds(socket), ["lobby_clear", "party_rooms_list"])
+
+    def test_a_newer_request_supersedes_an_older_reply(self):
+        socket = LobbySocket()
+        socket.library_fetch_async()
+        socket.library_fetch_async()
+        self.finish(0)
+        self.assertEqual(socket.messages, [])
+        self.finish(1)
+        self.assertEqual(self.kinds(socket), ["game_library"])
+
+    def test_input_waits_for_the_previous_expedition_record_to_close(self):
+        socket = LobbySocket()
+        socket._record_finish = concurrent.futures.Future()
+        socket.message_handlers = {"ping": lambda **kw: socket.messages.append(("pong", kw))}
+        socket.on_message(json.dumps(dict(msg="ping")))
+        self.assertEqual(socket.messages, [])
+        (pending, redeliver), = self.callbacks
+        self.assertIs(pending, socket._record_finish)
+        socket._record_finish.set_result(None)
+        redeliver(socket._record_finish)
+        self.assertEqual(self.kinds(socket), ["pong"])
+        # Closed meanwhile: the held frame is discarded instead of dispatched.
+        socket._record_finish = concurrent.futures.Future()
+        socket.on_message(json.dumps(dict(msg="ping")))
+        socket.client_closed = True
+        self.callbacks[-1][1](socket._record_finish)
+        self.assertEqual(self.kinds(socket), ["pong"])
+
+    def test_anonymous_fetch_answers_at_once(self):
+        socket = LobbySocket(username=None)
+        socket._start_library_fetch(lambda: socket.messages.append(("done", {})))
+        self.assertEqual(self.kinds(socket), ["game_library", "done"])
+        self.assertEqual(self.jobs, [])
 
 
 if __name__ == "__main__":

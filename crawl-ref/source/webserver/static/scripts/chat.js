@@ -6,6 +6,7 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
             names: ""
     };
     var history_limit = 25;
+    var log_limit = 500;
     var message_history = [];
     var unsent_message = { text: "", tags: [] };
     var draft_tags = [];
@@ -23,6 +24,33 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
         $(document).trigger("spectators_changed", [spectators]);
     }
 
+    // Hero colour tags come from the authoritative party state when a sender
+    // can be matched to a seat; otherwise lines stay neutral.
+    function hero_slot(sender)
+    {
+        var state = window.crawl_party && window.crawl_party.state;
+        var members = state && state.members;
+        if (!members || typeof sender !== "string" || !sender) return null;
+        var needle = sender.trim().toLocaleLowerCase();
+        for (var i = 0; i < members.length; i++)
+        {
+            var m = members[i];
+            var names = [m.username, m.owner, m.player, m.account, m.name].filter(function (value) {
+                return typeof value === "string";
+            });
+            if (names.some(function (value) { return value.trim().toLocaleLowerCase() === needle; }))
+                return typeof m.slot === "number" ? m.slot : i;
+        }
+        return null;
+    }
+
+    function tag_hero(msg, sender)
+    {
+        var slot = hero_slot(sender);
+        if (slot === null) return;
+        msg.attr("data-hero-slot", String(slot % 4)).addClass("chat-line-hero");
+    }
+
     function receive_message(data)
     {
         var msg = $("<span class='chat-line'></span>");
@@ -30,9 +58,13 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
         {
             msg.append($("<span class='chat_sender'></span>").text(data.sender),
                 $("<span class='chat_msg'></span>").append(items.render(data.text, data.tags, data.sender)));
+            tag_hero(msg, data.sender);
         }
         else
+        {
             append_legacy_message(msg, data);
+            tag_hero(msg, msg.find(".chat_sender").first().text());
+        }
         msg.toggleClass("chat-line-system", !!data.meta || !msg.find(".chat_sender").length);
         msg.find("a[target='_blank']").attr("rel", "noopener noreferrer");
         var histcon = $('#chat_history_container')[0];
@@ -40,6 +72,8 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
         var visible = $("#chat").is(":visible") && $("#chat_body").is(":visible");
         if (visible) history_position = scrollback.capture(histcon, histcon.querySelectorAll(".chat-line"));
         $("#chat_history").append(msg);
+        var lines = $("#chat_history").children(".chat-line");
+        if (lines.length > log_limit) lines.slice(0, lines.length - log_limit).remove();
         if (visible) scrollback.restore(histcon, history_position);
         if ($("#chat_body").css("display") === "none" && !data.meta)
         {
@@ -324,8 +358,9 @@ define(["jquery", "comm", "chat-items", "scrollback"], function ($, comm, items,
         items.init(tag_item);
         $("<span id='chat_compose_status' class='chat-sr-only' role='status' aria-live='polite'></span>").appendTo("#chat_body");
         $("#chat").attr({ role: "region", "aria-label": "Expedition chat" });
-        $("#chat_caption").attr({ "aria-label": "Toggle expedition chat", "aria-expanded": "false" });
-        $("#chat_hide_button").attr("aria-label", "Hide expedition chat");
+        $("#chat_caption").attr({ "aria-label": "Toggle expedition chat", "aria-expanded": "false",
+            "aria-controls": "chat_body", role: "button", title: "Show or hide the conversation (F12)" });
+        $("#chat_hide_button").attr({ "aria-label": "Hide expedition chat", title: "Hide chat" });
         $("#chat_input").attr({ placeholder: "Message your expedition…", "aria-label": "Message your expedition", maxlength: 500 });
         $("#chat_history").attr({ role: "log", "aria-live": "polite", "aria-relevant": "additions" });
         $("#chat_history_container").attr({ tabindex: 0, role: "region", "aria-label": "Expedition chat history" });

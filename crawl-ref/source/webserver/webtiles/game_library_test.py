@@ -23,6 +23,10 @@ class Workspace:
         super().setUp()
 
     def cleanup_workspace(self):
+        # Library jobs resolve BASE_DIR relative to the cwd: let the worker
+        # drain before leaving the temporary directory.
+        from webtiles import library_socket
+        library_socket._db_executor.submit(lambda: None).result(timeout=10)
         os.chdir(self.previous_dir)
         self.workspace.cleanup()
 
@@ -49,6 +53,20 @@ class LibraryTests(Workspace, unittest.TestCase):
         serialized = json.dumps(library.list_games("Host"))
         self.assertNotIn("save_dir", serialized)
         self.assertNotIn(self.workspace.name, serialized)
+        library.create_game("Other", "coop")
+        self.assertEqual([game["id"] for game in library.list_games("hOsT")],
+                         [first["id"], second["id"]])
+        self.assertEqual(len(library.list_games()), 3)
+
+    def test_ingest_reports_only_real_updates(self):
+        game = library.create_game("Host", "coop")
+        self.assertFalse(library.ingest(game["id"]))
+        event_dir = Path(library.BASE_DIR, "events")
+        event_dir.mkdir(exist_ok=True)
+        (event_dir / (game["id"] + ".json")).write_text(json.dumps({"id": game["id"], "turns": 7}))
+        self.assertTrue(library.ingest(game["id"]))
+        self.assertFalse(library.ingest(game["id"]))
+        self.assertEqual(library.list_games("Host")[0]["state"]["turns"], 7)
 
     def test_identity_links_survive_updates_and_keep_dropped_randarts(self):
         game = library.create_game("Host", "coop")
@@ -108,7 +126,7 @@ class LibraryHTTPTests(Workspace, AsyncHTTPTestCase):
         return tornado.web.Application([
             (r"/(games|players|randarts)/([0-9a-f-]+)", LibraryPageHandler),
             (r"/api/library/(games|players|randarts)/([0-9a-f-]+)", LibraryAPIHandler),
-        ], template_path=str(templates))
+        ], template_path=str(templates), static_path=str(templates.parent / "static"))
 
     def test_profiles_escape_text_and_hide_save_paths(self):
         game = library.create_game("Host", "coop", title="<script>alert(1)</script>")

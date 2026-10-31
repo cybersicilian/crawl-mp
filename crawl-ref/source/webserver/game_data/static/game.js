@@ -11,6 +11,36 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
     var stat_width = 42;
     var msg_height;
     var show_diameter = 17;
+    // null = "fit": scale the full LOS diameter to the available viewport.
+    // A number is an explicit, persisted user zoom.
+    var view_zoom = null;
+    var fit_zoom_limits = { min: 1, max: 2 };
+
+    function base_cell_size()
+    {
+        var pixels = Number(options.get("tile_cell_pixels")) || 32;
+        var scale = Number(options.get("tile_viewport_scale")) || 100;
+        return Math.max(8, Math.floor(pixels * scale / 100));
+    }
+
+    // Fit keeps every visible LOS tile on screen while using the whole
+    // column: tiles grow until show_diameter tiles span the shorter side.
+    // The renderer still floors to integer device pixels, so pointer
+    // conversion and canvas dimensions stay exact.
+    function fit_zoom_factor(width, height)
+    {
+        var span = show_diameter * base_cell_size();
+        if (!(width > 0) || !(height > 0) || !(span > 0)) return 1;
+        var factor = Math.min(width, height) / span;
+        factor = Math.floor(factor * 20) / 20;
+        return Math.max(fit_zoom_limits.min, Math.min(fit_zoom_limits.max, factor));
+    }
+
+    function apply_view_zoom(width, height)
+    {
+        dungeon_renderer.viewport_zoom = view_zoom === null
+            ? fit_zoom_factor(width, height) : view_zoom;
+    }
 
     function setup_keycodes()
     {
@@ -135,8 +165,10 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
             "max-height": msg_height_px*msg_height/(msg_height+1),
             "width": remaining_width
         });
+        apply_view_zoom(remaining_width, remaining_height);
         dungeon_renderer.fit_to(remaining_width, remaining_height,
                                 show_diameter);
+        $(document).trigger("game_view_zoom_changed", [game.get_view_zoom()]);
 
         minimap.fit_to($("#hud_minimap").width() || stat_width_px, layout_parameters);
 
@@ -173,7 +205,7 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
                     .off("mousedown focusout")
                     .on("mousedown", mobile_input_click);
                 // the following requires a fairly modern browser
-                $(document).on("visibilitychange",
+                $(document).off("visibilitychange.mobileInput").on("visibilitychange.mobileInput",
                     function(ev)
                     {
                         // try to regularize the behavior, on iOS it's flaky
@@ -221,6 +253,8 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         }
         else
         {
+            apply_view_zoom(layout_parameters.remaining_width,
+                            layout_parameters.remaining_height);
             dungeon_renderer.fit_to(layout_parameters.remaining_width,
                                     layout_parameters.remaining_height,
                                     show_diameter);
@@ -304,14 +338,21 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
             messages.new_command();
     }
 
+    // factor: a number between 0.5 and 4, or null to fit the LOS to the view.
     game.set_view_zoom = function(factor) {
-        if (!Number.isFinite(factor) || factor < .5 || factor > 4) return false;
-        dungeon_renderer.viewport_zoom = factor;
+        if (factor !== null && (!Number.isFinite(factor) || factor < .5 || factor > 4)) return false;
+        view_zoom = factor;
         if (layout_parameters) {
             layout($.extend({}, layout_parameters), true);
             display.invalidate(true); display.display(); minimap.update_overlay();
         }
+        else
+            dungeon_renderer.viewport_zoom = factor === null ? 1 : factor;
         return true;
+    };
+    game.get_view_zoom = function() {
+        return { fit: view_zoom === null,
+                 factor: Number(dungeon_renderer.viewport_zoom) || 1 };
     };
 
     game.get_input_mode = function() { return input_mode; }

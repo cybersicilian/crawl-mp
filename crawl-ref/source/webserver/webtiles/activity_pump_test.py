@@ -163,6 +163,16 @@ class ActivityPumpTest(unittest.TestCase):
         self.assertFalse(self.streams.native_ready)
         self.assertEqual(self.pump.owner, 3)
 
+    def test_exact_completion_releases_personal_view_requests_without_input_mode(self):
+        self.streams._request_pending = Mock()
+        request = self.pump.start_manual(0)
+        self.streams._request_pending.assert_not_called()
+        self.pump.command_boundary(request - 1)
+        self.streams._request_pending.assert_not_called()
+        self.pump.command_boundary(request)
+        self.streams._request_pending.assert_called_once()
+        self.assertTrue(self.streams.native_ready)
+
     def test_local_noops_do_not_strand_later_buffered_input(self):
         request = self.pump.start_manual(0)
         ignored, movement, later = Mock(), Mock(), Mock()

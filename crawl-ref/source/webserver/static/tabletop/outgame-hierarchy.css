@@ -45,3 +45,10 @@
 @media (forced-colors: active) {
     #lobby .lobby-account-settings-button:focus-visible { outline: 2px solid Highlight; }
 }
+
+/* Signed-in lobby: a custom server banner reads as a quiet notice, not a heading. */
+#lobby.has-chapter-index > #banner:not(.default-welcome-banner):not(:empty) {
+    max-width: 760px; margin: 0 auto var(--tt-space-4, 16px); padding: 8px 12px;
+    border: 1px solid var(--tt-rule, #d89b483d); border-left-width: 3px; border-radius: 5px;
+    background: #d89b4812; color: #e8d9b6; font: 12px/1.5 var(--tt-font-ui); text-align: left;
+}

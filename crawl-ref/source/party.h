@@ -56,6 +56,17 @@ namespace party
     bool region_combat_locked(int slot);
     bool same_region(int slot_a, int slot_b);
     void reconcile_floor_regions();
+    // While one of these is alive the world is being serialised, not
+    // simulated: reconcile_floor_regions() runs once and is then memoised
+    // until the outermost snapshot ends. Never hold one across an action.
+    class scoped_region_snapshot
+    {
+    public:
+        scoped_region_snapshot();
+        ~scoped_region_snapshot();
+        scoped_region_snapshot(const scoped_region_snapshot&) = delete;
+        scoped_region_snapshot& operator=(const scoped_region_snapshot&) = delete;
+    };
     int advance_floor_clock(int time_taken);
     int advance_region_clock(int time_taken, int *out_floor_delta = nullptr);
     bool monster_in_active_region(const monster &mon, int actor_slot = -1);

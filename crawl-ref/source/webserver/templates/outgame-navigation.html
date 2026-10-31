@@ -1,6 +1,10 @@
-<nav class="library-navigation" aria-label="Main navigation">
-  <a class="library-brand" href="/?view=play#lobby">Pebble Broth</a>
-  <div class="library-chapters">
+<link rel="stylesheet" href="{{ static_url('tabletop/navigation.css') }}">
+<nav class="library-navigation outgame-nav" aria-label="Main navigation">
+  <a class="library-brand outgame-brand" href="/?view=play#lobby" aria-label="Pebble Broth home">
+    <span class="outgame-emblem" aria-hidden="true"></span>
+    <span class="outgame-brand-title"><span class="outgame-brand-kicker">Cooperative tactics roguelike</span><strong>Pebble Broth</strong></span>
+  </a>
+  <div class="library-chapters outgame-sections">
     <a href="/?view=play#lobby">Play</a>
     <a href="/?view=saved#lobby" aria-label="Saved expeditions"><span class="outgame-label-full">Saved expeditions</span><span class="outgame-label-short">Saved</span></a>
     <a href="/?view=friends#lobby" aria-label="Join friends"><span class="outgame-label-full">Join friends</span><span class="outgame-label-short">Join</span></a>
@@ -9,12 +13,12 @@
     <a href="/stats"{% if outgame_section == 'stats' %} aria-current="page"{% end %}>Stats</a>
   </div>
   {% if handler.get_cookie('login') %}
-  <details class="archive-account">
+  <details class="archive-account outgame-account">
     <summary>Account</summary>
-    <div class="archive-account-menu"><a href="/profile">Profile &amp; textures</a><a href="/settings/graphics">Graphics &amp; interface</a>{% include "logout.html" %}</div>
+    <div class="archive-account-menu outgame-account-menu"><a href="/profile">Profile &amp; textures</a><a href="/settings/graphics">Appearance &amp; graphics</a>{% include "logout.html" %}</div>
   </details>
   {% else %}
-  <a class="archive-sign-in" href="/?view=play#lobby">Sign in &amp; play</a>
+  <a class="archive-sign-in outgame-sign-in" href="/?view=play#lobby">Sign in</a>
   {% end %}
 </nav>
 {% if outgame_section == 'chronicle' %}

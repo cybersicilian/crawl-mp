@@ -1,5 +1,8 @@
 define(["./view_data"], function (view) {
     "use strict";
+    // Native wound bands only: a strike label names the band change, never a number.
+    var strike_labels = ["", "HIT", "HIT!", "CRUSHED", "CRUSHED!"];
+    var enemy_colour = "#ff8a76";
     function paint(ctx, effect, point, progress, ratio) {
         var unit = Math.min(point.width, point.height);
         var x = point.x + point.width / 2, y = point.y + point.height / 2;
@@ -30,6 +33,17 @@ define(["./view_data"], function (view) {
             ctx.arc(x, y, unit * (0.2 + progress * 0.13), -Math.PI * 0.8,
                 -Math.PI * 0.8 + Math.PI * 1.2 * sweep);
             ctx.stroke();
+            var text = strike_labels[Math.max(1, Math.min(strike_labels.length - 1, effect.strength || 1))];
+            var fontSize = Math.round(Math.max(10 * ratio, Math.min(18 * ratio, unit * 0.26)));
+            ctx.font = "bold " + fontSize + "px monospace";
+            ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+            ctx.lineJoin = "round"; ctx.lineWidth = Math.max(2 * ratio, unit * 0.06); ctx.strokeStyle = "#101418";
+            var inset = ctx.measureText(text).width / 2 + 3 * ratio;
+            var tx = Math.max(inset, Math.min(ctx.canvas.width - inset, x));
+            var ty = Math.max(fontSize, point.y - unit * (0.12 + (1 - Math.pow(1 - progress, 2)) * 0.3));
+            ctx.globalAlpha = Math.min(1, (1 - progress) * 2.5);
+            ctx.strokeText(text, tx, ty);
+            ctx.fillStyle = enemy_colour; ctx.fillText(text, tx, ty);
         }
         var colour = effect.kind === "magic" ? view.get_flash_colour(effect.colour) : { r: 255, g: 183, b: 127 };
         if (!colour) return;

@@ -134,7 +134,11 @@ define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "rc
                 if (time)
                 {
                     time++;
-                    $this.html(format_idle_time(time));
+                    // Replace the label only when its text changes; every
+                    // DOM rewrite here wakes the lobby navigation observer.
+                    var label = format_idle_time(time);
+                    if ($this.text() !== label.text())
+                        $this.html(label);
                     $this.data("time", time)
                         .attr("data-time", "" + time);
                     $this.data("sort", "" + time)

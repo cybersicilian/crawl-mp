@@ -16,7 +16,8 @@ define(["liquid-field", "liquid-shader"], function (field, shader) {
                 terrain.shore, terrain.depth, phase].join(":");
             if (cache.has(key)) { var old = cache.get(key); cache.delete(key); cache.set(key, old); return old; }
             var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
-            var ctx = canvas.getContext("2d");
+            // Only ever written by putImageData and composed onto CPU scratch surfaces.
+            var ctx = canvas.getContext("2d", { willReadFrequently: true });
             if (!ctx) return null;
             var image = ctx.createImageData(32, 32);
             var lava = own.surface === "lava";
@@ -26,8 +27,9 @@ define(["liquid-field", "liquid-shader"], function (field, shader) {
                 var grain = noise(gx, gy), bank = distance(terrain.shore, x, y);
                 var rim = Math.max(0, 1 - bank / 5), depth = distance(terrain.depth, x, y);
                 var offset = ((gy + (lava ? 256 : 0)) * 256 + gx) * 4;
-                var colour = atlas ? atlas.subarray(offset, offset + 3) : field.sample(gx, gy, phase, lava).colour;
-                var red = colour[0], green = colour[1], blue = colour[2];
+                var red, green, blue;
+                if (atlas) { red = atlas[offset]; green = atlas[offset + 1]; blue = atlas[offset + 2]; }
+                else { var colour = field.sample(gx, gy, phase, lava).colour; red = colour[0]; green = colour[1]; blue = colour[2]; }
                 if (lava) {
                     red *= 1 - rim * .28; green *= 1 - rim * .33; blue *= 1 - rim * .15;
                 } else {

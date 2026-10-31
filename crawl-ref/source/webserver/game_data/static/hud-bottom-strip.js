@@ -12,7 +12,8 @@ define(["jquery", "./minimap"], function ($, minimap) {
             + "<div id='hud_map_tools' role='toolbar' aria-label='Map and view controls'></div></div></div>").appendTo($left);
         $("#hud_minimap").prop("open", true).appendTo("#hud_bottom_map");
         $("#message_pane").appendTo($row);
-        $("#hud_zoom_controls, #party_banner_cycle, #party_banner_center").appendTo("#hud_map_tools");
+        // Zoom, hero cycling and camera controls stay in the mission bar; the
+        // map strip only keeps controls that were explicitly placed there.
         $("#hud_map_tools").off(".bottomInput").on("keydown.bottomInput keypress.bottomInput keyup.bottomInput", function (event) { event.stopPropagation(); });
         $(window).off("resize.bottomStrip").on("resize.bottomStrip", fit);
         fit();

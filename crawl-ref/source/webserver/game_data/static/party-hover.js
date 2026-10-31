@@ -80,6 +80,7 @@ function ($, comm, client, model, map, options) {
         redraw(peers.get(data.id));
     }
     function draw(view, cx, cy, x, y) {
+        if (!peers.size) return;
         var pointers = Array.from(peers.values()).filter(function (peer) {
             return peer.x === cx && peer.y === cy && peer.expires > Date.now();
         });

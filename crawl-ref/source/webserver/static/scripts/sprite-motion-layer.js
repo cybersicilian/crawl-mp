@@ -3,12 +3,14 @@ define([], function () {
     "use strict";
     function create(settings) {
         var renderer, canvas, context, frame = null, sprites = new WeakMap();
+        var placed = null, clipped = null, stamp, queued = false;
         function ensure() {
             if (canvas) return;
             canvas = document.createElement("canvas"); canvas.className = settings.className;
             canvas.setAttribute("aria-hidden", "true");
             Object.assign(canvas.style, { position: "fixed", pointerEvents: "none", zIndex: "21", imageRendering: "pixelated" });
             document.body.appendChild(canvas); context = canvas.getContext("2d");
+            placed = clipped = null;
         }
         function repaint(now) {
             if (!renderer || !renderer.element || !renderer.element.isConnected || !settings.allowed()) return;
@@ -18,10 +20,17 @@ define([], function () {
             if (!bounds.width || !bounds.height) return;
             if (canvas.width !== element.width) canvas.width = element.width;
             if (canvas.height !== element.height) canvas.height = element.height;
-            Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px", width: bounds.width + "px", height: bounds.height + "px" });
+            // Style writes invalidate layout for every later geometry read in
+            // the frame; the overlay only moves when the native canvas does.
+            var geometry = [bounds.left, bounds.top, bounds.width, bounds.height].join(":");
+            if (geometry !== placed) {
+                placed = geometry;
+                Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px", width: bounds.width + "px", height: bounds.height + "px" });
+            }
             var clip = settings.clipBounds && settings.clipBounds();
-            canvas.style.clipPath = clip ? "inset(" + [Math.max(0, clip.top - bounds.top), Math.max(0, bounds.right - clip.right),
+            var inset = clip ? "inset(" + [Math.max(0, clip.top - bounds.top), Math.max(0, bounds.right - clip.right),
                 Math.max(0, bounds.bottom - clip.bottom), Math.max(0, clip.left - bounds.left)].map(function (n) { return n + "px"; }).join(" ") + ")" : "none";
+            if (inset !== clipped) { clipped = inset; canvas.style.clipPath = inset; }
             context.clearRect(0, 0, canvas.width, canvas.height); context.imageSmoothingEnabled = false;
             context.save(); context.beginPath();
             settings.cells().forEach(function (cell) { var p = renderer.canvas_coords(cell.x, cell.y); context.rect(p.x, p.y, p.width, p.height); });
@@ -38,6 +47,13 @@ define([], function () {
                 context.restore();
             });
             context.restore(); canvas.dataset.actors = String(settings.poses.size);
+        }
+        // Several actors captured in one native paint share one overlay
+        // repaint, run before the browser presents that paint.
+        function coalesce() {
+            if (queued) return;
+            queued = true;
+            Promise.resolve().then(function () { queued = false; repaint(window.performance.now()); });
         }
         function tick(now) {
             frame = null;
@@ -62,19 +78,21 @@ define([], function () {
             if (pose.finishing) {
                 paint(); settings.poses.delete(pose.key); repaint(window.performance.now()); return true;
             }
-            var size = view.scaled_size(), sprite = sprites.get(pose), stamp = view.frame_time;
+            var size = view.scaled_size(), sprite = sprites.get(pose), paintStamp = view.frame_time;
             if (!sprite || sprite.canvas.width !== size.width * 5 || sprite.canvas.height !== size.height * 5) {
                 var image = document.createElement("canvas"); image.width = size.width * 5; image.height = size.height * 5;
                 sprite = { canvas: image, ctx: image.getContext("2d"), stamp: null }; sprites.set(pose, sprite);
             }
             if (!sprite.ctx) return false;
-            if (sprite.stamp !== stamp) { sprite.ctx.clearRect(0, 0, sprite.canvas.width, sprite.canvas.height); sprite.stamp = stamp; }
+            if (sprite.stamp !== paintStamp) { sprite.ctx.clearRect(0, 0, sprite.canvas.width, sprite.canvas.height); sprite.stamp = paintStamp; }
             var original = view.ctx;
             sprite.ctx.save(); sprite.ctx.translate(size.width * 2 - x, size.height * 2 - y);
             sprite.ctx.globalAlpha = original.globalAlpha; sprite.ctx.imageSmoothingEnabled = false;
             view.ctx = sprite.ctx;
             try { paint(); } finally { view.ctx = original; sprite.ctx.restore(); }
-            repaint(window.performance.now()); request(); return true;
+            if (paintStamp === undefined || paintStamp !== stamp) { stamp = paintStamp; repaint(window.performance.now()); }
+            else coalesce();
+            request(); return true;
         }
         function clear(redraw) {
             if (frame !== null) window.cancelAnimationFrame(frame);

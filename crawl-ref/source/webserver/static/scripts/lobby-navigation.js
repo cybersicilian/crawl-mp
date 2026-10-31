@@ -8,7 +8,22 @@ function ($, createViews, browser, overview, discovery) {
         { id: "chronicle", title: "Chronicle", sections: ["coop_chronicle_panel"] }
     ];
     var root, nav, primary, controller, pending = false, hadRoom = false, leftLobby = false, returnedFromGame = false;
-    var settingsSignature = null;
+    var settingsSignature = null, observers = [];
+    // Steady-state churn that never changes navigation state: the one-second
+    // idle-time ticker and the milestone roll-in animation.
+    var ignoredSelector = ".idle_time, .milestone_col";
+    function ignores(records) {
+        for (var i = 0; i < records.length; i++) {
+            var target = records[i].target;
+            var node = target && target.nodeType === 1 ? target : target && target.parentNode;
+            if (!node || typeof node.closest !== "function" || !node.closest(ignoredSelector)) return false;
+        }
+        return true;
+    }
+    function observe(target, options) {
+        var observer = new MutationObserver(function (records) { if (!ignores(records)) schedule(); });
+        observer.observe(target, options); observers.push(observer);
+    }
     function element(tag, className, text) {
         var node = document.createElement(tag);
         if (className) node.className = className;
@@ -38,13 +53,23 @@ function ($, createViews, browser, overview, discovery) {
         }
         jump("party_lobby_panel", keyboard);
     }
+    function menuItems(menu) {
+        return Array.from(menu.querySelectorAll("a, button")).filter(function (item) {
+            item.setAttribute("role", "menuitem"); item.tabIndex = -1;
+            return item.getClientRects().length > 0;
+        });
+    }
     function account() {
         var details = element("details", "lobby-account"); details.id = "lobby_account";
         var summary = element("summary", "", "Account"); details.appendChild(summary);
-        var menu = element("div", "lobby-account-menu");
+        summary.setAttribute("aria-haspopup", "menu"); summary.setAttribute("aria-expanded", "false");
+        summary.setAttribute("aria-controls", "lobby_account_menu");
+        var menu = element("div", "lobby-account-menu"); menu.id = "lobby_account_menu";
+        menu.setAttribute("role", "menu"); menu.setAttribute("aria-label", "Account");
         var gameSettings = element("div", "lobby-account-settings"); gameSettings.id = "lobby_account_settings";
+        gameSettings.setAttribute("role", "group"); gameSettings.setAttribute("aria-label", "Game settings");
         menu.appendChild(gameSettings);
-        var graphics = element("a", "", "Graphics & interface"); graphics.href = "/settings/graphics"; menu.appendChild(graphics);
+        var graphics = element("a", "", "Appearance & graphics"); graphics.href = "/settings/graphics"; menu.appendChild(graphics);
         var profile = element("a", "", "Profile & textures"); profile.href = "/profile"; menu.appendChild(profile);
         ["chem_link", "chpw_link"].forEach(function (id) {
             var link = document.getElementById(id); if (link) menu.appendChild(link);
@@ -52,8 +77,30 @@ function ($, createViews, browser, overview, discovery) {
         var logout = document.getElementById("logout_form");
         if (logout) menu.appendChild(logout);
         details.appendChild(menu); nav.appendChild(details);
+        var viaKeyboard = false;
+        summary.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") viaKeyboard = true;
+            if (event.key === "ArrowDown" && !details.open) { event.preventDefault(); details.open = true; }
+        });
+        details.addEventListener("toggle", function () {
+            summary.setAttribute("aria-expanded", String(details.open));
+            if (!details.open) { viaKeyboard = false; return; }
+            var items = menuItems(menu);
+            if (viaKeyboard && items.length) items[0].focus();
+            viaKeyboard = false;
+        });
         details.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") { details.open = false; summary.focus(); }
+            if (event.key === "Escape") { event.preventDefault(); details.open = false; summary.focus(); return; }
+            if (!details.open || !event.target.closest(".lobby-account-menu")) return;
+            var items = menuItems(menu), index = items.indexOf(document.activeElement);
+            var next = event.key === "ArrowDown" ? index + 1 : event.key === "ArrowUp" ? index - 1
+                : event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : null;
+            if (next === null || !items.length) {
+                if (event.key === "Tab") details.open = false;
+                return;
+            }
+            event.preventDefault();
+            items[(next + items.length) % items.length].focus();
         });
         // A form submission must finish before its containing menu is closed.
         menu.addEventListener("click", function (event) {
@@ -61,6 +108,9 @@ function ($, createViews, browser, overview, discovery) {
         });
         document.addEventListener("click", function (event) {
             if (!details.contains(event.target)) details.open = false;
+        });
+        details.addEventListener("focusout", function (event) {
+            if (details.open && event.relatedTarget && !details.contains(event.relatedTarget)) details.open = false;
         });
     }
     function refreshGameSettings() {
@@ -125,6 +175,9 @@ function ($, createViews, browser, overview, discovery) {
         var nextHeight = Math.ceil(nav.getBoundingClientRect().height) + "px";
         if (root.style.getPropertyValue("--lobby-navigation-height") !== nextHeight)
             root.style.setProperty("--lobby-navigation-height", nextHeight);
+        // Mutations made by this pass reflect state already read; drop them
+        // instead of scheduling a second identical pass.
+        observers.forEach(function (observer) { observer.takeRecords(); });
     }
     function schedule() {
         if (pending) return;
@@ -141,9 +194,9 @@ function ($, createViews, browser, overview, discovery) {
         var brand = element("a", "lobby-book-brand"); brand.href = "#lobby"; brand.dataset.workspaceTarget = "play";
         var mark = element("span", "lobby-book-emblem"); mark.setAttribute("aria-hidden", "true"); brand.appendChild(mark);
         var title = element("span", "lobby-book-title");
-        title.appendChild(element("span", "lobby-book-kicker", "Field guide & tavern"));
+        title.appendChild(element("span", "lobby-book-kicker", "Cooperative tactics roguelike"));
         title.appendChild(element("strong", "", "Pebble Broth")); brand.appendChild(title); nav.appendChild(brand);
-        var links = element("div", "lobby-chapters");
+        var links = element("div", "lobby-chapters"); links.setAttribute("aria-label", "Workspace sections");
         views.forEach(function (view) {
             var link = element("a", "lobby-chapter-link");
             link.setAttribute("aria-label", view.title);
@@ -151,13 +204,22 @@ function ($, createViews, browser, overview, discovery) {
                 element("span", "outgame-label-short", view.shortTitle || view.title));
             link.href = "/?view=" + view.id + "#lobby"; link.dataset.workspaceTarget = view.id;
             if (view.id === "saved") {
-                var badge = element("span", "lobby-nav-count"); badge.hidden = true; link.appendChild(badge);
+                var badge = element("span", "lobby-nav-count tr-badge"); badge.hidden = true; link.appendChild(badge);
             }
             links.appendChild(link);
         });
         var statsLink = element("a", "lobby-chapter-link lobby-chapter-external", "Stats ↗");
         statsLink.href = "/stats"; statsLink.target = "_blank"; statsLink.rel = "noopener";
         statsLink.setAttribute("aria-label", "Stats and reference (opens in a new tab)"); links.appendChild(statsLink);
+        // Arrow keys move between sections; Enter/Space still activate the focused link.
+        links.addEventListener("keydown", function (event) {
+            var items = Array.from(links.querySelectorAll(".lobby-chapter-link")), index = items.indexOf(event.target);
+            if (index === -1) return;
+            var next = event.key === "ArrowRight" ? index + 1 : event.key === "ArrowLeft" ? index - 1
+                : event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : null;
+            if (next === null) return;
+            event.preventDefault(); items[(next + items.length) % items.length].focus();
+        });
         nav.appendChild(links);
         primary = element("button", "lobby-primary-action", "New expedition");
         primary.type = "button"; primary.id = "lobby_primary_action"; primary.dataset.lobbyCreate = "true";
@@ -188,15 +250,14 @@ function ($, createViews, browser, overview, discovery) {
             } else controller.show(target.dataset.workspaceTarget, keyboard);
             schedule();
         });
-        new MutationObserver(schedule).observe(root, { childList: true, subtree: true,
+        observe(root, { childList: true, subtree: true,
             characterData: true, attributes: true, attributeFilter: ["style"] });
-        new MutationObserver(schedule).observe(root.querySelector(".welcome-entry"), {
-            attributes: true, attributeFilter: ["class"] });
+        observe(root.querySelector(".welcome-entry"), { attributes: true, attributeFilter: ["class"] });
         window.addEventListener("resize", schedule, { passive: true }); update();
         window.addEventListener("party-lobby-opened", function () { jump("party_lobby_panel", false); schedule(); });
         window.addEventListener("party-invite-opened", function () { jump("lobby_friends_panel", false); schedule(); });
         window.dispatchEvent(new CustomEvent("lobby-navigation-ready"));
     }
     $(document).ready(init);
-    return { init: init };
+    return { init: init, ignores: ignores };
 });

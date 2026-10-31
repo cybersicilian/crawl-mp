@@ -13,9 +13,11 @@
 .library-page .archive-collections a { padding: 7px 12px; color: #dce6d2; border: 1px solid #a7b39348; border-radius: 4px; text-decoration: none; }
 .library-page .archive-collections [aria-current] { color: #f5e2bc; border-color: #d89b48; background: #c86d3b24; }
 .archive-account { position: relative; color: #e2d5b8; font-size: 12px; }
-.archive-account summary { padding: 11px 8px; cursor: pointer; }
-.archive-account-menu { position: absolute; right: 0; top: 100%; z-index: 50; padding: 10px; min-width: 150px; background: #243027; border: 1px solid #d89b4870; border-radius: 6px; }
-.library-page .archive-account-menu a { display: block; padding: 9px 10px; }
+.archive-account summary { padding: 11px 10px; cursor: pointer; border: 1px solid var(--ui-edge, #d89b4875); border-radius: 5px; color: var(--ui-text, #e2d5b8); }
+.archive-account[open] summary { background: var(--ui-raised, #2f3d33); }
+.archive-account-menu { position: absolute; right: 0; top: 100%; z-index: 50; padding: 10px; min-width: 190px; background: var(--ui-panel, #243027); border: 1px solid var(--ui-edge, #d89b4870); border-radius: 6px; box-shadow: 0 10px 30px #0007; }
+.library-page .archive-account-menu a { display: block; padding: 9px 10px; border-radius: 4px; color: var(--ui-text, #e2d5b8); text-decoration: none; }
+.library-page .archive-account-menu a:hover, .library-page .archive-account-menu a:focus-visible { background: var(--ui-raised, #2f3d33); color: var(--ui-accent-bright, #f6e7c8); }
 .archive-account-menu .site-logout button { width: 100%; }
 .library-page .archive-sign-in { padding: 9px 13px; border: 1px solid #d89b4875; border-radius: 5px; font-size: 12px; }
 .archive-skip { position: fixed; top: -70px; left: 18px; z-index: 5000; padding: 12px 18px; color: #fff !important; background: #943824; }

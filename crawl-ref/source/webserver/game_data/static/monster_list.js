@@ -4,6 +4,9 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
     "use strict";
 
     var monsters, $list, monster_groups, max_rows;
+    // The list is rebuilt only when a tracked actor, the unseen warning or the
+    // party context changed, not on every native paint.
+    var changed, last_render;
 
     function init()
     {
@@ -11,6 +14,8 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         $list = $("#monster_list");
         monster_groups = [];
         max_rows = 5;
+        changed = true;
+        last_render = null;
     }
     $(document).bind("game_init", init);
 
@@ -18,10 +23,17 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
     {
         var map_cell = map_knowledge.get(loc.x, loc.y);
         var mon = map_cell.mon;
+        var key = [loc.x, loc.y];
         if (mon && map_knowledge.visible(map_cell))
-            monsters[[loc.x,loc.y]] = { mon: mon, loc: loc };
-        else
-            delete monsters[[loc.x,loc.y]];
+        {
+            monsters[key] = { mon: mon, loc: loc };
+            changed = true;
+        }
+        else if (monsters[key])
+        {
+            delete monsters[key];
+            changed = true;
+        }
     }
 
     function can_combine(monster1, monster2)
@@ -136,6 +148,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
                     // Do not carry an aura reading on a remembered map cell.
                     aura_radius: map_knowledge.get(entry.loc.x, entry.loc.y).t.bg.OOR
                         ? undefined : entry.mon.aura_radius,
+                    threat: Number.isInteger(entry.mon.threat) ? entry.mon.threat : undefined,
                     non_threatening: Boolean(is_excluded(entry.mon)), perception: "visible" };
             });
     }
@@ -158,11 +171,24 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
 
     function update(show_inv)
     {
-        $(document).trigger("nearby_creatures_changed");
         var rail = document.getElementById("enemy_initiative_rail");
+        var grouped = Boolean(rail && rail.dataset.creatureGroups === "true");
+        var party = window.crawl_party && window.crawl_party.state;
+        // Only the party facts that decide which actors the list shows.
+        var party_key = party && Array.isArray(party.members) ? party.members.map(function (hero) {
+            return [hero.on_same_level, hero.alive, Boolean(hero.ghost_haunting), hero.pos && hero.pos.x, hero.pos && hero.pos.y].join(",");
+        }).join(";") : "";
+        var context = { show_inv: show_inv, grouped: grouped, party: party_key,
+            cell_width: dungeon_renderer.cell_width, cell_height: dungeon_renderer.cell_height,
+            mode: options.get("tile_display_mode"), max_rows: max_rows };
+        if (!changed && last_render && Object.keys(context).every(function (key) { return context[key] === last_render[key]; }))
+            return;
+        changed = false;
+        last_render = context;
+        $(document).trigger("nearby_creatures_changed");
         // The grouped rail owns visible contacts. Do not paint a second hidden
         // roster on every map update; unknown-location warnings still live here.
-        var grouped_monsters = rail && rail.dataset.creatureGroups === "true" ? [] : group_monsters();
+        var grouped_monsters = grouped ? [] : group_monsters();
 
         var rows = Math.min(grouped_monsters.length, max_rows);
         if (show_inv)
@@ -326,6 +352,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         $list.empty();
         monster_groups = [];
         monsters = {};
+        changed = true;
         $(document).trigger("nearby_creatures_changed");
     }
 

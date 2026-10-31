@@ -1,6 +1,6 @@
 /* Staging character controls and their authoritative room commands.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers", "party-lobby-tools"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers, lobbyTools) {
+define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers", "party-lobby-tools", "party-roster-strip"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers, lobbyTools, strip) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
@@ -17,17 +17,19 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
 
             for (var s = 0; s < 4; s++)
             {
-                var $box = $("<div class='party-slot-box party-slot-card slot-p" + s + "' data-slot='" + s + "'></div>");
+                var $box = $("<div class='party-slot-box party-slot-card slot-p" + s + "' data-slot='" + s + "'></div>")
+                    .attr("id", "party_seat_editor_" + s);
                 $box.append(builder.identity(s));
 
-                var $modes = $("<div class='party-slot-modes'></div>");
+                var $modes = $("<div class='party-slot-modes party-seat-kind' role='group'></div>")
+                    .attr("aria-label", "Seat " + (s + 1) + " kind");
                 if (s === 0)
                 {
                     $modes.append(
-                        $("<span style='color: #8ae234; font-size: 10px; cursor: help;' tabindex='0'>[Party Leader / Host]</span>")
-                            .attr("data-tip-title", "Party Leader / Host Slot (P1)")
-                            .attr("data-tip-body", "Primary Expedition Leader slot. Controls Party Staging Room settings, Friendly Fire rules, and launching the party into Dungeon:1.")
-                            .attr("data-tip-meta", "Slot P1: Always Active Party Host")
+                        $("<span class='party-seat-kind-fixed' tabindex='0'>Host seat · Always active</span>")
+                            .attr("data-tip-title", "Host seat")
+                            .attr("data-tip-body", "The expedition leader. Controls party rules and begins the expedition.")
+                            .attr("data-tip-meta", "Seat 1 is always active")
                     );
                 }
                 else
@@ -99,13 +101,13 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 $box.append($archRow);
 
                 var $bottom = $("<div class='party-slot-bottom'></div>");
-                $bottom.append($("<span class='party-slot-combo-summary' style='color: #babdb6; font-size: 11px;'></span>")
+                $bottom.append($("<span class='party-slot-combo-summary'></span>")
                     .text(defaultSpecies[s] + " " + defaultJobs[s]));
-                var $readyBtn = $("<button type='button' class='party-ready-badge party-slot-ready'>[READY]</button>")
+                var $readyBtn = $("<button type='button' class='party-ready-badge party-slot-ready'>Ready</button>")
                     .attr("data-slot", s)
-                    .attr("data-tip-title", "Slot P" + (s + 1) + " Ready Status")
-                    .attr("data-tip-body", "Click to toggle ready status for Slot P" + (s + 1) + " before launching the expedition into Dungeon:1.")
-                    .attr("data-tip-meta", "Click to toggle [READY] / [WAITING]");
+                    .attr("data-tip-title", "Seat " + (s + 1) + " readiness")
+                    .attr("data-tip-body", "Toggle whether this hero is ready to begin. The host waits for every active hero.")
+                    .attr("data-tip-meta", "Click to toggle Ready / Waiting");
                 $bottom.append($readyBtn);
                 $box.append($bottom);
 
@@ -114,51 +116,31 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
 
             guide.init($grid[0]);
             $grid.find(".party-slot-box").each(function () { builder.refresh(this); });
+            strip.init($grid[0]);
             composition.init($grid[0]);
             lobbyTools.init();
-            $(".party-campaign-options").remove();
-            $(".party-setup-tools").append(modifiers.create(function (settings) {
+            // Lobby access, invite link and save loading belong with the other party-wide
+            // controls in the side column, not inside the sticky command bar.
+            var $lobbyTools = $(".party-lobby-tools"), $side = $(".party-builder-side");
+            if ($lobbyTools.length && $side.length) $side.append($lobbyTools);
+
+            function sendSettings(settings)
+            {
                 var room = api.find_my_party_room();
                 if (room) send_message("party_room_settings", $.extend({ room_id: room.room_id }, settings));
-            }));
-
-            if ($("#party_seasonings_bar").length === 0)
+            }
+            sendSettings.room = function () { return api.find_my_party_room(); };
+            // Legacy toolbars go; the Shared Fate block inside the rules panel keeps its class.
+            $(".party-campaign-options, .party-setup-tools").not("#party_expedition_rules *").remove();
+            if ($("#party_expedition_rules").length === 0)
             {
-                var $sBar = $("<div id='party_seasonings_bar' class='party-seasonings-bar' role='group' aria-label='Broth Seasonings'></div>");
-                $sBar.append("<span class='party-seasonings-label'>Pot Seasonings</span>");
-                var seasoningsList = [
-                    { id: "fast_boil", label: "Fast Boil", bonus: "+25% Score", tip: "Hellcrawl-inspired rapid delve: upstairs crumble behind the party and floor transitions accelerate." },
-                    { id: "shared_ladle", label: "Shared Ladle", bonus: "+20% Score", tip: "Lifelink cauldron: lethal blows draw emergency vitality from the healthiest cook in the pot." },
-                    { id: "heavy_pebbles", label: "Heavy Pebbles", bonus: "+15% Score", tip: "High-stakes loot race: relics, runes, and floor-firsts award double Chef's Citation points." }
-                ];
-                for (var sIdx = 0; sIdx < seasoningsList.length; sIdx++)
+                var $rulesHost = $("#party_rules_panel");
+                if ($rulesHost.length === 0)
                 {
-                    var item = seasoningsList[sIdx];
-                    var $chip = $("<button type='button' class='party-seasoning-chip' aria-pressed='false'></button>")
-                        .attr("data-seasoning", item.id)
-                        .attr("data-tip-title", item.label + " (" + item.bonus + ")")
-                        .attr("data-tip-body", item.tip)
-                        .attr("data-tip-meta", "Run Seasoning · Click to toggle for this pot");
-                    $chip.append($("<span></span>").text(item.label));
-                    $chip.append($("<small></small>").text(item.bonus));
-                    $sBar.append($chip);
+                    $rulesHost = $("<div id='party_rules_panel' class='party-rules-panel'></div>");
+                    $("#party_composition_view").after($rulesHost);
                 }
-                $(".party-setup-tools").append($sBar);
-
-                $sBar.on("click", ".party-seasoning-chip", function (ev) {
-                    ev.preventDefault();
-                    var room = api.find_my_party_room();
-                    if (!room) return;
-                    var key = $(this).attr("data-seasoning");
-                    var current = Array.isArray(room.seasonings) ? room.seasonings.slice() : [];
-                    var pos = current.indexOf(key);
-                    if (pos === -1) current.push(key);
-                    else current.splice(pos, 1);
-                    send_message("party_room_settings", {
-                        room_id: room.room_id,
-                        seasonings: current
-                    });
-                });
+                $rulesHost.append(modifiers.create(sendSettings));
             }
 
             window.addEventListener("pebble-apply-daily", function (ev) {

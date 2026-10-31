@@ -3,6 +3,36 @@ define(["jquery", "./status-icons", "./frame-update"], function ($, icons, frame
     var glyphs = { o: "explore", "\t": "autofight", "5": "rest", g: "pickup", i: "inventory",
         z: "spells", a: "abilities", m: "skills", A: "trait", "%": "shield",
         "<": "stairs-up", ">": "stairs-down", X: "map" };
+
+    // Shared tactics vocabulary. Lobby and game surfaces use the same words,
+    // glyphs and .tr-badge data attributes (styled in tactics-components.css).
+    var vocabulary = {
+        roles: { frontline: ["Frontline", "shield"], striker: ["Striker", "blade"], caster: ["Caster", "spark"],
+            support: ["Support", "heart"], scout: ["Scout", "eye"] },
+        modes: { explore: ["Free Explore", "explore"], combat: ["Tactical Combat", "autofight"] },
+        factions: { hero: ["Your hero", "user"], ally: ["Ally", "heart"], enemy: ["Enemy", "skull"], neutral: ["Neutral", "question"] },
+        threat: { low: ["Low threat", "ready"], med: ["Moderate threat", "danger"], high: ["High threat", "danger"],
+            lethal: ["Lethal threat", "skull"] },
+        initiative: { banked: ["Banked time", "time"], debt: ["Recovery debt", "slow"] },
+        resources: { hp: ["Health", "heart"], mp: ["Magic", "spark"], gold: ["Gold", "coin"], xp: ["Experience", "experience"] }
+    };
+
+    // badge("role", "caster") -> <span class="tr-badge" data-role="caster" role="img" aria-label="Caster">
+    function badge(kind, value, options) {
+        options = options || {};
+        var table = vocabulary[kind] || {}, key = String(value || "").toLowerCase();
+        var entry = table[key] || [options.label || value || "", "rune"];
+        var node = document.createElement("span");
+        node.className = "tr-badge" + (options.className ? " " + options.className : "");
+        node.setAttribute("data-" + ({ roles: "role", modes: "mode", factions: "faction", resources: "resource" }[kind] || kind), key);
+        node.setAttribute("data-tip-title", options.label || entry[0]);
+        if (options.description) node.setAttribute("data-tip-body", options.description);
+        if (options.icon !== false) node.appendChild(icons.icon(entry[1]));
+        if (options.text === false) { node.setAttribute("role", "img"); node.setAttribute("aria-label", options.label || entry[0]); }
+        else node.appendChild(document.createTextNode(options.label || entry[0]));
+        return node;
+    }
+
     function decorate(button, glyph) {
         var label = (button.id === "workflow_compact_btn" ? button.getAttribute("data-compact-label") : button.getAttribute("aria-label"))
             || button.textContent.replace(/\s+/g, " ").trim();
@@ -52,9 +82,14 @@ define(["jquery", "./status-icons", "./frame-update"], function ($, icons, frame
         document.querySelectorAll(".party-ping-btn").forEach(function (button) {
             decorate(button, { look: "ping-look", danger: "ping-danger", loot: "ping-loot", stairs: "ping-stairs" }[button.dataset.pingKind] || "rune");
         });
+        // Icon-only controls added by other modules still get a name and a tip.
+        document.querySelectorAll("#normal :is(button, [role='button']) > .tt-icon:only-child").forEach(function (glyph) {
+            var button = glyph.parentElement;
+            icons.name(button, button.getAttribute("title") || button.getAttribute("data-tip-title"));
+        });
     }
     var refresh = frameUpdate(update);
     $(document).on("party_state_rendered.hudIcons game_library_controls.hudIcons game_actions_changed.hudIcons", refresh)
         .on("game_cleanup.hudIcons", refresh.cancel);
-    return { init: update };
+    return { init: update, vocabulary: vocabulary, badge: badge, decorate: decorate };
 });

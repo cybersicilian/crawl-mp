@@ -1,9 +1,9 @@
 """Incremental cell storage with a lazy, complete reconnect baseline.
 
 Coordinates may use the native x+1/y shorthand. A reset cell is self-contained;
-legacy cells merge their tile/monster fields. Input packets remain immutable.
+legacy cells merge their tile/monster fields. Input packets remain immutable:
+their values are shared, never copied, and a changed cell is always rebuilt.
 """
-import copy
 
 
 class MapSnapshot:
@@ -19,7 +19,7 @@ class MapSnapshot:
             self.metadata.clear()
         self.floor = floor
         self._packet = None
-        self.metadata.update({key: copy.deepcopy(value) for key, value in packet.items()
+        self.metadata.update({key: value for key, value in packet.items()
                               if key not in {"cells", "clear"}})
         x, y = 0, 0
         for delta in packet.get("cells", []):
@@ -34,9 +34,9 @@ class MapSnapshot:
                     old = cell.get(field) or {}
                     if field == "mon" and value.get("id", old.get("id")) != old.get("id"):
                         old = {}
-                    cell[field] = dict(old, **copy.deepcopy(value))
+                    cell[field] = dict(old, **value)
                 else:
-                    cell[field] = copy.deepcopy(value)
+                    cell[field] = value
             cell.update(x=x, y=y)
             self.cells[key] = cell
 

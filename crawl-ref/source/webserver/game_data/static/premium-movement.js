@@ -28,12 +28,18 @@ function ($, map, options, enums, layers, terrain, view, presentation, motions, 
             return visible({ x: from.x, y: to.y }) && visible({ x: to.x, y: from.y });
         return true;
     }
+    // The visible-cell clip only changes with the camera or a native map
+    // packet, not with every overlay frame between them.
+    var visibleCells = null, visibleKey = null, generation = 0;
     function cells() {
+        if (!renderer) return [];
+        var key = [renderer.view.x, renderer.view.y, renderer.cols, renderer.rows, generation].join(":");
+        if (visibleCells && visibleKey === key) return visibleCells;
         var result = [];
-        if (!renderer) return result;
         for (var y = renderer.view.y; y < renderer.view.y + renderer.rows; y++)
             for (var x = renderer.view.x; x < renderer.view.x + renderer.cols; x++)
                 if (map.visible(map.get(x, y))) result.push({ x: x, y: y });
+        visibleCells = result; visibleKey = key;
         return result;
     }
     function key(cell, x, y) {
@@ -78,8 +84,8 @@ function ($, map, options, enums, layers, terrain, view, presentation, motions, 
     $(document).on("game_init.premiumMovement", function () { reset(false); heroes.clear(); floor = undefined; running = true; })
         .on("game_cleanup.premiumMovement game_preinit.premiumMovement game_connection_lost.premiumMovement", function () {
             running = false; reset(false); heroes.clear(); floor = undefined;
-        }).on("map_knowledge_changed.premiumMovement", sync)
-        .on("map_knowledge_cleared.premiumMovement", function () { reset(false); heroes.clear(); })
+        }).on("map_knowledge_changed.premiumMovement", function () { generation++; sync(); })
+        .on("map_knowledge_cleared.premiumMovement", function () { generation++; reset(false); heroes.clear(); })
         .on("party_state_rendered.premiumMovement", function (event, state) {
             if (!state) return;
             if (floor !== state.floor) reset(true);

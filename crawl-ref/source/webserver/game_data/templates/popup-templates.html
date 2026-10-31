@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="progress-bar">
+  <div class="progress-bar workflow-prompt">
     <div class="header"><span></span></div>
     <div class="bar-text"></div>
     <div class="status"><span></span></div>
@@ -191,7 +191,7 @@
     <div class="body fg7"></div>
     <div class="more"></div>
   </div>
-  <div class="msgwin-get-line">
+  <div class="msgwin-get-line workflow-prompt">
     <div class="header"></div>
     <input type="text" data-sync-id="input" />
     <div data-hotkey="Enter"></div>
@@ -214,18 +214,18 @@
     </div>
     <div class="body fg7"></div>
   </div>
-  <div class="seed-selection">
+  <div class="seed-selection workflow-prompt">
     <div class="header fg3"></div>
     <div class="body fg7">
       <p class="body-text"></p>
       <div class="seed-input">
         <span>Enter seed: </span>
         <input type="text" data-sync-id="seed" />
-        <button data-hotkey="-" data-sync-id="btn-clear">
-          <span>[-] Clear</span>
+        <button type="button" class="workflow-button" data-hotkey="-" data-sync-id="btn-clear">
+          <span>Clear</span><kbd aria-hidden="true">-</kbd>
         </button>
-        <button data-hotkey="d" data-sync-id="btn-daily">
-          <span>[d] Today's daily seed</span>
+        <button type="button" class="workflow-button" data-hotkey="d" data-sync-id="btn-daily">
+          <span>Today's daily seed</span><kbd aria-hidden="true">d</kbd>
         </button>
       </div>
       <p class="footer"></p>
@@ -236,9 +236,9 @@
         </label>
       </div>
     </div>
-    <div class="button-bar">
-      <button data-hotkey="Enter" data-sync-id="btn-begin">
-        <span>[Enter] Begin!</span>
+    <div class="button-bar workflow-dialog-actions">
+      <button type="button" class="workflow-button workflow-primary" data-hotkey="Enter" data-sync-id="btn-begin">
+        <span>Begin</span><kbd aria-hidden="true">Enter</kbd>
       </button>
     </div>
   </div>

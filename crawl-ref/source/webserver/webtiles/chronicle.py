@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import sqlite3
+import threading
 
 DEFAULT_BASE_DIR = "./rcs"
 DB_FILENAME = "coop_chronicle.db"
@@ -577,8 +578,37 @@ def ingest_jsonl_events(base_dir=DEFAULT_BASE_DIR):
     return total
 
 
+_summary_cache = {}
+# get_chronicle_summary() runs on the library worker as well as the IOLoop.
+_summary_lock = threading.Lock()
+
+
+def _summary_signature(base_dir):
+    """mtime/size of every file a summary depends on; None where absent."""
+    signature = []
+    for path in (os.path.join(base_dir, DB_FILENAME),
+                 os.path.join(base_dir, JSONL_FILENAME),
+                 os.path.join(base_dir, "saves", JSONL_FILENAME)):
+        try:
+            stat = os.stat(path)
+            signature.append((stat.st_mtime_ns, stat.st_size))
+        except OSError:
+            signature.append(None)
+    return tuple(signature)
+
+
 def get_chronicle_summary(limit=25, base_dir=DEFAULT_BASE_DIR):
-    """Return latest player ghosts, party comps, and cool items found."""
+    """Return latest player ghosts, party comps, and cool items found.
+
+    The summary is memoized against the database and JSONL file stats, so
+    lobby broadcasts do not reopen SQLite and re-ingest on every room change.
+    """
+    key = (os.path.abspath(base_dir), int(limit))
+    signature = _summary_signature(base_dir)
+    with _summary_lock:
+        cached = _summary_cache.get(key)
+    if cached is not None and signature[0] is not None and cached[0] == signature:
+        return dict(cached[1])
     init_db(base_dir)
     ingest_jsonl_events(base_dir)
 
@@ -655,8 +685,13 @@ def get_chronicle_summary(limit=25, base_dir=DEFAULT_BASE_DIR):
     except Exception:
         logging.warning("Failed to query coop_chronicle.db", exc_info=True)
 
-    return {
+    result = {
         "ghosts": ghosts,
         "party_comps": party_comps,
         "cool_items": cool_items,
     }
+    # Keyed on the pre-read signature: a write that lands mid-read changes the
+    # stats and forces a fresh query next time.
+    with _summary_lock:
+        _summary_cache[key] = (signature, result)
+    return dict(result)

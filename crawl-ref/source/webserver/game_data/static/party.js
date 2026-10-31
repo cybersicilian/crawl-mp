@@ -1,8 +1,9 @@
-define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade", "heat-help"],
-function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade, heatHelp) {
+define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade", "hero-roles", "./turn-order-rail", "heat-help"],
+function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade, roles, turnOrder, heatHelp) {
     "use strict";
 
     var party_slot_colours = model.colours;
+    var role_glyphs = { frontline: "shield", striker: "weapon", caster: "powers", support: "book", scout: "moon", unknown: "question" };
     var normalize_party_member = model.normalize;
     var format_char_abbrev = model.abbreviation;
 
@@ -208,11 +209,27 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                         "data-tip-title": m.name, "data-tip-meta": "Inspect character" });
                 $name.on("click", function (event) { event.stopPropagation(); open_party_inspector(m.slot, "overview"); });
                 $name.text(m.name);
-                if (m.slot === controlled_slot) $card.find(".party-portrait").append($name);
+                // The controlled hero's name leads its readings row (the portrait is 42px wide).
+                if (m.slot === controlled_slot) $meta.append($name);
                 else $leftInfo.append($name);
 
                 var char_code = format_char_abbrev(m.species, m.job);
                 var full_spec_title = model.speciesName(m) + " " + (m.job || "") + (m.god ? (" of " + m.god) : "");
+                // Hero identity line: role badge, species and background. The role is
+                // the shared lobby vocabulary (static/scripts/hero-roles.js) from the native background.
+                var role = roles.roleForBackground(m.job);
+                var $identity = $("<div class='party-hero-identity' role='group'></div>")
+                    .attr("aria-label", "Identity for " + m.name);
+                var $role = $("<span role='img' tabindex='0'></span>").addClass(roles.badgeClasses(role.key))
+                    .attr({ "data-role": role.key, "aria-label": "Role: " + role.label,
+                        "data-tip-title": role.label, "data-tip-badge": "[Role]",
+                        "data-tip-body": role.summary, "data-tip-meta": m.job ? "Background: " + m.job : "Background unavailable" })
+                    .append(icons.icon(role_glyphs[role.key] || "question"), $("<span class='party-role-label'></span>").text(role.label))
+                    .on("click keydown keypress keyup", function (event) { event.stopPropagation(); });
+                var $heroLine = $("<span class='party-hero-line'></span>")
+                    .append($("<span class='party-hero-kind'></span>").text([model.speciesName(m) || "Species unavailable", m.job || "Background unavailable"].join(" ")));
+                $identity.append($role, $heroLine);
+                $meta.append($identity);
                 var $xlSpan = $("<span></span>")
                     .attr("data-tip-title", m.name + " — " + full_spec_title)
                     .attr("data-tip-body", "Experience Level " + model.display(m.xl) + " (" + (m.title || "Adventurer") + "). Str " + m.str + " | Int " + m.intel + " | Dex " + m.dex)
@@ -256,6 +273,7 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 $def.append($("<span class='party-stat-lbl'>EV:</span>")).append($("<span class='party-stat-val'></span>").text(model.display(m.ev) + " "));
                 $def.append($("<span class='party-stat-lbl'>SH:</span>")).append($("<span class='party-stat-val'></span>").text(sh_val));
                 $meta.append($def);
+                $meta.append(cardStatus.faithRow(m));
                 $card.append($top);
                 $card.append($meta);
 
@@ -263,10 +281,18 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 var $bars = $("<div class='party-bars'></div>");
                 var $hpWrap = cardStatus.health(m);
 
-                var $mpWrap = $("<div class='party-bar-wrap mp-track'></div>")
+                var $mpWrap = $("<div class='party-bar-wrap mp-track tr-meter' role='meter' tabindex='0'></div>")
+                    .attr({ id: "party_mp_" + m.slot, "data-meter": resource.label === "Heat" ? "heat" : "mp",
+                        "aria-label": m.name + " " + resource.label + ": " + (resource.value === null ? "unavailable" : resource.value + " of " + resource.max),
+                        "data-resource-state": resource.value === null ? "unknown" : "known" })
+                    .on("click keydown keypress keyup", function (event) {
+                        if (event.type.indexOf("key") === 0 && event.key === "Tab") return;
+                        event.stopPropagation();
+                    })
                     .attr("data-tip-title", m.name + " " + (resource.label === "Heat" ? "Heat" : "Magic Points"))
                     .attr("data-tip-body", "Current " + resource.label + ": " + model.display(resource.value) + " / " + model.display(resource.max));
-                $mpWrap.append($("<div class='party-mp-fill'></div>").css("width", resource.percent + "%"));
+                if (resource.value !== null) $mpWrap.attr({ "aria-valuemin": 0, "aria-valuemax": resource.max, "aria-valuenow": resource.value });
+                $mpWrap.append($("<div class='party-mp-fill' aria-hidden='true'></div>").css("width", resource.percent + "%"));
                 $mpWrap.append($("<div class='party-bar-label'></div>").text(resource.label + " " + model.display(resource.value) + "/" + model.display(resource.max)));
                 if (resource.label === "Heat") {
                     heatHelp.apply($mpWrap[0], resource);
@@ -409,6 +435,7 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
             minimap.fit_to($("#hud_minimap").width());
         }
         initiative.update($members, data);
+        turnOrder.update(data);
         navigation.update();
 
         chatContext.update(data);

@@ -25,18 +25,19 @@
 }
 #lobby .lobby-discovery-rooms h2, #lobby #lobby_body h2, #lobby #play_now h2,
 #lobby .lobby-recent h2 { font-size: var(--tt-title-section); line-height: 1.25; }
-#lobby .lobby-home { margin-bottom: var(--tt-space-4); border-radius: 6px; }
-#lobby .lobby-home-copy { padding: var(--tt-space-5); }
+#lobby .lobby-home { margin-bottom: var(--tt-space-4); gap: var(--tt-space-4); }
+#lobby .lobby-home-banner { padding: var(--tt-space-5); border-radius: 6px; }
 #lobby #lobby_home h1 { font-size: var(--tt-title-page); line-height: 1.2; max-width: 22ch; }
 #lobby .lobby-home-intro { margin-bottom: var(--tt-space-4); line-height: 1.6; }
 #lobby .lobby-home-art { min-height: 0; }
-#lobby :is(.lobby-recent, .lobby-daily-broth) { padding: var(--tt-space-4) var(--tt-space-5); }
-#lobby .lobby-daily-broth { gap: var(--tt-space-2); justify-content: start; }
+#lobby #lobby_home :is(.lobby-recent, .lobby-home-friends) { padding: var(--tt-space-4) var(--tt-space-5); border-radius: 6px; }
+#lobby .lobby-daily-broth { padding: var(--tt-space-4); gap: var(--tt-space-2); justify-content: start; }
 .lobby-discovery-tools { margin-top: var(--tt-space-4); gap: var(--tt-space-3); }
 #lobby.has-chapter-index #game_library_panel > header {
     padding-bottom: var(--tt-space-3); gap: var(--tt-space-3);
 }
-#lobby.has-chapter-index #game_library_panel .library-search { margin-top: var(--tt-space-3); min-height: 40px; }
+#lobby.has-chapter-index #game_library_panel .library-filters { margin-top: var(--tt-space-3); }
+#lobby.has-chapter-index #game_library_panel .library-search { min-height: 40px; }
 #lobby.has-chapter-index #game_library_panel .game-library-list { margin-top: var(--tt-space-3); gap: var(--tt-space-2); }
 #lobby.has-chapter-index #game_library_panel .game-library-entry { padding: var(--tt-space-3) var(--tt-space-4); gap: var(--tt-space-3); }
 #lobby.has-chapter-index #game_library_panel h3 { font-size: var(--tt-title-entry); }

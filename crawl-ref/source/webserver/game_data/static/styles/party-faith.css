@@ -11,8 +11,8 @@
 .party-faith-frame .faith-material-stone-light { stop-color: color-mix(in srgb, var(--faith-accent) 23%, #364047); }
 .party-faith-frame .faith-material-stone { stop-color: color-mix(in srgb, var(--faith-accent) 8%, #20272b); }
 .party-faith-frame .faith-material-stone-dark { stop-color: #10171c; }
-.party-faith-frame .faith-arch-shadow { stroke: #080c10; stroke-width: 3.7; opacity: .9; }
-.party-faith-frame .faith-plinth-shadow { stroke: #070c10; stroke-width: 2; fill: #080e13; transform: translateY(1px); }
+.party-faith-frame .faith-arch-shadow { stroke: #080c10; stroke-width: 2.6; opacity: .55; }
+.party-faith-frame .faith-plinth-shadow { stroke: #070c10; stroke-width: 1.4; fill: #080e13; opacity: .6; transform: translateY(1px); }
 .party-faith-frame .faith-frame-structure { stroke-width: 1.8; }
 .party-faith-frame .faith-plinth-stone { stroke: #10191e; stroke-width: 1.2; }
 .party-faith-frame .faith-plinth-bevel { stroke-width: 1.1; }

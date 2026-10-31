@@ -89,6 +89,8 @@ def handle_new_socket(path, event):
             process.logger.error(
                 "Crawl process socket connection refused for %s, socketpath '%s'.",
                 game_info["id"], abspath, exc_info=True)
+            # Release the periodic callbacks too, or the handler lives forever.
+            process.handle_process_end()
             del processes[abspath]
             return
 
@@ -247,13 +249,16 @@ class CrawlProcessHandlerBase(object):
     def _request_native_view(self, slot):
         if getattr(self, "activity_pump", None) and self.activity_pump.inflight:
             return False
-        if not getattr(self, "conn", None) or not self.conn.open:
+        # A refused send closes the connection and clears self.conn from
+        # inside the first call; keep one reference for the whole sequence.
+        conn = getattr(self, "conn", None)
+        if not conn or not conn.open:
             return False
         if slot >= 1:
-            self.conn.send_message(json_encode(dict(msg="party_action", action="ensure_party_slot",
+            conn.send_message(json_encode(dict(msg="party_action", action="ensure_party_slot",
                 slot=slot, spec=self.party_slot_specs.get(slot, ""))))
-        self.conn.send_message(json_encode(dict(msg="party_session")))
-        self.conn.send_message(json_encode(dict(msg="view_player", slot=slot)))
+        conn.send_message(json_encode(dict(msg="party_session")))
+        conn.send_message(json_encode(dict(msg="view_player", slot=slot)))
         return True
 
     def _process_log_msg(self, msg, kwargs):
@@ -390,21 +395,33 @@ class CrawlProcessHandlerBase(object):
                     if self.activity_pump.queued_action:
                         self.activity_pump.tick()
             return
+        data = None
         if getattr(self, "ai_party", None) and self.activity_pump.owner in self.party_control.ai_slots:
-            self.ai_party.ingest(self.activity_pump.owner, json_decode(msg))
+            data = json_decode(msg)
+            self.ai_party.ingest(self.activity_pump.owner, data)
         if getattr(self, "player_streams", None) and any(
                 '"%s"' % kind in msg[:60] for kind in PlayerStreams.shared | {"input_mode"}):
-            packet = json_decode(msg)
-            self.player_streams.note_mode(packet)
-            self.player_streams.remember_shared(packet)
+            data = json_decode(msg) if data is None else data
+            self.player_streams.note_mode(data)
+            self.player_streams.remember_shared(data)
         if self.party_control.multiplayer and getattr(self, "player_streams", None):
-            data = json_decode(msg)
-            if data.get("msg") not in PlayerStreams.shared:
-                # Fail closed during initialization or a late-join transition;
-                # a union map is never a fallback for missing personal state.
+            # Fail closed during initialization or a late-join transition;
+            # a union map is never a fallback for missing personal state.
+            # Native writes "msg" first, so a legacy bundle (a 100k+ union
+            # map) is rejected from its prefix without decoding all of it.
+            if data is not None:
+                shared = data.get("msg") in PlayerStreams.shared
+            else:
+                shared = (any('"%s"' % kind in msg[:60] for kind in PlayerStreams.shared)
+                          and json_decode(msg).get("msg") in PlayerStreams.shared)
+            if not shared:
+                if getattr(self, "_fresh_watchers", None) and self._is_full_map_msg(msg):
+                    # Native answered spectator_joined with this union map;
+                    # the personal streams replace it for those sessions.
+                    self._fresh_watchers = set()
                 return
         if re.search(r'"msg"\s*:\s*"party_(state|control)"', msg[:80]):
-            data = json_decode(msg)
+            data = json_decode(msg) if data is None else data
             if data["msg"] == "party_control":
                 self.party_control.acknowledge(data.get("slot"))
             else:
@@ -880,6 +897,10 @@ class CrawlProcessHandlerBase(object):
             IOLoop.current().call_later(0.2, self.stop)
             return
         if self.process:
+            if self.kill_timeout is not None:
+                # Already asked to save and exit (socket close, then websocket
+                # close). Keep the original kill deadline instead of leaking it.
+                return
             self.process.flush_ttyrec()
             try:
                 self.process.send_signal(signal.SIGHUP)
@@ -1105,6 +1126,26 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         else:
             # No more locks, can start
             self._start_process()
+
+    def release_unstarted(self):
+        """Abandon a start still waiting on a stale lock.
+
+        The owning socket can close while the stale_processes or
+        force_terminate? dialog is pending. There is no process to stop, so
+        without this the activity, AI and idle PeriodicCallbacks (and any
+        pending HUP timeout) would keep the handler alive forever. Returns
+        whether a pending start was released."""
+        if self.process is not None or not self.idle_checker.is_running():
+            return False
+        if self._process_hup_timeout is not None:
+            IOLoop.current().remove_timeout(self._process_hup_timeout)
+            self._process_hup_timeout = None
+        # _check_stale_process polling stops once the pid is cleared.
+        self._stale_pid = None
+        self._stale_lockfile = None
+        self._purging_timer = None
+        self.handle_process_end()
+        return True
 
     def _stop_purging_stale_processes(self):
         if not self._process_hup_timeout: return
@@ -1347,14 +1388,20 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         super(CrawlProcessHandler, self).add_watcher(watcher)
 
         if self.conn and self.conn.open:
-            self._fresh_watchers.add(watcher)
+            if not self.party_control.multiplayer:
+                # Multiplayer wraps the native redraw in party packets, so the
+                # legacy full-map consumer never runs; adding here would retain
+                # every closed session for the lifetime of the game.
+                self._fresh_watchers.add(watcher)
             self.conn.send_message('{"msg":"spectator_joined"}')
         if self.party_control.multiplayer:
             self.player_streams.restore(watcher)
             self.player_streams.request(watcher)
 
     def handle_input(self, msg, source=None, queued_floor=None):
-        obj = json_decode(msg)
+        # ws_handler.on_message already decoded the frame; a copy keeps the
+        # caller's object (and the re-queue closures below) unmodified.
+        obj = dict(msg) if isinstance(msg, dict) else json_decode(msg)
         if obj.get("msg") == "ai_control":
             if not self.party_control.is_owner(source):
                 if source:
@@ -1404,7 +1451,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
             # Normalize before buffering. Delaying a whole string would append
             # its suffix behind newer keys when the first key takes ownership.
             for keycode in keys:
-                self.handle_input(json_encode(dict(msg="key", keycode=keycode)), source,
+                self.handle_input(dict(msg="key", keycode=keycode), source,
                                   queued_floor=queued_floor)
             return
         if obj.get("msg") == "record_save":
@@ -1595,7 +1642,8 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
             data += obj.get("text", "")
 
             if self.party_mode or self.party_control.state:
-                if not self.conn or not self.conn.open:
+                conn = self.conn
+                if not conn or not conn.open:
                     return
                 for ch in data:
                     packet = {
@@ -1603,7 +1651,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                         "keycode": ord(ch),
                         "player_id": player_id
                     }
-                    self.conn.send_message(utf8(json_encode(packet)))
+                    conn.send_message(utf8(json_encode(packet)))
             else:
                 self.process.write_input(utf8(data))
 

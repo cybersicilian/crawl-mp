@@ -1,5 +1,5 @@
 <div id="stats">
-      <div id="stats_wizmode" style="float: right"></div>
+      <div id="stats_wizmode" class="hud-wizmode"></div>
       <div
         id="stats_titleline"
         data-tip-title="Character Identity &amp; Title"
@@ -37,7 +37,7 @@
       </div>
       <div
         id="stats_hpline"
-        class="stat-row-interactive"
+        class="stat-row-interactive tr-meter tr-meter-hp"
         data-tip-title="Health Points (HP)"
         data-tip-badge="[Vital]"
         data-tip-body="Your current and maximum life force. Yellow bar segments show projected HP remaining after poison wears off."
@@ -52,7 +52,7 @@
       </div>
       <div
         id="stats_mpline"
-        class="stat-row-interactive"
+        class="stat-row-interactive tr-meter tr-meter-mp"
         data-tip-title="Magic Points (MP)"
         data-tip-badge="[Vital]"
         data-tip-body="Your arcane and divine energy pool used to cast spells ('z') and invoke abilities ('a')."
@@ -66,63 +66,70 @@
         <span id="stats_dd_real_mp_max"></span>
       </div>
       <div class="hud-stats-details">
-        <div id="stats_leftcolumn" style="float: left; width: 45%">
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Armour Class (AC)"
-            data-tip-badge="[Defense]"
-            data-tip-body="Reduces physical damage taken from attacks via random damage reduction and guaranteed damage shaving."
-            data-tip-meta="Governs physical damage mitigation"
-          >
-            <span class="stats_caption">AC:</span>
-            <span
-              id="stats_ac"
+        <div id="stats_leftcolumn" class="hud-stat-column">
+          <div class="hud-stat-cluster hud-defense-cluster" role="group" aria-label="Defenses">
+            <span class="hud-stat-cluster-title" aria-hidden="true">Defense</span>
+            <div
+              class="stat-row-interactive"
               data-tip-title="Armour Class (AC)"
               data-tip-badge="[Defense]"
               data-tip-body="Reduces physical damage taken from attacks via random damage reduction and guaranteed damage shaving."
               data-tip-meta="Governs physical damage mitigation"
-            ></span>
-          </div>
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Evasion (EV)"
-            data-tip-badge="[Defense]"
-            data-tip-body="Chance to completely dodge melee attacks, ranged projectiles, and bolt spells."
-            data-tip-meta="Scales with Dodging skill &amp; Dexterity"
-          >
-            <span class="stats_caption">EV:</span>
-            <span
-              id="stats_ev"
+            >
+              <span class="stats_caption">AC:</span>
+              <span class="hud-stat-label" aria-hidden="true">AC</span>
+              <span
+                id="stats_ac"
+                data-tip-title="Armour Class (AC)"
+                data-tip-badge="[Defense]"
+                data-tip-body="Reduces physical damage taken from attacks via random damage reduction and guaranteed damage shaving."
+                data-tip-meta="Governs physical damage mitigation"
+              ></span>
+            </div>
+            <div
+              class="stat-row-interactive"
               data-tip-title="Evasion (EV)"
               data-tip-badge="[Defense]"
               data-tip-body="Chance to completely dodge melee attacks, ranged projectiles, and bolt spells."
               data-tip-meta="Scales with Dodging skill &amp; Dexterity"
-            ></span>
-          </div>
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Shields (SH)"
-            data-tip-badge="[Defense]"
-            data-tip-body="Chance to block physical attacks and piercing ranged projectiles before EV or AC checks."
-            data-tip-meta="Scales with equipped Shield, Shields skill &amp; Dex"
-          >
-            <span class="stats_caption">SH:</span>
-            <span
-              id="stats_sh"
+            >
+              <span class="stats_caption">EV:</span>
+              <span class="hud-stat-label" aria-hidden="true">EV</span>
+              <span
+                id="stats_ev"
+                data-tip-title="Evasion (EV)"
+                data-tip-badge="[Defense]"
+                data-tip-body="Chance to completely dodge melee attacks, ranged projectiles, and bolt spells."
+                data-tip-meta="Scales with Dodging skill &amp; Dexterity"
+              ></span>
+            </div>
+            <div
+              class="stat-row-interactive"
               data-tip-title="Shields (SH)"
               data-tip-badge="[Defense]"
               data-tip-body="Chance to block physical attacks and piercing ranged projectiles before EV or AC checks."
               data-tip-meta="Scales with equipped Shield, Shields skill &amp; Dex"
-            ></span>
+            >
+              <span class="stats_caption">SH:</span>
+              <span class="hud-stat-label" aria-hidden="true">SH</span>
+              <span
+                id="stats_sh"
+                data-tip-title="Shields (SH)"
+                data-tip-badge="[Defense]"
+                data-tip-body="Chance to block physical attacks and piercing ranged projectiles before EV or AC checks."
+                data-tip-meta="Scales with equipped Shield, Shields skill &amp; Dex"
+              ></span>
+            </div>
           </div>
           <div
-            class="stat-row-interactive"
+            class="stat-row-interactive hud-progress-row"
             data-tip-title="Experience Level (XL)"
             data-tip-badge="[Progression]"
             data-tip-body="Your character level (max 27) and percentage progress toward the next level."
             data-tip-meta="Grants HP, MP, Willpower &amp; attribute increases"
           >
             <span class="stats_caption">XL:</span>
+            <span class="hud-stat-label" aria-hidden="true">Level</span>
             <span
               id="stats_xl"
               data-tip-title="Experience Level (XL)"
@@ -131,12 +138,12 @@
               data-tip-meta="Grants HP, MP, Willpower &amp; attribute increases"
             ></span>
             <span class="stats_caption">Next:</span>
+            <span class="hud-stat-label" aria-hidden="true">XP</span>
             <span id="stats_progress"></span>%
           </div>
           <div
             id="stats_noise"
             class="stat-row-interactive"
-            style="float: left; width: 95%"
             data-tip-title="Noise &amp; Stealth"
             data-tip-badge="[Stealth]"
             data-tip-body="Sound produced by your recent combat, spells, or effects. Loud noises wake and attract distant monsters."
@@ -157,71 +164,80 @@
               style="float: right; width: 0%"
             ></span>
             <span class="stats_caption">Noise:</span>
+            <span class="hud-stat-label" aria-hidden="true">Noise</span>
             <span id="stats_noise_num"></span>
           </div>
         </div>
-        <div id="stats_rightcolumn" style="float: right; width: 55%">
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Strength (Str)"
-            data-tip-badge="[Attribute]"
-            data-tip-body="Increases weapon damage and reduces heavy armour and shield encumbrance penalties to EV and spellcasting."
-            data-tip-meta="Governs physical power &amp; armour comfort"
-          >
-            <span class="stats_caption">Str:</span>
-            <span
-              id="stats_str"
+        <div id="stats_rightcolumn" class="hud-stat-column">
+          <div class="hud-stat-cluster hud-attribute-cluster" role="group" aria-label="Attributes">
+            <span class="hud-stat-cluster-title" aria-hidden="true">Attributes</span>
+            <div
+              class="stat-row-interactive"
               data-tip-title="Strength (Str)"
               data-tip-badge="[Attribute]"
               data-tip-body="Increases weapon damage and reduces heavy armour and shield encumbrance penalties to EV and spellcasting."
               data-tip-meta="Governs physical power &amp; armour comfort"
-            ></span>
+            >
+              <span class="stats_caption">Str:</span>
+              <span class="hud-stat-label" aria-hidden="true">Str</span>
+              <span
+                id="stats_str"
+                data-tip-title="Strength (Str)"
+                data-tip-badge="[Attribute]"
+                data-tip-body="Increases weapon damage and reduces heavy armour and shield encumbrance penalties to EV and spellcasting."
+                data-tip-meta="Governs physical power &amp; armour comfort"
+              ></span>
+            </div>
+            <div
+              class="stat-row-interactive"
+              data-tip-title="Intelligence (Int)"
+              data-tip-badge="[Attribute]"
+              data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
+              data-tip-meta="Governs spell success &amp; arcane potency"
+            >
+              <span class="stats_caption">Int:</span>
+              <span class="hud-stat-label" aria-hidden="true">Int</span>
+              <span
+                id="stats_int"
+                data-tip-title="Intelligence (Int)"
+                data-tip-badge="[Attribute]"
+                data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
+                data-tip-meta="Governs spell success &amp; arcane potency"
+              ></span>
+            </div>
+            <div
+              class="stat-row-interactive"
+              data-tip-title="Dexterity (Dex)"
+              data-tip-badge="[Attribute]"
+              data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
+              data-tip-meta="Governs agility, accuracy &amp; evasion"
+            >
+              <span class="stats_caption">Dex:</span>
+              <span class="hud-stat-label" aria-hidden="true">Dex</span>
+              <span
+                id="stats_dex"
+                data-tip-title="Dexterity (Dex)"
+                data-tip-badge="[Attribute]"
+                data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
+                data-tip-meta="Governs agility, accuracy &amp; evasion"
+              ></span>
+            </div>
+          </div>
+          <div class="hud-hazard-row" role="group" aria-label="Hazards">
             <span
               id="stats_doom_ui"
               data-tip-title="Doom"
               data-tip-badge="[Hazard]"
               data-tip-body="Accumulated Doom. Reaching 100% Doom triggers severe planar consequences."
               data-tip-meta="Avoid doom-inflicting attacks"
-            ><span class="stats_caption" style="margin-left:2.2em">Doom:</span><span id="stats_doom"></span></span>
-          </div>
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Intelligence (Int)"
-            data-tip-badge="[Attribute]"
-            data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
-            data-tip-meta="Governs spell success &amp; arcane potency"
-          >
-            <span class="stats_caption">Int:</span>
-            <span
-              id="stats_int"
-              data-tip-title="Intelligence (Int)"
-              data-tip-badge="[Attribute]"
-              data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
-              data-tip-meta="Governs spell success &amp; arcane potency"
-            ></span>
+            ><span class="stats_caption">Doom:</span><span class="hud-stat-label" aria-hidden="true">Doom</span><span id="stats_doom"></span></span>
             <span
               id="stats_contam_ui"
               data-tip-title="Magical Contamination"
               data-tip-badge="[Hazard]"
               data-tip-body="Residual magical radiation. High contamination can cause harmful explosions and temporary mutations."
               data-tip-meta="Dissipates naturally over time"
-            ><span class="stats_caption" style="margin-left:1.1em">Contam:</span><span id="stats_contam"></span></span>
-          </div>
-          <div
-            class="stat-row-interactive"
-            data-tip-title="Dexterity (Dex)"
-            data-tip-badge="[Attribute]"
-            data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
-            data-tip-meta="Governs agility, accuracy &amp; evasion"
-          >
-            <span class="stats_caption">Dex:</span>
-            <span
-              id="stats_dex"
-              data-tip-title="Dexterity (Dex)"
-              data-tip-badge="[Attribute]"
-              data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
-              data-tip-meta="Governs agility, accuracy &amp; evasion"
-            ></span>
+            ><span class="stats_caption">Contam:</span><span class="hud-stat-label" aria-hidden="true">Contam</span><span id="stats_contam"></span></span>
           </div>
           <div
             class="stat-row-interactive"
@@ -231,6 +247,7 @@
             data-tip-meta="Press 'Ctrl+O' for Dungeon Overview"
           >
             <span class="stats_caption">Place:</span>
+            <span class="hud-stat-label" aria-hidden="true">Floor</span>
             <span
               id="stats_place"
               data-tip-title="Dungeon Branch &amp; Depth"
@@ -257,8 +274,7 @@
           </div>
         </div>
         <div
-          class="stat-row-interactive"
-          style="float: left; width: 100%"
+          class="stat-row-interactive hud-equipment-row"
           data-tip-title="Wielded Primary Weapon"
           data-tip-badge="[Weapon]"
           data-tip-body="Your active weapon used for melee or ranged attacks."
@@ -276,8 +292,7 @@
         </div>
         <div
           id="stats_offhand_weapon_line"
-          class="stat-row-interactive"
-          style="float: left; width: 100%"
+          class="stat-row-interactive hud-equipment-row"
           data-tip-title="Offhand Weapon"
           data-tip-badge="[Offhand]"
           data-tip-body="Your secondary dual-wielded weapon."
@@ -290,8 +305,7 @@
         </div>
         <div
           id="stats_quiver_line"
-          class="stat-row-interactive"
-          style="float: left; width: 100%"
+          class="stat-row-interactive hud-equipment-row"
           data-tip-title="Quivered Action / Projectile"
           data-tip-badge="[Quiver]"
           data-tip-body="Your readied ranged ammo, throwing weapon, spell, or ability triggered with 'f'."
@@ -300,7 +314,7 @@
           <span class="stats_caption" id="stats_quiver_letter"></span>
           <span id="stats_quiver"></span>
         </div>
-        <div id="stats_status_lights" style="float: left; width: 100%"></div>
+        <div id="stats_status_lights" role="group" aria-label="Status effects"></div>
         <div id="stats_status_lights_tooltip" class="fg7" style="display: none;"></div>
       </div>
     </div>

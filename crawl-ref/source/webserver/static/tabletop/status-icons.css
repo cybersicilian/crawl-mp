@@ -69,8 +69,8 @@
     pointer-events: none;
 }
 .status-icon-frame:is(:hover, :focus-visible) {
-    outline: 2px solid #e7c88a;
-    outline-offset: 2px;
+    outline: var(--tt-focus-ring, 2px solid #e7c88a);
+    outline-offset: var(--tt-focus-offset, 2px);
     border-color: #d8bd89;
     background: linear-gradient(145deg, #ffffff0d, transparent 55%), var(--status-well);
     z-index: 1;

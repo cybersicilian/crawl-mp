@@ -71,12 +71,16 @@ define(["jquery", "comm", "client", "./util", "./menu-keyboard", "./menu-columns
             element.text(element.text().replace(/\s*\(go to first with.*$/, ""));
         } else if (item.label !== undefined && menu.tag !== "shop") {
             element.contents().filter(function () { return this.nodeName !== "CANVAS"; }).remove();
-            element.append($("<span class='workflow-item-name'></span>").text(item.label));
-            if (item.equipped) element.append($("<span class='workflow-state'>Equipped</span>"));
+            var chips = states(item);
+            element.append($("<span class='workflow-item-name'></span>").text(chips.label));
+            chips.states.forEach(function (state) {
+                element.append($("<span class='workflow-state'></span>").attr("data-state", state.key).text(state.label));
+            });
             if (item.letter) element.append($("<kbd class='workflow-key'></kbd>").text(item.letter));
         }
         if (item.level === 2 && element.hasClass("selectable")) {
-            element.attr({ role: "button", tabindex: 0 });
+            element.attr({ role: "button", tabindex: 0,
+                "data-row-hint": menu.flags & enums.menu_flag.MULTISELECT ? "Toggle" : "Select" });
             var key = item.letter || (item.hotkeys || []).map(function (code) {
                 return code === 27 ? "Esc" : code === 13 ? "Enter" : code === 32 ? "Space"
                     : code >= 33 && code <= 126 ? String.fromCharCode(code) : "";
@@ -100,6 +104,17 @@ define(["jquery", "comm", "client", "./util", "./menu-keyboard", "./menu-columns
         search.item(item, element, menu);
         entryActions.item(item, element, menu);
         selection(item, element, menu);
+    }
+    // Status chips come from the native equipped flag and the item's own
+    // name suffixes; nothing is inferred beyond what the engine printed.
+    function states(item) {
+        var label = String(item.label), result = [];
+        if (item.equipped) result.push({ key: "equipped", label: "Equipped" });
+        var quivered = label.match(/\s*\(quivered\)\s*$/);
+        if (quivered) { label = label.slice(0, quivered.index); result.push({ key: "quivered", label: "Quivered" }); }
+        if (/\bcursed\b/i.test(label)) result.push({ key: "cursed", label: "Cursed" });
+        if (/\bunidentified\b|\{unknown\}/i.test(label)) result.push({ key: "unidentified", label: "Unidentified" });
+        return { label: label, states: result };
     }
     function selection(item, element, menu) {
         var multiple = element.hasClass("selectable")

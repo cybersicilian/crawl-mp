@@ -19,7 +19,8 @@
 #normal :is(.party-member-card, #hud_inventory, #hud_powers, #stats) { box-shadow: var(--art-line); }
 #normal .party-member-card { border-radius: 2px; background: var(--hud-panel); border-color: #777c5c55; }
 #normal .party-member-card.is-controlled-card { border-color: #b9a17388; background: linear-gradient(135deg, #30392b, #1c271f); box-shadow: inset 3px 0 0 var(--art-brass); }
-#normal .party-portrait { border-radius: 2px; border-color: var(--art-brass-dim); background: radial-gradient(ellipse at 50% 90%, #53614466, transparent 70%), var(--art-recess); }
+/* The shrine frame and arch draw the portrait's shape; no rectangular recess behind them. */
+#normal .party-portrait { border: 0; border-radius: 0; background: transparent; }
 #normal .party-member-name { font-family: var(--art-title); color: var(--art-brass-light); text-shadow: none; }
 #normal .party-member-state { border-color: #8b8f6770; border-radius: 1px; background: #111a13; }
 #normal .party-xp-fill { background: linear-gradient(90deg, #3f5144, #617756); }

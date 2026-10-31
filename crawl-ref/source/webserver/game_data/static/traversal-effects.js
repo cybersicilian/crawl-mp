@@ -3,7 +3,7 @@ define(["jquery", "comm", "./map_knowledge", "./shell-animation"], function ($, 
 
     // Transient presentation only: native traversal owns collisions and timing.
     // Map-space anchors follow camera movement and viewport scaling each frame.
-    var renderer, canvas, context, frame = null, particles = [], running = false;
+    var renderer, canvas, context, frame = null, particles = [], running = false, placed = null;
     var floor = null;
     var rolls = [];
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -16,7 +16,7 @@ define(["jquery", "comm", "./map_knowledge", "./shell-animation"], function ($, 
         particles = [];
         rolls = [];
         if (canvas) canvas.remove();
-        canvas = context = null;
+        canvas = context = null; placed = null;
     }
 
     function ensure() {
@@ -43,8 +43,12 @@ define(["jquery", "comm", "./map_knowledge", "./shell-animation"], function ($, 
         var width = renderer.element.width, height = renderer.element.height;
         if (canvas.width !== width) canvas.width = width;
         if (canvas.height !== height) canvas.height = height;
-        Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px",
-            width: bounds.width + "px", height: bounds.height + "px" });
+        var geometry = [bounds.left, bounds.top, bounds.width, bounds.height].join(":");
+        if (geometry !== placed) {
+            placed = geometry;
+            Object.assign(canvas.style, { left: bounds.left + "px", top: bounds.top + "px",
+                width: bounds.width + "px", height: bounds.height + "px" });
+        }
         context.clearRect(0, 0, canvas.width, canvas.height);
         var cell = renderer.canvas_coords(0, 0);
         var unit = Math.min(cell.width, cell.height);

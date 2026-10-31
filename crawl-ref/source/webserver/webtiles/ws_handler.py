@@ -2,6 +2,7 @@ import codecs
 import collections
 import datetime
 import errno
+import functools
 import logging
 import os
 import random
@@ -11,6 +12,7 @@ import time
 import zlib
 
 import tornado.ioloop
+import tornado.iostream
 import tornado.template
 import tornado.websocket
 import tornado.gen
@@ -60,17 +62,80 @@ def _get_chronicle_payload():
     except Exception:
         return {"ghosts": [], "party_comps": [], "cool_items": []}
 
+def _finish_record(record_id, reason):
+    """Library worker: merge the last event snapshot and close the record."""
+    game_library.ingest(record_id)
+    game_library.finish_game(record_id, reason)
+    return game_library.get_game(record_id)
+
 def broadcast_party_rooms():
-    rooms_list = [party_roster.describe(room) for room in PARTY_ROOMS.values()]
-    for room in rooms_list:
+    for room in PARTY_ROOMS.values():
         for slot in room.get("slots", []):
             starting_weapons.normalize_slot(slot)
             ensure_seed(slot)
-    chronicle_data = _get_chronicle_payload()
-    for socket in list(sockets):
-        if socket.is_in_lobby():
-            socket.send_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), socket))
-            socket.send_message("coop_chronicle", **chronicle_data)
+    lobby_sockets = [s for s in list(sockets) if s.is_in_lobby()]
+    if not lobby_sockets:
+        return
+    # Serialize once per distinct view, then deliver both updates in a single
+    # frame per socket instead of re-encoding the room list for every
+    # recipient. Private lobbies make the list viewer-specific, so the cache
+    # key is the rooms a viewer may see and whether it sees their invites.
+    chronicle_msg = json_encode(dict(msg="coop_chronicle", **_get_chronicle_payload()))
+    encoded = {}
+    for socket in lobby_sockets:
+        rooms = party_access.visible(PARTY_ROOMS.values(), socket)
+        key = tuple((room.get("room_id"), "invite_token" in room) for room in rooms)
+        rooms_msg = encoded.get(key)
+        if rooms_msg is None:
+            rooms_msg = encoded[key] = json_encode(dict(msg="party_rooms_list", rooms=rooms))
+        socket.append_message(rooms_msg, False)
+        socket.append_message(chronicle_msg, True)
+
+def _reset_party_slot(slot, room=None):
+    idx = slot["slot"]
+    slot["username"] = ""
+    slot["ready"] = True
+    if room is not None and room.get("resume_id"):
+        # A saved party keeps its hero roster; only the seat's claim is freed.
+        slot["state"] = "open" if room.get("resume_multiplayer") else "companion"
+        return
+    slot["state"] = "companion" if idx == 1 else "open"
+    slot["hero_name"] = DEFAULT_PARTY_SLOTS[idx]["hero_name"]
+
+def _vacate_party_rooms(username):
+    """Drop a departed user's staging room and free their guest seats.
+
+    Launching and launched rooms belong to a running game and are handled by
+    _on_crawl_end. Returns whether anything changed."""
+    changed = False
+    lowered = username.lower()
+    for rid, room in list(PARTY_ROOMS.items()):
+        if room.get("host", "").lower() == lowered:
+            if room.get("status") not in ("launching", "launched"):
+                del PARTY_ROOMS[rid]
+                changed = True
+            continue
+        for slot in room.get("slots", [])[1:]:
+            if slot.get("username", "").lower() == lowered:
+                _reset_party_slot(slot, room)
+                changed = True
+    return changed
+
+def _expire_party_presence(username):
+    if any(not s.client_closed for s in find_user_sockets(username)):
+        return
+    if _vacate_party_rooms(username):
+        broadcast_party_rooms()
+
+def _schedule_party_presence_check(username):
+    # Rooms used to outlive their members forever: a host whose socket
+    # dropped left a permanent staging room in every lobby broadcast. Give a
+    # reconnecting browser the same grace period as a running game.
+    delay = config.get('reconnect_grace_period') or 0
+    if delay <= 0:
+        _expire_party_presence(username)
+        return
+    IOLoop.current().call_later(delay, _expire_party_presence, username)
 
 def _resolve_party_room(room_id=None, username=None):
     if room_id and room_id in PARTY_ROOMS:
@@ -362,6 +427,11 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         self.game_id = None
         self.received_pong = None
         self.reconnect_timeout = None
+        # True once on_close has run; client_closed alone is True as soon as
+        # the server initiates a close, before the handshake completes.
+        self.close_handled = False
+        # The library worker's Future closing the last expedition's record.
+        self._record_finish = None
         self.save_info = dict()
         self.party_member_active = False
         self.party_slot = 0
@@ -414,7 +484,7 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             "party_room_launch": self.party_room_launch,
             "party_room_apply_comp": self.party_room_apply_comp,
             "chronicle_fetch": self.chronicle_fetch,
-            "library_fetch": self.library_fetch,
+            "library_fetch": self.library_fetch_async,
             "profile_appearance_fetch": lambda **kwargs: profile_appearance.send_state(self),
             "profile_graphics_fetch": lambda **kwargs: profile_graphics.send_state(self),
             "library_load": self.library_load,
@@ -513,6 +583,14 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
     def open(self):
         # Keystroke responses should not wait for TCP small-packet coalescing.
         self.set_nodelay(True)
+        limit = config.get('websocket_max_write_buffer')
+        stream = getattr(self.ws_connection, "stream", None)
+        if limit and stream is not None:
+            # A client that stops reading must not hold the whole game in
+            # server memory. Tornado 6.5 write_message -> _write_frame ->
+            # IOStream.write raises StreamBufferFullError past this size;
+            # _send_raw_message then aborts only this socket.
+            stream.max_write_buffer_size = limit
         compression = "on"
         if isinstance(self.ws_connection, getattr(tornado.websocket, "WebSocketProtocol76", ())):
             # Old Websocket versions don't support binary messages
@@ -574,10 +652,25 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             if not party_access.process_allowed(PARTY_ROOMS.values(), process, self):
                 continue
             self.queue_message("lobby_entry", **process.lobby_entry())
-        self.queue_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
-        self.queue_message("coop_chronicle", **_get_chronicle_payload())
-        self.library_fetch()
-        self.send_message("lobby_complete")
+        self.send_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
+        # The chronicle summary and save library read SQLite and files, so
+        # both run on the library worker (FIFO). Each reply is dropped if this
+        # socket closed or left the lobby first; otherwise the client still
+        # sees coop_chronicle, game_library, lobby_complete in that order.
+        library_socket.when_done(library_socket.run_in_db_thread(_get_chronicle_payload),
+                                 self._queue_chronicle)
+        self._start_library_fetch(lambda: self.send_message("lobby_complete"))
+
+    def _queue_chronicle(self, future):
+        if self.client_closed or self.is_running(partial=True):
+            return
+        try:
+            payload = future.result()
+        except Exception:
+            self.logger.warning("Chronicle summary failed", exc_info=True)
+            return
+        # Queued only: the game_library reply that follows flushes both.
+        self.queue_message("coop_chronicle", **payload)
 
     def send_lobby(self):
         self.send_lobby_data()
@@ -770,6 +863,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
 
     def reset_lobby_timeout(self):
         self.clear_timeouts(lobby=True)
+        if self.client_closed:
+            # Deferred callbacks (go_lobby, login) can land after the socket
+            # closed; a new timer would only keep this handler alive.
+            return
         # warning: there is a somewhat painful interval at game start while
         # self.process is partly set up, but before self.process.process is
         # still unset. Don't call this function during that time...
@@ -797,6 +894,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
 
     def reset_timeout(self):
         self.clear_timeouts(lobby=False)
+        if self.client_closed:
+            return
 
         self.received_pong = False
         self.send_message("ping")
@@ -921,6 +1020,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             self.process.start()
         except Exception:
             self.logger.warning("Exception starting process!", exc_info=True)
+            if getattr(self.process, "release_unstarted", None):
+                # Stop its periodic callbacks; the lobby return is handled here.
+                self.process.end_callback = None
+                self.process.release_unstarted()
             self.process = None
             self.go_lobby()
         else:
@@ -960,9 +1063,6 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         record_id = None
         if self.process:
             record_id = getattr(self.process, "record_id", None)
-            if record_id:
-                game_library.ingest(record_id)
-                game_library.finish_game(record_id, self.process.exit_reason)
             if config.get('dgl_mode'):
                 remove_in_lobbys(self.process)
 
@@ -971,10 +1071,15 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             dump_url = self.process.exit_dump_url
             if reason in {"crash", "error"} and record_id:
                 dump_url = crash_reports.register(self.process)
-                game = game_library.get_game(record_id)
-                if game and self.username and game["owner"].lower() == self.username.lower():
-                    IOLoop.current().spawn_callback(self._send_game_recovery, game,
-                                                   dump_url + ".txt" if dump_url else None)
+            if record_id:
+                # The final snapshot ingest and status update are SQLite and
+                # file work: run them on the library worker. It is FIFO, so
+                # the lobby refresh queued below sees the finished status;
+                # on_message holds this socket's input until then as well.
+                self._record_finish = library_socket.run_in_db_thread(
+                    _finish_record, record_id, reason)
+                library_socket.when_done(self._record_finish, functools.partial(
+                    self._on_record_finished, reason, dump_url + ".txt" if dump_url else None))
         else:
             # XX under what circumstance is this reachable?
             reason = None
@@ -982,13 +1087,19 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         self.process = None
 
         if self.username:
+            room_changed = False
             for r in PARTY_ROOMS.values():
                 if r.get("host", "").lower() == self.username.lower() and r.get("status") == "launched":
                     r["status"] = "staging"
-                    game = game_library.get_game(record_id) if record_id else None
-                    if game and game_library.save_files(game):
-                        r.update(party_saved.staged(game, r, DEFAULT_PARTY_SLOTS))
-            broadcast_party_rooms()
+                    room_changed = True
+            # Every solo game end used to re-query the chronicle and push the
+            # room list to all lobby sockets even when nothing changed. The
+            # finished checkpoint is staged into the room by
+            # _on_record_finished, once the library worker has closed it.
+            if room_changed:
+                broadcast_party_rooms()
+            if self.client_closed:
+                _schedule_party_presence_check(self.username)
 
         if not self.client_closed:
             if shutting_down:
@@ -1013,6 +1124,43 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             update_global_status()
 
         self.try_cleanup()
+
+    def _on_record_finished(self, reason, report_url, future):
+        try:
+            game = future.result()
+        except Exception:
+            self.logger.warning("Failed to close the expedition record", exc_info=True)
+            return
+        if game and self.username:
+            self._stage_saved_rooms(game)
+        if (reason in {"crash", "error"} and game and self.username
+                and game["owner"].lower() == self.username.lower()):
+            IOLoop.current().spawn_callback(self._send_game_recovery, game, report_url)
+
+    def _stage_saved_rooms(self, game):
+        """Offer the finished expedition's checkpoint in its host's room.
+
+        Runs after the record was ingested and closed, so the staged roster
+        reflects the final snapshot. The room is the one this expedition was
+        launched from and must still be staging; a fresh room the host opened
+        meanwhile is left alone."""
+        if not game_library.save_files(game):
+            return
+        changed = False
+        for room in PARTY_ROOMS.values():
+            if (room.get("host", "").lower() != self.username.lower()
+                    or room.get("status") != "staging"
+                    or room.get("expedition_id") != game["id"]):
+                continue
+            try:
+                room.update(party_saved.staged(game, room, DEFAULT_PARTY_SLOTS))
+            except ValueError:
+                self.logger.warning("Could not stage checkpoint %s in room %s",
+                                    game["id"], room.get("room_id"), exc_info=True)
+                continue
+            changed = True
+        if changed:
+            broadcast_party_rooms()
 
     def init_user(self, callback):
         # this would be more cleanly implemented with wait_for_exit, but I
@@ -1084,7 +1232,7 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                                admin=self.is_admin())
             profile_appearance.send_state(self, queued=True)
             profile_graphics.send_state(self, queued=True)
-            self.library_fetch()
+            self.library_fetch_async()
             if self.account_restricted():
                 self.queue_message("set_account_hold")
             self.queue_message("party_rooms_list", rooms=party_access.visible(PARTY_ROOMS.values(), self))
@@ -2044,9 +2192,24 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                         )
 
         _notify_launched_players()
-        IOLoop.current().call_later(0.35, _notify_launched_players)
+        process = getattr(self, "process", None)
+        if not (process and getattr(process, "process", None)):
+            # The engine is not registered yet (e.g. a stale-lock dialog), so
+            # a guest's watch request would find nothing: tell them again
+            # shortly. A running engine needs the one notice.
+            IOLoop.current().call_later(0.35, _notify_launched_players)
 
     def on_message(self, message): # type: (Union[str, bytes]) -> None
+        pending = self._record_finish
+        if pending is not None and not pending.done():
+            # The last expedition's record is still closing on the library
+            # worker: a quick play/resume must not read its old status.
+            # Future callbacks run in order, so input order is preserved.
+            def redeliver(_future):
+                if not self.client_closed:
+                    self.on_message(message)
+            library_socket.when_done(pending, redeliver)
+            return
         try:
             obj = json_decode(message) # type: Dict[str, Any]
             if obj["msg"] in self.message_handlers:
@@ -2054,10 +2217,11 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                 del obj["msg"]
                 handler(**obj)
             elif self.process:
-                self.process.handle_input(message, source=self)
+                # Decoded once here; handle_input accepts the object.
+                self.process.handle_input(obj, source=self)
             elif self.watched_game and (self.watched_game.is_party_member(self)
                                         or obj.get("msg") == "party_ping"):
-                self.watched_game.handle_input(message, source=self)
+                self.watched_game.handle_input(obj, source=self)
             elif (not self.watched_game
                     and obj["msg"] != 'ui_state_sync'
                     and obj["msg"] != 'key'):
@@ -2186,6 +2350,14 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             self.failed_messages += 1
             if self.ws_connection is not None:
                 self.ws_connection._abort()
+        except tornado.iostream.StreamBufferFullError:
+            # This client is not reading fast enough; drop it alone.
+            self.logger.warning("Write buffer over %s; closing slow connection",
+                                util.humanise_bytes(config.get('websocket_max_write_buffer') or 0))
+            self.failed_messages += 1
+            if self.ws_connection is not None:
+                self.ws_connection._abort()
+            return False
         except:
             self.logger.warning("Exception trying to send message.", exc_info = True)
             self.failed_messages += 1
@@ -2252,16 +2424,24 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
 
     def on_close(self):
         # at this point, self.client_closed is guaranteed to be true
+        self.close_handled = True
         extra = []
         if self.is_running():
             # this will (sooner or later) trigger _on_crawl_end, which will
             # remove `self` from `sockets`
             # XX would it be better to handle on_close messaging at that point?
+            # Browsers echo 1000 after Tornado's own ping-timeout close, so it
+            # is a detected drop, not a deliberate quit: it gets the grace
+            # period like any other drop (defer_stop's expiry still stops a
+            # game with no connected human). Only policy closures stop at once.
             if (shutting_down or self.close_code == 1008
-                    or self.close_code == 1000
-                    and not session_recovery.has_connected_humans(self.process)
                     or not session_recovery.defer_stop(self)):
                 self.process.stop()
+        elif self.process and getattr(self.process, "release_unstarted", None) \
+                and self.process.release_unstarted():
+            # The browser left during the stale-lock dialog: the handler
+            # never started a process, so nothing else would stop its timers.
+            extra += ["abandoned pending start"]
         elif self in sockets and self.process:
             # buggy state (I think): `self.process` did not get set to
             # None, but process is not actually running.
@@ -2286,3 +2466,6 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                          util.humanise_bytes(self.total_message_bytes),
                          comp_ratio,
                          extra_msg)
+
+        if self.username:
+            _schedule_party_presence_check(self.username)

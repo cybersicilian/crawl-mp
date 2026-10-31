@@ -1,7 +1,7 @@
 define(["jquery", "comm", "./cell_renderer", "./map_knowledge", "./options",
-    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view"],
+    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view", "./encounter-banner"],
 function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
-    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains) {
+    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains, encounterBanner) {
     "use strict";
     var global_anim_counter = 0;
     var last_background_tick = -1;
@@ -131,7 +131,10 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
                     y: Math.floor(scaled.height / cell_size.height) + this.view.y
                 };
 
-                view_data.place_cursor(enums.CURSOR_MOUSE, loc);
+                // Pointer motion inside one cell repaints nothing.
+                var mouse_cursor = view_data.cursor_locs[enums.CURSOR_MOUSE];
+                if (!mouse_cursor || mouse_cursor.x !== loc.x || mouse_cursor.y !== loc.y)
+                    view_data.place_cursor(enums.CURSOR_MOUSE, loc);
                 presence.point(loc, ev);
 
                 if (game.can_target() && ev.type !== "contextmenu" && !(ev.type === "mousedown" && (ev.which === 3 || ev.ctrlKey)))
@@ -425,6 +428,8 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
     shells.attach(renderer);
     feedback.attach(renderer);
     encounters.attach(renderer);
+    // Fixtures that stub the renderer may omit this module; it is presentation only.
+    if (encounterBanner && encounterBanner.attach) encounterBanner.attach(renderer);
     movement.attach(renderer);
     plannedRoute.attach(renderer);
     var anim_interval = null, animation_running = false;

@@ -28,9 +28,18 @@ body {
     font-family: var(--crt-font);
 }
 
+/* Lobby shell: page gutters, max width and no horizontal overflow at 390px.
+ * Signed-in layout (#lobby.has-chapter-index) narrows this in navigation.css. */
 #lobby {
-    padding: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px var(--tt-page-gutter, 12px);
+    overflow-x: clip;
 }
+#lobby img, #lobby video, #lobby svg { max-width: 100%; }
+#lobby :is(#play_now, #lobby_body, #party_lobby_panel, #coop_chronicle_panel, #game_library_panel) { min-width: 0; max-width: 100%; }
+#lobby :is(#lobby_body, #play_now) table { max-width: 100%; }
 
 #lobby_body {
     text-align: center;
@@ -170,10 +179,16 @@ body {
     position: absolute;
     left: 50px;
     top: 50px;
+    box-sizing: border-box;
+    max-width: calc(100vw - 32px);
 
-    border: 1px solid lightgray;
-    padding: 10px;
-    background-color: black;
+    border: 1px solid #c8ac7270;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #141b18;
+    color: #efe5cf;
+    font-family: var(--tt-font-ui, system-ui, sans-serif);
+    box-shadow: 0 20px 60px #000a;
 
     z-index: 3000;
 }
@@ -233,7 +248,7 @@ body {
     background-color: #000000;
     color: #babdb6;
     border: 1px solid #7d623c;
-    border-radius: 0;
+    border-radius: 4px;
     padding: 2px 6px;
     font-family: "Courier New", "DejaVu Sans Mono", Consolas, monospace;
 }
@@ -246,7 +261,7 @@ body {
     background-color: #181612;
     color: #fce94f;
     border: 1px solid #7d623c;
-    border-radius: 0;
+    border-radius: 4px;
     padding: 2px 8px;
     cursor: pointer;
     font-family: "Courier New", "DejaVu Sans Mono", Consolas, monospace;
