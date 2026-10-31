@@ -292,8 +292,11 @@ class ActivityPump:
                 if delta_aut <= 0:
                     delta_aut = member.get("last_action_aut") or 10
                 combat = member.get("region_combat", state.get("combat_locked"))
-                ms_per_aut = 50 if combat else 25
-                duration_ms = int(min(1400, max(100, delta_aut * ms_per_aut)))
+                # Long enough for a peer to see the step start; hit and target
+                # effects play on without holding input. A 10 aut combat action
+                # waits 200 ms, not the 500 ms that made partners feel laggy.
+                ms_per_aut = 20 if combat else 10
+                duration_ms = int(min(400, max(100, delta_aut * ms_per_aut)))
                 self.cooldown_duration[slot] = duration_ms
                 self.cooldown_until[slot] = now + duration_ms / 1000.0
             if isinstance(new_aut, int):

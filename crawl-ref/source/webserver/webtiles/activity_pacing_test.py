@@ -28,7 +28,7 @@ class NativeWorkPacingTest(unittest.TestCase):
 
     def test_real_owner_turn_preserves_safe_finite_work_deadline(self):
         run = self.make_pump()
-        self.assertEqual(run.pump.cooldown_duration[0], 250)
+        self.assertEqual(run.pump.cooldown_duration[0], 100)
         self.assertEqual(run.pump.cooldown_until[0], 10.25)
         self.assertFalse(run.pump.check_smart_fast_forward(0))
         self.assertEqual(run.pump.cooldown_until[0], 10.25)
@@ -38,7 +38,7 @@ class NativeWorkPacingTest(unittest.TestCase):
 
     def test_finite_work_dispatches_at_deadline_with_one_native_request(self):
         run = self.make_pump()
-        run.clock[0] = 10.249
+        run.clock[0] = 10.099
         run.pump.tick()
         run.send.assert_not_called()
         run.clock[0] = 10.25
@@ -54,11 +54,11 @@ class NativeWorkPacingTest(unittest.TestCase):
         run.send.assert_called_once_with(0)
         self.assertTrue(run.pump.inflight)
 
-    def test_combat_finite_work_keeps_existing_fifty_ms_per_aut(self):
+    def test_combat_finite_work_paces_twenty_ms_per_aut(self):
         run = self.make_pump(combat=True)
-        self.assertEqual(run.pump.cooldown_duration[0], 500)
+        self.assertEqual(run.pump.cooldown_duration[0], 200)
         self.assertEqual(run.pump.cooldown_until[0], 10.5)
-        run.clock[0] = 10.499
+        run.clock[0] = 10.199
         run.pump.tick()
         run.send.assert_not_called()
         run.clock[0] = 10.5
