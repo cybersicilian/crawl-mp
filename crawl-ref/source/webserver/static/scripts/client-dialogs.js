@@ -126,6 +126,15 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
 
         function center_element(elem)
         {
+            // A dialog the stylesheet already pins to the viewport (position:
+            // fixed, transform-centred) keeps that: a document offset would be
+            // measured against the scrolled page and push it above the viewport
+            // on a phone-width lobby that has scrolled down to the sign-in card.
+            if (elem[0] && window.getComputedStyle(elem[0]).position === "fixed")
+            {
+                elem.css({ left: "", top: "" });
+                return;
+            }
             var left = $(window).width() / 2 - elem.outerWidth() / 2;
             if (left < 0) left = 0;
             var top = $(window).height() / 2 - elem.outerHeight() / 2;
