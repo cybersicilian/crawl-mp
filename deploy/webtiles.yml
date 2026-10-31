@@ -5,8 +5,6 @@ http_xheaders: true
 development_mode: false
 game_data_no_cache: false
 password_db: /var/lib/dcss/accounts.db3
-disabled_accounts: [Host, Player2, Player3, Player4]
-allow_anon_spectate: false
 settings_db: /var/lib/dcss/settings.db3
 server_socket_path: /run/dcss
 lobby_url: https://dcss.iancaltabiano.com/
