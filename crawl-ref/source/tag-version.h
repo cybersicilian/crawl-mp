@@ -378,6 +378,7 @@ enum tag_minor_version
     TAG_MINOR_HONEY_TERRAIN,     // Append shallow honey; existing terrain IDs retain their values.
 #endif
     TAG_MINOR_PROTECTED_CLOUDS,    // Preserve per-cloud nonhostile protection.
+    TAG_MINOR_GEM_BURROWS,         // Burrows gem time; older saves may lack it.
     NUM_TAG_MINORS,
     TAG_MINOR_VERSION = NUM_TAG_MINORS - 1
 };

@@ -126,6 +126,7 @@ public:
     ~reader();
 
     unsigned char readByte();
+    unsigned char peekByte();
     void read(void *data, size_t size);
     void advance(size_t size);
     int getMinorVersion() const;

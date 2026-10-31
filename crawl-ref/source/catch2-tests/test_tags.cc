@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <random>
 
 #include "catch_amalgamated.hpp"
@@ -5,9 +6,15 @@
 #include "AppHdr.h"
 
 #include "ability-type.h"
+#include "branch.h"
+#include "dungeon.h"
+#include "item-prop-enum.h"
 #include "map-cell.h"
+#include "player.h"
 #include "random.h"
 #include "tags.h"
+#include "test_player_fixture.h"
+#include "unwind.h"
 
 TEST_CASE("Saved wizard hotkeys remain loadable without wizard commands", "[save-compatibility]")
 {
@@ -269,4 +276,63 @@ TEST_CASE( "Basic marshalling/unmarshalling works correctly.", "[single-file]" )
             roundtrip_map_cell(cell);
         }
     }
+}
+
+static int _gem_time_marker(int gem)
+{
+    return 0x00A55A00 + gem;
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Saves from before the Burrows gem keep their stream alignment",
+                 "[save-compatibility]")
+{
+    dgn_reset_level(false);
+    unwind_var<int> dungeon_depth(brdepth[BRANCH_DUNGEON], 15);
+    you.where_are_you = BRANCH_DUNGEON;
+    you.depth = 1;
+    for (int gem = 0; gem < NUM_GEM_TYPES; ++gem)
+        you.gem_time_spent[gem] = _gem_time_marker(gem);
+
+    vector<unsigned char> current;
+    writer output(&current);
+    tag_write(TAG_YOU, output);
+
+    // Find the gem times and drop the Burrows one, as the writer did before
+    // GEM_BURROWS existed. The tag starts with its payload size.
+    vector<unsigned char> times;
+    writer time_output(&times);
+    for (int gem = 0; gem < NUM_GEM_TYPES; ++gem)
+        marshallInt(time_output, _gem_time_marker(gem));
+    const auto found = search(current.begin(), current.end(),
+                              times.begin(), times.end());
+    REQUIRE(found != current.end());
+    vector<unsigned char> old = current;
+    const auto burrows = old.begin() + (found - current.begin())
+                         + GEM_BURROWS * 4;
+    old.erase(burrows, burrows + 4);
+    reader size_input(current);
+    const int size = unmarshallInt(size_input);
+    vector<unsigned char> old_size;
+    writer size_output(&old_size);
+    marshallInt(size_output, size - 4);
+    copy(old_size.begin(), old_size.end(), old.begin());
+
+    const auto check_read = [](const vector<unsigned char> &bytes, int minor,
+                               bool has_burrows)
+    {
+        for (int gem = 0; gem < NUM_GEM_TYPES; ++gem)
+            you.gem_time_spent[gem] = -1;
+        reader input(bytes, minor);
+        tag_read(input, TAG_YOU);
+        for (int gem = 0; gem < GEM_BURROWS; ++gem)
+            CHECK(you.gem_time_spent[gem] == _gem_time_marker(gem));
+        CHECK(you.gem_time_spent[GEM_BURROWS]
+              == (has_burrows ? _gem_time_marker(GEM_BURROWS) : 0));
+    };
+
+    check_read(old, TAG_MINOR_PROTECTED_CLOUDS, false);
+    check_read(old, TAG_MINOR_PROTECTED_CLOUDS - 1, false);
+    check_read(current, TAG_MINOR_PROTECTED_CLOUDS, true);
+    check_read(current, TAG_MINOR_VERSION, true);
 }

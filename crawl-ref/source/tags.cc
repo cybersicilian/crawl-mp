@@ -206,6 +206,24 @@ unsigned char reader::readByte()
     }
 }
 
+// Look at the next byte without consuming it. Tag data is always read from
+// a buffer; chunk readers cannot rewind.
+unsigned char reader::peekByte()
+{
+    ASSERT(!_chunk);
+    if (_file)
+    {
+        const int b = fgetc(_file);
+        if (b == EOF)
+            _short_read(_safe_read);
+        ungetc(b, _file);
+        return b;
+    }
+    if (_read_offset >= _pbuf->size())
+        _short_read(_safe_read);
+    return (*_pbuf)[_read_offset];
+}
+
 void reader::read(void *data, size_t size)
 {
     if (_file)
@@ -5238,7 +5256,23 @@ static void _tag_read_you_items(reader &th)
         _unmarshallFixedBitVector<NUM_GEM_TYPES>(th, you.gems_found);
         _unmarshallFixedBitVector<NUM_GEM_TYPES>(th, you.gems_shattered);
         for (int i = 0; i < NUM_GEM_TYPES; i++)
+        {
+#if TAG_MAJOR_VERSION == 34
+            // GEM_BURROWS was appended without a minor bump, so saves tagged
+            // TAG_MINOR_PROTECTED_CLOUDS come both with and without its time.
+            // Without it, the next byte is the nonzero item description type
+            // count; with it, it is the high byte of a small turn count.
+            if (i == GEM_BURROWS
+                && (th.getMinorVersion() < TAG_MINOR_PROTECTED_CLOUDS
+                    || (th.getMinorVersion() == TAG_MINOR_PROTECTED_CLOUDS
+                        && th.peekByte() != 0)))
+            {
+                you.gem_time_spent[i] = 0;
+                continue;
+            }
+#endif
             you.gem_time_spent[i] = unmarshallInt(th);
+        }
     }
     // Otherwise, it should be initialized to a reasonable zero value.
 
