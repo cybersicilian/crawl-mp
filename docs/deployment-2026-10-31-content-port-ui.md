@@ -4,43 +4,80 @@ Status: PENDING (release id, snapshot and verification are filled in once deploy
 
 ## What ships
 
-Branch `claude/content-port-ui-integration`, landed on `master`:
+Branch `claude/ui-deploy-2026-10-31`: the UI overhaul integration lineage
+(`claude/content-port-ui-integration`) with the content-port release lineage
+(`master` at fa9fc4c587, live as releases 20261031T031551Z and 20261031T045552Z)
+merged on top. Native code is identical to master; only `webserver/` and `docs/`
+differ.
 
 - The curated content port (`port-manifest.md`): 13 species, undead traits and
   game modifiers, Elder Pantheon backgrounds and the standalone backgrounds, three
   gods and 6★ blessings, eleven spells, the Cubus/grape pair, the kimjoy uniques and
   mercenaries, Golemforge, the Zot:5 hall, items, bag slot and bunker, corpse
   knockback and the autofight swap; see
-  `docs/diagnostics/2026-10-30-content-port-audit.md` for the audit, fixes and flags.
-- The WebTiles UI overhaul lineage (`claude/trusting-brahmagupta-ba643d`): tactics-RPG
-  lobby and HUD, frame-cost cuts, multiplayer connectivity fixes, screenshots cleanup
-  and composition pass, merged with the port's trait and modifier controls, bag and
-  grape equipment display and class art.
-- Production's remaining server-only fixes, ported: seat-owner-only trait edits,
-  activity-ready only for non-view packets, cached-bootstrap reattach without the
-  spectator replay. The async chronicle and library reads, record finish off the
-  IOLoop, presence expiry, write-buffer cap and the close-1000 reconnect grace arrived
-  through the merged multiplayer branch.
+  `docs/diagnostics/2026-10-30-content-port-audit.md`.
+- Production's server fixes as deployed: the 2026-10-30 performance and
+  connectivity release, the per-turn multiplayer region reconcile (5688efc06b),
+  -std=c++17 builds, gen-apt species tables, `games.d/base.yaml`, the tooltip ink
+  pin and its cache-tag bump.
+- The WebTiles UI overhaul lineage (`claude/trusting-brahmagupta-ba643d`, PR 3):
+  tactics-RPG lobby and HUD, frame-cost cuts, multiplayer connectivity fixes,
+  screenshot-pass fixes (graphics settings rows, mission bar, portrait arches)
+  and the enhancement and composition passes, merged with the port's trait and
+  modifier controls, bag and grape equipment display and class art.
+
+Merge resolution (5e9211d05b): the integration lobby's per-view room-list
+encoding cache and `party_rooms_test` superset were kept; master's deployed
+saved-party staging (`_stage_saved_party`), presence-check test patching,
+starting-weapons fixture and `monster_list.js` dirty tracking were taken (the
+overhaul's `threat` field re-added); the ink pin was layered onto the overhaul's
+tooltip contract and its folio card tokens ported from the enhancement pass.
+`deploy/Caddyfile` is the live one (HTTP/1.1 ALPN, Alt-Svc cleared).
+
+Integration fixes found by the QA pass on this tree:
+
+- a587caf272 — a roster-selected open seat shows its editor (production hid every
+  non-launching seat's editor; the overhaul's roster strip had no way to give an
+  open seat a mode).
+- 02ed5d7baa — hero sheet weapon tile laid out by class, not grid position (the
+  port's LEVEL CAP tile had pushed it into a single track: one letter per line).
+- e372018994 — the account menu's Log out button keeps its native button role.
+- (this commit) — fixed-position account dialogs stay viewport-centred on a
+  scrolled phone-width lobby ("Create an account" opened above the viewport).
 
 Deliberate differences from the previous production lineage: AI party seats stay
-available when `TYPESAFE_API_KEY` is configured (production forced them off), the
-`/profile` page and appearance API are present, `deploy/webtiles.yml` disables the
-`Host` and `Player2..4` accounts and anonymous spectating, and the Caddyfile imports
-`/etc/caddy/apps/*.caddy` and pins HTTP/1.1.
+available when `TYPESAFE_API_KEY` is configured, the `/profile` page and
+appearance API are present, one seat editor is shown at a time (roster strip),
+and the Play home is the overhaul's hub.
 
 ## Pre-deploy evidence
 
-Evidence root:
-`/Users/iancaltabiano/.claude/projects/-Users-iancaltabiano-Documents-Projects-dcss/evidence/content-port-20261030/`
+QA server: `util/qa_server.py` on the merged source with the content-port release
+engine (`evidence/content-port-20261030/release-candidate-r1/source`, binary
+9e7b2165…), port 8899, runtime `/tmp/dcp-ui/rt`.
 
-- `integration-candidate-r1`/`r2`: DEBUG WebTiles build, builddb, install-gate
-  python suite (102 OK), webtiles discover (529, two known pytest import errors), node
-  UI checks, five Lua fixtures; per-file Catch2 844/852 with the same known
-  harness-only and fork-own items as the content-port baseline. r1's debug engine
-  aborted on a FULLDEBUG monster-scan check for party avatars at multiplayer launch;
-  r2 exempts those (release engines never ran the check).
-- `two-client-integration-*`: PENDING
-- `ui-acceptance-r1`: PENDING
+- Python webtiles suite: 537 tests, 9 failures + 2 import errors — the identical
+  set as on the deployed lineage (`activity_pacing_test`, `auth_test`, `util_test`;
+  all pre-existing).
+- Pure-node tests: 59 pass / 10 fail on both the merged tree and the deployed
+  lineage, same files.
+- Screenshot pass (Playwright, 1440×900 and 1024×768, DPR 2): lobby home, party
+  builder with four seats, HUD, hero sheet and its tabs, pause menu, graphics
+  settings, premium preset on the dungeon theme (light canvas mounted), 390 px
+  lobby. No page errors beyond the git-ignored `title_*.png` illustrations, which
+  the release archive carries (staged with `git add -f` in the release worktree).
+  Main-thread profile of the hero sheet's Equipment tab: 15 ms.
+- Overhaul browser suites against the merged lobby: `portrait-status-browser`,
+  `party-faith-browser`, `logout-browser` pass. `status-icons-browser` (overhaul
+  version) does not stub `./equipment-paperdoll` and fails identically on the
+  overhaul branch; `tactical-ui-browser` and `premium-presentation-browser` need
+  generated client assets and fail the same way on the deployed lineage.
+- Main-checkout lobby acceptance (`lobby-ui`, `lobby-navigation`, `lobby-access`,
+  `party-setup`, `party-management`, `starting-weapons`, `library-smoke`): these
+  assert production's all-seats-visible editor and compact Play section and fail
+  on the overhaul's one-seat-at-a-time roster by design; the deployed lineage
+  itself passed only 7/16 of this set. The native six were not run (they failed
+  on the release candidate too).
 
 ## Deploy
 
