@@ -1,6 +1,6 @@
 # Content port and UI overhaul deployment — 31 October 2026
 
-Status: PENDING (release id, snapshot and verification are filled in once deployed).
+Status: LIVE as release `20261031T123110Z` since 13:28 UTC on 31 October 2026 (commit 25ced510ff).
 
 ## What ships
 
@@ -83,5 +83,19 @@ engine (`evidence/content-port-20261030/release-candidate-r1/source`, binary
 
 ## Deploy
 
-PENDING: state-disk snapshot name, release id, `install_release.sh` gate output,
-`/status/version/`, lobby and websocket check.
+- State-disk snapshot `dcss-data-pre-ui-overhaul-20261031` (20 GB, READY) taken
+  first. Deployed with `deploy_gcloud.sh --project chuk-437319` from a clean
+  detached worktree of 25ced510ff with the HUD atlas and the 41 `title_*.png`
+  illustrations staged (`git add -f`); the archive carried 68,531 files.
+- Release `20261031T123110Z`: uploaded 12:31 UTC, from-scratch build finished and
+  the install gate passed at 13:28 UTC (104 tests OK, native character preview
+  and runtime preview checks passed, `crawl -version` 0.33-coop, save version
+  34.350). `dcss-coop` and `caddy` active; previous release
+  `20261031T045552Z` kept for rollback. Boot disk at 66% afterwards.
+- Public: `/status/version/` and `/healthz` OK, lobby HTTP 200, the served
+  `style.css` imports the overhaul's tabletop stylesheets and
+  `tooltip-content.css?v=tooltip-ink-ae95e701-r1`, title illustrations and the HUD
+  atlas served. Headless Chrome on the live welcome page at 1440 and 390 px:
+  no page errors, no failed requests, the register dialog centred in the viewport.
+- The first deploy attempt was stopped while still packaging locally (nothing had
+  reached the VM) to include the combat pacing change cd3b3ffdf5.
