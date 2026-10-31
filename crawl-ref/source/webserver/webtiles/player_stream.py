@@ -25,6 +25,9 @@ class PlayerStreams:
                             "region_combat", "same_region", "can_act", "move_delay_aut", "atk_aut",
                             "cooldown_ms", "cooldown_remaining_ms", "queued_action", "queued_action_count", "zot_clock"}
 
+    # Shared bootstrap packets, in the order a reattaching client replays them.
+    bootstrap_order = ("version", "options", "layout")
+
     def __init__(self, control, presence, request_view=None):
         self.control = control
         self.presence = presence
@@ -248,7 +251,7 @@ class PlayerStreams:
         # Layout must precede the first map so its render can satisfy client
         # readiness. Every game-client attachment needs complete baselines,
         # including another attachment to the same native process.
-        for kind in ("version", "options", "layout"):
+        for kind in self.bootstrap_order:
             if kind in self.bootstrap:
                 receiver.append_message(json.dumps(self.bootstrap[kind]), True)
         slot = self.slot(receiver)

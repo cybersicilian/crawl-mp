@@ -1944,7 +1944,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         if weapon is not None:
             slot_obj["weapon"] = weapon
 
-        if trait is not None and trait in ("none", "mummy", "zombie", "ghost"):
+        # Party members choose their undead trait independently: only the
+        # seat's owner (or anyone, for an unclaimed seat) may change it.
+        if (trait is not None and trait in ("none", "mummy", "zombie", "ghost")
+                and (not slot_obj.get("username") or is_owner)):
             slot_obj["trait"] = trait
 
         if ready is not None:

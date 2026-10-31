@@ -375,7 +375,8 @@ class CrawlProcessHandlerBase(object):
                          or payload.get("msg") == "input_mode" and payload.get("mode", 0) > 1)):
                 self.activity_pump.prompt_boundary()
                 CrawlProcessHandlerBase.publish_party_status(self)
-            if payload.get("msg") == "party_activity_ready" and getattr(self, "activity_pump", None):
+            if (envelope.get("view") is not True and payload.get("msg") == "party_activity_ready"
+                    and getattr(self, "activity_pump", None)):
                 request = payload.get("activity_id")
                 if type(request) is int and self.activity_pump.command_boundary(request):
                     CrawlProcessHandlerBase.publish_party_status(self)
@@ -1393,7 +1394,14 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 # legacy full-map consumer never runs; adding here would retain
                 # every closed session for the lifetime of the game.
                 self._fresh_watchers.add(watcher)
-            self.conn.send_message('{"msg":"spectator_joined"}')
+            streams = self.player_streams
+            cached_command_bootstrap = (
+                self.party_control.multiplayer and streams.native_ready
+                and all(kind in streams.bootstrap for kind in streams.bootstrap_order))
+            # COMMAND reattachments already restore shared bootstrap and request
+            # only their own native view. Prompts still need the legacy UI replay.
+            if not cached_command_bootstrap:
+                self.conn.send_message('{"msg":"spectator_joined"}')
         if self.party_control.multiplayer:
             self.player_streams.restore(watcher)
             self.player_streams.request(watcher)
