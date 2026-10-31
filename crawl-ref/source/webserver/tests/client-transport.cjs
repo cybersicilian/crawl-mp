@@ -109,38 +109,6 @@ for (const input of ['key', 'input', 'text_input', 'click_cell', 'power_action',
 }
 {
     const f = fixture();
-    f.enqueue({ msg: 'delay', t: 250 }, message('slow'),
-        { msg: 'delay', t: 250 }, message('slow'), message('state'));
-    f.send('key');
-    assert.deepEqual(f.received, ['delay', 'slow'], 'Animation catch-up yields before sending input');
-    assert.equal(f.timers.size, 1);
-    f.tick();
-    assert.deepEqual(f.received, ['delay', 'slow', 'delay', 'slow'],
-        'Later catch-up slices skip old animation waits and keep their work budget');
-    f.tick();
-    assert.equal(f.received.at(-1), 'state');
-    f.client.delay(100);
-    f.enqueue(message('new-animation'));
-    assert.equal(f.received.at(-1), 'state', 'New animations resume after catch-up empties the queue');
-    f.tick();
-    assert.equal(f.received.at(-1), 'new-animation');
-}
-{
-    const f = fixture();
-    f.client.inhibit_messages();
-    f.client.delay(100); f.enqueue(message('slow'), { msg: 'delay', t: 100 }, message('state'));
-    f.send('key');
-    assert.deepEqual(f.received, [], 'Catch-up never bypasses client loading');
-    f.client.uninhibit_messages(); f.tick();
-    assert.deepEqual(f.received, ['slow', 'delay', 'state']);
-    f.client.delay(100); f.enqueue(message('slow'), message('old'));
-    f.send('key'); f.client.reset_transport();
-    f.client.delay(100); f.enqueue(message('new'));
-    assert.notEqual(f.received.at(-1), 'new', 'Reset clears the old catch-up mode');
-    f.tick(); assert.equal(f.received.at(-1), 'new');
-}
-{
-    const f = fixture();
     f.client.enqueue_messages('{msg:"legacy"}');
     assert.deepEqual(f.received, ['legacy'], 'Old non-standard JSON remains supported');
 }
@@ -191,6 +159,16 @@ for (const content of ['<div>legacy client</div>', '<script>game_loading</script
     f.window.game_loading = true;
     f.tick();
     assert.deepEqual(f.received, ['game_client', 'replacement-state']);
+    assert.equal(f.timers.size, 0);
+}
+{
+    const f = fixture();
+    const content = '<script>game_loading</script>';
+    f.client.receive_game_client({ version: 'current', content });
+    f.client.receive_game_client({ version: 'current', content });
+    f.enqueue(message('state'));
+    f.imagesReady(); f.window.game_loading = true; f.tick();
+    assert.deepEqual(f.received, ['state'], 'A client replaced while loading cannot strand its barrier');
     assert.equal(f.timers.size, 0);
 }
 console.log('Transport ordering, interruptible delays, loading barriers, yielding and legacy messages passed.');

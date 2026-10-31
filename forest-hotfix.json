@@ -1,0 +1,67 @@
+{
+  "release": "/opt/dcss/releases/20261021T193000Z-forest-recovery",
+  "base_release": "/opt/dcss/releases/20261021T011926Z-creature-roster-r2",
+  "previous_before": "/opt/dcss/releases/20261021T003239Z-rogue-jiyva-altar",
+  "snapshot": {
+    "creationTimestamp": "2026-10-21T12:23:38.896-07:00",
+    "diskSizeGb": "10",
+    "name": "dcss-pre-forest-recovery-20261021t1925",
+    "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+    "status": "READY"
+  },
+  "native_sha256": "76b6e73aabe123595f5d67447757e36f12fa5678a98b3824a57f6efeda56dae9",
+  "map_sha256": "a703ce3aaee18dbc50597d6b350aec139d2ec2ab67f3fdf4058fd811303cbf49",
+  "unchanged_hardlinked_files": 13366,
+  "started_at": "2026-10-21T19:28:46.842059+00:00",
+  "backup": "/var/lib/dcss/recovery/forest-recovery-20261021T193000Z/save-before",
+  "status": "deployed_and_recovered",
+  "recovery_passed": true,
+  "save_reload_preserved": true,
+  "original_save_sha256": "5f8e8e89f63a78c508c48f490dacc7c9c3315084e417dd7f002a741a0719139e",
+  "recovered_save_sha256": "9f7ca8041e4b26f23b784e24b1b4791caeb987e7a4701ce2814aac7ad4b3d855",
+  "added_chunks": [
+    "Forest:4"
+  ],
+  "changed_chunks": [
+    "lua",
+    "msg",
+    "st",
+    "tc",
+    "tdl",
+    "you"
+  ],
+  "preserved_existing_chunks": 56,
+  "player": {
+    "name": "JediJosh",
+    "species": "Minotaur",
+    "xl": 22,
+    "god": "Qazlal",
+    "hp": 225,
+    "hp_max": 225,
+    "gold": 5898,
+    "turn": 45306,
+    "place": "Forest",
+    "depth": 4
+  },
+  "identity": {
+    "msg": "record_identity",
+    "game_id": "ab4f89d6-bbdd-412b-bfd4-cb71453ae77e",
+    "player_id": "cbf9f961-8472-4d4e-9c31-90103761ed8e",
+    "owner_id": "0e37c1fe-85fd-4ea6-8ef9-d25ea92113dd"
+  },
+  "health": {
+    "ok": true,
+    "checked_at": "2026-10-21T19:33:17.165027+00:00",
+    "application": true,
+    "disk": true
+  },
+  "application_version": {
+    "webtiles": "0.33-coop",
+    "tornado": "6.4",
+    "python": "3.12.3",
+    "python_supported": true
+  },
+  "all_owned_native_processes_exited": true,
+  "activation_retry": "Canonical /status/version/ health check; save recovery was not repeated.",
+  "finished_at": "2026-10-21T19:33:23.295500+00:00"
+}

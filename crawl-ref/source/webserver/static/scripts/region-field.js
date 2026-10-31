@@ -61,10 +61,9 @@ define([], function () {
         var phase = seconds * profile.speed, pulse = .88 + Math.sin(phase) * .12;
         var wave = Math.sin(wx * 3 + wy * 2 - phase);
         var alpha = (profile.fill + rim * profile.rim + (wave + 1) * profile.motion) * fade * pulse;
-        var mix = Math.min(1, rim * .85);
-        return { alpha: Math.min(.6, alpha), colour: profile.colour.map(function (value, c) {
-            return value * (1 - mix) + profile.edge[c] * mix;
-        }) };
+        var mix = Math.min(1, rim * .85), base = profile.colour, edge = profile.edge;
+        return { alpha: Math.min(.6, alpha), colour: [base[0] * (1 - mix) + edge[0] * mix,
+            base[1] * (1 - mix) + edge[1] * mix, base[2] * (1 - mix) + edge[2] * mix] };
     }
     function circle(group, wx, wy, seconds, profile) {
         var radius = Math.max(.55, group.radius), r = Math.hypot(wx - group.center.x, wy - group.center.y) / radius;
@@ -73,10 +72,9 @@ define([], function () {
         var corona = Math.exp(-Math.pow((r - .82) / .25, 2));
         var wave = Math.pow(Math.max(0, Math.sin(r * Math.PI * 5 - seconds * profile.speed * 2.3 * (profile.inward ? -1 : 1))), 10);
         var alpha = (profile.fill * (profile.fill > .2 ? .95 : 1.75) + profile.rim * corona * .22 + wave * .045) * edge * pulse;
-        var tint = Math.min(.8, r * r * .65);
-        return { alpha: Math.min(.4, alpha), colour: profile.colour.map(function (value, c) {
-            return value * (1 - tint) + profile.edge[c] * tint;
-        }) };
+        var tint = Math.min(.8, r * r * .65), base = profile.colour, edge = profile.edge;
+        return { alpha: Math.min(.4, alpha), colour: [base[0] * (1 - tint) + edge[0] * tint,
+            base[1] * (1 - tint) + edge[1] * tint, base[2] * (1 - tint) + edge[2] * tint] };
     }
     return { create: create, distance: distance, sample: sample, circle: circle };
 });

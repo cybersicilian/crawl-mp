@@ -204,6 +204,68 @@ class ActivityPumpTest(unittest.TestCase):
         callback.assert_not_called()
         self.assertFalse(self.streams.native_ready)
 
+    def test_exact_completion_restores_readiness_without_an_input_mode_packet(self):
+        request = self.pump.start_manual(2)
+        self.assertFalse(self.streams.native_ready)
+        self.pump.command_boundary(request)
+        self.assertTrue(self.streams.native_ready)
+        self.assertFalse(self.pump.inflight)
+        self.assertIsNotNone(self.pump.start_manual(3))
+        self.pump.command_boundary(request)
+        self.assertFalse(self.streams.native_ready)
+        self.assertEqual(self.pump.owner, 3)
+
+    def test_exact_completion_releases_personal_view_requests_without_input_mode(self):
+        self.streams._request_pending = Mock()
+        request = self.pump.start_manual(0)
+        self.streams._request_pending.assert_not_called()
+        self.pump.command_boundary(request - 1)
+        self.streams._request_pending.assert_not_called()
+        self.pump.command_boundary(request)
+        self.streams._request_pending.assert_called_once()
+        self.assertTrue(self.streams.native_ready)
+
+    def test_local_noops_do_not_strand_later_buffered_input(self):
+        request = self.pump.start_manual(0)
+        ignored, movement, later = Mock(), Mock(), Mock()
+        movement.side_effect = lambda: self.pump.start_manual(1)
+        for callback in (ignored, movement, later):
+            self.pump.queue_input(callback)
+        self.pump.command_boundary(request)
+        ignored.assert_called_once()
+        movement.assert_called_once()
+        later.assert_not_called()
+        self.assertEqual(self.pump.owner, 1)
+        self.assertFalse(self.streams.native_ready)
+        self.pump.command_boundary(self.pump.request_id)
+        later.assert_called_once()
+
+    def test_prompt_drains_only_its_owners_buffered_responses(self):
+        request = self.pump.start_manual(1)
+        peer, response, suffix = Mock(), Mock(), Mock()
+        self.pump.queue_input(peer, 0)
+        self.pump.queue_input(response, 1)
+        self.pump.queue_input(suffix, 1)
+        self.pump.prompt_boundary()
+        response.assert_called_once()
+        suffix.assert_called_once()
+        peer.assert_not_called()
+        self.assertEqual(self.pump.request_id, request)
+        self.assertTrue(self.pump.inflight)
+        self.assertFalse(self.streams.native_ready)
+        self.pump.command_boundary(request)
+        peer.assert_called_once()
+
+    def test_stale_completion_cannot_drain_idle_input_or_restore_readiness(self):
+        request = self.pump.start_manual(0)
+        self.pump.command_boundary(request)
+        self.streams.native_ready = False
+        callback = Mock()
+        self.pump.queue_input(callback)
+        self.pump.command_boundary(request - 1)
+        callback.assert_not_called()
+        self.assertFalse(self.streams.native_ready)
+
     def test_buffered_manual_command_holds_automation_until_its_own_completion(self):
         request_id = self.pump.start_manual(2)
         self.assertIsNotNone(request_id)

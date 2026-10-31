@@ -11,6 +11,7 @@ from webtiles.player_update import merge_player, player_update
 
 
 class PlayerStreams:
+    bootstrap_order = ("version", "options", "layout")
     shared = {"version", "options", "set_option", "layout"}
     projected = {"map", "player", "party_state", "record_identity"}
     global_member_fields = {"hp", "hp_max", "mp", "mp_max", "xl_cap", "alive", "ghost_haunting", "zot_clock", "bribe_fund", "banes"}
@@ -140,7 +141,7 @@ class PlayerStreams:
         # Spectating follows the host's permitted view, never union vision.
         return selected if selected is not None else 0
 
-    def deliver(self, receiver, packet, floor, send, receivers=()):
+    def deliver(self, receiver, packet, floor, send, receivers=(), encoded=None):
         if getattr(receiver, "personal_stream", None) is not self:
             self.attach(receiver)
         kind = packet.get("msg")
@@ -184,7 +185,16 @@ class PlayerStreams:
                 self.presence.remove(receiver, receivers)
                 receiver.party_view_floor = floor
                 self.presence.sync(receiver)
-        receiver.append_message(json.dumps(packet, separators=(",", ":")), send)
+        if encoded is not None and kind == "map":
+            # One native projection reaches every same-character session.
+            # Serialize it once per camera variant, not once per receiver.
+            variant = "vgrdc" in packet
+            text = encoded.get(variant)
+            if text is None:
+                text = encoded[variant] = json.dumps(packet, separators=(",", ":"))
+        else:
+            text = json.dumps(packet, separators=(",", ":"))
+        receiver.append_message(text, send)
 
     def ingest(self, envelope, receivers, send):
         slot, payload = envelope.get("slot"), envelope.get("payload")
@@ -229,16 +239,17 @@ class PlayerStreams:
             self.cached.setdefault(slot, {})[kind] = (payload, floor)
         if kind == "map":
             self.maps.setdefault(slot, MapSnapshot()).update(payload, floor)
+        encoded = {}
         for receiver in receivers:
             if self.slot(receiver) == slot:
-                self.deliver(receiver, payload, floor, send, receivers)
+                self.deliver(receiver, payload, floor, send, receivers, encoded)
 
     def restore(self, receiver):
         self.attach(receiver)
         # Layout must precede the first map so its render can satisfy client
         # readiness. Every game-client attachment needs complete baselines,
         # including another attachment to the same native process.
-        for kind in ("version", "options", "layout"):
+        for kind in self.bootstrap_order:
             if kind in self.bootstrap:
                 receiver.append_message(json.dumps(self.bootstrap[kind]), True)
         slot = self.slot(receiver)

@@ -1,6 +1,3 @@
-# Preserve independently managed applications on a shared host.
-import /etc/caddy/apps/*.caddy
-
 dcss.iancaltabiano.com {
     # Parallel HTTP/2 asset requests stalled in live Chrome acceptance.
     # Keep the tested compatibility path scoped to this hostname.

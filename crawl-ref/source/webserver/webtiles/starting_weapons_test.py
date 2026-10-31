@@ -1,6 +1,7 @@
 """Native menu contracts and staging-to-launch weapon propagation."""
 from copy import deepcopy
 import tempfile
+from types import SimpleNamespace
 from pathlib import Path
 import unittest
 from unittest.mock import Mock, patch
@@ -76,8 +77,13 @@ class StagingSocket:
     username = "Host"
     logger = Mock()
     reset_lobby_timeout = Mock()
-    start_crawl = Mock()
     library_error = Mock()
+    process = None
+
+    def start_crawl(self, game_id, **kwargs):
+        # The launch treats a socket without a handler as a failed start.
+        if self.process is None:
+            self.process = SimpleNamespace(process=object(), record_id=None)
 
     def is_in_lobby(self):
         return True
@@ -90,7 +96,6 @@ class StagingWeaponTests(unittest.TestCase):
     def setUp(self):
         self.socket = StagingSocket()
         self.socket.process = None
-        self.socket.start_crawl = Mock(side_effect=lambda game_id, **kwargs: setattr(self.socket, "process", Mock()))
         self.room = {"room_id": "room-host", "host": "Host", "game_id": "coop",
                      "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
         self.room["slots"][0]["username"] = "Host"
@@ -114,6 +119,15 @@ class StagingWeaponTests(unittest.TestCase):
         self.assertEqual(self.room["slots"][0]["weapon"], "hand axe")
         self.socket.party_room_update_slot(slot=0, species="Felid", weapon="war axe")
         self.assertEqual(self.room["slots"][0]["weapon"], "unarmed")
+
+    def test_connected_player_controls_their_own_trait(self):
+        self.room["slots"][1].update(state="player", username="Guest", trait="ghost")
+        self.socket.party_room_update_slot(slot=1, trait="mummy")
+        self.assertEqual(self.room["slots"][1]["trait"], "ghost")
+        guest = StagingSocket()
+        guest.username = "Guest"
+        guest.party_room_update_slot(room_id="room-host", slot=1, trait="zombie")
+        self.assertEqual(self.room["slots"][1]["trait"], "zombie")
 
     def test_launch_carries_host_and_companion_weapons(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -201,6 +215,26 @@ class StagingWeaponTests(unittest.TestCase):
         self.socket.party_room_apply_comp(members=[{"species": "Minotaur", "job": "Fighter",
                                                     "weapon": "flail"}])
         self.assertEqual(self.room["slots"][0]["weapon"], "flail")
+
+
+class LaunchNoticeTests(StagingWeaponTests):
+    def test_guests_hear_once_when_the_engine_is_already_registered(self):
+        self.room["slots"][1].update(state="player", username="Guest")
+        guest = Mock()
+        with patch.object(ws_handler, "find_user_sockets", return_value=[guest]), \
+                tempfile.TemporaryDirectory() as directory:
+            self.socket.rc_path = str(Path(directory, "Host.rc"))
+            self.socket.process = SimpleNamespace(process=object())
+            self.socket.party_room_launch()
+            ws_handler.IOLoop.current.return_value.call_later.assert_not_called()
+            self.assertEqual(guest.send_message.call_count, 1)
+            self.assertEqual(guest.send_message.call_args.args, ("party_room_launched",))
+            # Not registered yet (stale-lock dialog): the notice is repeated.
+            self.socket.process = SimpleNamespace(process=None, record_id=None)
+            self.room["status"] = "staging"
+            self.socket.party_room_launch()
+            ws_handler.IOLoop.current.return_value.call_later.assert_called_once()
+            self.assertEqual(ws_handler.IOLoop.current.return_value.call_later.call_args.args[0], 0.35)
 
 
 if __name__ == "__main__":

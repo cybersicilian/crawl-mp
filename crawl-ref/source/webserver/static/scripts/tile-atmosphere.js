@@ -2,9 +2,13 @@
 define([], function () {
     "use strict";
     var priority = { ember: 0, fire: 0, fountain: 0, lava: 1, water: 2 };
+    var scenes = new WeakMap();
     function rank(cell) { return (Math.imul(cell.x, 374761393) ^ Math.imul(cell.y, 668265263)) >>> 0; }
-    function paint(ctx, scene, coords, now, enabled) {
-        if (!enabled) return;
+    // Emitter selection and the particle clip depend only on the scene window
+    // and its occupancy version, not on the animation clock.
+    function prepare(scene) {
+        var version = scene.base ? scene.base.version : 0, entry = scenes.get(scene);
+        if (entry && entry.version === version) return entry;
         var available = scene.cells.filter(function (cell) { return !cell.occupied || cell.emission && !cell.emission.blocked; });
         var emitters = available.filter(function (cell) {
             return cell.effect === "ember" || cell.effect === "fire" || cell.effect === "fountain"
@@ -13,10 +17,29 @@ define([], function () {
         }).sort(function (a, b) {
             return priority[a.effect] - priority[b.effect] || rank(a) - rank(b);
         }).slice(0, 32);
+        entry = { version: version, available: available, emitters: emitters, key: null, path: null };
+        scenes.set(scene, entry);
+        return entry;
+    }
+    function clipTo(ctx, entry, coords) {
+        if (typeof Path2D !== "function") {
+            ctx.beginPath();
+            entry.available.forEach(function (cell) { var p = coords(cell.x, cell.y); ctx.rect(p.x, p.y, p.width, p.height); });
+            ctx.clip(); return;
+        }
+        var origin = coords(0, 0) || {}, key = [origin.x, origin.y, origin.width, origin.height].join(":");
+        if (!entry.path || entry.key !== key) {
+            entry.key = key; entry.path = new Path2D();
+            entry.available.forEach(function (cell) { var p = coords(cell.x, cell.y); entry.path.rect(p.x, p.y, p.width, p.height); });
+        }
+        ctx.clip(entry.path);
+    }
+    function paint(ctx, scene, coords, now, enabled) {
+        if (!enabled) return;
+        var entry = prepare(scene), emitters = entry.emitters;
         if (!emitters.length) return;
-        ctx.save(); ctx.beginPath();
-        available.forEach(function (cell) { var p = coords(cell.x, cell.y); ctx.rect(p.x, p.y, p.width, p.height); });
-        ctx.clip();
+        ctx.save();
+        clipTo(ctx, entry, coords);
         emitters.forEach(function (cell) {
             var p = coords(cell.x, cell.y), unit = Math.max(1, Math.round(p.width / 32));
             var seed = Math.abs(cell.x * 31 + cell.y * 47), cycle = (now / 2600 + seed * .137) % 1;

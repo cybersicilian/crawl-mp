@@ -1,8 +1,12 @@
 """Real Tornado framing verifies protocol and application heartbeats."""
 import asyncio
+import functools
 import json
+from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
+
+import tornado.iostream
 
 import tornado.web
 from tornado.testing import AsyncHTTPTestCase, gen_test
@@ -115,6 +119,26 @@ class HeartbeatSettingsTest(unittest.TestCase):
     def test_disabled_pings_and_default_timeouts_are_preserved(self):
         self.assertEqual(heartbeat_settings(0, 20, (6, 4))["websocket_ping_interval"], 0)
         self.assertIsNone(heartbeat_settings(20, None, (6, 4))["websocket_ping_timeout"])
+
+
+class SlowClientTest(unittest.TestCase):
+    def test_open_bounds_the_write_buffer_from_config(self):
+        connection = Mock()
+        connection.get_extensions.return_value = []
+        with patch("webtiles.ws_handler.sockets", set()), \
+                patch("webtiles.ws_handler.config.get", return_value=4096):
+            CrawlWebSocket.open(connection)
+        self.assertEqual(connection.ws_connection.stream.max_write_buffer_size, 4096)
+
+    def test_full_buffer_closes_only_that_socket(self):
+        socket = SimpleNamespace(client_closed=False, deflate=False, _compressobj=None, logger=Mock(),
+                                 total_message_bytes=0, uncompressed_bytes_sent=0, failed_messages=0,
+                                 ws_connection=Mock(),
+                                 write_message=Mock(side_effect=tornado.iostream.StreamBufferFullError()))
+        socket._encode_for_send = functools.partial(CrawlWebSocket._encode_for_send, socket)
+        self.assertFalse(CrawlWebSocket._send_raw_message(socket, "{}"))
+        socket.ws_connection._abort.assert_called_once_with()
+        self.assertEqual(socket.failed_messages, 1)
 
 
 if __name__ == "__main__":
