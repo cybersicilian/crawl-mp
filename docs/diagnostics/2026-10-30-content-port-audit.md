@@ -31,7 +31,18 @@ all-owned-processes-gone evidence.
 | `web-candidate-r1` | WEBTILES build (`-DUSE_TILE_WEB -DWIZARD -DASSERTS`, no SAVE_DIR_PATH/SHARED_DIR_PATH/DGAMELAUNCH), `crawl` + `webserver` assets + `catch2-tests-executable`; node checks creature-roster, party-data, grape-ui-browser | build and the three UI checks passed; single-process Catch2 aborted at case 41/830 (harness, see §4) |
 | `catch2-full-r2` | per-file Catch2 run on that binary | 809/830 passed; 8 failures and 13 aborts, all traced to test-harness initialisation and console animation in a WEBTILES binary (fixed in §4), none to game code |
 | `two-client-cubus-grape-r1..r3` | prepared Codex draft fixture, bound to the candidate with a reviewed isolation attestation (private runtime, `shared_dir = <runtime>/rcs/saves`, per-game `CRAWL_SAVE_DIR` under the private library, accounts deleted afterwards) | see §3 |
-| `web-candidate-r2` | DEBUG WebTiles build of the combined source after the audit fixes; per-file Catch2, UI checks, builddb, Lua fixtures (`curated_port_golemforge`, `curated_port_zot_hall`, `curated_port_step6`, `curated_port_imus`, `burrows`) | PENDING |
+| `web-candidate-r2..r4` | DEBUG WebTiles builds of the combined source after the audit fixes; per-file Catch2, UI checks, builddb (compiles every des, so the new vaults parse), Lua fixtures (`curated_port_golemforge`, `curated_port_zot_hall`, `curated_port_step6`, `curated_port_imus`, `burrows`) | build, builddb, UI checks and all five Lua fixtures passed; Catch2 844/852 in r4 (22 new cases, all passing). Remaining: 3 failures and 5 aborts, see below |
+
+Remaining Catch2 items after r4, none in ported game code: the Fallen umbra test and
+the new gauntlets-of-Distortion blink test both throw a `basic_string` exception from
+actor movement in the headless WEBTILES harness (the Fallen case passed in the Codex r9
+local-tiles debug harness); `test_pakellas.cc` "Every live wand and XP evoker has an
+explicit Prototype profile" fails in isolation (fork-own Pakellas); five Vellum tests
+abort on a DEBUG-only `CrawlStoreValue` type assertion (fork-own Vellum, latent in
+release builds). Catch2 harness fixes made along the way: a listener initialises the
+static game tables and resets the level grids once per process, cursor validation is
+skipped before the console starts, and the poison fixture disables animations; these
+let a single file or case run alone with the same result as the full suite.
 
 ## 3. Two-client Cubus / grape fixture
 
@@ -105,9 +116,13 @@ Gaps found and fixed in this pass:
   (`test_curated_vaults.cc`); gauntlets of Distortion, Unseen Dragon, Erysichthon's Jaw,
   Scorpio beckon, seeking brand, iron dragon scale drop, Irit low-level encumbrance
   (see the test files named in §2's final phase log).
-- Test harness: `test_main.cc` initialises the static game tables once per run, the
-  kimjoy poison fixture disables animations, and `test_branch.cc` treats Burrows as the
-  guaranteed Lair child it is.
+- Test harness: `test_main.cc` initialises the static game tables and resets the level
+  grids once per run, headless runs skip cursor validation, the kimjoy poison fixture
+  disables animations, and `test_branch.cc` treats Burrows as the guaranteed Lair child
+  it is.
+- Wight granted the removed legacy `MUT_UNBREATHING` (no mutation definition exists);
+  undead species are unbreathing through `player::is_unbreathing()`, so the grant was
+  dropped.
 
 ## 5. Decisions and flags for review
 

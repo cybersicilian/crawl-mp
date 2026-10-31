@@ -6,6 +6,8 @@
 
 #include "fake-main.hpp"
 
+#include "colour.h"
+#include "dungeon.h"
 #include "feature.h"
 #include "item-prop.h"
 #include "mon-util.h"
@@ -25,10 +27,14 @@ namespace
         void testRunStarting(Catch::TestRunInfo const&) override
         {
             init_show_table();
+            init_element_colours();
             init_monsters();
             init_spell_descs();
             init_properties();
             init_mut_index();
+            // Item and monster grids start zeroed (index 0 = "occupied");
+            // reset them to NON_ITEM/NON_MONSTER like a real level load.
+            dgn_reset_level(false);
         }
     };
 }

@@ -47,7 +47,6 @@ mutations:
     MUT_NEGATIVE_ENERGY_RESISTANCE: 3
     MUT_COLD_RESISTANCE: 1
     MUT_TORMENT_RESISTANCE: 1
-    MUT_UNBREATHING: 1
 fake_mutations:
   - long: At level 6, your melee attacks begin to drain living enemies; their draining grows stronger at level 18.
     short: draining melee at levels 6 and 18
