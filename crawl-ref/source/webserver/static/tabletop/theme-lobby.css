@@ -42,5 +42,5 @@ html[data-ui-theme] #play_now a { background: var(--ui-page-raised); }
 html[data-ui-theme] #lobby_body #player_list :is(td, th),
 html[data-ui-theme] #party_lobby_panel #party_rooms_table :is(td, th) { color: var(--ui-ink); border-color: var(--ui-rule); }
 html[data-ui-theme] :is(#party_lobby_panel, #coop_chronicle_panel) :is(button, input, select, a):focus-visible {
-    outline-color: var(--ui-chapter);
+    outline: var(--tt-focus-ring); outline-offset: var(--tt-focus-offset);
 }

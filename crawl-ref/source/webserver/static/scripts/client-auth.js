@@ -4,6 +4,18 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
     return function create(api, state) {
         var send_message = comm.send_message;
 
+        // #login_message is a styled callout; the tone class is presentational only.
+        function set_status(text, tone, as_html)
+        {
+            var status = $("#login_message").removeClass("is-error is-busy");
+            if (tone)
+                status.addClass("is-" + tone);
+            if (as_html)
+                status.html(text);
+            else
+                status.text(text);
+        }
+
         function start_login()
         {
             $(".welcome-entry").removeClass("signed-in");
@@ -12,7 +24,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
                 $("#login_form").hide();
                 $("#reg_link").hide();
                 $("#forgot_link").hide();
-                $("#login_message").html("Logging in...");
+                set_status("Signing you in…", "busy");
                 state.logging_in = send_message("token_login", {
                     cookie: get_login_cookie()
                 });
@@ -26,7 +38,8 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             var username = ($("#username").val() || "").trim();
             var password = $("#password").val();
             if (!username || !password) {
-                $("#login_message").text("Enter your username and password.");
+                set_status(username ? "Enter your password to sign in."
+                    : "Enter your account name and password.", "error");
                 $(username ? "#password" : "#username").focus();
                 return false;
             }
@@ -34,24 +47,21 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
                 username: username,
                 password: password
             })) {
-                $("#login_message").text("Waiting for a connection…");
+                set_status("Waiting for a connection… try again in a moment.", "error");
                 return false;
             }
             state.logging_in = true;
             $("#login_form").hide();
             $("#reg_link").hide();
             $("#forgot_link").hide();
-            $("#login_message").html("Logging in...");
+            set_status("Signing you in…", "busy");
             return false;
         }
 
         function auth_error(data)
         {
             var reason = data.reason;
-            if (reason)
-                $("#login_message").html(reason);
-            else
-                $("#login_message").html("Login failed.");
+            set_status(reason ? reason : "Sign-in failed. Check your name and password.", "error", !!reason);
         }
 
         function login_failed(data)
@@ -64,6 +74,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             $("#party_lobby_panel").hide();
             $("#reg_link").show();
             $("#forgot_link").show();
+            $("#password").focus();
             state.current_user = null;
             texturePack.bindUser(null);
             graphics.bindUser(null);
@@ -76,7 +87,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             state.logging_in = false;
             var username = data.username;
             api.hide_prompt();
-            $("#login_message").html("Logged in as " + username);
+            set_status("Logged in as " + username, null, true);
             state.current_user = username;
             texturePack.bindUser(username);
             // HTTP account settings wait for the matching session cookie.
@@ -239,9 +250,30 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             chat.show_in_chat(text);
         }
 
+        // Show/hide the typed password. Presentation only; nothing is sent.
+        function bind_password_toggle()
+        {
+            var toggle = document.getElementById("password_toggle");
+            var field = document.getElementById("password");
+            if (!toggle || !field) return;
+            toggle.addEventListener("click", function () {
+                var reveal = field.type === "password";
+                field.type = reveal ? "text" : "password";
+                toggle.textContent = reveal ? "Hide" : "Show";
+                toggle.setAttribute("aria-pressed", String(reveal));
+                toggle.setAttribute("aria-label", (reveal ? "Hide" : "Show") + " password");
+                field.focus();
+            });
+            // Never leave a revealed password behind after a sign-in attempt.
+            $("#login_form").on("submit", function () {
+                if (field.type !== "password") toggle.click();
+            });
+        }
+
         function bind_account_events()
         {
             $("#login_form").bind("submit", login);
+            bind_password_toggle();
 
             $("#chat_login_link").bind("click", api.chat_login);
 

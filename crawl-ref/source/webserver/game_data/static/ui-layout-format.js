@@ -131,7 +131,60 @@ function ($, comm, enums, cr, util, richText) {
             + util.formatted_string_to_html(parts[2]) + "</pre>" + fmt_body_txt(parts[3]);
     }
 
+    // Native stat lines ("Base accuracy: +2  Base damage: 7", "Level: 3
+    // School: Fire  Fail: 4%") become a labelled definition grid. Only runs of
+    // "Label: value" pairs convert; any other prose stays where it was.
+    var stat_pair = /^([A-Z][A-Za-z' ]{1,24}): (\S.*)$/;
+    function stat_segments(node)
+    {
+        var segments = [], current = document.createElement("span");
+        function flush() {
+            if (current.textContent.trim()) segments.push(current);
+            current = document.createElement("span");
+        }
+        Array.from(node.childNodes).forEach(function (child) {
+            if (child.nodeName === "BR") { flush(); return; }
+            var text = child.nodeType === 3 ? child.nodeValue : child.textContent;
+            var parts = text.split(/ {2,}|\n/);
+            parts.forEach(function (part, index) {
+                if (index) flush();
+                if (!part) return;
+                if (child.nodeType === 3) current.appendChild(document.createTextNode(part));
+                else { var copy = child.cloneNode(true); copy.textContent = part; current.appendChild(copy); }
+            });
+        });
+        flush();
+        return segments;
+    }
+    function stat_grid(root)
+    {
+        $(root).find("pre.native-spell-stats, .rich-text > p").each(function () {
+            var segments = stat_segments(this), rows = [];
+            while (segments.length && stat_pair.test(segments[0].textContent.trim()))
+                rows.push(segments.shift());
+            if (rows.length < 2) return;
+            var grid = $("<dl class='workflow-stat-grid'></dl>");
+            rows.forEach(function (segment) {
+                var match = segment.textContent.trim().match(stat_pair);
+                var value = $("<dd></dd>").append($(segment).contents());
+                // Strip the label from the first text node so value markup survives.
+                var first = value[0].firstChild;
+                while (first && first.nodeType !== 3 && first.firstChild) first = first.firstChild;
+                if (first && first.nodeType === 3)
+                    first.nodeValue = first.nodeValue.replace(/^\s*[A-Z][A-Za-z' ]{1,24}: /, "");
+                grid.append($("<div></div>").append($("<dt></dt>").text(match[1]), value));
+            });
+            var rest = $("<p></p>");
+            segments.forEach(function (segment, index) {
+                if (index) rest.append(document.createElement("br"));
+                rest.append($(segment).contents());
+            });
+            $(this).replaceWith(rest.text().trim() ? grid.add(rest) : grid);
+        });
+    }
+
     return {
+        stat_grid: stat_grid,
         body: fmt_body_txt,
         spellset: _fmt_spellset_html,
         spells_list: _fmt_spells_list,

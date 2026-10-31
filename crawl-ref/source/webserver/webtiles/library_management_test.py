@@ -184,7 +184,7 @@ class RecordVisibilityHTTPTests(Workspace, AsyncHTTPTestCase):
         return tornado.web.Application([
             (r"/(games|players|randarts)(?:/([0-9a-f-]+))?", LibraryPageHandler),
             (r"/api/library/(games|players|randarts)(?:/([0-9a-f-]+))?", LibraryAPIHandler),
-        ], template_path=str(templates))
+        ], template_path=str(templates), static_path=str(templates.parent / "static"))
 
     def test_browse_pages_and_apis_hide_test_data_while_owner_links_work(self):
         normal = library.create_game("Contest", "coop", title="Real expedition")

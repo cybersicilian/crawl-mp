@@ -1,167 +1,270 @@
-/* Non-play working surfaces. Visual hierarchy follows the player's task. */
+/* Non-play working surfaces: saved expeditions, join friends, chronicle.
+ * Semantic --ui-* tokens are preferred; folio/art tokens are the fallback. */
 body:has(#lobby.has-chapter-index:not([style*="display: none"])) { background: #19211c; background-image: radial-gradient(ellipse at 50% 0, #32443255, transparent 70%); }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now) {
-    --hall-text: var(--tt-folio-ink);
-    --hall-muted: var(--tt-folio-muted);
-    --hall-field: var(--tt-folio-raised);
-    --hall-rule: var(--tt-folio-rule);
-    color: var(--hall-text);
+#lobby.has-chapter-index {
+    --hub-paper: var(--ui-page, var(--tt-folio-paper, #ebe5d5));
+    --hub-raised: var(--ui-page-raised, var(--tt-folio-raised, #f6f1e6));
+    --hub-inset: var(--ui-page-inset, var(--tt-vellum-aged, #ddd5bf));
+    --hub-ink: var(--ui-ink, var(--tt-folio-ink, #282d27));
+    --hub-muted: var(--ui-quiet, var(--tt-folio-muted, #5f6456));
+    --hub-rule: var(--ui-rule, var(--tt-folio-rule, #b8b29b));
+    --hub-chapter: var(--ui-chapter, var(--tt-folio-crimson, #315e53));
+    --hub-action: var(--ui-action, var(--art-teal-ink, #315e53));
+    --hub-action-text: var(--ui-action-text, #fff5df);
+    --hub-good: var(--ui-good, #2d633a);
+    --hub-warn: var(--ui-warn, #805019);
+    --hub-danger: var(--ui-danger, #a12d27);
+    --hub-accent: var(--ui-accent, var(--art-brass, #b9a173));
+    --hub-accent-bright: var(--ui-accent-bright, var(--art-brass-light, #e2cea1));
+    --hub-frame: var(--ui-panel, var(--art-frame, #1a211f));
+    --hub-frame-text: var(--ui-text, var(--art-ivory, #eee7d6));
+    --hub-focus: var(--ui-chapter, #b5652d);
+    --hero-0: #c99f3f; --hero-1: #3f8f8c; --hero-2: #6f8f45; --hero-3: #8a6a9c;
+    --role-frontline: #8a4b2f; --role-striker: #6b5a2b; --role-caster: #4f3d7a;
+    --role-support: #2d633a; --role-scout: #2b568c; --role-adventurer: var(--hub-muted);
+}
+html[data-ui-theme="dungeon"] #lobby.has-chapter-index, html[data-ui-theme="contrast"] #lobby.has-chapter-index {
+    --hero-0: #e6c35f; --hero-1: #7fd0cc; --hero-2: #b4d47c; --hero-3: #d1aee6;
+    --role-frontline: #f0a27c; --role-striker: #e9cf7c; --role-caster: #d9b8f5; --role-support: #a0e3b3; --role-scout: #a5c8ff;
+}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now, #lobby_friends_panel, #lobby_rooms_panel) {
+    --hall-text: var(--hub-ink);
+    --hall-muted: var(--hub-muted);
+    --hall-field: var(--hub-raised);
+    --hall-rule: var(--hub-rule);
+    box-sizing: border-box;
+    color: var(--hub-ink);
     padding: 25px 28px;
     margin: 0 0 22px;
-    border: 1px solid #d5c7a9;
-    border-top: 3px solid var(--tt-broth-copper);
+    border: 1px solid var(--hub-rule);
     border-radius: 9px;
-    background: var(--tt-folio-paper);
+    background: var(--hub-paper);
     box-shadow: 0 6px 18px #00000014;
     font-family: var(--tt-font-ui);
 }
 #lobby.has-chapter-index :is(h1, h2, h3, .party-hall-title) { font-variant-caps: normal; letter-spacing: -.01em; text-shadow: none; }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title {
-    color: var(--tt-folio-crimson);
-    font: 600 28px/1.2 var(--tt-font-title);
-    margin: 0;
-}
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title { color: var(--hub-chapter); font: 600 28px/1.2 var(--tt-font-title); margin: 0; }
 #lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title::before { content: none; }
 #lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) > .party-hall-header {
-    min-height: 0;
-    margin: 0 0 19px;
-    padding: 0 0 17px;
-    border: 0;
-    border-bottom: 1px dashed var(--tt-folio-rule);
-    background: none;
-    gap: 15px;
-    border-radius: 0;
+    min-height: 0; margin: 0 0 19px; padding: 0 0 17px; border: 0; border-bottom: 1px solid var(--hub-rule);
+    background: none; gap: 15px; border-radius: 0;
 }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel) .dcss-btn {
-    min-height: 40px;
-    padding: 9px 14px;
-    border-color: #cbb996;
-    border-radius: 5px;
-    color: #3f382b;
-    background: #fffdf7;
-    font: 600 12px/1.4 var(--tt-font-ui);
-    box-shadow: none;
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_friends_panel, #lobby_rooms_panel, #lobby_body) .dcss-btn {
+    min-height: 40px; padding: 9px 14px; border: 1px solid var(--hub-rule); border-radius: 5px;
+    color: var(--hub-ink); background: var(--hub-raised); font: 600 12px/1.4 var(--tt-font-ui); box-shadow: none; text-shadow: none;
 }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel) .dcss-btn:hover:not(:disabled) { border-color: #b5652d; background: #efe4cc; }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel) .dcss-btn-primary { color: #fff9f0; background: #943824; border-color: #943824; }
-#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel) .dcss-btn-primary:hover:not(:disabled) { background: #ad432c; }
-#lobby.has-chapter-index :is(.lobby-section-intro, .library-section-heading p) { color: #5e5544; font: 13px/1.65 var(--tt-font-ui); margin: 0; }
-#lobby.has-chapter-index #party_rooms_empty { padding: 0; color: #5e5544; font-size: 13px; }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_friends_panel, #lobby_rooms_panel, #lobby_body) .dcss-btn:hover:not(:disabled) { border-color: var(--hub-action); background: var(--hub-inset); }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_friends_panel, #lobby_rooms_panel, #lobby_body) .dcss-btn-primary { color: var(--hub-action-text); background: var(--hub-action); border-color: var(--hub-action); }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_friends_panel, #lobby_rooms_panel, #lobby_body) .dcss-btn-primary:hover:not(:disabled) { filter: brightness(1.12); background: var(--hub-action); }
+#lobby.has-chapter-index :is(.lobby-section-intro, .library-section-heading p) { color: var(--hub-muted); font: 13px/1.65 var(--tt-font-ui); margin: 0; }
 #lobby.has-chapter-index #btn_create_party_room_empty,
 #lobby.has-chapter-index #btn_create_party_room,
 #lobby.has-chapter-index:not(.has-party-room) #party_lobby_panel .party-hall-controls { display: none !important; }
 #lobby.has-chapter-index:not(.has-party-room) #party_lobby_panel .party-hall-title { font-size: 24px; }
-#lobby.has-chapter-index #party_room_view .party-room-banner { border: 0; margin: 0 0 14px; padding: 0; }
-#lobby.has-chapter-index #party_room_title_text { font: 600 23px/1.3 var(--tt-font-title); color: #2f5239 !important; }
-#lobby.has-chapter-index #party_room_host_text { color: #665c49 !important; font-size: 12px; }
-#lobby.has-chapter-index .party-room-banner > div:last-child { display: none !important; }
-#lobby.has-chapter-index #party_turn_pacing_badge { color: #2f5239 !important; border: 1px solid #b8ccb2; background: #e3eee0; font-size: 11px; border-radius: 999px; padding: 4px 10px; }
-#lobby.has-chapter-index #party_room_footer { padding: 13px 0; margin: 0 0 16px; border-top: 1px dashed var(--tt-folio-rule); border-bottom: 1px dashed var(--tt-folio-rule); }
-#lobby.has-chapter-index #party_room_status_hint { color: #5e5544 !important; font: 12px/1.5 var(--tt-font-ui) !important; }
-#lobby.has-chapter-index #party_slots_grid { gap: 15px; margin-bottom: 0; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-box {
-    min-width: 0;
-    padding: 17px;
-    gap: 10px;
-    background: #fffdf7;
-    border: 1px solid #d5c7a9;
-    border-top: 3px solid var(--slot-accent);
-    border-radius: 7px;
-    box-shadow: none;
+#lobby.has-chapter-index :is(a, button, input, select, summary):focus-visible { outline: 2px solid var(--hub-focus); outline-offset: 3px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Minimal component fallbacks until the shared .tr-* classes land. */
+#lobby .tr-card { background: var(--hub-raised); border: 1px solid var(--hub-rule); border-radius: 6px; color: var(--hub-ink); }
+#lobby .tr-badge {
+    display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box; max-width: 100%;
+    padding: 2px 8px; border: 1px solid transparent; border-radius: 999px; white-space: nowrap;
+    background: var(--hub-inset); color: var(--hub-ink); font: 600 10.5px/1.4 var(--tt-font-ui); letter-spacing: .02em;
 }
-#lobby.has-chapter-index #party_slots_grid .slot-state-open { background: #eff2e6; border-style: dashed; border-top-style: solid; }
-#lobby.has-chapter-index #party_slots_grid .slot-state-closed { background: #ebe5d6; opacity: .88; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-top { gap: 5px; padding-bottom: 12px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-title { font: 600 23px/1.2 var(--tt-font-title); color: var(--tt-folio-crimson); }
-#lobby.has-chapter-index #party_slots_grid .party-slot-occupant { font-size: 10px; color: #665c49 !important; }
-#lobby.has-chapter-index #party_slots_grid .party-field-label { font: 600 11px/1.5 var(--tt-font-ui); color: #574c3b; }
-#lobby.has-chapter-index #party_slots_grid :is(input, select) { min-height: 39px; font-size: 13px; border-color: var(--tt-folio-rule); border-radius: 4px; }
-#lobby.has-chapter-index #party_slots_grid .party-mode-btn { min-height: 39px; font-size: 10px; color: #574c3b; border-color: #d0c3a6; }
-#lobby.has-chapter-index #party_slots_grid .party-mode-btn.active { background: #e1ecdc; border-color: #76a973; color: #274a31; }
-.party-presets-label { width: 100%; margin-bottom: 3px; color: #665c49; font: 600 10px/1.4 var(--tt-font-ui); }
-#lobby.has-chapter-index #party_slots_grid .party-archetype-btn { min-height: 30px; padding: 5px 7px; font: 10px/1.4 var(--tt-font-ui); color: #574c3b; }
-#lobby.has-chapter-index #party_slots_grid .party-archetype-row { gap: 4px; margin-top: 5px; }
-#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { margin-top: auto; }
-#lobby.has-chapter-index #game_library_panel header { gap: 15px; justify-content: space-between; align-items: center; }
-#lobby.has-chapter-index #game_library_panel h2 { font: 600 27px/1.25 var(--tt-font-title); color: var(--tt-folio-crimson); margin: 0 0 5px; }
-#lobby.has-chapter-index #game_library_panel .game-library-list { gap: 10px; margin-top: 16px; }
-#lobby.has-chapter-index #game_library_panel .game-library-entry { background: var(--tt-folio-raised); border: 1px solid #d5c7a9; padding: 14px 16px; border-radius: 6px; }
-#lobby.has-chapter-index #game_library_panel h3 { font: 600 21px/1.25 var(--tt-font-title); margin: 0; color: #2f5239; overflow-wrap: anywhere; }
-.library-state { font: 700 10px/1.4 var(--tt-font-ui); color: #355e3e; background: #e3ede0; border: 1px solid #b7cbb0; border-radius: 4px; padding: 2px 6px; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
-#lobby.has-chapter-index #game_library_panel .game-library-entry small { color: #665c49; font-size: 12px; margin: 5px 0 3px; }
-.library-roster { color: #5c5343; font: 12px/1.6 var(--tt-font-ui); margin: 0 0 4px; }
-.library-saved-time { color: #665c49; font: 11px/1.4 var(--tt-font-ui); margin: 0; }
-#lobby.has-chapter-index #game_library_panel .library-entry-actions a { color: #7a4427; font-size: 12px; font-weight: 600; }
-#lobby.has-chapter-index #game_library_panel .library-entry-actions .dcss-btn-primary { color: #fff9f0; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
-#lobby.has-chapter-index #game_library_panel .library-entry-actions .dcss-btn-primary:hover { color: #fff9f0; }
-#lobby.has-chapter-index #game_library_panel .library-header-actions a { color: #7a4427; font-size: 12px; font-weight: 600; }
-#lobby.has-chapter-index #game_library_panel .library-empty-state { color: #665c49; font: 13px/1.7 var(--tt-font-ui); margin: 0; }
-.library-search { width: 100%; max-width: 380px; margin-top: 20px; }
-#lobby.has-chapter-index #lobby_body > span { color: var(--tt-folio-crimson) !important; font: 600 25px/1.3 var(--tt-font-title); }
-#lobby .lobby-live-empty { margin: 0; color: #5e5544; font: 13px/1.7 var(--tt-font-ui); }
-#lobby_body .lobby-live-empty:not([hidden]) + #player_list { display: none; }
+#lobby .tr-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; min-height: 40px; padding: 8px 14px; border-radius: 5px; font: 600 12px/1.4 var(--tt-font-ui); text-decoration: none; cursor: pointer; }
+#lobby .tr-callout { padding: 14px 16px; border: 1px dashed var(--hub-rule); border-radius: 6px; background: color-mix(in srgb, var(--hub-inset) 55%, transparent); color: var(--hub-muted); font: 13px/1.6 var(--tt-font-ui); }
+#lobby .tr-callout p { margin: 0 0 10px; }
+#lobby .tr-callout strong { display: block; margin-bottom: 4px; color: var(--hub-ink); font: 600 16px/1.3 var(--tt-font-title); }
+#lobby .lobby-section-count { margin-left: 10px; vertical-align: middle; font-size: 11px; }
+
+/* Hero chips and role badges share one vocabulary across lobby surfaces. */
+#lobby :is(.library-roster, .chronicle-roster) { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+#lobby :is(.library-hero, .chronicle-hero) {
+    --hero-accent: var(--hero-0);
+    display: inline-flex; align-items: center; flex-wrap: wrap; gap: 3px 8px; min-width: 0; max-width: 100%;
+    padding: 4px 9px 4px 7px; border-left: 3px solid var(--hero-accent); border-radius: 4px;
+    background: color-mix(in srgb, var(--hub-inset) 70%, transparent); font: 12px/1.4 var(--tt-font-ui); color: var(--hub-ink);
+}
+#lobby :is(.library-hero, .chronicle-hero)[data-hero-slot="1"] { --hero-accent: var(--hero-1); }
+#lobby :is(.library-hero, .chronicle-hero)[data-hero-slot="2"] { --hero-accent: var(--hero-2); }
+#lobby :is(.library-hero, .chronicle-hero)[data-hero-slot="3"] { --hero-accent: var(--hero-3); }
+#lobby :is(.library-hero-name, .chronicle-hero-name) { font-weight: 700; overflow-wrap: anywhere; }
+#lobby :is(.library-hero-meta, .chronicle-hero-meta) { color: var(--hub-muted); font-size: 11px; overflow-wrap: anywhere; }
+#lobby .hero-role-badge { --role: var(--role-adventurer); color: var(--role); background: color-mix(in srgb, var(--role) 12%, transparent); border-color: color-mix(in srgb, var(--role) 40%, transparent); font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; }
+#lobby .hero-role-badge[data-role="frontline"] { --role: var(--role-frontline); }
+#lobby .hero-role-badge[data-role="striker"] { --role: var(--role-striker); }
+#lobby .hero-role-badge[data-role="caster"] { --role: var(--role-caster); }
+#lobby .hero-role-badge[data-role="support"] { --role: var(--role-support); }
+#lobby .hero-role-badge[data-role="scout"] { --role: var(--role-scout); }
+
+/* Saved expeditions: one card component, also cloned into Continue. */
+#lobby.has-chapter-index #game_library_panel header { display: flex; gap: 15px; justify-content: space-between; align-items: center; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--hub-rule); }
+#lobby.has-chapter-index #game_library_panel h2 { font: 600 27px/1.25 var(--tt-font-title); color: var(--hub-chapter); margin: 0 0 5px; }
+#lobby.has-chapter-index #game_library_panel .library-header-actions a { color: var(--hub-chapter); font: 600 12px/1.4 var(--tt-font-ui); }
+#lobby .library-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 16px; margin-top: 16px; }
+#lobby .library-filters .library-search { flex: 1 1 260px; max-width: 420px; margin: 0; }
+#lobby .library-filter { display: grid; gap: 4px; color: var(--hub-muted); font: 600 11px/1.4 var(--tt-font-ui); }
+#lobby .library-filter select { min-height: 41px; padding: 8px 10px; color: var(--hub-ink); background: var(--hub-raised); border: 1px solid var(--hub-rule); border-radius: 5px; font: 12px/1.5 var(--tt-font-ui); }
+#lobby .library-filter-status { color: var(--hub-muted); font: 11px/1.4 var(--tt-font-ui); align-self: center; }
+#lobby :is(.lobby-search input, .library-search) { box-sizing: border-box; width: 100%; min-height: 41px; padding: 10px 13px; color: var(--hub-ink); background: var(--hub-raised); border: 1px solid var(--hub-rule); border-radius: 5px; font: 12px/1.5 var(--tt-font-ui); }
+#lobby.has-chapter-index #game_library_panel .game-library-list { display: grid; gap: 10px; margin-top: 16px; }
+#lobby .expedition-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 24px; padding: 14px 18px; background: var(--hub-raised); border: 1px solid var(--hub-rule); border-radius: 6px; color: var(--hub-ink); }
+#lobby .expedition-card[hidden] { display: none !important; }
+#lobby .expedition-card .library-entry-summary { min-width: 0; display: grid; gap: 6px; }
+#lobby .expedition-card .library-entry-title { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+#lobby .expedition-card h3 { margin: 0; font: 600 20px/1.25 var(--tt-font-title); color: var(--hub-chapter); overflow-wrap: anywhere; }
+#lobby .library-state { text-transform: uppercase; letter-spacing: .06em; font-size: 10px; }
+#lobby .library-state[data-state="running"] { color: var(--hub-good); background: color-mix(in srgb, var(--hub-good) 14%, transparent); border-color: color-mix(in srgb, var(--hub-good) 45%, transparent); }
+#lobby .library-state[data-state="unavailable"] { color: var(--hub-warn); background: color-mix(in srgb, var(--hub-warn) 14%, transparent); border-color: color-mix(in srgb, var(--hub-warn) 45%, transparent); }
+#lobby .library-facts { display: flex; flex-wrap: wrap; gap: 2px 16px; margin: 0; font: 12px/1.5 var(--tt-font-ui); }
+#lobby .library-facts dt { display: inline; color: var(--hub-muted); font-weight: 600; }
+#lobby .library-facts dt::after { content: ":"; }
+#lobby .library-facts dd { display: inline; margin: 0 0 0 4px; font-variant-numeric: tabular-nums; }
+#lobby .library-facts div, #lobby .library-facts dt { white-space: nowrap; }
+#lobby .library-saved-time { margin: 0; color: var(--hub-muted); font: 11px/1.4 var(--tt-font-ui); }
+#lobby .library-unavailable { margin: 0; color: var(--hub-warn); font: 12px/1.5 var(--tt-font-ui); }
+#lobby .expedition-card .library-entry-actions { display: flex; flex-direction: column; align-items: stretch; gap: 8px; min-width: 150px; margin: 0; }
+#lobby.has-chapter-index #game_library_panel .library-entry-actions .dcss-btn-primary { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; color: var(--hub-action-text); background: var(--hub-action); border-color: var(--hub-action); text-decoration: none; }
+#lobby.has-chapter-index #game_library_panel .library-entry-actions .dcss-btn-primary:hover { color: var(--hub-action-text); }
+#lobby.has-chapter-index #game_library_panel .library-record-link { text-align: center; color: var(--hub-chapter); font: 600 12px/1.4 var(--tt-font-ui); }
+#lobby .library-entry-danger { display: flex; justify-content: center; margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--hub-rule); }
+#lobby.has-chapter-index #game_library_panel .library-delete { min-height: 34px; padding: 6px 10px; color: var(--hub-danger); background: transparent; border-color: transparent; font-size: 11px; }
+#lobby.has-chapter-index #game_library_panel .library-delete:hover:not(:disabled) { background: color-mix(in srgb, var(--hub-danger) 10%, transparent); border-color: color-mix(in srgb, var(--hub-danger) 50%, transparent); }
+#lobby.has-chapter-index #game_library_panel .library-delete:disabled { opacity: .5; cursor: default; }
+#lobby.has-chapter-index #game_library_panel .library-empty-state { margin: 0; }
+#lobby .library-no-matches { margin: 14px 0 0; padding: 14px 16px; border: 1px dashed var(--hub-rule); border-radius: 6px; color: var(--hub-muted); font: 13px/1.5 var(--tt-font-ui); }
+#lobby .library-no-matches[hidden] { display: none; }
+
+/* Join friends: table rows keep their ids and classes but read as cards. */
+#lobby:not(.has-chapter-index) :is(#lobby_friends_panel, #lobby_rooms_panel) { display: none; }
+#lobby .lobby-discovery-header h1 { margin: 0 0 8px; color: var(--hub-chapter); font: 600 34px/1.2 var(--tt-font-title); }
+#lobby :is(.lobby-discovery-rooms, #lobby_body) h2 { margin: 0 0 8px; color: var(--hub-chapter); font: 600 26px/1.25 var(--tt-font-title); }
+#lobby .lobby-discovery-rooms .lobby-section-intro { margin-bottom: 16px; }
+.lobby-discovery-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; margin-top: 20px; }
+.lobby-discovery-tools .lobby-search { max-width: 430px; flex: 1 1 250px; }
+.lobby-search { flex: 1 1 230px; margin-left: auto; max-width: 350px; }
+.lobby-discovery-count { color: var(--hub-muted); font: 12px/1.5 var(--tt-font-ui); }
+.lobby-party-notice { padding: 14px 16px; border-left: 3px solid var(--hub-good); background: color-mix(in srgb, var(--hub-good) 10%, transparent); color: var(--hub-ink); font: 13px/1.6 var(--tt-font-ui); margin: 16px 0 0; }
+#lobby .lobby-party-notice a { color: var(--hub-chapter); font-weight: 600; }
+.lobby-discovery-no-results { color: var(--hub-danger); font: 13px/1.5 var(--tt-font-ui); margin: 14px 0 0; }
+#lobby.has-chapter-index #party_rooms_empty { display: block; padding: 14px 16px; margin: 0; color: var(--hub-muted); font: 13px/1.65 var(--tt-font-ui); }
+#lobby #party_rooms_empty button { display: none; }
+#lobby #lobby_body { text-align: left; overflow: visible; }
+#lobby .lobby-live-empty { margin: 0; color: var(--hub-muted); font: 13px/1.7 var(--tt-font-ui); }
+#lobby_body .lobby-live-empty:not([hidden]) + #player_list, #lobby #lobby_body:not(.has-live-games) #player_list { display: none; }
+#lobby #lobby_body:not(.has-live-games) .lobby-live-details { display: none; }
+.lobby-live-details { min-height: 36px; margin: 0 0 12px; padding: 6px 12px; border: 1px solid var(--hub-rule); border-radius: 4px; background: var(--hub-raised); color: var(--hub-muted); font: 600 12px/1.4 var(--tt-font-ui); cursor: pointer; }
+.lobby-live-details[aria-pressed="true"] { color: var(--hub-ink); border-color: var(--hub-action); }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) { display: block; width: 100%; min-width: 0; border-collapse: collapse; font: 12px/1.5 var(--tt-font-ui); margin: 0; }
+#lobby.has-chapter-index #party_rooms_list_view { overflow: visible; }
+#lobby.has-chapter-index #party_rooms_table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+#lobby.has-chapter-index #player_list thead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 12px; }
+#lobby.has-chapter-index #player_list thead::before { content: "Sort by"; color: var(--hub-muted); font: 600 11px/1.4 var(--tt-font-ui); margin-right: 4px; }
+#lobby.has-chapter-index #player_list thead tr { display: contents; }
+#lobby.has-chapter-index #player_list th { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid var(--hub-rule); border-radius: 999px; background: var(--hub-raised); color: var(--hub-muted); font: 600 11px/1.4 var(--tt-font-ui); cursor: pointer; }
+#lobby.has-chapter-index #player_list th:hover { color: var(--hub-ink); border-color: var(--hub-action); }
+#lobby.has-chapter-index #player_list th:is(.headerSortUp, .headerSortDown) { color: var(--hub-action-text); background: var(--hub-action); border-color: var(--hub-action); }
+#lobby.has-chapter-index #player_list th.headerSortUp::after { content: "↑"; }
+#lobby.has-chapter-index #player_list th.headerSortDown::after { content: "↓"; }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody tr { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; align-content: start; padding: 14px 16px; border: 1px solid var(--hub-rule); border-radius: 6px; background: var(--hub-raised); }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody tr:hover { border-color: var(--hub-action); background: var(--hub-raised); }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody tr[hidden] { display: none; }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) td { display: block; min-width: 0; padding: 0; border: 0; color: var(--hub-ink) !important; font-size: 12px; line-height: 1.5; text-align: left; overflow-wrap: anywhere; }
+#lobby.has-chapter-index :is(#party_rooms_table, #player_list) td::before { content: attr(data-label); display: block; margin-bottom: 1px; color: var(--hub-muted); font: 600 10px/1.4 var(--tt-font-ui); text-transform: uppercase; letter-spacing: .06em; }
+#lobby.has-chapter-index :is(#party_rooms_table td:first-child, #player_list td.username) { grid-column: 1 / -1; font: 600 18px/1.3 var(--tt-font-title); color: var(--hub-chapter) !important; }
+#lobby.has-chapter-index :is(#party_rooms_table td:first-child, #player_list td.username)::before { content: none; }
+#lobby.has-chapter-index #party_rooms_table td:nth-child(4), #lobby.has-chapter-index #player_list td.milestone_col { grid-column: 1 / -1; }
+#lobby.has-chapter-index :is(#party_rooms_table td:last-child, #player_list td.coop_join) { grid-column: 1 / -1; order: 99; margin-top: 6px; }
+#lobby.has-chapter-index :is(#party_rooms_table td:last-child, #player_list td.coop_join)::before { content: none; }
+#lobby.has-chapter-index #party_rooms_table td span { display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--hub-rule); border-radius: 999px; background: var(--hub-inset); color: var(--hub-ink) !important; font: 600 10.5px/1.5 var(--tt-font-ui); }
+#lobby.has-chapter-index #party_rooms_table td span.ff-on, #lobby.has-chapter-index #party_rooms_table td span[style*="ef2929"] { color: var(--hub-warn) !important; border-color: color-mix(in srgb, var(--hub-warn) 45%, transparent); background: color-mix(in srgb, var(--hub-warn) 12%, transparent); }
+#lobby.has-chapter-index #party_rooms_table td span[style*="8ae234"] { color: var(--hub-good) !important; border-color: color-mix(in srgb, var(--hub-good) 45%, transparent); background: color-mix(in srgb, var(--hub-good) 12%, transparent); }
+#lobby.has-chapter-index #player_list .username a { color: inherit; text-decoration: none; }
+#lobby.has-chapter-index #player_list .username a:hover { text-decoration: underline; }
+#lobby.has-chapter-index #player_list td:is(.xl, .turn, .dur, .idle_time, .spectator_count) { font-variant-numeric: tabular-nums; }
+#lobby.has-chapter-index #player_list .milestone_container { position: relative; overflow: hidden; min-height: 1.4em; }
+#lobby #lobby_body:not(.show-live-details) #player_list :is(.god, .spectator_count, .milestone_col, .idle_time) { display: none; }
+#lobby.has-chapter-index :is(.btn-join-party-room, .coop-join-table-btn) { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 100%; min-height: 40px; padding: 8px 12px; border: 1px solid var(--hub-action); border-radius: 5px; background: var(--hub-action); color: var(--hub-action-text) !important; font: 600 12px/1.4 var(--tt-font-ui); text-align: center; text-decoration: none !important; text-shadow: none; box-shadow: none; transform: none; white-space: normal; }
+#lobby.has-chapter-index :is(.btn-join-party-room, .coop-join-table-btn):hover { filter: brightness(1.12); border-color: var(--hub-action); background: var(--hub-action); color: var(--hub-action-text) !important; transform: none; }
+
+/* Chronicle: three collections in one trophy hall. */
 #lobby.has-chapter-index #coop_chronicle_panel > .party-hall-header { border: 0; padding: 0; margin-bottom: 10px; }
 #coop_chronicle_panel .lobby-section-intro { margin-bottom: 20px !important; }
-.chronicle-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; padding: 16px 0; margin-bottom: 20px; border-top: 1px dashed var(--tt-folio-rule); border-bottom: 1px dashed var(--tt-folio-rule); }
+.chronicle-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; padding: 16px 0; margin-bottom: 20px; border-top: 1px solid var(--hub-rule); border-bottom: 1px solid var(--hub-rule); }
 .lobby-filter-group { display: flex; gap: 5px; flex-wrap: wrap; }
-#lobby .lobby-filter-group button { min-height: 40px; padding: 8px 13px; color: #5c513e; background: transparent; border: 1px solid transparent; border-radius: 5px; cursor: pointer; font: 600 12px/1.4 var(--tt-font-ui); }
-#lobby .lobby-filter-group button[aria-pressed="true"] { background: #e3ede0; border-color: #9ec29a; color: #284b31; font-weight: 700; }
-.lobby-search { flex: 1 1 230px; margin-left: auto; max-width: 350px; }
-#lobby :is(.lobby-search input, .library-search) { box-sizing: border-box; width: 100%; min-height: 41px; padding: 10px 13px; color: #2b241c; background: var(--tt-folio-raised); border: 1px solid var(--tt-folio-rule); border-radius: 5px; font: 12px/1.5 var(--tt-font-ui); }
-.chronicle-search-count { color: #665c49; font: 11px/1.4 var(--tt-font-ui); }
-#lobby.has-chapter-index #coop_chronicle_grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; }
+#lobby .lobby-filter-group button { min-height: 40px; padding: 8px 13px; color: var(--hub-muted); background: transparent; border: 1px solid transparent; border-radius: 5px; cursor: pointer; font: 600 12px/1.4 var(--tt-font-ui); }
+#lobby .lobby-filter-group button:hover { color: var(--hub-ink); border-color: var(--hub-rule); }
+#lobby .lobby-filter-group button[aria-pressed="true"] { background: var(--hub-action); border-color: var(--hub-action); color: var(--hub-action-text); font-weight: 700; }
+.chronicle-search-count { color: var(--hub-muted); font: 11px/1.4 var(--tt-font-ui); }
+#lobby.has-chapter-index #coop_chronicle_grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; margin: 0; }
 #lobby.has-chapter-index #coop_chronicle_grid:has(.chronicle-box[hidden]) { grid-template-columns: 1fr; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box { padding: 0; border: 0; background: none; box-shadow: none; gap: 12px; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box-header { color: #2f5239; padding: 0 0 12px; font: 600 21px/1.3 var(--tt-font-title); border-bottom: 1px dashed var(--tt-folio-rule); }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-count { color: #7a6d56; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-list { max-height: none; overflow: visible; gap: 12px; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry { padding: 16px; background: #fffdf7; border: 1px solid #d5c7a9; border-left: 3px solid var(--tt-broth-copper); border-radius: 6px; flex-wrap: wrap; gap: 10px; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-main { flex-basis: 210px; }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-title { color: #3d3122 !important; font: 600 19px/1.25 var(--tt-font-title); }
-#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-sub { color: #5f5544; font: 12px/1.65 var(--tt-font-ui); }
-.chronicle-entry-meta { color: #665c49; font: 10px/1.6 var(--tt-font-ui); margin-top: 8px; }
-.chronicle-entry-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
-.chronicle-score-pill, .chronicle-mvp-badge, .chronicle-seasoning-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 7px;
-    border-radius: 999px;
-    font: 600 10px/1.35 var(--tt-font-ui);
-}
-.chronicle-score-pill { background: #f6e7c6; color: #754418; border: 1px solid #d89b4880; font-variant-numeric: tabular-nums; }
-.chronicle-mvp-badge { background: #e3eee0; color: #2b5435; border: 1px solid #8dbd89; }
-.chronicle-seasoning-tag { background: #f8e2dc; color: #8c2d23; border: 1px solid #d98e82; }
-.chronicle-build-note { margin: 0; color: #5f5544; font: 12px/1.65 var(--tt-font-ui); }
-.chronicle-no-results { padding: 25px; background: #eee6d3; color: #5b4d38; font: 13px/1.5 var(--tt-font-ui); border-radius: 5px; }
-.chronicle-record-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 22px; margin-top: 28px; padding-top: 20px; border-top: 1px dashed var(--tt-folio-rule); font: 12px/1.5 var(--tt-font-ui); }
-.chronicle-record-links span { color: #665c49; margin-right: auto; }
-#lobby .chronicle-record-links a { color: #8c3425; font-weight: 600; }
-#lobby.has-chapter-index #play_now { display: block; font-size: 13px; line-height: 1.5; }
-#lobby.has-chapter-index #play_now::before { content: none; }
-#play_now .mode-page-heading { padding-bottom: 24px; border-bottom: 1px dashed var(--tt-folio-rule); margin-bottom: 28px; }
-#lobby #play_now h1 { color: var(--tt-folio-crimson); font: 600 36px/1.15 var(--tt-font-title); margin: 0 0 13px; }
-.mode-groups { display: grid; gap: 30px; }
-#lobby #play_now h2 { color: #2f5239; font: 600 24px/1.3 var(--tt-font-title); margin: 0 0 7px; }
-#play_now .mode-group > p { color: #5f5544; margin: 0 0 17px; font: 13px/1.5 var(--tt-font-ui); }
-.mode-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
-#lobby #play_now .mode-card { display: flex; flex-direction: column; align-items: start; gap: 10px; padding: 21px; margin: 0; border: 1px solid #d5c7a9; border-top: 3px solid var(--tt-broth-sage); border-radius: 7px; color: #2f5239; background: #fffdf7; text-decoration: none; text-align: left; box-shadow: none; }
-#lobby #play_now .mode-card:hover { background: #eef3e8; border-color: #76a973; transform: none; }
-.mode-card strong { font: 600 22px/1.3 var(--tt-font-title); }
-.mode-card span { color: #5f5544; font: 13px/1.65 var(--tt-font-ui); }
-.mode-card small { margin-top: auto; padding-top: 8px; font: 700 11px/1.4 var(--tt-font-ui); color: #943824; }
-.mode-preferences { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; margin-top: 30px; padding-top: 20px; border-top: 1px dashed var(--tt-folio-rule); }
-#lobby #play_now .mode-preferences a { min-height: 40px; padding: 10px 15px; color: #2f5239; background: #e3eee0; border-color: #a3c49f; font: 600 12px/1.4 var(--tt-font-ui); border-radius: 5px; }
-.mode-preferences span { color: #5f5544; font: 12px/1.5 var(--tt-font-ui); }
-.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box { display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid var(--hub-rule); border-top: 3px solid var(--hub-accent); border-radius: 6px; background: var(--hub-raised); box-shadow: none; transition: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box[data-collection="ghosts"] { border-top-color: var(--hub-danger); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box[data-collection="relics"] { border-top-color: var(--hub-chapter); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box[hidden] { display: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box:hover { border-color: var(--hub-rule); box-shadow: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-box-header { display: flex; align-items: center; gap: 10px; min-height: 0; padding: 0 0 10px; color: var(--hub-chapter); font: 600 21px/1.3 var(--tt-font-title); border-bottom: 1px solid var(--hub-rule); cursor: default; letter-spacing: -.01em; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-count { color: var(--hub-ink); background: var(--hub-inset); font: 700 11px/1.4 var(--tt-font-ui); min-width: 26px; justify-content: center; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-list { display: flex; flex-direction: column; max-height: none; overflow: visible; gap: 10px; font-size: 12px; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 14px; background: var(--hub-paper); border: 1px solid var(--hub-rule); border-radius: 5px; color: var(--hub-ink); cursor: default; box-shadow: none; transform: none; transition: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry:hover, #lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry:focus-visible { border-color: var(--hub-action); box-shadow: none; transform: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry[hidden] { display: none; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-main { display: flex; flex-direction: column; flex: 1 1 210px; min-width: 0; gap: 6px; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-title { color: var(--hub-ink) !important; font: 600 18px/1.25 var(--tt-font-title); overflow-wrap: anywhere; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-ghost-title { color: var(--hub-danger) !important; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry-sub { color: var(--hub-muted); font: 12px/1.6 var(--tt-font-ui); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-list > .chronicle-entry-sub { padding: 12px 14px; border: 1px dashed var(--hub-rule); border-radius: 5px; }
+.chronicle-entry-meta { color: var(--hub-muted); font: 11px/1.6 var(--tt-font-ui); }
+.chronicle-entry-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+#lobby .chronicle-score-pill { color: var(--hub-warn); background: color-mix(in srgb, var(--hub-warn) 12%, transparent); border-color: color-mix(in srgb, var(--hub-warn) 45%, transparent); font-variant-numeric: tabular-nums; }
+#lobby .chronicle-mvp-badge { color: var(--hub-good); background: color-mix(in srgb, var(--hub-good) 12%, transparent); border-color: color-mix(in srgb, var(--hub-good) 45%, transparent); }
+#lobby .chronicle-seasoning-tag { color: var(--hub-danger); background: color-mix(in srgb, var(--hub-danger) 10%, transparent); border-color: color-mix(in srgb, var(--hub-danger) 40%, transparent); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-kind-badge { flex-shrink: 0; color: var(--hub-chapter) !important; background: color-mix(in srgb, var(--hub-chapter) 10%, transparent); border-color: color-mix(in srgb, var(--hub-chapter) 40%, transparent); font: 600 10.5px/1.4 var(--tt-font-ui) !important; padding: 2px 8px; }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-kind-badge[data-kind="ghost"] { color: var(--hub-danger) !important; background: color-mix(in srgb, var(--hub-danger) 10%, transparent); border-color: color-mix(in srgb, var(--hub-danger) 40%, transparent); }
+#lobby.has-chapter-index #coop_chronicle_grid .chronicle-entry > .hero-role-badge { flex-shrink: 0; color: var(--role) !important; font: 600 9.5px/1.4 var(--tt-font-ui) !important; }
+#lobby.has-chapter-index #coop_chronicle_panel .btn-load-chronicle-comp { flex-shrink: 0; min-height: 40px; padding: 9px 14px; font-size: 12px; color: var(--hub-action-text); background: var(--hub-action); border-color: var(--hub-action); }
+#lobby.has-chapter-index #coop_chronicle_panel .btn-load-chronicle-comp:hover { filter: brightness(1.12); color: var(--hub-action-text); background: var(--hub-action); }
+.chronicle-build-note { margin: 0; color: var(--hub-muted); font: 12px/1.6 var(--tt-font-ui); }
+.chronicle-no-results { padding: 25px; border: 1px dashed var(--hub-rule); border-radius: 5px; color: var(--hub-muted); font: 13px/1.5 var(--tt-font-ui); }
+.chronicle-no-results[hidden] { display: none; }
+.chronicle-record-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 22px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--hub-rule); font: 12px/1.5 var(--tt-font-ui); }
+.chronicle-record-links span { color: var(--hub-muted); margin-right: auto; }
+#lobby .chronicle-record-links a { color: var(--hub-chapter); font-weight: 600; }
+
+/* Party builder paper (kept for the builder agent's selectors). */
+#lobby.has-chapter-index #party_room_view .party-room-banner { border: 0; margin: 0 0 14px; padding: 0; }
+#lobby.has-chapter-index #party_room_title_text { font: 600 23px/1.3 var(--tt-font-title); color: var(--hub-chapter) !important; }
+#lobby.has-chapter-index #party_room_host_text { color: var(--hub-muted) !important; font-size: 12px; }
+#lobby.has-chapter-index .party-room-banner > div:last-child { display: none !important; }
+#lobby.has-chapter-index #party_turn_pacing_badge { color: var(--hub-good) !important; border: 1px solid color-mix(in srgb, var(--hub-good) 40%, transparent); background: color-mix(in srgb, var(--hub-good) 10%, transparent); font-size: 11px; border-radius: 999px; padding: 4px 10px; }
+#lobby.has-chapter-index #party_room_footer { padding: 13px 0; margin: 0 0 16px; border-top: 1px solid var(--hub-rule); border-bottom: 1px solid var(--hub-rule); }
+#lobby.has-chapter-index #party_room_status_hint { color: var(--hub-muted) !important; font: 12px/1.5 var(--tt-font-ui) !important; }
+#lobby.has-chapter-index #party_slots_grid { gap: 15px; margin-bottom: 0; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-box { min-width: 0; padding: 17px; gap: 10px; background: var(--hub-raised); border: 1px solid var(--hub-rule); border-top: 3px solid var(--slot-accent); border-radius: 7px; box-shadow: none; }
+#lobby.has-chapter-index #party_slots_grid .slot-state-open { background: var(--hub-paper); border-style: dashed; border-top-style: solid; }
+#lobby.has-chapter-index #party_slots_grid .slot-state-closed { background: var(--hub-inset); opacity: .88; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-top { gap: 5px; padding-bottom: 12px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-title { font: 600 23px/1.2 var(--tt-font-title); color: var(--hub-chapter); }
+#lobby.has-chapter-index #party_slots_grid .party-slot-occupant { font-size: 10px; color: var(--hub-muted) !important; }
+#lobby.has-chapter-index #party_slots_grid .party-field-label { font: 600 11px/1.5 var(--tt-font-ui); color: var(--hub-muted); }
+#lobby.has-chapter-index #party_slots_grid :is(input, select) { min-height: 39px; font-size: 13px; border-color: var(--hub-rule); border-radius: 4px; }
+#lobby.has-chapter-index #party_slots_grid .party-mode-btn { min-height: 39px; font-size: 10px; color: var(--hub-muted); border-color: var(--hub-rule); }
+#lobby.has-chapter-index #party_slots_grid .party-mode-btn.active { background: color-mix(in srgb, var(--hub-good) 12%, transparent); border-color: var(--hub-good); color: var(--hub-good); }
+.party-presets-label { width: 100%; margin-bottom: 3px; color: var(--hub-muted); font: 600 10px/1.4 var(--tt-font-ui); }
+#lobby.has-chapter-index #party_slots_grid .party-archetype-btn { min-height: 30px; padding: 5px 7px; font: 10px/1.4 var(--tt-font-ui); color: var(--hub-muted); }
+#lobby.has-chapter-index #party_slots_grid .party-archetype-row { gap: 4px; margin-top: 5px; }
+#lobby.has-chapter-index #party_slots_grid .party-slot-bottom { margin-top: auto; }
+#lobby.has-chapter-index #party_room_footer { position: sticky; top: var(--lobby-navigation-height, 88px); z-index: 30; background: var(--hub-paper); box-shadow: 0 5px 8px #3a2a1512; }
+
 @media (max-width: 1080px) {
     #lobby.has-chapter-index #coop_chronicle_grid { grid-template-columns: 1fr 1fr; }
     #lobby.has-chapter-index #coop_chronicle_grid .chronicle-box:first-child { grid-column: 1 / -1; }
-    #chronicle_comps_list { display: grid; grid-template-columns: 1fr 1fr; }
     #lobby.has-chapter-index #party_slots_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 680px) {
-    #lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now) { padding: 21px 19px; margin-bottom: 18px; }
-    #lobby.has-chapter-index :is(#coop_chronicle_grid, #party_slots_grid), #chronicle_comps_list, .mode-grid { grid-template-columns: 1fr; }
+    #lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now, #lobby_friends_panel, #lobby_rooms_panel) { padding: 21px 19px; margin-bottom: 18px; }
+    #lobby.has-chapter-index :is(#coop_chronicle_grid, #party_slots_grid) { grid-template-columns: 1fr; }
     #lobby.has-chapter-index #coop_chronicle_grid .chronicle-box:first-child { grid-column: auto; }
     #lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel) .party-hall-title { font-size: 27px; }
     #lobby.has-chapter-index #party_room_status_hint { font-size: 11px !important; }
@@ -169,11 +272,18 @@ body:has(#lobby.has-chapter-index:not([style*="display: none"])) { background: #
     .lobby-search { max-width: none; flex-basis: 100%; }
     #lobby .lobby-filter-group button { font-size: 11px; padding: 9px 10px; }
     .chronicle-record-links span { flex-basis: 100%; }
-    #lobby #play_now h1 { font-size: 31px; }
     #lobby.has-chapter-index #game_library_panel header { align-items: start; }
     #lobby.has-chapter-index #game_library_panel h2 { font-size: 25px; }
+    #lobby .expedition-card { grid-template-columns: 1fr; padding: 14px; }
+    #lobby .expedition-card .library-entry-actions { flex-direction: row; flex-wrap: wrap; align-items: center; min-width: 0; }
+    #lobby .expedition-card .library-entry-actions > * { flex: 1 1 120px; }
+    #lobby .library-entry-danger { flex-basis: 100%; margin-top: 2px; }
+    #lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody { grid-template-columns: 1fr; }
+    #lobby.has-chapter-index :is(#party_rooms_table, #player_list) tbody tr { padding: 12px 14px; }
+    #lobby .lobby-discovery-header h1 { font-size: 29px; }
 }
 @media (forced-colors: active) {
     #lobby .workspace-view-hidden { display: none !important; }
     #lobby_navigation .lobby-chapter-link[aria-current], #lobby .lobby-filter-group button[aria-pressed="true"] { outline: 2px solid Highlight; }
+    #lobby :is(.tr-badge, .library-hero, .chronicle-hero) { border-color: CanvasText; }
 }

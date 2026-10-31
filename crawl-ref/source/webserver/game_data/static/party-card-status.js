@@ -67,6 +67,17 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if ($active.children().length) $row.append($active);
         if ($harmful.children().length) $row.append($harmful);
         if ($row.children().length) $root.append($row);
+        // Named labels for the two most important effects (harmful first).
+        var named = model.effects(hero).filter(function (effect) { return effect.key !== "unknown"; });
+        if (named.length) {
+            var $names = $("<span class='party-effect-names' aria-hidden='true'></span>");
+            named.slice(0, 2).forEach(function (effect) {
+                $names.append($("<span class='party-effect-name'></span>").addClass("is-" + effect.tone)
+                    .text(effect.name.replace(/\s*\(expiring\)\s*$/i, "")));
+            });
+            if (named.length > 2) $names.append($("<span class='party-effect-more'></span>").text("+" + (named.length - 2)));
+            $root.append($names);
+        }
         var slots = hero.equipment_profile && hero.equipment_profile.slots;
         var distorted = Array.isArray(slots) ? slots.filter(function (slot) {
             return slot.state === "melded" && slot.suppression === "interdimensional_grape";
@@ -129,6 +140,31 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if (progress !== null) $bar.attr("aria-valuenow", progress);
         return $bar;
     }
+    // Deity and favour as one labelled text row; the shrine portrait stays decorative.
+    function faithRow(hero) {
+        var view = model.faith(hero);
+        var stars = view.kind === "piety" && view.rank !== null
+            ? new Array(view.rank + 1).join("\u2605") + new Array(7 - view.rank).join("\u2606") : "";
+        var standing = view.kind === "defiance" ? "Defiance " + view.reserve + "/100"
+            : !view.known ? "unknown" : !view.worships ? "" : view.kind === "gold" ? "gold" : view.kind === "xom" ? "mood"
+            : view.rank === null ? "favour unknown" : view.rank + "/6";
+        var $row = $("<div class='party-faith-row' role='img' tabindex='0'></div>")
+            .attr({ id: "party_faith_row_" + hero.slot, "data-faith-kind": view.kind,
+                "data-faith-state": !view.known ? "unknown" : view.penance ? "penance" : view.worships ? "devout" : "none",
+                "aria-label": "Faith: " + view.name + (standing ? ", " + standing : "") + (view.penance ? ", under penance" : ""),
+                "data-tip-title": view.name, "data-tip-badge": "[Faith]", "data-tip-body": view.summary,
+                "data-tip-meta": view.description || "Press ^ for religion details" })
+            .append($("<span class='party-faith-label' aria-hidden='true'></span>").text("Faith"),
+                $("<span class='party-faith-name' aria-hidden='true'></span>").text(view.name))
+            .on("click keydown keypress keyup", function (event) {
+                if (event.type.indexOf("key") === 0 && event.key === "Tab") return;
+                event.stopPropagation();
+            });
+        if (stars) $row.append($("<span class='party-faith-stars' aria-hidden='true'></span>").text(stars));
+        else if (standing && view.worships) $row.append($("<span class='party-faith-standing' aria-hidden='true'></span>").text(standing));
+        if (view.penance) $row.append($("<span class='party-faith-penance' aria-hidden='true'></span>").text("Penance"));
+        return $row;
+    }
     function portrait(hero, compass, inspect) {
         var root = faith.portrait(hero, compass, inspect);
         portraitStatus.decorate(root[0], hero);
@@ -137,8 +173,8 @@ function ($, model, icons, faith, portraitStatus, properties) {
     function health(hero) {
         var view = model.health(hero), label = view.known ? "HP " + hero.hp + "/" + hero.hp_max : "HP unavailable";
         if (view.poison > 0) label += " → " + view.forecast;
-        var $bar = $("<div class='party-bar-wrap hp-track' role='meter' tabindex='0'></div>")
-            .attr({ id: "party_hp_" + hero.slot, "data-tip-title": hero.name + " Hit Points",
+        var $bar = $("<div class='party-bar-wrap hp-track tr-meter' role='meter' tabindex='0'></div>")
+            .attr({ id: "party_hp_" + hero.slot, "data-meter": "hp", "data-tip-title": hero.name + " Hit Points",
                 "data-tip-body": view.summary, "data-tip-live": "", "aria-label": hero.name + ": " + view.summary,
                 "aria-valuetext": view.summary, "data-health-state": view.known ? "known" : "unknown",
                 "data-health-effects": view.effects.map(function (effect) { return effect.kind; }).join(" ") })
@@ -158,5 +194,5 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if (view.lethal) $bar.append($("<span class='party-hp-warning' aria-hidden='true'>!</span>"));
         return $bar;
     }
-    return { create: create, portrait: portrait, passives: passives, activity: activity, health: health };
+    return { create: create, portrait: portrait, passives: passives, activity: activity, health: health, faithRow: faithRow };
 });

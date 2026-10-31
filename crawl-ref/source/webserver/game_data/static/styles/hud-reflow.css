@@ -1,7 +1,6 @@
 /* Portrait stack, personal details, and a compact map/log footer. */
 #normal .party-card { grid-template-columns: 60px minmax(0, 1fr); }
 #normal .party-portrait { justify-self: center; height: 79px; }
-#normal .party-portrait .party-member-name { position: absolute; top: 66px; left: -9px; width: 60px; font-size: 10px; line-height: 12px; text-align: center; }
 #normal .party-member-identity { min-height: 20px; align-items: flex-start; }
 #normal .party-member-identity .party-card-status { flex: 1 1 auto; }
 #normal .party-member-timing { margin-top: 2px; }
@@ -21,13 +20,14 @@
 #normal .party-self-details .hud-stats-details { margin-top: 4px; gap: 3px 8px; }
 #normal .party-self-details #party_hud_gold { margin-left: 0; }
 #normal .party-card.is-controlled-card { padding-bottom: 9px; }
-#normal #party_turn_banner { display: none !important; }
+/* The mission bar is the in-flow strip above the dungeon (see tactics-shell.css). */
 #normal #left_column { background: #000; }
 #normal #dcss_quick_dock:not(.hud-floating) { margin-top: auto; flex-shrink: 0; }
 #normal #hud_bottom_row { display: grid; grid-template-columns: 148px minmax(0, 1fr); box-sizing: border-box; flex: 0 0 clamp(112px, 17vh, 140px); width: 100%; height: clamp(112px, 17vh, 140px); min-height: 0; border-top: 1px solid #a98d5645; background: #12181d; }
 #normal #hud_bottom_map { position: relative; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; min-height: 0; padding: 3px 4px; overflow: auto; border-right: 1px solid #a98d5630; }
 #normal #hud_bottom_map.hud-floating { position: fixed; width: var(--panel-width) !important; }
 #normal #hud_map_tools { display: flex; flex: 0 0 auto; flex-wrap: wrap; align-items: center; gap: 3px; align-self: flex-start; width: 100%; min-height: 24px; }
+#normal #hud_map_tools:empty { display: none; }
 #normal #hud_map_tools button { box-sizing: border-box; flex: 0 0 22px; width: 22px; min-width: 22px; height: 22px; min-height: 22px; padding: 2px; margin: 0; }
 #normal #hud_map_tools .tt-icon { width: 16px; height: 16px; margin: 0; }
 #normal #hud_map_tools #hud_zoom_controls { display: flex; flex: 0 1 auto; flex-wrap: wrap; min-width: 0; gap: 2px; padding: 0 4px 0 0; margin: 0; }
@@ -36,10 +36,9 @@
 #normal #minimap_block { flex: 0 0 auto; margin: 0; padding: 0; border: 0; background: #101419; }
 #normal #hud_bottom_row #message_pane { box-sizing: border-box; width: auto; height: 100%; min-height: 0; padding: 4px 6px; display: flex; flex-direction: column; border: 0; }
 #normal #hud_bottom_row #messages_container { box-sizing: border-box; width: 100% !important; max-height: 100% !important; min-height: 0; flex: 1 1 auto; overflow-y: auto; scrollbar-width: thin; }
-#normal #hud_bottom_row #messages { font-size: 11px; line-height: 1.18; }
+#normal #hud_bottom_row #messages { font-size: 12px; line-height: 1.3; }
 #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating) { grid-template-columns: minmax(0, 1fr); }
 #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating):has(#message_pane.hud-floating) { height: 0; flex-basis: 0; border: 0; }
 @media (pointer: coarse) {
     #normal .party-portrait { height: 93px; }
-    #normal .party-portrait .party-member-name { top: 80px; }
 }

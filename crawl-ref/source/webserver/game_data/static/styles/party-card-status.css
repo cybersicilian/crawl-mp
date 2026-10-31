@@ -4,11 +4,12 @@
 #normal .party-member-identity { flex-wrap: nowrap; }
 #normal .party-member-name { display: block; flex: 1 1 0; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left; }
 #normal .party-portrait { grid-column: 1; grid-row: 1 / span 3; position: relative; width: 42px; height: 64px; align-self: start; }
-#normal .party-portrait .party-compass { position: absolute; left: 50%; top: -9px; transform: translateX(-50%); z-index: 2; border-radius: 50%; background: #20252a; }
+/* Heading badge on the arch's right shoulder, ringed so it sits on the card rather than over the crown. */
+#normal .party-portrait .party-compass { position: absolute; left: auto; right: -8px; top: -4px; transform: none; z-index: 3; border-radius: 50%; background: #20252a; }
 #normal .party-portrait .party-compass {
     box-sizing: border-box; border: 1px solid var(--faith-accent, #b5a376);
     background: radial-gradient(circle at 40% 30%, #303a3e, #131b21 78%);
-    box-shadow: 0 0 0 1px #080e13, inset 0 0 0 1px #e8cf8b20;
+    box-shadow: 0 0 0 1px #080e13, 0 0 0 3px #23262b, inset 0 0 0 1px #e8cf8b20;
 }
 #normal .party-portrait .party-compass:is([data-direction-state='away'], [data-direction-state='unknown']) {
     border-style: dashed; border-color: #b4a98b;

@@ -52,6 +52,16 @@ define(["jquery", "./party-model", "./status-icons", "./portrait-status"], funct
             window.dcss_tooltips.refresh();
     }
 
+    // Short labelled reading beside each meter: "Ready", "+12 banked", "−8 recovering".
+    function readingText(entry) {
+        if (entry.banked === undefined)
+            return entry.status === "downed" ? "Downed" : entry.status === "away" ? "Other floor"
+                : entry.status === "independent" ? "Own clock" : "Timing unknown";
+        var parts = [];
+        if (entry.banked > 0) parts.push("+" + entry.banked + " banked");
+        if (entry.debt > 0) parts.push("\u2212" + entry.debt + " recovering");
+        return parts.length ? parts.join(" \u00b7 ") : "Ready";
+    }
     function update($members, state) {
         var timeline = model.initiativeTimeline(state);
         // All heroes use the same scale, with at least two standard turns per
@@ -93,10 +103,18 @@ define(["jquery", "./party-model", "./status-icons", "./portrait-status"], funct
             if (entry.queued_action) $meter.attr("data-queued-action", String(entry.queued_action));
             else $meter.removeAttr("data-queued-action");
             fill($meter, entry.banked, entry.debt, maximum);
+            var $timing = $meter.closest(".party-member-timing"), $reading = $timing.children(".initiative-reading");
+            if ($timing.length && !$reading.length)
+                $reading = $("<span class='initiative-reading' aria-hidden='true'></span>").appendTo($timing);
+            if ($reading.length) {
+                var text = readingText(entry);
+                if ($reading.text() !== text) $reading.text(text);
+                $reading.attr("data-timing-state", entry.status);
+            }
         });
         if (window.dcss_tooltips && $members.find(".party-initiative[aria-describedby~='dcss_rich_tooltip']").length)
             window.dcss_tooltips.refresh();
     }
 
-    return { create: create, update: update, createMonster: createMonster, updateMonster: updateMonster };
+    return { create: create, update: update, createMonster: createMonster, updateMonster: updateMonster, readingText: readingText };
 });

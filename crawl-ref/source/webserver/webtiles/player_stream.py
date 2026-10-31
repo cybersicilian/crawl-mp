@@ -26,6 +26,9 @@ class PlayerStreams:
                             "region_combat", "same_region", "can_act", "move_delay_aut", "atk_aut",
                             "cooldown_ms", "cooldown_remaining_ms", "queued_action", "queued_action_count", "zot_clock"}
 
+    # Shared bootstrap packets, in the order a reattaching client replays them.
+    bootstrap_order = ("version", "options", "layout")
+
     def __init__(self, control, presence, request_view=None):
         self.control = control
         self.presence = presence

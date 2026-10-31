@@ -126,7 +126,7 @@ class LibraryHTTPTests(Workspace, AsyncHTTPTestCase):
         return tornado.web.Application([
             (r"/(games|players|randarts)/([0-9a-f-]+)", LibraryPageHandler),
             (r"/api/library/(games|players|randarts)/([0-9a-f-]+)", LibraryAPIHandler),
-        ], template_path=str(templates))
+        ], template_path=str(templates), static_path=str(templates.parent / "static"))
 
     def test_profiles_escape_text_and_hide_save_paths(self):
         game = library.create_game("Host", "coop", title="<script>alert(1)</script>")

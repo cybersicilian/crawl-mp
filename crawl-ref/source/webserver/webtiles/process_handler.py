@@ -1459,7 +1459,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
             # Normalize before buffering. Delaying a whole string would append
             # its suffix behind newer keys when the first key takes ownership.
             for keycode in keys:
-                self.handle_input(json_encode(dict(msg="key", keycode=keycode)), source,
+                self.handle_input(dict(msg="key", keycode=keycode), source,
                                   queued_floor=queued_floor)
             return
         if obj.get("msg") == "record_save":

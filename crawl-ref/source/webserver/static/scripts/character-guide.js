@@ -148,7 +148,7 @@ define(["jquery", "character-catalog", "item-properties", "starting-sheet", "ric
     });
     function ensureDialog() {
         if (dialog) return;
-        dialog = element("dialog", "character-guide-dialog");
+        dialog = element("dialog", "character-guide-dialog character-side-sheet");
         dialog.id = "character_guide_dialog";
         dialog.setAttribute("aria-labelledby", "character_guide_title");
         var header = element("header", "character-guide-header party-insp-header");
@@ -282,11 +282,10 @@ define(["jquery", "character-catalog", "item-properties", "starting-sheet", "ric
             var card = event.target.closest(".party-slot-box");
             if (card) updateCard(card);
         });
-        var footer = document.getElementById("party_room_footer");
-        if (footer && footer.parentElement === grid.parentElement) {
-            grid.parentElement.insertBefore(footer, grid);
-            grid.parentElement.classList.add("character-guides-active");
-        }
+        var footer = document.getElementById("party_room_footer"), view = document.getElementById("party_room_view");
+        // Legacy markup keeps the launch bar as a grid sibling; the squad screen mounts it in the command bar.
+        if (footer && footer.parentElement === grid.parentElement) grid.parentElement.insertBefore(footer, grid);
+        (view || grid.parentElement).classList.add("character-guides-active");
         var lobby = document.getElementById("lobby");
         if (lobby && !lobbyObserver) {
             lobbyObserver = new MutationObserver(function () { if (getComputedStyle(lobby).display === "none") close(); });

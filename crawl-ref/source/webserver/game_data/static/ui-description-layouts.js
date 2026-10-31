@@ -94,6 +94,7 @@ function ($, comm, client, ui, enums, cr, util, scroller, main, gui, player, for
         var $body = $popup.find(".body");
         $body.html(_fmt_spellset_html(desc.body));
         _fmt_spells_list($body, desc.spellset, true);
+        format.stat_grid($body[0]);
         var s = scroller($body[0]);
         $popup.on("keydown keypress", function (event) {
             scroller_handle_key(s, event);
@@ -128,13 +129,14 @@ function ($, comm, client, ui, enums, cr, util, scroller, main, gui, player, for
         var $popup = $(".templates > .describe-spell").clone();
         $popup.find(".header > span").text(desc.title);
         $popup.find(".body").html(format_spell_html(desc.desc));
+        format.stat_grid($popup.find(".body")[0]);
         var s = scroller($popup.find(".body")[0]);
         $popup.on("keydown keypress", function (event) {
             scroller_handle_key(s, event);
         });
         if (desc.can_mem)
             $popup.find(".actions").removeClass("hidden").empty().append(
-                $("<button type='button' class='workflow-button' data-hotkey='M'>Memorise <kbd>M</kbd></button>"));
+                $("<button type='button' class='workflow-button workflow-primary' data-hotkey='M'>Memorise <kbd>M</kbd></button>"));
 
         var canvas = $popup.find(".header > canvas");
         var renderer = new cr.DungeonCellRenderer();

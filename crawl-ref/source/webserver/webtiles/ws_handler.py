@@ -69,46 +69,55 @@ def _finish_record(record_id, reason):
     return game_library.get_game(record_id)
 
 def broadcast_party_rooms():
-    rooms_list = [party_roster.describe(room) for room in PARTY_ROOMS.values()]
-    for room in rooms_list:
+    for room in PARTY_ROOMS.values():
         for slot in room.get("slots", []):
             starting_weapons.normalize_slot(slot)
             ensure_seed(slot)
     lobby_sockets = [s for s in list(sockets) if s.is_in_lobby()]
     if not lobby_sockets:
         return
-    # Serialize the chronicle once and deliver both updates in a single frame
-    # per socket. The room list stays per socket: private lobbies filter it.
+    # Serialize once per distinct view, then deliver both updates in a single
+    # frame per socket instead of re-encoding the room list for every
+    # recipient. Private lobbies make the list viewer-specific, so the cache
+    # key is the rooms a viewer may see and whether it sees their invites.
     chronicle_msg = json_encode(dict(msg="coop_chronicle", **_get_chronicle_payload()))
+    encoded = {}
     for socket in lobby_sockets:
-        rooms_msg = json_encode(dict(msg="party_rooms_list",
-                                     rooms=party_access.visible(PARTY_ROOMS.values(), socket)))
+        rooms = party_access.visible(PARTY_ROOMS.values(), socket)
+        key = tuple((room.get("room_id"), "invite_token" in room) for room in rooms)
+        rooms_msg = encoded.get(key)
+        if rooms_msg is None:
+            rooms_msg = encoded[key] = json_encode(dict(msg="party_rooms_list", rooms=rooms))
         socket.append_message(rooms_msg, False)
         socket.append_message(chronicle_msg, True)
 
-def _reset_party_slot(slot):
+def _reset_party_slot(slot, room=None):
     idx = slot["slot"]
     slot["username"] = ""
+    slot["ready"] = True
+    if room is not None and room.get("resume_id"):
+        # A saved party keeps its hero roster; only the seat's claim is freed.
+        slot["state"] = "open" if room.get("resume_multiplayer") else "companion"
+        return
     slot["state"] = "companion" if idx == 1 else "open"
     slot["hero_name"] = DEFAULT_PARTY_SLOTS[idx]["hero_name"]
-    slot["ready"] = True
 
 def _vacate_party_rooms(username):
     """Drop a departed user's staging room and free their guest seats.
 
-    Launched rooms belong to a running game and are handled by _on_crawl_end.
-    Returns whether anything changed."""
+    Launching and launched rooms belong to a running game and are handled by
+    _on_crawl_end. Returns whether anything changed."""
     changed = False
     lowered = username.lower()
     for rid, room in list(PARTY_ROOMS.items()):
         if room.get("host", "").lower() == lowered:
-            if room.get("status") != "launched":
+            if room.get("status") not in ("launching", "launched"):
                 del PARTY_ROOMS[rid]
                 changed = True
             continue
         for slot in room.get("slots", [])[1:]:
             if slot.get("username", "").lower() == lowered:
-                _reset_party_slot(slot)
+                _reset_party_slot(slot, room)
                 changed = True
     return changed
 
@@ -1086,7 +1095,9 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                     # snapshot has been ingested (_on_record_finished).
                     room_changed = True
             # Every solo game end used to re-query the chronicle and push the
-            # room list to all lobby sockets even when nothing changed.
+            # room list to all lobby sockets even when nothing changed. The
+            # finished checkpoint is staged into the room by
+            # _on_record_finished, once the library worker has closed it.
             if room_changed:
                 broadcast_party_rooms()
             if self.client_closed:
@@ -1821,14 +1832,6 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             return
 
         if target_slot_obj is not None:
-            # One seat per user: a guest who hops rooms must not stay listed
-            # in the old one (leave only cleared the first room it found).
-            for other in PARTY_ROOMS.values():
-                if other is room:
-                    continue
-                for s in other.get("slots", [])[1:]:
-                    if s.get("username", "").lower() == uname.lower():
-                        _reset_party_slot(s)
             target_slot_obj["state"] = "player"
             target_slot_obj["username"] = uname
             if not room.get("resume_id"):
@@ -1935,6 +1938,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         if weapon is not None:
             slot_obj["weapon"] = weapon
 
+        # Party members choose their undead trait independently: only the
+        # seat's owner (or anyone, for an unclaimed seat) may change it.
         if (trait is not None and trait in ("none", "mummy", "zombie", "ghost")
                 and (not slot_obj.get("username") or is_owner)):
             slot_obj["trait"] = trait
@@ -2424,7 +2429,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             # XX would it be better to handle on_close messaging at that point?
             # Browsers echo 1000 after Tornado's own ping-timeout close, so it
             # is a detected drop, not a deliberate quit: it gets the grace
-            # period like any other drop. Only policy closures stop at once.
+            # period like any other drop (defer_stop's expiry still stops a
+            # game with no connected human). Only policy closures stop at once.
             if (shutting_down or self.close_code == 1008
                     or not session_recovery.defer_stop(self)):
                 self.process.stop()

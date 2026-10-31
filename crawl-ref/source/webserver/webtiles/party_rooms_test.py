@@ -11,10 +11,10 @@ class StagingSocket:
     username = "NewHost"
     client_closed = False
     reset_lobby_timeout = Mock()
-    library_error = Mock()
     party_room_create = ws_handler.CrawlWebSocket.party_room_create
     party_room_apply_comp = ws_handler.CrawlWebSocket.party_room_apply_comp
     party_room_join = ws_handler.CrawlWebSocket.party_room_join
+    party_room_leave = ws_handler.CrawlWebSocket.party_room_leave
     party_room_update_slot = ws_handler.CrawlWebSocket.party_room_update_slot
 
     def __init__(self, username=None):
@@ -185,28 +185,34 @@ class RoomLifecycleTests(unittest.TestCase):
         socket = StagingSocket()
         socket.party_room_create(room_id="room-other")
         self.assertEqual(ws_handler.PARTY_ROOMS["room-other"]["host"], "OtherHost")
+        self.assertNotIn("room-NewHost", ws_handler.PARTY_ROOMS, "a refused id does not open a room")
         self.assertTrue(socket.errors)
-        self.assertNotIn("room-NewHost", ws_handler.PARTY_ROOMS)
 
     def test_host_keeps_a_single_room(self):
         StagingSocket().party_room_create(room_id="custom-id")
-        socket = StagingSocket()
-        socket.party_room_create()
-        mine = [r["room_id"] for r in ws_handler.PARTY_ROOMS.values() if r["host"] == "NewHost"]
-        self.assertEqual(mine, ["custom-id"])
-        self.assertTrue(socket.errors)
+        second = StagingSocket()
+        second.party_room_create()
+        mine = [r for r in ws_handler.PARTY_ROOMS.values() if r["host"] == "NewHost"]
+        self.assertEqual([r["room_id"] for r in mine], ["custom-id"])
+        self.assertTrue(second.errors)
 
-    def test_joining_another_room_requires_leaving_the_first(self):
+    def test_joining_another_room_requires_leaving_the_previous_seat(self):
         second = {"room_id": "room-second", "host": "Second", "status": "staging",
                   "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
         second["slots"][0]["username"] = "Second"
         ws_handler.PARTY_ROOMS["room-second"] = second
-        socket = StagingSocket("Guest")
-        socket.party_room_join(room_id="room-second")
-        self.assertTrue(socket.errors)
-        self.assertEqual(second["slots"][1].get("username", ""), "")
+        guest = StagingSocket("Guest")
+        guest.party_room_join(room_id="room-second")
+        self.assertTrue(guest.errors)
+        self.assertEqual(second["slots"][1]["username"], "")
         self.assertEqual(self.other["slots"][1]["username"], "Guest")
         self.assertIs(ws_handler._resolve_party_room(username="guest"), self.other)
+        guest.party_room_leave(room_id="room-other")
+        guest.party_room_join(room_id="room-second")
+        self.assertEqual(second["slots"][1]["username"], "Guest")
+        self.assertEqual(self.other["slots"][1]["username"], "")
+        self.assertEqual(self.other["slots"][1]["state"], "companion")
+        self.assertIs(ws_handler._resolve_party_room(username="guest"), second)
 
     def test_a_host_must_leave_before_joining_elsewhere(self):
         StagingSocket().party_room_create()

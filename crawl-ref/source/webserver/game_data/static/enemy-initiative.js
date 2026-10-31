@@ -3,6 +3,7 @@ define(["jquery", "./party-initiative", "./party-model", "./frame-update", "./en
 function ($, initiative, party, frameUpdate, model, view, enums, map, cells, main, util, contextMenu, icons, indexedPaint, nearby, roster, createRoster) {
     "use strict";
     var observer, state, hovered, cursor, disclosure, rosterSignature, nodes = new Map();
+    var threatNames = ["trivial", "easy", "tough", "nasty", "invisible"];
     function clearTarget() {
         if (cursor && view.cursor_locs[enums.CURSOR_MOUSE] === cursor)
             view.remove_cursor(enums.CURSOR_MOUSE);
@@ -124,8 +125,16 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         var ready = String(Boolean(enemy.ready) && data.timed), perception = data.remembered ? "last_known" : "visible";
         if (node.dataset.ready !== ready) node.dataset.ready = ready;
         if (node.dataset.perception !== perception) node.dataset.perception = perception;
+        // Threat tier and attitude come from the native map contact; absent facts stay unknown.
+        var threat = Number.isInteger(enemy.threat) ? threatNames[enemy.threat] || "unknown" : "unknown";
+        if (node.dataset.threat !== threat) node.dataset.threat = threat;
+        var attitude = roster.category(enemy);
+        if (node.dataset.attitude !== attitude) node.dataset.attitude = attitude;
+        var injury = data.remembered || !Number.isInteger(enemy.damage_level) ? "unknown" : String(enemy.damage_level);
+        if (node.dataset.injury !== injury) node.dataset.injury = injury;
         if (node.parts.name.textContent !== enemy.name) node.parts.name.textContent = enemy.name;
-        var reading = [data.reading, aura].filter(Boolean).join(" · ");
+        var reading = [data.reading, !data.remembered && enemy.health ? enemy.health : "", aura]
+            .filter(Boolean).join(" · ");
         if (node.parts.reading.textContent !== reading) node.parts.reading.textContent = reading;
         if (node.statusSignature !== statusSignature) {
             node.statusSignature = statusSignature;
@@ -187,6 +196,13 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         $rail.attr("aria-label", "Nearby creatures beside " + (hero ? hero.name : "player"));
         render();
     }
+    // Place the shared mouse cursor on a contact by roster key (the banner's own hover behaviour).
+    function locate(key) {
+        var node = nodes.get(key);
+        if (!node || !node.isConnected) return false;
+        point(node);
+        return true;
+    }
     function init() {
         if (!$("#party_hud").length) return;
         clearTarget(); renderFrame.cancel(); portraits.clear(); nodes.clear(); rosterSignature = null;
@@ -222,5 +238,5 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         });
     $(window).on("resize.enemyInitiative scroll.enemyInitiative", refresh)
         .on("blur.enemyInitiative", clearTarget);
-    return { init: init, update: update };
+    return { init: init, update: update, locate: locate };
 });

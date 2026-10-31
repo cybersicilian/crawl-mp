@@ -32,15 +32,15 @@
 :is(.party-slot-box, .party-slot-card, .chronicle-box, .chronicle-col) { border-radius: 6px; border-color: #b48b4e66; }
 :is(.party-slot-box, .party-slot-card) { padding: 12px; gap: 8px; }
 .party-slot-title { font-size: 16px; }
-.party-field-label { font: 11px/1.4 var(--tt-font-ui); letter-spacing: 0.02em; }
+.party-field-label { font: var(--tt-type-label)/1.4 var(--tt-font-ui); letter-spacing: 0.02em; }
 .party-slot-input, .party-slot-select { font: 13px/1.4 var(--tt-font-ui); padding: 5px 7px; border-color: #b48b4e66; border-radius: 4px; }
-.party-mode-btn, .party-archetype-btn { font-size: 11px; padding: 4px 7px; }
+.party-mode-btn, .party-archetype-btn { font-size: var(--tt-type-label); padding: 4px 7px; }
 .party-mode-btn.active { color: var(--tt-vellum-light); background: #76542e; border-color: #d9b15f90; }
-.party-ready-badge { font: 10px/1.4 var(--tt-font-ui); }
+.party-ready-badge { font: var(--tt-type-label)/1.4 var(--tt-font-ui); }
 .party-room-banner { font: 12px/1.4 var(--tt-font-ui); border-radius: 5px; }
-.party-slot-occupant { font-size: 10px; }
-.dcss-badge-pacing { font: 11px/1.4 var(--tt-font-ui); border-radius: 5px; }
-.chronicle-entry-sub { font-family: var(--tt-font-ui); font-size: 11px; }
+.party-slot-occupant { font-size: var(--tt-type-label); }
+.dcss-badge-pacing { font: var(--tt-type-label)/1.4 var(--tt-font-ui); border-radius: 5px; }
+.chronicle-entry-sub { font-family: var(--tt-font-ui); font-size: var(--tt-type-label); }
 .chronicle-entry-title { font-family: var(--tt-font-copy); font-size: 14px; }
 :is(.chronicle-entry, .chronicle-card) { border-radius: 4px; padding: 9px 10px; }
 #stats > div { font-family: var(--tt-font-ui); }
@@ -48,34 +48,34 @@
 :is(#stats_hp, #stats_hp_max, #stats_mp, #stats_mp_max, #stats_ac, #stats_ev,
     #stats_sh, #stats_xl, #stats_str, #stats_int, #stats_dex, #stats_time) { font-family: var(--tt-font-mono); }
 #party_turn_banner { font-family: var(--tt-font-ui); border-image: none; border-color: #b48b4e99; border-radius: 6px; width: max-content; }
-.party-banner-label { font-family: var(--tt-font-ui); font-size: 10px; }
-:is(.party-banner-btn, #party_turn_banner .party-mini-btn) { font-size: 10px; padding: 3px 6px; }
+.party-banner-label { font-family: var(--tt-font-ui); font-size: var(--tt-type-label); }
+:is(.party-banner-btn, #party_turn_banner .party-mini-btn) { font-size: var(--tt-type-label); padding: 3px 6px; }
 #party_hud { font-family: var(--tt-font-ui); }
 #party_hud_title { font-size: 14px; }
-.party-badge { font: 9px/1.3 var(--tt-font-ui); border-radius: 4px; }
+.party-badge { font: var(--tt-type-label)/1.3 var(--tt-font-ui); border-radius: 4px; }
 :is(.party-card, .party-member-card) { border-radius: 5px; border-color: #8c652866; padding: 5px 6px; }
-.party-member-name { font: 600 11px/1.4 var(--tt-font-ui); }
+.party-member-name { font: 600 var(--tt-type-label)/1.4 var(--tt-font-ui); }
 .party-member-top { margin-bottom: 4px; }
-.party-slot-tag { display: inline-block; font: 600 9px/1.3 var(--tt-font-ui); padding: 1px 3px; margin-right: 4px; background: #cfa65c20; color: var(--tt-brass-light); border-color: #d9b15f40; }
-.party-def-badges { color: var(--tt-muted); font: 9px/1.4 var(--tt-font-mono); }
+.party-slot-tag { display: inline-block; font: 600 var(--tt-type-key)/1.3 var(--tt-font-ui); padding: 1px 3px; margin-right: 4px; background: #cfa65c20; color: var(--tt-brass-light); border-color: #d9b15f40; }
+.party-def-badges { color: var(--tt-muted); font: var(--tt-type-label)/1.4 var(--tt-font-mono); }
 .party-stat-lbl { font-family: var(--tt-font-ui); }
-.party-buff-pill { font: 9px/1.4 var(--tt-font-ui); border-radius: 4px; padding: 1px 4px; }
+.party-buff-pill { font: var(--tt-type-label)/1.4 var(--tt-font-ui); border-radius: 4px; padding: 1px 4px; }
 .party-buff-strip:has(.is-aut-ready, .is-aut-recov) > .is-ready { display: none; }
-.party-mini-btn { font-size: 10px; padding: 2px 5px; }
-.party-weapon-text { font-family: var(--tt-font-ui); font-size: 10px; }
-.party-bar-label { font-size: 9px; }
-.party-ping-btn { font-size: 10px; }
+.party-mini-btn { font-size: var(--tt-type-label); padding: 2px 5px; }
+.party-weapon-text { font-family: var(--tt-font-ui); font-size: var(--tt-type-label); }
+.party-bar-label { font-size: var(--tt-type-key); }
+.party-ping-btn { font-size: var(--tt-type-label); }
 #dcss_quick_dock { padding: 6px; gap: 4px; border-image: none; border-color: #b48b4e80; border-radius: 5px; }
-.dcss-dock-btn { font-size: 11px; min-height: 28px; padding: 4px 6px; display: inline-flex; align-items: center; gap: 4px; }
-.dcss-dock-btn .dock-key { order: 2; min-width: 8px; padding: 0 2px; background: #0c080660; color: #c9b696; border-color: #d9b15f26; font: 9px/1.4 var(--tt-font-mono); box-shadow: none; text-shadow: none; }
+.dcss-dock-btn { font-size: var(--tt-type-label); min-height: 28px; padding: 4px 6px; display: inline-flex; align-items: center; gap: 4px; }
+.dcss-dock-btn .dock-key { order: 2; min-width: 8px; padding: 0 2px; background: #0c080660; color: #c9b696; border-color: #d9b15f26; font: var(--tt-type-key)/1.4 var(--tt-font-mono); box-shadow: none; text-shadow: none; }
 .dcss-dock-btn > .tt-icon { margin-right: 0; width: 16px; height: 16px; }
 .dcss-dock-btn.dock-btn-accent { margin-left: 0; }
 #dock_chat_btn { margin-left: auto; }
 #chat { border-radius: 8px; border-color: #c9a462; padding: 12px; box-shadow: 0 12px 40px #000000a0, var(--tt-recess); }
 #chat_caption { display: block; font: 12px/1.4 var(--tt-font-ui); padding-bottom: 9px; }
 #chat_caption::before { content: "Expedition Chat"; display: block; font: bold 17px/1.4 var(--tt-font-title); color: var(--tt-brass-light); }
-#spectator_count { color: var(--tt-muted); font-size: 10px; }
-#message_count { font-size: 10px; }
+#spectator_count { color: var(--tt-muted); font-size: var(--tt-type-label); }
+#message_count { font-size: var(--tt-type-label); }
 #chat_history { font-family: var(--tt-font-ui); }
 #chat_input { border-radius: 5px; font-family: var(--tt-font-ui); }
 #chat_hide_button_span { font: 16px/1 var(--tt-font-ui); }
@@ -99,8 +99,8 @@
 .tt-codex .menu_contents li > .tt-icon { width: 16px; height: 16px; padding: 8px; color: var(--tt-brass); border-radius: 8px; background: #b48b4e12; }
 .codex-chapter { flex: 1; min-width: 0; }
 .codex-chapter strong { display: block; color: var(--tt-vellum-light); font-size: 13px; font-weight: 600; }
-.codex-chapter small { display: block; color: var(--tt-muted); font: 10px/1.5 var(--tt-font-ui); margin-top: 3px; }
-.tt-codex kbd { color: var(--tt-brass); font: 10px/1.4 var(--tt-font-mono); border: 1px solid #d9b15f30; border-radius: 3px; padding: 1px 4px; }
+.codex-chapter small { display: block; color: var(--tt-muted); font: var(--tt-type-label)/1.5 var(--tt-font-ui); margin-top: 3px; }
+.tt-codex kbd { color: var(--tt-brass); font: var(--tt-type-key)/1.4 var(--tt-font-mono); border: 1px solid #d9b15f30; border-radius: 3px; padding: 1px 4px; }
 .tt-codex .menu_more { font: 11px/1.4 var(--tt-font-ui); color: var(--tt-muted); border-top-color: var(--tt-rule); }
 @media (max-width: 620px) {
     .tt-codex .menu_contents ol { grid-template-columns: 1fr; }
@@ -124,5 +124,5 @@
 #monster_list { font: 12px/1.4 var(--tt-font-ui); }
 #tooltip { background: var(--tt-paper); color: var(--tt-ink); border-color: var(--tt-brass-shadow); }
 .tt-codex .menu_title { position: relative; padding-right: 95px; }
-.codex-close { position: absolute; top: 0; right: 0; font: 11px/1.4 var(--tt-font-ui); }
+.codex-close { position: absolute; top: 0; right: 0; font: var(--tt-type-label)/1.4 var(--tt-font-ui); }
 .tt-codex .menu_contents li.codex-exit { display: none; }

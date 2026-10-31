@@ -10,3 +10,17 @@
 #normal #monster_list .group { display: flex; align-items: center; gap: 4px; min-height: 22px; padding: 1px 0; }
 #normal #monster_list .picture { flex: 0 0 auto; width: auto !important; height: 22px !important; max-width: 132px; image-rendering: pixelated; }
 #normal #monster_list .name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ---- Minimap frame: label and floor name, in the sidebar or the bottom strip ---- */
+#normal #hud_minimap > summary.hud-minimap-summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px; box-sizing: border-box;
+    width: 100%; min-height: 18px; padding: 2px 8px; margin: 0; border: 0; border-bottom: 1px solid #ae925633;
+    background: transparent; color: #b1a78f; font: 600 9px/1.4 var(--tt-font-ui); letter-spacing: .08em;
+    text-transform: uppercase; cursor: pointer; list-style: none;
+}
+#normal #hud_minimap > summary.hud-minimap-summary::-webkit-details-marker { display: none; }
+#normal #hud_bottom_map #hud_minimap > summary.hud-minimap-summary { display: flex; flex: 0 0 auto; pointer-events: none; }
+#normal #hud_minimap > summary .hud-minimap-floor { text-transform: none; letter-spacing: 0; color: var(--ui-text, #f0e5cd); font: 600 10px/1.4 var(--tt-font-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#normal #hud_minimap > summary:focus-visible { outline: 2px solid #f4d9a0; outline-offset: -2px; }
+#normal #hud_minimap.hud-minimap-frame { border: 1px solid #7e69403b; border-radius: 3px; background: #101419; }
+#normal #hud_bottom_map #hud_minimap.hud-minimap-frame { flex-direction: column; align-items: stretch; border: 0; border-radius: 0; background: transparent; }
+#normal #hud_bottom_map #hud_minimap > #minimap_block { align-self: center; }

@@ -11,6 +11,13 @@ inside the repository; runtime rendering needs no external asset service.
 
 - `webserver/static/tabletop/`: reusable palette, material recipes, SVG ornaments,
   interaction states, and modern interface presentation.
+- `tabletop/ui-themes.css` + `tabletop/tactics-components.css`: the tactics-RPG
+  vocabulary (faction, threat, initiative, mode, resource and role tokens; `.tr-*`
+  badge, meter, stat, key-hint, button, card, segmented and callout classes; one
+  focus ring; the 12px label floor). See [ui-themes.md](ui-themes.md).
+- `game_data/static/status-icons.js` probes the HUD sprite sheet, falls back to the
+  committed legacy sheet, then to text glyphs (`html[data-ui-sprites]`), so a
+  missing licensed atlas never leaves empty icon boxes.
 - `welcome.css`, `lobby-experience.css`, and `accounts.css` cover the responsive
   entry, quick seats, account forms, party planner, Chronicle, and expedition list.
   Welcome collapses after authentication; the existing one-click seats remain.
