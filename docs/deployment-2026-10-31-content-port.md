@@ -48,10 +48,10 @@ Content-port validation: `docs/diagnostics/2026-10-30-content-port-audit.md`.
 - Public: `/status/version/` and `/healthz` OK, lobby HTTP 200, the served
   character catalog lists the ported species and backgrounds, and the served
   `class-art.js` hash matches the release commit.
-- Not yet shipped: commit 9119297e27 (the hotfix's tooltip stylesheet cache-tag
-  bump, cherry-picked onto master after the build started). Cached clients may
-  keep the pre-fix tooltip ink until their cache expires; a follow-up deploy
-  carries it.
+- Follow-up release `20261031T031551Z` (branch tip 38ed5d0c2e, adds the hotfix's
+  tooltip stylesheet cache-tag bump 9119297e27) went live at 04:53 UTC: install
+  gate 104 tests OK, `dcss-coop` and `caddy` active, served `style.css` carries
+  `tooltip-content.css?v=tooltip-ink-ae95e701-r1`. Boot disk at 84% afterwards.
 - Browser acceptance against the release candidate: 7 of 16 main-checkout lobby
   tests passed; the 9 failures are pre-existing drift against the one-seat-editor
   lobby that production already ran (hidden seat-2 mode button, saved-games view
