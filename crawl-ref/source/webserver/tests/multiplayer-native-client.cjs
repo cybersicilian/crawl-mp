@@ -60,8 +60,14 @@ async function lua(target, code) {
     const wizardPrompts = await page.evaluate(() => window.qaWizardPrompts);
     await key(page, 38);
     if (!target.wizard) {
-        await waitText(page, 'really want to enter wizard mode');
-        await send(page, "text_input", { text: "wiz\r" });
+        // Debug engines start in wizard mode and go straight to the command
+        // prompt; release engines ask for confirmation first.
+        await page.waitForFunction(() => {
+            const text = document.body.innerText.toLowerCase();
+            return text.includes('really want to enter wizard mode') || text.includes('enter wizard command');
+        });
+        const asked = await page.evaluate(() => document.body.innerText.toLowerCase().includes('really want to enter wizard mode'));
+        if (asked) await send(page, "text_input", { text: "wiz\r" });
         target.wizard = true;
     }
     await page.waitForFunction(count => window.qaWizardPrompts > count, wizardPrompts);
