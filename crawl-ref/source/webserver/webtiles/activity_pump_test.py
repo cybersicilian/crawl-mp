@@ -104,6 +104,26 @@ class ActivityPumpTest(unittest.TestCase):
         self.pump.tick()
         self.send.assert_not_called()
 
+    def test_regional_pacing_is_short_and_capped(self):
+        self.pump._now = lambda: 10.0
+        own = dict(slot=0, alive=True, activity="", can_act=True, turns=0,
+                   aut_clock=0, region_id=0)
+        peer = dict(slot=1, alive=True, activity="", can_act=True, region_id=0)
+        state = dict(members=[own, peer])
+        self.control.views = {0: state}
+        self.pump.note_party_state(state)
+        for combat, aut, expected_ms in ((True, 10, 200), (True, 15, 300),
+                                         (True, 100, 400), (None, 10, 100)):
+            with self.subTest(combat=combat, aut=aut):
+                own.update(region_combat=combat, turns=own["turns"] + 1,
+                           aut_clock=own["aut_clock"] + aut)
+                self.pump.note_party_state(state)
+                self.assertEqual(self.pump.cooldown_duration[0], expected_ms)
+                self.assertTrue(self.pump.should_buffer_action(0))
+                self.pump._now = lambda: 10.0 + expected_ms / 1000.0
+                self.assertFalse(self.pump.should_buffer_action(0))
+                self.pump._now = lambda: 10.0
+
     def test_disconnected_queued_actions_are_discarded(self):
         callback = Mock()
         self.pump.queue_action(0, "move", callback)
