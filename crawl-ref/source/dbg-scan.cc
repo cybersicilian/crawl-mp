@@ -478,7 +478,10 @@ void debug_mons_scan()
             } // if (holder != m)
         } // for (int j = 0; j < NUM_MONSTER_SLOTS; j++)
 
-        monster* m1 = monster_by_mid(m->mid, false, true);
+        // Party member avatars carry their player's mid; monster_by_mid()
+        // routes those to the player and never to the avatar, by design.
+        const monster* m1 = party::is_party_mid(m->mid)
+                            ? m : monster_by_mid(m->mid, false, true);
         if (m1 != m)
         {
             if (!m1)
