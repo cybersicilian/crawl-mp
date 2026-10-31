@@ -1,6 +1,7 @@
 /** Per-floor and per-region scheduling for one authoritative multiplayer expedition. */
 #include "AppHdr.h"
 #include "party.h"
+#include "party-region.h"
 
 #include <algorithm>
 #include <climits>
@@ -26,6 +27,35 @@ const char* const floor_key = "multiplayer_aut_floor";
 const char* const region_clock_key = "multiplayer_region_clock";
 const char* const region_id_key = "multiplayer_region_id";
 const char* const last_action_key = "multiplayer_last_action_aut";
+
+// Heroes' placement when the region partition was last reconciled under a
+// scoped_region_snapshot. Monsters and clouds may move within the snapshot.
+struct region_inputs
+{
+    int active = -1;
+    int count = 0;
+    level_id floor[party::MAX_PARTY_PLAYERS];
+    coord_def pos[party::MAX_PARTY_PLAYERS];
+    bool living[party::MAX_PARTY_PLAYERS] = {};
+
+    bool operator==(const region_inputs& other) const
+    {
+        if (active != other.active || count != other.count)
+            return false;
+        for (int slot = 0; slot < count; ++slot)
+        {
+            if (floor[slot] != other.floor[slot] || pos[slot] != other.pos[slot]
+                || living[slot] != other.living[slot])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+int region_snapshot_depth = 0;
+bool region_snapshot_valid = false;
+region_inputs region_snapshot_inputs;
 
 string floor_name(const player& member)
 {
@@ -54,6 +84,21 @@ bool slot_living(int slot)
     return slot >= 0 && slot < party::player_count()
            && !party::is_player_downed(slot)
            && party::get_player(slot).hp > 0;
+}
+
+region_inputs current_region_inputs()
+{
+    region_inputs inputs;
+    inputs.active = party::active_slot();
+    inputs.count = party::player_count();
+    for (int slot = 0; slot < inputs.count; ++slot)
+    {
+        const player& member = party::get_player(slot);
+        inputs.floor[slot] = level_id(member.where_are_you, member.depth);
+        inputs.pos[slot] = member.pos();
+        inputs.living[slot] = slot_living(slot);
+    }
+    return inputs;
 }
 
 void ensure_member_floor_state(int slot)
@@ -263,8 +308,28 @@ int member_last_action_aut(int slot)
     return props.exists(last_action_key) ? props[last_action_key].get_int() : 0;
 }
 
+scoped_region_snapshot::scoped_region_snapshot()
+{
+    ++region_snapshot_depth;
+}
+
+scoped_region_snapshot::~scoped_region_snapshot()
+{
+    if (--region_snapshot_depth == 0)
+        region_snapshot_valid = false;
+}
+
 void reconcile_floor_regions()
 {
+    if (region_snapshot_depth > 0)
+    {
+        const region_inputs inputs = current_region_inputs();
+        if (region_snapshot_valid && inputs == region_snapshot_inputs)
+            return;
+        region_snapshot_inputs = inputs;
+        region_snapshot_valid = true;
+    }
+
     const int count = player_count();
     int old_reg_id[MAX_PARTY_PLAYERS] = {};
     int old_reg_clock[MAX_PARTY_PLAYERS] = {};

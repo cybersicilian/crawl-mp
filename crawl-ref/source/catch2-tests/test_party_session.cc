@@ -20,6 +20,7 @@
 #include "hermit-crab.h"
 #include "timed-effects.h"
 #include "party.h"
+#include "party-region.h"
 #include "player.h"
 #include "spl-util.h"
 #include "test_player_fixture.h"
@@ -390,6 +391,37 @@ TEST_CASE_METHOD(session_fixture, "A shared visible threat connects heroes outsi
     REQUIRE(you.see_cell(env.mons[0].pos()));
     REQUIRE(peer.see_cell(env.mons[0].pos()));
     REQUIRE(party::same_region(0, 1));
+}
+
+TEST_CASE_METHOD(session_fixture, "A world turn snapshot keeps one partition until a hero changes", "[party-session][encounter-time]")
+{
+    encounter_map map;
+    you.set_position(coord_def(26, 35));
+    auto& peer = party::get_player(1);
+    peer.depth = 1;
+    peer.set_position(coord_def(40, 35));
+    encounter_monster threat(coord_def(50, 35));
+    REQUIRE_FALSE(party::same_region(0, 1));
+    {
+        party::scoped_region_snapshot regions;
+        REQUIRE_FALSE(party::same_region(0, 1));
+        // A monster moving into shared sight links the regions on the next
+        // reconciliation after the snapshot, not mid-turn.
+        env.mons[0].set_position(coord_def(33, 35));
+        REQUIRE(peer.see_cell(env.mons[0].pos()));
+        CHECK_FALSE(party::same_region(0, 1));
+        {
+            party::scoped_region_snapshot nested;
+            CHECK_FALSE(party::same_region(0, 1));
+        }
+        CHECK_FALSE(party::same_region(0, 1));
+        // A hero moving still repartitions immediately.
+        peer.set_position(coord_def(39, 35));
+        CHECK(party::same_region(0, 1));
+        env.mons[0].set_position(coord_def(50, 35));
+        CHECK(party::same_region(0, 1));
+    }
+    CHECK_FALSE(party::same_region(0, 1));
 }
 
 TEST_CASE_METHOD(session_fixture, "Visible combat owns entities nearer a wall-separated explorer", "[party-session][encounter-time]")

@@ -79,6 +79,7 @@
 #include "oozle-memory.h"
 #include "output.h"
 #include "party.h"
+#include "party-region.h"
 #include "party-trade.h"
 #include "zot.h"
 #include "player.h"
@@ -4159,6 +4160,10 @@ void TilesFramework::redraw()
         }
         return;
     }
+
+    // Party state and every personal view query each hero's region; nothing
+    // here moves a hero or monster, so one partition serves the whole frame.
+    party::scoped_region_snapshot regions;
 
     if (m_layout_reset)
     {

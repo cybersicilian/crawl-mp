@@ -110,6 +110,7 @@
 #include "options.h"
 #include "output.h"
 #include "party.h"
+#include "party-region.h"
 #include "mercenary.h"
 #include "player.h"
 #include "player-notices.h"
@@ -2729,6 +2730,10 @@ void world_reacts()
     const int world_delta = party::is_enabled()
         ? party::record_player_turn_and_get_world_delta(orig_time_taken, &floor_delta)
         : orig_time_taken;
+    // Ends before the screen and party state are sent and input is next
+    // gated, so those see a freshly reconciled partition.
+    auto region_snapshot = party::multiplayer_enabled()
+        ? make_unique<party::scoped_region_snapshot>() : nullptr;
 
     if (party::is_enabled())
         party::sync_all_proxies();
@@ -2834,6 +2839,7 @@ void world_reacts()
         handle_time(floor_delta);
         fire_final_effects();
     }
+    region_snapshot.reset();
     if (party::is_enabled())
     {
         party::sync_shared_state_from_active();
