@@ -55,7 +55,10 @@ function ($, createViews, browser, overview, discovery) {
     }
     function menuItems(menu) {
         return Array.from(menu.querySelectorAll("a, button")).filter(function (item) {
-            item.setAttribute("role", "menuitem"); item.tabIndex = -1;
+            // Links become menu items; a form button (Log out) keeps its native
+            // button role so assistive tech and the browser suites see an action.
+            if (item.tagName !== "BUTTON") item.setAttribute("role", "menuitem");
+            item.tabIndex = -1;
             return item.getClientRects().length > 0;
         });
     }
