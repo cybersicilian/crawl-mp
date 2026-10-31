@@ -53,6 +53,13 @@ recommended_jobs:
   - monk
   - hunter
   - berserker
+  - slime priest
+  - archaeologist
+  - collector
+  - fencer
+  - ronin
+  - billionaire
+  - neckbeard
 
 child_name: Calf
 orc_name: Minotorc

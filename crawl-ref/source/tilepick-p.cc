@@ -595,6 +595,8 @@ tileidx_t tilep_species_to_base_tile(int sp, int level)
         return TILEP_BASE_WIGHT;
     case SP_MELIAI:
         return TILEP_BASE_MELIAI;
+    case SP_KITSUNE:
+        return TILEP_BASE_KITSUNE;
     case SP_BASE_DRACONIAN:
     case SP_RED_DRACONIAN:
 #if TAG_MAJOR_VERSION == 34
@@ -799,6 +801,7 @@ void tilep_race_default(int sp, int level, dolls_data *doll)
         case SP_SPARKBORN:
         case SP_WIGHT:
         case SP_MELIAI:
+        case SP_KITSUNE:
         case SP_AUTOMATON:
             hair = 0;
             break;

@@ -12,7 +12,8 @@ weapons and armour before their wands run out.
 Berserker
 
 Berserkers believe in Trog, the magic-hating god of frenzy. Not much can stop a
-raging berserker early on, apart from hubris.
+raging berserker early on, apart from hubris. Berserkers are the birthright
+order of Trog, one of the eight gods of the Elder Pantheon.
 %%%%
 Brigand
 
@@ -152,7 +153,8 @@ Healer
 
 Healers are devoted followers of Elyvilon, the Healer, starting with healing
 potions and divine abilities to mend wounds, purify ailments, and protect their
-allies.
+allies. Healers are the birthright order of Elyvilon, one of the eight gods of
+the Elder Pantheon.
 %%%%
 Death Knight
 
@@ -181,18 +183,23 @@ only the strongest caster's power. Lay on Hands & Intervene heals and briefly
 wards the Paladin and a nearby ally, costs 3 MP, scales with Invocations, and
 requires 30 turns of recovery. This invocation requires continued service to
 The Shining One. Demigods, undead and demonspawn cannot become Paladins.
+Paladins are the birthright order of the Shining One, one of the eight gods of
+the Elder Pantheon.
 %%%%
 Preacher
 
 Preachers enter the dungeon in Zin's service with a chosen weapon, a robe and
 silver javelins. They train stealth and invocations. Demigods, undead and
 demonspawn cannot become Preachers; undead traits are also incompatible.
+Preachers are the birthright order of Zin, one of the eight gods of the Elder
+Pantheon.
 %%%%
 Sage
 
 Sages serve Sif Muna and begin with Apportation and the contents of a random
 spellbook in their library. They wear a robe, carry a dagger and rely on their
-knowledge of spellcasting. Demigods cannot become Sages.
+knowledge of spellcasting. Demigods cannot become Sages. Sages are the
+birthright order of Sif Muna, one of the eight gods of the Elder Pantheon.
 %%%%
 Abyssal Knight
 

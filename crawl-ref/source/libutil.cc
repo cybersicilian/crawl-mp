@@ -378,6 +378,10 @@ coord_def cgetpos(GotoRegion region)
 
 bool valid_cursor_pos(int x, int y, GotoRegion region)
 {
+    // Headless runs (the Catch2 harness, -test fixtures before the console
+    // starts) have no cursor regions at all; nothing can be out of bounds.
+    if (!crawl_state.io_inited)
+        return true;
     const coord_def sz = cgetsize(region);
     return x >= 1 && y >= 1 && x <= sz.x && y <= sz.y;
 }

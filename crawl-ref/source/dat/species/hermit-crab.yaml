@@ -25,11 +25,12 @@ fake_mutations:
     short: molting opportunities
   - long: After escaping a broken shell, you can Crab Walk for ten turns.
     short: Crab Walk after shell escape
-walking_verb: scuttl
+walking_verb: Scuttl
 altar_action: rest your weary claws in front of
 recommended_jobs:
   - gladiator
   - fighter
+  - hermit
 recommended_weapons:
   - axes
   - maces and flails

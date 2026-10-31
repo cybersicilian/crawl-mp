@@ -366,7 +366,7 @@ base/human_f SP_RECOMMENDED_IRIT
 base/sparkborn SP_RECOMMENDED_SPARKBORN
 base/wight SP_RECOMMENDED_WIGHT
 base/meliai SP_RECOMMENDED_MELIAI
-base/human_f SP_RECOMMENDED_KITSUNE
+base/kitsune SP_RECOMMENDED_KITSUNE
 %start
 %compose base/golem
 %compose body/animal_skin

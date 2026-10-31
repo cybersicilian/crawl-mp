@@ -45,6 +45,7 @@ recommended_jobs:
   - warper
   - hedge wizard
   - alchemist
+  - philosopher
 
 walking_verb: Slither
 altar_action: coil in front of

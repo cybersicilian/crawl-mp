@@ -19,6 +19,7 @@
 #include "ng-restr.h"
 #include "party.h"
 #include "player.h"
+#include "species.h"
 #include "spl-util.h"
 #include "terrain.h"
 #include "test_player_fixture.h"
@@ -182,6 +183,30 @@ TEST_CASE("Special backgrounds recommend only compatible starting species",
         CHECK(is_starting_job(choice.first));
         CHECK(character_is_allowed(choice.second, choice.first));
         CHECK(job_recommends_species(choice.first, choice.second));
+    }
+}
+
+TEST_CASE("Every ported background is recommended by a starting species",
+          "[standalone-jobs]")
+{
+    for (const auto job : {JOB_PREACHER, JOB_SAGE, JOB_HERMIT, JOB_SLIME_PRIEST,
+                           JOB_ARCHAEOLOGIST, JOB_CARAVAN, JOB_COLLECTOR,
+                           JOB_ROGUE, JOB_FENCER, JOB_RONIN, JOB_APOTHECARY,
+                           JOB_BILLIONAIRE, JOB_NECKBEARD, JOB_PHILOSOPHER})
+    {
+        CAPTURE(job);
+        REQUIRE(is_starting_job(job));
+        bool recommended = false;
+        for (const species_type species : species::get_all_species())
+        {
+            if (species::is_starting_species(species)
+                && species::recommends_job(species, job))
+            {
+                CHECK(character_is_allowed(species, job));
+                recommended = true;
+            }
+        }
+        CHECK(recommended);
     }
 }
 

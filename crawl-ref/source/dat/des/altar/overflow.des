@@ -8374,3 +8374,86 @@ MAP
  .ccc.ccc.
     ...
 ENDMAP
+
+###############################################################################
+# Overflow altars for the ported gods: Imus Thea, the Great Wyrm and
+# Agraphede. These follow the single-god conventions from the header: one
+# specified-god overflow vault per god, tagged temple_overflow_1 plus the
+# god's temple_overflow_<name> and buniq_altar_<name> tags, so they are picked
+# by the overflow temple code and otherwise place at most once per branch.
+#
+# Note that the Great Wyrm's god name is "the Great Wyrm", so the overflow
+# code looks for temple_overflow_the_great_wyrm / buniq_altar_the_great_wyrm,
+# while its altar feature is altar_great_wyrm; the tags are set by hand.
+###############################################################################
+
+# Imus Thea: a hall of mirrors. Crystal and glass walls enclose a ring of
+# polished pillars that reflect the prismatic altar at the centre.
+NAME:   altar_imus_thea_hall_of_mirrors
+TAGS:   no_monster_gen no_trap_gen transparent decor
+DEPTH:  D:3-, Orc, Elf
+COLOUR: b = lightcyan
+COLOUR: m = white
+COLOUR: n = white
+FTILE:  _.n = floor_crystal_squares
+TILE:   b = dngn_crystal_cyan
+TILE:   m = dngn_transparent_wall
+TILE:   n = dngn_transparent_stone
+: standard_overflow_setup(_G, { { "imus_thea", "_" } }, true)
+MAP
+.........
+.bmbmbmb.
+.m.....m.
+.b.n.n.b.
+.m.._..m.
+.b.n.n.b.
+.m.....m.
+.bmb+bmb.
+.........
+ENDMAP
+
+# The Great Wyrm: a small alchemical laboratory. Iron workbenches flank the
+# altar, vats of liquid bubble in the alcoves, and a couple of leftover
+# potions sit on the benches.
+NAME:   altar_great_wyrm_alchemical_lab
+TAGS:   no_monster_gen no_trap_gen transparent
+TAGS:   temple_overflow_1 temple_overflow_the_great_wyrm
+TAGS:   buniq_altar_the_great_wyrm extra_post_overflow
+DEPTH:  D:3-, Orc, Elf
+KFEAT:  _ = altar_great_wyrm
+ITEM:   any potion
+NSUBST: d = 2:d / *:.
+COLOUR: c = lightgreen
+COLOUR: v = darkgrey
+FTILE:  _.dvW = floor_pebble_green
+TILE:   c = wall_slime
+MAP
+ccccccc
+c.....c
+cvd.dvc
+cW._.Wc
+cvd.dvc
+c.....c
+ccc+ccc
+ENDMAP
+
+# Agraphede: a web-draped nest. Webs cross most of the approaches and a
+# few vermin lurk by the altar; the openings without webs are the safe way in.
+NAME:   altar_agraphede_web_nest
+TAGS:   no_monster_gen transparent
+DEPTH:  D:4-, Lair, Spider
+MONS:   scorpion / rat / nothing w:4
+KFEAT:  ^ = web
+COLOUR: x = green
+FTILE:  ^.1_ = floor_dirt
+TILE:   x = wall_lair
+: standard_overflow_setup(_G, { { "agraphede", "_" } }, false)
+MAP
+.x^x.x.
+x^.1.^x
+^.....^
+..._...
+^.....^
+x^.1.^x
+.x.x^x.
+ENDMAP

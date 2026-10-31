@@ -1,6 +1,8 @@
 #include "AppHdr.h"
 
 #include "character-trait.h"
+#include "message.h"
+#include "monster.h"
 #include "mutation.h"
 #include "player.h"
 #include "species.h"
@@ -8,6 +10,9 @@
 namespace
 {
 const char *const TRAIT_KEY = "character_trait";
+// Accumulated aut towards the ghost trait's next point of fading. Stored in
+// props so it survives saves without a new tag field.
+const char *const GHOST_FADE_KEY = "ghost_trait_fade_progress";
 }
 
 trait_restriction check_trait(character_trait trait, species_type sp,
@@ -130,4 +135,62 @@ void give_level_trait_mutations(int xp_level)
 {
     if (xp_level == 13 && get_character_trait(you) == character_trait::mummy)
         perma_mutate(MUT_NECRO_ENHANCER, 1, "mummy trait growth");
+}
+
+bool trait_blocks_natural_regen(const player& p)
+{
+    return get_character_trait(p) == character_trait::ghost;
+}
+
+int ghost_trait_fade(player& p, int delay)
+{
+    if (delay <= 0 || get_character_trait(p) != character_trait::ghost)
+        return 0;
+
+    int progress = p.props.exists(GHOST_FADE_KEY)
+                   ? p.props[GHOST_FADE_KEY].get_int() : 0;
+    progress += delay;
+    const int period = GHOST_FADE_TURNS * BASELINE_DELAY;
+    const int ticks = progress / period;
+    p.props[GHOST_FADE_KEY] = progress % period;
+    if (ticks <= 0)
+        return 0;
+
+    // Fading alone can never finish a ghost off; it only wears them down.
+    const int loss = min(ticks, max(0, p.hp - 1));
+    if (loss <= 0)
+        return 0;
+    p.hp -= loss;
+    p.redraw_hit_points = true;
+    if (p.hp == 1 && &p == &you)
+        mprf(MSGCH_WARN, "Your spectral form has faded as far as it can.");
+    return loss;
+}
+
+int ghost_trait_harvest_amount(int hit_dice, int hp_max)
+{
+    const int cap = max(1, hp_max / GHOST_HARVEST_CAP_DIVISOR);
+    return min(cap, 1 + max(0, hit_dice));
+}
+
+int ghost_trait_harvest(player& p, const monster& mons, bool gives_xp)
+{
+    if (!gives_xp || get_character_trait(p) != character_trait::ghost)
+        return 0;
+    if (p.hp >= p.hp_max || p.hp <= 0)
+        return 0;
+
+    const int heal = min(p.hp_max - p.hp,
+                         ghost_trait_harvest_amount(mons.get_experience_level(),
+                                                    p.hp_max));
+    if (heal <= 0)
+        return 0;
+    p.hp += heal;
+    p.redraw_hit_points = true;
+    if (&p == &you)
+    {
+        mprf(MSGCH_RECOVERY, "You draw %s fading essence into yourself.",
+             mons.name(DESC_ITS).c_str());
+    }
+    return heal;
 }

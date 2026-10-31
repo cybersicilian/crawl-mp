@@ -5,6 +5,7 @@
 #include "job-type.h"
 #include "species-type.h"
 
+class monster;
 class player;
 
 // Stable values: these may be stored with a character in future saves.
@@ -39,3 +40,21 @@ trait_restriction set_character_trait(player& p, character_trait trait);
 // Called once after the host species' innate mutations are initialized.
 void give_basic_trait_mutations();
 void give_level_trait_mutations(int xp_level);
+
+// Ghost trait (drawn from bloatcrawl2's Mirror Eidolon): the spectral body
+// never regenerates on its own and slowly fades, but feeding on kills
+// restores it. The fade is a steady 1 HP per GHOST_FADE_TURNS player turns
+// and never reduces HP below 1 on its own.
+constexpr int GHOST_FADE_TURNS = 15;
+// Harvest heals 1 + the victim's hit dice, capped at this fraction of max HP.
+constexpr int GHOST_HARVEST_CAP_DIVISOR = 4;
+
+// True when this player's trait forbids natural HP regeneration entirely.
+bool trait_blocks_natural_regen(const player& p);
+// Advance the fade clock by `delay` aut for `p`; returns HP lost (0 or more).
+int ghost_trait_fade(player& p, int delay);
+// HP a ghost-trait player of `hp_max` would harvest from a kill of `hit_dice`.
+int ghost_trait_harvest_amount(int hit_dice, int hp_max);
+// Restore HP to `p` for personally killing `mons`; returns HP gained. Only
+// acts for ghost-trait players and only if the kill was worth experience.
+int ghost_trait_harvest(player& p, const monster& mons, bool gives_xp);

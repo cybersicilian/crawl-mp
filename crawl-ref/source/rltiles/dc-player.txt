@@ -210,6 +210,7 @@ ent ENT
 sparkborn SPARKBORN
 wight WIGHT
 meliai MELIAI
+kitsune KITSUNE
 golem AUTOMATON
 %end_ctg
 

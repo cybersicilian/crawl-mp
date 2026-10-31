@@ -23,6 +23,16 @@ recommended_jobs:
   - necromancer
   - ice elementalist
   - mystic
+  - preacher
+  - hermit
+  - archaeologist
+  - caravan
+  - collector
+  - rogue
+  - ronin
+  - apothecary
+  - billionaire
+  - neckbeard
 mutations:
   1:
     MUT_EXPLORE_REGEN: 1

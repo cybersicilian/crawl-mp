@@ -60,6 +60,8 @@ recommended_jobs:
   - conjurer
   - air elementalist
   - fire elementalist
+  - caravan
+  - philosopher
 
 walking_verb: Trott
 child_name: Foal

@@ -3,6 +3,7 @@
 
 #include "character-trait.h"
 #include "god-abil.h"
+#include "monster.h"
 #include "mutation.h"
 #include "ng-restr.h"
 #include "ng-setup.h"
@@ -153,6 +154,11 @@ TEST_CASE_METHOD(vellum_fixture, "Hermit and Slime Priest effects fit eligible s
             CAPTURE(sp, job);
             you = baseline;
             you.save = save;
+            // Start from a clean mutation slate: the fixture's own species
+            // mutations must not stack under the species being tested.
+            you.mutation.init(0);
+            you.innate_mutation.init(0);
+            you.temp_mutation.init(0);
             you.species = sp;
             you.char_class = job;
             you.religion = job == JOB_HERMIT ? GOD_RU : GOD_JIYVA;
@@ -256,4 +262,161 @@ TEST_CASE("Trait properties survive save serialization", "[character-trait]")
     player restored;
     restored.props.read(input);
     CHECK(get_character_trait(restored) == character_trait::ghost);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Ghost trait fades steadily but never below 1 HP",
+                 "[character-trait][ghost]")
+{
+    you.religion = GOD_NO_GOD;
+    REQUIRE(set_character_trait(you, character_trait::ghost) == trait_restriction::allowed);
+    you.hp_max = 30;
+    you.hp = 30;
+
+    // Nothing happens until a full fade period has elapsed.
+    CHECK(ghost_trait_fade(you, GHOST_FADE_TURNS * BASELINE_DELAY - 1) == 0);
+    CHECK(you.hp == 30);
+    // The next aut completes the period: exactly one point fades.
+    CHECK(ghost_trait_fade(you, 1) == 1);
+    CHECK(you.hp == 29);
+    // Long delays fade proportionally, with the remainder carried over.
+    CHECK(ghost_trait_fade(you, GHOST_FADE_TURNS * BASELINE_DELAY * 3) == 3);
+    CHECK(you.hp == 26);
+    CHECK(ghost_trait_fade(you, 0) == 0);
+
+    // Fading cannot finish a ghost off.
+    you.hp = 2;
+    CHECK(ghost_trait_fade(you, GHOST_FADE_TURNS * BASELINE_DELAY * 5) == 1);
+    CHECK(you.hp == 1);
+    CHECK(ghost_trait_fade(you, GHOST_FADE_TURNS * BASELINE_DELAY * 5) == 0);
+    CHECK(you.hp == 1);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Ghost trait harvests health from kills",
+                 "[character-trait][ghost]")
+{
+    you.religion = GOD_NO_GOD;
+    REQUIRE(set_character_trait(you, character_trait::ghost) == trait_restriction::allowed);
+    you.hp_max = 40;
+    you.hp = 10;
+
+    monster victim;
+    victim.type = MONS_ORC;
+    victim.set_hit_dice(4);
+
+    // 1 + HD, well under the cap of hp_max / 4 = 10.
+    CHECK(ghost_trait_harvest_amount(4, 40) == 5);
+    CHECK(ghost_trait_harvest(you, victim, true) == 5);
+    CHECK(you.hp == 15);
+
+    // Unrewarding kills restore nothing.
+    CHECK(ghost_trait_harvest(you, victim, false) == 0);
+    CHECK(you.hp == 15);
+
+    // Big victims are capped at a quarter of max HP ...
+    victim.set_hit_dice(30);
+    CHECK(ghost_trait_harvest_amount(30, 40) == 10);
+    CHECK(ghost_trait_harvest(you, victim, true) == 10);
+    CHECK(you.hp == 25);
+    // ... and the cap is never less than one point.
+    CHECK(ghost_trait_harvest_amount(30, 3) == 1);
+    CHECK(ghost_trait_harvest_amount(0, 40) == 1);
+
+    // Harvest never overfills.
+    you.hp = 38;
+    CHECK(ghost_trait_harvest(you, victim, true) == 2);
+    CHECK(you.hp == 40);
+    CHECK(ghost_trait_harvest(you, victim, true) == 0);
+    CHECK(you.hp == 40);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Ghost trait suppresses natural regeneration only",
+                 "[character-trait][ghost]")
+{
+    you.religion = GOD_NO_GOD;
+    you.duration[DUR_SICKNESS] = 0;
+    you.duration[DUR_TROGS_HAND] = 0;
+    you.hp_max = 30;
+    you.hp = 10;
+    REQUIRE(player_regenerates_hp());
+    REQUIRE(player_regen() > 0);
+
+    REQUIRE(set_character_trait(you, character_trait::ghost) == trait_restriction::allowed);
+    CHECK(trait_blocks_natural_regen(you));
+    CHECK_FALSE(player_regenerates_hp());
+    CHECK(player_regen() == 0);
+    // A ghost with nothing to rest for counts as rested for HP purposes.
+    you.magic_points = you.max_magic_points;
+    CHECK(you.is_sufficiently_rested(true));
+
+    // Divine healing still bypasses the gate, as it does for sickness.
+    you.duration[DUR_TROGS_HAND] = 100;
+    CHECK(player_regen() == 100);
+    you.duration[DUR_TROGS_HAND] = 0;
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Other traits neither fade nor harvest",
+                 "[character-trait][ghost]")
+{
+    you.religion = GOD_NO_GOD;
+    you.hp_max = 30;
+    monster victim;
+    victim.type = MONS_ORC;
+    victim.set_hit_dice(4);
+
+    for (const auto trait : {character_trait::none, character_trait::mummy,
+                             character_trait::zombie})
+    {
+        CAPTURE(static_cast<int>(trait));
+        REQUIRE(set_character_trait(you, trait) == trait_restriction::allowed);
+        you.hp = 20;
+        CHECK_FALSE(trait_blocks_natural_regen(you));
+        CHECK(ghost_trait_fade(you, GHOST_FADE_TURNS * BASELINE_DELAY * 4) == 0);
+        CHECK(you.hp == 20);
+        CHECK(ghost_trait_harvest(you, victim, true) == 0);
+        CHECK(you.hp == 20);
+        if (trait == character_trait::zombie)
+        {
+            // Zombies keep natural regeneration but lose it while enemies
+            // are in view; that remains their own, separate mechanism.
+            CHECK(regeneration_is_ever_inhibited());
+        }
+        else
+        {
+            CHECK_FALSE(regeneration_is_ever_inhibited());
+            CHECK(player_regenerates_hp());
+            CHECK(player_regen() > 0);
+        }
+    }
+}
+
+TEST_CASE("Ghost fade and harvest follow each party member's own trait",
+          "[character-trait][ghost]")
+{
+    player ghost;
+    ghost.species = SP_HUMAN;
+    ghost.char_class = JOB_FIGHTER;
+    ghost.hp_max = 20;
+    ghost.hp = 20;
+    player mortal;
+    mortal.species = SP_MINOTAUR;
+    mortal.char_class = JOB_FIGHTER;
+    mortal.hp_max = 20;
+    mortal.hp = 20;
+    REQUIRE(set_character_trait(ghost, character_trait::ghost) == trait_restriction::allowed);
+
+    CHECK(ghost_trait_fade(ghost, GHOST_FADE_TURNS * BASELINE_DELAY) == 1);
+    CHECK(ghost_trait_fade(mortal, GHOST_FADE_TURNS * BASELINE_DELAY) == 0);
+    CHECK(ghost.hp == 19);
+    CHECK(mortal.hp == 20);
+
+    monster victim;
+    victim.type = MONS_ORC;
+    victim.set_hit_dice(2);
+    mortal.hp = 10;
+    CHECK(ghost_trait_harvest(mortal, victim, true) == 0);
+    CHECK(mortal.hp == 10);
+    CHECK(ghost_trait_harvest(ghost, victim, true) == 1);
+    CHECK(ghost.hp == 20);
+    CHECK(trait_blocks_natural_regen(ghost));
+    CHECK_FALSE(trait_blocks_natural_regen(mortal));
 }

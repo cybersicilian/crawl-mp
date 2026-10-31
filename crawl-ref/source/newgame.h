@@ -37,6 +37,15 @@ weapon_type default_starting_weapon(const newgame_def& ng);
 
 string newgame_random_name();
 
+// Layout of the native species/background selection menus. Each group in
+// species-groups.h / job-groups.h occupies a column starting at a fixed row,
+// so the OuterMenu must be at least as tall as the longest column.
+constexpr int NEWGAME_MENU_MIN_ROWS = 20;
+// Rows needed by the tallest column (title row + every compiled-in entry).
+int newgame_menu_rows_needed(bool jobs);
+// The height actually passed to the OuterMenu: at least the minimum above.
+int newgame_menu_height(bool jobs);
+
 /*
  * A structure for grouping backgrounds by category.
  */

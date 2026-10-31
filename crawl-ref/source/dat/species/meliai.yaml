@@ -49,7 +49,7 @@ fake_mutations:
     short: poison vulnerability; no boots
   - long: You can smite enemies at the cost of temporary maximum health.
     short: innate smiting
-walking_verb: Flap
+walking_verb: Flapp
 recommended_jobs:
   - gladiator
   - monk

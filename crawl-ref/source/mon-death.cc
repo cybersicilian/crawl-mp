@@ -21,6 +21,7 @@
 #include "attitude-change.h"
 #include "beam.h"
 #include "bloodspatter.h"
+#include "character-trait.h"
 #include "cloud.h"
 #include "cluautil.h"
 #include "colour.h"
@@ -3712,6 +3713,21 @@ item_def* monster_die(monster& mons, killer_type killer,
     _player_on_kill_effects(mons, killer,
                             gives_player_xp || (mons.flags & MF_TESSERACT_SPAWN),
                             pet_kill);
+
+    // Ghost-trait harvest: only the player who personally made the kill feeds
+    // on it. Damage resolving during another party member's turn carries the
+    // credited slot, so route the heal to that member rather than to `you`.
+    if (YOU_KILL(killer) && gives_player_xp)
+    {
+        if (party::is_enabled() && credited_player_slot != -1
+            && credited_player_slot != party::active_slot())
+        {
+            party::scoped_player_context ctx(credited_player_slot);
+            ghost_trait_harvest(you, mons, true);
+        }
+        else
+            ghost_trait_harvest(you, mons, true);
+    }
 
     if (mons.has_ench(ENCH_RIMEBLIGHT) && !was_banished && !mons_reset)
     {

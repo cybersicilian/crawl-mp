@@ -2393,6 +2393,7 @@ ENDMAP
 #
 
 NAME:   caravan_mercenary_shop
+TAGS:   allow_dup extra shop transparent
 DEPTH:  D:4-, Depths, Orc, Elf, Shoals, Snake, Vaults
 WEIGHT: 1
 KFEAT:  S = mercenary shop

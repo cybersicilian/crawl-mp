@@ -11,6 +11,7 @@
 
 #include "player-reacts.h"
 #include "bunker.h"
+#include "character-trait.h"
 
 #include <algorithm>
 #include <cerrno>
@@ -1426,6 +1427,11 @@ void player_reacts()
         frigid_walls_damage(you.time_taken);
 
     _regenerate_hp_and_mp(you.time_taken);
+
+    // Ghost-trait characters slowly fade instead of regenerating. This runs
+    // for whichever party member is currently acting as `you`.
+    if (!crawl_state.disables[DIS_PLAYER_REGEN])
+        ghost_trait_fade(you, you.time_taken);
 
     // Update attunement of regeneration items if our hp/mp has refilled.
     _maybe_attune_regen_items();

@@ -49,6 +49,49 @@ MAP
   .....
 ENDMAP
 
+# Sealed forge-door variants. All entry vaults share the uniq_golemforge and
+# chance_golemforge tags set by golemforge_portal, so the per-level portal
+# chance stays a single roll no matter how many entry layouts exist.
+
+# A sealed iron gatehouse: two iron golem statues flank a runed door that
+# leads to the portal.
+NAME: portal_golemforge_entry_sealed_gate
+TAGS: transparent no_monster_gen
+DEPTH: Elf, Depths:1-4
+KFEAT: = = runed_door
+TILE:  G = dngn_statue_iron_golem
+COLOUR: v = darkgrey
+: golemforge_portal(_G)
+MAP
+.........
+.vvv.vvv.
+.vG...Gv.
+.v.vOv.v.
+.v.v=v.v.
+.vG...Gv.
+.vvv.vvv.
+.........
+ENDMAP
+
+# A forge hall: the door opens on a hall of iron anvil-blocks and grates
+# around a cold forge where the portal sits.
+NAME: portal_golemforge_entry_anvil_hall
+TAGS: transparent no_monster_gen
+DEPTH: Elf, Depths:1-4
+KFEAT: a = iron_grate
+TILE:  G = dngn_statue_iron
+COLOUR: v = darkgrey
+: golemforge_portal(_G)
+MAP
+ vvvvvvv
+ v..G..v
+ v.....v
+ va.O.av
+ v.....v
+ v..G..v
+ vvv+vvv
+ENDMAP
+
 default-depth: Forge
 
 NAME: golemforge_main

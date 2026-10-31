@@ -10,6 +10,7 @@
 #include "mon-ench.h"
 #include "mon-util.h"
 #include "monster.h"
+#include "options.h"
 #include "party.h"
 #include "player.h"
 #include "spl-kimjoy.h"
@@ -18,12 +19,17 @@
 #include "spl-util.h"
 #include "target.h"
 #include "test_vellum_fixture.h"
+#include "unwind.h"
 
 namespace
 {
 struct poison_spell_fixture : vellum_fixture
 {
     int old_max = env.max_mon_index;
+    // Rootspike and Last Mercy flash tiles; the test harness has no console
+    // or tile window, so keep animations off (as test_bloodcraft.cc does).
+    unwind_var<use_animations_type> no_animations{Options.use_animations,
+                                                  use_animations_type()};
     poison_spell_fixture()
     {
         init_monsters();

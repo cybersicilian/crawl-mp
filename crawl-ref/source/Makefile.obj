@@ -444,6 +444,8 @@ catch2-tests/test_bag_storage.o \
 catch2-tests/test_bag_menu.o \
 catch2-tests/test_autofight_weapon_swap.o \
 catch2-tests/test_golemforge.o \
+catch2-tests/test_curated_vaults.o \
+catch2-tests/test_newgame_layout.o \
 catch2-tests/test_mercenary_transit.o \
 catch2-tests/test_mercenary_roster.o \
 catch2-tests/test_mercenary.o \

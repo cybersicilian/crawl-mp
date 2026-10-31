@@ -514,3 +514,71 @@ TEST_CASE_METHOD(bloodcraft_fixture, "Saved reservations rebuild without healing
     REQUIRE(you.hp == 65);
     REQUIRE(bloodcraft::active_rite() == SPELL_NO_SPELL);
 }
+
+TEST_CASE_METHOD(bloodcraft_fixture, "Irit armour penalties to spell failure scale with spell level", "[bloodcraft][irit]")
+{
+    // Same body, same stats, same armour; only the species changes.
+    you.species = SP_HUMAN;
+    you.base_stats[STAT_STR] = 10;
+    you.base_stats[STAT_INT] = 10;
+    REQUIRE(spell_difficulty(SPELL_MAGIC_DART) == 1);
+    REQUIRE(spell_difficulty(SPELL_FIRE_STORM) == 9);
+    REQUIRE(player_armour_shield_spell_penalty() == 0);
+
+    const auto wear_ring_mail = [&]()
+    {
+        item_def& mail = you.inv[0];
+        mail.clear();
+        mail.base_type = OBJ_ARMOUR;
+        mail.sub_type = ARM_RING_MAIL;
+        mail.quantity = 1;
+        mail.link = 0;
+        mail.slot = 'a';
+        mail.pos = ITEM_IN_INVENTORY;
+        you.equipment.add(mail, SLOT_BODY_ARMOUR);
+        you.equipment.update();
+        REQUIRE(you.body_armour() == &mail);
+    };
+
+    SECTION("an untrained caster's low-level spell is easier for an Irit")
+    {
+        const int naked = raw_spell_fail(SPELL_MAGIC_DART);
+        wear_ring_mail();
+        const int penalty = player_armour_shield_spell_penalty();
+        REQUIRE(penalty > 0);
+        const int human = raw_spell_fail(SPELL_MAGIC_DART);
+
+        you.species = SP_IRIT;
+        // The armour itself encumbers an Irit exactly as much...
+        CHECK(player_armour_shield_spell_penalty() == penalty);
+        const int irit = raw_spell_fail(SPELL_MAGIC_DART);
+
+        // ...but a level 1 spell only pays (9 + 1) / 18 of it.
+        REQUIRE(human < 100);
+        REQUIRE(naked > 0);
+        CHECK(naked < irit);
+        CHECK(irit < human);
+    }
+
+    SECTION("a trained caster's level 9 spell pays the full penalty")
+    {
+        you.base_stats[STAT_INT] = 40;
+        set_skill_level(SK_CONJURATIONS, 27);
+        set_skill_level(SK_FIRE_MAGIC, 27);
+        set_skill_level(SK_SPELLCASTING, 27);
+        const int naked = raw_spell_fail(SPELL_FIRE_STORM);
+        wear_ring_mail();
+        REQUIRE(player_armour_shield_spell_penalty() > 0);
+        const int human = raw_spell_fail(SPELL_FIRE_STORM);
+
+        you.species = SP_IRIT;
+        const int irit = raw_spell_fail(SPELL_FIRE_STORM);
+
+        // (penalty * 18 + 9) / 18 is the unscaled penalty, so the species
+        // makes no difference at level 9 while the armour still does.
+        REQUIRE(naked > 0);
+        REQUIRE(human < 100);
+        CHECK(human > naked);
+        CHECK(irit == human);
+    }
+}

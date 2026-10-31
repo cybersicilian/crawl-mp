@@ -50,6 +50,9 @@ recommended_jobs:
   - conjurer
   - necromancer
   - ice elementalist
+  - sage
+  - archaeologist
+  - rogue
 recommended_weapons:
   - maces and flails
   - axes

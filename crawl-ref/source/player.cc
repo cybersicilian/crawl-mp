@@ -4927,11 +4927,14 @@ int get_real_mp(bool include_items)
 /// Does the player currently regenerate hp? Used for resting.
 bool player_regenerates_hp()
 {
+    // The ghost trait never regenerates naturally (it fades instead and is
+    // restored by kills); divine healing such as Trog's Hand still applies
+    // in player_regen() after this gate.
     return !regeneration_is_inhibited()
 #if TAG_MAJOR_VERSION == 34
     && !you.has_mutation(MUT_NO_REGENERATION)
 #endif
-    ;
+    && !trait_blocks_natural_regen(you);
 }
 
 bool player_regenerates_mp()

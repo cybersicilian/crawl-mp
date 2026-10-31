@@ -46,6 +46,8 @@ recommended_jobs:
   - fire elementalist
   - earth elementalist
   - alchemist
+  - sage
+  - slime priest
 
 walking_verb: Wriggl
 altar_action: curl up in front of

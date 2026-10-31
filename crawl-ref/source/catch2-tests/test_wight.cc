@@ -36,7 +36,9 @@ TEST_CASE("Standalone backgrounds use valid selection tiles", "[standalone-job-t
              tuple{JOB_APOTHECARY, TILEG_JOB_ALCHEMIST, TILEG_JOB_RECOMMENDED_ALCHEMIST},
              tuple{JOB_BILLIONAIRE, TILEG_JOB_WANDERER, TILEG_JOB_RECOMMENDED_WANDERER},
              tuple{JOB_NECKBEARD, TILEG_JOB_GLADIATOR, TILEG_JOB_RECOMMENDED_GLADIATOR},
-             tuple{JOB_PHILOSOPHER, TILEG_JOB_HEDGE_WIZARD, TILEG_JOB_RECOMMENDED_HEDGE_WIZARD}})
+             tuple{JOB_PHILOSOPHER, TILEG_JOB_HEDGE_WIZARD, TILEG_JOB_RECOMMENDED_HEDGE_WIZARD},
+             tuple{JOB_CARAVAN, TILEG_JOB_ARTIFICER, TILEG_JOB_RECOMMENDED_ARTIFICER},
+             tuple{JOB_COLLECTOR, TILEG_JOB_WANDERER, TILEG_JOB_RECOMMENDED_WANDERER}})
     {
         CHECK(tileidx_player_job(job, false) == normal);
         CHECK(tileidx_player_job(job, true) == recommended);

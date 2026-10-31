@@ -55,6 +55,12 @@ recommended_jobs:
   - alchemist
   - mystic
   - stalker
+  - preacher
+  - sage
+  - caravan
+  - rogue
+  - apothecary
+  - philosopher
 recommended_weapons:
   - short blades
 

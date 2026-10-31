@@ -338,3 +338,10 @@ A spectral remnant retains the abilities and equipment of its host species.
 Its insubstantial body resists certain hazards, and it resists negative energy,
 poison and torment. It does not inherit the Poltergeist's equipment-haunting
 abilities.
+
+A ghost's form is not self-sustaining: it never regenerates health on its own
+and slowly fades, losing one point of health every fifteen turns, though
+fading alone can never destroy it. Each creature a ghost personally slays
+restores health in proportion to the victim's strength, up to a quarter of the
+ghost's maximum at once. Divine healing and other external restoration work
+as usual.

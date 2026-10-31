@@ -54,6 +54,9 @@ recommended_jobs:
   - shapeshifter
   - wanderer
   - forgewright
+  - preacher
+  - caravan
+  - billionaire
 
 child_name: Pup
 orc_name: Hyenorc

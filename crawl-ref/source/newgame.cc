@@ -1161,6 +1161,57 @@ static void _mark_fully_random(newgame_def& ng, newgame_def& ng_choice,
 
 class UINewGameMenu;
 
+// The species and background menus lay each group out in a fixed column at a
+// fixed starting row (see species-groups.h and job-groups.h). Every group
+// needs one row for its title plus one row per entry; the menu must be tall
+// enough for the longest column or OuterMenu::add_button asserts.
+static int _group_rows_needed(const job_group& group)
+{
+    int shown = 0;
+    for (const job_type job : group.jobs)
+    {
+        if (job == JOB_UNKNOWN)
+            break; // list terminator, mirrors job_group::attach
+        ++shown;
+    }
+    return group.position.y + 1 + shown;
+}
+
+static int _group_rows_needed(const species_group& group)
+{
+    int shown = 0;
+    for (const species_type sp : group.species_list)
+    {
+        if (sp == SP_UNKNOWN)
+            break; // list terminator, mirrors species_group::attach
+        ++shown;
+    }
+    return group.position.y + 1 + shown;
+}
+
+int newgame_menu_rows_needed(bool jobs)
+{
+    int rows = 0;
+    if (jobs)
+    {
+        for (const job_group& group : job_groups)
+            rows = max(rows, _group_rows_needed(group));
+    }
+    else
+    {
+        for (const species_group& group : species_groups)
+            rows = max(rows, _group_rows_needed(group));
+    }
+    return rows;
+}
+
+int newgame_menu_height(bool jobs)
+{
+    // Never shrink below the historical layout, so sparse data still leaves
+    // room for the sub-menu navigation to link up as before.
+    return max(NEWGAME_MENU_MIN_ROWS, newgame_menu_rows_needed(jobs));
+}
+
 static void _construct_species_menu(const newgame_def& ng,
                                     const newgame_def& defaults,
                                     UINewGameMenu* ng_menu)
@@ -1221,7 +1272,8 @@ public:
 
         descriptions = make_shared<Switcher>();
 
-        m_main_items = make_shared<OuterMenu>(true, 3, 20);
+        m_main_items = make_shared<OuterMenu>(true, 3,
+                            newgame_menu_height(m_choice_type == C_JOB));
         m_main_items->menu_id = m_choice_type == C_JOB ?
             "background-main" : "species-main";
         m_main_items->set_margin_for_crt(1, 0);
