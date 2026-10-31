@@ -143,16 +143,16 @@ dialog#party_inspector_modal .party-insp-hero-meta { color: var(--sheet-quiet); 
 .party-insp-meter[data-threshold="low"] { --tr-meter-color: var(--ui-threat-high, #c2561f); }
 .party-insp-meter.is-low .party-insp-meter-value { color: var(--sheet-danger); }
 .party-insp-meter-value { font-variant-numeric: tabular-nums; color: var(--sheet-ink); }
-/* Twelve tracks: four attributes, three defenses, then the weapon on a full-width row so its
-   name never breaks mid-word. */
+/* Twelve tracks: numeric tiles four to a row (attributes, then level cap and defenses), and the
+   weapon on a full-width row so its name never breaks mid-word. The weapon tile is marked by
+   class, not position, so adding a numeric tile cannot push it into a single track. */
 dialog#party_inspector_modal .party-insp-stat-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 5px; align-content: start; }
-dialog#party_inspector_modal .party-insp-stat-box:nth-child(-n+4) { grid-column: span 3; }
-dialog#party_inspector_modal .party-insp-stat-box:nth-child(n+5):nth-child(-n+7) { grid-column: span 4; }
-dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) { grid-column: span 12; }
+dialog#party_inspector_modal .party-insp-stat-box { grid-column: span 3; }
+dialog#party_inspector_modal .party-insp-stat-box.party-insp-stat-weapon { grid-column: span 12; }
 dialog#party_inspector_modal .party-insp-stat-box { padding: 6px 8px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-paper); }
 dialog#party_inspector_modal .party-insp-stat-box .lbl { display: block; color: var(--sheet-quiet); font: 600 9px/1.5 var(--sheet-copy-font); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
 dialog#party_inspector_modal .party-insp-stat-box .val { display: block; min-width: 0; color: var(--sheet-ink); font: 700 15px/1.3 var(--sheet-title-font); font-variant-numeric: tabular-nums; overflow-wrap: break-word; }
-dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) .val { font-size: 13px; line-height: 1.3; }
+dialog#party_inspector_modal .party-insp-stat-box.party-insp-stat-weapon .val { font-size: 13px; line-height: 1.3; }
 dialog#party_inspector_modal .party-insp-aut-strip {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin-top: 10px;
     padding: 8px 16px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-inset); color: var(--sheet-ink); font-size: 11px;

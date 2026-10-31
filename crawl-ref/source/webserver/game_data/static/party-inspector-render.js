@@ -220,6 +220,8 @@ function ($, model, icons, properties, equipment, powers, skillTraining, actions
         for (var si = 0; si < stat_items.length; ++si)
         {
             var $sb = $("<div class='party-insp-stat-box'></div>");
+            if (stat_items[si].lbl === "WEAPON")
+                $sb.addClass("party-insp-stat-weapon");
             $sb.append($("<span class='lbl'></span>").text(stat_items[si].lbl));
             var $statValue = $("<span class='val'></span>");
             if (stat_items[si].lbl === "WEAPON")
