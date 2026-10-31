@@ -2,7 +2,7 @@
 import secrets
 import json
 
-from webtiles import party_roster
+from webtiles import party_roster, system_one
 
 
 def member(room, username):
@@ -30,6 +30,7 @@ def allowed(room, socket, token=None):
 def describe(room, socket):
     result = party_roster.describe(room)
     result.pop("invite_token", None)
+    result["ai_available"] = system_one.configured()
     if member(room, socket.username):
         result["invite_token"] = room.get("invite_token", "")
     return result

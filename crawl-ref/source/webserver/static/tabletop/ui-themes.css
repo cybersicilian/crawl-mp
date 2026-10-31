@@ -283,6 +283,23 @@ html[data-ui-theme="folio"] :is(#ui-stack .workflow-surface, #dcss_rich_tooltip,
     --ui-role-support: #2d633a;
     --ui-role-scout: #286065;
 }
+/* Explanatory cards mount inside whichever dialog opened them (client-tooltips.js appends
+   the card to dialog[open]); tooltip-content.css pins their --tt-* ink to the page tokens.
+   Folio cards stay parchment even over dark chrome: mirror the root page tokens above. */
+html[data-ui-theme="folio"] :is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip,
+    .dcss-nested-tip, .dcss-tooltip-card, .lobby-tooltip) {
+    --ui-page: #eee3cc;
+    --ui-page-raised: #fcf5e6;
+    --ui-page-inset: #e2d3b5;
+    --ui-ink: #30261e;
+    --ui-quiet: #685742;
+    --ui-rule: #ac9470;
+    --ui-chapter: #7a352d;
+    --ui-hover: #e4d2ad;
+    --ui-good: #2d633a;
+    --ui-paper: repeating-linear-gradient(12deg, #43301c04 0 1px, transparent 1px 5px),
+        linear-gradient(110deg, var(--ui-page-raised), var(--ui-page));
+}
 html[data-ui-theme="folio"] :is(.folio-equipment.is-crpg-layout, .tr-on-panel) {
     --ui-focus: #f0d29a;
     --ui-hero: #f5c96a; --ui-hero-ink: #2a1c08; --ui-ally: #86cfa5; --ui-enemy: #ff8f80; --ui-neutral: #bfb5a2;

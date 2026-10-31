@@ -317,9 +317,11 @@ class CrawlProcessHandlerBase(object):
         self.conn.send_message(utf8(json_encode(packet)))
         return True
 
+
     def _probe_native_activity(self, request_id):
         if self.conn and self.conn.open:
             self.conn.send_message(utf8(json_encode(dict(msg="party_activity_probe", request_id=request_id))))
+
 
     def _restore_native_prompt(self):
         if self.conn and self.conn.open:
@@ -380,9 +382,7 @@ class CrawlProcessHandlerBase(object):
                 request = payload.get("activity_id")
                 if type(request) is int and self.activity_pump.command_boundary(request):
                     CrawlProcessHandlerBase.publish_party_status(self)
-                    # Resume automation at its real completion, after the rest
-                    # of this socket batch refreshes personal eligibility. Yield
-                    # to the loop so queued stop/input events can run as well.
+                    # Refresh personal eligibility and allow queued input first.
                     IOLoop.current().add_callback(self.activity_pump.tick)
                 return
             if payload.get("msg") == "party_state" and getattr(self, "activity_pump", None):

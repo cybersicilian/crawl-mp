@@ -20,27 +20,15 @@ function ($, edges, regions, tiles, map, enums, texturePack) {
         var idx = index(cell);
         return idx === null ? null : types.get(idx) || (tiles.get_img(idx) === "wall" ? "wall" : "other");
     }
-    // Neighbour kinds are memoized per position; a native packet drops the
-    // entry for each changed position, since a kind depends only on its own cell.
-    var kinds = new Map();
-    function kindAt(x, y) {
-        var key = x + ":" + y, value = kinds.get(key);
-        if (value === undefined) {
-            value = kind(map.get(x, y));
-            if (kinds.size > 16384) kinds.clear();
-            kinds.set(key, value);
-        }
-        return value;
-    }
     function connects(self, other) { return self === "wall" ? other === "wall" : other !== "wall"; }
     function draw(renderer, cx, cy, x, y) {
         if (!texturePack.illustrated()) return;
         if (!Number.isInteger(cx) || !Number.isInteger(cy)) return;
         var cell = map.get(cx, cy);
         if (!types.has(index(cell))) return;
-        var own = kindAt(cx, cy);
+        var own = kind(cell);
         if (!styles[own]) return;
-        var neighbours = edges.sides.map(function (side) { return kindAt(cx + side.x, cy + side.y); });
+        var neighbours = edges.sides.map(function (side) { return kind(map.get(cx + side.x, cy + side.y)); });
         var mask = edges.mask(own, neighbours, connects), size = renderer.scaled_size();
         edges.paint(renderer.ctx, { x: x, y: y, width: size.width, height: size.height }, mask, styles[own]);
     }
@@ -48,7 +36,6 @@ function ($, edges, regions, tiles, map, enums, texturePack) {
         if (!texturePack.illustrated()) return;
         (changed || []).forEach(function (loc) {
             var key = loc.x + ":" + loc.y, value = kind(map.get(loc.x, loc.y));
-            kinds.delete(key);
             if (known.get(key) !== value) {
                 known.set(key, value);
                 edges.sides.forEach(function (side) {
@@ -57,6 +44,6 @@ function ($, edges, regions, tiles, map, enums, texturePack) {
                 });
             }
         });
-    }).on("game_init.terrainEdges game_cleanup.terrainEdges map_knowledge_cleared.terrainEdges texture_pack_changed.terrainEdges", function () { known.clear(); kinds.clear(); });
+    }).on("game_init.terrainEdges game_cleanup.terrainEdges map_knowledge_cleared.terrainEdges texture_pack_changed.terrainEdges", function () { known.clear(); });
     return { draw: draw };
 });

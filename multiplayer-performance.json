@@ -1,0 +1,18 @@
+{
+  "ready": true,
+  "baseline": "/opt/dcss/releases/input-completion-01a17b3b-r2",
+  "release": "/opt/dcss/releases/multiplayer-performance-01a17ea4",
+  "runtime_files": {
+    "webserver/webtiles/player_stream.py": "a7c2382667ffb608403157f843816f7ba6d8b965726af3314ae896ea6313b940",
+    "webserver/webtiles/player_update.py": "e66fd391d534bdf38ca5273168253df6bcdd2d68676ea2791dec32887135952e",
+    "webserver/webtiles/state_transport.py": "c45a3364e3c63ea92c1499ebd8fe5f65e732ce4a97a41f4110a8e1bfc4fd3768"
+  },
+  "unchanged_existing_files": 12725,
+  "backend_tests_passed": true,
+  "native_test_passed": true,
+  "native_rebuilt": false,
+  "native_sha256": "9ef564707993b7f23aa55d34bd46d306a1d8f99196e485ad8508d882ec973ad8",
+  "existing_saves_used_by_tests": false,
+  "private_qa": "/tmp/perf-qa-v3ehtvg3",
+  "production_activated": false
+}

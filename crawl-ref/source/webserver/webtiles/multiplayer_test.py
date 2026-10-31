@@ -373,6 +373,7 @@ class MultiplayerTest(unittest.TestCase):
         CrawlProcessHandler.handle_input(game, json.dumps(dict(msg="key", keycode=27)), self.guest)
         self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
 
+
     def command_game(self):
         streams = SimpleNamespace(native_ready=True)
         pump = ActivityPump(self.control, streams, lambda: {0, 1}, Mock())
@@ -479,7 +480,7 @@ class PendingStartTest(unittest.TestCase):
         game.process = game.conn = game.kill_timeout = None
         game._process_hup_timeout, game._stale_pid, game._stale_lockfile = hup, 4242, "lock"
         game._purging_timer, game._receivers, game.end_callback = 10, set(), Mock()
-        game.idle_checker, game.activity_timer, game.ai_timer, game.ai_party = Mock(), Mock(), Mock(), Mock()
+        game.idle_checker, game.activity_timer = Mock(), Mock()
         game.idle_checker.is_running.return_value = True
         return game
 
@@ -488,9 +489,8 @@ class PendingStartTest(unittest.TestCase):
         with patch("webtiles.process_handler.IOLoop.current") as loop:
             self.assertTrue(game.release_unstarted())
         loop.return_value.remove_timeout.assert_called_once_with("hup")
-        for timer in (game.idle_checker, game.activity_timer, game.ai_timer):
+        for timer in (game.idle_checker, game.activity_timer):
             timer.stop.assert_called_once()
-        game.ai_party.close.assert_called_once()
         game.end_callback.assert_called_once()
         self.assertIsNone(game._stale_pid)
         self.assertIsNone(game._process_hup_timeout)

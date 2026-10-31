@@ -248,13 +248,6 @@ protected:
     int m_ai_revisions[4] = {};
     int m_ai_slots = 0;
     bool m_personal_dirty = true;
-    // Last party_state / ai_state frame sent to each hero's personal stream.
-    // A byte-identical projection is skipped (the server also dedups, but
-    // the socket and fan-out cost is native).
-    string m_personal_party_frames[4];
-    string m_personal_ai_frames[4];
-    string* m_frame_sink = nullptr;
-    bool m_raw_frame = false;
     struct personal_view_cache;
     struct personal_floor_cache;
     vector<std::shared_ptr<personal_view_cache>> m_personal_views;
@@ -380,8 +373,6 @@ protected:
     void _write_item_training(const item_def &item);
     void _send_personal_views(bool force_full = false, int force_slot = -1);
     void _clear_personal_views();
-    void _send_captured_frame(string& frame);
-    void _reset_personal_frames();
     string _personal_cell_json(const coord_def& cell);
 };
 

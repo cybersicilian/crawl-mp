@@ -11,7 +11,7 @@ function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_s
     {
         var image = images[id];
         if (!image || image.isConnected === false)
-            images[id] = image = (typeof document === "object" && document.getElementById ? document.getElementById(id) : $("#" + id)[0]) || undefined;
+            images[id] = image = document.getElementById(id) || undefined;
         return art.image(id, image);
     }
 

@@ -103,7 +103,7 @@ test('native atlas sampling stays at 32 pixels across device scales and keeps th
         const textures = load('game_data/static/cell-renderer-textures.js', {
             jquery: () => [original], './tileinfo-dngn': tiles, './options': { get: () => false },
             './tile-art-direction': { image(id, source) { assert.equal(id, 'floor'); assert.equal(source, original); return selectedPack; } }
-        }, { window: { devicePixelRatio: ratio } });
+        }, { window: { devicePixelRatio: ratio }, document: { getElementById: id => id === 'floor' ? original : null } });
         const sample = Object.assign({ ctx: { drawImage: (...args) => calls.push(args) },
             x_scale: 1 / ratio, y_scale: 1 / ratio, current_left_overlap: 0, current_sy: 0 }, textures);
         sample.draw_dngn(1, 0, 0);

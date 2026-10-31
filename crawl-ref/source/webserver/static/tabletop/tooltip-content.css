@@ -8,6 +8,16 @@
  * Cards open on hover, tap and keyboard focus; icons retain visible text labels.
  * Materials come from --ui-* tokens (ui-themes.css) with --tt-* fallbacks.
  */
+/* Cards are appended to the dialog that opened them, so a host that remaps --tt-ink or
+   --tt-folio-* for a dark sheet (rpg-character-builder.css) would otherwise print light
+   ink on this parchment. Pin the card's own ink to the page tokens. */
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    --tt-ink: var(--ui-ink, var(--art-ink, #2b241c));
+    --tt-ink-soft: var(--ui-quiet, var(--art-ink-muted, #5c4d3c));
+    --tt-folio-ink: var(--ui-ink, var(--art-ink, #29251e));
+    --tt-folio-muted: var(--ui-quiet, var(--art-ink-muted, #665c49));
+    --tt-folio-crimson: var(--ui-chapter, var(--art-teal-ink, #943824));
+}
 :is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
     max-width: min(var(--tt-tip-width, 360px), calc(100vw - 16px));
     min-width: min(220px, calc(100vw - 16px));

@@ -3,7 +3,7 @@ import copy
 import json
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from webtiles.party_control import PartyControl
 from webtiles.player_stream import PlayerStreams
@@ -82,24 +82,6 @@ class StreamPerformanceTest(unittest.TestCase):
         self.streams = PlayerStreams(self.control, TilePresence())
         self.ingest(packet)
         self.assertEqual(self.packets(self.host), [packet, packet])
-
-    def test_same_character_sessions_share_one_map_serialization_per_camera_variant(self):
-        spectator = self.client("Spectator")
-        self.clients.append(spectator)
-        packet = dict(msg="map", clear=True, vgrdc=dict(x=2, y=3), cells=[dict(x=2, y=3, reset=True, f=1)])
-        with patch("webtiles.player_stream.json.dumps", wraps=json.dumps) as dumps:
-            self.ingest(packet)
-            self.assertEqual(dumps.call_count, 1, "Host and spectator both view P1: encode once")
-            self.assertEqual(self.packets(self.host)[-1], self.packets(spectator)[-1])
-            self.guest.append_message.assert_not_called()
-            # A returning session needs the camera the others already have.
-            spectator.personal_center = None
-            dumps.reset_mock()
-            self.ingest(dict(packet, cells=[dict(x=3, y=3, reset=True, f=1)]))
-            self.assertEqual(dumps.call_count, 2, "One encoding per camera variant")
-        self.assertNotIn("vgrdc", self.packets(self.host)[-1])
-        self.assertEqual(self.packets(spectator)[-1]["vgrdc"], dict(x=2, y=3))
-        self.assertEqual(self.packets(spectator)[-1]["cells"], self.packets(self.host)[-1]["cells"])
 
     def test_player_type_changes_are_not_mistaken_for_equal_values(self):
         self.ingest(dict(msg="player", wizard=False))

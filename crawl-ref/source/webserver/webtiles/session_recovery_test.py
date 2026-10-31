@@ -177,13 +177,13 @@ class SessionRecoveryTest(unittest.TestCase):
         self.assertTrue(session_recovery.reclaim(self.new, [self.old]))
         self.assertIs(self.new.process, self.process)
 
-    def test_normal_close_without_a_connected_human_stops_when_the_grace_ends(self):
-        # A code-1000 close is Tornado's ping-timeout echo in practice, so the
-        # engine gets the grace period; with no human left (AI seats and
-        # anonymous slots do not count) it stops as soon as that expires.
+    def test_normal_close_without_a_connected_human_stops_after_the_grace_period(self):
+        # Code 1000 also follows Tornado's ping-timeout close, so even a lone
+        # host gets the reconnect grace; the expedition stops once it lapses.
         for connected, ai_slots in ((set(), set()), ({None}, set()), ({2}, {2})):
             with self.subTest(connected=connected, ai_slots=ai_slots):
                 self.process.stop.reset_mock()
+                self.old.reconnect_timeout = None
                 self.close_owner(connected=connected, ai_slots=ai_slots)
                 self.process.stop.assert_not_called()
                 self.assertIsNotNone(self.old.reconnect_timeout)
@@ -199,7 +199,8 @@ class SessionRecoveryTest(unittest.TestCase):
     def test_server_shutdown_still_stops_even_with_connected_teammates(self):
         self.close_owner(code=1001)
         self.process.stop.reset_mock()
-        with patch("webtiles.ws_handler.shutting_down", True):
+        with patch("webtiles.ws_handler.shutting_down", True), \
+                patch("webtiles.ws_handler._schedule_party_presence_check"):
             CrawlWebSocket.on_close(self.old)
         self.process.stop.assert_called_once()
 

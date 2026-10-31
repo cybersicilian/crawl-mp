@@ -1091,6 +1091,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             for r in PARTY_ROOMS.values():
                 if r.get("host", "").lower() == self.username.lower() and r.get("status") == "launched":
                     r["status"] = "staging"
+                    # The saved-party roster is staged once the record's final
+                    # snapshot has been ingested (_on_record_finished).
                     room_changed = True
             # Every solo game end used to re-query the chronicle and push the
             # room list to all lobby sockets even when nothing changed. The
@@ -1131,34 +1133,26 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         except Exception:
             self.logger.warning("Failed to close the expedition record", exc_info=True)
             return
-        if game and self.username:
-            self._stage_saved_rooms(game)
+        self._stage_saved_party(game)
         if (reason in {"crash", "error"} and game and self.username
                 and game["owner"].lower() == self.username.lower()):
             IOLoop.current().spawn_callback(self._send_game_recovery, game, report_url)
 
-    def _stage_saved_rooms(self, game):
-        """Offer the finished expedition's checkpoint in its host's room.
-
-        Runs after the record was ingested and closed, so the staged roster
-        reflects the final snapshot. The room is the one this expedition was
-        launched from and must still be staging; a fresh room the host opened
-        meanwhile is left alone."""
-        if not game_library.save_files(game):
+    def _stage_saved_party(self, game):
+        """Offer the finished expedition's save as the host's staged party."""
+        if not (game and self.username):
             return
         changed = False
-        for room in PARTY_ROOMS.values():
-            if (room.get("host", "").lower() != self.username.lower()
-                    or room.get("status") != "staging"
-                    or room.get("expedition_id") != game["id"]):
+        for r in PARTY_ROOMS.values():
+            if (r.get("host", "").lower() != self.username.lower() or r.get("status") != "staging"
+                    or r.get("expedition_id") not in (None, game["id"])):
                 continue
             try:
-                room.update(party_saved.staged(game, room, DEFAULT_PARTY_SLOTS))
-            except ValueError:
-                self.logger.warning("Could not stage checkpoint %s in room %s",
-                                    game["id"], room.get("room_id"), exc_info=True)
-                continue
-            changed = True
+                if game_library.save_files(game):
+                    r.update(party_saved.staged(game, r, DEFAULT_PARTY_SLOTS))
+                    changed = True
+            except Exception:
+                self.logger.warning("Could not stage the saved party", exc_info=True)
         if changed:
             broadcast_party_rooms()
 

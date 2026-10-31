@@ -11,6 +11,7 @@ from webtiles.player_update import merge_player, player_update
 
 
 class PlayerStreams:
+    bootstrap_order = ("version", "options", "layout")
     shared = {"version", "options", "set_option", "layout"}
     projected = {"map", "player", "party_state", "record_identity"}
     global_member_fields = {"hp", "hp_max", "mp", "mp_max", "xl_cap", "alive", "ghost_haunting", "zot_clock", "bribe_fund", "banes"}
