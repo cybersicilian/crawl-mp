@@ -472,6 +472,7 @@ catch2-tests/test_equipment_matrix.o \
 catch2-tests/test_party_trade.o \
 catch2-tests/test_party_session.o \
 catch2-tests/test_party_friendly_fire.o \
+catch2-tests/test_party_tally.o \
 catch2-tests/test_coop_content.o \
 catch2-tests/test_mon-util.o \
 catch2-tests/test_ng-init-branches.o \

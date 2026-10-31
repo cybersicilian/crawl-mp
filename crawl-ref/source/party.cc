@@ -10,6 +10,7 @@
 #include "ng-restr.h"
 
 #include "party.h"
+#include "party-tally.h"
 #include "mercenary.h"
 
 #include <algorithm>
@@ -113,6 +114,15 @@ namespace party
     static game_modifiers::traps s_trap_mode = game_modifiers::traps::normal;
     static int s_damage_dealt[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
     static int s_support_acts[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
+    static int s_citation_points[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
+    // Since the last floor change, for the Floor Tasting Note.
+    static int s_floor_damage[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
+    static int s_floor_support[MAX_PARTY_PLAYERS] = { 0, 0, 0, 0 };
+    // Automatic seasoning effects are not a hero's choice to help.
+    static bool s_suppress_support_credit = false;
+    // Raising a fallen teammate outweighs a single heal or buff.
+    static const int REVIVE_SUPPORT_ACTS = 3;
+    static const int FLOOR_FIRST_CITATION = 100;
     static string s_last_tasting_floor;
     static bool s_downed[MAX_PARTY_PLAYERS] = { false, false, false, false };
     static bool s_acted_this_round[MAX_PARTY_PLAYERS] = { false, false, false, false };
@@ -309,6 +319,9 @@ namespace party
             s_proxy_mindex[i] = NON_MONSTER;
             s_damage_dealt[i] = 0;
             s_support_acts[i] = 0;
+            s_citation_points[i] = 0;
+            s_floor_damage[i] = 0;
+            s_floor_support[i] = 0;
         }
         s_world_aut_clock = 0;
         s_active_slot = 0;
@@ -892,6 +905,11 @@ namespace party
         return s_seasoning_heavy_pebbles;
     }
 
+    void set_seasoning_heavy_pebbles(bool enabled)
+    {
+        s_seasoning_heavy_pebbles = enabled;
+    }
+
     bool has_seasoning_soul_tether()
     {
         return s_seasoning_soul_tether;
@@ -912,23 +930,130 @@ namespace party
         return (slot >= 0 && slot < MAX_PARTY_PLAYERS) ? s_support_acts[slot] : 0;
     }
 
+    int slot_citation_points(int slot)
+    {
+        return (slot >= 0 && slot < MAX_PARTY_PLAYERS) ? s_citation_points[slot] : 0;
+    }
+
     std::string slot_mvp_title(int slot)
     {
         if (slot < 0 || slot >= s_player_count)
             return "Sous-Cook";
-        int top_dmg_slot = 0, top_sup_slot = 0;
+        int top_dmg_slot = 0, top_sup_slot = 0, top_cite_slot = 0;
         for (int i = 1; i < s_player_count; ++i)
         {
             if (s_damage_dealt[i] > s_damage_dealt[top_dmg_slot])
                 top_dmg_slot = i;
             if (s_support_acts[i] > s_support_acts[top_sup_slot])
                 top_sup_slot = i;
+            if (s_citation_points[i] > s_citation_points[top_cite_slot])
+                top_cite_slot = i;
         }
         if (slot == top_sup_slot && s_support_acts[slot] > 0)
             return "Master Ladler";
         if (slot == top_dmg_slot)
             return "Head Butcher";
+        if (slot == top_cite_slot && s_citation_points[slot] > 0)
+            return "Head Forager";
         return "Pot Stirrer";
+    }
+
+    static void _credit_support(int acts)
+    {
+        if (!coop_content::enabled() || s_suppress_support_credit)
+            return;
+        s_support_acts[s_active_slot] += acts;
+        s_floor_support[s_active_slot] += acts;
+    }
+
+    static void _award_citation(int slot, int points, bool pebble_doubled,
+                                const string &reason)
+    {
+        if (!coop_content::enabled() || slot < 0 || slot >= s_player_count
+            || points <= 0)
+        {
+            return;
+        }
+        if (pebble_doubled && s_seasoning_heavy_pebbles)
+            points *= 2;
+        s_citation_points[slot] += points;
+        mprf(MSGCH_INTRINSIC_GAIN, "Chef's Citation: %s, %s (+%d%s).",
+             s_players[slot].your_name.c_str(), reason.c_str(), points,
+             pebble_doubled && s_seasoning_heavy_pebbles
+                 ? ", Heavy Pebbles" : "");
+    }
+
+    void award_item_citation(const item_def &item, int value_score)
+    {
+        if (!coop_content::enabled())
+            return;
+        const bool relic = item.base_type == OBJ_RUNES || is_artefact(item);
+        _award_citation(s_active_slot, value_score, relic,
+                        "found " + item.name(DESC_A, false, true));
+    }
+
+    static const char *const DAMAGE_TALLY_KEY = "party_damage_dealt";
+    static const char *const SUPPORT_TALLY_KEY = "party_support_acts";
+    static const char *const CITATION_TALLY_KEY = "party_citation_points";
+    static const char *const FLOOR_DAMAGE_TALLY_KEY = "party_floor_damage";
+    static const char *const FLOOR_SUPPORT_TALLY_KEY = "party_floor_support";
+    static const char *const FLOOR_FIRSTS_KEY = "party_floor_firsts";
+    static const char *const TASTING_FLOOR_KEY = "party_tasting_floor";
+
+    void save_tallies()
+    {
+        for (int i = 0; i < s_player_count; ++i)
+        {
+            auto &props = s_players[i].props;
+            props[DAMAGE_TALLY_KEY] = s_damage_dealt[i];
+            props[SUPPORT_TALLY_KEY] = s_support_acts[i];
+            props[CITATION_TALLY_KEY] = s_citation_points[i];
+            props[FLOOR_DAMAGE_TALLY_KEY] = s_floor_damage[i];
+            props[FLOOR_SUPPORT_TALLY_KEY] = s_floor_support[i];
+        }
+        s_players[0].props[TASTING_FLOOR_KEY] = s_last_tasting_floor;
+    }
+
+    static int _saved_tally(const player &p, const char *key)
+    {
+        return p.props.exists(key) ? p.props[key].get_int() : 0;
+    }
+
+    void restore_tallies()
+    {
+        for (int i = 0; i < s_player_count; ++i)
+        {
+            const player &p = s_players[i];
+            s_damage_dealt[i] = _saved_tally(p, DAMAGE_TALLY_KEY);
+            s_support_acts[i] = _saved_tally(p, SUPPORT_TALLY_KEY);
+            s_citation_points[i] = _saved_tally(p, CITATION_TALLY_KEY);
+            s_floor_damage[i] = _saved_tally(p, FLOOR_DAMAGE_TALLY_KEY);
+            s_floor_support[i] = _saved_tally(p, FLOOR_SUPPORT_TALLY_KEY);
+        }
+        if (s_players[0].props.exists(TASTING_FLOOR_KEY))
+        {
+            s_last_tasting_floor =
+                s_players[0].props[TASTING_FLOOR_KEY].get_string();
+        }
+
+        // Saves from before floor claims existed: every floor a hero has
+        // already seen is taken, with no claimant.
+        if (is_enabled() && !s_players[0].props.exists(FLOOR_FIRSTS_KEY))
+        {
+            auto &firsts = s_players[0].props[FLOOR_FIRSTS_KEY].get_table();
+            for (int i = 0; i < s_player_count; ++i)
+            {
+                // player::set_level_visited's key in files.cc.
+                if (!s_players[i].props.exists("visited_levels"))
+                    continue;
+                for (const auto &entry
+                     : s_players[i].props["visited_levels"].get_table())
+                {
+                    if (!firsts.exists(entry.first))
+                        firsts[entry.first] = -1;
+                }
+            }
+        }
     }
 
     bool simultaneous_turns_enabled()
@@ -1859,6 +1984,9 @@ namespace party
             did_effect = true;
         }
 
+        if (did_effect && slot != s_active_slot)
+            _credit_support(1);
+
         if (did_effect && msg_prefix && *msg_prefix)
             mprf(MSGCH_RECOVERY, "%s %s!", msg_prefix, p.your_name.c_str());
 
@@ -2320,6 +2448,7 @@ namespace party
             _restore_downed_member(i, 1, 3, 3);
             if (s_seasoning_soul_tether)
             {
+                unwind_bool automatic(s_suppress_support_credit, true);
                 heal_or_buff_party_member(i, 0, DUR_MIGHT, 12, false);
                 heal_or_buff_party_member(i, 0, DUR_HASTE, 10, false);
             }
@@ -2396,20 +2525,41 @@ namespace party
         const string cur_floor = level_id(active.where_are_you, active.depth).describe();
         if (!s_last_tasting_floor.empty() && s_last_tasting_floor != cur_floor)
         {
-            int top_slot = 0;
+            int top_slot = 0, top_sup_slot = 0;
             for (int i = 1; i < s_player_count; ++i)
             {
-                if (s_damage_dealt[i] > s_damage_dealt[top_slot])
+                if (s_floor_damage[i] > s_floor_damage[top_slot])
                     top_slot = i;
+                if (s_floor_support[i] > s_floor_support[top_sup_slot])
+                    top_sup_slot = i;
             }
-            if (s_damage_dealt[top_slot] > 0)
+            if (s_floor_damage[top_slot] > 0)
             {
+                const string ladler = s_floor_support[top_sup_slot] <= 0 ? ""
+                    : make_stringf("; Master Ladler: %s (%d support)",
+                                   s_players[top_sup_slot].your_name.c_str(),
+                                   s_floor_support[top_sup_slot]);
                 mprf(MSGCH_INTRINSIC_GAIN,
-                     "Floor Tasting Note (%s) — Head Butcher: %s (%d dmg dealt)%s",
+                     "Floor Tasting Note (%s) — Head Butcher: %s (%d dmg dealt)%s%s",
                      s_last_tasting_floor.c_str(),
                      s_players[top_slot].your_name.c_str(),
-                     s_damage_dealt[top_slot],
+                     s_floor_damage[top_slot], ladler.c_str(),
                      s_seasoning_fast_boil ? " [Fast Boil +25%]" : "");
+            }
+            for (int i = 0; i < MAX_PARTY_PLAYERS; ++i)
+                s_floor_damage[i] = s_floor_support[i] = 0;
+        }
+
+        // The first hero to reach a floor claims it. The starting floor, and
+        // saves from before tallies persisted, only record the claim.
+        auto &firsts = s_players[0].props[FLOOR_FIRSTS_KEY].get_table();
+        if (!firsts.exists(cur_floor))
+        {
+            firsts[cur_floor] = s_active_slot;
+            if (!s_last_tasting_floor.empty())
+            {
+                _award_citation(s_active_slot, FLOOR_FIRST_CITATION, true,
+                                "first taste of " + cur_floor);
             }
         }
         s_last_tasting_floor = cur_floor;
@@ -2894,7 +3044,10 @@ namespace party
 
         const int attacker_slot = active_slot();
         if (attacker_slot >= 0 && attacker_slot < MAX_PARTY_PLAYERS)
+        {
             s_damage_dealt[attacker_slot] += damage_done;
+            s_floor_damage[attacker_slot] += damage_done;
+        }
         const player &active = s_players[attacker_slot];
 
         if (s_seasoning_chaotic_ladle && one_chance_in(22))
@@ -2911,6 +3064,7 @@ namespace party
                     DUR_BRILLIANCE, DUR_SWIFTNESS
                 };
                 const duration_type chosen = boons[random2(ARRAYSZ(boons))];
+                unwind_bool automatic(s_suppress_support_credit, true);
                 heal_or_buff_party_member(boon_slot, 3 + random2(5), chosen,
                                           random_range(6, 11), false);
                 mprf(MSGCH_GOD,
@@ -3452,7 +3606,12 @@ namespace party
             _restore_downed_member(i, 1, 2, 2);
             _record_spawn_place(p);
 
-            heal_or_buff_party_member(i, 0, DUR_DIVINE_SHIELD, 6, true);
+            {
+                // The revival itself carries the credit.
+                unwind_bool revival(s_suppress_support_credit, true);
+                heal_or_buff_party_member(i, 0, DUR_DIVINE_SHIELD, 6, true);
+            }
+            _credit_support(REVIVE_SUPPORT_ACTS);
             place_cloud(CLOUD_TLOC_ENERGY, pos, 3 + random2(4), &you);
 
             mprf(MSGCH_RECOVERY,
@@ -3798,6 +3957,7 @@ namespace party
 
             player &p = s_players[i];
             _restore_downed_member(i, hp_pct, 100, 4, true);
+            _credit_support(REVIVE_SUPPORT_ACTS);
             sync_all_proxies();
             sync_player_to_proxy(i);
             mprf(MSGCH_RECOVERY,

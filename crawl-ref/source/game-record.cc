@@ -17,6 +17,7 @@
 #include "json-wrapper.h"
 #include "libutil.h"
 #include "party.h"
+#include "party-tally.h"
 #include "player.h"
 #include "species.h"
 #include "state.h"
@@ -183,6 +184,8 @@ namespace game_record
             number(member, "mp", p.magic_points);
             number(member, "mp_max", p.max_magic_points);
             number(member, "damage_dealt", party::slot_damage_dealt(slot));
+            number(member, "support_acts", party::slot_support_acts(slot));
+            number(member, "citation_points", party::slot_citation_points(slot));
             text(member, "mvp_title", party::slot_mvp_title(slot));
             for (auto &item : p.inv)
                 if (item.defined())

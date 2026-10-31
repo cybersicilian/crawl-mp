@@ -66,6 +66,7 @@
 #include "orb.h"
 #include "output.h"
 #include "party.h"
+#include "party-tally.h"
 #include "place.h"
 #include "player-equip.h"
 #include "player.h"
@@ -1890,6 +1891,7 @@ static void _maybe_log_cool_item(item_def &item)
         return;
 
     item.props["chronicle_logged"] = true;
+    party::award_item_citation(item, value_score);
 
     string path = Options.save_dir.empty()
                   ? string("./rcs/coop_chronicle.jsonl")
@@ -2217,7 +2219,10 @@ static bool _got_all_pan_runes()
 static void _get_rune(const item_def& it, bool quiet)
 {
     if (!you.runes[it.sub_type])
+    {
         you.runes.set(it.sub_type);
+        party::award_item_citation(it, 500);
+    }
 
     if (party::is_enabled())
         party::sync_shared_state_from_active();
