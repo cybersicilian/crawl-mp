@@ -59,6 +59,8 @@
     text-transform: uppercase;
 }
 .welcome-brand strong { display: block; color: var(--welcome-gold); font: 600 22px/1.15 var(--tt-font-title); letter-spacing: 0.02em; text-transform: none; }
+/* The name stacks above the tagline, so the inline separator would lead the line. */
+.welcome-brand-sep { display: none; }
 .welcome-brand-mark {
     display: grid;
     place-items: center;

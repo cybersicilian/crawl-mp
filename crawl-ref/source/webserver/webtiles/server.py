@@ -75,6 +75,16 @@ class MainHandler(tornado.web.RequestHandler):
                     config = config,
                     reset_token = recovery_token, reset_token_error = recovery_token_error)
 
+class RevalidatingStaticHandler(tornado.web.StaticFileHandler):
+    # Versioned URLs (?v=hash) keep tornado's long max-age. Unversioned ones,
+    # such as the stylesheets style.css pulls in with @import, must revalidate
+    # by ETag: without a Cache-Control header browsers cache them heuristically
+    # and keep serving the previous release's CSS after a deploy.
+    def set_extra_headers(self, path):
+        if self.get_query_argument("v", None) is None:
+            self.set_header("Cache-Control", "no-cache")
+
+
 class NoCacheHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):
         self.set_header("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -281,6 +291,7 @@ def bind_server(nonsecure_sockets, secure_sockets):
         "template_loader": util.DynamicTemplateLoader.get(config.get('template_path')),
         "debug": bool(config.get('development_mode', False)),
         "static_hash_cache": not (config.get('live_debug', False) or config.get('no_cache', False)),
+        "static_handler_class": RevalidatingStaticHandler,
         }
 
     from webtiles.websocket_settings import heartbeat_settings
