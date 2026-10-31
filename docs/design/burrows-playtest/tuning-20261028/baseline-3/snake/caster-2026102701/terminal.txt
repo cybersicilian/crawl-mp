@@ -1,0 +1,435 @@
+=Route_caster the Digger           *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 11Int: 19SH:  0Dex: 15XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)-) Nothing wieldedCast: Sandblast♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Sneak 3/30ROUTE_EVENT setup 2
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  3/3========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  1 Next: 10947Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 15/15     ========================Magic:  4/4========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  2 Next: 54732Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 19/19     ========================Magic:  5/5========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  3 Next: 27361Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 24/24     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  4 Next: 15471Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 28/28     ========================Magic:  7/7========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  5 Next: 83189Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 32/32     ========================Magic:  8/8========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  6 Next: 43187Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 36/36     ========================Magic:  9/9========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  7 Next: 22010Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 41/41     ========================Magic:  10/10     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  8 Next: 11066Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 45/45     ========================Magic:  11/11     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  9 Next: 5513%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 50/50     ========================Magic:  12/12     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 10 Next: 2713%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 54/54     ========================Magic:  13/13     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 11 Next: 1308%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 59/59     ========================Magic:  14/14     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 12 Next: 811% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 63/63     ========================Magic:  15/15     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 13 Next: 435% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 68/68     ========================Magic:  16/16     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 14 Next: 231% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 72/72     ========================Magic:  17/17     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 15 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 6/768/186 0% ROUTE_EVENT setup 3
+
+_Experience level set to 16.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 8 28 148284ROUTE_EVENT setup 4
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 76/76     ========================Magic:  18/18     ========================AC:  2 (19%)Str: 8EV: 10Int: 28SH:  0Dex: 14XL: 16 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 16.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+new experience level: Experience level set to 16.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+ Vehumet welcomes you!Vehumet offers you knowledge of Kiss of Death. of Vehumet ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Spellcasting
+ Spellcasting
+ To what level? (current = 0.0) 16Eclecticist18/3-------------ROUTE_EVENT setup 6
+
+_Increased Spellcasting to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 12101/101ROUTE_EVENT setup 7
+
+_Increased Fighting to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fire Magic
+ Fire Magic
+ To what level? (current = 0.0) 12ROUTE_EVENT setup 8
+
+_Increased Fire Magic to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 8ROUTE_EVENT setup 9
+
+_Increased Evocations to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 6ROUTE_EVENT setup 10
+
+_Increased Shields to skill level 6.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Conjurations
+ Conjurations
+ To what level? (current = 0.0) 16ROUTE_EVENT setup 11
+
+_Increased Conjurations to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Earth Magic
+ Earth Magic
+ To what level? (current = 0.0) 16ROUTE_EVENT setup 12
+
+_Increased Earth Magic to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 148ROUTE_EVENT setup 13
+
+_Increased Dodging to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Translocations
+ Translocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 14
+
+_Increased Translocations to skill level 10.0.
+ Enter Wizard Command (? - help): Memorise which spell? Stone ArrowROUTE_EVENT setup 15
+_Memorise which spell? Enter Wizard Command (? - help): FireballROUTE_EVENT setup 16
+_Memorise which spell? Enter Wizard Command (? - help): Iskenderun's Mystic BlastROUTE_EVENT setup 17
+_Memorise which spell? Enter Wizard Command (? - help): Bombard
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): Memorise which spell? 
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog9=------------2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking20=4
+_
+_g - 3 potions of magic (gained 2)5
+_
+_m - 2 potions of might1=6
+_
+_h - 2 potions of haste7
+_
+_c - 6 potions of curing2=8
+_
+_w - 6 potions of heal wounds9
+_
+_b - a ring of poison resistance3=10.0 (1.0)
+_
+_c - a +0 pair of boots1
+_
+_d - a +0 pair of gloves4==2
+_
+_e - a +0 cloak3
+_
+_f - a +0 helmet5=4
+_
+_g - a +0 buckler5
+_
+_h - a +2 robe6=6
+_
+_i - a +2 devious dagger7
+_
+ You feel a baleful cunning.
+_i - a +2 devious dagger (weapon)7==5 (0.5i) +2 dagger (devious)
+_08.5 (18=9.5 (220.5 (39=1.5 (42.5 (5
+0 (0%) 
+_You start removing your armour. You continue removing your +0 robe. x5
+ You finish removing your +0 robe.30=3.5 (64.5 (71=5.5 (86.5 (92==7.5 (10.0)
+4 (22%)
+_You start putting on your armour. You continue putting on your +2 robe. x5
+_You finish putting on your +2 robe.0.0)
+_
+ You start putting on your armour.8.5 (13=9.5 (230.5 (34=1.5 (42.5 (5
+75
+_You continue putting on your +0 buckler. x5
+_You finish putting on your +0 buckler.0
+_5==3.5 (14.5 (26=5.5 (36.5 (47=7.5 (5
+5 (23
+_You start putting on your armour. You continue putting on your +0 helmet. x5
+_You finish putting on your +0 helmet.0
+_
+ You start putting on your armour. You continue putting on your +0 cloak.8==8.5 (1
+_Magic restored.9.5 (240.5 (31.5 (4=2.5 (5
+6 (25
+_You continue putting on your +0 cloak. x4
+_You finish putting on your +0 cloak.0
+_
+ You start putting on your armour.3.5 (14.5 (25.5 (36.5 (47.5 (5
+7 (26
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.8.5 (19.5 (250.5 (31.5 (42.5 (5
+8
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_b - a ring of poison resistance (worn)3.0 (0.5
+_ROUTE_EVENT inventory +0 robe
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +0 buckler
+ROUTE_EVENT inventory +2 robe
+ROUTE_EVENT inventory +2 devious dagger
+ROUTE_EVENT inventory 3 potions of magic
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of might
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_caster the Eclecticist      *WIZARD*Deep Elf of Vehumet ****..Health: 101/101   ========================Magic:  38/38     ========================AC:  8 (26%)Str: 8EV: 17Int: 28###SH:  5Dex: 14#..##XL: 16 Next:  0%  Place: Snake Pit:1##...##Noise:  0 ------  Time: 53.0 (0.0)#.....###...i) +2 dagger (devious)#...@.......Cast: Sandblast#...........#.....$......##..........NN   naga warrior (polearm, constriction, asleep)#...........S   black mamba (asleep).........................#.S...........
+_b - a ring of poison resistance (worn)
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Snake Pit? (default 1, ? - help) 1
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.
+ Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Snake Pit? (default 1, ? - help) Found 21 gold pieces. Found a staircase back to the Lair.ROUTE_AUDIT {"inventory":[{"class":"armour","name":"+0 robe","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"armour","name":"+2 robe","quantity":1},{"class":"weapon","name":"+2 devious dagger","quantity":1},{"class":"potion","name":"3 potions of magic","quantity":3},{"class":"scroll","name":"3 scrolls of fear","quantity":3},{"class":"scroll","name":"3 scrolls of fog","quantity":3},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"scroll","name":"2 scrolls of blinking","quantity":2},{"class":"potion","name":"2 potions of might","quantity":2},{"class":"potion","name":"2 potions of haste","quantity":2},{"class":"potion","name":"6 potions of curing","quantity":6},{"class":"potion","name":"6 potions of heal wounds","quantity":6}],"honey":0,"xl":16,"hp":101,"maxmp":38,"turn":60,"maxhp":101,"progress":0,"items":[{"class":"gold","artefact":false,"x":76,"name":"30 gold pieces","y":39,"quantity":30},{"class":"scroll","artefact":false,"x":89,"name":"scroll of vulnerability","y":40,"quantity":1},{"class":"gold","artefact":false,"x":66,"name":"21 gold pieces","y":44,"quantity":21},{"class":"book","artefact":false,"x":73,"name":"parchment of Kinetic Grapnel","y":49,"quantity":1},{"class":"gold","artefact":false,"x":89,"name":"28 gold pieces","y":54,"quantity":28},{"class":"armour","artefact":false,"x":83,"name":"scale mail","y":55,"quantity":1},{"class":"weapon","artefact":false,"x":53,"name":"dagger","y":64,"quantity":1},{"class":"armour","artefact":false,"x":37,"name":"leather armour","y":66,"quantity":1},{"class":"gold","artefact":false,"x":65,"name":"22 gold pieces","y":69,"quantity":22},{"class":"armour","artefact":false,"x":74,"name":"chain mail","y":71,"quantity":1},{"class":"gold","artefact":false,"x":78,"name":"16 gold pieces","y":74,"quantity":16},{"class":"armour","artefact":false,"x":35,"name":"robe","y":75,"quantity":1},{"class":"scroll","artefact":false,"x":32,"name":"3 scrolls of amnesia","y":78,"quantity":3},{"class":"weapon","artefact":false,"x":83,"name":"spear","y":78,"quantity":1}],"where":"Snake:1","gold":0,"vaults":"layout_cave_pods, statue_in_the_mist_lemuel and uniq_donald","mp":38,"tag":"enter","monsters":[{"xp":799,"name":"naga warrior","y":45,"x":72},{"xp":453,"name":"black mamba","y":49,"x":61},{"xp":726,"name":"mana viper","y":50,"x":85},{"xp":164,"name":"naga","y":51,"x":70},{"xp":458,"name":"black mamba","y":53,"x":65},{"xp":1354,"name":"Donald","y":53,"x":81},{"xp":447,"name":"naga mage","y":53,"x":82},{"xp":538,"name":"salamander","y":55,"x":71},{"xp":840,"name":"anaconda","y":56,"x":61},{"xp":456,"name":"black mamba","y":61,"x":62},{"xp":445,"name":"naga mage","y":63,"x":55},{"xp":715,"name":"mana viper","y":64,"x":63},{"xp":161,"name":"naga","y":64,"x":67},{"xp":458,"name":"black mamba","y":70,"x":71},{"xp":706,"name":"mana viper","y":71,"x":73},{"xp":681,"name":"naga ritualist","y":71,"x":74},{"xp":468,"name":"black mamba","y":71,"x":77},{"xp":793,"name":"naga warrior","y":72,"x":29},{"xp":458,"name":"black mamba","y":72,"x":72},{"xp":718,"name":"mana viper","y":74,"x":71},{"xp":539,"name":"salamander","y":75,"x":36},{"xp":772,"name":"naga warrior","y":76,"x":67},{"xp":159,"name":"naga","y":77,"x":54},{"xp":718,"name":"mana viper","y":77,"x":78},{"xp":718,"name":"mana viper","y":80,"x":71},{"xp":453,"name":"black mamba","y":81,"x":88},{"xp":164,"name":"naga","y":82,"x":34},{"xp":470,"name":"black mamba","y":82,"x":86},{"xp":686,"name":"naga ritualist","y":82,"x":89},{"xp":832,"name":"anaconda","y":83,"x":88},{"xp":463,"name":"black mamba","y":83,"x":89},{"xp":440,"name":"naga mage","y":84,"x":66},{"xp":456,"name":"black mamba","y":84,"x":87},{"xp":458,"name":"black mamba","y":84,"x":88}],"xp":19166}
+ROUTE_EVENT start caster AC=8 EV=17 SH=5
+
+#### #..###...## #.....###... #...<....... #.$...... ##....N  #..S   black mamba ( ..#.S. ..You encounter a black mamba and a naga warrior.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x24.0 (1
+#### #..###...## #.....###... #...<.......#....$...... ##....N  #.. ..N   naga (constriction, wandering)#.S.. ..#N
+_The naga warrior leaves your sight.
+N.You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+_You encounter a naga. It is wielding a +0 scimitar.5Sandblast
+_
+M###  #..## #...##     ..### #...<##.@........$......#N#S  ............#.S#..........N.The iron shot hits the black mamba!!
+ The black mamba is severely wounded.The black mamba hisses angrily.
+S.
+_The blast sends you backwards.S.2---- 7 ===--- 6
+.
+_You hear an angry hiss.
+ The stone arrow hits the black mamba!
+ You kill the black mamba!
+S
+_Vehumet accepts your kill.N.SS  (wandering)†N   naga (constriction, wandering).0------ 4 ==---- 7Sandblast
+#####..##..#.....###...#...<....... ##..... #...@.$ #.....N.#.† #.... #....S.N#.....
+_You encounter a black mamba.
+S.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2S.N.N.N   naga warrior (polearm, constriction)S   black mambaN   naga (constriction)-8Sandblast
+S.
+_The naga shouts!
+ The fireball explodes! The fireball engulfs the black mamba!
+ The black mamba is heavily wounded.The fireball engulfs the naga!!
+_The naga is severely wounded.S.  26----12 ====-- 9
+ ##  #  ##...##    #.....###...  #...<. ##.@... $..#...........  #....S....N.S   black mamba  #.†.N   naga (constriction) #...... #N....  .#.............
+_You hear an angry hiss. You hear a shout!N.NS..N   naga warrior (polearm, constriction)S   black mambaN   naga (constriction) 0 ------ 60
+.SYou erupt in a blast of force! The mystic blast hits the black mamba.
+ The black mamba is heavily wounded.
+_The black mamba is knocked back by the mystic blast.N.N.3---- 8 ===--- 1
+_You hear an angry hiss..The black mamba is heavily wounded.
+_The black mamba is knocked back by the mystic blast.
+_You hear an angry hiss.
+ You erupt in a blast of force! The mystic blast hits the black mamba!
+ The black mamba is almost dead.
+ The black mamba is knocked back by the mystic blast.
+ The black mamba collides with the naga!
+ The naga is almost dead.
+ You kill the black mamba!
+S
+_Vehumet accepts your kill.N
+S.You encounter an anaconda.N.†N   salamander (polearm)S   anaconda (constriction)N   naga (constriction)19----12
+.
+_You encounter a salamander. It is wielding a +0 spear.The iron shot hits the naga!!!
+ You kill the naga!
+S.
+_Vehumet accepts your kill.N.S.)4------73
+_
+S.The iron shot hits the anaconda!!!
+_The anaconda is severely wounded.N.N.S. 8/38 -------4
+_ ##  #  ##...##    #.....###...  #@..<....... ##.....N... #.....$...#..S..  #....†......  #.†....)..... #.N... #....  .#.............N.S.N.N)9--- 0 ------ 5
+ You erupt in a blast of force! The mystic blast hits the anaconda!
+ The anaconda is almost dead.
+_The anaconda is knocked back by the mystic blast.N† 5-- 8 ===--- 6
+_M###  #..##     #...##   . ..### #...<N#.....#..S..$##...N. #....†.#.†....)..............S.
+S.The naga warrior spits poison at you.N., catching breath)98/101 -6-- 3 =----- 7
+_The splash of poison hits you. You resist.
+.You erupt in a blast of force! The mystic blast hits the salamander!
+ The salamander is lightly wounded.
+ The salamander is knocked back by the mystic blast.
+ The mystic blast hits the anaconda!
+ You kill the anaconda!
+N.
+_Vehumet accepts your kill.†.N-2--3 8 ===--- 8
+_ROUTE_EVENT use magic turn=75 place=Snake:1
+Route_caster the Eclecticist      *WIZARD*Deep Elf of Vehumet ****..Health: 98/101    =======================-Magic:  2/38=-----------------------AC:  8 (26%)Str: 8EV: 17Int: 28SH:  5Dex: 14####XL: 16 Next:  3%  Place: Snake Pit:1#..##Noise:  8 ===---  Time: 68.0 (0.0)##...##   .i) +2 dagger (devious)#@....###...Cast: Sandblast#†..N.......##...........#.....$......N   naga warrior (polearm, constriction, catching breath)##...........N   salamander (polearm)#....†......#.†...N).....#.............#..........................#.............
+_The anaconda is knocked back by the mystic blast.
+ The naga warrior spits poison at you.
+_The splash of poison hits you. You resist.
+ You erupt in a blast of force! The mystic blast hits the salamander!
+ The salamander is lightly wounded.
+ The salamander is knocked back by the mystic blast.
+ The mystic blast hits the anaconda!
+ You kill the anaconda!
+_Vehumet accepts your kill.N<N.26/38=============== 0 ------ 9.0 (1
+_Magic courses through your body.
+N†You erupt in a blast of force! The mystic blast hits the naga warrior!
+ The naga warrior is moderately wounded.
+_The naga warrior is knocked back by the mystic blast...N 92============--- 8 ===--- 70
+_
+N.The iron shot hits the salamander!!
+_The salamander is severely wounded.N.. 17------71
+_.N. N
+_The salamander is severely wounded.You erupt in a blast of force! The mystic blast hits the salamander!!
+ The salamander is almost dead.
+ The salamander is knocked back by the mystic blast.
+ naga warrior slams into the rock wall!
+_The naga warrior is heavily wounded.3-----82
+_
+N.The iron shot hits the naga warrior!!!
+_The naga warrior is almost dead.# 100/1018/38 -----73
+_
+.The iron shot hits the naga warrior!!
+ You kill the naga warrior!
+N.
+_Vehumet accepts your kill.)N   salamander (polearm)2-------44
+_ROUTE_EVENT use magic turn=81 place=Snake:1
+Route_caster the Eclecticist      *WIZARD*Deep Elf of Vehumet ****..Health: 100/101   =======================-Magic:  2/38=-----------------------AC:  8 (26%)Str: 8EV: 17Int: 28SH:  5Dex: 14####XL: 16 Next:  4%  Place: Snake Pit:1#..##Noise:  7 ===---  Time: 74.0 (0.0)##...##   .i) +2 dagger (devious)#@...)###...Cast: Sandblast#†..<.......##...........#.....$......N   salamander (polearm)##....N......#....†......#.†....).....#.............#..........................#.............The naga warrior is moderately wounded.The naga warrior is knocked back by the mystic blast.
+ The naga warrior slams into the rock wall!
+_The naga warrior is heavily wounded.The iron shot hits the naga warrior!!!
+_The naga warrior is almost dead.The iron shot hits the naga warrior!!
+ You kill the naga warrior!
+_Vehumet accepts your kill.N.1=19/38=========== 0 ------ 5.0 (1
+.
+_Magic courses through your body.
+ The blast of sand hits the salamander!
+ You kill the salamander!Vehumet accepts your kill.
+)
+_You feel your power returning.=23=============52 =--6.5 (1.5Sandblast
+_4===5=6=7==8=9=30=1=2==3=4=5==6=
+_You start resting.7=0 -@   Donald (wandering)@102.5 (26.0)
+ You encounter Donald the Adventurer. He is wielding a +0 double sword.-3.5 (27
+_#####..##...##   .#....)###..#†@.<....... ##...........#....)$...##........... #....†......#.†....)..#.......@.............................#.............
+@@
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+(strong)Donald mumbles some strange words.4.5 (1.0)#####..##...##   .#....)###..#†..<....... ##..@.. #....)$..##...............†...... #.†....).#.......@.....#.........................#.............
+_Donald seems to grow stronger.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2
+fast, strong)Donald points at himself and mumbles some strange words.8==3 =5Sandblast
+@.
+_Donald seems to speed up.
+ The iron shot hits Donald!!
+_Donald is moderately wounded.@. 2---- 7 ===--- 6
+_ ##  #..##     ##...##    #....)###...  #†@.<. ##........... #....)$...#...........  #....@..  #.†....).. #.... #..  .#.............
+@†
+_Donald blocks the iron shot. The blast sends you backwards.27-------7
+@.
+_Donald says, "That guy with the scythe is really mean."
+_Donald blocks the iron shot.@.1-------8
+_ ##  #..##     ##...##    #@...)###...  #†..<... ##.@......... #....)$......##........  #....†...  #.†....)... #..... #..  .#.............@.
+ Donald attacks as he pursues you!78/101 ------2---- 6 ==---- 9
+_Donald hits you with a +0 double sword!!
+_Donald blocks the iron shot.16--- 7 ===--- 10
+####  ..##      ##@..##   .  #....)###...#@..<..##........... #....)$..##...........#....†.......†....).....
+#
+_Donald hits you but does no damage.@†
+ Donald says, "Man, snails must be faster than these guys."50-------------7---81
+M###  #@.##     ##...##   .#.@..)###. #†..<.....##...........#.†....)...
+_Donald hits you with a +0 double sword!!
+@.
+_Donald blocks the iron shot. The blast sends you backwards.
+ Donald says, "So, nagas are stealthy? Don't make me laugh."1----72
+_Donald barely misses you.The iron shot hits Donald!!
+_Donald is heavily wounded.Donald hits you with a +0 double sword!!18--------------6/38 -------93ROUTE_EVENT use heal wounds turn=120 place=Snake:1
+Route_caster the Eclecticist      *WIZARD*Deep Elf of Vehumet ****..Health: 18/101    ====--------------------Magic:  6/38===---------------------AC:  8 (26%)Str: 8EV: 17Int: 28SH:  5Dex: 14XL: 16 Next:  5%  Place: Snake Pit:1Noise:  9 ===---  Time: 113.5 (0.0)####i) +2 dagger (devious)#@.##Cast: Sandblast##@..##   .#....)###...#†..<.......@   Donald (fast, strong)##...........#....)$......##...........#....†......#.†....).....#.............#.............Donald says, "Man, snails must be faster than these guys."
+_Donald hits you with a +0 double sword!!
+_Donald blocks the iron shot. The blast sends you backwards.
+ Donald says, "So, nagas are stealthy? Don't make me laugh."
+_Donald barely misses you.The iron shot hits Donald!!
+_Donald is heavily wounded.Donald hits you with a +0 double sword!!
+_* * * LOW HITPOINT WARNING * * *ROUTE_AUDIT {"inventory":[{"class":"armour","name":"+0 robe","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"armour","name":"+2 robe","quantity":1},{"class":"weapon","name":"+2 devious dagger","quantity":1},{"class":"potion","name":"potion of magic","quantity":1},{"class":"scroll","name":"3 scrolls of fear","quantity":3},{"class":"scroll","name":"3 scrolls of fog","quantity":3},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"scroll","name":"2 scrolls of blinking","quantity":2},{"class":"potion","name":"2 potions of might","quantity":2},{"class":"potion","name":"2 potions of haste","quantity":2},{"class":"potion","name":"6 potions of curing","quantity":6},{"class":"potion","name":"5 potions of heal wounds","quantity":5}],"honey":0,"xl":16,"hp":-17,"maxmp":38,"turn":120,"maxhp":101,"progress":5,"items":[{"class":"gold","artefact":false,"x":76,"name":"30 gold pieces","y":39,"quantity":30},{"class":"scroll","artefact":false,"x":89,"name":"scroll of vulnerability","y":40,"quantity":1},{"class":"weapon","artefact":false,"x":66,"name":"+0 halberd","y":41,"quantity":1},{"class":"corpse","artefact":false,"x":66,"name":"naga corpse","y":41,"quantity":1},{"class":"corpse","artefact":false,"x":62,"name":"anaconda corpse","y":42,"quantity":1},{"class":"weapon","artefact":false,"x":65,"name":"+0 spear","y":44,"quantity":1},{"class":"gold","artefact":false,"x":66,"name":"21 gold pieces","y":44,"quantity":21},{"class":"corpse","artefact":false,"x":66,"name":"black mamba corpse","y":46,"quantity":1},{"class":"corpse","artefact":false,"x":62,"name":"black mamba corpse","y":47,"quantity":1},{"class":"weapon","artefact":false,"x":67,"name":"+0 scimitar","y":47,"quantity":1},{"class":"book","artefact":false,"x":73,"name":"parchment of Kinetic Grapnel","y":49,"quantity":1},{"class":"gold","artefact":false,"x":89,"name":"28 gold pieces","y":54,"quantity":28},{"class":"armour","artefact":false,"x":83,"name":"scale mail","y":55,"quantity":1},{"class":"weapon","artefact":false,"x":53,"name":"dagger","y":64,"quantity":1},{"class":"armour","artefact":false,"x":37,"name":"leather armour","y":66,"quantity":1},{"class":"gold","artefact":false,"x":65,"name":"22 gold pieces","y":69,"quantity":22},{"class":"armour","artefact":false,"x":74,"name":"chain mail","y":71,"quantity":1},{"class":"gold","artefact":false,"x":78,"name":"16 gold pieces","y":74,"quantity":16},{"class":"scroll","artefact":false,"x":32,"name":"3 scrolls of amnesia","y":78,"quantity":3},{"class":"weapon","artefact":false,"x":83,"name":"spear","y":78,"quantity":1}],"where":"Snake:1","gold":0,"vaults":"layout_cave_pods, statue_in_the_mist_lemuel and uniq_donald","mp":6,"tag":"death","monsters":[{"xp":1354,"name":"Donald","y":40,"x":63},{"xp":726,"name":"mana viper","y":42,"x":77},{"xp":447,"name":"naga mage","y":51,"x":82},{"xp":456,"name":"black mamba","y":61,"x":62},{"xp":445,"name":"naga mage","y":63,"x":55},{"xp":715,"name":"mana viper","y":64,"x":63},{"xp":161,"name":"naga","y":64,"x":67},{"xp":458,"name":"black mamba","y":70,"x":71},{"xp":706,"name":"mana viper","y":71,"x":73},{"xp":681,"name":"naga ritualist","y":71,"x":74},{"xp":468,"name":"black mamba","y":71,"x":77},{"xp":793,"name":"naga warrior","y":72,"x":29},{"xp":458,"name":"black mamba","y":72,"x":72},{"xp":718,"name":"mana viper","y":74,"x":71},{"xp":772,"name":"naga warrior","y":76,"x":67},{"xp":159,"name":"naga","y":77,"x":54},{"xp":718,"name":"mana viper","y":77,"x":78},{"xp":718,"name":"mana viper","y":80,"x":71},{"xp":453,"name":"black mamba","y":81,"x":88},{"xp":164,"name":"naga","y":82,"x":34},{"xp":470,"name":"black mamba","y":82,"x":86},{"xp":686,"name":"naga ritualist","y":82,"x":89},{"xp":832,"name":"anaconda","y":83,"x":88},{"xp":463,"name":"black mamba","y":83,"x":89},{"xp":440,"name":"naga mage","y":84,"x":66},{"xp":456,"name":"black mamba","y":84,"x":87},{"xp":458,"name":"black mamba","y":84,"x":88},{"xp":539,"name":"salamander","y":88,"x":31}],"xp":15914}
+ROUTE_EVENT death Snake:1
+
+_Donald is heavily wounded.
+ _* * * LOW HITPOINT WARNING * * *
+ You feel much better.
+ Donald hits you with a +0 double sword!!
+ * * * LOW HITPOINT WARNING * * *
+ Donald hits you with a +0 double sword!!!
+ You die...
+ Donald says, "I won. I... don't hate that."Gear: 9/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ i - a +2 devious dagger (weapon)
+Armour         (go to first with [)
+ c - a +0 pair of boots (worn)
+ d - a +0 pair of gloves (worn)
+ e - a +0 cloak (worn)
+ f - a +0 helmet (worn)
+ g - a +0 buckler (worn)
+ h - a +2 robe (worn)a - a +0 robe
+Jewellery      (go to first with "=)
+ b - a ring of poison resistance (worn)
+ i - a +2 devious dagger (weapon)
+Goodbye, Route_caster.109561 Route_caster the Eclecticist (level 16, -17/101 HPs) *WIZ*Began as a Deep Elf Earth Elementalist on Oct 28, 2026.Was an Elder of Vehumet.Demolished by Donald... wielding a +0 double sword(38 damage)... on level 1 of the Snake Pit.The game lasted 00:00:00 (120 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/baseline-3/snake/caster-20261027
+>

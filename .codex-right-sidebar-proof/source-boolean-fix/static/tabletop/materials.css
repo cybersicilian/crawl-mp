@@ -1,0 +1,153 @@
+/* Material primitives shared by lobby, HUD, and the adventurer's tome. */
+body {
+    background: radial-gradient(ellipse at 45% 0, #4b2b1b55, transparent 65%), #120c09;
+    color: var(--tt-text);
+}
+:is(#stats, #party_hud, #message_pane, #monster_list, #minimap_block,
+    #dcss_quick_dock, #party_turn_banner, #coop_quick_login, #coop_quick_bar,
+    #party_lobby_panel, #coop_chronicle_panel, .menu, .ui-popup-outer,
+    .floating_dialog, #action-panel-settings) {
+    background: var(--tt-hide);
+    border: 1px solid var(--tt-brass-edge);
+    border-image: var(--tt-metal) 1;
+    border-radius: 3px;
+    color: var(--tt-text);
+    box-shadow: var(--tt-recess), 0 3px 9px #00000070;
+}
+/* Inset decoration has no hit target and adds no layout or canvas offset. */
+:is(#stats, #party_hud, #dcss_quick_dock, #party_turn_banner,
+    #coop_quick_login, #coop_quick_bar, #party_lobby_panel, #coop_chronicle_panel) {
+    position: relative;
+}
+:is(#stats, #party_hud, #dcss_quick_dock, #party_turn_banner,
+    #coop_quick_login, #coop_quick_bar, #party_lobby_panel, #coop_chronicle_panel)::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed var(--tt-stitch);
+    border-radius: 2px;
+    pointer-events: none;
+}
+:is(#coop_quick_login, #coop_quick_bar, #party_lobby_panel, #coop_chronicle_panel)::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    background: var(--tt-brass-corner) top left / 30px 30px no-repeat,
+        var(--tt-brass-rivet) top right / 8px 8px no-repeat,
+        var(--tt-brass-rivet) bottom left / 8px 8px no-repeat,
+        var(--tt-brass-rivet) bottom right / 8px 8px no-repeat;
+    pointer-events: none;
+}
+:is(.party-banner-btn, .party-hud-btn, .party-ctrl-btn, .party-mini-btn,
+    .party-preset-chip, .party-preset-btn, .party-ping-btn, .dcss-dock-btn,
+    .coop-preset-btn, .dcss-btn, .button, .party-mode-btn, .party-archetype-btn,
+    .slot-preset-btn, .slot-state-btn, .chronicle-load-btn,
+    .party-insp-close-btn, .party-insp-hero-btn, .party-insp-tab-btn,
+    .pi-close-btn, .pi-hero-btn, .pi-tab-btn) {
+    background: linear-gradient(180deg, #84603530, transparent 48%, #00000040), var(--tt-hide);
+    border: 1px solid var(--tt-brass-edge);
+    border-top-color: var(--tt-brass);
+    border-radius: 3px;
+    color: var(--tt-vellum);
+    font-family: var(--tt-font-mono);
+    text-shadow: 0 1px 1px #000;
+    box-shadow: inset 0 1px 0 #f3d78b26, 0 2px 1px #080502;
+    cursor: pointer;
+    transition: border-color 100ms, box-shadow 100ms, background-color 100ms;
+    transform: none;
+}
+:is(.party-banner-btn, .party-hud-btn, .party-ctrl-btn, .party-mini-btn,
+    .party-preset-chip, .party-preset-btn, .party-ping-btn, .dcss-dock-btn,
+    .coop-preset-btn, .dcss-btn, .button, .party-mode-btn, .party-archetype-btn,
+    .slot-preset-btn, .slot-state-btn, .chronicle-load-btn,
+    .party-insp-close-btn, .party-insp-hero-btn, .party-insp-tab-btn,
+    .pi-close-btn, .pi-hero-btn, .pi-tab-btn):hover {
+    background: linear-gradient(180deg, #654627, #382418);
+    border-color: var(--tt-brass-light);
+    color: var(--tt-vellum-light);
+    transform: none;
+}
+:is(button, a, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--tt-brass-light);
+    outline-offset: 2px;
+}
+:is(.party-banner-btn, .party-hud-btn, .party-ctrl-btn, .party-mini-btn,
+    .party-preset-chip, .party-preset-btn, .party-ping-btn, .dcss-dock-btn,
+    .coop-preset-btn, .dcss-btn, .button, .party-mode-btn, .party-archetype-btn,
+    .slot-preset-btn, .slot-state-btn, .chronicle-load-btn,
+    .party-insp-close-btn, .party-insp-hero-btn, .party-insp-tab-btn,
+    .pi-close-btn, .pi-hero-btn, .pi-tab-btn):active {
+    background: var(--tt-leather-deep);
+    box-shadow: inset 0 2px 5px #000000c0;
+    border-color: var(--tt-brass-shadow);
+    transform: translateY(1px);
+}
+:is(button, .button, .dcss-btn):disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+:is(.text, .party-slot-input, .party-slot-select,
+    .party-custom-row input, .party-custom-row select) {
+    color: var(--tt-text);
+    background: #170f0b;
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 2px;
+    font-family: var(--tt-font-mono);
+    box-shadow: inset 0 2px 4px #00000090;
+    accent-color: var(--tt-brass);
+}
+:is(.text, .party-slot-input, .party-slot-select):focus {
+    color: var(--tt-vellum-light);
+    border-color: var(--tt-brass-light);
+}
+/* Parchment is reserved for transient explanatory content. */
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    position: fixed;
+    z-index: 99999;
+    background: var(--tt-paper);
+    color: var(--tt-ink);
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 3px;
+    outline: 1px solid #160c06;
+    padding: 9px 12px;
+    box-shadow: inset 0 0 16px #8c652833, 0 8px 24px #000000c0;
+    font: 12px/1.45 var(--tt-font-copy);
+    pointer-events: none;
+    box-sizing: border-box;
+    max-width: min(360px, calc(100vw - 16px));
+    min-width: min(220px, calc(100vw - 16px));
+    overflow-wrap: anywhere;
+}
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip)[hidden] { display: none !important; }
+:is(.dcss-tip-header, .lobby-tip-title) { border-bottom: 1px solid #7a582450; }
+:is(#dcss_rich_tooltip .tip-title, .dcss-tip-title, .lobby-tip-title) {
+    color: var(--tt-ink);
+    font: bold 13px/1.3 var(--tt-font-title);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+}
+:is(#dcss_rich_tooltip .tip-body, .dcss-tip-body, .lobby-tip-body) {
+    color: var(--tt-ink);
+    font: 12px/1.45 var(--tt-font-copy);
+    white-space: pre-line;
+}
+:is(#dcss_rich_tooltip .tip-meta, .dcss-tip-meta, .lobby-tip-meta) {
+    color: var(--tt-ink-soft);
+    font: 10px/1.4 var(--tt-font-mono);
+    border-top: 1px dashed #7a582450;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+.dcss-tip-badge {
+    background: #8c65281a;
+    color: var(--tt-ink-soft);
+    border-color: #8c652860;
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+@media (forced-colors: active) {
+    :is(button, a, input, select, textarea, [tabindex]):focus-visible { outline-color: Highlight; }
+}

@@ -4,8 +4,20 @@
 **/
 
 #include "AppHdr.h"
+#include "hermit-crab.h"
+#include "chain-devil.h"
+#include "eldritch.h"
+#include "god-vellum.h"
+#include "coop-content.h"
+#include "oozle-memory.h"
+#include "god-pakellas.h"
+#include "god-vorr.h"
+#include "bloodcraft.h"
+#include "wight.h"
 
 #include "ability.h"
+#include "shell.h"
+#include "paladin.h"
 
 #include <cctype>
 #include <cmath>
@@ -19,6 +31,7 @@
 #include "acquire.h"
 #include "areas.h"
 #include "artefact.h"
+#include "beam.h"
 #include "art-enum.h"
 #include "branch.h"
 #include "chardump.h"
@@ -51,6 +64,7 @@
 #include "maps.h"
 #include "menu.h"
 #include "message.h"
+#include "neckbeard.h"
 #include "mgen-data.h"
 #include "mon-behv.h"
 #include "mon-book.h"
@@ -65,6 +79,7 @@
 #include "notes.h"
 #include "options.h"
 #include "output.h"
+#include "party.h"
 #include "player-reacts.h"
 #include "player-stats.h"
 #include "potion.h"
@@ -91,6 +106,7 @@
 #include "stringutil.h"
 #include "tag-version.h"
 #include "target.h"
+#include "target-dithmenos.h"
 #include "teleport.h"
 #include "terrain.h"
 #include "tilepick.h"
@@ -325,7 +341,8 @@ struct ability_def
 
 static int _lookup_ability_slot(ability_type abil);
 static spret _do_ability(const ability_def& abil, bool fail, dist *target,
-                         bolt& beam, int piety_cost, int mp_cost, int hp_cost);
+                         bolt& beam, int piety_cost, int mp_cost, int hp_cost,
+                         int inventory_slot);
 static void _finalize_ability_costs(const ability_def& abil, int piety_cost,
                                     int mp_cost, int hp_cost);
 
@@ -387,18 +404,52 @@ static vector<ability_def> &_get_ability_list()
             0, 0, 0, -1, {}, abflag::delay },
         { ABIL_HOP, "Hop",
             0, 0, 0, -1, {}, abflag::none }, // range special-cased
+        { ABIL_CHAIN_LASH, "Chain Lash", 0, 0, 0, chains::lash_range, {},
+            abflag::silence_ok | abflag::dir_or_target | abflag::not_self },
+        { ABIL_REEL_IN, "Reel In", 0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_PINNING_CHAIN, "Pinning Chain", 0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_RELEASE_CHAIN, "Release Chain", 0, 0, 0, -1, {},
+            abflag::silence_ok | abflag::instant | abflag::conf_ok | abflag::berserk_ok },
+        { ABIL_PROFANE_ALTAR, "Profane Altar", 0, 0, 0, -1, {}, abflag::none },
+        { ABIL_ELDER_RITE, "Invoke Elder Rites", 0, 0, 0, -1, {}, abflag::none },
+        { ABIL_AUTOMATON_DELETE_SPELL, "Delete Spell", 0, 0, 0, -1, {}, abflag::none },
+        { ABIL_CRAB_WALK, "Crab Walk", 0, 0, 0, 2, {},
+            abflag::silence_ok | abflag::target | abflag::not_self },
+        { ABIL_HERMIT_MOULT, "Molt", 0, 0, 0, -1, {},
+            abflag::silence_ok | abflag::delay },
+        { ABIL_ENT_PASSWALL, "Passwall", 1, 0, 0, -1, {}, abflag::none },
+        { ABIL_WIGHT_BURY, "Burialize Weapon", 0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_WIGHT_RELEASE, "Release Buried Weapon", 0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_KITSUNE_CHARM, "Charm Monsters", 0, 0, 0, -1, {}, abflag::exhaustion },
+        { ABIL_MELIAI_SMITE, "Invoke Smite", 0, 0, 0, LOS_MAX_RANGE,
+            {fail_basis::xl, 30, 1}, abflag::target | abflag::not_self },
+        { ABIL_STEP_BEHIND, "Step Behind", 2, 0, 0, LOS_RADIUS, {},
+            abflag::target | abflag::not_self },
+        { ABIL_ASSIMILATE, "Assimilate",
+            0, 0, 0, -1, {}, abflag::delay },
+        { ABIL_RETRACT_SHELL, "Retract into Shell",
+            0, 0, 0, -1, {}, abflag::conf_ok | abflag::silence_ok },
+        { ABIL_SHELL_DASH, "Shell Dash",
+            0, 0, 0, LOS_MAX_RANGE, {},
+            abflag::silence_ok | abflag::dir_or_target | abflag::not_self },
         { ABIL_BLINKBOLT, "Blinkbolt",
             0, 0, 0, LOS_MAX_RANGE, {}, abflag::none },
         { ABIL_SIPHON_ESSENCE, "Siphon Essence",
             20, 0, 0, -1, {}, abflag::none },
 #if TAG_MAJOR_VERSION == 34
         { ABIL_HEAL_WOUNDS, "Heal Wounds",
-            0, 0, 0, -1, {fail_basis::xl, 45, 2}, abflag::none },
+            3, 0, 0, -1, {fail_basis::xl, 45, 2}, abflag::max_hp_drain },
 #endif
         { ABIL_IMBUE_SERVITOR, "Imbue Servitor",
             0, 0, 0, -1, {}, abflag::delay },
         { ABIL_IMPRINT_WEAPON, "Imprint Weapon",
             0, 0, 0, -1, {}, abflag::delay },
+        { ABIL_DISMISS_RITE, "Dismiss Rite",
+            0, 0, 0, -1, {}, abflag::none },
+        { ABIL_AMPLIFY_SCARLET_FETTERS, "Amplify Scarlet Fetters",
+            0, 0, 0, 7, {}, abflag::dir_or_target },
+        { ABIL_AMPLIFY_STOLEN_SIGHT, "Amplify Stolen Sight",
+            0, 0, 0, 7, {}, abflag::dir_or_target },
         { ABIL_END_TRANSFORMATION, "End Transformation",
             0, 0, 0, -1, {}, abflag::none },
         { ABIL_INVENT_GIZMO, "Invent Gizmo",
@@ -632,6 +683,10 @@ static vector<ability_def> &_get_ability_list()
             0, 0, 0, -1, {fail_basis::invo}, abflag::curse },
 
         // Dithmenos
+        { ABIL_DITHMENOS_SHADOW_STEP, "Shadow Step",
+            4, 80, 5, -1, {fail_basis::invo, 30, 6, 20}, abflag::target },
+        { ABIL_DITHMENOS_SHADOW_FORM, "Shadow Form",
+            9, 0, 12, -1, {fail_basis::invo, 80, 4, 25}, abflag::max_hp_drain },
         { ABIL_DITHMENOS_SHADOWSLIP, "Shadowslip",
             4, 60, 4, -1, {fail_basis::invo, 50, 6, 30}, abflag::instant },
         { ABIL_DITHMENOS_APHOTIC_MARIONETTE, "Aphotic Marionette",
@@ -746,6 +801,16 @@ static vector<ability_def> &_get_ability_list()
         { ABIL_WU_JIAN_WALLJUMP, "Wall Jump",
             0, 0, 0, -1, {}, abflag::berserk_ok },
 
+        // Vorr: blood payment is validated and committed by the rite.
+        { ABIL_VELLUM_WEAVE, "Weave Enchantments",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_VORR_RUPTURE, "Rupture",
+            0, 0, 0, 5, {fail_basis::invo}, abflag::target | abflag::not_self },
+        { ABIL_VORR_RED_PASSAGE, "Red Passage",
+            0, 0, 0, 6, {fail_basis::invo}, abflag::target | abflag::not_self },
+        { ABIL_VORR_GREAT_LETTING, "The Great Letting",
+            0, 0, 5, 6, {fail_basis::invo}, abflag::target },
+
         // Ignis
         { ABIL_IGNIS_FIERY_ARMOUR, "Fiery Armour",
             0, 0, 8, -1, {fail_basis::invo}, abflag::none },
@@ -753,6 +818,28 @@ static vector<ability_def> &_get_ability_list()
             0, 0, 12, -1, {fail_basis::invo}, abflag::quiet_fail },
         { ABIL_IGNIS_RISING_FLAME, "Rising Flame",
             0, 0, 0, -1, {fail_basis::invo}, abflag::none },
+
+#if TAG_MAJOR_VERSION == 34
+        // Saved IDs are retained; costs are committed by the evocation request.
+        { ABIL_PAKELLAS_QUICK_CHARGE, "Designate Prototype",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_PAKELLAS_DEVICE_SURGE, "Overclock",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_PAKELLAS_SUPERCHARGE, "Breakthrough",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_PAKELLAS_FIELD_KIT, "Receive Field Kit",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+        { ABIL_PAKELLAS_EVOKE_PROTOTYPE, "Evoke Prototype",
+            0, 0, 0, -1, {}, abflag::silence_ok },
+#endif
+        { ABIL_PANTHEON_CONVERGENCE, "Prayer of Fellowship",
+            4, 0, 6, -1, {fail_basis::invo, 45, 4, 20}, abflag::none },
+        { ABIL_PALADIN_INTERVENE, "Lay on Hands & Intervene",
+            3, 0, 0, -1, {fail_basis::invo, 30, 3}, abflag::none },
+        { ABIL_PALADIN_AURA_ZEAL, "Aura of Crusader's Zeal",
+            3, 0, 0, -1, {fail_basis::xl, 25, 2}, abflag::none },
+        { ABIL_PALADIN_AURA_VITALITY, "Aura of Vitality & Warding",
+            4, 0, 0, -1, {fail_basis::xl, 35, 2}, abflag::none },
 
         { ABIL_RENOUNCE_RELIGION, "Renounce Religion",
             0, 0, 0, -1, {fail_basis::invo}, abflag::silence_ok },
@@ -768,6 +855,14 @@ static vector<ability_def> &_get_ability_list()
 #endif
 
     };
+    static const bool echo_definitions = [&]() {
+        for (const auto& row : eldritch::powers())
+            if (!row.passive)
+                Ability_List.push_back({eldritch::ability(row.god), row.name,
+                    0, 0, 0, row.range, {}, abflag::silence_ok});
+        return true;
+    }();
+    (void)echo_definitions;
     return Ability_List;
 }
 
@@ -813,6 +908,11 @@ vector<ability_type> get_defined_abilities()
     return r;
 }
 
+bool ability_permits_silence(ability_type ability)
+{
+    return testbits(get_ability_def(ability).flags, abflag::silence_ok);
+}
+
 unsigned int ability_mp_cost(ability_type abil)
 {
     return get_ability_def(abil).get_mp_cost();
@@ -820,11 +920,16 @@ unsigned int ability_mp_cost(ability_type abil)
 
 int ability_range(ability_type abil)
 {
+    if (abil >= ABIL_VORR_RUPTURE && abil <= ABIL_VORR_GREAT_LETTING)
+        return min(int(you.current_vision), vorr::ability_range(abil));
     int range = get_ability_def(abil).range;
 
     // Special-cased abilities with variable range.
     switch (abil)
     {
+        case ABIL_DITHMENOS_SHADOW_STEP:
+            range = you.umbra_radius();
+            break;
         case ABIL_HOP:
             range = frog_hop_range();
             break;
@@ -969,6 +1074,25 @@ static string _ashenzari_curse_text()
 
 const string make_cost_description(ability_type ability)
 {
+    if (ability == ABIL_MELIAI_SMITE || ability == ABIL_WIGHT_BURY
+        || ability == ABIL_AUTOMATON_DELETE_SPELL)
+        return "Maximum HP drain (recovers with experience)";
+    if (eldritch::policy(eldritch::god_for_ability(ability)))
+        return make_stringf("%d Defiance", eldritch::cost(eldritch::god_for_ability(ability)));
+    if (ability == ABIL_VELLUM_WEAVE)
+        return "Up to 6 capacity; exact work price shown before commitment";
+    if (ability == ABIL_SHELL_DASH)
+        return "1-5 HP recoil, 5-turn recovery";
+    if (ability == ABIL_HERMIT_MOULT)
+        return make_stringf("1 opportunity, 5 turns (%d available)",
+                            hermit_crab::moult_chances(you));
+    if (pakellas::is_ability(ability))
+        return pakellas::costs(ability);
+    if (ability >= ABIL_VORR_RUPTURE && ability <= ABIL_VORR_GREAT_LETTING)
+        return vorr::cost_description(ability);
+    if (ability == ABIL_AMPLIFY_SCARLET_FETTERS || ability == ABIL_AMPLIFY_STOLEN_SIGHT)
+        return bloodcraft::cost_description(ability == ABIL_AMPLIFY_SCARLET_FETTERS
+            ? SPELL_SCARLET_FETTERS : SPELL_STOLEN_SIGHT, true);
     const ability_def& abil = get_ability_def(ability);
     string ret;
     if (abil.get_mp_cost())
@@ -976,11 +1100,6 @@ const string make_cost_description(ability_type ability)
 
     if (abil.flags & abflag::variable_mp)
         ret += ", MP";
-
-#if TAG_MAJOR_VERSION == 34
-    if (ability == ABIL_HEAL_WOUNDS)
-        ret += make_stringf(", Permanent MP (%d left)", get_real_mp(false));
-#endif
 
     if (ability == ABIL_CACOPHONY)
         ret += ", Noise";
@@ -1062,6 +1181,9 @@ const string make_cost_description(ability_type ability)
     if (abil.flags & abflag::torchlight)
         ret += ", Torchlight";
 
+    if (ability == ABIL_STEP_BEHIND)
+        ret += ", 5-turn Blink cooldown";
+
     // If we haven't output anything so far, then the effect has no cost
     if (ret.empty())
         return "None";
@@ -1072,11 +1194,30 @@ const string make_cost_description(ability_type ability)
 
 static const string _detailed_cost_description(ability_type ability)
 {
+    if (ability == ABIL_MELIAI_SMITE)
+        return "A successful smite drains maximum HP, which recovers as you gain experience.";
+    if (ability == ABIL_WIGHT_BURY)
+        return "This ability drains maximum HP, which recovers as you gain experience.";
+    if (ability == ABIL_AUTOMATON_DELETE_SPELL)
+        return "Deleting an engraving drains maximum HP, which recovers as you gain experience. Cancelling costs nothing.";
+    if (eldritch::policy(eldritch::god_for_ability(ability)))
+        return "This ability costs " + make_cost_description(ability)
+            + ". Defiance is restored by ordinary combat experience.";
+
+    if (ability == ABIL_VELLUM_WEAVE)
+        return vellum::summary(you) + " Extraction costs 4 to 14 piety, with the exact price shown in the menu. Moving a thread costs 3 piety. Work takes five owner actions and interruption spends nothing.";
+    if (ability == ABIL_SHELL_DASH)
+        return "This ability costs 1-5 nonlethal HP in recoil and requires "
+               "five standard turns of recovery after a successful dash.";
     const ability_def& abil = get_ability_def(ability);
     ostringstream ret;
 
     bool have_cost = false;
     ret << "This ability costs: ";
+    if (pakellas::is_ability(ability))
+        return pakellas::costs(ability);
+    if (ability >= ABIL_VORR_RUPTURE && ability <= ABIL_VORR_GREAT_LETTING)
+        return vorr::detailed_cost_description(ability);
 
     if (abil.get_mp_cost())
     {
@@ -1158,21 +1299,29 @@ static const string _detailed_cost_description(ability_type ability)
     if (abil.flags & abflag::drac_charges)
         ret << "\nGaining experience will replenish charges of this ability.";
 
-#if TAG_MAJOR_VERSION == 34
-    if (abil.ability == ABIL_HEAL_WOUNDS)
-    {
-        ASSERT(!have_cost); // validate just in case this ever changes
-        return "This ability has a chance of reducing your maximum magic "
-               "capacity when used.";
-    }
-#endif
-
     return ret.str();
 }
 
 // TODO: consolidate with player_has_ability?
+ability_type restored_dithmenos_ability(ability_type ability)
+{
+    switch (ability)
+    {
+    case ABIL_DITHMENOS_SHADOWSLIP:
+        return ABIL_DITHMENOS_SHADOW_STEP;
+    case ABIL_DITHMENOS_PRIMORDIAL_NIGHTFALL:
+        return ABIL_DITHMENOS_SHADOW_FORM;
+    case ABIL_DITHMENOS_APHOTIC_MARIONETTE:
+        return ABIL_NON_ABILITY;
+    default:
+        return ability;
+    }
+}
+
 ability_type fixup_ability(ability_type ability)
 {
+    if (ability == ABIL_PAKELLAS_FIELD_KIT && pakellas::kit_claimed())
+        return ABIL_NON_ABILITY;
     switch (ability)
     {
     case ABIL_TROG_BERSERK:
@@ -1329,6 +1478,9 @@ talent get_talent(ability_type ability)
     const int base_chance = abil.failure.chance();
     const int failure = _adjusted_failure_chance(ability, base_chance);
     result.fail = max(0, min(100, failure));
+    if (ability == ABIL_AMPLIFY_SCARLET_FETTERS || ability == ABIL_AMPLIFY_STOLEN_SIGHT)
+        result.fail = raw_spell_fail(ability == ABIL_AMPLIFY_SCARLET_FETTERS
+            ? SPELL_SCARLET_FETTERS : SPELL_STOLEN_SIGHT);
 
     result.is_invocation = abil.failure.basis == fail_basis::invo;
 
@@ -1352,6 +1504,8 @@ mutation_type makhleb_ability_to_mutation(ability_type abil)
 
 string ability_name(ability_type ability, bool dbname)
 {
+    if (ability == ABIL_RETRACT_SHELL && !dbname && shell::retracted())
+        return "Emerge from Shell";
     // Special-case some dynamic names
     switch (ability)
     {
@@ -1492,6 +1646,8 @@ static int _orb_of_dispater_power();
 // different in-house and outsourced methods.
 static string _ability_damage_string(ability_type ability)
 {
+    if (ability >= ABIL_VORR_RUPTURE && ability <= ABIL_VORR_GREAT_LETTING)
+        return vorr::damage_description(ability);
     // TODO The following abilities have effects that would be nice to show
     //      but which don't fit neatly into the "Damage: dice" format.
     // Chei: temporal distortion, step from time
@@ -1522,6 +1678,9 @@ static string _ability_damage_string(ability_type ability)
                                        _yred_hurl_torchlight_power());
         case ABIL_BEOGH_SMITING:
             dam = beogh_smiting_dice(_beogh_smiting_power(false), false);
+            return make_stringf("6 + %dd%d", dam.num, dam.size);
+        case ABIL_MELIAI_SMITE:
+            dam = beogh_smiting_dice(you.experience_level * 3, false);
             return make_stringf("6 + %dd%d", dam.num, dam.size);
         case ABIL_TSO_CLEANSING_FLAME:
             return make_stringf("2d%d*", _tso_cleansing_flame_power(false));
@@ -1642,6 +1801,12 @@ string get_ability_desc(const ability_type ability, bool need_title)
 
     const string range_str = range_string(ability_range(ability));
 
+    if (const auto* row = eldritch::policy(eldritch::god_for_ability(ability)))
+        lookup = std::string(row->benefit) + "\nWrath: " + row->punishment;
+    if (ability >= ABIL_CHAIN_LASH && ability <= ABIL_RELEASE_CHAIN)
+        lookup += "\n" + chains::summary();
+    if (ability == ABIL_PROFANE_ALTAR || ability == ABIL_ELDER_RITE)
+        lookup += "\n" + eldritch::summary(you);
     lookup += "\n";
 
     if (damage_str != "")
@@ -1838,6 +2003,40 @@ static bool _can_rising_flame(bool quiet)
 // TODO: Many more cases need to be added!
 static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
 {
+    if (abil.ability == ABIL_MELIAI_SMITE && you.hp_max <= 1)
+    {
+        if (!quiet)
+            mpr("You are too drained to invoke a smite.");
+        return false;
+    }
+    if (abil.ability == ABIL_KITSUNE_CHARM
+        && (you.duration[DUR_EXHAUSTED] || you.allies_forbidden()))
+    {
+        if (!quiet)
+            mpr(you.duration[DUR_EXHAUSTED] ? "You are too exhausted to charm anyone."
+                                           : "You cannot have allies.");
+        return false;
+    }
+    if (abil.ability == ABIL_WIGHT_BURY)
+    {
+        const string reason = wight::burial_reason(you.weapon());
+        if (!reason.empty())
+        {
+            if (!quiet)
+                mpr(reason);
+            return false;
+        }
+    }
+    if (eldritch::is_ability(abil.ability)
+        || (abil.ability >= ABIL_CHAIN_LASH && abil.ability <= ABIL_RELEASE_CHAIN))
+    {
+        const auto reason = eldritch::is_ability(abil.ability)
+            ? eldritch::reason(abil.ability) : chains::reason(abil.ability);
+        if (!quiet && !reason.empty())
+            mpr(reason);
+        if (!reason.empty())
+            return false;
+    }
 #ifdef WIZARD
     if (abil.ability >= ABIL_FIRST_WIZ)
         return you.wizard;
@@ -1849,7 +2048,8 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
         return false;
     }
 
-    if (you.berserk() && !testbits(abil.flags, abflag::berserk_ok))
+    if (you.berserk() && !testbits(abil.flags, abflag::berserk_ok)
+        && !(abil.ability == ABIL_MELIAI_SMITE && you_worship(GOD_TROG)))
     {
         if (!quiet)
             canned_msg(MSG_TOO_BERSERK);
@@ -1936,6 +2136,22 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
     const int hpcost = abil.get_hp_cost();
     if (hpcost > 0 && !enough_hp(hpcost, quiet, !quiet))
         return false;
+
+    if (pakellas::is_ability(abil.ability))
+    {
+        const string reason = pakellas::reason(abil.ability);
+        if (!quiet && !reason.empty())
+            mpr(reason);
+        return reason.empty();
+    }
+
+    if (abil.ability >= ABIL_VORR_RUPTURE && abil.ability <= ABIL_VORR_GREAT_LETTING)
+    {
+        const string reason = vorr::ability_reason(abil.ability);
+        if (!quiet && !reason.empty())
+            mpr(reason);
+        return reason.empty();
+    }
 
     switch (abil.ability)
     {
@@ -2064,6 +2280,7 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
         }
         return true;
 
+    case ABIL_AUTOMATON_DELETE_SPELL:
     case ABIL_SIF_MUNA_FORGET_SPELL:
         if (you.spell_no == 0)
         {
@@ -2170,7 +2387,24 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
 
 #if TAG_MAJOR_VERSION == 34
     case ABIL_HEAL_WOUNDS:
-        if (you.hp == you.hp_max)
+    {
+        bool need_heal = (you.hp < you.hp_max);
+        if (!need_heal && party::is_enabled())
+        {
+            for (int slot = 0; slot < party::player_count(); ++slot)
+            {
+                if (slot == party::active_slot() || party::is_player_downed(slot))
+                    continue;
+                player &ally = party::get_player(slot);
+                if (ally.hp > 0 && ally.hp < ally.hp_max
+                    && grid_distance(you.pos(), ally.pos()) <= 1)
+                {
+                    need_heal = true;
+                    break;
+                }
+            }
+        }
+        if (!need_heal)
         {
             if (!quiet)
                 canned_msg(MSG_FULL_HEALTH);
@@ -2182,13 +2416,8 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
                 mpr("You can't heal while in death's door.");
             return false;
         }
-        if (get_real_mp(false) < 1)
-        {
-            if (!quiet)
-                mpr("You don't have enough innate magic capacity.");
-            return false;
-        }
         return true;
+    }
 #endif
 
     case ABIL_SHAFT_SELF:
@@ -2196,6 +2425,40 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
 
     case ABIL_HOP:
         return _can_hop(quiet);
+
+    case ABIL_STEP_BEHIND:
+    {
+        const string reason = neckbeard::blocked_reason();
+        if (reason.empty())
+            return true;
+        if (!quiet)
+            mpr(reason);
+        return false;
+    }
+
+    case ABIL_CRAB_WALK:
+        if (!hermit_crab::crab_walk_ready(you))
+            return false;
+        if (you.cannot_move())
+        {
+            if (!quiet)
+                canned_msg(MSG_CANNOT_MOVE);
+            return false;
+        }
+        return true;
+
+    case ABIL_HERMIT_MOULT:
+        if (hermit_crab::moult_reason(you).empty())
+            return true;
+        if (!quiet)
+            mpr(hermit_crab::moult_reason(you));
+        return false;
+
+    case ABIL_RETRACT_SHELL:
+        return shell::can_retract(quiet);
+
+    case ABIL_SHELL_DASH:
+        return shell::can_dash(quiet);
 
     case ABIL_BESTIAL_TAKEDOWN:
         return _can_movement_ability(quiet);
@@ -2540,6 +2803,18 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
         }
         return true;
 
+    case ABIL_DITHMENOS_SHADOW_FORM:
+    {
+        const string reason = cant_transform_reason(transformation::shadow);
+        if (!reason.empty())
+        {
+            if (!quiet)
+                mpr(reason);
+            return false;
+        }
+        return true;
+    }
+
     case ABIL_DITHMENOS_SHADOWSLIP:
     {
         const string reason = dithmenos_cannot_shadowslip_reason();
@@ -2584,6 +2859,21 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
         {
             if (!quiet)
                 mpr("You are already a vessel of slaughter!");
+            return false;
+        }
+        return true;
+
+    case ABIL_PANTHEON_CONVERGENCE:
+        return coop_content::can_pray(quiet);
+
+    case ABIL_PALADIN_INTERVENE:
+        return paladin::can_intervene(quiet);
+
+    case ABIL_PALADIN_AURA_ZEAL:
+        if (you.duration[DUR_PALADIN_ZEAL])
+        {
+            if (!quiet)
+                mpr("Your Aura of Crusader's Zeal is already blazing!");
             return false;
         }
         return true;
@@ -2683,8 +2973,23 @@ static vector<coord_def> _find_carnage_servant_targets()
 
 unique_ptr<targeter> find_ability_targeter(ability_type ability)
 {
+    if (ability >= ABIL_VORR_RUPTURE && ability <= ABIL_VORR_GREAT_LETTING)
+        return vorr::ability_targeter(ability);
+    if (ability == ABIL_AMPLIFY_SCARLET_FETTERS || ability == ABIL_AMPLIFY_STOLEN_SIGHT)
+    {
+        const spell_type spell = ability == ABIL_AMPLIFY_SCARLET_FETTERS
+            ? SPELL_SCARLET_FETTERS : SPELL_STOLEN_SIGHT;
+        const int power = calc_spell_power(spell);
+        return find_spell_targeter(spell, power, bloodcraft::curse_range(power));
+    }
     switch (ability)
     {
+    case ABIL_STEP_BEHIND:
+        return neckbeard::step_targeter();
+    case ABIL_CRAB_WALK:
+        return make_unique<targeter_multiposition>(&you, hermit_crab::crab_walk_targets());
+    case ABIL_SHELL_DASH:
+        return shell::dash_targeter();
     // Limited radius:
     case ABIL_ZIN_SANCTUARY:
     case ABIL_YRED_FATHOMLESS_SHACKLES:
@@ -2718,6 +3023,10 @@ unique_ptr<targeter> find_ability_targeter(ability_type ability)
         return make_unique<targeter_walls>(&you, find_slimeable_walls());
     case ABIL_SIPHON_ESSENCE:
         return make_unique<targeter_siphon_essence>();
+    case ABIL_DITHMENOS_SHADOW_STEP:
+        return make_unique<targeter_shadow_step>(&you, ability_range(ability));
+    case ABIL_DITHMENOS_SHADOW_FORM:
+        return nullptr;
     case ABIL_DITHMENOS_SHADOWSLIP:
         return make_unique<targeter_multiposition>(&you, _find_shadowslip_affected(), AFF_YES);
 
@@ -2956,8 +3265,13 @@ bool handle_post_ability_effects(ability_type ability,
     }
 }
 
-bool activate_talent(const talent& tal, dist *target)
+bool activate_talent(const talent& tal, dist *target, int inventory_slot)
 {
+    // These are alternate casts of known spells. Their native casting path
+    // handles targeting, failure, costs and action time exactly once.
+    if (tal.which == ABIL_AMPLIFY_SCARLET_FETTERS || tal.which == ABIL_AMPLIFY_STOLEN_SIGHT)
+        return bloodcraft::cast_amplified(tal.which == ABIL_AMPLIFY_SCARLET_FETTERS
+            ? SPELL_SCARLET_FETTERS : SPELL_STOLEN_SIGHT, target) != spret::abort;
     const ability_def& abil = get_ability_def(tal.which);
 
     bolt beam;
@@ -2970,6 +3284,9 @@ bool activate_talent(const talent& tal, dist *target)
         crawl_state.zero_turns_taken();
         return false;
     }
+
+    if (tal.which != ABIL_RETRACT_SHELL && tal.which != ABIL_SHELL_DASH)
+        shell::emerge();
 
     const int range = ability_range(abil.ability);
     beam.range = range;
@@ -2990,7 +3307,10 @@ bool activate_talent(const talent& tal, dist *target)
         args.restricts = testbits(abil.flags, abflag::target) ? DIR_ENFORCE_RANGE
                                                               : DIR_NONE;
         args.mode = abil.ability == ABIL_ELYVILON_DIVINE_ALMS ? TARG_FRIEND
-                                                              : TARG_HOSTILE;
+            : abil.ability == ABIL_CRAB_WALK ? TARG_NON_ACTOR
+            : abil.ability == ABIL_SHELL_DASH
+                || abil.ability == ABIL_VORR_RED_PASSAGE || abil.ability == ABIL_VORR_GREAT_LETTING
+                ? TARG_ANY : TARG_HOSTILE;
         args.range = range;
         args.needs_path = !testbits(abil.flags, abflag::target);
         args.top_prompt = make_stringf("%s: <w>%s</w>",
@@ -3013,6 +3333,11 @@ bool activate_talent(const talent& tal, dist *target)
         }
         else if (abil.ability == ABIL_ELYVILON_PACIFY)
             args.get_desc_func = bind(desc_pacify_chance, placeholders::_1);
+        else if (abil.ability == ABIL_STEP_BEHIND)
+            args.get_desc_func = [](const monster_info& mon) {
+                const coord_def dest = neckbeard::landing(you.pos(), mon.pos);
+                return vector<string>{make_stringf("Landing square: (%d, %d)", dest.x, dest.y)};
+            };
 
         if (abil.failure.base_chance)
         {
@@ -3063,7 +3388,7 @@ bool activate_talent(const talent& tal, dist *target)
         pay_hp(hp_cost);
 
     const spret ability_result = _do_ability(abil, fail, target, beam,
-                                             piety_cost, mp_cost, hp_cost);
+                                             piety_cost, mp_cost, hp_cost, inventory_slot);
     ASSERT(!(ability_result == spret::success && fail));
     return handle_post_ability_effects(tal.which, ability_result, piety_cost,
                                        mp_cost, hp_cost, tal.is_invocation);
@@ -3307,8 +3632,13 @@ spret run_ability_uncancel(uncancellable_type kind, int piety_cost,
  *  or was canceled (spret::abort). Never returns spret::none.
  */
 static spret _do_ability(const ability_def& abil, bool fail, dist *target,
-                         bolt& beam, int piety_cost, int mp_cost, int hp_cost)
+                         bolt& beam, int piety_cost, int mp_cost, int hp_cost,
+                         int inventory_slot)
 {
+    if (eldritch::is_ability(abil.ability))
+        return eldritch::invoke(abil.ability, target);
+    if (abil.ability >= ABIL_CHAIN_LASH && abil.ability <= ABIL_RELEASE_CHAIN)
+        return chains::invoke(abil.ability, target);
     // Note: the costs will not be applied until after this switch
     // statement... it's assumed that only failures have returned! - bwr
     switch (abil.ability)
@@ -3316,12 +3646,19 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
 #if TAG_MAJOR_VERSION == 34
     case ABIL_HEAL_WOUNDS:
         fail_check();
-        if (one_chance_in(4))
-        {
-            mpr("Your magical essence is drained by the effort!");
-            rot_mp(1);
-        }
+        drain_player(15, true, true);
         potionlike_effect(POT_HEAL_WOUNDS, 40);
+        if (party::is_enabled())
+        {
+            for (int slot = 0; slot < party::player_count(); ++slot)
+            {
+                if (slot == party::active_slot() || party::is_player_downed(slot))
+                    continue;
+                player &ally = party::get_player(slot);
+                if (ally.hp > 0 && grid_distance(you.pos(), ally.pos()) <= 1)
+                    party::heal_or_buff_party_member(slot, 20);
+            }
+        }
         break;
 #endif
 
@@ -3364,6 +3701,58 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
             return frog_hop(fail, target);
         else
             return spret::abort;
+
+    case ABIL_STEP_BEHIND:
+        return neckbeard::step_behind(target->target);
+
+    case ABIL_CRAB_WALK:
+        return hermit_crab::crab_walk(target->target);
+
+    case ABIL_HERMIT_MOULT:
+        return hermit_crab::begin_moult();
+
+    case ABIL_ENT_PASSWALL:
+        return your_spells(SPELL_PASSWALL, you.experience_level * 4, false,
+                           nullptr, target);
+
+    case ABIL_WIGHT_BURY:
+    {
+        item_def* weapon = you.weapon();
+        if (!weapon || !yesno("Bind your wielded weapon and drain maximum HP?", false, 'n'))
+            return spret::abort;
+        return wight::bury(*weapon) ? spret::success : spret::abort;
+    }
+    case ABIL_WIGHT_RELEASE:
+    {
+        item_def* weapon = you.weapon();
+        if (!weapon || !yesno("Release this weapon and lose its burial enhancement?", false, 'n'))
+            return spret::abort;
+        return wight::release(*weapon) ? spret::success : spret::abort;
+    }
+
+    case ABIL_KITSUNE_CHARM:
+        mpr("You attempt to charm your audience.");
+        you.increase_duration(DUR_EXHAUSTED,
+                              25 - you.experience_level / 2 + random2(8));
+        return mass_enchantment(ENCH_CHARM, 10 + you.experience_level * 4, fail);
+
+    case ABIL_MELIAI_SMITE:
+    {
+        const spret result = cast_smiting(you.experience_level * 3,
+                                         monster_at(target->target), fail, 100, false);
+        if (result == spret::success)
+            drain_player(10, false, true);
+        return result;
+    }
+
+    case ABIL_ASSIMILATE:
+        return oozle::assimilate(inventory_slot);
+
+    case ABIL_RETRACT_SHELL:
+        return shell::retract();
+
+    case ABIL_SHELL_DASH:
+        return shell::choose_dash_direction(target);
 
     case ABIL_BLINKBOLT:
         if (!_can_blinkbolt(false))
@@ -3494,6 +3883,10 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         potionlike_effect(POT_INVISIBILITY, you.skill(SK_EVOCATIONS, 2) + 5);
         break;
 
+    case ABIL_DISMISS_RITE:
+        bloodcraft::dismiss_rite();
+        break;
+
     case ABIL_END_TRANSFORMATION:
         if (transforming_is_unsafe(you.default_form))
             return spret::abort;
@@ -3576,6 +3969,29 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         mpr("You channel a blast of cleansing flame!");
         cleansing_flame(_tso_cleansing_flame_power(),
                         cleansing_flame_source::invocation, you.pos(), &you);
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (grid_distance(you.pos(), ally.pos()) > 2)
+                    continue;
+                if (party::are_gods_concordant(GOD_SHINING_ONE, ally.religion)
+                    && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 8 + random2(10), 0, DUR_DIVINE_SHIELD, 4,
+                        "The Shining One's golden flame invigoratingly washes over");
+                }
+
+            }
+        }
         break;
     }
 
@@ -3587,6 +4003,11 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         // included in default force_more_message
         if (!bless_weapon(GOD_SHINING_ONE, SPWPN_HOLY_WRATH, YELLOW))
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_SHINING_ONE, "blessed weapon");
+        }
         break;
 
     case ABIL_KIKU_UNEARTH_WRETCHES:
@@ -3604,11 +4025,21 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         // included in default force_more_message
         if (!bless_weapon(GOD_KIKUBAAQUDGHA, SPWPN_PAIN, RED))
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_KIKUBAAQUDGHA, "pain-branded weapon");
+        }
         break;
 
     case ABIL_KIKU_GIFT_CAPSTONE_SPELLS:
         if (!kiku_gift_capstone_spells())
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_KIKUBAAQUDGHA, "capstone necromancy spells");
+        }
         break;
 
     case ABIL_YRED_RECALL_UNDEAD_HARVEST:
@@ -3639,6 +4070,28 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         you.duration[DUR_FATHOMLESS_SHACKLES] = random_range(15, 25) * BASELINE_DELAY;
         yred_make_blasphemy();
         invalidate_agrid();
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_YREDELEMNUL, ally.religion))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 4 + random2(6), 0, DUR_REGENERATION, 6 + random2(5),
+                        "Yredelemnul's soul-harvest vitalises");
+                }
+
+            }
+        }
         break;
 
     case ABIL_YRED_BIND_SOUL:
@@ -3666,19 +4119,43 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     }
 
     case ABIL_OKAWARU_HEROISM:
+    {
         fail_check();
         mprf(MSGCH_DURATION, you.duration[DUR_HEROISM]
              ? "You feel more confident with your borrowed prowess."
              : "You gain the combat prowess of a mighty hero.");
 
-        you.increase_duration(DUR_HEROISM,
-                              10 + random2avg(you.skill(SK_INVOCATIONS, 6), 2),
-                              100);
+        const int dur = 10 + random2avg(you.skill(SK_INVOCATIONS, 6), 2);
+        you.increase_duration(DUR_HEROISM, dur, 100);
         you.redraw_evasion      = true;
         you.redraw_armour_class = true;
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_OKAWARU, ally.religion))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 0, 0, DUR_HEROISM, max(4, dur / 2),
+                        "Okawaru's heroic battle-chant inspires");
+                }
+
+            }
+        }
         break;
+    }
 
     case ABIL_OKAWARU_FINESSE:
+    {
         fail_check();
         if (you.duration[DUR_FINESSE])
         {
@@ -3689,11 +4166,32 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         else
             mprf(MSGCH_DURATION, "You can now deal lightning-fast blows.");
 
-        you.increase_duration(DUR_FINESSE,
-                              10 + random2avg(you.skill(SK_INVOCATIONS, 6), 2),
-                              100);
+        const int dur = 10 + random2avg(you.skill(SK_INVOCATIONS, 6), 2);
+        you.increase_duration(DUR_FINESSE, dur, 100);
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_OKAWARU, ally.religion))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 0, 0, DUR_FINESSE, max(4, dur / 2),
+                        "Okawaru's martial cadence quickens");
+                }
 
+            }
+        }
         break;
+    }
 
     case ABIL_OKAWARU_DUEL:
         return okawaru_duel(beam.target, fail);
@@ -3701,11 +4199,21 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_OKAWARU_GIFT_WEAPON:
         if (!okawaru_gift_weapon())
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_OKAWARU, "capstone weapon gift");
+        }
         break;
 
     case ABIL_OKAWARU_GIFT_ARMOUR:
         if (!okawaru_gift_armour())
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_OKAWARU, "capstone armour gift");
+        }
         break;
 
     case ABIL_MAKHLEB_ANNIHILATION:
@@ -3755,6 +4263,28 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         fail_check();
         // Trog abilities don't use or train invocations.
         you.go_berserk(true);
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_TROG, ally.religion))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 0, 0, DUR_MIGHT, 8 + random2(8),
+                        "Trog's primal war-cry bolsters");
+                }
+
+            }
+        }
         break;
 
     case ABIL_TROG_HAND:
@@ -3766,20 +4296,47 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_TROG_BROTHERS_IN_ARMS:
         return trog_brothers_in_arms(fail);
 
+    case ABIL_AUTOMATON_DELETE_SPELL:
     case ABIL_SIF_MUNA_FORGET_SPELL:
         if (cast_selective_amnesia() <= 0)
         {
             canned_msg(MSG_OK);
             return spret::abort;
         }
+        if (abil.ability == ABIL_AUTOMATON_DELETE_SPELL)
+            drain_player(200, false, true);
         break;
 
     case ABIL_SIF_MUNA_CHANNEL_ENERGY:
+    {
         fail_check();
         mpr("You channel some magical energy.");
-        you.increase_duration(DUR_CHANNEL_ENERGY,
-            4 + random2avg(you.skill_rdiv(SK_SPELLCASTING, 3, 10), 2), 100);
+        const int dur = 4 + random2avg(you.skill_rdiv(SK_SPELLCASTING, 3, 10), 2);
+        you.increase_duration(DUR_CHANNEL_ENERGY, dur, 100);
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_SIF_MUNA, ally.religion))
+                {
+                    party::heal_or_buff_party_member(
+                        i, 0, 2 + random2(4), DUR_CHANNEL_ENERGY, max(2, dur / 2),
+                        "Sif Muna's arcane ley-current flows into");
+                }
+
+            }
+        }
         break;
+    }
 
     case ABIL_SIF_MUNA_DIVINE_EXEGESIS:
         return divine_exegesis(fail);
@@ -3797,6 +4354,33 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         const int healed = pow + roll_dice(2, pow) - 2;
         mpr("You are healed.");
         inc_hp(healed);
+        if (party::is_enabled())
+        {
+            const int active = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == active || !party::slot_is_alive(i)
+                    || !party::slot_is_on_current_floor(i))
+                {
+                    continue;
+                }
+                const player &ally = party::Member(i);
+                if (!you.see_cell_no_trans(ally.pos()))
+                    continue;
+                if (party::are_gods_concordant(GOD_ELYVILON, ally.religion)
+                    && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+                {
+                    const int share = (healed * 3) / 4;
+                    if (share > 0 && ally.hp < ally.hp_max)
+                    {
+                        party::heal_or_buff_party_member(
+                            i, share, 0, NUM_DURATIONS, 0,
+                            "Elyvilon's soothing light mends");
+                    }
+                }
+
+            }
+        }
         break;
     }
 
@@ -3853,6 +4437,17 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
             mpr("You cannot banish yourself!");
             return spret::abort;
         }
+        if (party::is_enabled())
+        {
+            if (monster *m = monster_at(beam.target))
+            {
+                if (party::is_proxy_monster(*m))
+                {
+                    mpr("You cannot banish your party member!");
+                    return spret::abort;
+                }
+            }
+        }
 
         fail_check();
 
@@ -3883,6 +4478,11 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         // included in default force_more_message
         if (!bless_weapon(GOD_LUGONU, SPWPN_DISTORTION, MAGENTA))
             return spret::abort;
+        if (party::is_enabled())
+        {
+            party::apply_pantheon_gift_resonance(
+                party::active_slot(), GOD_LUGONU, "distortion-branded weapon");
+        }
         break;
 
     case ABIL_NEMELEX_DRAW_DESTRUCTION:
@@ -4000,6 +4600,17 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
 
     case ABIL_ASHENZARI_SHATTER:
         if (!ashenzari_shatter_item())
+            return spret::abort;
+        break;
+
+    case ABIL_DITHMENOS_SHADOW_STEP:
+        if (_abort_if_stationary() || cancel_harmful_move(false))
+            return spret::abort;
+        return dithmenos_shadow_step(beam.target, fail);
+
+    case ABIL_DITHMENOS_SHADOW_FORM:
+        fail_check();
+        if (!transform(dithmenos_shadow_form_duration(), transformation::shadow))
             return spret::abort;
         break;
 
@@ -4133,6 +4744,14 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_WU_JIAN_WALLJUMP:
         return wu_jian_wall_jump_ability();
 
+    case ABIL_VELLUM_WEAVE:
+        return vellum::invoke();
+
+    case ABIL_VORR_RUPTURE:
+    case ABIL_VORR_RED_PASSAGE:
+    case ABIL_VORR_GREAT_LETTING:
+        return vorr::invoke(abil.ability, fail, target && target->isValid ? &target->target : nullptr);
+
     case ABIL_IGNIS_FIERY_ARMOUR:
         fiery_armour();
         return spret::success;
@@ -4148,6 +4767,26 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         you.set_duration(DUR_RISING_FLAME, 2 + random2(3));
         you.one_time_ability_used.set(GOD_IGNIS);
         return spret::success;
+
+#if TAG_MAJOR_VERSION == 34
+    case ABIL_PAKELLAS_DEVICE_SURGE:
+    case ABIL_PAKELLAS_QUICK_CHARGE:
+    case ABIL_PAKELLAS_SUPERCHARGE:
+    case ABIL_PAKELLAS_FIELD_KIT:
+    case ABIL_PAKELLAS_EVOKE_PROTOTYPE:
+        return pakellas::invoke(abil.ability, target);
+#endif
+
+    case ABIL_PANTHEON_CONVERGENCE:
+        return coop_content::pray(fail);
+
+    case ABIL_PALADIN_INTERVENE:
+        return paladin::intervene(fail);
+
+    case ABIL_PALADIN_AURA_ZEAL:
+    case ABIL_PALADIN_AURA_VITALITY:
+        mpr("This invocation has been replaced by an Auramancy spell.");
+        return spret::abort;
 
     case ABIL_RENOUNCE_RELIGION:
         if (yesno("Really renounce your faith, foregoing its fabulous benefits?",
@@ -4405,6 +5044,22 @@ bool is_card_ability(ability_type abil)
 
 bool player_has_ability(ability_type abil, bool include_unusable)
 {
+    if (abil == ABIL_AUTOMATON_DELETE_SPELL)
+        return you.species == SP_AUTOMATON;
+    if (eldritch::is_ability(abil))
+    {
+        if (you.species != SP_ELDRITCH)
+            return false;
+        return abil == ABIL_PROFANE_ALTAR || abil == ABIL_ELDER_RITE
+            || eldritch::has(eldritch::god_for_ability(abil));
+    }
+    if (abil >= ABIL_CHAIN_LASH && abil <= ABIL_RELEASE_CHAIN)
+        return you.species == SP_CHAIN_DEVIL
+            && (include_unusable || chains::has_body(you))
+            && (abil != ABIL_REEL_IN || you.experience_level >= 7)
+            && (abil != ABIL_PINNING_CHAIN || you.experience_level >= 13);
+    if (abil == ABIL_VELLUM_WEAVE)
+        return you_worship(GOD_VELLUM) || !vellum::load(you).threads.empty();
 #ifdef WIZARD
     if (abil >= ABIL_FIRST_WIZ)
         return you.wizard;
@@ -4440,6 +5095,31 @@ bool player_has_ability(ability_type abil, bool include_unusable)
                && (!form_changes_anatomy() || include_unusable);
     case ABIL_HOP:
         return you.get_mutation_level(MUT_FROG_LEGS);
+    case ABIL_CRAB_WALK:
+        return hermit_crab::crab_walk_ready(you);
+    case ABIL_STEP_BEHIND:
+        return you.char_class == JOB_NECKBEARD;
+    case ABIL_HERMIT_MOULT:
+        return you.species == SP_HERMIT_CRAB;
+    case ABIL_ENT_PASSWALL:
+        return you.species == SP_ENT;
+    case ABIL_WIGHT_BURY:
+        return you.species == SP_WIGHT && you.experience_level >= 12
+            && (!you.weapon() || !wight::buried(*you.weapon()));
+    case ABIL_WIGHT_RELEASE:
+        return you.species == SP_WIGHT && you.experience_level >= 12
+            && you.weapon() && wight::buried(*you.weapon());
+    case ABIL_KITSUNE_CHARM:
+        return you.species == SP_KITSUNE;
+    case ABIL_MELIAI_SMITE:
+        return you.species == SP_MELIAI;
+    case ABIL_ASSIMILATE:
+        return oozle::has_memory();
+    case ABIL_RETRACT_SHELL:
+        return you.get_mutation_level(MUT_ARMOURED_SHELL)
+               || (include_unusable && you.has_innate_mutation(MUT_ARMOURED_SHELL));
+    case ABIL_SHELL_DASH:
+        return shell::retracted();
     case ABIL_BREATHE_POISON:
         return you.get_mutation_level(MUT_SPIT_POISON) >= 2;
     case ABIL_SPIT_POISON:
@@ -4455,6 +5135,12 @@ bool player_has_ability(ability_type abil, bool include_unusable)
         return you.form == transformation::werewolf;
     case ABIL_BREATHE_RUST:
         return you.form == transformation::fortress_crab;
+    case ABIL_PALADIN_INTERVENE:
+        return you.props.exists("paladin_aura") && you_worship(GOD_SHINING_ONE)
+               && !player_under_penance();
+    case ABIL_PALADIN_AURA_ZEAL:
+    case ABIL_PALADIN_AURA_VITALITY:
+        return false; // Auras are now castable cross-school spells
     case ABIL_BLINKBOLT:
         return you.form == transformation::storm;
     case ABIL_SIPHON_ESSENCE:
@@ -4484,6 +5170,12 @@ bool player_has_ability(ability_type abil, bool include_unusable)
     case ABIL_WORD_OF_CHAOS:
         return you.get_mutation_level(MUT_WORD_OF_CHAOS)
                && (!you.is_silenced() || include_unusable);
+    case ABIL_DISMISS_RITE:
+        return bloodcraft::active_rite() != SPELL_NO_SPELL;
+    case ABIL_AMPLIFY_SCARLET_FETTERS:
+        return you.has_spell(SPELL_SCARLET_FETTERS);
+    case ABIL_AMPLIFY_STOLEN_SIGHT:
+        return you.has_spell(SPELL_STOLEN_SIGHT);
     case ABIL_END_TRANSFORMATION:
         return you.form != you.default_form && !you.transform_uncancellable;
     // TODO: other god abilities
@@ -4532,6 +5224,24 @@ vector<talent> your_talents(bool include_unusable, bool ignore_piety)
             ABIL_DIG,
             ABIL_SHAFT_SELF,
             ABIL_HOP,
+            ABIL_STEP_BEHIND,
+            ABIL_CRAB_WALK,
+            ABIL_HERMIT_MOULT,
+            ABIL_ENT_PASSWALL,
+            ABIL_WIGHT_BURY,
+            ABIL_WIGHT_RELEASE,
+            ABIL_KITSUNE_CHARM,
+            ABIL_MELIAI_SMITE,
+            ABIL_RETRACT_SHELL,
+            ABIL_SHELL_DASH,
+            ABIL_ASSIMILATE,
+            ABIL_CHAIN_LASH,
+            ABIL_REEL_IN,
+            ABIL_PINNING_CHAIN,
+            ABIL_RELEASE_CHAIN,
+            ABIL_PROFANE_ALTAR,
+            ABIL_ELDER_RITE,
+            ABIL_AUTOMATON_DELETE_SPELL,
             ABIL_SPIT_POISON,
             ABIL_GOLDEN_BREATH,
             ABIL_COMBUSTION_BREATH,
@@ -4553,10 +5263,16 @@ vector<talent> your_talents(bool include_unusable, bool ignore_piety)
             ABIL_WATERY_GRAVE,
             ABIL_BESTIAL_TAKEDOWN,
             ABIL_BREATHE_RUST,
+            ABIL_PALADIN_INTERVENE,
+            ABIL_PALADIN_AURA_ZEAL,
+            ABIL_PALADIN_AURA_VITALITY,
             ABIL_BLINKBOLT,
             ABIL_SIPHON_ESSENCE,
             ABIL_IMBUE_SERVITOR,
             ABIL_IMPRINT_WEAPON,
+            ABIL_DISMISS_RITE,
+            ABIL_AMPLIFY_SCARLET_FETTERS,
+            ABIL_AMPLIFY_STOLEN_SIGHT,
             ABIL_END_TRANSFORMATION,
             ABIL_RENOUNCE_RELIGION,
             ABIL_CONVERT_TO_BEOGH,
@@ -4577,8 +5293,15 @@ vector<talent> your_talents(bool include_unusable, bool ignore_piety)
 
 
     // player_has_ability will just brute force these anyways (TODO)
+    for (const auto& row : eldritch::powers())
+        if (!row.passive && eldritch::has(row.god))
+            _add_talent(talents, eldritch::ability(row.god));
+
     for (ability_type abil : get_god_abilities(ignore_piety, include_unusable))
         _add_talent(talents, abil);
+
+    if (!you_worship(GOD_VELLUM) && !vellum::load(you).threads.empty())
+        _add_talent(talents, ABIL_VELLUM_WEAVE);
 
     // Side effect alert!
     // Find hotkeys for the non-hotkeyed talents. (XX: how does this relate
@@ -4847,6 +5570,13 @@ vector<ability_type> get_god_abilities(bool ignore_piety, bool ignore_penance)
         }
     }
 
+    if (coop_content::offers_fellowship_prayer()
+        && (ignore_penance || !player_under_penance())
+        && (ignore_piety || you.piety() >= piety_breakpoint(2)))
+    {
+        abilities.push_back(ABIL_PANTHEON_CONVERGENCE);
+    }
+
     return abilities;
 }
 
@@ -4874,6 +5604,10 @@ void swap_ability_slots(int index1, int index2, bool silent)
 skill_type abil_skill(ability_type ability)
 {
     ASSERT(ability != ABIL_NON_ABILITY);
+    if (ability == ABIL_SHELL_DASH)
+        return SK_UNARMED_COMBAT;
+    if (ability == ABIL_ASSIMILATE)
+        return SK_SHAPESHIFTING;
     return get_ability_def(ability).failure.skill();
 }
 
@@ -4887,6 +5621,8 @@ skill_type abil_skill(ability_type ability)
 int abil_skill_weight(ability_type ability)
 {
     ASSERT(ability != ABIL_NON_ABILITY);
+    if (ability == ABIL_ASSIMILATE)
+        return 1;
     // This is very loosely modelled on a legacy model; fairly arbitrary.
     const int base_fail = get_ability_def(ability).failure.base_chance;
     const int floor = base_fail ? 1 : 0;

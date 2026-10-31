@@ -1,0 +1,68 @@
+/* Small material and light changes; pixel geometry and native colours stay intact. */
+#normal #dungeon_viewport { position: relative; z-index: 0; flex: 0 0 auto; min-height: 0; overflow: hidden; }
+#normal #dungeon_viewport > #dungeon { position: absolute; display: block; outline: none; }
+.premium-dungeon-radiance { mix-blend-mode: screen; }
+.premium-dungeon-light, .premium-dungeon-radiance {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    image-rendering: pixelated;
+}
+#normal #dcss_quick_dock #graphics_settings_btn {
+    width: auto;
+    min-width: 84px;
+    padding: 5px 8px;
+    gap: 4px;
+    font: 11px/1.2 var(--tt-font-ui, system-ui);
+    white-space: nowrap;
+}
+#normal #premium_visuals_btn[aria-pressed="true"] {
+    color: #efdbad;
+    border-color: #b89c66;
+    background: linear-gradient(#3d4030, #252b23);
+}
+html[data-presentation="premium"] #normal #dungeon_viewport {
+    isolation: isolate;
+    box-shadow: inset 0 0 0 1px #e3c79715;
+}
+html[data-graphics-interface="true"] #normal :is(#right_column, #hud_bottom_row, #dcss_quick_dock) {
+    box-shadow: inset 0 1px 0 #f7e1b510, inset 1px 0 0 #fff3da08, 0 2px 12px #0003;
+}
+html[data-graphics-interface="true"] #normal .party-member-card {
+    box-shadow: inset 0 1px 0 #fff0cb0b, 0 2px 5px #0002;
+}
+html[data-graphics-interface="true"] #normal .party-member-card.is-controlled-card {
+    box-shadow: inset 3px 0 0 var(--art-brass, #b89c66), inset 0 1px 0 #fff0cb18, 0 2px 7px #0003;
+}
+html[data-graphics-interface="true"] #normal .party-portrait { box-shadow: none; }
+html[data-graphics-interface="true"] #normal .hud-item-slot {
+    box-shadow: inset 0 1px 0 #e6d6ae0d, inset 0 -2px 4px #0003;
+}
+html[data-graphics-interface="true"] #normal .hud-item-slot:hover {
+    box-shadow: inset 0 1px 0 #f8dfab2b, 0 0 6px #d4b77412;
+}
+html[data-graphics-interface="true"] #normal :is(button, summary, a) {
+    transition: border-color 120ms ease-out, background-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+html[data-graphics-interface="true"] :is(.workflow-context-menu, #party_inspector_modal) {
+    box-shadow: inset 0 1px 0 #f6e3ba18, 0 8px 28px #0007;
+    animation: premium-surface-enter 120ms ease-out;
+}
+@keyframes premium-surface-enter {
+    from { opacity: .6; }
+    to { opacity: 1; }
+}
+html[data-graphics-motion="reduced"] #normal :is(button, summary, a),
+html[data-graphics-motion="reduced"] :is(.workflow-context-menu, #party_inspector_modal) {
+    animation: none; transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    html[data-presentation="premium"] #normal :is(button, summary, a),
+    html[data-presentation="premium"] :is(.workflow-context-menu, #party_inspector_modal) {
+        animation: none;
+        transition: none;
+    }
+}
+@media (forced-colors: active) {
+    .premium-dungeon-light, .premium-dungeon-radiance { display: none; }
+}

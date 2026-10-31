@@ -456,6 +456,11 @@ A brilliant scientist obsessed with electricity. In his attempts to perfect his
 electric golem, he was involved in a terrible accident, and now phases in and
 out of reality.
 %%%%
+Rin the nine-tailed
+
+A formidable Kitsune spellcaster, Rin is famed among her people for her nine
+tails and her mastery of captivating and destructive magic.
+%%%%
 Nobody
 
 A time-lost revenant, risen not from the death of a single individual but of
@@ -1715,6 +1720,11 @@ green draconian
 
 A muscular green-scaled humanoid with a reptilian tail and small wings.
 %%%%
+greenwood witch
+
+These witches follow the old ways of the forest, patrolling their sacred
+woodlands on long, chicken-like legs. They use magic to incapacitate intruders.
+%%%%
 grey draconian
 
 A muscular grey-scaled humanoid with a reptilian tail and small wings.
@@ -2016,6 +2026,10 @@ ensnaring them. The speed with which it leaps is almost supernatural.
 killer bee
 
 A giant bee, bearing a deadly barb which can sting repeatedly.
+%%%%
+killer bee larva
+
+A young killer bee, still wingless and able to defend its brood with a bite.
 %%%%
 Killer Klown
 
@@ -3587,6 +3601,10 @@ wolf
 
 A strong wild canine, with sharp teeth and a healthy appetite.
 %%%%
+fire fox
+
+A quick fox that kindles wisps of magical fire and blinks away from danger.
+%%%%
 wolf spider
 
 A hairy fast-moving hunting spider with vicious mandibles, the size of a wolf.
@@ -3655,6 +3673,32 @@ zykzyl
 A demon born of mortal envy, its flesh undulating with a sickening wetness
 whenever it moves. It is driven by a singular desire to reduce all beauty to a
 form as hideous as its own.
+%%%%
+deep dwarf
+
+A pallid, stocky subterranean dwarf whose body has adapted to the crushing weight
+of the deep earth. Though incapable of natural regeneration, it shrugs off blows
+with uncanny resilience and mends its own flesh with dark subterranean magic.
+%%%%
+silver star
+
+A radiant orb of living silver light that drifts silently through the halls of
+Zot. It unleashes blinding beams of searing silver radiance and fracturing bolts
+of pure energy against any who trespass.
+%%%%
+chain-warden
+
+An ironbound jailer charged with breaking up bands of intruders in the Vaults.
+Its harpoon drags a straggler away from their companions; its chains punish
+those who crowd together. The wardens keep these specialists for incursions
+by more than one adventurer.
+%%%%
+void-tether stalker
+
+An Abyssal predator drawn to the disturbances left by several souls travelling
+together. It folds space around its prey, separating companions before closing
+in to feed. Bands of adventurers attract it where a lone traveller passes
+unnoticed.
 %%%%
 # Specials
 test spawner
@@ -4139,3 +4183,63 @@ You hear the echoes of planets behind the deafening roar of stars as it
 approaches. It is the jaws of the abyss. It brings forth crawling chaos from
 within. It is the last sight you will ever see.
 %%%%
+burrowing beast
+
+A massive pale-furred animal with broad digging claws and a wedge-shaped head.
+It tears through rock in pursuit of prey.
+%%%%
+crag boar
+
+A heavy boar with a thick hide and mineral-stained bristles. Its tusks are
+polished by years of rooting among stones.
+%%%%
+shale drake
+
+A squat, flightless drake that grinds swallowed stones in its muscular throat.
+When disturbed, it spits the fragments with considerable force.
+%%%%
+deep troll delver
+
+A deep troll versed in simple earth magic. It clears passages with a muttered
+spell and defends them with less subtle applications of the same art.
+%%%%
+Worldworm
+
+An enormous pale worm, scored by countless journeys through the earth. Its
+passage has joined caverns that were once far apart.
+
+%%%%
+gallery worm
+
+An enormous worm armoured in rings of stone-hard hide. It cuts through soft
+rock as it hunts, opening fresh passages into neighbouring galleries.
+%%%%
+coil worm
+
+A thick-bodied worm which winds its muscular coils around its prey. Its bulk
+makes it slow to turn, but its grip can hold a traveller in a dangerous place.
+%%%%
+caustic worm
+
+A thick cave worm with an acid-filled crop. It spits a corrosive stream at
+intruders, softening them before it feeds.
+%%%%
+wax beetle
+
+A broad beetle whose amber carapace blends into the wax walls of the Hive. Its
+heavy shell and powerful jaws make it a stubborn obstacle in a narrow passage.
+%%%%
+venom wasp
+
+A slender green wasp that spits venom from a safe distance. Its delicate body
+is easy to crush, if you can reach it through the other insects.
+%%%%
+Old Coil
+
+An immense pale worm, scarred by centuries of hunting in the deep galleries.
+It wraps its prey in muscular coils and drinks deeply with each bite.
+%%%%
+Vespara
+
+An enormous queen bee with a deep, commanding buzz. Her workers answer it with
+a furious determination to defend their queen.

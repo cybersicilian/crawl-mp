@@ -26,10 +26,12 @@
 #include <string>
 
 #include "ability.h"
+#include "beam.h"
 #include "branch-data-json.h"
 #include "chardump.h"
 #include "clua.h"
 #include "colour.h"
+#include "database.h"
 #include "defines.h"
 #include "delay.h"
 #include "describe.h"
@@ -44,6 +46,7 @@
 #include "game-options.h"
 #include "ghost.h"
 #include "invent.h"
+#include "item-name.h"
 #include "item-prop.h"
 #include "items.h"
 #include "jobs.h"
@@ -56,8 +59,10 @@
 #include "message.h"
 #include "mon-util.h"
 #include "monster.h"
+#include "mutation.h"
 #include "newgame.h"
 #include "options.h"
+#include "party.h"
 #include "playable.h"
 #include "player.h"
 #include "prompt.h"
@@ -66,6 +71,7 @@
 #include "spl-util.h"
 #include "stash.h"
 #include "state.h"
+#include "stats-json.h"
 #include "status.h"
 #include "stringutil.h"
 #include "syscalls.h"
@@ -1412,6 +1418,8 @@ void game_options::set_default_activity_interrupts()
         "interrupt_drop_item = interrupt_equip_on",
         "interrupt_transform = interrupt_equip_on",
         "interrupt_memorise = hp_loss, monster_attack",
+        "interrupt_assimilation = interrupt_equip_on",
+        "interrupt_hermit_moult = hp_loss, monster_attack",
         "interrupt_imbue_servitor = interrupt_equip_on",
         "interrupt_imprint_weapon = interrupt_imbue_servitor",
         "interrupt_multidrop = hp_loss, monster_attack",
@@ -1566,6 +1574,11 @@ void game_options::reset_paths()
     shared_dir = save_dir;
 #endif
 
+    // Trusted launcher override: isolate each expedition while retaining the
+    // configured shared bones, scores and data directories.
+    const char *expedition_saves = getenv("CRAWL_SAVE_DIR");
+    if (expedition_saves && *expedition_saves)
+        save_dir = canonicalise_file_separator(string(expedition_saves) + "/");
 }
 
 void game_options::reset_options()
@@ -2971,6 +2984,9 @@ string base_game_options::expand_vars(const string &field) const
 
 void game_options::fixup_options()
 {
+    const char *expedition_saves = getenv("CRAWL_SAVE_DIR");
+    if (expedition_saves && *expedition_saves)
+        save_dir = canonicalise_file_separator(string(expedition_saves) + "/");
     // Validate save_dir
     if (!check_mkdir("Save directory", &save_dir))
         end(1, false, "Cannot create save directory '%s'", save_dir.c_str());
@@ -4430,6 +4446,16 @@ bool game_options::read_custom_option(opt_parse_state &state, bool runscripts)
         return true;
     }
 #endif
+    else if (key == "party_players" || key == "party")
+    {
+        party::configure_from_arg(state.raw_field);
+        return true;
+    }
+    else if (key == "party_friendly_fire" || key == "friendly_fire")
+    {
+        party::set_friendly_fire(read_bool(state.field, party::friendly_fire_enabled()));
+        return true;
+    }
 
     return false;
 }
@@ -4849,7 +4875,9 @@ enum commandline_option_type
     CLO_NO_THROTTLE,
     CLO_CLUA_MAX_MEMORY,
     CLO_PLAYABLE_JSON, // JSON metadata for species, jobs, combos.
+    CLO_CHARACTER_PREVIEW_JSON,
     CLO_BRANCHES_JSON, // JSON metadata for branches.
+    CLO_STATS_JSON, // JSON reference data for the /stats pages.
     CLO_SAVE_JSON,
     CLO_GAMETYPES_JSON,
     CLO_EDIT_BONES,
@@ -4863,6 +4891,7 @@ enum commandline_option_type
     CLO_PRINT_WEBTILES_OPTIONS,
 #endif
     CLO_RESET_CACHE,
+    CLO_PARTY,
 
     CLO_NOPS
 };
@@ -4876,7 +4905,9 @@ static set<commandline_option_type> clo_headless_ok = {
     CLO_HELP,
     CLO_VERSION,
     CLO_PLAYABLE_JSON, // JSON metadata for species, jobs, combos.
+    CLO_CHARACTER_PREVIEW_JSON,
     CLO_BRANCHES_JSON, // JSON metadata for branches.
+    CLO_STATS_JSON, // JSON reference data for the /stats pages.
     CLO_EDIT_BONES,
     CLO_MAPSTAT,
     CLO_MAPSTAT_DUMP_DISCONNECT,
@@ -4908,7 +4939,8 @@ static const char *cmd_ops[] =
     "extra-opt-first", "extra-opt-last", "sprint-map", "edit-save",
     "print-charset", "tutorial", "wizard", "explore", "no-save",
     "no-player-bones", "gdb", "no-gdb", "nogdb", "throttle", "no-throttle",
-    "lua-max-memory", "playable-json", "branches-json", "save-json",
+    "lua-max-memory", "playable-json", "character-preview-json", "branches-json", "stats-json",
+    "save-json",
     "gametypes-json", "bones", "descent",
 #if defined(UNIX) || defined(USE_TILE_LOCAL)
     "headless",
@@ -4917,6 +4949,7 @@ static const char *cmd_ops[] =
     "webtiles-socket", "await-connection", "print-webtiles-options",
 #endif
     "reset-cache",
+    "party",
 };
 
 
@@ -5965,11 +5998,42 @@ bool parse_args(int argc, char **argv, bool rc_only)
             break;
 
         case CLO_PLAYABLE_JSON:
+            // Weapon names and restrictions use the indexed item properties.
+            init_properties();
             fprintf(stdout, "%s", playable_metadata_json().c_str());
             end(0);
 
+        case CLO_CHARACTER_PREVIEW_JSON:
+            if (!next_is_param)
+                return false;
+            enter_headless_mode();
+            crawl_state.character_preview = next_arg;
+            Options.no_save = true;
+            Options.no_player_bones = true;
+            nextUsed = true;
+            break;
+
         case CLO_BRANCHES_JSON:
             fprintf(stdout, "%s", branch_data_json().c_str());
+            end(0);
+
+        case CLO_STATS_JSON:
+            // This runs during the first (rc_only) argument pass, before
+            // main() has initialised anything, so set up every table the
+            // dump reads. Descriptions come from the database; if it can't
+            // be opened they are simply emitted as "".
+            init_char_table(CSET_ASCII);
+            init_monsters();
+            init_properties();
+            init_item_name_cache();
+            init_spell_descs();
+            init_zap_index();
+            init_mut_index();
+            init_mon_name_cache();
+            databaseSystemInit();
+            init_spell_name_cache();
+            fprintf(stdout, "%s\n", stats_reference_json().c_str());
+            fflush(stdout);
             end(0);
 
         case CLO_TEST:
@@ -6291,6 +6355,14 @@ bool parse_args(int argc, char **argv, bool rc_only)
 
             // Can be used multiple times.
             _arg_seen(static_cast<commandline_option_type>(o)) = false;
+            break;
+
+        case CLO_PARTY:
+            if (!next_is_param)
+                return false;
+            if (!rc_only)
+                party::configure_from_arg(next_arg);
+            nextUsed = true;
             break;
         }
 

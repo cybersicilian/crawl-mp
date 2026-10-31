@@ -192,7 +192,7 @@ TEST_CASE("Test all_item_subtypes() does not include removed items",
           "[single-file]") {
     const auto items = all_item_subtypes(OBJ_POTIONS);
 
-    const auto has_removed_item = find(items.begin(), items.end(), POT_POISON) != items.end();
+    const auto has_removed_item = find(items.begin(), items.end(), POT_PORRIDGE) != items.end();
 
     REQUIRE(has_removed_item == false);
 }

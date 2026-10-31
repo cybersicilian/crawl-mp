@@ -1,0 +1,24 @@
+{
+  "/healthz": {
+    "status": 200,
+    "bytes": 91,
+    "tls_verification": true,
+    "body": {
+      "ok": true,
+      "checked_at": "2026-10-28T01:48:25.616340+00:00",
+      "application": true,
+      "disk": true
+    }
+  },
+  "/status/version/": {
+    "status": 200,
+    "bytes": 89,
+    "tls_verification": true,
+    "python_supported": true
+  },
+  "/": {
+    "status": 200,
+    "bytes": 31105,
+    "tls_verification": true
+  }
+}

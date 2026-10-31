@@ -173,6 +173,9 @@ public:
 
     int total_kills() const;
 
+    // Per-monster kill records for one category (used by stats snapshots).
+    int get_kills(kill_category cat, vector<kill_exp> &v) const;
+
     string kill_info() const;
 private:
     const char *category_name(kill_category kc) const;

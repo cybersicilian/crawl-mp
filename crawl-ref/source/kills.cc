@@ -110,6 +110,13 @@ int KillMaster::total_kills() const
     return grandtotal;
 }
 
+int KillMaster::get_kills(kill_category cat, vector<kill_exp> &v) const
+{
+    if (cat < KC_YOU || cat >= KC_NCATEGORIES || categorized_kills[cat].empty())
+        return 0;
+    return categorized_kills[cat].get_kills(v);
+}
+
 string KillMaster::kill_info() const
 {
     if (empty())

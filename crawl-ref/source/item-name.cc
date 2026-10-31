@@ -40,6 +40,7 @@
 #include "notes.h"
 #include "options.h"
 #include "orb-type.h"
+#include "party.h"
 #include "player.h"
 #include "potion.h"
 #include "prompt.h"
@@ -728,8 +729,17 @@ const char* potion_type_name(int potiontype)
     case POT_MUTATION:          return "mutation";
     case POT_RESISTANCE:        return "resistance";
     case POT_LIGNIFY:           return "lignification";
+    case POT_EMPATHY:           return "empathy";
+    case POT_SOUL_AMBROSIA:     return "soul ambrosia";
+    case POT_CONCORD:           return "concord";
+    case POT_TRANSFUSION:       return "transfusion";
 
     case POT_MIST:              return "mist";
+    case POT_POISON:            return "poison";
+    case POT_STRONG_POISON:     return "strong poison";
+    case POT_SLOWING:           return "slowing";
+    case POT_DECAY:             return "decay";
+    case POT_WATER:             return "water";
 
     // FIXME: Remove this once known-items no longer uses this as a sentinel.
     default:
@@ -761,6 +771,10 @@ const char* scroll_type_name(int scrolltype)
     case SCR_VULNERABILITY:      return "vulnerability";
     case SCR_SILENCE:            return "silence";
     case SCR_AMNESIA:            return "amnesia";
+    case SCR_SOUL_RECALL:        return "soul recall";
+    case SCR_RALLYING:           return "rallying";
+    case SCR_PHASE_SWAP:         return "phase swap";
+    case SCR_SHARED_VIGOUR:      return "shared vigour";
 #if TAG_MAJOR_VERSION == 34
     case SCR_HOLY_WORD:          return "holy word";
     case SCR_CURSE_WEAPON:       return "curse weapon";
@@ -811,6 +825,7 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_FLIGHT:                return "flight";
         case RING_POSITIVE_ENERGY:       return "positive energy";
         case RING_WILLPOWER:             return "willpower";
+        case RING_CAMARADERIE:           return "camaraderie";
 #if TAG_MAJOR_VERSION == 34
         case RING_FIRE:                  return "obsoleteness";
         case RING_ICE:                   return "obsoleteness";
@@ -834,6 +849,7 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case AMU_WILDSHAPE:              return "wildshape";
         case AMU_CHEMISTRY:              return "chemistry";
         case AMU_DISSIPATION:            return "dissipation";
+        case AMU_VANGUARD:               return "the vanguard";
         case AMU_NOTHING:                return "nothing";
         default: return "buggy jewellery";
         }
@@ -866,6 +882,7 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_FLIGHT:                return "Fly";
         case RING_POSITIVE_ENERGY:       return "rN+";
         case RING_WILLPOWER:             return "Will+";
+        case RING_CAMARADERIE:           return "Camaraderie";
 #if TAG_MAJOR_VERSION == 34
         case RING_FIRE:                  return "obsolete";
         case RING_ICE:                   return "obsolete";
@@ -889,6 +906,7 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case AMU_WILDSHAPE:              return "Wildshape";
         case AMU_CHEMISTRY:              return "Chemistry";
         case AMU_DISSIPATION:            return "Dissipate";
+        case AMU_VANGUARD:               return "Vanguard";
         case AMU_NOTHING:                return "";
         default: return "buggy";
         }
@@ -997,6 +1015,7 @@ const char* rune_type_name(short p)
     case RUNE_SHOALS:      return "barnacled";
     case RUNE_SPIDER:      return "gossamer";
     case RUNE_FOREST:      return "mossy";
+    case RUNE_BURROWS:     return "clay";
 
     // pandemonium and abyss runes:
     case RUNE_DEMONIC:     return "demonic";
@@ -1053,7 +1072,13 @@ static string misc_type_name(int type)
     case MISC_TIN_OF_TREMORSTONES:       return "tin of tremorstones";
     case MISC_CONDENSER_VANE:            return "condenser vane";
     case MISC_GRAVITAMBOURINE:           return "Gell's gravitambourine";
+    case MISC_AEGIS_STANDARD:            return "aegis standard";
+    case MISC_ASTRAL_BEACON:             return "astral beacon";
+    case MISC_TWIN_SPARK_CONDUIT:        return "twin-spark conduit";
+    case MISC_SKALD_HORN:                return "horn of the Vanguard";
     case MISC_SHOP_VOUCHER:              return "shop voucher";
+    case MISC_ANCIENT_CRATE:             return "ancient crate";
+    case MISC_DUSTY_TOME:                return "dusty tome";
 
     default:
         return "buggy miscellaneous item";
@@ -1403,7 +1428,7 @@ static string _plus_prefix(const item_def &weap)
 {
     if (is_unrandom_artefact(weap, UNRAND_WOE))
         return Options.char_set == CSET_ASCII ? "+inf " : "+\u221e "; // ∞
-    return make_stringf("%+d ", weap.plus);
+    return make_stringf("%+d ", effective_item_enchantment(weap));
 }
 
 /**
@@ -1604,7 +1629,7 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
 
         // Don't list unenchantable armor as +0.
         if (identified && !dbname && !qualname && armour_is_enchantable(*this))
-            buff << make_stringf("%+d ", plus);
+            buff << make_stringf("%+d ", effective_item_enchantment(*this));
 
         if ((item_typ == ARM_GLOVES || item_typ == ARM_BOOTS)
             && !is_unrandom_artefact(*this, UNRAND_POWER_GLOVES)
@@ -2867,6 +2892,10 @@ bool is_emergency_item(const item_def &item)
             return !you.stasis();
         case SCR_FEAR:
         case SCR_FOG:
+        case SCR_SOUL_RECALL:
+        case SCR_RALLYING:
+        case SCR_PHASE_SWAP:
+        case SCR_SHARED_VIGOUR:
             return true;
         default:
             return false;
@@ -2886,6 +2915,10 @@ bool is_emergency_item(const item_def &item)
             return !you.has_mutation(MUT_HP_CASTING);
         case POT_CURING:
         case POT_RESISTANCE:
+        case POT_EMPATHY:
+        case POT_SOUL_AMBROSIA:
+        case POT_CONCORD:
+        case POT_TRANSFUSION:
             return true;
         default:
             return false;
@@ -2928,7 +2961,9 @@ bool is_good_item(const item_def &item)
     case OBJ_SCROLLS:
         if (item.sub_type == SCR_TORMENT)
             return you.res_torment();
-        return item.sub_type == SCR_ACQUIREMENT;
+        return item.sub_type == SCR_ACQUIREMENT
+               || item.sub_type == SCR_SOUL_RECALL
+               || item.sub_type == SCR_SHARED_VIGOUR;
     case OBJ_POTIONS:
         if (!you.can_drink(false)) // still want to pick them up in lichform?
             return false;
@@ -3144,6 +3179,13 @@ string cannot_read_item_reason(const item_def *item, bool temp, bool ident,
             if (you.stasis())
                 return you.no_tele_reason(item->sub_type == SCR_BLINKING);
             break;
+        case SCR_SOUL_RECALL:
+        case SCR_RALLYING:
+        case SCR_PHASE_SWAP:
+        case SCR_SHARED_VIGOUR:
+            if (!party::is_enabled())
+                return "You have no companions to share this scroll with.";
+            break;
         default:
             break;
         }
@@ -3215,6 +3257,13 @@ string cannot_read_item_reason(const item_def *item, bool temp, bool ident,
                 return "This place cannot be mapped!";
             return "";
 
+        case SCR_PHASE_SWAP:
+            if (you.stasis() || you.no_tele(true))
+                return you.no_tele_reason(true);
+            if (!party::any_living_ally_on_current_floor())
+                return "You have no living companions on this floor to swap places with!";
+            return "";
+
         default:
             return "";
     }
@@ -3242,6 +3291,7 @@ string cannot_drink_item_reason(const item_def *item, bool temp,
         get_potion_effect(ptyp)->can_quaff(&r, false);
         if (!r.empty())
             return r;
+        r.clear();
 
         // Your god won't let you drink potions they forbid.
         if (god_forbids_item(*item, temp))
@@ -3319,6 +3369,12 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
     {
         return false;
     }
+
+    // These are quest objects, not evokers: Sacrifice Artifice or a species'
+    // inability to evoke must not delete them from a starting inventory.
+    if (item.is_type(OBJ_MISCELLANY, MISC_ANCIENT_CRATE)
+        || item.is_type(OBJ_MISCELLANY, MISC_DUSTY_TOME))
+        return false;
 
     // An ash item that is already being worn and is cursed, counts as useful
     // even if it would otherwise be useless.
@@ -3439,6 +3495,13 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
 
     case OBJ_POTIONS:
     {
+        if (you.has_spell(SPELL_EVAPORATE)
+            || you.spell_library[SPELL_EVAPORATE]
+            || you.char_class == JOB_ALCHEMIST)
+        {
+            return false;
+        }
+
         // general reasons: player is a mummy, player in cocytus, etc.
         if (cannot_drink_item_reason(nullptr, temp).size())
             return true;
@@ -3449,6 +3512,9 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
 
         // A bad item is always useless.
         if (is_bad_item(item))
+            return true;
+
+        if (item.sub_type == POT_WATER)
             return true;
 
         // specific reasons
@@ -3522,6 +3588,10 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
         case AMU_CHEMISTRY:
             return you.has_mutation(MUT_NO_ALCHEMY_MAGIC)
                    && !you.can_drink(temp);
+
+        case RING_CAMARADERIE:
+        case AMU_VANGUARD:
+            return !party::is_enabled();
 
         default:
             return false;

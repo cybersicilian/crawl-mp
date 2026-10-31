@@ -1129,7 +1129,7 @@ void wizard_xom_acts()
 
 void wizard_set_zot_clock()
 {
-    const int max_zot_clock = MAX_ZOT_CLOCK / BASELINE_DELAY;
+    const int max_zot_clock = zot_clock_capacity_aut() / BASELINE_DELAY;
 
     string prompt = make_stringf("Enter new Zot clock value "
                                  "(current = %d, from 0 to %d): ",

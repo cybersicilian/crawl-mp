@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your profile · Pebble Broth</title>
+  <link rel="stylesheet" href="/static/tabletop/art-direction-tokens.css?v={{ graphics_revision }}">
+  <link rel="stylesheet" href="/static/tabletop/profile.css?v={{ graphics_revision }}">
+  <script src="/static/scripts/contrib/require.js?v={{ graphics_revision }}"></script>
+  <script>require.config({baseUrl:'/static/scripts',urlArgs:'v={{ graphics_revision }}',paths:{jquery:'/static/scripts/contrib/jquery'},shim:{'contrib/jquery.json':['jquery']}});require(['profile-appearance','profile-graphics']);</script>
+</head><body class="profile-page">
+<main>
+  <nav class="profile-page-nav" aria-label="Account pages">
+    <a class="profile-back" href="/#lobby">← Return to the tavern</a>
+    <a href="/profile" aria-current="page">Profile &amp; textures</a>
+    <a href="/settings/graphics">Appearance &amp; graphics</a>
+  </nav>
+  <header>
+    <p class="eyebrow">Account · {{ username }}</p>
+    <h1>Profile &amp; textures</h1>
+    <p class="profile-lede">Choose how your dungeon and your heroes look. Saved to your account; party members keep their own choices.</p>
+  </header>
+  <section id="profile_appearance" class="profile-card" data-username="{{ username }}" data-texture-pack="{{ texture_pack }}">
+    <fieldset>
+      <legend>Texture pack</legend>
+      <p id="texture_pack_help" class="profile-help">Pick the look of terrain and sprites. Changes apply immediately to your open games.</p>
+      {% raw xsrf_form_html() %}
+      <div class="texture-choices" role="radiogroup" aria-describedby="texture_pack_help">
+      {% for pack in packs %}
+        <label class="texture-choice" data-texture-pack="{{ pack['id'] }}">
+          <input type="radio" name="texture_pack" value="{{ pack['id'] }}" aria-describedby="texture_pack_help"{% if texture_pack == pack['id'] %} checked{% end %}>
+          <span class="texture-choice-art" aria-hidden="true"><span class="texture-choice-swatch"></span><span class="texture-choice-swatch"></span><span class="texture-choice-swatch"></span><span class="texture-choice-swatch"></span></span>
+          <span class="texture-choice-copy"><strong>{{ pack['label'] }}</strong><span>{{ pack['description'] }}</span></span>
+          <span class="texture-choice-mark" aria-hidden="true">Selected</span>
+        </label>
+      {% end %}
+      </div>
+    </fieldset>
+    <p class="profile-save-status" role="status" aria-live="polite">Saved to your profile.</p>
+    <p class="profile-note">Your choice affects your terrain and sprites only. Game rules and the interface stay the same.</p>
+  </section>
+  <section id="profile_graphics" aria-label="Account graphics settings"></section>
+  <script id="profile_graphics_state" type="application/json">{% raw graphics_json %}</script>
+</main></body></html>

@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "party.h"
 
 #include "message.h"
 
@@ -107,6 +108,7 @@ struct message_line
     int                 param;          // param for channel (god, enchantment)
     vector<message_particle> messages;  // a set of possibly-repeated messages
     int                 turn;
+    int                 recipient = 0; // Stable owner of deferred native text.
     bool                join;          /// may we merge this message w/others?
 
     message_line() : channel(NUM_MESSAGE_CHANNELS), param(0), turn(-1),
@@ -117,6 +119,7 @@ struct message_line
     message_line(string msg, msg_channel_type chan, int par, bool jn)
      : channel(chan), param(par), turn(you.num_turns)
     {
+        recipient = party::multiplayer_enabled() ? party::active_slot() : 0;
         messages = { { msg, 1 } };
         // Don't join long messages.
         join = jn && strwidth(last_msg().pure_text()) < 40;
@@ -157,7 +160,7 @@ struct message_line
             return false; // dangerous for hacky code (looks at EOL for '!'...)
         if (!Options.msg_condense_repeats)
             return false;
-        if (other.channel != channel || other.param != param)
+        if (other.recipient != recipient || other.channel != channel || other.param != param)
             return false;
         if (other.messages.size() > 1)
         {
@@ -915,6 +918,8 @@ public:
             tiles.json_write_string("text", msg.full_text());
             tiles.json_write_int("turn", msg.turn);
             tiles.json_write_int("channel", msg.channel);
+            if (party::multiplayer_enabled())
+                tiles.json_write_int("recipient", msg.recipient);
             tiles.json_close_object();
         }
         tiles.json_close_array();
@@ -2173,7 +2178,8 @@ string get_last_messages(int mcount, bool full)
         const message_line msg = msgs[i];
         if (!msg)
             break;
-        if (full || is_channel_dumpworthy(msg.channel))
+        if ((!party::multiplayer_enabled() || msg.recipient == party::active_slot())
+            && (full || is_channel_dumpworthy(msg.channel)))
         {
             string line = msg.pure_text_with_repeats();
             string wrapped;
@@ -2214,13 +2220,16 @@ bool recent_error_messages()
 void save_messages(writer& outf)
 {
     store_t msgs = buffer.get_store();
-    marshallInt(outf, msgs.size());
+    // Negative count marks recipient-aware history without changing old chunks.
+    marshallInt(outf, party::multiplayer_enabled() ? -msgs.size() : msgs.size());
     for (int i = 0; i < msgs.size(); ++i)
     {
         marshallString4(outf, msgs[i].full_text());
         marshallInt(outf, msgs[i].channel);
         marshallInt(outf, msgs[i].param);
         marshallInt(outf, msgs[i].turn);
+        if (party::multiplayer_enabled())
+            marshallInt(outf, msgs[i].recipient);
     }
 }
 
@@ -2234,6 +2243,8 @@ void load_messages(reader& inf)
     clear_message_store();
 
     int num = unmarshallInt(inf);
+    const bool personal = num < 0;
+    num = abs(num);
     for (int i = 0; i < num; ++i)
     {
         string text;
@@ -2248,6 +2259,7 @@ void load_messages(reader& inf)
         int           turn       = unmarshallInt(inf);
 
         message_line msg(message_line(text, channel, param, turn));
+        msg.recipient = personal ? unmarshallInt(inf) : 0;
         if (msg)
             buffer.store_msg(msg);
     }
@@ -2263,7 +2275,8 @@ static void _replay_messages_core(formatted_scroller &hist)
     const store_t msgs = buffer.get_store();
     formatted_string lines;
     for (int i = 0; i < msgs.size(); ++i)
-        if (channel_message_history(msgs[i].channel))
+        if ((!party::multiplayer_enabled() || msgs[i].recipient == party::active_slot())
+            && channel_message_history(msgs[i].channel))
         {
             string text = msgs[i].full_text();
             if (!text.size())

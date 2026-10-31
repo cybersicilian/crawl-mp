@@ -1,0 +1,14 @@
+{
+  "runtime": "/opt/dcss/staging/eldritch-render-01a16b6d/r12",
+  "source": "/opt/dcss/staging/eldritch-render-01a16b6d/patched-current",
+  "build": "/opt/dcss/releases/20261024T163456Z-chain-devil/crawl-ref/source",
+  "url": "http://127.0.0.1:18988",
+  "binary_sha256": "16ab04953766d3c53f34c1139d4b22f62f5eda89b91b603f3139d50939d35ca4",
+  "client_revision": "d6e3c7dcc0e0e8e82097",
+  "lobby_revision": "9e1e3a85b2bc8ecd6ebf",
+  "native_discovery_defaults": {
+    "CRAWL_DIR": "/opt/dcss/staging/eldritch-render-01a16b6d/r12/native-defaults",
+    "CRAWL_RC": "/opt/dcss/staging/eldritch-render-01a16b6d/r12/native-defaults/init.txt",
+    "CRAWL_SAVE_DIR": "/opt/dcss/staging/eldritch-render-01a16b6d/r12/native-defaults/saves"
+  }
+}

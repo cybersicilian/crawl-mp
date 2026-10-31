@@ -1,0 +1,105 @@
+{
+  "scope": "Oozle random empty-slot manual assimilation and -2 manufactured-weapon aptitudes",
+  "recordedAt": "2026-10-21T00:38:44.230858+00:00",
+  "core": {
+    "passed": true,
+    "cases": 17,
+    "assertions": 245,
+    "result": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-check-2/result.json",
+      "sha256": "9850ecbd7ee4c7bbfe6381228f7fe39ff1b03008931c6b0f778be85ae09bafcd"
+    },
+    "log": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-check-2/tests.log",
+      "sha256": "c1fde7a8216be2af0d179e00c4030e530bc3c77cf6ece67cd3e7171162462bce"
+    }
+  },
+  "cppSyntax": {
+    "passed": true,
+    "translationUnits": 10
+  },
+  "itemActionContracts": {
+    "passed": true,
+    "cases": 10
+  },
+  "speciesGeneration": {
+    "passed": true,
+    "manufacturedWeaponSkills": 8,
+    "weaponAptitude": -2,
+    "unarmedCombatAptitude": 1
+  },
+  "browser": {
+    "passed": true,
+    "sampleStateOnly": true,
+    "result": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-browser/result.json",
+      "sha256": "636bc44cc848ce4d2a828b92e2e74b36455b686b856b3ccaa68a7fa8d3dfab7d"
+    },
+    "log": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-browser/browser.log",
+      "sha256": "1891deae32275e38f7c4f02abc11e9d9cf3518fc251b43bba5c967dbbffaca80"
+    }
+  },
+  "javascriptAndPreviewSyntax": true,
+  "editedWebFilesUnder600Lines": true,
+  "fullNativeIntegrationTestsExecuted": false,
+  "nativeGameplayExecuted": false,
+  "deployed": false,
+  "sharedHost": {
+    "allOwnReservationsReleased": true,
+    "closures": [
+      {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-check/release.log",
+        "sha256": "8b9f9524f7d330e0caf6169284a53b289063e858bf487c193097fbe81d66e221"
+      },
+      {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-check-2/release.log",
+        "sha256": "b6b7b518a82db4621a7ffd807644bc1691a87616c29996051f3b4dfbf9fc405d"
+      },
+      {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-browser/release.log",
+        "sha256": "255736d9b3d0e20719a5d0ba9cf9fd875fda7cce2ae9ba111b87bcf3362b9383"
+      }
+    ]
+  },
+  "initialFailures": [
+    "First component attempt used stricter warning-as-error flags and failed on pre-existing diagnostics; rerun used the established C++14 flags.",
+    "First browser attempt could not resolve Playwright; browser-only rerun used the existing bundled dependency."
+  ],
+  "patch": {
+    "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/21/01a15bd9-48e0-7462-874f-ca9a84b42f97/oozle-manual.patch",
+    "sha256": "3c574664326e84728795b4820135c249a6c09aad5f08393679b74f10b6934aaf"
+  },
+  "sourceFiles": {
+    "crawl-ref/source/aptitudes.h": "c578c7b2acc445a934d6d989fd5f109de51fb753dff668346434ee98f46614bf",
+    "crawl-ref/source/attack.cc": "8595411573cf67d2365d29686159b075d10714c331c9c42e95370f06abf1dfec",
+    "crawl-ref/source/catch2-tests/test_equipment_memory.cc": "e6d3f3a8e143d9220e1f2d0a7950296370f4de30590411a672d5780c520819f0",
+    "crawl-ref/source/catch2-tests/test_oozle.cc": "9854203f9ecc90fb5d50fb7768d35e416580ebdb2b372908a9aae7a4ea5672ad",
+    "crawl-ref/source/catch2-tests/test_oozle_memory.cc": "aa4d0aad5ae62c38d3a03086190e14a1492975254b3d707d4aa47fde7db6e711",
+    "crawl-ref/source/catch2-tests/test_oozle_memory_effects.cc": "e64cd6b00a8eef09b914d25e238b3750d2177b8064beb1ea4b12970c7a97369b",
+    "crawl-ref/source/catch2-tests/test_oozle_memory_fixture.h": "40caad18da7c67a26ea72695949202a8f4b3ce9f57cf1e5f4b896e18ba652983",
+    "crawl-ref/source/dat/descript/ability.txt": "203aa64f95005e0a6c23ec52a26ff3f6f1f01a62bf1e860cc638d391de39c710",
+    "crawl-ref/source/dat/descript/species.txt": "5eb75b05f33b906d1b79460af101de835d199e1a271fb3dba24108e22dabcc7f",
+    "crawl-ref/source/dat/species/oozle.yaml": "b700ed23b0bb1e1192a54b94647abdbb3d84172e73d35df2282de9c8b086490e",
+    "crawl-ref/source/describe.cc": "10e6426005efe5c136a4a90e5e759a5c0a770388e8fc3c60efdb68d3839d7477",
+    "crawl-ref/source/equipment-memory.cc": "4745e451cd5a0d36296f7f7e74e8c5445ddc48dab71e9939efab6df51a96df4b",
+    "crawl-ref/source/equipment-memory.h": "f0ccf0f1224fbe6eb70625bb0d4466428e4ee657672f394584a081802d90c091",
+    "crawl-ref/source/melee-attack.cc": "10c9726b9837137b8f7afb5e6dc59b73f17fb77fe82bdc80bc3c021407af4c7b",
+    "crawl-ref/source/oozle-memory-ui.cc": "72b65aa948e8ddbfed164d39356d29a25c5bdd65656c99a54da84c2cdd78a342",
+    "crawl-ref/source/oozle-memory.cc": "3f213c3c5bb668a4a5c3f3965ae680c8e5084b9c7cb221d49087ce13ac5d0867",
+    "crawl-ref/source/oozle-memory.h": "dd2ad4f4ccbeb20d5845e0150356700110f5415fd86ecfc20911bc75d2dc0d5c",
+    "crawl-ref/source/player-reacts.cc": "40b903b966378be6eba25af664c015ad82c19e255291aaba31510c112d687296",
+    "crawl-ref/source/throw.cc": "e95b632f8c03565da8e87dd79a250a4d4aef425cf6c05be7be7f12ecdec3a60a",
+    "crawl-ref/source/webserver/game_data/static/assimilation-panel.js": "b5aa64650440733ad48f0dadb75eebe5383b2429a65dbdde762e6f6fb961bff3",
+    "crawl-ref/source/webserver/game_data/static/equipment-memory-ui.js": "024a4ddc1482e014d683bea9bc8efb72c2d38e7b83595ab45ac5d5f4c8af2a4f",
+    "crawl-ref/source/webserver/game_data/static/styles/assimilation.css": "bc14cf7ea9cf32d04030ab77b68e9bc1a31e83519780ec51f90035375622ef60",
+    "crawl-ref/source/webserver/tests/assimilation-display.cjs": "7bc3965ea9457c62db6ae612a75caf1e5342e55ab16c5d1671e877b11bb5bcdc",
+    "crawl-ref/source/webserver/tests/oozle-gameplay-native.cjs": "85c016c759c55f142509750ff926563978bdff122cc2cda29dc93a268130dfab",
+    "crawl-ref/source/webserver/tests/oozle-item-context-native.cjs": "f9479b22bb882b02a56ab2bb3e0dec4631bd282a010a15f794fa2d6cb421ea12",
+    "crawl-ref/source/webserver/tests/oozle-release-smoke.cjs": "720a8cd2e6c20ebd7ced07f229e5d5699e2410382117f58fda5439f1a058d792",
+    "docs/design/oozle/README.md": "c4b2a1312ffd48ff57efb5beac0595619d1ac9e50bb270359cbd646b56000fb3",
+    "docs/design/oozle/assimilation-design.md": "c7806d28c78d56cfae2d343899eee2cf0dcad71a682fe3076bf5da70b2e9a934",
+    "docs/design/oozle/assimilation-preview.html": "bc1b1024629e185df1d68c3b3d57a1e76960b19414a0bb182a1fb983679177bb",
+    "docs/design/oozle/digestion-design.md": "067eb8e3f070239463de83ded71e375d68bae2ef161225bd270e8ab9930eb336"
+  }
+}

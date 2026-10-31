@@ -1,0 +1,124 @@
+/*
+ * One rich-tooltip contract for lobby (#lobby_rich_tooltip), game
+ * (#dcss_rich_tooltip, #tooltip) and nested cards (.dcss-nested-tip):
+ *   .dcss-tip-header  = title (.dcss-tip-title / .tip-title / .lobby-tip-title)
+ *                       + optional key-hint badge (.dcss-tip-badge, drawn as .tr-kbd)
+ *   .dcss-tip-body    = facts grid, prose, search details
+ *   .dcss-tip-meta    = context row (states and notes)
+ * Cards open on hover, tap and keyboard focus; icons retain visible text labels.
+ * Materials come from --ui-* tokens (ui-themes.css) with --tt-* fallbacks.
+ */
+/* Cards are appended to the dialog that opened them, so a host that remaps --tt-ink or
+   --tt-folio-* for a dark sheet would otherwise print light ink on this parchment. Pin the
+   card's own ink to the page tokens (tokens.css values when no --ui-* theme is loaded). */
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    --tt-ink: var(--ui-ink, #2b241c);
+    --tt-ink-soft: var(--ui-quiet, #5c4d3c);
+    --tt-folio-ink: var(--ui-ink, #29251e);
+    --tt-folio-muted: var(--ui-quiet, #665c49);
+    --tt-folio-crimson: var(--ui-chapter, #943824);
+}
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    max-width: min(var(--tt-tip-width, 360px), calc(100vw - 16px));
+    min-width: min(220px, calc(100vw - 16px));
+    padding: 11px 13px;
+    border: 1px solid var(--ui-edge, var(--tt-brass-shadow));
+    border-radius: var(--tt-radius-3, 8px);
+    background: var(--ui-paper, var(--tt-paper));
+    color: var(--ui-ink, var(--tt-ink));
+    font: var(--tt-type-body, 13px)/1.5 var(--tt-font-ui, sans-serif);
+    box-shadow: 0 10px 28px #000000b3, inset 0 0 0 1px color-mix(in srgb, var(--ui-page-inset, #e2d3b5) 70%, transparent);
+    overflow-wrap: anywhere;
+}
+.dcss-tip-header {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+    margin: 0 0 7px; padding: 0 0 6px;
+    border-bottom: 1px solid color-mix(in srgb, var(--ui-rule, #ac9470) 70%, transparent);
+}
+:is(#dcss_rich_tooltip .tip-title, .dcss-tip-title, .lobby-tip-title) {
+    flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; border: 0;
+    color: var(--ui-chapter, var(--tt-folio-crimson));
+    font: 600 16px/1.25 var(--tt-font-title, serif);
+    letter-spacing: 0.01em;
+}
+.dcss-tip-header > .dcss-tip-badge { flex: 0 0 auto; margin-top: 2px; }
+:is(#dcss_rich_tooltip .tip-body, .dcss-tip-body, .lobby-tip-body) {
+    color: inherit;
+    font: var(--tt-type-body, 13px)/1.5 var(--tt-font-ui, sans-serif);
+    white-space: pre-line;
+}
+:is(#dcss_rich_tooltip .tip-meta, .dcss-tip-meta, .lobby-tip-meta) {
+    margin: 8px 0 0; padding: 7px 0 0;
+    border-top: 1px dashed color-mix(in srgb, var(--ui-rule, #ac9470) 70%, transparent);
+    color: var(--ui-quiet, var(--tt-ink-soft));
+    font: var(--tt-type-label, 12px)/1.45 var(--tt-font-ui, sans-serif);
+}
+.lobby-tip-reading-hint, .dcss-tip-reading-hint {
+    margin-top: 8px; color: var(--ui-quiet, var(--tt-ink-soft));
+    font: var(--tt-type-label, 12px)/1.4 var(--tt-font-ui, sans-serif);
+}
+.tip-content { white-space: normal; }
+:is(.dcss-tip-title, .lobby-tip-title) { min-width: 0; }
+:is(.dcss-tip-title, .lobby-tip-title, #workflow_help_title) .item-properties {
+    display: flex; max-width: 100%; margin: 6px 0 0;
+}
+.tip-facts {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 90px), 1fr));
+    gap: 6px; margin: 0 0 10px; padding: 0;
+}
+.tip-fact {
+    min-width: 0; padding: 7px 9px;
+    border: 1px solid color-mix(in srgb, var(--ui-rule, #ac9470) 45%, transparent);
+    border-radius: var(--tt-radius-1, 3px);
+    background: color-mix(in srgb, var(--ui-page-raised, #fcf5e6) 55%, transparent);
+}
+.tip-fact-label {
+    display: flex; align-items: center; gap: 5px;
+    color: var(--ui-quiet, var(--tt-ink-soft));
+    font: 600 var(--tt-type-label, 12px)/1.35 var(--tt-font-ui, sans-serif);
+}
+.tip-fact-label .tt-icon { width: 16px; height: 16px; }
+.tip-fact-value {
+    margin: 3px 0 0; color: inherit;
+    font: 650 18px/1.2 var(--tt-font-ui, sans-serif); font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.tip-description { white-space: pre-line; }
+.tip-description p { margin: 0 0 9px; }
+.tip-description p:last-child { margin-bottom: 0; }
+.tip-search-details {
+    margin-top: 10px; padding-top: 7px;
+    border-top: 1px solid color-mix(in srgb, var(--ui-rule, #ac9470) 45%, transparent);
+    color: var(--ui-quiet, var(--tt-ink-soft));
+    font: var(--tt-type-label, 12px)/1.45 var(--tt-font-ui, sans-serif);
+}
+.tip-search-details summary { width: fit-content; padding: 3px 0; cursor: pointer; }
+.tip-search-details summary:focus-visible {
+    outline: var(--tt-focus-ring, 2px solid var(--tt-folio-crimson)); outline-offset: var(--tt-focus-offset, 2px);
+}
+.tip-search-values { margin: 5px 0 0; }
+.tip-search-values dt { font-weight: 600; }
+.tip-search-values dd { margin: 1px 0 6px; overflow-wrap: anywhere; }
+.tip-context { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; }
+.tip-state {
+    display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px;
+    color: var(--ui-good, #3f5f39);
+    background: color-mix(in srgb, var(--ui-good, #567145) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ui-good, #567145) 40%, transparent);
+    border-radius: var(--tt-radius-1, 3px);
+    font-weight: 600;
+}
+.tip-state .tt-icon { width: 14px; height: 14px; }
+.tip-context-note + .tip-context-note::before { content: "· "; }
+/* Keyboard-opened cards (focusin) are associated through aria-describedby by the
+   host; readable cards accept the pointer so long bodies can be scrolled. */
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip).is-readable { pointer-events: auto; }
+@media (prefers-reduced-motion: no-preference) {
+    :is(#dcss_rich_tooltip, #lobby_rich_tooltip)[aria-hidden="false"] { animation: tip-in 90ms ease-out; }
+}
+@keyframes tip-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+@media (forced-colors: active) {
+    :is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) { border-color: CanvasText; box-shadow: none; }
+    .dcss-tip-header, :is(#dcss_rich_tooltip .tip-meta, .dcss-tip-meta, .lobby-tip-meta) { border-color: CanvasText; }
+    .tip-fact, .tip-state { border-color: CanvasText; }
+}

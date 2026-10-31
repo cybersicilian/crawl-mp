@@ -2,6 +2,9 @@
 
 #include "tag-version.h"
 
+// Random populations must contain repeatable monsters. Uniques belong in
+// dedicated vaults, where their generation history is checked before placement.
+
 // This is done to avoid duplicating the Depths list and can be
 // changed once TAG_MAJOR_VERSION > 35
 #define POP_DEPTHS \
@@ -37,6 +40,8 @@
   {  1,  7,  185, SEMI, MONS_SPRIGGAN_BERSERKER },\
   {  1,  9,   45, FLAT, MONS_GLASS_EYE },\
   {  2, 13,   45, FLAT, MONS_SPRIGGAN_DEFENDER },\
+  {  2, 13,   55, SEMI, MONS_HALAZID_WARLOCK },\
+  {  2, 13,   50, SEMI, MONS_SALAMANDER_TYRANT },\
   {  3, 13,   70, SEMI, MONS_TENTACLED_MONSTROSITY },\
   {  3, 13,   40, FLAT, MONS_STORM_DRAGON },\
   {  3, 13,   40, FLAT, MONS_SHADOW_DRAGON },\
@@ -121,6 +126,7 @@ static const vector<pop_entry> population[] =
   {  6, 10,  350, PEAK, MONS_STEAM_DRAGON },
   {  6, 11,  500, PEAK, MONS_KOBOLD_BRIGAND },
   {  6, 12,  600, PEAK, MONS_ORC_WARRIOR },
+  {  6, 12,  150, PEAK, MONS_INSUBSTANTIAL_WISP },
   {  7, 11,  500, PEAK, MONS_KILLER_BEE },
   {  7, 11,  200, PEAK, MONS_HORNET },
   {  7, 11,  350, PEAK, MONS_WYVERN },
@@ -132,6 +138,7 @@ static const vector<pop_entry> population[] =
   {  9, 14,  500, PEAK, MONS_WRAITH },
   {  9, 14,  800, PEAK, MONS_TROLL },
   {  9, 14,  200, PEAK, MONS_VAMPIRE },
+  {  9, 15,  140, PEAK, MONS_PLAGUE_SHAMBLER },
   { 10, 13,  350, PEAK, MONS_UNSEEN_HORROR },
   { 10, 13,  200, PEAK, MONS_KOMODO_DRAGON },
   { 10, 14,  350, PEAK, MONS_GARGOYLE },
@@ -163,6 +170,7 @@ static const vector<pop_entry> population[] =
   { 15, 19,  105, FLAT, MONS_OCCULTIST },
   { 15, 20,  335, SEMI, MONS_YAKTAUR },
   { 15, 24,  345, FALL, MONS_ORC_KNIGHT },
+  { 14, 22,  140, SEMI, MONS_DEEP_DWARF },
   { 15, 25,  345, FALL, MONS_OGRE_MAGE },
   { 15, 25,  275, PEAK, MONS_WOLF_SPIDER },
   { 16, 24,   89, PEAK, MONS_REDBACK },
@@ -184,9 +192,11 @@ static const vector<pop_entry> population[] =
   { 20, 30,  310, FALL, MONS_YAKTAUR_CAPTAIN },
   { 20, 30,  136, SEMI, MONS_FIRE_GIANT },
   { 20, 30,  136, SEMI, MONS_FROST_GIANT },
+  { 20, 27,   45, SEMI, MONS_SALAMANDER_TYRANT },
   { 21, 27,  310, FALL, MONS_STONE_GIANT },
   { 21, 31,  192, PEAK, MONS_ETTIN },
   { 22, 27,  100, RISE, MONS_SPHINX_MARAUDER },
+  { 22, 27,   35, RISE, MONS_HALAZID_WARLOCK },
   { 22, 30,  136, SEMI, MONS_DEEP_TROLL_EARTH_MAGE },
   { 23, 27,   89, RISE, MONS_STORM_DRAGON },
   { 23, 27,   28, SEMI, MONS_ORC_WARLORD },
@@ -194,6 +204,7 @@ static const vector<pop_entry> population[] =
   { 23, 31,   89, PEAK, MONS_PHANTASMAL_WARRIOR },
   { 23, 27,  136, FLAT, MONS_GLOWING_SHAPESHIFTER },
   { 23, 27,   22, RISE, MONS_THERMIC_DYNAMO },
+  { 23, 27,   35, RISE, MONS_CHAIN_WARDEN },
   { 24, 27,   22, RISE, MONS_DEEP_ELF_ANNIHILATOR },
   { 24, 27,   22, RISE, MONS_DEEP_ELF_HIGH_PRIEST },
   { 24, 27,   22, RISE, MONS_VAMPIRE_KNIGHT },
@@ -271,6 +282,7 @@ static const vector<pop_entry> population[] =
   { -2,  6,  310, SEMI, MONS_BASILISK },
   { -1,  3,   24, PEAK, MONS_SCORPION },
   { -1,  5,  310, SEMI, MONS_WOLF },
+  { -1,  5,   45, SEMI, MONS_FIRE_FOX },
   { -1,  8,  290, PEAK, MONS_RIME_DRAKE },
   { -1, 10,  380, SEMI, MONS_BLACK_MAMBA },
   {  0,  4, 1000, FLAT, MONS_BULLFROG },
@@ -320,6 +332,8 @@ static const vector<pop_entry> population[] =
   {  1,  4,   500, FLAT, MONS_GOLIATH_FROG },
   {  1,  4,   300, FALL, MONS_BLOATED_HUSK },
   {  1,  4,   300, FLAT, MONS_BLOATED_HUSK },
+  {  1,  4,   300, FLAT, MONS_PLAGUE_SHAMBLER },
+  {  1,  4,   350, FALL, MONS_INSUBSTANTIAL_WISP },
   {  1,  4,   800, FALL, MONS_BOG_BODY },
   {  1,  4,   200, FLAT, MONS_BOG_BODY },
   // Harder enemies:
@@ -508,6 +522,9 @@ static const vector<pop_entry> population[] =
   {  1,  4,  725, FLAT, MONS_IRONBOUND_FROSTHEART },
   {  1,  4,  525, FLAT, MONS_VAULT_WARDEN },
   {  1,  4,  525, RISE, MONS_VAULT_WARDEN },
+  {  1,  4,  280, RISE, MONS_CHAIN_WARDEN },
+  {  1,  4,  220, RISE, MONS_VOID_TETHER_STALKER },
+  {  1,  4,  180, FLAT, MONS_DEEP_DWARF },
   {  1,  4,  500, FLAT, MONS_IRONBOUND_THUNDERHULK },
   {  1,  4,  200, RISE, MONS_IRONBOUND_THUNDERHULK },
   {  1,  4,  325, FLAT, MONS_GREAT_ORB_OF_EYES },
@@ -527,6 +544,7 @@ static const vector<pop_entry> population[] =
   {  1,  4,  350, RISE, MONS_PEACEKEEPER },
   {  1,  4,  225, RISE, MONS_SPHINX_MARAUDER },
   {  2,  4,  115, RISE, MONS_GUARDIAN_SPHINX },
+  {  2,  4,  100, RISE, MONS_SALAMANDER_TYRANT },
 
   // Vaults:5 enemies. These weights are very roughly based on
   // the monster frequency as of 0.26.
@@ -542,6 +560,7 @@ static const vector<pop_entry> population[] =
   {  5, 12,  520, FALL, MONS_PHANTASMAL_WARRIOR },
   {  5, 12,  100, FALL, MONS_FREEZING_WRAITH },
   {  5, 12,  110, FALL, MONS_LICH },
+  {  5, 12,  120, FALL, MONS_HALAZID_WARLOCK },
   {  5, 12,   45, FALL, MONS_FLAYED_GHOST },
   // V:5 elves:
   {  5, 12,  300, FALL, MONS_DEEP_ELF_HIGH_PRIEST },
@@ -565,6 +584,7 @@ static const vector<pop_entry> population[] =
   {  5, 12,  260, FALL, MONS_WAR_GARGOYLE },
   {  5, 12,  300, FALL, MONS_POLTERGUARDIAN },
   {  5, 12,  135, FALL, MONS_IRONBOUND_MECHANIST },
+  {  5, 12,  180, FALL, MONS_SALAMANDER_TYRANT },
   // V:5 chaff from earlier floors
   {  5, 12,  350, FALL, MONS_CRAWLING_FLESH_CAGE },
   {  5,  5,  650, FLAT, MONS_ORC_KNIGHT },
@@ -601,6 +621,7 @@ static const vector<pop_entry> population[] =
   { -1,  5,  125, PEAK, MONS_PHANTASMAL_WARRIOR },
   { -1,  9,  120, PEAK, MONS_ANCIENT_CHAMPION },
   {  0,  2,   55, SEMI, MONS_FREEZING_WRAITH },
+  {  0,  4,   85, SEMI, MONS_PLAGUE_SHAMBLER },
   {  0,  5,  125, FLAT, MONS_VAMPIRE_MAGE },
   {  0,  5,   65, SEMI, MONS_COGNITOGAUNT },
   {  0,  5,   70, PEAK, MONS_GHOUL },
@@ -610,6 +631,7 @@ static const vector<pop_entry> population[] =
   {  1,  6,  145, SEMI, MONS_EIDOLON },
   {  1,  6,   80, SEMI, MONS_DEEP_ELF_DEATH_MAGE },
   {  1,  7,   85, SEMI, MONS_REVENANT_SOULMONGER },
+  {  1,  7,   80, SEMI, MONS_HALAZID_WARLOCK },
   {  1,  7,   55, SEMI, MONS_CURSE_SKULL },
   {  2,  5,  140, SEMI, MONS_FLAYED_GHOST },
   {  2,  5,   95, SEMI, MONS_SHADOW_WRAITH },
@@ -806,6 +828,7 @@ POP_DEPTHS,
   {  1,  7,  515, FLAT, MONS_TENTACLED_MONSTROSITY },
   {  1,  5,   89, FALL, MONS_ELECTRIC_GOLEM },
   {  6,  7,   20, FLAT, MONS_ELECTRIC_GOLEM },
+  {  1,  7,   45, RISE, MONS_SILVER_STAR },
   {  1,  5,   42, FLAT, MONS_ORB_OF_APPROPRIATENESS },
   {  6,  7,   80, FLAT, MONS_ORB_OF_APPROPRIATENESS },
 },
@@ -828,6 +851,7 @@ POP_DEPTHS,
   {  1,  9,  235, SEMI, MONS_SPRIGGAN_BERSERKER },
   {  1,  8,  155, SEMI, MONS_SPRIGGAN_AIR_MAGE },
   {  3,  5,  115, RISE, MONS_SPRIGGAN_DEFENDER },
+  {  2,  5,   55, SEMI, MONS_GREENWOOD_WITCH },
   {  1,  7,   85, PEAK, MONS_APIS },
   {  2,  7,  165, SEMI, MONS_SHAMBLING_MANGROVE },
   {  1,  6,   85, SEMI, MONS_ANACONDA },
@@ -964,6 +988,8 @@ POP_DEPTHS,
   {  6, 10,   10, RISE, MONS_PUTRID_MOUTH },
   // Generic
   {  1,  7,  340, FLAT, MONS_WRETCHED_STAR },
+  {  1,  7,   65, FLAT, MONS_SILVER_STAR },
+  {  1,  7,  120, FLAT, MONS_VOID_TETHER_STALKER },
   {  1,  7,  340, FLAT, MONS_TENTACLED_STARSPAWN },
   {  1,  7,  340, FLAT, MONS_ANCIENT_ZYME },
   {  1,  7,  335, FLAT, MONS_STARCURSED_MASS },
@@ -1204,6 +1230,38 @@ POP_DEPTHS,
   {  1,  1,   25, FLAT, MONS_SEWAGE_SOVEREIGN },
   {  1,  1,   25, FLAT, MONS_SCRAPSHELL_CHIMERA },
 },
+{ // Burrows: familiar supporting fauna, with no new swarm or support bands.
+  {  1,  4, 1400, FLAT, MONS_BURROWING_BEAST },
+  {  1,  4, 1100, FLAT, MONS_CRAG_BOAR },
+  {  1,  4,  950, RISE, MONS_SHALE_DRAKE },
+  {  1,  4,  650, RISE, MONS_DEEP_TROLL_DELVER },
+  {  1,  2,  350, FALL, MONS_KOMODO_DRAGON },
+  {  2,  4,  200, FLAT, MONS_BOULDER_BEETLE },
+  {  2,  4,  175, SEMI, MONS_EARTH_ELEMENTAL },
+},
+{ // Wormlands: sustained damage and fungal positioning; support bands stay in vaults.
+  {  1,  4, 1000, FLAT, MONS_GALLERY_WORM },
+  {  1,  4,  650, FLAT, MONS_COIL_WORM },
+  {  2,  4,  180, FLAT, MONS_CAUSTIC_WORM },
+  {  1,  4,  900, FLAT, MONS_WANDERING_MUSHROOM },
+  {  3,  4,  250, RISE, MONS_DEATHCAP },
+  {  1,  3,  250, FALL, MONS_DEEP_TROLL_DELVER },
+  {  1,  4,  250, FLAT, MONS_DEEP_TROLL },
+  {  1,  4,  250, FLAT, MONS_LINDWURM },
+  {  1,  4,  100, FLAT, MONS_EARTH_ELEMENTAL },
+  {  2,  4,  300, RISE, MONS_IRON_TROLL },
+  {  3,  4,  200, RISE, MONS_STONE_GIANT },
+  {  4,  4,  100, FLAT, MONS_IRON_DRAGON },
+},
+{ // Hive: fast flying packs, with poison and deeper electrical threats.
+  {  1,  2,  200, FALL, MONS_KILLER_BEE },
+  {  1,  2, 1000, FLAT, MONS_WAX_BEETLE },
+  {  1,  2,  750, FLAT, MONS_VENOM_WASP },
+  {  1,  2,  100, FLAT, MONS_QUEEN_BEE },
+  {  1,  2,  250, FLAT, MONS_HORNET },
+  {  1,  2,  150, RISE, MONS_MELIAI },
+  {  2,  2,  400, FLAT, MONS_SPARK_WASP },
+},
 };
 
 COMPILE_CHECK(ARRAYSZ(population) == NUM_BRANCHES);
@@ -1359,6 +1417,9 @@ static const vector<pop_entry> population_water[] =
     GENERIC_WATER_POP, // Crucible
     GENERIC_WATER_POP, // Necropolis
     GENERIC_WATER_POP, // Gulch
+    GENERIC_WATER_POP, // Burrows
+    GENERIC_WATER_POP, // Wormlands
+    GENERIC_WATER_POP, // Hive
 };
 COMPILE_CHECK(ARRAYSZ(population_water) == NUM_BRANCHES);
 
@@ -1464,6 +1525,9 @@ static const vector<pop_entry> population_lava[] =
     GENERIC_LAVA_POP, // Crucible
     GENERIC_LAVA_POP, // Necropolis
     GENERIC_LAVA_POP, // Gulch
+    GENERIC_LAVA_POP, // Burrows
+    GENERIC_LAVA_POP, // Wormlands
+    GENERIC_LAVA_POP, // Hive
 };
 
 COMPILE_CHECK(ARRAYSZ(population_lava) == NUM_BRANCHES);

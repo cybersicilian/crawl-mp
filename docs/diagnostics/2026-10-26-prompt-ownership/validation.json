@@ -1,0 +1,65 @@
+{
+  "status": "locally_verified_not_uploaded_or_deployed",
+  "checked_at": "2026-10-27T05:11:46.759965+00:00",
+  "root_cause": "Router/native prompt ownership diverged after repeated owner input and premature buffered-command completion.",
+  "original_deadlock_reproduced": true,
+  "original_deadlock_report": "original-three-owner/report.json",
+  "audit_report": "AUDIT.md",
+  "audit_source_binding": "audit/source-binding.json",
+  "binding_sha256": "0bdcaac2c8e0435a2035080dbadb2a83d9a38b8e9d730a38851dc13d7bb4f9d3",
+  "tests": {
+    "backend_cases": 167,
+    "minimal_production_overlay_cases": 86,
+    "javascript_suites": 6,
+    "native_three_owner_scenarios": 14,
+    "burst_commands": 96,
+    "native_noop_commands": 4,
+    "macro_turns": 2,
+    "alternating_actions": 3,
+    "recovery_counts": {
+      "probes": 2,
+      "completed": 1,
+      "prompts": 1,
+      "unresolved": 0
+    },
+    "native_processes_exited": true
+  },
+  "passed": true,
+  "native_mac_sha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c",
+  "runtime_overlay": {
+    "crawl-ref/source/tileweb.cc": "f25731daa48a7da3a5b661387dc6fc56592b5d89014f4b1adc694647f2fbc6db",
+    "crawl-ref/source/webserver/webtiles/activity_pump.py": "20a2a819532ea885b4be8cd858609f7fd55a5184527e19d5edc284592c9ba174",
+    "crawl-ref/source/webserver/webtiles/process_handler.py": "44c782fc2860221e852da7ca1d662e1b3642f63d8815a6838bbf3b624943030e"
+  },
+  "payload_sha256": "02a1c4bfa0e74b0431f3d498c98edfecb2c76e52cf566c720af670eeea446744",
+  "payload_manifest_sha256": "858ad53044be566844165ecdfbe78ada7db88a00e72a5126f338e0af490dc7bf",
+  "source_inputs": {
+    "tileweb.cc": "5143ec562f571bbd9b9c421445313e67a8c8c4df125714daa106633eb5fdb474",
+    "webserver/webtiles/activity_pump.py": "20a2a819532ea885b4be8cd858609f7fd55a5184527e19d5edc284592c9ba174",
+    "webserver/webtiles/process_handler.py": "aaca63364293ba0e4a4d68ab2f3dde81f658799109fef6157a3e371c14d69051"
+  },
+  "recovery": {
+    "probe_after_seconds": 5,
+    "probe_interval_seconds": 5,
+    "warn_after_unanswered_probes": 3,
+    "automatic_gameplay_replay": false,
+    "timeout_unlock": false,
+    "unknown_native_state_unlock": false,
+    "prompt_owner_and_ui_recovery": true,
+    "completion_and_tactical_ack_recovery": true
+  },
+  "existing_saves_used": false,
+  "existing_saves_modified": false,
+  "save_format_changed": false,
+  "database_schema_changed": false,
+  "production_mutation": false,
+  "pending": [
+    "Explicit authorization for this follow-up upload/deployment after prior automatic-review rejection.",
+    "Linux build and candidate native acceptance against the pinned deployed release.",
+    "Save-preserving activation and hosted browser/gameplay acceptance."
+  ],
+  "limitations": [
+    "No new live browser run; deterministic browser protocol suites and real native/router probes were used.",
+    "Busy, unresponsive, or unknown native requests retain ownership and require diagnosis; recovery never invents a player action."
+  ]
+}

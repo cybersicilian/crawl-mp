@@ -1,0 +1,21 @@
+{
+  "creationSizeBytes": "257201344",
+  "creationTimestamp": "2026-10-23T16:18:43.257-07:00",
+  "description": "State backup after frozen Chain Devil, Eldritch and Vellum native-art release validation; owner 01a16a0f",
+  "diskSizeGb": "10",
+  "downloadBytes": "2412564446",
+  "enableConfidentialCompute": false,
+  "id": "8891115908189541820",
+  "kind": "compute#snapshot",
+  "labelFingerprint": "42WmSpB8rSM=",
+  "name": "dcss-content-20261023t2318-01a16a0f",
+  "selfLink": "https://www.googleapis.com/compute/v1/projects/chuk-437319/global/snapshots/dcss-content-20261023t2318-01a16a0f",
+  "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+  "sourceDiskId": "4919868165669720580",
+  "status": "READY",
+  "storageBytes": "257201344",
+  "storageBytesStatus": "UP_TO_DATE",
+  "storageLocations": [
+    "us"
+  ]
+}

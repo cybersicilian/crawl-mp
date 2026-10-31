@@ -1,0 +1,38 @@
+{
+  "owner": "01a15523-0d2a-7a92-b63a-f7e2469fd2fe",
+  "status": "DEPLOYED_PUBLIC_PASS_tactical_sidebar_leaderboard",
+  "detailsPath": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/successor-tactical-sidebar/progress.json",
+  "candidate": "/opt/dcss/releases/20261020T032750Z-tactical-sidebar",
+  "nativeSha256": "0f145db9a26bfb95569ee474803aa01cadf2b208e8e92ebf8e60ace623cc1df8",
+  "nativeAcceptanceSha256": "b1af2c38c66d042985606de02809d97326eead778d6e685c4aea3eb666ef94d6",
+  "recordedAt": 1792501883.732905,
+  "ordinaryVerifierVersion": 3,
+  "activated": true,
+  "url": "https://dcss.iancaltabiano.com",
+  "manifestSha256": "00247e943448ece00023903599f09b7d7b318d4d6a92eefd04fb48dfd9f8d91f",
+  "finalCloseoutSha256": "0028ee8277ffcab3480aa106705df7b31e45c7642ce7d312bfa418e29dcf5f43",
+  "backup": "dcss-tactical-sidebar-20261020t125642z",
+  "backendCases": 152,
+  "publicScopes": [
+    "Oozle5",
+    "sidebar3layouts/inspection/heroSwitch/SaveQuit",
+    "tactical2/3nativeACKmoves/idlepeer/reconnect",
+    "restoredleaderboard98runs"
+  ],
+  "resultPath": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/successor-tactical-sidebar/deployment-result.json",
+  "allGameplayTestsPassed": false,
+  "remainingDeferredScopes": [
+    "Paladin combat/support/faith aggregate as requested"
+  ],
+  "webOnlyBooleanFollowup": {
+    "release": "/opt/dcss/releases/20261020T133036Z-sidebar-booleans",
+    "manifestSha256": "2845bfcc9cb9931c4349a359601012119ed229ff4d1e15e06baac8f3dec2876a",
+    "nativeSha256": "0f145db9a26bfb95569ee474803aa01cadf2b208e8e92ebf8e60ace623cc1df8",
+    "partySidebarSha256": "28928deaf8ad104765107ed320fd9d30954817ee1b395cceadbd4b6509e2e571",
+    "receiptPath": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/sidebar-boolean/deployment-receipt.json",
+    "receiptSha256": "06ff9c8982fff3f2c9275564d67a6a21e5d8b8f1ae783135f639c1121488ec77",
+    "parserCases": 9,
+    "newBrowserAssertionsExecuted": false,
+    "deployed": true
+  }
+}

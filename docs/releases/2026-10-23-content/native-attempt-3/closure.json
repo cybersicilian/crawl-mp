@@ -1,0 +1,12 @@
+{
+  "reservationId": "9f064118-331d-4474-892f-392e01d7d267",
+  "owner": "codex/01a16a0f-b9dc-7e80-ad55-34720b26d695",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateStatus": "completed_held",
+    "processGroup": 81433,
+    "gateProcessGroupGone": true,
+    "freshHostGroupMembers": [],
+    "checkedAt": 1792782756.644157
+  }
+}

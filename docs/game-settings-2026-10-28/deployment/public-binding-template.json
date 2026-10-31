@@ -1,0 +1,22 @@
+{
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "source": {
+    "docs/game-settings-2026-10-28/deployment/verify_live.cjs": "0e74d054e0c487cbde8bb01a0586f6ae0e072ec97522659ba79f18f39f057ee5",
+    "docs/game-settings-2026-10-28/deployment/payload/manifest.json": "4e0b366e767d1c3c1fdb91d1dd53c2fe15e41bb6f2cf4ee3d1d41a99d4572619"
+  },
+  "resources": {
+    "browser_engines": [
+      "chromium"
+    ],
+    "pages": 1,
+    "new_accounts": 0,
+    "native_games": 0,
+    "existing_qa_preferences_restored": true
+  },
+  "command": [
+    "env",
+    "NODE_PATH=/Users/iancaltabiano/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
+    "node",
+    "docs/game-settings-2026-10-28/deployment/verify_live.cjs"
+  ]
+}

@@ -15,6 +15,7 @@
 #include "act-iter.h"
 #include "areas.h"
 #include "attack.h"
+#include "automaton.h"
 #include "beam.h"
 #include "cloud.h"
 #include "colour.h"
@@ -44,6 +45,7 @@
 #include "mon-tentacle.h"
 #include "mutation.h"
 #include "ouch.h"
+#include "party.h"
 #include "prompt.h"
 #include "random.h"
 #include "religion.h"
@@ -162,7 +164,7 @@ bool cast_smitey_damnation(int pow, bolt &beam)
     beam.real_flavour      = beam.flavour;
     beam.glyph             = dchar_glyph(DCHAR_FIRED_BURST);
     beam.colour            = LIGHTRED;
-    beam.source_id         = MID_PLAYER;
+    beam.source_id         = you.mid;
     beam.thrower           = KILL_YOU;
     beam.obvious_effect    = false;
     beam.pierce            = false;
@@ -3338,7 +3340,7 @@ dice_def thunderbolt_damage(int power, int arc)
     return dice_def(dice, div_rand_round(45 + power / 4, arc + 2));
 }
 
-spret cast_thunderbolt(actor *caster, int pow, coord_def aim, bool fail)
+spret cast_thunderbolt(actor *caster, int pow, coord_def aim, bool fail, int damage_percent)
 {
     int &charges = caster->props[THUNDERBOLT_CHARGES_KEY].get_int();
     ASSERT(charges <= LIGHTNING_MAX_CHARGE);
@@ -3363,6 +3365,7 @@ spret cast_thunderbolt(actor *caster, int pow, coord_def aim, bool fail)
     bolt beam;
     beam.name              = "thunderbolt";
     beam.aux_source        = "lightning rod";
+    beam.damage_percent    = damage_percent;
     beam.origin_spell      = SPELL_THUNDERBOLT;
     beam.flavour           = BEAM_ELECTRICITY;
     beam.glyph             = dchar_glyph(DCHAR_FIRED_BURST);
@@ -3896,6 +3899,16 @@ spret cast_searing_ray(actor& agent, int pow, bolt &beam, bool fail)
             return spret::abort;
 
         fail_check();
+
+        // An engraving fires the initial ray without taking over the hero's
+        // future turns or replacing an existing channelled activity.
+        if (automaton::casting_automatically())
+        {
+            bolt ray(agent, SPELL_SEARING_RAY, pow);
+            ray.target = beam.target;
+            ray.fire();
+            return spret::success;
+        }
     }
     else
     {
@@ -4413,14 +4426,32 @@ void actor_apply_toxic_bog(actor * act)
         return;
 
     actor *oppressor = nullptr;
+    bool protected_from_automatic_bog = false;
 
     for (map_marker *marker : env.markers.get_markers_at(act->pos(), MAT_TERRAIN_CHANGE))
     {
         map_terrain_change_marker* tmarker =
                 dynamic_cast<map_terrain_change_marker*>(marker);
         const auto ct = tmarker->change_type;
-        if (ct == TERRAIN_CHANGE_BOG || ct == TERRAIN_CHANGE_FLOOD)
+        if (ct == TERRAIN_CHANGE_BOG || ct == TERRAIN_CHANGE_FLOOD
+            || ct == TERRAIN_CHANGE_AUTOMATON_BOG)
             oppressor = actor_by_mid(tmarker->source_mid);
+        if (ct == TERRAIN_CHANGE_AUTOMATON_BOG && act->mid != tmarker->source_mid)
+        {
+            const monster* mon = act->as_monster();
+            protected_from_automatic_bog = act->is_player()
+                || (mon && (party::is_proxy_monster(*mon)
+                            || mon->wont_attack() || mon->neutral()));
+        }
+    }
+
+    // Automatic terrain is allowed to persist, but must not injure an ally
+    // who arrives after the original safety check. Unrelated terrain layers
+    // are retained by the normal terrain-change reversion mechanism.
+    if (protected_from_automatic_bog)
+    {
+        revert_terrain_change(act->pos(), TERRAIN_CHANGE_AUTOMATON_BOG);
+        return;
     }
 
     if (!_bog_can_affect(oppressor, act))
@@ -4730,8 +4761,10 @@ spret cast_noxious_bog(int pow, bool fail)
 
     for (auto pos : bog_locs)
     {
+        const bool automatic = automaton::casting_automatically();
         temp_change_terrain(pos, DNGN_TOXIC_BOG, turns * BASELINE_DELAY,
-                TERRAIN_CHANGE_BOG, MID_PLAYER);
+                automatic ? TERRAIN_CHANGE_AUTOMATON_BOG : TERRAIN_CHANGE_BOG,
+                automatic ? you.mid : MID_PLAYER);
         flash_tile(pos, LIGHTGREEN, 0, TILE_BOLT_BOG_FLASH);
     }
 
@@ -4998,7 +5031,7 @@ static void _do_fusillade_hit(monster* mon, int power, beam_type flavour)
     if (flavour == BEAM_MMISSILE)
         exp.damage.num = 5;
 
-    exp.source_id     = MID_PLAYER;
+    exp.source_id     = you.mid;
     exp.thrower       = KILL_YOU_MISSILE;
     exp.origin_spell  = SPELL_FULSOME_FUSILLADE;
     exp.target        = mon->pos();

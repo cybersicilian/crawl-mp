@@ -3457,7 +3457,11 @@ void Menu::webtiles_write_item(const MenuEntry* me) const
     tiles.json_open_object();
 
     if (me)
+    {
         tiles.json_write_string("text", me->get_text());
+        if (!me->tag.empty())
+            tiles.json_write_string("kind", me->tag);
+    }
     else
     {
         tiles.json_write_string("text", "");
@@ -3467,6 +3471,8 @@ void Menu::webtiles_write_item(const MenuEntry* me) const
 
     if (me->quantity)
         tiles.json_write_int("q", me->quantity);
+    // Send zero as well: row updates must clear a previous selection.
+    tiles.json_write_int("selected_qty", me->selected() ? me->selected_qty : 0);
 
     int col = item_colour(me);
     if (col != MENU_ITEM_STOCK_COLOUR)
@@ -3484,6 +3490,7 @@ void Menu::webtiles_write_item(const MenuEntry* me) const
         tiles.json_write_int("level", me->level);
 
     webtiles_write_tiles(*me);
+    me->webtiles_write_metadata();
 
     tiles.json_close_object();
 }

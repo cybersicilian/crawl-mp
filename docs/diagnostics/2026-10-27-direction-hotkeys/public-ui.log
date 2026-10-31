@@ -1,0 +1,4 @@
+Compact keypad renders all eight labelled directions with accessible touch targets
+Common hotkeys opens in one click, contains focus, returns it on Escape and spends no turn
+Gameplay keys work immediately after closing help with exactly one owner action
+{"passed":true,"checks":["Compact keypad renders all eight labelled directions with accessible touch targets","Common hotkeys opens in one click, contains focus, returns it on Escape and spends no turn","Gameplay keys work immediately after closing help with exactly one owner action"],"errors":[],"game_id":"e813e777-feac-4221-9b97-4c875be376a9","test_game_saved":true}

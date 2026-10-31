@@ -222,16 +222,18 @@ The sacred weapon of Toth-Mos, first apostle of the god Ashenzari. It grants
 the wielder a fraction of Ashenzari's own vision, ensuring that every shot will
 land true.
 %%%%
-# TAG_MAJOR_VERSION == 34
 longbow "Piercer"
 
 An exceptionally large metal longbow.
 %%%%
-# TAG_MAJOR_VERSION == 34
+shortbow of the Assassin
+
+This shadowy shortbow guides its venomous arrows to seek the most lethal point
+to strike an unaware target, packing a nasty punch.
+%%%%
 blowgun of the Assassin
 
-This blowgun seems to guide the needle to seek the most lethal point to hit
-the target, packing a nasty punch.
+<shortbow of the Assassin>
 %%%%
 lance "Wyrmbane"
 
@@ -954,3 +956,66 @@ imagery, but the focus of the scene is obscured by a great dark stain {{
         return "that smells strongly "
     end
 }}of ashes and salt. It seems somehow blasphemous to wear.
+%%%%
+sword of Power
+
+A legendary great sword that surges with martial vigour when its wielder is in
+peak fighting condition. In a co-op party, its valorous strikes bolster and
+mend nearby allies standing shoulder-to-shoulder on the front line.
+%%%%
+sword of Zonguldrok
+
+An ancient double sword carved with necromantic runes by the dread lich
+Zonguldrok. Those slain by its edge are bound into unlife to serve its wielder.
+%%%%
+Aegis of Fellowship
+
+A battered shield whose overlapping wards were devised for the shield-lines
+of an old dwarven company. Its bearer shelters nearby companions, finding
+strength in the press of a shared defence.
+
+Available only in multiplayer.
+%%%%
+Conduit Staff
+
+A silver-veined staff carried by an expedition of wandering magicians. Its
+runes conduct the power of a blow or spell towards nearby companions, feeding
+their magic rather than hoarding it in the wood.
+
+Available only in multiplayer.
+%%%%
+Twin-Soul Ring
+
+Two strands of silver twist through this ring without touching. Its old
+translocation charm needs no matching ring: a nearby companion completes the
+circuit, sharing the wearer's protection and the warmth of each successful
+strike.
+
+Available only in multiplayer.
+%%%%
+broad axe "Dawnforged"
+
+This axe was forged alongside Duskweaver for two adventurers who rarely
+agreed on anything except which monster to kill next. Its fire answers the
+other blade's frost; in the hands of companions their paired enchantments
+reinforce one another and burst against their quarry.
+
+Available only in multiplayer.
+%%%%
+demon blade "Duskweaver"
+
+The cold counterpart of Dawnforged, quenched in the same enchanter's workshop.
+It drinks warmth and magic from its victims. A companion bearing Dawnforged
+can awaken the answering enchantment, strengthening both wielders and
+bringing fire and frost together against their foes.
+
+Available only in multiplayer.
+%%%%
+gauntlets of the Shieldmate
+
+The battered gauntlets of a dwarven caravan guard. Their maker considered a
+blow wasted if it did nothing for the person standing beside you. Each strike
+feeds the old wards sewn into the cuffs, sheltering nearby companions.
+
+Available only in multiplayer.
+%%%%

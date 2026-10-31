@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "coord.h"
 #include "enum.h"
 #include "feature.h"
@@ -97,7 +99,11 @@ class invis_monster_knowledge
 {
 private:
     vector<invis_mon_data> data;
-    bool unknown_invis_nearby;
+    bool unknown_invis_nearby = false;
+    // Recipient observations are runtime-only. Legacy floor saves retain their
+    // existing layout; loading never assigns one hero's hints to another hero.
+    std::map<int, vector<invis_mon_data>> personal_observations;
+    void observe(const monster& mon, bool reveal_pos, coord_def forced_pos);
 
 public:
     coord_def last_known_pos(const monster& mon);
@@ -109,6 +115,8 @@ public:
     void suppress_invis_warning();
     bool any_unknown_nearby();
     vector<monster_info> get_unknown_in_los();
+    invis_monster_knowledge personal_view(int slot) const;
+    vector<monster_info> known_positions() const;
     string get_unknown_monster_description();
 
     void marshall(writer &) const;

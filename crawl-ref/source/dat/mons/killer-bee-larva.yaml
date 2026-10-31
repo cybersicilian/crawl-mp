@@ -1,0 +1,19 @@
+name: "killer bee larva"
+glyph: {char: "k", colour: lightgray}
+flags: [no_skeleton]
+resists: {poison: -1}
+exp: 1
+genus: killer_bee
+will: 0
+attacks:
+ - {type: bite, damage: 3}
+hd: 1
+hp_10x: 25
+ac: 1
+ev: 5
+has_corpse: true
+intelligence: animal
+speed: 5
+size: tiny
+shape: insect
+corpse_tile: killer_bee

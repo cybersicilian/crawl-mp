@@ -1,0 +1,234 @@
+/*
+ * Offline typography: Iowan and Avenir are used only when installed locally.
+ * No system font is copied or redistributed. DejaVu Sans/Mono are the existing
+ * bundled WebTiles fallbacks. Keep renderer-owned glyph and canvas metrics intact.
+ */
+:root {
+    --tt-font-title: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --tt-font-copy: "Avenir Next", Avenir, "Segoe UI", "DejaVu Sans", sans-serif;
+    --tt-font-ui: "Avenir Next", Avenir, "Segoe UI", "DejaVu Sans", sans-serif;
+    --tt-font-mono: "DejaVu Sans Mono", "SFMono-Regular", Consolas, monospace;
+    --tt-type-small: 11px;
+    --tt-type-body: 13px;
+    --tt-type-reading: 14px;
+    --tt-muted: #c5b398;
+}
+
+/* Use proportional type for controls and prose, tabular numerals for values. */
+:is(#lobby, #stats, #party_hud, #party_turn_banner, #dcss_quick_dock,
+    #monster_list, #party_inspector_modal, .tt-codex) {
+    font-family: var(--tt-font-ui);
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures;
+}
+:is(.party-card, .party-member-card, .party-badge, .party-floor-badge,
+    .party-member-footer, .party-stat-lbl, .party-weapon-text,
+    .party-custom-row input, .party-custom-row select) {
+    font-family: var(--tt-font-ui);
+}
+:is(button, input, select, .dcss-btn, .button, .dcss-dock-btn,
+    .party-banner-btn, .party-hud-btn, .party-mini-btn, .party-ping-btn,
+    .party-preset-chip, .party-preset-btn, .party-mode-btn,
+    .party-archetype-btn, .slot-preset-btn, .slot-state-btn,
+    .chronicle-load-btn, .party-insp-close-btn, .party-insp-hero-btn,
+    .party-insp-tab-btn) {
+    font-family: var(--tt-font-ui);
+    font-weight: 500;
+    letter-spacing: 0;
+}
+:is(.party-stat-val, .party-def-badges, .party-bar-label,
+    .party-speed-meta, .party-insp-stat-box .val, .chronicle-count) {
+    font-variant-numeric: tabular-nums;
+}
+:is(.party-bar-label, .party-speed-meta) { font-family: var(--tt-font-mono); }
+
+/* The staging hall has room for a considered editorial rhythm. */
+#lobby { font-size: var(--tt-type-body); line-height: 1.5; }
+:is(.party-hall-title, .party-lobby-title, .coop-quick-title) {
+    font-family: var(--tt-font-title);
+    font-size: 23px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.015em;
+}
+.chronicle-header {
+    font-family: var(--tt-font-title);
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+}
+:is(.party-hall-header, .party-lobby-header, .chronicle-header) {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+.party-slot-title {
+    font: 600 20px/1.2 var(--tt-font-title);
+    letter-spacing: 0.01em;
+}
+.party-slot-top { padding-bottom: 9px; }
+.party-field-label {
+    font: 500 11px/1.4 var(--tt-font-ui);
+    letter-spacing: 0.025em;
+    color: #d1bea0;
+}
+:is(.party-slot-input, .party-slot-select) {
+    font: 500 13px/1.4 var(--tt-font-ui);
+    min-height: 32px;
+    padding: 5px 8px;
+}
+:is(.party-mode-btn, .party-archetype-btn, .slot-preset-btn) {
+    line-height: 1.35;
+    padding: 4px 7px;
+}
+.party-ready-badge { font-weight: 600; letter-spacing: 0.04em; }
+.party-room-banner { font-size: 12px; line-height: 1.5; }
+.party-slot-occupant { font-size: 10px; line-height: 1.4; }
+.chronicle-box-header {
+    font: 600 14px/1.35 var(--tt-font-title);
+    letter-spacing: 0.015em;
+    padding-bottom: 8px;
+}
+.chronicle-entry-title {
+    font: 600 16px/1.35 var(--tt-font-title);
+    letter-spacing: 0;
+}
+.chronicle-entry-sub {
+    font: 12px/1.5 var(--tt-font-ui);
+    margin-top: 4px;
+}
+:is(.chronicle-entry, .chronicle-card) { padding: 10px 12px; }
+.coop-quick-sub { font: 13px/1.5 var(--tt-font-ui); }
+#party_room_footer { gap: 8px; }
+#footer { font: 11px/1.6 var(--tt-font-ui); }
+
+/* Compact HUD: preserve the four-hero roster's laptop-height budget. */
+#stats > #stats_titleline {
+    font: 600 17px/1.2 var(--tt-font-title);
+    letter-spacing: 0;
+    text-shadow: 0 1px 2px #00000090;
+}
+#stats > div { font-family: var(--tt-font-ui); }
+#stats_species_god { color: #cfba97; }
+.stats_caption { color: #c5b398; }
+#party_hud_title { font: 600 16px/1.15 var(--tt-font-title); }
+#party_hud_header { padding-bottom: 4px; margin-bottom: 5px; }
+.party-member-name { font: 600 11px/1.35 var(--tt-font-ui); }
+.party-member-top { line-height: 1.25; }
+.party-def-badges { font: 9px/1.25 var(--tt-font-mono); }
+.party-buff-pill {
+    font: 500 9px/1.3 var(--tt-font-ui);
+    text-shadow: 0 1px 1px #00000070;
+}
+.party-buff-pill .tt-icon { width: 16px; height: 16px; }
+.party-weapon-text { font: 10px/1.3 var(--tt-font-ui); }
+.party-mini-btn { font: 500 10px/1.2 var(--tt-font-ui); }
+.party-ping-btn { font: 500 10px/1.3 var(--tt-font-ui); }
+.party-badge { font: 500 9px/1.3 var(--tt-font-ui); }
+.party-banner-label { color: #c5b398; letter-spacing: 0.015em; }
+#party_banner_who { font-weight: 600; }
+.dcss-dock-btn { font-weight: 500; line-height: 1.3; }
+.dcss-dock-btn .dock-key { font-size: 9px; font-weight: 400; }
+#monster_list { font-size: 12px; line-height: 1.4; }
+
+/* Dialog headings are quiet, legible, and separate from the reading surface. */
+html dialog#party_inspector_modal {
+    font: 13px/1.5 var(--tt-font-ui);
+    border-image: none;
+    border-color: #b68f51;
+    border-radius: 10px;
+}
+#party_inspector_modal .party-insp-title-wrap h1 {
+    font: 600 25px/1.15 var(--tt-font-title);
+    letter-spacing: 0.015em;
+    text-shadow: 0 1px 2px #00000090;
+}
+#party_inspector_modal .party-insp-subtitle {
+    font: 12px/1.4 var(--tt-font-ui);
+    color: #c5b398;
+}
+#party_inspector_modal .party-insp-header { padding: 16px 18px 14px; }
+#party_inspector_modal .party-insp-hero-bar { padding: 9px 14px; gap: 6px; }
+#party_inspector_modal .party-insp-hero-btn {
+    font: 500 11px/1.35 var(--tt-font-ui);
+    padding: 6px 8px;
+}
+#party_inspector_modal .party-insp-tab-bar { gap: 6px; padding-top: 10px; }
+#party_inspector_modal .party-insp-tab-btn {
+    font: 500 12px/1.3 var(--tt-font-ui);
+    padding: 9px 11px;
+}
+#party_inspector_modal .party-insp-tab-btn.active { font-weight: 600; }
+#party_inspector_modal .party-insp-body { font: 13px/1.5 var(--tt-font-ui); }
+#party_inspector_modal .party-insp-hero-headline {
+    font: 600 21px/1.25 var(--tt-font-title);
+    margin-bottom: 6px;
+}
+#party_inspector_modal .party-insp-hero-meta { font: 12px/1.6 var(--tt-font-ui); }
+#party_inspector_modal .party-insp-stat-box { padding: 6px 8px; border-radius: 4px; }
+#party_inspector_modal .party-insp-stat-box .lbl {
+    font: 500 10px/1.35 var(--tt-font-ui);
+    letter-spacing: 0.025em;
+    margin-bottom: 2px;
+}
+#party_inspector_modal .party-insp-stat-box .val {
+    font: 600 13px/1.35 var(--tt-font-ui);
+    font-variant-numeric: tabular-nums;
+}
+#party_inspector_modal .party-insp-section-title {
+    font: 600 17px/1.3 var(--tt-font-title);
+    margin: 17px 0 8px;
+    padding-bottom: 5px;
+}
+#party_inspector_modal .party-insp-res-row { font-size: 12px; line-height: 1.4; }
+#party_inspector_modal .party-insp-table { font: 12px/1.5 var(--tt-font-ui); }
+#party_inspector_modal .party-insp-table th { font-weight: 600; }
+
+/* Explanatory cards should be read comfortably without terminal typography. */
+:is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip, .dcss-nested-tip) {
+    font: 13px/1.5 var(--tt-font-ui);
+    padding: 11px 13px;
+    border-radius: 7px;
+}
+:is(#dcss_rich_tooltip .tip-title, .dcss-tip-title, .lobby-tip-title) {
+    font: 600 16px/1.25 var(--tt-font-title);
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+}
+:is(#dcss_rich_tooltip .tip-body, .dcss-tip-body, .lobby-tip-body) {
+    font: 13px/1.5 var(--tt-font-ui);
+}
+:is(#dcss_rich_tooltip .tip-meta, .dcss-tip-meta, .lobby-tip-meta) {
+    font: 11px/1.45 var(--tt-font-ui);
+    padding-top: 7px;
+    margin-top: 7px;
+}
+.tt-codex .menu_title { font: 600 27px/1.2 var(--tt-font-title); }
+.codex-subtitle { font: 12px/1.5 var(--tt-font-ui); }
+.codex-chapter strong { font: 600 13px/1.35 var(--tt-font-ui); }
+.codex-chapter small { font: 11px/1.45 var(--tt-font-ui); }
+.menu_title { letter-spacing: 0.015em; }
+#ui-stack :is(.describe-item, .describe-generic, .describe-feature,
+    .describe-spell, .describe-monster, .formatted-scroller) pre {
+    font: 14px/1.65 var(--tt-font-ui);
+}
+
+@media (max-height: 820px) {
+    #stats > #stats_titleline { font-size: 15px; line-height: 1.2; }
+    #party_hud_title { font-size: 15px; }
+    #party_hud_header { margin-bottom: 4px; }
+    .party-member-top { margin-bottom: 3px; }
+    #party_inspector_modal .party-insp-header { padding: 12px 18px 10px; }
+    #party_inspector_modal .party-insp-title-wrap h1 { font-size: 23px; }
+    #party_inspector_modal .party-insp-body { padding-top: 13px; padding-bottom: 13px; }
+    #party_inspector_modal .party-insp-section-title { margin-top: 13px; }
+    #party_inspector_modal .party-insp-hero-headline { font-size: 19px; }
+}
+
+@media (max-width: 680px) {
+    :is(.party-hall-title, .party-lobby-title, .coop-quick-title, .chronicle-header) { font-size: 21px; }
+    #party_inspector_modal .party-insp-title-wrap h1 { font-size: 20px; }
+    #party_inspector_modal .party-insp-header { padding: 12px; }
+    #party_inspector_modal .party-insp-body { padding: 10px; }
+    #party_inspector_modal .party-insp-hero-btn { padding: 5px 7px; }
+    #party_inspector_modal .party-insp-tab-btn { padding: 7px 8px; font-size: 11px; }
+}

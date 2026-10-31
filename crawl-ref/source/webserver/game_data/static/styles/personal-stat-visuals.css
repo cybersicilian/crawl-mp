@@ -1,0 +1,56 @@
+/* Native character readings, shown once inside the controlled hero card. */
+#stats .personal-stat-glyph { display: none; }
+#normal .party-self-details #stats { color: #d4d5cb; }
+#normal .party-self-details :is(#stats_hpline, #stats_mpline) { display: none !important; }
+#normal .party-self-details :is(#stats_gozag_gold_label, #stats_gozag_gold) { display: none; }
+#normal .party-self-details .hud-stats-details { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px 7px; margin-top: 0; }
+#normal .party-self-details .stats_caption { display: none; }
+#normal .party-self-details :is(.personal-stat-reading, #stats_noise) { box-sizing: border-box; display: flex; align-items: center; gap: 5px; min-width: 0; min-height: 22px; width: auto !important; padding: 2px 3px; border: 1px solid #ad98611c; border-radius: 2px; background: #10161b42; }
+#normal .party-self-details .personal-stat-reading { order: 1; font: 600 11px/1.2 var(--tt-font-mono); }
+#normal .party-self-details .personal-stat-reading:has(:is(#stats_str, #stats_int, #stats_dex)) { order: 2; }
+#normal .party-self-details .personal-stat-glyph { display: inline-flex; flex: 0 0 16px; align-items: center; justify-content: center; color: #b9aa85; }
+#normal .party-self-details .personal-stat-glyph .tt-icon { width: 16px; height: 16px; margin: 0; }
+#normal .party-self-details .personal-stat-reading > [id] { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#normal .party-self-details .personal-stat-reading:focus-visible,
+#normal .party-self-details :is(#stats_noise, .personal-equipment, .personal-stat-hazard):focus-visible { outline: 1px solid #d1b777; outline-offset: 1px; }
+#normal .party-self-details .stat-row-interactive:has(:is(#stats_xl, #stats_place, #stats_time)) { display: none; }
+#normal .party-self-details #stats_noise { flex: 1 1 0; order: 0; opacity: 1; }
+#normal .party-self-details #stats_noise_inter { display: flex; flex: 1 1 auto; align-items: center; width: auto !important; height: 5px !important; min-width: 10px; }
+#normal .party-self-details #stats_noise_bar { display: block; float: none !important; width: 100% !important; height: 5px !important; border-radius: 1px; overflow: hidden; }
+#normal .party-self-details #stats_noise_status { display: none; }
+#normal .party-self-details #stats_noise_num { font: 9px var(--tt-font-mono); }
+#normal .party-self-details #stats_noise[data-level="blank"] { border-color: #c991c65c; }
+#normal .party-self-details #stats_noise[data-level="blank"] .personal-stat-glyph { color: #d0a2ce; }
+#normal .party-self-details .personal-stat-context { display: flex; align-items: center; gap: 4px; grid-column: 1 / -1; order: 3; min-width: 0; }
+#normal .party-self-details :is(.personal-equipment, .personal-stat-hazard) { box-sizing: border-box; display: inline-flex; align-items: center; gap: 3px; float: none !important; width: auto !important; min-height: 20px; padding: 1px 3px; border: 1px solid #9e8c5e36; border-radius: 2px; background: #0e141a75; }
+#normal .party-self-details .personal-equipment { cursor: pointer; }
+#normal .party-self-details .personal-equipment:hover { border-color: #c7ab70; background: #ad975820; }
+#normal .party-self-details .personal-equipment > :not(.personal-stat-glyph) { display: none; }
+#normal .party-self-details .personal-stat-hazard { font: 10px var(--tt-font-mono); border-color: #b77c6e5c; }
+#normal .party-self-details .personal-stat-hazard .personal-stat-glyph { color: #d3a192; }
+#normal .party-self-details #stats_wizmode:empty { display: none; }
+@media (pointer: coarse) {
+    #normal .party-self-details :is(.personal-stat-reading, #stats_noise, .personal-equipment, .personal-stat-hazard) { min-height: 26px; }
+}
+
+/* ---- Labelled clusters for the controlled hero's native readings ---- */
+.hud-stat-label { display: none; }
+#normal .party-self-details .hud-stat-label { display: inline; color: var(--ui-muted, #c0b296); }
+#normal .party-self-details .hud-stat-column { display: contents; }
+#normal .party-self-details .hud-stat-cluster {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; grid-column: 1 / -1; min-width: 0;
+    position: relative; padding-top: 11px;
+}
+#normal .party-self-details .hud-stat-cluster-title {
+    position: absolute; left: 1px; top: 0; font: 600 var(--tt-type-caption, 10px)/1.2 var(--tt-font-ui); letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ui-muted, #c0b296); pointer-events: none;
+}
+#normal .party-self-details .hud-defense-cluster { order: 1; }
+#normal .party-self-details .hud-attribute-cluster { order: 2; }
+#normal .party-self-details .hud-stat-cluster .personal-stat-reading { order: 0; }
+#normal .party-self-details .personal-stat-reading > [id] { margin-left: auto; font-variant-numeric: tabular-nums; }
+#normal .party-self-details .hud-hazard-row:empty { display: none; }
+#normal .party-self-details .hud-progress-row { display: none; } /* level and XP live on the card's progress bar */
+#normal .party-self-details .hud-wizmode { float: none; grid-column: 1 / -1; color: #f3b6a2; font: 600 10px/1.3 var(--tt-font-mono); }
+#normal .party-self-details .hud-wizmode:empty { display: none; }
+#normal .party-self-details .personal-stat-hazard .hud-stat-label { margin-right: 2px; }

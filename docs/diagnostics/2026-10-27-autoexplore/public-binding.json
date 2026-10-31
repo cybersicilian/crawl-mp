@@ -1,0 +1,24 @@
+{
+  "source": {
+    "docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs": "7a4db7fb129b61e93c868e196d4840e1fb3c744b13475ab09893388a64a497ed",
+    "docs/diagnostics/2026-10-27-autoexplore/run_public.py": "961696a0a492adddb3aa60b876a0cc3905d5c7cf35ef06fd43016122c09108b5",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1",
+    "docs/diagnostics/2026-10-27-autoexplore/release-manifest.json": "537f4667db1e5fad3f881c210d3f568c58ae0f29c738c7e11ee067a301b33a2d",
+    "docs/diagnostics/2026-10-27-autoexplore/active-verification.json": "22d8da45bd5f10c8d3a9343337312c4a54a1c7f1dfb1a13b870e8e6847e5e0eb"
+  },
+  "resources": {
+    "browser_engines": [
+      "chromium",
+      "webkit"
+    ],
+    "sequential": true,
+    "pages_per_engine": 2,
+    "test_campaign_id": "e813e777-feac-4221-9b97-4c875be376a9",
+    "new_accounts": 0,
+    "new_campaigns": 0,
+    "autoexplore_engines": [
+      "chromium"
+    ],
+    "maximum_seconds_per_engine": 300
+  }
+}

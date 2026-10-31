@@ -1,0 +1,21 @@
+Route_caster
+
+Level 1 of the Dungeon
+
+Level 1 of the Snake Pit
+(0, 0, Snake:1)
+  an anaconda corpse
+(0, 5, Snake:1)
+  a black mamba corpse
+(3, 2, Snake:1)
+  a +0 spear
+(4, -1, Snake:1)
+  a +0 halberd
+  a naga corpse
+(4, 2, Snake:1)
+  21 gold pieces
+(4, 4, Snake:1)
+  a black mamba corpse
+(5, 5, Snake:1)
+  a +0 scimitar
+

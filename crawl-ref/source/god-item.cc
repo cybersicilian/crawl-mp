@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vellum.h"
 
 #include "god-item.h"
 
@@ -69,13 +70,8 @@ static bool _weapon_with_brand(const item_def &item, bool (*brand_fn)(brand_type
 
 bool is_holy_item(const item_def& item, bool calc_unid, bool include_temp)
 {
-    if (is_unrandom_artefact(item))
-    {
-        const unrandart_entry* entry = get_unrand_entry(item.unrand_idx);
-
-        if (entry->flags & UNRAND_FLAG_HOLY)
-            return true;
-    }
+    if (vellum::power_has_flag(item, UNRAND_FLAG_HOLY))
+        return true;
 
     if (item.base_type == OBJ_WEAPONS && is_blessed(item))
         return true;
@@ -120,13 +116,8 @@ bool is_hasty_brand(brand_type brand)
  */
 bool is_evil_item(const item_def& item, bool calc_unid, bool include_temp)
 {
-    if (is_unrandom_artefact(item))
-    {
-        const unrandart_entry* entry = get_unrand_entry(item.unrand_idx);
-
-        if (entry->flags & UNRAND_FLAG_EVIL)
-            return true;
-    }
+    if (vellum::power_has_flag(item, UNRAND_FLAG_EVIL))
+        return true;
 
     if (item.base_type == OBJ_WEAPONS)
     {
@@ -168,16 +159,9 @@ bool is_evil_item(const item_def& item, bool calc_unid, bool include_temp)
 
 bool is_chaotic_item(const item_def& item, bool calc_unid, bool include_temp)
 {
-    if (is_unrandom_artefact(item))
-    {
-        const unrandart_entry* entry = get_unrand_entry(item.unrand_idx);
-
-        if (entry->flags & UNRAND_FLAG_CHAOTIC ||
-           (testbits(item.flags, ISFLAG_CHAOTIC)))
-        {
-            return true;
-        }
-    }
+    if (vellum::power_has_flag(item, UNRAND_FLAG_CHAOTIC)
+        || testbits(item.flags, ISFLAG_CHAOTIC))
+        return true;
 
     if (_weapon_with_brand(item, is_chaotic_brand, calc_unid, include_temp))
         return true;
@@ -254,7 +238,7 @@ bool is_hasty_item(const item_def& item, bool calc_unid, bool include_temp)
     case OBJ_ARMOUR:
         return get_armour_rampaging(item, true)
                || get_armour_ego_type(item) == SPARM_MAYHEM
-               || is_unrandom_artefact(item, UNRAND_LIGHTNING_SCALES);
+               || has_unrand_effect(item, UNRAND_LIGHTNING_SCALES);
     case OBJ_POTIONS:
         return item.sub_type == POT_HASTE;
     case OBJ_BOOKS:
@@ -274,12 +258,12 @@ bool is_wizardly_item(const item_def& item, bool calc_unid)
         return true;
     }
 
-    if (is_unrandom_artefact(item, UNRAND_WUCAD_MU)
-        || is_unrandom_artefact(item, UNRAND_MAGE)
-        || is_unrandom_artefact(item, UNRAND_MAJIN)
-        || is_unrandom_artefact(item, UNRAND_BATTLE)
-        || is_unrandom_artefact(item, UNRAND_ELEMENTAL_STAFF)
-        || is_unrandom_artefact(item, UNRAND_OLGREB))
+    if (has_unrand_effect(item, UNRAND_WUCAD_MU)
+        || has_unrand_effect(item, UNRAND_MAGE)
+        || has_unrand_effect(item, UNRAND_MAJIN)
+        || has_unrand_effect(item, UNRAND_BATTLE)
+        || has_unrand_effect(item, UNRAND_ELEMENTAL_STAFF)
+        || has_unrand_effect(item, UNRAND_OLGREB))
     {
         return true;
     }

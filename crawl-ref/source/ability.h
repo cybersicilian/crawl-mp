@@ -75,7 +75,7 @@ bool activate_ability();
 bool check_ability_possible(const ability_type ability, bool quiet = false);
 bool ability_has_targeter(ability_type abil);
 unique_ptr<targeter> find_ability_targeter(ability_type ability);
-bool activate_talent(const talent& tal, dist *target = nullptr);
+bool activate_talent(const talent& tal, dist *target = nullptr, int inventory_slot = -1);
 bool handle_post_ability_effects(ability_type ability,
                                  spret ability_result,
                                  int piety_cost,
@@ -93,6 +93,7 @@ bool string_matches_ability_name(const string& key);
 ability_type ability_by_name(const string &name);
 string print_abilities();
 ability_type fixup_ability(ability_type ability);
+ability_type restored_dithmenos_ability(ability_type ability);
 
 int find_ability_slot(ability_type abil, char firstletter = 'f');
 int auto_assign_ability_slot(int slot);
@@ -102,3 +103,6 @@ void swap_ability_slots(int index1, int index2, bool silent = false);
 
 spell_type draconian_breath_to_spell(ability_type abil);
 int draconian_breath_power(int shapeshifting_skill = -1);
+
+// Explicit native voice requirement, independent of current worship.
+bool ability_permits_silence(ability_type ability);

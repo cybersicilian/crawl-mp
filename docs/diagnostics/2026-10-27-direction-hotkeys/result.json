@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "direction-pad-feedback",
+    "common-hotkeys",
+    "quickbar-hotkeys",
+    "hud-input"
+  ],
+  "production_mutation": false
+}

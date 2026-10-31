@@ -1,0 +1,32 @@
+enum: SP_CHAIN_DEVIL
+monster: MONS_CHAIN_WARDEN
+name: Chain Devil
+short_name: Cd
+adjective: Chain Devil
+genus: Devil
+difficulty: Advanced
+difficulty_priority: 44
+aptitudes:
+  xp: 0
+  hp: 0
+  mp_mod: 0
+  wl: 3
+  fighting: 1
+  maces_and_flails: 1
+  polearms: 1
+  armour: 1
+  invocations: 1
+  dodging: -1
+  spellcasting: -1
+  shapeshifting: -1
+  stealth: -2
+str: 10
+int: 8
+dex: 6
+levelup_stat_frequency: 4
+levelup_stats: [str, int]
+recommended_jobs: [fighter, hunter, conjurer, warper]
+recommended_weapons: [maces and flails, polearms]
+fake_mutations:
+  - long: You can lash one foe with living chains, reel it in at XL7 and pin it at XL13.
+    short: living chains

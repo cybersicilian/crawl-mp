@@ -32,7 +32,7 @@ CLua clua(true);
 CLua dlua(false);      // Lua interpreter for the dungeon builder.
 crawl_environment env; // Requires dlua.
 crawl_tile_environment tile_env; // Requires dlua.
-player you;
+// party.cc owns the player storage and real_you pointer, as in the game binary.
 game_state crawl_state;
 
 void process_command(command_type, command_type = CMD_NO_CMD);

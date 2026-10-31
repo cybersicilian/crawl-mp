@@ -1,0 +1,10 @@
+{
+  "owner": "codex/01a15b5a-8a11-7d93-85f8-fc4a093e3a65",
+  "reservationId": "45cfaf6b-7945-4b54-b004-72c901e06268",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "processGroup": 6914,
+    "processGroupGone": true,
+    "result": "docs/coop-content/attempt-5/validation-result.json"
+  }
+}

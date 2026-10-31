@@ -10,6 +10,16 @@
 class monster;
 struct bolt;
 struct dice_def;
+struct coord_def;
+
+namespace automaton_blazeheart
+{
+extern const char* const MARKER_KEY;
+bool marked(const monster& mon);
+bool owner_adjacent(const monster& mon);
+bool protected_near(const monster& mon);
+bool protected_near(const coord_def& pos);
+}
 
 bool monster_explodes(const monster &mons);
 bool mon_explodes_on_death(monster_type mc);

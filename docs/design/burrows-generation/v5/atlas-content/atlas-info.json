@@ -1,0 +1,172 @@
+[
+  {
+    "id": "caustic_worm",
+    "family": "player",
+    "symbol": "MONS_CAUSTIC_WORM",
+    "index": 7928,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 2,
+      "oy": 15,
+      "sx": 689,
+      "sy": 2118,
+      "ex": 717,
+      "ey": 2134
+    },
+    "count": 1
+  },
+  {
+    "id": "corpse_caustic_worm",
+    "family": "main",
+    "symbol": "CORPSE_CAUSTIC_WORM",
+    "index": 5003,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 0,
+      "oy": 11,
+      "sx": 845,
+      "sy": 1065,
+      "ex": 876,
+      "ey": 1084
+    },
+    "count": 1
+  },
+  {
+    "id": "wax_beetle",
+    "family": "player",
+    "symbol": "MONS_WAX_BEETLE",
+    "index": 7929,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 2,
+      "oy": 9,
+      "sx": 717,
+      "sy": 2118,
+      "ex": 745,
+      "ey": 2140
+    },
+    "count": 1
+  },
+  {
+    "id": "corpse_wax_beetle",
+    "family": "main",
+    "symbol": "CORPSE_WAX_BEETLE",
+    "index": 5004,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 1,
+      "oy": 10,
+      "sx": 876,
+      "sy": 1065,
+      "ex": 905,
+      "ey": 1086
+    },
+    "count": 1
+  },
+  {
+    "id": "venom_wasp",
+    "family": "player",
+    "symbol": "MONS_VENOM_WASP",
+    "index": 7930,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 2,
+      "oy": 6,
+      "sx": 745,
+      "sy": 2118,
+      "ex": 773,
+      "ey": 2142
+    },
+    "count": 1
+  },
+  {
+    "id": "corpse_venom_wasp",
+    "family": "main",
+    "symbol": "CORPSE_VENOM_WASP",
+    "index": 5005,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 1,
+      "oy": 10,
+      "sx": 905,
+      "sy": 1065,
+      "ex": 935,
+      "ey": 1085
+    },
+    "count": 1
+  },
+  {
+    "id": "old_coil",
+    "family": "player",
+    "symbol": "MONS_OLD_COIL",
+    "index": 7931,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 2,
+      "oy": 6,
+      "sx": 773,
+      "sy": 2118,
+      "ex": 801,
+      "ey": 2143
+    },
+    "count": 1
+  },
+  {
+    "id": "corpse_old_coil",
+    "family": "main",
+    "symbol": "CORPSE_OLD_COIL",
+    "index": 5006,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 0,
+      "oy": 9,
+      "sx": 935,
+      "sy": 1065,
+      "ex": 967,
+      "ey": 1087
+    },
+    "count": 1
+  },
+  {
+    "id": "vespara",
+    "family": "player",
+    "symbol": "MONS_VESPARA",
+    "index": 7932,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 2,
+      "oy": 4,
+      "sx": 801,
+      "sy": 2118,
+      "ex": 829,
+      "ey": 2144
+    },
+    "count": 1
+  },
+  {
+    "id": "corpse_vespara",
+    "family": "main",
+    "symbol": "CORPSE_VESPARA",
+    "index": 5007,
+    "info": {
+      "w": 32,
+      "h": 32,
+      "ox": 0,
+      "oy": 9,
+      "sx": 967,
+      "sy": 1065,
+      "ex": 999,
+      "ey": 1088
+    },
+    "count": 1
+  }
+]

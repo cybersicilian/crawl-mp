@@ -1,0 +1,933 @@
+{
+  "build": "ranged",
+  "seed": "2026102702",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "tag": "enter",
+      "maxmp": 14,
+      "progress": 0,
+      "items": [
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "weapon",
+          "name": "hammer",
+          "artefact": false,
+          "x": 81
+        },
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "artefact": false,
+          "x": 85
+        },
+        {
+          "y": 21,
+          "quantity": 1,
+          "class": "armour",
+          "name": "pair of runed boots",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 23,
+          "quantity": 1,
+          "class": "book",
+          "name": "parchment of Sigil of Binding",
+          "artefact": false,
+          "x": 50
+        },
+        {
+          "y": 32,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of might",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 41,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of amnesia",
+          "artefact": false,
+          "x": 45
+        },
+        {
+          "y": 42,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of enchant armour",
+          "artefact": false,
+          "x": 51
+        },
+        {
+          "y": 51,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of magic",
+          "artefact": false,
+          "x": 68
+        },
+        {
+          "y": 55,
+          "quantity": 17,
+          "class": "gold",
+          "name": "17 gold pieces",
+          "artefact": false,
+          "x": 59
+        },
+        {
+          "y": 59,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of amnesia",
+          "artefact": false,
+          "x": 55
+        },
+        {
+          "y": 59,
+          "quantity": 1,
+          "class": "talisman",
+          "name": "spider talisman",
+          "artefact": false,
+          "x": 69
+        },
+        {
+          "y": 67,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of cancellation",
+          "artefact": false,
+          "x": 53
+        }
+      ],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "turn": 53,
+      "xl": 14,
+      "maxhp": 115,
+      "mp": 14,
+      "hp": 115,
+      "xp": 6718,
+      "monsters": [
+        {
+          "xp": 608,
+          "name": "burrowing beast",
+          "y": 22,
+          "x": 85
+        },
+        {
+          "xp": 600,
+          "name": "burrowing beast",
+          "y": 27,
+          "x": 77
+        },
+        {
+          "xp": 561,
+          "name": "crag boar",
+          "y": 28,
+          "x": 39
+        },
+        {
+          "xp": 652,
+          "name": "deep troll delver",
+          "y": 34,
+          "x": 80
+        },
+        {
+          "xp": 551,
+          "name": "crag boar",
+          "y": 37,
+          "x": 72
+        },
+        {
+          "xp": 557,
+          "name": "crag boar",
+          "y": 42,
+          "x": 45
+        },
+        {
+          "xp": 541,
+          "name": "crag boar",
+          "y": 45,
+          "x": 55
+        },
+        {
+          "xp": 551,
+          "name": "crag boar",
+          "y": 47,
+          "x": 72
+        },
+        {
+          "xp": 354,
+          "name": "komodo dragon",
+          "y": 48,
+          "x": 69
+        },
+        {
+          "xp": 834,
+          "name": "boulder beetle",
+          "y": 58,
+          "x": 54
+        },
+        {
+          "xp": 362,
+          "name": "komodo dragon",
+          "y": 71,
+          "x": 64
+        },
+        {
+          "xp": 547,
+          "name": "crag boar",
+          "y": 72,
+          "x": 70
+        }
+      ],
+      "where": "Bur:1"
+    },
+    {
+      "tag": "explored",
+      "maxmp": 14,
+      "progress": 20,
+      "items": [
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "weapon",
+          "name": "hammer",
+          "artefact": false,
+          "x": 81
+        },
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 85
+        },
+        {
+          "y": 21,
+          "quantity": 1,
+          "class": "armour",
+          "name": "+0 pair of boots of earth",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 23,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast skeleton",
+          "artefact": false,
+          "x": 79
+        },
+        {
+          "y": 24,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast skeleton",
+          "artefact": false,
+          "x": 71
+        },
+        {
+          "y": 30,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 43,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 49,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 39
+        },
+        {
+          "y": 59,
+          "quantity": 1,
+          "class": "talisman",
+          "name": "spider talisman",
+          "artefact": false,
+          "x": 69
+        },
+        {
+          "y": 72,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 64
+        },
+        {
+          "y": 73,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "komodo dragon skeleton",
+          "artefact": false,
+          "x": 60
+        }
+      ],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "turn": 1013,
+      "xl": 14,
+      "maxhp": 115,
+      "mp": 14,
+      "hp": 115,
+      "xp": 0,
+      "monsters": [],
+      "where": "Bur:1"
+    },
+    {
+      "tag": "exit",
+      "maxmp": 14,
+      "progress": 20,
+      "items": [
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "weapon",
+          "name": "hammer",
+          "artefact": false,
+          "x": 81
+        },
+        {
+          "y": 20,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 85
+        },
+        {
+          "y": 21,
+          "quantity": 1,
+          "class": "armour",
+          "name": "+0 pair of boots of earth",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 23,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast skeleton",
+          "artefact": false,
+          "x": 79
+        },
+        {
+          "y": 24,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast skeleton",
+          "artefact": false,
+          "x": 71
+        },
+        {
+          "y": 30,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "deep troll skeleton",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 43,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 49,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 39
+        },
+        {
+          "y": 59,
+          "quantity": 1,
+          "class": "talisman",
+          "name": "spider talisman",
+          "artefact": false,
+          "x": 69
+        },
+        {
+          "y": 72,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 64
+        },
+        {
+          "y": 73,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "komodo dragon skeleton",
+          "artefact": false,
+          "x": 60
+        }
+      ],
+      "vaults": "layout_burrows, bur_bone_cache and bur_animal_den",
+      "turn": 1041,
+      "xl": 14,
+      "maxhp": 115,
+      "mp": 14,
+      "hp": 115,
+      "xp": 0,
+      "monsters": [],
+      "where": "Bur:1"
+    },
+    {
+      "tag": "enter",
+      "maxmp": 14,
+      "progress": 20,
+      "items": [
+        {
+          "y": 23,
+          "quantity": 1,
+          "class": "wand",
+          "name": "wand of charming (3)",
+          "artefact": false,
+          "x": 50
+        },
+        {
+          "y": 26,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of cancellation",
+          "artefact": false,
+          "x": 43
+        },
+        {
+          "y": 31,
+          "quantity": 19,
+          "class": "gold",
+          "name": "19 gold pieces",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 39,
+          "quantity": 1,
+          "class": "armour",
+          "name": "ring mail",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 47,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of enchant weapon",
+          "artefact": false,
+          "x": 81
+        },
+        {
+          "y": 48,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of enlightenment",
+          "artefact": false,
+          "x": 61
+        },
+        {
+          "y": 55,
+          "quantity": 1,
+          "class": "talisman",
+          "name": "spore talisman",
+          "artefact": false,
+          "x": 65
+        },
+        {
+          "y": 58,
+          "quantity": 1,
+          "class": "wand",
+          "name": "wand of warping (3)",
+          "artefact": false,
+          "x": 49
+        },
+        {
+          "y": 58,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of cancellation",
+          "artefact": false,
+          "x": 57
+        },
+        {
+          "y": 76,
+          "quantity": 1,
+          "class": "wand",
+          "name": "wand of polymorph (5)",
+          "artefact": false,
+          "x": 79
+        },
+        {
+          "y": 77,
+          "quantity": 1,
+          "class": "armour",
+          "name": "scale mail",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 80,
+          "quantity": 11,
+          "class": "gold",
+          "name": "11 gold pieces",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 85,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of amnesia",
+          "artefact": false,
+          "x": 77
+        }
+      ],
+      "vaults": "layout_burrows, hive_entry_comb, bur_flooded_roots, bur_side_den and bur_bent_gallery",
+      "turn": 1043,
+      "xl": 14,
+      "maxhp": 115,
+      "mp": 14,
+      "hp": 115,
+      "xp": 12499,
+      "monsters": [
+        {
+          "xp": 83,
+          "name": "earth elemental",
+          "y": 28,
+          "x": 77
+        },
+        {
+          "xp": 601,
+          "name": "burrowing beast",
+          "y": 29,
+          "x": 48
+        },
+        {
+          "xp": 610,
+          "name": "shale drake",
+          "y": 29,
+          "x": 66
+        },
+        {
+          "xp": 85,
+          "name": "earth elemental",
+          "y": 32,
+          "x": 78
+        },
+        {
+          "xp": 591,
+          "name": "burrowing beast",
+          "y": 40,
+          "x": 54
+        },
+        {
+          "xp": 548,
+          "name": "crag boar",
+          "y": 41,
+          "x": 78
+        },
+        {
+          "xp": 652,
+          "name": "deep troll delver",
+          "y": 41,
+          "x": 79
+        },
+        {
+          "xp": 550,
+          "name": "crag boar",
+          "y": 43,
+          "x": 37
+        },
+        {
+          "xp": 539,
+          "name": "crag boar",
+          "y": 43,
+          "x": 63
+        },
+        {
+          "xp": 584,
+          "name": "burrowing beast",
+          "y": 43,
+          "x": 81
+        },
+        {
+          "xp": 547,
+          "name": "crag boar",
+          "y": 45,
+          "x": 63
+        },
+        {
+          "xp": 610,
+          "name": "burrowing beast",
+          "y": 47,
+          "x": 76
+        },
+        {
+          "xp": 600,
+          "name": "shale drake",
+          "y": 49,
+          "x": 53
+        },
+        {
+          "xp": 606,
+          "name": "burrowing beast",
+          "y": 50,
+          "x": 78
+        },
+        {
+          "xp": 539,
+          "name": "crag boar",
+          "y": 54,
+          "x": 51
+        },
+        {
+          "xp": 591,
+          "name": "shale drake",
+          "y": 56,
+          "x": 46
+        },
+        {
+          "xp": 552,
+          "name": "crag boar",
+          "y": 57,
+          "x": 77
+        },
+        {
+          "xp": 591,
+          "name": "burrowing beast",
+          "y": 60,
+          "x": 70
+        },
+        {
+          "xp": 60,
+          "name": "killer bee",
+          "y": 68,
+          "x": 49
+        },
+        {
+          "xp": 552,
+          "name": "crag boar",
+          "y": 72,
+          "x": 39
+        },
+        {
+          "xp": 596,
+          "name": "burrowing beast",
+          "y": 72,
+          "x": 79
+        },
+        {
+          "xp": 606,
+          "name": "burrowing beast",
+          "y": 73,
+          "x": 51
+        },
+        {
+          "xp": 545,
+          "name": "crag boar",
+          "y": 73,
+          "x": 68
+        },
+        {
+          "xp": 661,
+          "name": "deep troll delver",
+          "y": 76,
+          "x": 52
+        }
+      ],
+      "where": "Bur:2"
+    },
+    {
+      "tag": "death",
+      "maxmp": 14,
+      "progress": 47,
+      "items": [
+        {
+          "y": 23,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast skeleton",
+          "artefact": false,
+          "x": 50
+        },
+        {
+          "y": 26,
+          "quantity": 1,
+          "class": "potion",
+          "name": "potion of cancellation",
+          "artefact": false,
+          "x": 43
+        },
+        {
+          "y": 31,
+          "quantity": 19,
+          "class": "gold",
+          "name": "19 gold pieces",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 33,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "shale drake skeleton",
+          "artefact": false,
+          "x": 66
+        },
+        {
+          "y": 39,
+          "quantity": 1,
+          "class": "armour",
+          "name": "ring mail",
+          "artefact": false,
+          "x": 80
+        },
+        {
+          "y": 44,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "artefact": false,
+          "x": 59
+        },
+        {
+          "y": 45,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast corpse",
+          "artefact": false,
+          "x": 61
+        },
+        {
+          "y": 46,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "burrowing beast corpse",
+          "artefact": false,
+          "x": 62
+        },
+        {
+          "y": 47,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 59
+        },
+        {
+          "y": 47,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of enchant weapon",
+          "artefact": false,
+          "x": 81
+        },
+        {
+          "y": 48,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "shale drake corpse",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 48,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar corpse",
+          "artefact": false,
+          "x": 53
+        },
+        {
+          "y": 48,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "crag boar skeleton",
+          "artefact": false,
+          "x": 59
+        },
+        {
+          "y": 48,
+          "quantity": 1,
+          "class": "corpse",
+          "name": "deep troll corpse",
+          "artefact": false,
+          "x": 62
+        },
+        {
+          "y": 55,
+          "quantity": 1,
+          "class": "talisman",
+          "name": "spore talisman",
+          "artefact": false,
+          "x": 65
+        },
+        {
+          "y": 76,
+          "quantity": 1,
+          "class": "wand",
+          "name": "wand of polymorph (5)",
+          "artefact": false,
+          "x": 79
+        },
+        {
+          "y": 77,
+          "quantity": 1,
+          "class": "armour",
+          "name": "scale mail",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 80,
+          "quantity": 11,
+          "class": "gold",
+          "name": "11 gold pieces",
+          "artefact": false,
+          "x": 73
+        },
+        {
+          "y": 85,
+          "quantity": 1,
+          "class": "scroll",
+          "name": "scroll of amnesia",
+          "artefact": false,
+          "x": 77
+        }
+      ],
+      "vaults": "layout_burrows, hive_entry_comb, bur_flooded_roots, bur_side_den and bur_bent_gallery",
+      "turn": 1637,
+      "xl": 14,
+      "maxhp": 116,
+      "mp": 14,
+      "hp": -12,
+      "xp": 3592,
+      "monsters": [
+        {
+          "xp": 652,
+          "name": "deep troll delver",
+          "y": 43,
+          "x": 60
+        },
+        {
+          "xp": 552,
+          "name": "crag boar",
+          "y": 44,
+          "x": 60
+        },
+        {
+          "xp": 85,
+          "name": "earth elemental",
+          "y": 51,
+          "x": 68
+        },
+        {
+          "xp": 60,
+          "name": "killer bee",
+          "y": 51,
+          "x": 76
+        },
+        {
+          "xp": 550,
+          "name": "crag boar",
+          "y": 52,
+          "x": 65
+        },
+        {
+          "xp": 552,
+          "name": "crag boar",
+          "y": 59,
+          "x": 55
+        },
+        {
+          "xp": 596,
+          "name": "burrowing beast",
+          "y": 72,
+          "x": 79
+        },
+        {
+          "xp": 545,
+          "name": "crag boar",
+          "y": 73,
+          "x": 68
+        }
+      ],
+      "where": "Bur:2"
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "inventory +0 shortbow",
+    "inventory +0 leather armour",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +2 ring mail",
+    "inventory +3 orcbow",
+    "inventory scroll of butterflies",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of might",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start ranged AC=13 EV=20 SH=0",
+    "leave Bur:1",
+    "use heal wounds turn=1064 place=Bur:2",
+    "use heal wounds turn=1559 place=Bur:2",
+    "use heal wounds turn=1560 place=Bur:2",
+    "use heal wounds turn=1561 place=Bur:2",
+    "use curing turn=1562 place=Bur:2",
+    "use heal wounds turn=1563 place=Bur:2",
+    "use heal wounds turn=1564 place=Bur:2",
+    "use haste turn=1565 place=Bur:2",
+    "use fear turn=1566 place=Bur:2",
+    "use fear turn=1567 place=Bur:2",
+    "use fear turn=1568 place=Bur:2",
+    "use blinking turn=1580 place=Bur:2",
+    "use blinking turn=1581 place=Bur:2",
+    "use haste turn=1636 place=Bur:2",
+    "death Bur:2"
+  ],
+  "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c"
+}

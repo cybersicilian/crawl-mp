@@ -196,6 +196,8 @@ void unmarshall_vehumet_spells(reader &th, set<spell_type>& old_gifts,
 
 FixedVector<int, 52> unmarshall_player_spell_letter_table(reader &th);
 
+int unmarshall_player_ability_binding(reader &th);
+
 void remove_removed_library_spells(FixedBitVector<NUM_SPELLS>& lib);
 
 /* ***********************************************************************
@@ -204,6 +206,7 @@ void remove_removed_library_spells(FixedBitVector<NUM_SPELLS>& lib);
 
 void tag_read(reader &inf, tag_type tag_id);
 void tag_write(tag_type tagID, writer &outf);
+bool unmarshall_cloud_protection(reader& inf);
 player_save_info tag_read_char_info(reader &th, uint8_t format, uint8_t major,
                                                                 uint32_t minor);
 

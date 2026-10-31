@@ -1,0 +1,34 @@
+{
+  "checkpoint_comparisons": 43,
+  "completed_at": 1792798152.3221703,
+  "health": {
+    "application": true,
+    "checked_at": "2026-10-23T23:29:03.897962+00:00",
+    "disk": true,
+    "ok": true
+  },
+  "missing_original_packages": 0,
+  "native_sha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+  "original_packages_changed_since_cutover": 0,
+  "original_packages_current_hash_unchanged": 61,
+  "original_packages_preserved_at_cutover": 61,
+  "passed": true,
+  "previous": "/opt/dcss/releases/20261023T190229Z-stats-website",
+  "private_qa_closed": true,
+  "public_art_assets": 10,
+  "public_checks": [
+    "Ordinary fresh Chain Devil and Eldritch games expose native powers and visible Defiance",
+    "All ten served Vellum/species/ability sprites match the finished native pixels exactly",
+    "Actual native map dolls and initial ability tiles select the new species artwork",
+    "Both human owners take real native actions independently",
+    "Native save/resume preserves new species, stable identities, resources, positions and turns",
+    "Both native race sprites remain correct after save/resume"
+  ],
+  "public_console_errors": [],
+  "recovery_refreshed": true,
+  "release": "/opt/dcss/releases/20261023T220119Z-content",
+  "restored_old_state": false,
+  "snapshot": "dcss-content-20261023t2318-01a16a0f",
+  "snapshot_id": "8891115908189541820",
+  "wizard_disabled": true
+}

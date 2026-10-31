@@ -1,0 +1,451 @@
+{
+  "added": [
+    "enchantment-transfer.cc",
+    "god-vellum-scripts.cc",
+    "god-vellum-work.cc",
+    "god-vellum.h",
+    "webserver/tests/party-status.cjs",
+    "actor-displacement.cc",
+    "actor-displacement.h",
+    "catch2-tests/test_new_species.cc",
+    "catch2-tests/test_vellum.cc",
+    "catch2-tests/test_vellum_comparison.cc",
+    "catch2-tests/test_vellum_fixture.h",
+    "catch2-tests/test_vellum_integrations.cc",
+    "chain-devil.cc",
+    "chain-devil.h",
+    "dat/species/chain-devil.yaml",
+    "dat/species/eldritch.yaml",
+    "eldritch-equipment.cc",
+    "eldritch-policy.cc",
+    "eldritch-powers.cc",
+    "eldritch-rites.cc",
+    "eldritch.cc",
+    "eldritch.h",
+    "enchantment-transfer.h",
+    "god-vellum-menu.cc",
+    "god-vellum-policy.cc",
+    "god-vellum-state.cc",
+    "webserver/game_data/static/chain-view.js"
+  ],
+  "conflicts": [
+    "ability.cc",
+    "artefact.cc",
+    "attack.cc",
+    "describe.cc",
+    "item-use.cc",
+    "mon-death.cc",
+    "player-equip.cc",
+    "player-reacts.cc",
+    "webserver/game_data/static/dungeon_renderer.js"
+  ],
+  "merged": [
+    "Makefile.obj",
+    "ability-type.h",
+    "ability.h",
+    "actor.cc",
+    "areas.cc",
+    "art-func.h",
+    "artefact.h",
+    "bloodcraft-curses.cc",
+    "dat/database/godname.txt",
+    "dat/descript/ability.txt",
+    "dat/descript/gods.txt",
+    "dat/descript/species.txt",
+    "decks.cc",
+    "decks.h",
+    "describe-god.cc",
+    "dungeon-feature-type.h",
+    "duration-data.h",
+    "duration-type.h",
+    "equipment-memory-items.cc",
+    "evocation.h",
+    "evoke.cc",
+    "evoke.h",
+    "feature-data.h",
+    "fight.cc",
+    "god-abil.cc",
+    "god-abil.h",
+    "god-conduct.cc",
+    "god-item.cc",
+    "god-passive.cc",
+    "god-prayer.cc",
+    "god-type.h",
+    "god-wrath.cc",
+    "invent.cc",
+    "item-name.cc",
+    "item-prop.cc",
+    "items.cc",
+    "l-item.cc",
+    "melee-attack.cc",
+    "mon-act.cc",
+    "monster.cc",
+    "movement.cc",
+    "ng-restr.cc",
+    "oozle-memory-effects.cc",
+    "oozle-memory-effects.h",
+    "output.cc",
+    "player.cc",
+    "religion.cc",
+    "species.cc",
+    "species.h",
+    "spl-goditem.cc",
+    "spl-goditem.h",
+    "spl-transloc.cc",
+    "stairs.cc",
+    "terrain.cc",
+    "throw.cc",
+    "tiledoll.cc",
+    "tilepick-p.cc",
+    "tilepick.cc",
+    "tileweb.cc",
+    "transform.cc",
+    "util/species-gen/species-type-header.txt",
+    "webserver/game_data/static/item-context-menu.js",
+    "webserver/game_data/static/party-card-status.js",
+    "webserver/game_data/static/party-faith.js",
+    "webserver/game_data/static/party-inspector-render.js",
+    "webserver/game_data/static/party-model.js",
+    "webserver/game_data/static/party-status-model.js",
+    "webserver/game_data/static/workflow-actions.js",
+    "webserver/util/generate_character_catalog.py"
+  ],
+  "operations": [
+    {
+      "added_sha256": "a58e66a7520b19d0091f6ccdb3e9325db67994cb3352c708e151e2d68f04e623",
+      "file": "mon-death.cc",
+      "original_sha256": "84a30a58d3420633fc3e5efbbb27fee13aec5607f7a90268ae5eb9395b3bb176"
+    },
+    {
+      "added_sha256": "52c05376c9f8b2530f9e2b731515ad25c3fe744293544c73caca8930d58bd5a6",
+      "file": "mon-death.cc",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "66e66b66f4dd4940a026b5d588562e1a598bacb69e6db7cc8a18c559e53ffdc4",
+      "file": "mon-death.cc",
+      "original_sha256": "321e1e72031e416ebba8209519036d000804578f78372dc868032d7db129d593"
+    },
+    {
+      "added_sha256": "e934a76de8a70aa810c529e95705fc84dd4bde37a1cd8e96230a20e072378ad4",
+      "file": "mon-death.cc",
+      "original_sha256": "39535da1743ec1c446d187ef8dd8f69013c86743daeaee57a9a338df174ac269"
+    },
+    {
+      "added_sha256": "1bad657c9e02b903e67294b56493227069a2d5adf9249fa68e2084711bb251cc",
+      "file": "mon-death.cc",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "9e4a41067bd38ef00df3cc1f63ca6d37bcc7d2391c308ce5a1addea227feb4b9",
+      "file": "mon-death.cc",
+      "original_sha256": "a28d7e55fb0f09dd9271bd1c01bfe2af60934a830fa1092e7790f87b7b88177f"
+    },
+    {
+      "added_sha256": "f2668187f061f9a13dd4ccd5a21d0148c4da4552a490da5db63571b7bcc06a9c",
+      "file": "mon-death.cc",
+      "original_sha256": "a4c22fc6e9009760d404b3314b558a3566351cde5b45215b08440eb4405f258e"
+    },
+    {
+      "added_sha256": "a199a21e61841528df1b4b8121c6ef1d2bfdd8e99fbcd36f3db5411c92bf02dc",
+      "file": "mon-death.cc",
+      "original_sha256": "7a85b0a904cc7b9a1fc448ad2a58654cbf68a5fb00cfe25d926c3bbd81b66aca"
+    },
+    {
+      "added_sha256": "821c85fdfb6a2428afdf5e57d33fab4c0e7dd8bcbb58d8f3c039ef32d25708d1",
+      "file": "duration-data.h",
+      "original_sha256": "171285cac83030914ea95a52951d79900a769dc8a9c906b421c65427f667093b"
+    },
+    {
+      "added_sha256": "39bde3f7506790b8ab85293f4589df463f74df3bbbeb15704f6ac7c3e581fcb8",
+      "file": "duration-data.h",
+      "original_sha256": "51600586c4311dd439072094fa94f90ba72f055f455c69237ff3c02f0c1df637"
+    },
+    {
+      "added_sha256": "5ac7af2b4d85780f9b72b2e1924819a9678fd8802486a218b910effc175122f7",
+      "file": "webserver/game_data/static/party-model.js",
+      "original_sha256": "ec839caecf0707c14e4447577847cf134b40dc50d8464fbe76114af19c833ef8"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "movement.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "god-prayer.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "output.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "dd436cc39939f6564f7162d7c6bce235e7656af44d17614433a805a8a68ff960",
+      "file": "god-prayer.cc",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "34eef16e79630e4977aa8730da1531232871ddfade24642dffac44dc2972f05a",
+      "file": "output.cc",
+      "original_sha256": "b3723aa09a1e27b22568373fd7ea287ce446cac155982e85a2ba41826145a382"
+    },
+    {
+      "added_sha256": "d98e07b2a7985acba5741cb41b0509bc0f292634d4e7d6b6e8a3f8b133968805",
+      "file": "mon-act.cc",
+      "original_sha256": "a7ffd0fb4c76de39fa9036c303d7cc059b3e785ece95b418d7d89bd054347aa6"
+    },
+    {
+      "added_sha256": "f0aad23b717675cb5822ef45a29b0b2d6dcc67af7b0201bc5265f3bb7da91c8c",
+      "file": "bloodcraft-curses.cc",
+      "original_sha256": "76c1a8b81d729ed915b5aa0acca166040703af5fa9404430737faa6255400c09"
+    },
+    {
+      "added_sha256": "7b37589bd9d469344596b68ea80bbf957fcb4c5fa1c0c14d21601613a8798cc4",
+      "file": "webserver/game_data/static/party-status-model.js",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "c0966aa79abae2aea140aeae86f429c1063faf0c352c94fb5f6a8c59a004e563",
+      "file": "webserver/game_data/static/party-faith.js",
+      "original_sha256": "89c4fdcf042560cd9cb3ce5c89dc18ed6155f853cfc2eae715bab6100fcf1a01"
+    },
+    {
+      "added_sha256": "63f8318859bb8ccbff730a41d9b08cd2d40e66f8e6cf55b09b85d084eee8c65a",
+      "file": "webserver/game_data/static/party-inspector-render.js",
+      "original_sha256": "7be73afc5dd60842c5c028ee7c4c2082249a37974bf87a7c44a7e52c803311b5"
+    },
+    {
+      "added_sha256": "78503596b7942c44f11372515116691b64a07b7259e0a260ac6927e631eaa79d",
+      "file": "webserver/game_data/static/party-inspector-render.js",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "5e5e368e3976266a437228b462daeb52d6a21fe6a243d21d8d06bb888d98103c",
+      "file": "webserver/game_data/static/party-card-status.js",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "8bdc31e7832da102aac661c9b6d0b014d1d5bb091fe8316a24f78dedf75610d3",
+      "file": "webserver/game_data/static/dungeon_renderer.js",
+      "original_sha256": "f393146dd0a6ef02d8fe64fe3fe0a8adcd3d0f1d12d9fb106e4a6b16ecb9a109"
+    },
+    {
+      "added_sha256": "d06c0e6ee4d1910362515a6decc34764f380f331ab45e93feff29feff1070f10",
+      "file": "webserver/game_data/static/dungeon_renderer.js",
+      "original_sha256": "a23b8deef8992ac1cac229dff5e764265e0d479131b64e8788148eeb82dfc1d1"
+    },
+    {
+      "added_sha256": "eeb618f680b88479af5740ccb93e78f061d164731f305faa62af3cc1cb32ca5f",
+      "file": "webserver/game_data/static/dungeon_renderer.js",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "b988d650dafc58c79ce2cb359fa2a1ac89f973abae604a8aa4e3751527446db6",
+      "file": "webserver/util/generate_character_catalog.py",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "66cf42dbe5366d9fd3261c6d5d09a60f5d111cac855138c549ab4478e124e7d7",
+      "file": "dat/descript/species.txt",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "673cfa7faabc5c7e95ed94897d16505f7ff00330af9c4ad722e6ae54a38579e4",
+      "file": "webserver/tests/party-status.cjs",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "324b8e50d7e1261fd4c89a1e734f3ee20186cd88e07d56ea85886baab0aa1f2e",
+      "file": "ability.h",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "6b6ddd86e8de0ff0b05fe330bc3a0976e4f590f881be29a8d5b67968ddfeecd6",
+      "file": "duration-data.h",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "c31a84e0dd37ed48cea172a4eb948a7b4ef04b8bafe55dba538c339164abc344",
+      "file": "duration-type.h",
+      "original_sha256": "bd985f723992d3ac132ebc5a133afafcd4c63aeebaa89d926a1b523274c6d687"
+    },
+    {
+      "added_sha256": "1079bd900199d35ebab2582da7faf95623fd746aa90b688e57ee1fa3d0fe796d",
+      "file": "mon-death.cc",
+      "original_sha256": "ce3aabd0f7a141604d33112572009f35dc474c9cc7d948c564e9fe678b3b72fe"
+    },
+    {
+      "added_sha256": "663ddd295dbeaf9eb42b1a86a3b37872a4f79886fe1e2e0532f29cbfd3c209b3",
+      "file": "evoke.cc",
+      "original_sha256": "2315569d0b3c7329dce969e141da5f9b758dfb224ee61b6304062d1eb2bfb6dc"
+    },
+    {
+      "added_sha256": "312ee6b0caec49373cea72140357a0a87755180ca7bf6ab8fdb1f76667cd0521",
+      "file": "evoke.cc",
+      "original_sha256": "51ad61fa4c33faf72e4471fbf4acdd1c5f86b37114f5541b3b8754cc280899c9"
+    },
+    {
+      "added_sha256": "7c966360d3b5a5f4e2aa51f9480366e222373b213607151eb3b46bd5c0ba0683",
+      "file": "evoke.cc",
+      "original_sha256": "6809a729d2660b5d5fa4f52a6e6ebf53c3f89e827fac81666e2d9b22e41a54c2"
+    },
+    {
+      "added_sha256": "803b6267681f1a734a7cf397f45160cfa46963e7bb79d34c3934f19eda4f9c35",
+      "file": "evoke.h",
+      "original_sha256": "c31fb5a4206f210042ada40756bfdf0cf1a2ae80a7d69221dff2c2c7bd0cb44d"
+    },
+    {
+      "added_sha256": "1630753ce73c9398d34f4ec08923ed63cf6dcc7d9cf5a7b7b56eb5d9905b2de7",
+      "file": "evocation.h",
+      "original_sha256": "a4d12f80522f0f5143edb51f19d120ef3f27640fa5447759fa21d062531beb39"
+    },
+    {
+      "added_sha256": "6c12a1410b954f7bee50e5b555d2d8d2dd8ada8e7facb4767f6ff497906832d0",
+      "file": "decks.cc",
+      "original_sha256": "d7efeca0008be0dab9f0d8062360277fe8c64a6c1185af0ab6d3d4b7172f8935"
+    },
+    {
+      "added_sha256": "4a5d16a32fb8b98292d0b71d7eed3fa6e9d96cd8cce7fdd3d5d41d19227cd587",
+      "file": "decks.cc",
+      "original_sha256": "a543a39e0f04a6eeec98a3bc7d786df66e844f9d37372a066f6934680a23f3a8"
+    },
+    {
+      "added_sha256": "88fa73cc3b1413e596ec6f5674364a7081f0d5b02015fa1c3e1a41aa109932f3",
+      "file": "decks.cc",
+      "original_sha256": "0456f84f768b06cbd95f193927140d09097f8116ea50bbbdec452e4abdf856df"
+    },
+    {
+      "added_sha256": "14717d2bde5660c46bf2c162de607ea68a582b6fecde2393a7cc3a524c23e948",
+      "file": "decks.h",
+      "original_sha256": "4486e55ce3e94326a09fb0f3d44a0f1cdb24e08b649e3b8b65a0b7eb5c4a4148"
+    },
+    {
+      "added_sha256": "759e60884519b53ce358885ba6e017267f80634dbd9990b4bc1beaf3942b09ac",
+      "file": "god-abil.cc",
+      "original_sha256": "d3e2525b4184b49afc928478512e4f9ecbc00caee1ab983956068e705143a3f4"
+    },
+    {
+      "added_sha256": "176883c612e9294c8bba43ff4acf7eea19544122452e05d739e00f92d6e864dd",
+      "file": "god-abil.cc",
+      "original_sha256": "88d515e6d9a42a9603c9b3079749ffd096433a3efc3f60bd93832196cfba64ae"
+    },
+    {
+      "added_sha256": "a04b9630080d3445b35e083681a5632904dbffb9ffb94857d66affac598a1e94",
+      "file": "god-abil.h",
+      "original_sha256": "a21335e8d9e7e4c7eec5cf1ebe3e66394b70117ab8fb0e266b3572d7585612c3"
+    },
+    {
+      "added_sha256": "6cee8954df1fee4800ee20fa718995c6cf9bbc40a449fd5911411835dd23bd5b",
+      "file": "spl-goditem.cc",
+      "original_sha256": "22e615b1d29eaff5f68c3c1fe161a50b7ac2656f213ff382238b0ff464abd15f"
+    },
+    {
+      "added_sha256": "47f35c61a449383324fa292deff59ab9569545fb24d5d0662d0d622bd2ab93f1",
+      "file": "spl-goditem.cc",
+      "original_sha256": "d3ad5b07bf45be0100113d407d86566bc7d05b383744288b68431ecc8928da3d"
+    },
+    {
+      "added_sha256": "4c89d078638f7c0c1a9b9e39f6334ab120c8f546f6f1fb36fd5634ffd1b233b2",
+      "file": "spl-goditem.h",
+      "original_sha256": "fc1cafc76b2a731283cfa0dfbdf383f4d1868457f6a44fdc4575745073d41074"
+    },
+    {
+      "added_sha256": "39535da1743ec1c446d187ef8dd8f69013c86743daeaee57a9a338df174ac269",
+      "file": "mon-death.cc",
+      "original_sha256": "e934a76de8a70aa810c529e95705fc84dd4bde37a1cd8e96230a20e072378ad4"
+    },
+    {
+      "added_sha256": "4c6dd6033c37d5c3863df7e82802d5bab21bdc70737caee9b2e21d2a0643efd7",
+      "file": "spl-goditem.cc",
+      "original_sha256": "034a3f09a31fbaa1407bde19293cef920ea42c6701586dbc2a3b7acf5e636a38"
+    },
+    {
+      "added_sha256": "12fbdaec764a1784cf97fb44f3665f1e4fb858f74914139866d8ffe67944f2ce",
+      "file": "stairs.cc",
+      "original_sha256": "bbcbd82a29890d86af5e73ed6e99ae9326f3b4ff3f91ff6ef05876ad9570acce"
+    },
+    {
+      "added_sha256": "c199636234c234bfcb188fb476dc6bda060c26b21ff527da6f0b872d4d028543",
+      "file": "bloodcraft-curses.cc",
+      "original_sha256": "9728094a8a000ad1ad5a9929029a42f81f63275249c294462ad86ddf69024bbc"
+    },
+    {
+      "added_sha256": "701f9a75a982a289d8a891c32df098a7b3caa616e66e89ba6b009ed43443d302",
+      "file": "mon-act.cc",
+      "original_sha256": "fa8ec4988ec47be03d13fd75726f2e6a102e850d751c6cba6b72c400ff45f64b"
+    },
+    {
+      "added_sha256": "52cc69ed40bebd38d40f404478f7f06b15f2c5a866e160f37e5ab7cc37c7ad90",
+      "file": "mon-act.cc",
+      "original_sha256": "ed1d9f8fc78c7a6f9e9ff3f884aa1a258003337fb18ea758fa9d8a7ca176e40d"
+    },
+    {
+      "added_sha256": "e935beb7c9c3eea0324d6ead39874e69528715bfe6ec0b7d9931c31818c03019",
+      "file": "bloodcraft-curses.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "e935beb7c9c3eea0324d6ead39874e69528715bfe6ec0b7d9931c31818c03019",
+      "file": "stairs.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "e935beb7c9c3eea0324d6ead39874e69528715bfe6ec0b7d9931c31818c03019",
+      "file": "mon-act.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "spl-goditem.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "stairs.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "9571ec2f6bfb9679ff3b1d2dc8bd61ed48989165e66f4086ca436da4a264a635",
+      "file": "mon-death.cc",
+      "original_sha256": "e49e226c4db4b3714a31c344d3f7d6071d352629987e58592499a98c6d15316c"
+    },
+    {
+      "added_sha256": "6122a03f90ee866128b2b3513e028f4b781d32bb0a5a8eefc83ab289a9a46b1f",
+      "file": "util/species-gen/species-type-header.txt",
+      "original_sha256": "f4d19f4d40f9363b13db7ffaa4c34f06821ce6e652a640a9f05a0d5db52bcca7"
+    },
+    {
+      "added_sha256": "89a0ca4834cdd581682107017a7e136551ab3f89e8fe1e237fbb8e6cf3dd2159",
+      "file": "duration-type.h",
+      "original_sha256": "4cd96854f248f778f3d2f972cf43e306d1bab38374ffce69fa4d3dc1a9822c92"
+    },
+    {
+      "added_sha256": "eaf5ba580cdef6d33e1316f473d07310c4217615d8938c755118c65a70ce437b",
+      "file": "species.h",
+      "original_sha256": "456295be2308357f8b8b11c53a147162ed86c6e50472ca559b392ae06d24d159"
+    },
+    {
+      "added_sha256": "2695403072bd9ad79c3fc3c5baf77a4654124ade125a0750ddcf0269fa21a5e1",
+      "file": "species.cc",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "added_sha256": "25534e67cc1d745a5e41699b66ff336219d6d44e146c63cda2641c0d4003c497",
+      "file": "ng-restr.cc",
+      "original_sha256": "ab02ee75d011e82eee6d00b1a46774c5604e5798f53b986076a6c6953421802d"
+    },
+    {
+      "added_sha256": "755535bf67591a14d69e7a84b5705094361745d21c0f806fc38fcdebfe345623",
+      "file": "tilepick-p.cc",
+      "original_sha256": "a755e968f2cd7d1c7ede40facadf5f83460cbb125512422f802bee18e9336c0a"
+    }
+  ],
+  "unchanged": [
+    "item-prop.h",
+    "player-equip.h",
+    "skills.cc",
+    "tags.cc"
+  ]
+}

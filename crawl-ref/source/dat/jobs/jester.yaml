@@ -1,0 +1,27 @@
+TAG_MAJOR_VERSION: 34
+enum: JOB_JESTER
+name: "Jester"
+short_name: Jr
+category: Zealot
+category_priority: 60
+str: 3
+int: 4
+dex: 5
+equipment:
+  - "robe plus:1"
+  - "quarterstaff plus:2 ego:chaos"
+  - "scroll of butterflies no_exclude"
+recommended_species:
+  - human
+  - kobold
+  - spriggan
+  - demonspawn
+  - gnoll
+  - octopode
+skills:
+  fighting: 2
+  dodging: 3
+  stealth: 2
+  staves: 3
+  evocations: 1
+create_enum: false

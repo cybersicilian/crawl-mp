@@ -1,0 +1,26 @@
+/* The journal pass keeps the folio dialog shell and adds editorial reading
+   rhythm: broad paper, fine rules and quiet quotes. Colours come from the
+   shell tokens so all three themes read the same way. */
+#ui-stack .ui-popup-overlay { background: #080f0bbf; }
+#ui-stack .ui-popup-outer:has(.workflow-surface) {
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 3px var(--menu-inset), 0 24px 70px #000a;
+}
+#game #ui-stack .workflow-surface > :is(.header, .menu_title) { letter-spacing: -.02em; }
+#ui-stack .workflow-popup-hero { letter-spacing: .09em; }
+#ui-stack .workflow-surface .menu_contents li.selectable { border-radius: 2px; }
+#ui-stack .workflow-surface .workflow-entry-copy { color: inherit; }
+#ui-stack .workflow-surface :is(.body, .footer) { border-color: var(--menu-rule); }
+#ui-stack .describe-item .body { line-height: 1.65; }
+#ui-stack .describe-item .body > :is(p, blockquote) { max-width: 78ch; }
+#ui-stack .workflow-surface .quote, #ui-stack .workflow-surface .body blockquote {
+    margin: 10px 0; padding: 2px 0 2px 12px; border-left: 2px solid var(--menu-rule);
+    color: var(--menu-quiet); font-family: var(--menu-title-font); font-style: italic;
+}
+:is(#dcss_rich_tooltip, .dcss-tooltip-card, .lobby-tooltip) {
+    border-color: var(--ui-edge, var(--art-brass-dim)); border-radius: 3px;
+    background: var(--ui-paper, var(--tt-paper)); color: var(--ui-ink, var(--art-ink)); box-shadow: var(--art-shadow, 0 10px 28px #000c);
+}
+@media (forced-colors: active) {
+    #ui-stack .workflow-surface li:focus-visible { outline: 2px solid Highlight; }
+}

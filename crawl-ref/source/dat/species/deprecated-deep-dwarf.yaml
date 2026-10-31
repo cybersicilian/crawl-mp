@@ -5,7 +5,7 @@ name: Deep Dwarf
 short_name: DD
 adjective: Dwarven
 genus: Dwarf
-difficulty: False
+difficulty: Intermediate
 aptitudes:
   xp: -1
   hp: 2
@@ -56,6 +56,14 @@ fake_mutations:
     short: damage resistance
   - long: You can heal yourself by infusing magical energy.
     short: heal wounds
+recommended_jobs:
+  - fighter
+  - berserker
+  - healer
+  - death knight
+  - necromancer
+  - earth elementalist
+  - artificer
 recommended_weapons:
   - maces and flails
   - axes

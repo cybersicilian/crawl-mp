@@ -1,0 +1,7 @@
+{
+  "reservationId": "96be88e4-1fd0-42c3-aa0d-2d2dd13416b0",
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "Browser test exited after baseline-default assertion, before saving any preferences; browser.close awaited, supervised group gone and worker/supervisor absent.",
+  "exitCode": 1
+}

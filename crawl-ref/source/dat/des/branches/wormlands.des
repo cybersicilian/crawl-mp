@@ -1,0 +1,303 @@
+###############################################################################
+# Long galleries; guarded side hoards; reversible passage into Depths:1.
+###############################################################################
+: crawl_require("dlua/vault.lua")
+: crawl_require("dlua/layout/wormlands.lua")
+
+NAME:   worm_mineral_seam
+DEPTH:  Worm
+TAGS:   transparent no_monster_gen
+MONS:   gallery worm, earth elemental
+SUBST:  2 = 22.
+MAP
+   xxxxxxxxxxxxx
+  xx......c....xx
+ xx..1.........xx
+xx......ccc.....xx
+@...............xx
+.....c....2.....xx
+xxxxx.......$..xx
+    xxxxxxxxxxxx
+ENDMAP
+
+NAME:   worm_cross_gallery
+DEPTH:  Worm
+TAGS:   extra transparent no_monster_gen
+CHANCE: 30%
+MONS:   coil worm / gallery worm
+MAP
+      xxxxxx
+      x....x
+xxxxxxx....xxxxxxx
+@.......1.......@
+.................
+xxxxxxx....xxxxxxx
+      x....x
+      x....x
+      xxxxxx
+ENDMAP
+
+NAME:   worm_troll_cache
+DEPTH:  Worm:2-4
+TAGS:   transparent no_monster_gen
+MONS:   iron troll, deep troll delver
+KITEM:  * = any weapon good_item / any armour good_item / any wand
+MAP
+xxxxxxxxxxxxxxxxxxx
+xx......c........xx
+@.......1.....*..xx
+.............$*..xx
+xx..2...c........xx
+xxxxxxxxxxxxxxxxxxx
+ENDMAP
+
+NAME:   worm_coiled_hoard
+DEPTH:  Worm
+TAGS:   transparent no_monster_gen
+MONS:   coil worm, gallery worm
+KITEM:  * = any weapon good_item / any armour good_item / any wand
+MAP
+     xxxxxxxxxxxxx
+    xx...........xx
+xxxxxx...1.....2..xx
+@.................x
+......cccc...*....x
+xxxxxx.......$....x
+     xx..1.......xx
+      xxxxxxxxxxxx
+ENDMAP
+
+NAME:   worm_end_troll_mine
+PLACE:  Worm:$
+ORIENT: encompass
+TAGS:   transparent
+KFEAT:  O = wormlands_to_depths
+KMONS:  G = stone giant
+KMONS:  T = iron troll
+KMONS:  M = deep troll earth mage
+KMONS:  C = coil worm / caustic worm
+KITEM:  * = any weapon good_item / any armour good_item / any magical staff good_item / any wand
+KITEM:  $ = gold
+{{
+    local exit, hoard = wormlands_ending(_G, 1)
+    mapgrd[exit.x-2][exit.y] = 'G'
+    mapgrd[exit.x+2][exit.y+3] = 'T'
+    mapgrd[hoard.x][hoard.y] = 'M'
+    mapgrd[hoard.x-2][hoard.y] = 'C'
+}}
+MAP
+ENDMAP
+
+NAME:   worm_end_dragon_cavern
+PLACE:  Worm:$
+ORIENT: encompass
+TAGS:   transparent
+KFEAT:  O = wormlands_to_depths
+KMONS:  D = iron dragon
+KMONS:  L = lindwurm
+KMONS:  W = gallery worm / caustic worm
+KITEM:  * = any weapon good_item / any armour good_item / any magical staff good_item / any wand
+KITEM:  $ = gold
+{{
+    local exit, hoard = wormlands_ending(_G, 2)
+    mapgrd[exit.x-2][exit.y] = 'D'
+    mapgrd[hoard.x][hoard.y] = 'W'
+    mapgrd[hoard.x+2][hoard.y+3] = 'L'
+}}
+MAP
+ENDMAP
+
+NAME:   worm_shed_coils
+DEPTH:  Worm
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+MONS:   coil worm
+SUBST:  1 = 11.
+MAP
+      xxxxxxx
+     xx.....xx
+xxxxxx.......x
+@.......1....x
+......xx.....x
+xxxx..xxx...xx
+   x...xxxxxx
+   xx.....xx
+    xx..%..@
+     x......
+     xxxxxxx
+ENDMAP
+
+NAME:   worm_double_mouth
+DEPTH:  Worm
+TAGS:   transparent no_monster_gen
+MONS:   gallery worm, coil worm
+MAP
+       xxxxxxx
+      xx.....xx
+xxxxxxx...1...xx
+@..............x
+.......xxx.....x
+xxxx....xxx...xx
+   xx....xx..xx
+    xx.......x
+     x...2...x
+     xx.....xx
+      xxxxxxx
+ENDMAP
+
+NAME:   worm_shale_shelf
+DEPTH:  Worm:2-4
+TAGS:   transparent no_monster_gen
+MONS:   lindwurm, earth elemental
+SUBST:  2 = 22.
+MAP
+    xxxxxxxxx
+   xx.......xx
+xxxx...cc....xx
+@....2........x
+......cc..1...x
+xxxx...c.....xx
+   xx.......xx
+    xxxxxxxxx
+ENDMAP
+
+NAME:   worm_blind_bend
+DEPTH:  Worm
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+MAP
+        xxxxxxx
+       xx.....xx
+      xx....$..x
+xxxxxxx.......xx
+@..........xxxx
+..........xx
+xxxxxxxxxxx
+ENDMAP
+
+NAME:   worm_troll_cut
+DEPTH:  Worm:3-4
+TAGS:   transparent no_monster_gen
+MONS:   deep troll shaman, iron troll
+MAP
+    xxxxxxx
+   xx.....xx
+xxxx...1...xx
+@...........x
+.......xx...xx
+xxxx..xxx....xxx
+   x..xx..2....xx
+   x..x........x
+   xx....$....xx
+    xx.......xx
+     xxxxxxxxx
+ENDMAP
+
+NAME:   worm_seeping_vein
+DEPTH:  Worm
+TAGS:   transparent no_monster_gen
+MONS:   gallery worm / coil worm
+KFEAT:  w = shallow_water
+MAP
+      xxxxxxxxx
+     xx.......xx
+xxxxxx...ww....xx
+@......www......x
+.......ww...1...x
+xxxx......c....xx
+   xx.........xx
+    xxxxxxxxxxx
+ENDMAP
+
+NAME:   worm_end_coiled_galleries
+PLACE:  Worm:$
+ORIENT: encompass
+TAGS:   transparent
+KFEAT:  O = wormlands_to_depths
+KMONS:  G = gallery worm
+KMONS:  C = coil worm
+KMONS:  E = deathcap
+KITEM:  * = any weapon good_item / any armour good_item / any magical staff good_item / any wand
+KITEM:  $ = gold
+{{
+    local exit, hoard = wormlands_ending(_G, 2)
+    mapgrd[exit.x-2][exit.y] = 'G'
+    mapgrd[exit.x+2][exit.y+3] = 'C'
+    mapgrd[hoard.x][hoard.y] = 'E'
+    mapgrd[hoard.x-2][hoard.y] = 'C'
+}}
+MAP
+ENDMAP
+
+# Side caches use the normal item generator; none is a compulsory reward.
+NAME:   worm_delvers_cache
+DEPTH:  Worm:2-4
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   caustic worm, coil worm
+KITEM:  a = any weapon good_item / any armour good_item
+KITEM:  b = any wand
+KITEM:  p = potion of curing / potion of heal wounds
+MAP
+       xxxxxxxxx
+      xx.......xx
+xxxxxxx...1.....x
+@...............x
+......ccc...b..xx
+xxxx...cc..a..xx
+   xx...2..p.xx
+    xx..$...xx
+     xxxxxxxx
+ENDMAP
+
+NAME:   worm_buried_armoury
+DEPTH:  Worm:3-4
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   iron troll, caustic worm
+KITEM:  a = any armour good_item
+KITEM:  b = any weapon good_item
+KITEM:  s = scroll of enchant armour / scroll of enchant weapon / scroll of acquirement w:1
+MAP
+      xxxxxxxxx
+     xx.......xx
+xxxxxx..2......x
+@........cc....xx
+.....cc..cc..1..x
+xxxx..c......a..x
+   xx......b.s.xx
+    xx...$....xx
+     xxxxxxxxxx
+ENDMAP
+
+NAME:   worm_corroded_gallery
+DEPTH:  Worm:2-4
+TAGS:   extra transparent no_monster_gen
+CHANCE: 30%
+MONS:   coil worm, caustic worm
+MAP
+      xxxxxxxx
+     xx......xx
+xxxxxx...2....x
+@.............xx
+......cc.......@
+xxxx...cc..1....
+   xx.........xx
+    xxxxxxxxxxx
+ENDMAP
+
+NAME:   uniq_old_coil
+DEPTH:  Worm:2-4
+WEIGHT: 20
+TAGS:   place_unique transparent no_monster_gen no_item_gen
+MONS:   Old Coil
+KITEM:  a = any weapon randart / any armour randart
+MAP
+       xxxxxxxx
+      xx......xx
+xxxxxxx........x
+@..............xx
+......ccc..1....x
+xxxx...cc....a..x
+   xx......$..$xx
+    xx........xx
+     xxxxxxxxxx
+ENDMAP

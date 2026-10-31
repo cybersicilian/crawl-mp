@@ -1,0 +1,28 @@
+enum: JOB_HEALER
+name: "Healer"
+short_name: He
+category: Zealot
+category_priority: 75
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "robe plus:1"
+  - "potion of curing q:2"
+  - "potion of heal wounds"
+weapon_choice: plain
+recommended_species:
+  - mountain dwarf
+  - gnoll
+  - human
+  - gargoyle
+  - minotaur
+  - vine stalker
+skills:
+  fighting: 2
+  dodging: 2
+  armour: 1
+  shields: 1
+  invocations: 3
+  weapon: 2
+create_enum: false

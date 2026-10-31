@@ -68,6 +68,7 @@ function ($, comm) {
     });
 
     return {
+        ready: function () { return options !== null; },
         get: get_option,
         set: set_option,
         send: send_option,

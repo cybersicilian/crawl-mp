@@ -9,6 +9,7 @@
 #include "AppHdr.h"
 
 #include "travel.h"
+#include "party.h"
 
 #include <algorithm>
 #include <array>
@@ -199,6 +200,49 @@ bool deviant_route_warning::warn_continue_travel(
 
 static deviant_route_warning _Route_Warning;
 
+namespace
+{
+struct travel_continuation
+{
+    level_pos last, target;
+    level_id source;
+    int distance = -1;
+    coord_def explore_stop;
+    string transport;
+    deviant_route_warning warning;
+};
+travel_continuation continuations[party::MAX_PARTY_PLAYERS];
+}
+
+void reset_travel_contexts()
+{
+    for (auto& context : continuations)
+        context = travel_continuation();
+}
+
+void switch_travel_context(int previous, int next)
+{
+    if (!party::multiplayer_enabled())
+        return;
+    auto& outgoing = continuations[previous];
+    outgoing.last = last_stair;
+    outgoing.target = level_target;
+    outgoing.source = _Src_Level;
+    outgoing.distance = _Src_Dest_Level_Delta;
+    outgoing.explore_stop = explore_stopped_pos;
+    outgoing.transport = trans_travel_dest;
+    outgoing.warning = _Route_Warning;
+    const auto& incoming = continuations[next];
+    last_stair = incoming.last;
+    level_target = incoming.target;
+    _Src_Level = incoming.source;
+    _Src_Dest_Level_Delta = incoming.distance;
+    explore_stopped_pos = incoming.explore_stop;
+    trans_travel_dest = incoming.transport;
+    _Route_Warning = incoming.warning;
+}
+
+
 static bool _find_transtravel_square(const level_pos &pos,
                                      bool verbose = true);
 
@@ -220,6 +264,9 @@ static inline bool _is_safe_cloud(const coord_def& c)
     const cloud_type ctype = env.map_knowledge(c).cloud();
     if (ctype == CLOUD_NONE)
         return true;
+    const cloud_struct* actual = you.see_cell(c) ? cloud_at(c) : nullptr;
+    if (actual && actual->type == ctype && cloud_dissipates_for(*actual, you))
+        return true;
 
     // We can also safely run through smoke, or any of our own clouds if
     // following Qazlal.
@@ -233,6 +280,12 @@ static inline int _feature_traverse_cost(dungeon_feature_type feature)
     const bool safe_trap = (feature == DNGN_TRAP_WEB || feature == DNGN_TRAP_NET)
                            && you.is_web_immune()
                            || feature == DNGN_TRAP_SHAFT;
+    if (!you.airborne())
+    {
+        const int penalty = feat_grounded_movement_penalty(feature);
+        if (penalty)
+            return 1 + (penalty + BASELINE_DELAY - 1) / BASELINE_DELAY;
+    }
     if (feat_is_closed_door(feature)
         // Higher cost for shallow water if species doesn't like water
         || feature == DNGN_SHALLOW_WATER && (!player_likes_water(true)))
@@ -3545,6 +3598,11 @@ level_id level_id::next_level_id(const coord_def &pos) const
 {
     int gridc = env.grid(pos);
     level_id id = *this;
+
+    const level_id connection = branch_connection_destination(
+        static_cast<dungeon_feature_type>(gridc), *this);
+    if (connection.is_valid())
+        return connection;
 
     if (gridc == branches[id.branch].exit_stairs)
     {

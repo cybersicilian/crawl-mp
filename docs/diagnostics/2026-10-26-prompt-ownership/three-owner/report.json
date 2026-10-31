@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "existing_saves_used": false,
+  "checks": [
+    "A rapid wait/inventory sequence retains the prompt owner while a peer waits",
+    "Rapid input from three owners is serialized with one token per command",
+    "A buffered owner response closes its native inventory prompt before a peer acts",
+    "An inline native item dialog cannot complete before its control handler returns",
+    "Raw multi-character input retains separate command ownership",
+    "A stale prompt response spends no turn and does not strand the next owner"
+  ],
+  "expect_failure": false,
+  "owned_process_exited": true
+}

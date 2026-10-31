@@ -1,0 +1,335 @@
+{
+  "name": "Vorr the Red Wake",
+  "design_date": "2026-10-18",
+  "revision": 2,
+  "status": "design and concept assets",
+  "generated_assets": [
+    {
+      "id": "direction-board",
+      "file": "assets/vorr-art-direction-v1.png",
+      "purpose": "opaque art direction board",
+      "status": "concept",
+      "native_game_asset": false,
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_range": null,
+      "sha256": "7db26638bebf457f45d18a38f05e7ebb052fb18074dde27e628f7e957eb1c51e",
+      "generator": "built-in imagegen",
+      "prompt": "prompts/art-direction-v1.txt"
+    },
+    {
+      "id": "altar-master",
+      "file": "assets/vorr-altar-concept-v1.png",
+      "purpose": "transparent altar concept master",
+      "status": "baseline concept retained",
+      "native_game_asset": false,
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "f8db4c7db690f5c840f34c493bfd1efa0d332ca572b0e02975ed85f7d79a1c02",
+      "generator": "built-in imagegen",
+      "prompt": "prompts/altar-concept-v1.txt"
+    },
+    {
+      "id": "sigil-master",
+      "file": "assets/vorr-sigil-concept-v1.png",
+      "purpose": "transparent split-drop concept master",
+      "status": "concept",
+      "native_game_asset": false,
+      "width": 1261,
+      "height": 1247,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "a043cc989da03a6d1e757d3ea8d87bc840d1c9a8c277d29f3e7eaf63cb439e46",
+      "generator": "built-in imagegen",
+      "prompt": "prompts/sigil-concept-v1.txt"
+    },
+    {
+      "id": "altar-study-v2",
+      "file": "assets/vorr-altar-concept-v2.png",
+      "purpose": "simplified current altar study against native reference sprites",
+      "status": "concept",
+      "native_game_asset": false,
+      "width": 1312,
+      "height": 1199,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "sha256": "156c161be39542cfe321a9bcff9f72b6014c07bc943565f751f2860e9a5dc20b",
+      "generator": "built-in imagegen",
+      "prompt": "prompts/altar-concept-v2.txt"
+    }
+  ],
+  "native_asset_plan": [
+    {
+      "id": "religion-mark",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "altar",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "rupture-invocation",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "communion-status",
+      "dimensions": "8x8 or 10x10",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "communion-detail",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "great-letting-invocation",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "fresh-blood-overlays",
+      "dimensions": "32x32",
+      "count": 3,
+      "status": "planned"
+    },
+    {
+      "id": "fading-blood-overlays",
+      "dimensions": "32x32",
+      "count": 3,
+      "status": "planned"
+    },
+    {
+      "id": "wound-effect",
+      "dimensions": "32x32",
+      "count": 4,
+      "status": "planned"
+    },
+    {
+      "id": "burst-effect",
+      "dimensions": "32x32",
+      "count": 4,
+      "status": "planned"
+    },
+    {
+      "id": "communion-effect",
+      "dimensions": "32x32",
+      "count": 4,
+      "status": "planned"
+    },
+    {
+      "id": "great-letting-effect",
+      "dimensions": "32x32",
+      "count": 5,
+      "status": "planned"
+    },
+    {
+      "id": "red-passage-invocation",
+      "dimensions": "32x32",
+      "count": 1,
+      "status": "planned"
+    },
+    {
+      "id": "red-passage-effect",
+      "dimensions": "32x32",
+      "count": 8,
+      "status": "planned"
+    },
+    {
+      "id": "portrait-faith-plinth",
+      "dimensions": "60x68 SVG",
+      "count": 1,
+      "status": "local design study; native registration pending"
+    }
+  ],
+  "reuse": [
+    "native cosmetic spent blood",
+    "native targeting and ally warnings",
+    "native god and quickbar presentation"
+  ],
+  "not_yet_supplied": [
+    "native production sprites",
+    "exported invocation icon PNGs",
+    "animation frames",
+    "audio",
+    "gameplay implementation"
+  ],
+  "gameplay_milestones": {
+    "1": [
+      "Rupture"
+    ],
+    "3": [
+      "Blood Communion",
+      "Red Passage"
+    ],
+    "5": [
+      "The Great Letting"
+    ]
+  },
+  "reference_assets": [
+    {
+      "file": "assets/reference-trog.png",
+      "source": "native DCSS rltiles altar; copied unchanged",
+      "dimensions": [
+        32,
+        32
+      ],
+      "sha256": "951ad6fd6d0660da4e9d2baa774091dc8ed666885297eea96c480bc309382553"
+    },
+    {
+      "file": "assets/reference-makhleb.png",
+      "source": "native DCSS rltiles altar; copied unchanged",
+      "dimensions": [
+        32,
+        32
+      ],
+      "sha256": "f2c1305d1e8fbbf3c6b3740ef3984b439950b3e145b8b7018bc5b88a6e91da72"
+    },
+    {
+      "file": "assets/reference-uskayaw.png",
+      "source": "native DCSS rltiles altar; copied unchanged",
+      "dimensions": [
+        32,
+        32
+      ],
+      "sha256": "29de7d0a77a8606559467382cea08837d617bf1f7bf5265746ce8c21ee084e59"
+    }
+  ],
+  "plinth_study": {
+    "theme": "plinth-theme.json",
+    "renderer": "plinth-study.js",
+    "shared_styles": "../../../crawl-ref/source/webserver/game_data/static/styles/party-faith.css",
+    "states": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "penance",
+      "unknown"
+    ],
+    "runtime_registered": false,
+    "inset": "reduced v2 concept placeholder",
+    "gameplay_unlocks_only": [
+      1,
+      3,
+      5
+    ],
+    "exports": [
+      {
+        "file": "assets/vorr-plinth-0.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "392aa980d640d8217d3e7a27b6dd59907666993da053f9bd61f9a3f20ad6a2b6"
+      },
+      {
+        "file": "assets/vorr-plinth-1.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "4d4845346f1969dd6cd0a3a702b05a8ea26239212285c60d4ccd819058214cab"
+      },
+      {
+        "file": "assets/vorr-plinth-2.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "effafec834f36e4c7f9d9ca6603d84034723f9fbcfd16610a5fc8c469877b802"
+      },
+      {
+        "file": "assets/vorr-plinth-3.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "239a745235190f5e3009e53eb1f72f0dca42dd70627199ca2623d06a71a232bb"
+      },
+      {
+        "file": "assets/vorr-plinth-4.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "fa3bb2b160df76af2d0d62108d656c69fcf1fcfae95673394bf3c315dd5b9c6b"
+      },
+      {
+        "file": "assets/vorr-plinth-5.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "54c403a68431c4257f79b71f5a5b4785b7efbdf3098782a7845c3246d2574fab"
+      },
+      {
+        "file": "assets/vorr-plinth-6.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "e80ed672026e463b2898b906d191a3472c0c53735e01678ab891e37c96dadf7d"
+      },
+      {
+        "file": "assets/vorr-plinth-penance.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "b767f35f6df1c1a8b54e51a32b724440579cc4d7c75c1a92de6f85590744edd9"
+      },
+      {
+        "file": "assets/vorr-plinth-unknown.svg",
+        "dimensions": [
+          60,
+          68
+        ],
+        "format": "SVG",
+        "status": "static design frame; no avatar or final altar inset",
+        "sha256": "f47b45fc26ee9f7e2fe05c4f32be193db91922aec4a1675500fe4d5d55fd8891"
+      }
+    ]
+  },
+  "native_prototype": "implementation-status.md",
+  "native_exports": "native-assets.json"
+}

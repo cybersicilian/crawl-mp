@@ -1,0 +1,22 @@
+{
+  "startedAt": 1792504033.328875,
+  "finishedAt": 1792504034.715787,
+  "results": [
+    {
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "NOWIZARD=y",
+        "NO_OPTIMIZE=y",
+        "STDFLAG=-std=c++14",
+        "PYTHON=/usr/local/bin/python3",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "snapshotMatchesRequest": true,
+  "workingSourceChangedDuringBuild": [],
+  "passed": false
+}

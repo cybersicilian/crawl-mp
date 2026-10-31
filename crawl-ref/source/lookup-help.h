@@ -13,6 +13,7 @@
 using std::string;
 
 void keyhelp_query_descriptions(command_type where_from=CMD_NO_CMD);
+void search_descriptions(const string& query);
 
 string lookup_help_type_name(lookup_help_type lht);
 char lookup_help_type_shortcut(lookup_help_type lht);

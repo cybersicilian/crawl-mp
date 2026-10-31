@@ -12,6 +12,9 @@
 */
 
 #include "AppHdr.h"
+#include "ability.h"
+#include "god-pakellas.h"
+#include "party.h"
 
 #include "feature.h"
 #include "mpr.h"
@@ -983,6 +986,12 @@ void marshallBoolean(writer &th, bool data)
 bool unmarshallBoolean(reader &th)
 {
     return th.readByte() != 0;
+}
+
+bool unmarshall_cloud_protection(reader& th)
+{
+    return th.getMinorVersion() >= TAG_MINOR_PROTECTED_CLOUDS
+           && unmarshallBoolean(th);
 }
 
 // Saving the date as a string so we're not reliant on a particular epoch.
@@ -2999,6 +3008,24 @@ FixedVector<int, 52> unmarshall_player_spell_letter_table(reader &th)
 }
 
 
+int unmarshall_player_ability_binding(reader &th)
+{
+    const int ability = unmarshallShort(th);
+#ifndef WIZARD
+    // These terrain-editor hotkeys are saved by wizard builds. Release builds
+    // cannot offer them, but must still load the character with its wizard
+    // history intact. All other IDs retain the normal migration and validation.
+    switch (ability)
+    {
+    case 10000: // ABIL_WIZ_BUILD_TERRAIN
+    case 10001: // ABIL_WIZ_SET_TERRAIN
+    case 10002: // ABIL_WIZ_CLEAR_TERRAIN
+        return ABIL_NON_ABILITY;
+    }
+#endif
+    return restored_dithmenos_ability(static_cast<ability_type>(ability));
+}
+
 void remove_removed_library_spells(FixedBitVector<NUM_SPELLS>& lib)
 {
     for (int i = 0; i < NUM_SPELLS; ++i)
@@ -3440,7 +3467,7 @@ static void _tag_read_you(reader &th)
     ASSERT(count == (int)you.ability_letter_table.size());
     for (int i = 0; i < count; i++)
     {
-        int a = unmarshallShort(th);
+        int a = unmarshall_player_ability_binding(th);
 #if TAG_MAJOR_VERSION == 34
         if (th.getMinorVersion() < TAG_MINOR_ABIL_1000)
         {
@@ -3624,13 +3651,13 @@ static void _tag_read_you(reader &th)
 
     // should be a check for MUT_INNATE_CASTER but I don't remember if muts
     // have been unmarshalled here.
-    if (th.getMinorVersion() < TAG_MINOR_DJ_SPLIT && you.species == SP_DJINNI)
+    if (th.getMinorVersion() < TAG_MINOR_AURAMANCY && you.species == SP_DJINNI)
     {
         // Balance XP from spellcasting across all other skills.
         cleanup_innate_magic_skills();
         // Fix which skills are enabled. (Don't bother fixing autotraining %s,
         // it'll all get balanced across skills anyway.)
-        for (skill_type sk = SK_FIRST_MAGIC_SCHOOL; sk <= SK_LAST_MAGIC; ++sk)
+        for (skill_type sk : magic_school_skills())
         {
             you.train[sk] = you.train[SK_SPELLCASTING];
             you.train_alt[sk] = you.train_alt[SK_SPELLCASTING];
@@ -4018,6 +4045,10 @@ static void _tag_read_you(reader &th)
     SP_MUT_FIX(MUT_QUADRUMANOUS, SP_FORMICID);
     SP_MUT_FIX(MUT_NO_DRINK, SP_MUMMY);
     SP_MUT_FIX(MUT_REFLEXIVE_HEADBUTT, SP_MINOTAUR);
+    // Upgrade existing Tortles without removing this reusable mutation from
+    // other species that acquired it through another consumer.
+    if (you.species == SP_TORTLE)
+        _fixup_species_mutations(MUT_RETALIATORY_BITE);
     SP_MUT_FIX(MUT_STEAM_RESISTANCE, SP_PALE_DRACONIAN);
     SP_MUT_FIX(MUT_PAWS, SP_FELID);
     SP_MUT_FIX(MUT_NO_GRASPING, SP_FELID);
@@ -4820,6 +4851,7 @@ static void _tag_read_you(reader &th)
 
     you.props.clear();
     you.props.read(th);
+    pakellas::migrate();
 #if TAG_MAJOR_VERSION == 34
     if (!you.props.exists(TIME_PER_LEVEL_KEY) && you.elapsed_time > 0)
     {
@@ -5593,11 +5625,32 @@ static void _tag_read_you_dungeon(reader &th)
     {
         brdepth[j] = branches[j].numlevels;
         brentry[j] = level_id(branches[j].parent_branch, branches[j].mindepth);
+        // Do not add a third Lair rune branch to an existing character.
+        if (is_random_subbranch(static_cast<branch_type>(j)))
+            brentry[j].clear();
         branch_bribe[j] = 0;
         branch_uniq_map_tags[j].clear();
     }
 
 #if TAG_MAJOR_VERSION == 34
+    // New branch routes are a new-game choice. Do not add exits to branches
+    // whose parent floors may already have been generated in an old save.
+    if (th.getMinorVersion() < TAG_MINOR_BURROWS_ROUTE)
+    {
+        brentry[BRANCH_WORMLANDS].clear();
+        brentry[BRANCH_HIVE].clear();
+    }
+
+    if (th.getMinorVersion() < TAG_MINOR_BURROWS
+        && crawl_state.game_is_descent()
+        && you.props.exists(DESCENT_POIS_BRANCH_KEY))
+    {
+        // Old Descent saves recorded the excluded member of the pair.
+        const int excluded = you.props[DESCENT_POIS_BRANCH_KEY].get_int();
+        you.props[DESCENT_POIS_BRANCH_KEY] =
+            excluded == BRANCH_SPIDER ? BRANCH_SNAKE : BRANCH_SPIDER;
+    }
+
     // Deepen the Abyss; this is okay since new abyssal stairs will be
     // generated as the place shifts.
     if (crawl_state.game_is_normal() && th.getMinorVersion() <= TAG_MINOR_ABYSS_SEVEN)
@@ -5810,7 +5863,8 @@ static void _tag_construct_level(writer &th)
     marshallByte(th, env.floor_colour);
     marshallByte(th, env.rock_colour);
 
-    marshallInt(th, you.on_current_level ? you.elapsed_time : env.elapsed_time);
+    marshallInt(th, party::multiplayer_enabled() ? env.elapsed_time
+                     : you.on_current_level ? you.elapsed_time : env.elapsed_time);
     marshallCoord(th, you.on_current_level ? you.pos() : env.old_player_pos);
 
     // Map grids.
@@ -5857,6 +5911,7 @@ static void _tag_construct_level(writer &th)
         marshallByte(th, cloud.killer);
         marshallInt(th, cloud.source);
         marshallInt(th, cloud.excl_rad);
+        marshallBoolean(th, cloud.protected_nonhostiles);
     }
 
     CANARY;
@@ -6104,13 +6159,8 @@ void unmarshallItem(reader &th, item_def &item)
             case POT_GAIN_STRENGTH:
             case POT_GAIN_DEXTERITY:
             case POT_GAIN_INTELLIGENCE:
-            case POT_POISON:
-            case POT_SLOWING:
             case POT_PORRIDGE:
-            case POT_DECAY:
-            case POT_WATER:
             case POT_RESTORE_ABILITIES:
-            case POT_STRONG_POISON:
             case POT_BLOOD:
             case POT_BLOOD_COAGULATED:
                 item.sub_type = POT_MOONSHINE;
@@ -7627,6 +7677,7 @@ static void _tag_read_level(reader &th)
         }
 #endif
         cloud.excl_rad = unmarshallInt(th);
+        cloud.protected_nonhostiles = unmarshall_cloud_protection(th);
 
 #if TAG_MAJOR_VERSION == 34
         // Remove clouds stuck in walls, from 0.18-a0-603-g332275c to

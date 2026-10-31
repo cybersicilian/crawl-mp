@@ -1,0 +1,56 @@
+[
+  {
+    "file": "ability.cc",
+    "live": "",
+    "content": "#include \"chain-devil.h\"\n#include \"eldritch.h\"\n#include \"god-vellum.h\"\n#include \"coop-content.h\"\n",
+    "result": "#include \"chain-devil.h\"\n#include \"eldritch.h\"\n#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "artefact.cc",
+    "live": "",
+    "content": "#include \"god-vellum.h\"\n#include \"coop-content.h\"\n",
+    "result": "#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "attack.cc",
+    "live": "    return weapon->plus - (stat_source().is_player() ? oozle::weapon_corrosion_penalty(*weapon) : 0);\n",
+    "content": "    return effective_item_enchantment(*weapon);\n",
+    "result": "    return effective_item_enchantment(*weapon)\n        - (stat_source().is_player() ? oozle::weapon_corrosion_penalty(*weapon) : 0);\n"
+  },
+  {
+    "file": "describe.cc",
+    "live": "#include \"oozle-memory.h\"\n",
+    "content": "#include \"god-vellum.h\"\n",
+    "result": "#include \"oozle-memory.h\"\n#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "item-use.cc",
+    "live": "",
+    "content": "#include \"god-vellum.h\"\n#include \"coop-content.h\"\n",
+    "result": "#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "mon-death.cc",
+    "live": "",
+    "content": "    const bool ordinary_kill = gives_player_xp && !mons.is_summoned()\n        && !mons.is_unrewarding() && !party::is_proxy_monster(mons);\n",
+    "result": "    const bool ordinary_kill = gives_player_xp && !mons.is_summoned()\n        && !mons.is_unrewarding() && !party::is_proxy_monster(mons);\n"
+  },
+  {
+    "file": "player-equip.cc",
+    "live": "",
+    "content": "#include \"god-vellum.h\"\n#include \"coop-content.h\"\n",
+    "result": "#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "player-reacts.cc",
+    "live": "#include \"oozle-memory.h\"\n",
+    "content": "#include \"chain-devil.h\"\n#include \"eldritch.h\"\n#include \"god-vellum.h\"\n",
+    "result": "#include \"oozle-memory.h\"\n#include \"chain-devil.h\"\n#include \"eldritch.h\"\n#include \"god-vellum.h\"\n"
+  },
+  {
+    "file": "webserver/game_data/static/dungeon_renderer.js",
+    "live": "    \"./tileinfo-dngn\", \"./util\", \"./view_data\", \"./enums\", \"./mouse_control\", \"./game-context\", \"tooltip-policy\", \"./party-hover\", \"./traversal-effects\", \"./shell-animation\", \"./planned-route\", \"./chunked-view\", \"./sprite-reach\", \"./premium-movement\", \"./premium-effects\", \"./premium-regions\"],\nfunction ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,\n    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, movement, effects, regions) {\n",
+    "content": "    \"./tileinfo-dngn\", \"./util\", \"./view_data\", \"./enums\", \"./mouse_control\", \"./game-context\", \"tooltip-policy\", \"./party-hover\", \"./traversal-effects\", \"./shell-animation\", \"./planned-route\", \"./chunked-view\", \"./sprite-reach\", \"./hero-feedback\", \"./encounter-feedback\", \"./premium-movement\", \"./premium-effects\", \"./premium-regions\", \"./chain-view\"],\nfunction ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,\n    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains) {\n",
+    "result": "    \"./tileinfo-dngn\", \"./util\", \"./view_data\", \"./enums\", \"./mouse_control\", \"./game-context\", \"tooltip-policy\", \"./party-hover\", \"./traversal-effects\", \"./shell-animation\", \"./planned-route\", \"./chunked-view\", \"./sprite-reach\", \"./premium-movement\", \"./premium-effects\", \"./premium-regions\", \"./chain-view\"],\nfunction ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,\n    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, movement, effects, regions, chains) {\n"
+  }
+]

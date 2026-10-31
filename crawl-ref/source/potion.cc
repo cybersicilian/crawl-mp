@@ -4,6 +4,8 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
+#include "oozle-memory-effects.h"
 
 #include "potion.h"
 
@@ -14,28 +16,44 @@
 #include "act-iter.h"
 #include "art-enum.h"
 #include "cloud.h"
+#include "coordit.h"
+#include "directn.h"
 #include "english.h"
+#include "env.h"
+#include "exercise.h"
 #include "fight.h"
 #include "god-conduct.h"
+#include "god-item.h"
 #include "god-passive.h"
 #include "god-wrath.h" // reduce_xp_penance
 #include "hints.h"
+#include "invent.h"
 #include "item-name.h"
 #include "item-prop.h"
 #include "item-status-flag-type.h"
 #include "item-use.h"
 #include "items.h"
 #include "message.h"
+#include "mon-behv.h"
+#include "mon-ench.h"
 #include "mutation.h"
 #include "nearby-danger.h"
+#include "ouch.h"
+#include "party.h"
 #include "player-stats.h"
 #include "potion-type.h"
 #include "prompt.h"
 #include "religion.h"
+#include "shout.h"
 #include "skill-menu.h"
 #include "spl-goditem.h"
+#include "spl-transloc.h"
 #include "stringutil.h"
+#include "target.h"
+#include "teleport.h"
+#include "terrain.h"
 #include "transform.h"
+#include "traps.h"
 #include "view.h"
 #include "xom.h"
 
@@ -619,7 +637,7 @@ public:
             if (is_potion && you.unrand_equipped(UNRAND_KRYIAS))
             {
                 mprf("%s enhances the restoration.",
-                     you.body_armour()->name(DESC_THE, false, false, false).c_str());
+                     oozle::unrand_source(UNRAND_KRYIAS)->name(DESC_THE, false, false, false).c_str());
             }
             else if (is_potion && you.has_mutation(MUT_DOUBLE_POTION_HEAL))
                 mpr("You savour every drop.");
@@ -943,6 +961,413 @@ public:
     }
 };
 
+class PotionEmpathy : public PotionEffect
+{
+private:
+    PotionEmpathy() : PotionEffect(POT_EMPATHY) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionEmpathy);
+public:
+    static const PotionEmpathy &instance()
+    {
+        static PotionEmpathy inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            if (reason)
+                *reason = "You have no companions to bond with.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool = true, int pow = 40, bool is_potion = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            canned_msg(MSG_NOTHING_HAPPENS);
+            return false;
+        }
+
+        const int turns = _scale_pot_duration(30 + random2(pow / 2), is_potion);
+        party::apply_party_aura_buff(DUR_EMPATHY, turns, GXM + GYM, true);
+
+        const int count = party::player_count();
+        for (int i = 0; i < count; ++i)
+        {
+            if (party::slot_is_alive(i) && !party::is_player_downed(i)
+                && party::slot_is_on_current_floor(i))
+            {
+                party::heal_or_buff_party_member(i, 6 + random2(7), NUM_DURATIONS, 0, false);
+            }
+        }
+
+        mprf(MSGCH_DURATION,
+             "A warm empathic tether links your life-force with your companions!");
+        return true;
+    }
+};
+
+class PotionSoulAmbrosia : public PotionEffect
+{
+private:
+    PotionSoulAmbrosia() : PotionEffect(POT_SOUL_AMBROSIA) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionSoulAmbrosia);
+public:
+    static const PotionSoulAmbrosia &instance()
+    {
+        static PotionSoulAmbrosia inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            if (reason)
+                *reason = "You have no companions to share soul ambrosia with.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool = true, int pow = 40, bool is_potion = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            canned_msg(MSG_NOTHING_HAPPENS);
+            return false;
+        }
+
+        const int turns = _scale_pot_duration(8 + random2(8) + pow / 10, is_potion);
+        bool revived_any = false;
+        const int count = party::player_count();
+        for (int i = 0; i < count; ++i)
+        {
+            if (party::is_player_downed(i))
+            {
+                revived_any = true;
+                break;
+            }
+        }
+
+        if (revived_any)
+            party::revive_downed_players(false, 0);
+
+        party::apply_party_aura_buff(DUR_SOUL_AMBROSIA, turns, LOS_DEFAULT_RANGE, true);
+
+        mprf(MSGCH_DURATION,
+             "Luminous soul ambrosia floods you and your companions with vital and arcane vigour!");
+        return true;
+    }
+};
+
+class PotionConcord : public PotionEffect
+{
+private:
+    PotionConcord() : PotionEffect(POT_CONCORD) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionConcord);
+public:
+    static const PotionConcord &instance()
+    {
+        static PotionConcord inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            if (reason)
+                *reason = "You have no companions to resonate with.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool = true, int pow = 40, bool is_potion = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            canned_msg(MSG_NOTHING_HAPPENS);
+            return false;
+        }
+
+        const int turns = _scale_pot_duration(25 + random2(pow / 2), is_potion);
+        party::apply_party_aura_buff(DUR_CONCORD, turns, LOS_DEFAULT_RANGE, true);
+        you.redraw_evasion = true;
+        you.redraw_armour_class = true;
+
+        const int allies = party::count_allies_in_radius(LOS_DEFAULT_RANGE);
+        mprf(MSGCH_DURATION,
+             "A harmonic chorus of battle-prowess resonates between you and %s!",
+             allies > 0 ? "your visible companions" : "your spirit");
+        return true;
+    }
+};
+
+class PotionTransfusion : public PotionEffect
+{
+private:
+    PotionTransfusion() : PotionEffect(POT_TRANSFUSION) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionTransfusion);
+public:
+    static const PotionTransfusion &instance()
+    {
+        static PotionTransfusion inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            if (reason)
+                *reason = "You have no companions to transfuse with.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool = true, int /*pow*/ = 40, bool /*is_potion*/ = true) const override
+    {
+        if (!coop_content::enabled() || !party::is_enabled())
+        {
+            canned_msg(MSG_NOTHING_HAPPENS);
+            return false;
+        }
+
+        const int count = party::player_count();
+        const int active = party::active_slot();
+        const player &me = party::get_player(active);
+
+        int sum_hp_pct = 0;
+        int sum_mp_pct = 0;
+        int living_on_floor = 0;
+
+        for (int i = 0; i < count; ++i)
+        {
+            if (party::is_player_downed(i))
+                continue;
+            const player &p = party::get_player(i);
+            if (p.hp <= 0 || p.where_are_you != me.where_are_you || p.depth != me.depth)
+                continue;
+
+            sum_hp_pct += (p.hp * 100) / max(1, p.hp_max);
+            sum_mp_pct += p.max_magic_points > 0
+                          ? (p.magic_points * 100) / p.max_magic_points
+                          : 100;
+            ++living_on_floor;
+        }
+
+        if (living_on_floor <= 0)
+            return false;
+
+        const int avg_hp_pct = min(100, (sum_hp_pct / living_on_floor) + 20);
+        const int avg_mp_pct = min(100, (sum_mp_pct / living_on_floor) + 20);
+
+        for (int i = 0; i < count; ++i)
+        {
+            if (party::is_player_downed(i))
+                continue;
+            player &p = party::get_player(i);
+            if (p.hp <= 0 || p.where_are_you != me.where_are_you || p.depth != me.depth)
+                continue;
+
+            if (!p.duration[DUR_DEATHS_DOOR])
+            {
+                const int target_hp = max(p.hp, (p.hp_max * avg_hp_pct) / 100);
+                p.hp = min(p.hp_max, target_hp + 5);
+            }
+            if (p.max_magic_points > 0)
+            {
+                const int target_mp = max(p.magic_points,
+                                          (p.max_magic_points * avg_mp_pct) / 100);
+                p.magic_points = min(p.max_magic_points, target_mp + 3);
+            }
+
+            party::heal_or_buff_party_member(i, 0, DUR_DIVINE_SHIELD, 5, true);
+        }
+
+        party::sync_all_proxies();
+        mprf(MSGCH_RECOVERY,
+             "Vitality and magic equalize across the party in a surge of protective light!");
+        return true;
+    }
+};
+
+class PotionPoison : public PotionEffect
+{
+private:
+    PotionPoison() : PotionEffect(POT_POISON) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionPoison);
+public:
+    static const PotionPoison &instance()
+    {
+        static PotionPoison inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool temp = true) const override
+    {
+        if (temp && player_res_poison(false) >= 1)
+        {
+            if (reason)
+                *reason = "You are resistant to poison.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool=true, int=40, bool=true) const override
+    {
+        mprf(MSGCH_WARN, "That liquid tasted very nasty...");
+        return poison_player(10 + random2avg(15, 2), "", "a potion of poison");
+    }
+
+    bool quaff(bool was_known) const override
+    {
+        if (was_known && !check_known_quaff())
+            return false;
+        if (player_res_poison() >= 1)
+            mpr("You feel slightly nauseous.");
+        else if (effect(was_known))
+            xom_is_stimulated(100 / _xom_factor(was_known));
+        return true;
+    }
+};
+
+class PotionStrongPoison : public PotionEffect
+{
+private:
+    PotionStrongPoison() : PotionEffect(POT_STRONG_POISON) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionStrongPoison);
+public:
+    static const PotionStrongPoison &instance()
+    {
+        static PotionStrongPoison inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool temp = true) const override
+    {
+        if (temp && player_res_poison(false) >= 1)
+        {
+            if (reason)
+                *reason = "You are resistant to poison.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool=true, int=40, bool=true) const override
+    {
+        mprf(MSGCH_WARN, "That liquid tasted maximally nasty...");
+        return poison_player(20 + random2avg(30, 2), "", "a potion of strong poison", true);
+    }
+
+    bool quaff(bool was_known) const override
+    {
+        if (was_known && !check_known_quaff())
+            return false;
+        if (player_res_poison() >= 1)
+            mpr("You feel quite nauseous.");
+        else if (effect(was_known))
+            xom_is_stimulated(100 / _xom_factor(was_known));
+        return true;
+    }
+};
+
+class PotionSlowing : public PotionEffect
+{
+private:
+    PotionSlowing() : PotionEffect(POT_SLOWING) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionSlowing);
+public:
+    static const PotionSlowing &instance()
+    {
+        static PotionSlowing inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool /*temp*/ = true) const override
+    {
+        if (you.stasis())
+        {
+            if (reason)
+                *reason = "Your stasis prevents you from being slowed.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool=true, int pow = 40, bool is_potion = true) const override
+    {
+        return slow_player(_scale_pot_duration(10 + random2(pow), is_potion));
+    }
+
+    bool quaff(bool was_known) const override
+    {
+        if (was_known && !check_known_quaff())
+            return false;
+        if (effect(was_known))
+            xom_is_stimulated(50 / _xom_factor(was_known));
+        return true;
+    }
+};
+
+class PotionDecay : public PotionEffect
+{
+private:
+    PotionDecay() : PotionEffect(POT_DECAY) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionDecay);
+public:
+    static const PotionDecay &instance()
+    {
+        static PotionDecay inst; return inst;
+    }
+
+    bool can_quaff(string *reason = nullptr, bool temp = true) const override
+    {
+        if (you.is_lifeless_undead(temp) || you.res_negative_energy(!temp) >= 3)
+        {
+            if (reason)
+                *reason = "You are resistant to rotting.";
+            return false;
+        }
+        return true;
+    }
+
+    bool effect(bool=true, int=40, bool=true) const override
+    {
+        mprf(MSGCH_WARN, "You feel your flesh start to rot away!");
+        return drain_player(60 + random2(40), true, false);
+    }
+
+    bool quaff(bool was_known) const override
+    {
+        if (was_known && !check_known_quaff())
+            return false;
+        if (effect(was_known))
+            xom_is_stimulated(50 / _xom_factor(was_known));
+        return true;
+    }
+};
+
+class PotionWater : public PotionEffect
+{
+private:
+    PotionWater() : PotionEffect(POT_WATER) { }
+    DISALLOW_COPY_AND_ASSIGN(PotionWater);
+public:
+    static const PotionWater &instance()
+    {
+        static PotionWater inst; return inst;
+    }
+
+    bool effect(bool=true, int=40, bool=true) const override
+    {
+        mpr("This tastes like water.");
+        return true;
+    }
+};
+
 static const unordered_map<potion_type, const PotionEffect*, std::hash<int>> potion_effects = {
     { POT_CURING, &PotionCuring::instance(), },
     { POT_HEAL_WOUNDS, &PotionHealWounds::instance(), },
@@ -951,17 +1376,26 @@ static const unordered_map<potion_type, const PotionEffect*, std::hash<int>> pot
     { POT_BRILLIANCE, &PotionBrilliance::instance(), },
     { POT_ATTRACTION, &PotionAttraction::instance(), },
     { POT_ENLIGHTENMENT, &PotionEnlightenment::instance(), },
+    { POT_POISON, &PotionPoison::instance(), },
+    { POT_SLOWING, &PotionSlowing::instance(), },
     { POT_CANCELLATION, &PotionCancellation::instance(), },
     { POT_AMBROSIA, &PotionAmbrosia::instance(), },
     { POT_INVISIBILITY, &PotionInvisibility::instance(), },
     { POT_MOONSHINE, &PotionMoonshine::instance(), },
+    { POT_DECAY, &PotionDecay::instance(), },
+    { POT_WATER, &PotionWater::instance(), },
     { POT_EXPERIENCE, &PotionExperience::instance(), },
     { POT_MAGIC, &PotionMagic::instance(), },
+    { POT_STRONG_POISON, &PotionStrongPoison::instance(), },
     { POT_BERSERK_RAGE, &PotionBerserk::instance(), },
     { POT_MUTATION, &PotionMutation::instance(), },
     { POT_RESISTANCE, &PotionResistance::instance(), },
     { POT_LIGNIFY, &PotionLignify::instance(), },
     { POT_MIST, &PotionMist::instance(), },
+    { POT_EMPATHY, &PotionEmpathy::instance(), },
+    { POT_SOUL_AMBROSIA, &PotionSoulAmbrosia::instance(), },
+    { POT_CONCORD, &PotionConcord::instance(), },
+    { POT_TRANSFUSION, &PotionTransfusion::instance(), },
 };
 
 const PotionEffect* get_potion_effect(potion_type pot)
@@ -987,6 +1421,10 @@ static const map<potion_type, string> _spore_msg =
     { POT_BERSERK_RAGE, "infuriating" },
     { POT_RESISTANCE, "bolstering" },
     { POT_MIST, "insubstantial" },
+    { POT_EMPATHY, "empathic" },
+    { POT_SOUL_AMBROSIA, "invigorating" },
+    { POT_CONCORD, "harmonious" },
+    { POT_TRANSFUSION, "revitalising" },
 };
 
 static void _handle_potion_fungus(potion_type potion)
@@ -1194,4 +1632,794 @@ void mons_potion_effect(monster& mon, potion_type potion, const actor& source)
         default:
             break;
     }
+}
+
+bool can_throw_potion(string *reason)
+{
+    if (you.berserk())
+    {
+        if (reason)
+            *reason = "You are too berserk!";
+        return false;
+    }
+    if (you.has_mutation(MUT_NO_GRASPING) || !form_can_wield())
+    {
+        if (reason)
+            *reason = "You cannot throw potions in your present form.";
+        return false;
+    }
+    if (you.attribute[ATTR_HELD])
+    {
+        if (reason)
+            *reason = make_stringf("You cannot throw anything while %s.", held_status());
+        return false;
+    }
+    return true;
+}
+
+static bool _is_offensive_thrown_potion(potion_type ptyp)
+{
+    switch (ptyp)
+    {
+    case POT_POISON:
+    case POT_STRONG_POISON:
+    case POT_SLOWING:
+    case POT_DECAY:
+    case POT_MOONSHINE:
+    case POT_CANCELLATION:
+    case POT_MUTATION:
+    case POT_LIGNIFY:
+    case POT_ATTRACTION:
+        return true;
+    default:
+        return false;
+    }
+}
+
+static bool _apply_player_potion_splash(potion_type ptyp, int pct, bool is_self)
+{
+    bool affected = false;
+    switch (ptyp)
+    {
+    case POT_CURING:
+        if (you.duration[DUR_CONF] || you.duration[DUR_POISONING] || you.duration[DUR_SLOW])
+        {
+            you.duration[DUR_CONF] = 0;
+            you.duration[DUR_POISONING] = 0;
+            you.duration[DUR_SLOW] = 0;
+            affected = true;
+        }
+        if (!you.duration[DUR_DEATHS_DOOR] && you.can_potion_heal() && you.hp < you.hp_max)
+        {
+            const int base_heal = 5 + (you.hp_max * 7) / 40;
+            const int amount = you.scale_potion_healing(max(3, base_heal * pct / 100));
+            inc_hp(amount);
+            affected = true;
+        }
+        break;
+
+    case POT_HEAL_WOUNDS:
+        if (!you.duration[DUR_DEATHS_DOOR] && you.can_potion_heal() && you.hp < you.hp_max)
+        {
+            const int base_heal = 10 + random2avg(28, 3);
+            const int amount = you.scale_potion_healing(max(6, base_heal * pct / 100));
+            inc_hp(amount);
+            affected = true;
+        }
+        break;
+
+    case POT_MAGIC:
+        if (you.magic_points < you.max_magic_points)
+        {
+            const int base_mp = 10 + (you.max_magic_points * 2) / 5;
+            inc_mp(max(4, base_mp * pct / 100));
+            affected = true;
+        }
+        break;
+
+    case POT_HASTE:
+        if (!you.stasis())
+        {
+            if (haste_player(max(6, (40 + random2(25)) * pct / 100)))
+            {
+                contaminate_player(random_range(350, 550) * pct / 100, true);
+                affected = true;
+            }
+        }
+        break;
+
+    case POT_MIGHT:
+        you.increase_duration(DUR_MIGHT, max(6, (35 + random2(25)) * pct / 100), 80);
+        affected = true;
+        break;
+
+    case POT_BRILLIANCE:
+        you.increase_duration(DUR_BRILLIANCE, max(6, (35 + random2(25)) * pct / 100), 80);
+        affected = true;
+        break;
+
+    case POT_ATTRACTION:
+        you.increase_duration(DUR_ATTRACTIVE, max(5, (20 + random2(15)) * pct / 100));
+        affected = true;
+        break;
+
+    case POT_ENLIGHTENMENT:
+    {
+        const int dur = max(6, (25 + random2(20)) * pct / 100);
+        fly_player(dur);
+        you.increase_duration(DUR_ENLIGHTENED, dur, 100);
+        affected = true;
+        break;
+    }
+
+    case POT_POISON:
+        if (player_res_poison() <= 0)
+        {
+            you.poison(&you, max(2, random_range(4, 8) * pct / 100));
+            affected = true;
+        }
+        break;
+
+    case POT_STRONG_POISON:
+        if (player_res_poison() <= 0)
+        {
+            you.poison(&you, max(5, random_range(10, 18) * pct / 100));
+            affected = true;
+        }
+        break;
+
+    case POT_SLOWING:
+        if (!you.stasis())
+        {
+            slow_player(max(4, (10 + random2(12)) * pct / 100));
+            affected = true;
+        }
+        break;
+
+    case POT_CANCELLATION:
+        debuff_player();
+        contaminate_player(-1 * (you.magic_contamination * pct / 100));
+        affected = true;
+        break;
+
+    case POT_AMBROSIA:
+    {
+        const int dur = max(2, (3 + random2(8)) * pct / 100);
+        if (confuse_player(dur, false, true))
+        {
+            you.increase_duration(DUR_AMBROSIA, dur);
+            affected = true;
+        }
+        break;
+    }
+
+    case POT_INVISIBILITY:
+        if (invis_allowed(true))
+        {
+            you.increase_duration(DUR_INVIS, max(5, (15 + random2(20)) * pct / 100), 100);
+            contaminate_player(random_range(350, 550) * pct / 100, true);
+            affected = true;
+        }
+        break;
+
+    case POT_MOONSHINE:
+        if (!you.has_mutation(MUT_CLARITY))
+        {
+            you.increase_duration(DUR_VERTIGO, max(5, random_range(12, 24) * pct / 100), 50);
+            confuse_player(max(2, random_range(3, 7) * pct / 100), true);
+            affected = true;
+        }
+        break;
+
+    case POT_DECAY:
+        if (you.holiness() & (MH_NATURAL | MH_DEMONIC))
+        {
+            you.drain(&you, false, max(10, 30 * pct / 100));
+            affected = true;
+        }
+        break;
+
+    case POT_WATER:
+        if (you.duration[DUR_STICKY_FLAME])
+        {
+            you.duration[DUR_STICKY_FLAME] = 0;
+            if (is_self)
+                mpr("The water extinguishes the liquid flames!");
+            affected = true;
+        }
+        break;
+
+    case POT_EXPERIENCE:
+    {
+        const int xp_pool = 350 * you.experience_level * pct / 100;
+        if (is_self)
+            skill_menu(SKMF_EXPERIENCE, xp_pool);
+        else
+            you.exp_available += xp_pool;
+        affected = true;
+        break;
+    }
+
+    case POT_BERSERK_RAGE:
+        if (you.can_go_berserk(false, true, false))
+        {
+            you.go_berserk(false, true);
+            you.duration[DUR_BERSERK] = max(50, you.duration[DUR_BERSERK] * pct / 100);
+            affected = true;
+        }
+        break;
+
+    case POT_MUTATION:
+        mutate(RANDOM_MUTATION, "thrown potion of mutation", true, false, false, false, MUTCLASS_NORMAL);
+        contaminate_player(random_range(500, 900) * pct / 100, true);
+        affected = true;
+        break;
+
+    case POT_RESISTANCE:
+        you.increase_duration(DUR_RESISTANCE, max(6, (35 + random2(25)) * pct / 100));
+        affected = true;
+        break;
+
+    case POT_LIGNIFY:
+        if (transform(max(8, 30 * pct / 100), transformation::tree))
+        {
+            you.transform_uncancellable = true;
+            affected = true;
+        }
+        break;
+
+    case POT_EMPATHY:
+        you.increase_duration(DUR_EMPATHY, max(8, (35 + random2(20)) * pct / 100), 100);
+        affected = true;
+        break;
+
+    case POT_SOUL_AMBROSIA:
+        inc_hp(max(4, random_range(8, 16) * pct / 100));
+        inc_mp(max(2, random_range(3, 6) * pct / 100));
+        you.increase_duration(DUR_SOUL_AMBROSIA, max(4, (12 + random2(8)) * pct / 100), 50);
+        affected = true;
+        break;
+
+    case POT_CONCORD:
+        you.increase_duration(DUR_CONCORD, max(8, (30 + random2(20)) * pct / 100), 100);
+        affected = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return affected;
+}
+
+static bool _apply_monster_potion_splash(monster &mon, potion_type ptyp, int pct)
+{
+    if (!mon.alive())
+        return false;
+
+    switch (ptyp)
+    {
+    case POT_CURING:
+    {
+        const int heal = max(5, random_range(12, 24) * pct / 100);
+        const bool had_ench = mon.has_ench(ENCH_POISON)
+                              || mon.has_ench(ENCH_CONFUSION)
+                              || mon.has_ench(ENCH_SLOW)
+                              || mon.has_ench(ENCH_DAZED);
+        const bool healed = mon.heal(heal);
+        mon.del_ench(ENCH_POISON);
+        mon.del_ench(ENCH_CONFUSION);
+        mon.del_ench(ENCH_SLOW);
+        mon.del_ench(ENCH_DAZED);
+        if (healed || had_ench)
+            simple_monster_message(mon, " is splashed with curing liquid!");
+        return healed || had_ench;
+    }
+
+    case POT_HEAL_WOUNDS:
+    {
+        const int heal = max(10, random_range(30, 50) * pct / 100);
+        if (mon.heal(heal))
+        {
+            simple_monster_message(mon, " is splashed with healing elixir and its wounds close!");
+            return true;
+        }
+        return false;
+    }
+
+    case POT_HASTE:
+        if (!mon.stasis())
+        {
+            mon.add_ench(mon_enchant(ENCH_HASTE, &you, random_range(200, 350) * pct / 100));
+            simple_monster_message(mon, " begins moving faster!");
+            return true;
+        }
+        return false;
+
+    case POT_MIGHT:
+        mon.add_ench(mon_enchant(ENCH_MIGHT, &you, random_range(200, 350) * pct / 100));
+        simple_monster_message(mon, " looks stronger!");
+        return true;
+
+    case POT_BRILLIANCE:
+        mon.add_ench(mon_enchant(ENCH_EMPOWERED_SPELLS, &you, random_range(200, 350) * pct / 100));
+        simple_monster_message(mon, " magic is enhanced!", true);
+        return true;
+
+    case POT_ATTRACTION:
+        if (!mon.is_stationary())
+        {
+            blink_other_close(&mon, you.pos());
+            if (!mon.wont_attack())
+                behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+        return false;
+
+    case POT_ENLIGHTENMENT:
+    {
+        const int dur = random_range(200, 350) * pct / 100;
+        mon.add_ench(mon_enchant(ENCH_FLIGHT, &you, dur));
+        mon.add_ench(mon_enchant(ENCH_STRONG_WILLED, &you, dur));
+        simple_monster_message(mon, " is enlightened!");
+        return true;
+    }
+
+    case POT_POISON:
+        poison_monster(&mon, &you, pct >= 70 ? 2 : 1);
+        behaviour_event(&mon, ME_WHACK, &you);
+        return true;
+
+    case POT_STRONG_POISON:
+        poison_monster(&mon, &you, pct >= 70 ? 4 : 3);
+        behaviour_event(&mon, ME_WHACK, &you);
+        return true;
+
+    case POT_SLOWING:
+        if (!mon.stasis())
+        {
+            mon.add_ench(mon_enchant(ENCH_SLOW, &you, random_range(120, 220) * pct / 100));
+            simple_monster_message(mon, " seems to slow down.");
+            behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+        return false;
+
+    case POT_CANCELLATION:
+        debuff_monster(mon);
+        simple_monster_message(mon, " is splashed with cancelling liquid!");
+        if (!mon.wont_attack())
+            behaviour_event(&mon, ME_WHACK, &you);
+        return true;
+
+    case POT_AMBROSIA:
+        mon.add_ench(mon_enchant(ENCH_CONFUSION, &you, random_range(60, 120) * pct / 100));
+        mon.heal(max(4, mon.max_hit_points * pct / 500));
+        simple_monster_message(mon, " looks bewildered and invigorated!");
+        return true;
+
+    case POT_INVISIBILITY:
+        if (!mon.backlit())
+        {
+            mon.add_ench(mon_enchant(ENCH_INVIS, &you, random_range(180, 320) * pct / 100));
+            simple_monster_message(mon, " flickers and fades from view!");
+            return true;
+        }
+        return false;
+
+    case POT_MOONSHINE:
+        if (mon.holiness() & (MH_NATURAL | MH_DEMONIC))
+        {
+            mon.add_ench(mon_enchant(ENCH_CONFUSION, &you, random_range(60, 120) * pct / 100));
+            mon.add_ench(mon_enchant(ENCH_DAZED, &you, random_range(80, 150) * pct / 100));
+            simple_monster_message(mon, " stumbles dizzily!");
+            behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+        return false;
+
+    case POT_DECAY:
+        if (mon.res_negative_energy() < 3)
+        {
+            mon.drain(&you, false, max(10, 35 * pct / 100));
+            const int dam = max(2, roll_dice(2, 6) * pct / 100);
+            mon.hurt(&you, dam, BEAM_NEG);
+            if (mon.alive())
+            {
+                simple_monster_message(mon, " withers in the foul liquid!");
+                behaviour_event(&mon, ME_WHACK, &you);
+            }
+            return true;
+        }
+        return false;
+
+    case POT_WATER:
+        if (mon.has_ench(ENCH_STICKY_FLAME))
+        {
+            mon.del_ench(ENCH_STICKY_FLAME);
+            simple_monster_message(mon, " liquid flames are extinguished!", true);
+            return true;
+        }
+        return false;
+
+    case POT_MIST:
+        if (!mon.is_insubstantial())
+        {
+            mon.add_ench(mon_enchant(ENCH_INSUBSTANTIAL, &you, random_range(150, 280) * pct / 100));
+            simple_monster_message(mon, " becomes momentarily insubstantial!");
+            return true;
+        }
+        return false;
+
+    case POT_EXPERIENCE:
+        mon.heal(max(8, mon.max_hit_points / 3));
+        mon.add_ench(mon_enchant(ENCH_MIGHT, &you, random_range(200, 350) * pct / 100));
+        mon.add_ench(mon_enchant(ENCH_HASTE, &you, random_range(200, 350) * pct / 100));
+        simple_monster_message(mon, " surges with newfound power!");
+        return true;
+
+    case POT_MAGIC:
+        mon.del_ench(ENCH_ANTIMAGIC);
+        mon.add_ench(mon_enchant(ENCH_EMPOWERED_SPELLS, &you, random_range(150, 250) * pct / 100));
+        simple_monster_message(mon, " crackles with arcane energy!");
+        return true;
+
+    case POT_BERSERK_RAGE:
+        if (mon.can_go_berserk())
+        {
+            mon.go_berserk(false);
+            return true;
+        }
+        return false;
+
+    case POT_MUTATION:
+        if (mon.can_safely_mutate())
+        {
+            mon.malmutate(&you, "thrown potion of mutation");
+            behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+        return false;
+
+    case POT_RESISTANCE:
+        mon.add_ench(mon_enchant(ENCH_RESISTANCE, &you, random_range(200, 350) * pct / 100));
+        simple_monster_message(mon, " is coated in a protective sheen!");
+        return true;
+
+    case POT_LIGNIFY:
+        mon.add_ench(mon_enchant(ENCH_SLOW, &you, random_range(80, 150) * pct / 100));
+        simple_monster_message(mon, " is entangled in woody roots!");
+        behaviour_event(&mon, ME_WHACK, &you);
+        return true;
+
+    case POT_EMPATHY:
+        if (mon.wont_attack())
+            return mon.heal(max(5, random_range(10, 18) * pct / 100));
+        else
+        {
+            mon.add_ench(mon_enchant(ENCH_LOWERED_WL, &you, random_range(150, 250) * pct / 100));
+            mon.add_ench(mon_enchant(ENCH_DAZED, &you, random_range(60, 100) * pct / 100));
+            simple_monster_message(mon, " reels from psychic empathy!");
+            behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+
+    case POT_SOUL_AMBROSIA:
+        if (mon.wont_attack() && !(mon.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+        {
+            if (mon.heal(max(8, random_range(14, 24) * pct / 100)))
+            {
+                simple_monster_message(mon, " is invigorated by golden ambrosia!");
+                return true;
+            }
+            return false;
+        }
+        else if (mon.res_holy_energy() < 3)
+        {
+            const int dam = max(3, roll_dice(2, 9) * pct / 100);
+            simple_monster_message(mon, " is seared by golden soul ambrosia!");
+            mon.hurt(&you, dam, BEAM_HOLY);
+            if (mon.alive())
+                behaviour_event(&mon, ME_WHACK, &you);
+            return true;
+        }
+        return false;
+
+    case POT_CONCORD:
+        if (mon.wont_attack())
+        {
+            mon.add_ench(mon_enchant(ENCH_MIGHT, &you, random_range(150, 250) * pct / 100));
+            simple_monster_message(mon, " resonates with harmonic might!");
+        }
+        else
+        {
+            mon.add_ench(mon_enchant(ENCH_WEAK, &you, random_range(150, 250) * pct / 100));
+            simple_monster_message(mon, " is weakened by discordant resonance!");
+            behaviour_event(&mon, ME_WHACK, &you);
+        }
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+bool throw_potion(item_def &potion, dist *pre_target)
+{
+    ASSERT(potion.base_type == OBJ_POTIONS);
+
+    string reason;
+    if (!can_throw_potion(&reason))
+    {
+        mpr(reason);
+        return false;
+    }
+
+    if (god_forbids_item(potion))
+    {
+        mprf(MSGCH_GOD, "%s forbids the use of this item.",
+             uppercase_first(god_name(you.religion)).c_str());
+        return false;
+    }
+
+    if (!check_warning_inscriptions(potion, OPER_FIRE))
+        return false;
+
+    const bool has_chemist = you.wearing(OBJ_JEWELLERY, AMU_CHEMISTRY, false, true);
+    const int range = min((int)LOS_RADIUS, 5 + you.skill_rdiv(SK_THROWING) / 4);
+    const int splash_radius = 1;
+    const int base_pct = has_chemist ? 70 : 50;
+
+    dist targ;
+    if (pre_target)
+        targ = *pre_target;
+
+    if (you.confused())
+    {
+        do
+        {
+            targ.target.x = you.pos().x + random2(7) - 3;
+            targ.target.y = you.pos().y + random2(7) - 3;
+        } while (!in_bounds(targ.target) || cell_is_solid(targ.target));
+        targ.isValid = true;
+        targ.isCancel = false;
+    }
+    else if (targ.needs_targeting() || !in_bounds(targ.target))
+    {
+        targeter_smite hitfunc(&you, range, splash_radius, splash_radius, false);
+        direction_chooser_args args;
+        args.hitfunc = &hitfunc;
+        args.restricts = DIR_TARGET;
+        args.range = range;
+        args.self = confirm_prompt_type::none;
+        if (item_type_known(potion)
+            && _is_offensive_thrown_potion(static_cast<potion_type>(potion.sub_type)))
+        {
+            args.mode = TARG_HOSTILE;
+        }
+        else
+            args.mode = TARG_ANY;
+        args.top_prompt = make_stringf("Throw: %s (splashes 3x3 for %d%% effect)",
+                                       potion.name(DESC_INVENTORY, false).c_str(),
+                                       base_pct);
+        direction(targ, args);
+        if (pre_target)
+            *pre_target = targ;
+        if (!targ.isValid || targ.isCancel)
+            return false;
+    }
+
+    if (!in_bounds(targ.target)
+        || grid_distance(you.pos(), targ.target) > range
+        || !you.see_cell_no_trans(targ.target))
+    {
+        mpr("That is beyond your throwing range.");
+        return false;
+    }
+
+    if (cell_is_solid(targ.target))
+    {
+        canned_msg(MSG_UNTHINKING_ACT);
+        return false;
+    }
+
+    const bool was_known = item_type_known(potion);
+    const potion_type ptyp = static_cast<potion_type>(potion.sub_type);
+
+    mprf("You throw %s! It shatters on impact, splashing its contents!",
+         potion.name(DESC_A, false, false, false).c_str());
+
+    if (!was_known && you.see_cell(targ.target))
+    {
+        identify_item(potion);
+        mprf("It was %s.", article_a(potion.name(DESC_QUALNAME)).c_str());
+    }
+
+    draw_ring_animation(targ.target, splash_radius, potion.get_colour(), WHITE, true, 15);
+    noisy(4, targ.target, "You hear the shatter of breaking glass.", MID_PLAYER);
+
+    vector<coord_def> splash_cells;
+    for (explosion_iterator ei(targ.target, splash_radius); ei; ++ei)
+        if (in_bounds(*ei) && !cell_is_solid(*ei))
+            splash_cells.push_back(*ei);
+
+    auto in_splash = [&splash_cells](const coord_def &p) -> bool
+    {
+        for (const coord_def &c : splash_cells)
+            if (c == p)
+                return true;
+        return false;
+    };
+
+    if (ptyp == POT_MIST)
+    {
+        for (const coord_def &c : splash_cells)
+            place_cloud(CLOUD_MIST, c, random_range(4, 8), &you);
+    }
+
+    if (ptyp == POT_SOUL_AMBROSIA && party::is_enabled())
+        party::try_revive_downed_ghost_in_radius(targ.target, splash_radius, 25);
+
+    if (ptyp == POT_TRANSFUSION)
+    {
+        // Equalize HP% partially (base_pct%) across all living players and monsters in the splash
+        vector<int> player_slots;
+        vector<monster*> splashed_mons;
+        int total_hp_pct = 0;
+        int actor_count = 0;
+
+        if (party::is_enabled())
+        {
+            const player &active = party::get_player(party::active_slot());
+            for (int s = 0; s < party::player_count(); ++s)
+            {
+                player &p = party::get_player(s);
+                if (party::is_player_downed(s) || p.hp <= 0 || p.hp_max <= 0)
+                    continue;
+                if (p.where_are_you != active.where_are_you || p.depth != active.depth)
+                    continue;
+                if (in_splash(p.pos()))
+                {
+                    player_slots.push_back(s);
+                    total_hp_pct += (p.hp * 100) / p.hp_max;
+                    ++actor_count;
+                }
+            }
+        }
+        else if (in_splash(you.pos()) && you.hp > 0 && you.hp_max > 0)
+        {
+            player_slots.push_back(-1);
+            total_hp_pct += (you.hp * 100) / you.hp_max;
+            ++actor_count;
+        }
+
+        for (const coord_def &c : splash_cells)
+        {
+            monster *mon = monster_at(c);
+            if (!mon || !mon->alive() || mon->max_hit_points <= 0)
+                continue;
+            if (party::is_enabled() && party::is_proxy_monster(*mon))
+                continue;
+            splashed_mons.push_back(mon);
+            total_hp_pct += (mon->hit_points * 100) / mon->max_hit_points;
+            ++actor_count;
+        }
+
+        if (actor_count > 0)
+        {
+            const int avg_hp_pct = total_hp_pct / actor_count;
+            for (int s : player_slots)
+            {
+                if (s == -1 || (party::is_enabled() && s == party::active_slot()))
+                {
+                    const int cur_pct = (you.hp * 100) / max(1, you.hp_max);
+                    const int new_pct = min(100, max(10, cur_pct + (avg_hp_pct - cur_pct) * base_pct / 100 + 8));
+                    you.hp = min(you.hp_max, max(1, (you.hp_max * new_pct) / 100));
+                    inc_mp(max(2, you.max_magic_points / 10));
+                    you.redraw_hit_points = true;
+                    mpr("The crimson transfusion mist balances your vitality!");
+                }
+                else if (party::is_enabled())
+                {
+                    party::scoped_player_context ctx(s);
+                    const int cur_pct = (you.hp * 100) / max(1, you.hp_max);
+                    const int new_pct = min(100, max(10, cur_pct + (avg_hp_pct - cur_pct) * base_pct / 100 + 8));
+                    you.hp = min(you.hp_max, max(1, (you.hp_max * new_pct) / 100));
+                    inc_mp(max(2, you.max_magic_points / 10));
+                    party::sync_player_to_proxy(s);
+                    mprf(MSGCH_RECOVERY, "%s is splashed by the transfusion mist!",
+                         you.your_name.c_str());
+                }
+            }
+
+            for (monster *mon : splashed_mons)
+            {
+                const int cur_pct = (mon->hit_points * 100) / max(1, mon->max_hit_points);
+                const int new_pct = min(100, max(5, cur_pct + (avg_hp_pct - cur_pct) * base_pct / 100));
+                const int target_hp = min(mon->max_hit_points, max(1, (mon->max_hit_points * new_pct) / 100));
+                if (target_hp > mon->hit_points)
+                {
+                    mon->heal(target_hp - mon->hit_points);
+                    simple_monster_message(*mon, " absorbs vitality from the transfusion splash!");
+                }
+                else if (target_hp < mon->hit_points)
+                {
+                    simple_monster_message(*mon, " has its vitality siphoned by the transfusion splash!");
+                    mon->hurt(&you, mon->hit_points - target_hp, BEAM_NEG);
+                    if (mon->alive())
+                        behaviour_event(mon, ME_WHACK, &you);
+                }
+            }
+        }
+    }
+    else
+    {
+        // Apply splash to players (thrower and/or co-op teammates in splash)
+        if (party::is_enabled())
+        {
+            const player &active = party::get_player(party::active_slot());
+            for (int s = 0; s < party::player_count(); ++s)
+            {
+                player &p = party::get_player(s);
+                if (party::is_player_downed(s) || p.hp <= 0)
+                    continue;
+                if (p.where_are_you != active.where_are_you || p.depth != active.depth)
+                    continue;
+                if (!in_splash(p.pos()))
+                    continue;
+
+                if (s == party::active_slot())
+                {
+                    if (_apply_player_potion_splash(ptyp, base_pct, true))
+                        mpr("You are splashed by the shattering potion!");
+                }
+                else
+                {
+                    bool affected = false;
+                    {
+                        party::scoped_player_context ctx(s);
+                        affected = _apply_player_potion_splash(ptyp, base_pct, false);
+                    }
+                    if (affected)
+                    {
+                        party::sync_player_to_proxy(s);
+                        mprf(MSGCH_RECOVERY, "%s is splashed by your thrown potion!",
+                             p.your_name.c_str());
+                    }
+                }
+            }
+        }
+        else if (in_splash(you.pos()))
+        {
+            if (_apply_player_potion_splash(ptyp, base_pct, true))
+                mpr("You are splashed by the shattering potion!");
+        }
+
+        // Apply splash to monsters (both allied and hostile) in splash
+        for (const coord_def &c : splash_cells)
+        {
+            monster *mon = monster_at(c);
+            if (!mon || !mon->alive())
+                continue;
+            if (party::is_enabled() && party::is_proxy_monster(*mon))
+                continue;
+            _apply_monster_potion_splash(*mon, ptyp, base_pct);
+        }
+    }
+
+    if (has_chemist && you.magic_points < you.max_magic_points)
+    {
+        mpr("You extract a trace of magical energy from the alchemical reaction.");
+        inc_mp(random_range(2, 5));
+    }
+
+    practise_throwing(MI_STONE);
+    you.time_taken = you.attack_delay().roll();
+    you.turn_is_over = true;
+    dec_inv_item_quantity(potion.link, 1);
+
+    if (party::is_enabled())
+        party::sync_shared_state_from_active();
+
+    return true;
 }

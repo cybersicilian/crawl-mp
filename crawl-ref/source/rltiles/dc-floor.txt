@@ -1468,3 +1468,54 @@ ink_full WAVE_INK_FULL
 %shrink 1
 liquefaction1 LIQUEFACTION
 liquefaction2
+
+# Dry packed earth and sparse gravel in the Burrows.
+%sdir dngn/floor
+%shrink 0
+%weight 10
+floor_burrows0 FLOOR_BURROWS
+floor_burrows1
+floor_burrows2
+floor_burrows3
+
+# Honey reuses native liquid pixels with an amber tilegen palette.
+%resetcol
+%sdir dngn/water
+%weight 1
+%hue 190 38
+%lum 190 18
+%hue 191 38
+%lum 191 18
+%hue 192 38
+%lum 192 18
+%hue 193 38
+%lum 193 18
+%hue 194 38
+%lum 194 18
+%hue 195 38
+%lum 195 18
+%hue 196 38
+%lum 196 18
+%hue 197 38
+%lum 197 18
+%hue 198 38
+%lum 198 18
+%hue 199 38
+%lum 199 18
+%hue 200 38
+%lum 200 18
+%hue 202 38
+%lum 202 18
+%hue 203 38
+%lum 203 18
+%hue 204 38
+%lum 204 18
+%hue 205 38
+%lum 205 18
+%hue 206 38
+%lum 206 18
+%hue 207 38
+%lum 207 18
+shallow_water DNGN_SHALLOW_HONEY
+shallow_water2
+%resetcol

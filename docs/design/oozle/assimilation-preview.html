@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oozle player display · design preview</title>
+<link rel="stylesheet" href="../../../crawl-ref/source/webserver/game_data/static/styles/assimilation.css">
+<style>
+* { box-sizing: border-box; } body { margin: 0; background: #101515; color: #e5e2cd; font: 15px/1.5 system-ui,sans-serif; }
+main { max-width: 1040px; margin: 40px auto; padding: 0 24px; } h1 { font: 30px Georgia,serif; margin: 8px 0; }
+.eyebrow { color: #c5aa70; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; }
+p { max-width: 680px; color: #bdc8bc; } .layout { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 32px; margin-top: 24px; align-items: start; }
+.scene { min-height: 270px; display: grid; place-items: center; border: 1px solid #405248; background: radial-gradient(ellipse,#2b4031,#141c1b 65%); }
+.scene img { width: 220px; image-rendering: pixelated; } .party-card { background: #222724; border: 1px solid #6a7156; border-radius: 6px; overflow: hidden; }
+.identity { display: flex; align-items: center; gap: 12px; padding: 14px; background: #2a322a; } .identity img { width: 64px; image-rendering: pixelated; }
+.identity strong { font: 22px Georgia,serif; } .identity small { display: block; color: #b8c7b6; }
+.health { margin: 0 12px 8px; background: #385633; padding: 4px 8px; font-size: 12px; display: flex; justify-content: space-between; }
+.loadout { margin: 12px 6px; border-top: 1px solid #59604b; padding: 10px; } .loadout h2 { margin: 0 0 6px; font-size: 13px; color: #dfc58d; }
+.loadout > div { background: #1c221e; padding: 8px; border: 1px solid #485541; font-size: 13px; }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; } select,button { font: inherit; padding: 6px 10px; border: 1px solid #74806a; border-radius: 3px; background: #27382e; color: #e6ecd8; } input[type=range] { width: 110px; accent-color: #adc98a; }
+.controls label { display: flex; gap: 8px; align-items: center; } aside p { font-size: 13px; margin-bottom: 22px; }
+#notice { min-height: 3em; color: #efcc8a; } .legend { font-size: 13px; line-height: 1.7; }
+.legend strong { color: #e7ca8e; } .sample-note { color: #929f94; font-size: 12px; }
+@media(max-width:760px) { main { margin-top: 24px; padding: 0 16px; } .layout { grid-template-columns: 1fr; } .party-card { width: 100%; max-width: 380px; margin: auto; } }
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Design preview · sample data</div>
+<h1>Oozle memory, visible at a glance</h1>
+<p>Stored memory bundles live beside the player stats. The amber edge marks the next slot to fill or the oldest memory to replace. Equipped items show inherited properties with a dashed jade outline.</p>
+<div class="controls"><label>XL <select id="level"><option>1</option><option>3</option><option selected>7</option><option>13</option><option>19</option><option>25</option></select></label><label>Shapeshifting <input id="skill" type="range" min="0" max="27" step="0.1" value="9"><output id="skill-value">9.0</output></label><button id="advance" type="button" disabled>Advance one owner turn</button><button id="reset" type="button">Reset sample</button></div>
+<div class="layout"><aside>
+<div class="scene"><img src="sprite-preview-v1.png" alt="Expressive jade Oozle with amber nucleus and pseudopods"></div>
+<p id="notice" role="status">Each memory retains a full extracted bundle. Move Shapeshifting to see its numeric bonuses improve.</p>
+<div class="legend"><strong>One item, one memory.</strong> All extracted properties stay together until that memory is overwritten.<br><strong>Shapeshifting.</strong> Scales numeric strength at application; techniques such as cleaving remain intact.<br><strong>Self-improvement.</strong> Every absorbed property strengthens the ooze once, independently of equipped items.<br><strong>Fragile gel.</strong> rF− and −10% base HP; manufactured-weapon aptitudes are −2.</div>
+<p class="sample-note">This design preview renders the production HUD modules against sample state. It does not run the native game. Assimilation fills a random open slot; equipped gear is never passively consumed.</p>
+</aside><div id="party_hud_members"><article class="party-card is-controlled-card" data-party-slot="0"><div class="identity"><img src="sprite-preview-v1.png" alt=""><div><strong>Jade</strong><small id="identity">XL 7 Oozle Alchemist</small><small>rF− · −10% base HP</small></div></div><div class="health"><span>HP 39 / 39</span><span>MP 21 / 21</span></div><section class="loadout party-card-sections"><h2>Equipped · ring of strength</h2><div>Native: Strength +4</div></section></article></div></div>
+</main>
+<script src="../../../crawl-ref/source/webserver/static/scripts/contrib/jquery.js"></script>
+<script>
+var modules = {}, currentModule;
+window.define = function (dependencies, factory) { modules[currentModule] = factory.apply(null, dependencies.map(function (key) { return key === 'jquery' ? jQuery : modules[key]; })); };
+currentModule = './equipment-memory-ui';
+</script>
+<script src="../../../crawl-ref/source/webserver/game_data/static/equipment-memory-ui.js"></script>
+<script>
+modules['./frame-update'] = function (update) { var fn = function () {update();}; fn.cancel=function(){}; return fn; };
+modules['./workflow-actions'] = { controlledSlot:function(){return 0;},reason:function(){return '';},powerReason:function(){return '';},usePower:function(){window.startSample();} };
+currentModule = './assimilation-panel';
+</script>
+<script src="../../../crawl-ref/source/webserver/game_data/static/assimilation-panel.js"></script>
+<script>
+(function ($) {
+    'use strict';
+    var thresholds=[1,3,7,13,19,25],serial=3,remaining=0;
+    var memories=[
+        {id:1,family:'Rings',source:'artefact ring',method:'Assimilated',effects:[{name:'rF+',raw:1,qualitative:true},{name:'Str',raw:6}]},
+        {id:2,family:'Armour',source:'plate armour',method:'Assimilated',effects:[{name:'AC',raw:10}]},
+        {id:3,family:'Weapons',source:'broad axe of flaming',method:'Assimilated',effects:[{name:'Damage',raw:12},{name:'Slay',raw:3},{name:'Cleaving',raw:1,qualitative:true},{name:'Flaming',raw:1,qualitative:true}]}
+    ];
+    function eligibleSlots(count) {
+        var open=[];
+        for(var index=0;index<count;index++) if(!memories[index]) open.push(index);
+        if(open.length) return open;
+        return [memories.slice(0,count).reduce(function(oldest,entry,index){return entry.id<memories[oldest].id ? index : oldest;},0)];
+    }
+    function draw() {
+        var xl=Number($('#level').val()),skill=Math.round(Number($('#skill').val())*10),quality=35+Math.floor(skill*65/270);
+        var count=thresholds.filter(function(level){return level<=xl;}).length,eligible=eligibleSlots(count);
+        function effectData(effect,memory) {
+            var value=effect.qualitative ? effect.raw : Math.max(1,Math.floor(effect.raw*quality/100));
+            return {key:effect.name,id:memory.id,label:effect.name+(effect.qualitative ? '' : ' +'+value),source_label:effect.name+(effect.qualitative ? '' : ' +'+effect.raw),value:value,source_value:effect.raw,family:memory.family,method:memory.method,scope:'body'};
+        }
+        function memoryData(memory) {return memory && Object.assign({},memory,{scope:'body',effects:memory.effects.map(function(effect){return effectData(effect,memory);})});}
+        var live=memories.slice(0,count).filter(Boolean).map(memoryData);
+        function bodyEffects() {
+            var selected={}; live.forEach(function(memory){memory.effects.forEach(function(effect){
+                if(!selected[effect.key] || selected[effect.key].value<=effect.value) selected[effect.key]=effect;
+            });}); return Object.values(selected);
+        }
+        var data={version:3,capacity:count,used:live.length,numeric_percent:quality,shapeshifting_tenths:skill,next_xl:thresholds[count]||0,
+            slots:thresholds.map(function(level,index){return {slot:index,unlock_xl:level,unlocked:index<count,next:eligible.includes(index),memory:memoryData(memories[index])};}),
+            body_properties:bodyEffects(),work:{remaining:remaining,total:5,source:'artefact armour'}};
+        window.crawl_party={state:{members:[{slot:0,abilities:[{name:'Assimilate',id:1,hotkey:'a'}],equipment_profile:{assimilation:data}}]}};
+        modules['./assimilation-panel'].mount();
+        $('#skill-value').text((skill/10).toFixed(1)); $('#identity').text('XL '+xl+' Oozle Alchemist');
+        $('#advance').prop('disabled',remaining===0);
+    }
+    window.startSample=function(){remaining=4;$('#notice').text('Sample: one item chosen. All its extracted properties will share one memory slot.');draw();};
+    $('#advance').on('click',function(){
+        if(remaining>0 && --remaining===0){
+            var count=thresholds.filter(function(level){return level<=Number($('#level').val());}).length;
+            var eligible=eligibleSlots(count);
+            memories[eligible[Math.floor(Math.random()*eligible.length)]]={id:++serial,family:'Armour',source:'artefact armour',method:'Assimilated',effects:[{name:'AC',raw:12},{name:'Str',raw:4},{name:'rF+',raw:1,qualitative:true}]};
+            $('#notice').text('One item consumed; all three extracted properties now share one memory slot.');
+        }
+        draw();
+    });
+    $('#level,#skill').on('input change',draw); $('#reset').on('click',function(){location.reload();});draw();
+})(jQuery);
+</script></body></html>

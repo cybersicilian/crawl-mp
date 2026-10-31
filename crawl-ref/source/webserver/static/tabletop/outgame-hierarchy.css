@@ -1,0 +1,54 @@
+/* Reading order and controls for the lobby; game and account routes remain native. */
+#lobby.has-chapter-index {
+    --lobby-reading-ink: var(--ui-ink, var(--tt-folio-ink));
+    --lobby-reading-muted: var(--ui-quiet, var(--tt-folio-muted));
+    --lobby-reading-rule: var(--ui-rule, var(--tt-folio-rule));
+}
+#lobby .lobby-home-copy { padding: 24px 30px; }
+#lobby #lobby_home h1 { margin: 0 0 8px; font-size: clamp(30px, 3vw, 40px); }
+#lobby .lobby-home-intro { margin-bottom: 16px; line-height: 1.5; }
+#lobby .lobby-home-art span { font-size: 15px; }
+#lobby .lobby-recent-heading { align-items: center; }
+#lobby .lobby-recent-heading h2 { font-size: 24px; }
+#lobby .lobby-recent-entry { padding: 14px 0; }
+#lobby .lobby-daily-broth { gap: 10px; }
+#lobby .lobby-daily-broth-title { font-size: 19px; }
+#lobby .lobby-account-settings:empty { display: none; }
+#lobby .lobby-account-settings { border-bottom: 1px solid var(--workspace-rule); padding-bottom: 5px; margin-bottom: 5px; }
+#lobby .lobby-account-settings-button {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    padding: 10px 12px; border: 0; border-radius: 2px;
+    background: transparent; color: #3c3226; font: 12px/1.4 var(--tt-font-ui);
+}
+#lobby .lobby-account-settings-button:hover { background: var(--ui-page-inset, #eadec5); }
+#lobby.has-party-room #party_lobby_panel > .party-hall-header #btn_create_party_room,
+#lobby.has-party-room #party_lobby_panel > .party-hall-header #party_turn_pacing_badge { display: none; }
+#lobby #party_room_title_text { font-weight: 700; color: var(--lobby-reading-ink); }
+#lobby.has-chapter-index :is(#party_lobby_panel, #coop_chronicle_panel, #game_library_panel, #lobby_body, #play_now, #lobby_friends_panel, #lobby_rooms_panel) {
+    line-height: 1.5;
+}
+#lobby.has-chapter-index :is(#lobby_friends_panel, #lobby_rooms_panel) {
+    border-radius: 3px; border-color: var(--lobby-reading-rule);
+}
+#lobby.has-chapter-index :is(.lobby-discovery-header h1, #lobby_body h2, .lobby-discovery-rooms h2) {
+    color: var(--lobby-reading-ink); letter-spacing: -.02em;
+}
+#lobby :is(.lobby-search input, .library-search) { min-height: 44px; }
+#lobby :is(.lobby-chapter-link, .lobby-account-settings-button, .lobby-filter-group button, .lobby-live-details):focus-visible {
+    outline: 2px solid currentColor; outline-offset: 3px;
+}
+@media (max-width: 760px) {
+    #lobby .lobby-home-copy { padding: 22px 20px; }
+    #lobby .lobby-recent, #lobby .lobby-daily-broth { padding: 20px; }
+    #lobby .lobby-recent-heading { align-items: baseline; }
+}
+@media (forced-colors: active) {
+    #lobby .lobby-account-settings-button:focus-visible { outline: 2px solid Highlight; }
+}
+
+/* Signed-in lobby: a custom server banner reads as a quiet notice, not a heading. */
+#lobby.has-chapter-index > #banner:not(.default-welcome-banner):not(:empty) {
+    max-width: 760px; margin: 0 auto var(--tt-space-4, 16px); padding: 8px 12px;
+    border: 1px solid var(--tt-rule, #d89b483d); border-left-width: 3px; border-radius: 5px;
+    background: #d89b4812; color: #e8d9b6; font: 12px/1.5 var(--tt-font-ui); text-align: left;
+}

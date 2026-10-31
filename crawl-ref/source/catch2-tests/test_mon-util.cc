@@ -5,6 +5,34 @@
 #include "mon-enum.h"
 #include "monster-type.h"
 #include "mon-util.h"
+#include "mon-pick.h"
+#include "mon-pick-data.h"
+#include "mon-place.h"
+
+TEST_CASE("Random populations contain repeatable spawnable monsters", "[mon-population]")
+{
+    init_monsters();
+    const auto check = [](const vector<pop_entry>& entries)
+    {
+        for (const auto& entry : entries)
+        {
+            // Empty slots and deferred selectors (such as Zot's orb) are valid.
+            if (entry.value == MONS_NO_MONSTER || needs_resolution(entry.value))
+                continue;
+            CAPTURE(entry.value, mons_class_name(entry.value));
+            REQUIRE_FALSE(invalid_monster_type(entry.value));
+            CHECK_FALSE(mons_is_unique(entry.value));
+            CHECK_FALSE(mons_class_flag(entry.value, M_CANT_SPAWN));
+        }
+    };
+    for (const auto& entries : population)
+        check(entries);
+    for (const auto& entries : population_water)
+        check(entries);
+    for (const auto& entries : population_lava)
+        check(entries);
+    check(pop_generic_late_zombie);
+}
 
 TEST_CASE("mons_is_removed() returns correct values", "[single-file]")
 {

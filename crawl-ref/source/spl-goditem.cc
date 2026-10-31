@@ -4,6 +4,9 @@
 **/
 
 #include "AppHdr.h"
+#include "eldritch.h"
+#include "oozle-memory-effects.h"
+#include "bloodcraft.h"
 
 #include "spl-goditem.h"
 
@@ -311,7 +314,8 @@ static vector<duration_type> _dispellable_player_buffs()
         if (dur <= 0 || !duration_dispellable((duration_type) i))
             continue;
         if (i == DUR_TRANSFORMATION && (you.form == you.default_form
-                                        || you.form == transformation::slaughter))
+                                        || you.form == transformation::slaughter
+                                        || you.form == transformation::shadow))
         {
             continue;
         }
@@ -509,7 +513,9 @@ bool monster_is_debuffable(const monster &mon)
 {
     vector<enchant_type> buffs;
     _dispellable_monster_buffs(mon, buffs);
-    return !buffs.empty();
+    return !buffs.empty() || bloodcraft::bound(mon)
+        || bloodcraft::anchored(mon) || bloodcraft::blinded(mon)
+        || bloodcraft::accuracy_penalty(mon) > 0;
 }
 
 bool monster_can_be_unravelled(const monster& mon)
@@ -526,7 +532,8 @@ void debuff_monster(monster &mon)
 {
     vector<enchant_type> buffs;
     _dispellable_monster_buffs(mon, buffs);
-    if (buffs.empty())
+    const bool blood_curses = bloodcraft::dispel_curses(mon);
+    if (buffs.empty() && !blood_curses)
         return;
 
     for (enchant_type buff : buffs)
@@ -856,7 +863,8 @@ dice_def beogh_smiting_dice(int pow, bool allow_random)
         return dice_def(3, pow / 8);
 }
 
-spret cast_smiting(int pow, monster* mons, bool fail)
+spret cast_smiting(int pow, monster* mons, bool fail, int damage_percent,
+                   bool beogh_smite)
 {
     if (mons == nullptr)
     {
@@ -868,7 +876,8 @@ spret cast_smiting(int pow, monster* mons, bool fail)
 
     if (mons->friendly())
     {
-        mpr("Beogh will not strike down an ally of the cause.");
+        mpr(beogh_smite ? "Beogh will not strike down an ally of the cause."
+                        : "You cannot smite an ally.");
         return spret::abort;
     }
 
@@ -877,7 +886,7 @@ spret cast_smiting(int pow, monster* mons, bool fail)
         return spret::abort;
 
     // No direct divine intervention during apostle challenges
-    if (mons->has_ench(ENCH_TOUCH_OF_BEOGH))
+    if (beogh_smite && mons->has_ench(ENCH_TOUCH_OF_BEOGH))
     {
         simple_god_message(" booms: This is a trial of mortal prowess."
                            " Fight with your own strength!");
@@ -890,14 +899,15 @@ spret cast_smiting(int pow, monster* mons, bool fail)
     set_attack_conducts(conducts, *mons, you.aware_of(*mons));
 
     // damage at 0 Invo ranges from 9-12 (avg 10), to 9-72 (avg 40) at 27.
-    int damage = 6 + beogh_smiting_dice(pow).roll();
+    int damage = (6 + beogh_smiting_dice(pow).roll()) * damage_percent / 100;
 
     mprf("You smite %s%s",
          mons->name(DESC_THE).c_str(),
          attack_strength_punctuation(damage).c_str());
 
     behaviour_event(mons, ME_ANNOY, &you);
-    mons->hurt(&you, damage, BEAM_MISSILE, KILLED_BY_BEOGH_SMITING);
+    mons->hurt(&you, damage, BEAM_MISSILE,
+               beogh_smite ? KILLED_BY_BEOGH_SMITING : KILLED_BY_MONSTER);
 
     if (mons->alive())
     {
@@ -1023,6 +1033,8 @@ int torment_player(const actor *attacker, torment_source_type taux)
         if (you.has_mutation(MUT_TORMENT_RESISTANCE))
             hploss /= 2;
     }
+
+    hploss -= hploss * eldritch::torment_reduction() / 100;
 
     // Kiku protects you from torment to a degree.
     const bool kiku_shielding_player = player_kiku_res_torment();
@@ -1210,7 +1222,7 @@ void setup_cleansing_flame_beam(bolt &beam, int pow,
     else if (attacker->is_player())
     {
         beam.thrower   = KILL_YOU;
-        beam.source_id = MID_PLAYER;
+        beam.source_id = you.mid;
         beam.attitude  = ATT_FRIENDLY;
     }
     else
@@ -1262,19 +1274,12 @@ void majin_bo_vampirism(monster &mon, int damage)
 void dreamshard_shatter()
 {
     ASSERT(you.unrand_equipped(UNRAND_DREAMSHARD_NECKLACE));
-    for (player_equip_entry& entry: you.equipment.items)
-    {
-        if (entry.slot != SLOT_AMULET)
-            continue;
-        item_def& item = entry.get_item();
-        if (is_unrandom_artefact(item, UNRAND_DREAMSHARD_NECKLACE))
-        {
-            you.equipment.remove(item);
-            item.unrand_idx = UNRAND_DREAMDUST_NECKLACE;
-            you.equipment.add(item, SLOT_AMULET);
-            break;
-        }
-    }
+    item_def* item = oozle::unrand_source(UNRAND_DREAMSHARD_NECKLACE);
+    ASSERT(item);
+    const bool absorbed = oozle::is_effect_source(item);
+    if (!absorbed) you.equipment.remove(*item);
+    item->unrand_idx = UNRAND_DREAMDUST_NECKLACE;
+    if (!absorbed) you.equipment.add(*item, SLOT_AMULET);
     mpr("Your necklace shatters, unleashing a wave of protective dreams!");
     mark_milestone("dreamshard", "was saved by the dreamshard necklace!");
     take_note(NOTE_DREAMSHARD);

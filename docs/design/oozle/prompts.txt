@@ -1,0 +1,24 @@
+Built-in imagegen: concept-v1.png
+
+Use case: stylized-concept
+Asset type: concept sheet for a new playable Dungeon Crawl Stone Soup species named Oozle.
+Primary request: design a sentient ooziform adventurer. Landscape concept sheet on warm charcoal parchment, with one large full-body character on the left and three smaller silhouette studies on the right: resting puddle, raised adventuring posture, reaching with a pseudopod.
+Subject: a translucent jade and teal gelatinous creature, broadly pear-shaped with a puddled lower body and no legs or bones. It raises a small rounded head and two temporary arms out of the same continuous ooze. Two simple dark eye spots give it quiet curiosity, no mouth needed. A small amber nucleus glows visibly inside its torso. It holds a simple iron short sword within one pseudopod and a small plain wooden round shield within the other. A ring and amulet may be suspended visibly in its gel. No clothing, helmets, armour, boots or gloves.
+Style: hand-painted dark fantasy roguelike bestiary illustration, restrained color palette, appealing but unusual and dungeon-worn, readable silhouette. Watery translucency and thick jelly edges, not neon or plastic. Secondary studies include a small crisp pixel-art interpretation suitable for a 32x32 game tile, shown enlarged with square pixels.
+Text: only the heading 'OOZLE' and subtitle 'Ooziform adventurer'. No other text.
+Constraints: keep the amber nucleus and flowing puddle base prominent. No humanoid legs, no tentacle octopus anatomy, no skulls, no slime-covered human, no cartoon emoji, no excessive sparkles. This is a concept exploration, not a screenshot.
+
+Built-in imagegen: sprite-source-v1.png
+Reference: concept-v1.png; transparent_background=true.
+
+Use case: stylized-concept. Asset type: native 32-by-32 Dungeon Crawl Stone Soup player-base sprite derived from the Oozle concept sheet just generated. Create ONE standalone sprite on a truly transparent square canvas. Preserve the selected jade/teal translucent ooze, visible amber nucleus, two small dark eye spots, two temporary arm-like pseudopods, and puddle base. The creature has NO legs and NO feet. Use a front three-quarter slightly top-down roguelike player-tile view. Neutral adventuring stance, both pseudopods empty and held near the body's sides, ready for separate weapon overlays. No weapons, shield, jewellery, clothing, floor, cast shadow, text or frame. IMPORTANT: this must look like an authentic tiny 32x32 pixel-art tile, rendered as a clean nearest-neighbor enlargement of a 32x32 grid, with only a small palette and coarse square pixels, no fine-detail illustration or antialiasing. Fit the entire sprite inside approximately 26x27 logical pixels, centered with at least 3 transparent logical pixels left and right and 2 above and below. Dark emerald outline, jade gel midtones, pale mint highlights on the upper left, amber-gold nucleus clearly visible at belly height. Keep the two eye spots readable and the lower silhouette a flowing puddle, never two humanoid legs. Single sprite only.
+
+Mechanical import (from repository root):
+
+ffmpeg -hide_banner -loglevel error -threads 1 -i docs/design/oozle/sprite-source-v1.png -vf scale=32:32:flags=neighbor -frames:v 1 -threads 1 crawl-ref/source/rltiles/player/base/oozle.png
+
+Assimilate ability icon (2026-10-20, built-in imagegen mode):
+Single strict 32-pixel-grid DCSS pixel-art icon: jade ooze with amber core
+engulfing a small silver sword and gold ring, simple bold dark-outlined
+silhouettes, transparent margin, no frame, text, background, blur or watermark.
+Master: assimilation-icon-source.png. Native sprite: ../../../crawl-ref/source/rltiles/gui/abilities/assimilate.png.

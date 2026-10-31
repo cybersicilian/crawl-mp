@@ -1,0 +1,7 @@
+{
+  "creationTimestamp": "2026-10-26T15:33:53.547-07:00",
+  "id": "6490312907227818942",
+  "name": "dcss-pre-elf3-20261026t2237",
+  "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+  "status": "READY"
+}

@@ -1,0 +1,2573 @@
+{
+  "assetErrors": [],
+  "assetHashes": {
+    "chain-view.js": "fd222afe9a799f113e6f1983d785e52335b2bd0319e99149f602e3438d7c9875",
+    "dungeon_renderer.js": "e18f82395bdd5edc52bbb5eab12d65262b9be556ee36789522d6778aa0bbfa28",
+    "party-card-status.js": "b0d83e0ac1a006b75e62c0730dfbfabe990607cd4010633ca3fb187249ed6ab5",
+    "workflow-actions.js": "91340682c1482db954ed4db6f7426215b9561fa9d64e93447ae96ba325ab3e3a"
+  },
+  "checks": [
+    "Ordinary fresh Chain Devil and Eldritch games expose native powers and visible Defiance",
+    "All ten served Vellum/species/ability sprites match the finished native pixels exactly",
+    "Actual native map dolls and initial ability tiles select the new species artwork",
+    "Both human owners take real native actions independently",
+    "Native save/resume preserves new species, stable identities, resources, positions and turns",
+    "Both native race sprites remain correct after save/resume"
+  ],
+  "contentArt": {
+    "ABILITY_CHAIN_LASH": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10617,
+      "info": {
+        "ex": 134,
+        "ey": 1110,
+        "h": 32,
+        "ox": 1,
+        "oy": 2,
+        "sx": 104,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "011b5a5f480893897a05d946604aa8c0525cd16a72bcd5f0f500bd705512b476"
+    },
+    "ABILITY_ELDER_RITE": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10622,
+      "info": {
+        "ex": 276,
+        "ey": 1112,
+        "h": 32,
+        "ox": 0,
+        "oy": 1,
+        "sx": 246,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "c4e4ca3a8e70581bf7d16b2c8a6648568122baeebb37269ba7ca5d2ffa13f098"
+    },
+    "ABILITY_PINNING_CHAIN": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10619,
+      "info": {
+        "ex": 186,
+        "ey": 1103,
+        "h": 32,
+        "ox": 3,
+        "oy": 6,
+        "sx": 160,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "5e9b3f89ae0bbb8cc22301b3df6f9c6cfa0028ec07ff4d4da3e09a36588d3ae5"
+    },
+    "ABILITY_PROFANE_ALTAR": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10621,
+      "info": {
+        "ex": 246,
+        "ey": 1112,
+        "h": 32,
+        "ox": 3,
+        "oy": 1,
+        "sx": 218,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "c02f03c76de9a2001ea302dc734e6ea990f00fbb1b4e57475e57bd44647dcd97"
+    },
+    "ABILITY_REEL_IN": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10618,
+      "info": {
+        "ex": 160,
+        "ey": 1105,
+        "h": 32,
+        "ox": 3,
+        "oy": 4,
+        "sx": 134,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "f6965cdd90237c93ba54cb26ac75c1cd0353a6e663e72e0ab3bc87a1d84f52b9"
+    },
+    "ABILITY_RELEASE_CHAIN": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10620,
+      "info": {
+        "ex": 218,
+        "ey": 1097,
+        "h": 32,
+        "ox": 0,
+        "oy": 9,
+        "sx": 186,
+        "sy": 1081,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "1f7fa5dca38ebcd0f36deadbf569547cf0f86bec984b0a5e6cabad57333e5460"
+    },
+    "ABILITY_VELLUM_WEAVE": {
+      "atlas_sha256": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+      "index": 10150,
+      "info": {
+        "ex": 291,
+        "ey": 760,
+        "h": 32,
+        "ox": 2,
+        "oy": 2,
+        "sx": 263,
+        "sy": 732,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "63462a13acf3fba393da2dc8765d9bf4bdf9ed122d3e094b4f1d293378d98450"
+    },
+    "BASE_CHAIN_DEVIL": {
+      "atlas_sha256": "fca50c005f28f6f086fa3c875b7a80c09ea3494ba9ace45ffd4cf06162baab5f",
+      "index": 8066,
+      "info": {
+        "ex": 62,
+        "ey": 2304,
+        "h": 32,
+        "ox": 6,
+        "oy": 2,
+        "sx": 42,
+        "sy": 2275,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "549734d9dff6ea5e94ef8c5db9c8d6dc8b2f77841a63ea7b739bf6bb6396c2d8"
+    },
+    "BASE_ELDRITCH": {
+      "atlas_sha256": "fca50c005f28f6f086fa3c875b7a80c09ea3494ba9ace45ffd4cf06162baab5f",
+      "index": 8067,
+      "info": {
+        "ex": 82,
+        "ey": 2303,
+        "h": 32,
+        "ox": 6,
+        "oy": 4,
+        "sx": 62,
+        "sy": 2275,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "2be16138f9fae12b4c01743137a6371750d5136870ed12d81911c10c827669ba"
+    },
+    "DNGN_ALTAR_VELLUM": {
+      "atlas_sha256": "4c33bf0875d451d2d5c29a6eccc58f9f7a4e559a2ac308b515457eb0f64c3531",
+      "index": 3544,
+      "info": {
+        "ex": 256,
+        "ey": 800,
+        "h": 32,
+        "ox": 0,
+        "oy": 0,
+        "sx": 224,
+        "sy": 768,
+        "w": 32
+      },
+      "mismatches": 0,
+      "source_sha256": "1b99e070fc63ed672f7087266096ca52295dd8b651e3ee38a71f7083294deb5e"
+    }
+  },
+  "errors": [],
+  "gameId": "227d5c49-1be9-417d-b9c8-5b4b3655c3c4",
+  "nativeDollLayers": {
+    "BASE_CHAIN_DEVIL": 8066,
+    "BASE_ELDRITCH": 8067
+  },
+  "native_sha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+  "observedDollLayers0nativeDollLayers": [
+    8068,
+    8067,
+    8144,
+    8186,
+    8066,
+    8148,
+    8264,
+    8605,
+    8967
+  ],
+  "observedDollLayers0resumedDollLayers": [
+    8068,
+    8067,
+    8144,
+    8186,
+    8066,
+    8148,
+    8264,
+    8605,
+    8967
+  ],
+  "observedDollLayers1nativeDollLayers": [
+    8068,
+    8067,
+    8144,
+    8186,
+    8066,
+    8148,
+    8264,
+    8605,
+    8967
+  ],
+  "observedDollLayers1resumedDollLayers": [
+    8068,
+    8067,
+    8144,
+    8186,
+    8066,
+    8148,
+    8264,
+    8605,
+    8967
+  ],
+  "passed": true,
+  "phase": "linux-private",
+  "release": "/opt/dcss/releases/20261023T220119Z-content",
+  "requestId": "dc953cb0586d4ac8471fa412437c32855ed03b9430f0f549f2dd8988d012e91c",
+  "resumedDollLayers": {
+    "BASE_CHAIN_DEVIL": 8066,
+    "BASE_ELDRITCH": 8067
+  },
+  "saved": [
+    {
+      "abilities": [
+        {
+          "blocked_reason": "",
+          "cost": "None",
+          "desc": "Strike one visible hostile within three tiles with a bodily chain. A successful physical hit deals 1d(5 + XL/3) damage before armour and may tether an eligible body, even if armour absorbs all the damage. The original distance becomes the chain's maximum length; the foe can move within it and still attack or cast. Lash lasts four, six or eight standard turns at XL1, XL7 or XL13. One chain can be maintained at a time. A miss or ended hold begins five turns of recovery.\n\nLiving chains ready.\nRange: 3\n\nThis ability costs: nothing.",
+          "fail": "0%",
+          "hotkey": "f",
+          "id": 1516,
+          "is_god": false,
+          "name": "Chain Lash",
+          "tile": 10617
+        },
+        {
+          "blocked_reason": "You hold no chain.",
+          "cost": "Instant",
+          "desc": "Release your one living chain instantly and begin the same five-turn recovery as any other ending. Walking beyond a mobile tether's reach releases it automatically. Releasing never resets or shortens recovery.\n\nLiving chains ready.\nRange: N/A\n\nThis ability costs: nothing.\nThis ability is instantaneous.\nYou can use this ability even if confused.",
+          "fail": "0%",
+          "hotkey": "g",
+          "id": 1519,
+          "is_god": false,
+          "name": "Release Chain",
+          "tile": 10620
+        }
+      ],
+      "abilities_known": true,
+      "ac": 6,
+      "actions": [],
+      "actions_known": true,
+      "active": true,
+      "activity": "",
+      "adjusted_noise": 0,
+      "alive": true,
+      "ally_kill_total": 0,
+      "atk_aut": 14,
+      "aut_clock": 20,
+      "aut_lead": 0,
+      "auto_training": true,
+      "can_act": true,
+      "chain_summary": "Living chains ready.",
+      "dex": 10,
+      "dex_max": 10,
+      "elapsed_aut": 10,
+      "equipment_profile": {
+        "feet": "feet",
+        "form": "",
+        "hands": "hands",
+        "items": [
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 28,
+                  "ox": 2,
+                  "oy": 2,
+                  "sx": 503,
+                  "sy": 1411,
+                  "w": 28,
+                  "ymax": 32
+                },
+                {
+                  "h": 25,
+                  "ox": 2,
+                  "oy": 3,
+                  "sx": 871,
+                  "sy": 192,
+                  "w": 29,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": true,
+            "fits": true,
+            "hands": 1,
+            "inv_slot": 0,
+            "reason": "",
+            "required_slots": [
+              [
+                "weapon",
+                "weapon_offhand"
+              ]
+            ],
+            "slot_types": [
+              "weapon",
+              "weapon_offhand"
+            ]
+          },
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 28,
+                  "ox": 2,
+                  "oy": 2,
+                  "sx": 503,
+                  "sy": 1411,
+                  "w": 28,
+                  "ymax": 32
+                },
+                {
+                  "h": 27,
+                  "ox": 3,
+                  "oy": 4,
+                  "sx": 513,
+                  "sy": 352,
+                  "w": 27,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": true,
+            "fits": true,
+            "inv_slot": 1,
+            "reason": "",
+            "required_slots": [
+              [
+                "body"
+              ]
+            ],
+            "slot_types": [
+              "body"
+            ]
+          },
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 28,
+                  "ox": 2,
+                  "oy": 2,
+                  "sx": 503,
+                  "sy": 1411,
+                  "w": 28,
+                  "ymax": 32
+                },
+                {
+                  "h": 19,
+                  "ox": 6,
+                  "oy": 7,
+                  "sx": 120,
+                  "sy": 415,
+                  "w": 23,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": true,
+            "fits": true,
+            "inv_slot": 2,
+            "reason": "",
+            "required_slots": [
+              [
+                "offhand",
+                "weapon_offhand"
+              ]
+            ],
+            "slot_types": [
+              "offhand",
+              "weapon_offhand"
+            ]
+          },
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 27,
+                  "ox": 7,
+                  "oy": 2,
+                  "sx": 586,
+                  "sy": 602,
+                  "w": 25,
+                  "ymax": 32
+                },
+                {
+                  "h": 24,
+                  "ox": 13,
+                  "oy": 7,
+                  "sx": 154,
+                  "sy": 634,
+                  "w": 18,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": false,
+            "inv_slot": 52
+          }
+        ],
+        "portrait": {
+          "layers": [
+            {
+              "h": 9,
+              "ox": 13,
+              "oy": 23,
+              "sx": 82,
+              "sy": 2275,
+              "w": 15,
+              "ymax": 32
+            },
+            {
+              "h": 29,
+              "ox": 6,
+              "oy": 2,
+              "sx": 42,
+              "sy": 2275,
+              "w": 20,
+              "ymax": 32
+            },
+            {
+              "h": 16,
+              "ox": 8,
+              "oy": 16,
+              "sx": 838,
+              "sy": 2275,
+              "w": 16,
+              "ymax": 32
+            },
+            {
+              "h": 17,
+              "ox": 8,
+              "oy": 8,
+              "sx": 397,
+              "sy": 2334,
+              "w": 16,
+              "ymax": 32
+            },
+            {
+              "h": 20,
+              "ox": 0,
+              "oy": 2,
+              "sx": 760,
+              "sy": 2419,
+              "w": 10,
+              "ymax": 32
+            },
+            {
+              "h": 9,
+              "ox": 21,
+              "oy": 13,
+              "sx": 754,
+              "sy": 2515,
+              "w": 8,
+              "ymax": 32
+            }
+          ],
+          "texture": "player"
+        },
+        "restrictions": [],
+        "size": "medium",
+        "slots": [
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "inv_slot": 0,
+            "key": "weapon:0",
+            "label": "Weapon",
+            "name": "+0 war axe",
+            "reason": "",
+            "shared": false,
+            "state": "equipped",
+            "support_only": false,
+            "type": "weapon"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "inv_slot": 2,
+            "key": "offhand:0",
+            "label": "Offhand",
+            "name": "+0 buckler",
+            "reason": "",
+            "shared": false,
+            "state": "equipped",
+            "support_only": false,
+            "type": "offhand"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "inv_slot": 1,
+            "key": "body:0",
+            "label": "Body Armour",
+            "name": "+0 scale mail",
+            "reason": "",
+            "shared": false,
+            "state": "equipped",
+            "support_only": false,
+            "type": "body"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "head:0",
+            "label": "Helmet",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "head"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "hands:0",
+            "label": "Gloves",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "hands"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "feet:0",
+            "label": "Boots",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "feet"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "barding:0",
+            "label": "Barding",
+            "reason": "You can't fit into that!",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "barding"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "cloak:0",
+            "label": "Cloak",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "cloak"
+          },
+          {
+            "alternatives": [],
+            "capacity": 2,
+            "key": "ring:0",
+            "label": "Ring 1",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "ring"
+          },
+          {
+            "alternatives": [],
+            "capacity": 2,
+            "key": "ring:1",
+            "label": "Ring 2",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "ring"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "amulet:0",
+            "label": "Amulet",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "amulet"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "gizmo:0",
+            "label": "Gizmo",
+            "reason": "You lack an exoframe to install that in.",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "gizmo"
+          },
+          {
+            "alternatives": [
+              "weapon",
+              "offhand"
+            ],
+            "capacity": 0,
+            "key": "weapon_offhand:0",
+            "label": "Offhand weapon / shield",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "weapon_offhand"
+          },
+          {
+            "alternatives": [
+              "head",
+              "hands",
+              "feet",
+              "cloak"
+            ],
+            "capacity": 0,
+            "key": "haunted_armour:0",
+            "label": "Haunted armour",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "haunted_armour"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "twohander:0",
+            "label": "Two-handed weapon support",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": true,
+            "type": "twohander"
+          }
+        ],
+        "species": "Chain Devil",
+        "unarmed_attack": "Unarmed",
+        "version": 1
+      },
+      "equipment_slots": [
+        {
+          "base_key": "war_axe",
+          "empty": false,
+          "inv_slot": 0,
+          "letter": "a",
+          "melded": false,
+          "name": "+0 war axe",
+          "slot_name": "Weapon"
+        },
+        {
+          "base_key": "buckler",
+          "empty": false,
+          "inv_slot": 2,
+          "letter": "c",
+          "melded": false,
+          "name": "+0 buckler",
+          "slot_name": "Offhand"
+        },
+        {
+          "base_key": "scale_mail",
+          "empty": false,
+          "inv_slot": 1,
+          "letter": "b",
+          "melded": false,
+          "name": "+0 scale mail",
+          "slot_name": "Body Armour"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Helmet"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Gloves"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Boots"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Cloak"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Ring 1"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Ring 2"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Amulet"
+        }
+      ],
+      "equipment_slots_known": true,
+      "ev": 8,
+      "exp_pool": 0,
+      "floor_items": [],
+      "floor_items_known": true,
+      "gems": [],
+      "gems_known": true,
+      "ghost_haunting": false,
+      "god": "",
+      "god_politics": "",
+      "god_relation": "",
+      "gold": 0,
+      "hp": 18,
+      "hp_max": 18,
+      "hp_regen": 23,
+      "int_max": 8,
+      "intel": 8,
+      "inventory": [
+        {
+          "base_type": 0,
+          "description": "A military axe with a long haft and a single-bladed head.\n",
+          "equipped": true,
+          "kind_name": "Hand Weapons",
+          "letter": "a",
+          "name": "+0 war axe",
+          "qty": 1,
+          "slot": 0,
+          "training": [
+            {
+              "skill": 3,
+              "target": 160
+            }
+          ]
+        },
+        {
+          "base_type": 2,
+          "description": "A leather suit covered with metal plates attached to each other in overlapping rows to provide full protection, but at the cost of reduced freedom of movement.\n",
+          "equipped": true,
+          "kind_name": "Armour",
+          "letter": "b",
+          "name": "+0 scale mail",
+          "qty": 1,
+          "slot": 1,
+          "training": [
+            {
+              "skill": 11,
+              "target": 0
+            }
+          ]
+        },
+        {
+          "base_type": 2,
+          "description": "A small piece of wood and metal, to be strapped on one arm for defence.\n",
+          "equipped": true,
+          "kind_name": "Armour",
+          "letter": "c",
+          "name": "+0 buckler",
+          "qty": 1,
+          "slot": 2,
+          "training": [
+            {
+              "skill": 15,
+              "target": 0
+            }
+          ]
+        },
+        {
+          "base_type": 7,
+          "description": "A potion which greatly increases the power of the drinker's melee attacks.\n",
+          "equipped": false,
+          "kind_name": "Potions",
+          "letter": "m",
+          "name": "2 potions of might",
+          "qty": 2,
+          "slot": 52,
+          "training": []
+        }
+      ],
+      "inventory_known": true,
+      "job": "Fighter",
+      "kill_total": 0,
+      "kills_top": [],
+      "kills_top_known": true,
+      "last_action_aut": 10,
+      "move_aut": 10,
+      "move_delay_aut": 10,
+      "mp": 1,
+      "mp_max": 1,
+      "mp_regen": 7,
+      "mutations": [],
+      "mutations_known": true,
+      "name": "MultiHmvll4zu6",
+      "on_same_level": true,
+      "penance": 0,
+      "piety": 0,
+      "piety_rank": 0,
+      "place": "D:1",
+      "player_id": "2d84288e-8fa8-448f-9641-7043ef5e7fab",
+      "poison_survival": 18,
+      "pos": {
+        "x": 106,
+        "y": 10
+      },
+      "real_hp_max": 18,
+      "region_aut_clock": 20,
+      "region_combat": false,
+      "region_id": 0,
+      "resists": {
+        "Fly": false,
+        "SeeInvis": false,
+        "Stlth": 0,
+        "Will": 3,
+        "rCold": 0,
+        "rCorr": 0,
+        "rElec": 0,
+        "rFire": 0,
+        "rNeg": 0,
+        "rPois": 0
+      },
+      "ritual_blood": 0,
+      "runes": [],
+      "runes_known": true,
+      "same_region": true,
+      "sh": 4,
+      "skills": [
+        {
+          "apt": 1,
+          "base_level": "3.2",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 0,
+          "level": "3.2",
+          "name": "Fighting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 31
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 2,
+                "name": "Long Blades",
+                "points": 0
+              }
+            ]
+          },
+          "id": 1,
+          "level": "0.0",
+          "name": "Short Blades",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 1,
+                "name": "Short Blades",
+                "points": 0
+              }
+            ]
+          },
+          "id": 2,
+          "level": "0.0",
+          "name": "Long Blades",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "2.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 5,
+                "name": "Polearms",
+                "points": 0
+              },
+              {
+                "id": 4,
+                "name": "Maces & Flails",
+                "points": 0
+              }
+            ]
+          },
+          "id": 3,
+          "level": "2.0",
+          "name": "Axes",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 8
+        },
+        {
+          "apt": 1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "1.2",
+            "points": 60,
+            "sources": [
+              {
+                "id": 3,
+                "name": "Axes",
+                "points": 60
+              },
+              {
+                "id": 6,
+                "name": "Staves",
+                "points": 0
+              }
+            ]
+          },
+          "id": 4,
+          "level": "1.2",
+          "name": "Maces & Flails",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "1.2",
+            "points": 60,
+            "sources": [
+              {
+                "id": 3,
+                "name": "Axes",
+                "points": 60
+              },
+              {
+                "id": 6,
+                "name": "Staves",
+                "points": 0
+              }
+            ]
+          },
+          "id": 5,
+          "level": "1.2",
+          "name": "Polearms",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 5,
+                "name": "Polearms",
+                "points": 0
+              },
+              {
+                "id": 4,
+                "name": "Maces & Flails",
+                "points": 0
+              }
+            ]
+          },
+          "id": 6,
+          "level": "0.0",
+          "name": "Staves",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 8,
+          "level": "0.0",
+          "name": "Ranged Weapons",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 10,
+          "level": "0.0",
+          "name": "Throwing",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 1,
+          "base_level": "3.2",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 11,
+          "level": "3.2",
+          "name": "Armour",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 31
+        },
+        {
+          "apt": -1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 12,
+          "level": "0.0",
+          "name": "Dodging",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": -2,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 13,
+          "level": "0.0",
+          "name": "Stealth",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "3.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 15,
+          "level": "3.0",
+          "name": "Shields",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 30
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 17,
+          "level": "0.0",
+          "name": "Unarmed Combat",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": -1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 18,
+          "level": "0.0",
+          "name": "Spellcasting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 19,
+          "level": "0.0",
+          "name": "Conjurations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 20,
+          "level": "0.0",
+          "name": "Hexes",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 22,
+          "level": "0.0",
+          "name": "Summonings",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 23,
+          "level": "0.0",
+          "name": "Necromancy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 24,
+          "level": "0.0",
+          "name": "Translocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 25,
+          "level": "0.0",
+          "name": "Forgecraft",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 26,
+          "level": "0.0",
+          "name": "Fire Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 27,
+          "level": "0.0",
+          "name": "Ice Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 28,
+          "level": "0.0",
+          "name": "Air Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 29,
+          "level": "0.0",
+          "name": "Earth Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 30,
+          "level": "0.0",
+          "name": "Alchemy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 31,
+          "level": "0.0",
+          "name": "Invocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 32,
+          "level": "0.0",
+          "name": "Evocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": -1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 33,
+          "level": "0.0",
+          "name": "Shapeshifting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": -1,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 34,
+          "level": "0.0",
+          "name": "Auramancy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        }
+      ],
+      "skills_known": true,
+      "slaying": 0,
+      "slot": 0,
+      "species": "Chain Devil",
+      "speed_stat": 10,
+      "spell_levels_left": 0,
+      "spell_levels_total": 0,
+      "spell_library": {
+        "memorisable": 0,
+        "total": 4
+      },
+      "spell_resource": "mp",
+      "spells": [],
+      "spells_known": true,
+      "stairs": "up",
+      "statuses": [],
+      "statuses_known": true,
+      "str": 18,
+      "str_max": 18,
+      "title": "the Covered",
+      "trade_targets": [
+        1
+      ],
+      "training_locked": "",
+      "training_supported": true,
+      "turns": 1,
+      "weapon": "+0 war axe",
+      "xl": 1,
+      "xl_next": 0,
+      "zot_clock": {
+        "active": true,
+        "capacity_aut": 364500,
+        "immune": false,
+        "lifespan_divisor": 1,
+        "reference_aut": 270000,
+        "remaining_aut": 80990,
+        "short_lifespans": 0,
+        "warning": 0
+      }
+    },
+    {
+      "abilities": [
+        {
+          "blocked_reason": "Stand on an available god's own altar to profane it.",
+          "cost": "None",
+          "desc": "At an available god's own altar, permanently steal its single offered benefit and accept its wrath. Choose at most three distinct gods. The first theft supplies forty Defiance once; later thefts never refill it. Duplicate and ecumenical altars grant nothing. Profanation does not consume the altar or prevent an ally from worshipping there.\n\nDefiance 0/100; Elder Rites 0/3.\nRange: N/A\n\nThis ability costs: nothing.",
+          "fail": "0%",
+          "hotkey": "f",
+          "id": 1520,
+          "is_god": false,
+          "name": "Profane Altar",
+          "tile": 10621
+        },
+        {
+          "blocked_reason": "Profane your first altar before undertaking an Elder Rite.",
+          "cost": "None",
+          "desc": "At XL9, XL15 and XL21, complete one short two-wave encounter to strengthen all your stolen benefits. Begin on safe open ground. The second wave arrives after four standard turns without waiting for the first wave to die. Trial actors grant no rewards. Killing or permanently banishing every trial actor wins; pacification, conversion and dismissal do not. Leaving the floor abandons the attempt, preserving completed rites. Only one party rite can be active on a floor.\n\nDefiance 0/100; Elder Rites 0/3.\nRange: N/A\n\nThis ability costs: nothing.",
+          "fail": "0%",
+          "hotkey": "g",
+          "id": 1521,
+          "is_god": false,
+          "name": "Invoke Elder Rites",
+          "tile": 10622
+        }
+      ],
+      "abilities_known": true,
+      "ac": 2,
+      "actions": [],
+      "actions_known": true,
+      "active": true,
+      "activity": "",
+      "adjusted_noise": 0,
+      "alive": true,
+      "ally_kill_total": 0,
+      "atk_aut": 10,
+      "aut_clock": 20,
+      "aut_lead": 0,
+      "auto_training": true,
+      "can_act": true,
+      "defiance": 0,
+      "dex": 11,
+      "dex_max": 11,
+      "elapsed_aut": 10,
+      "elder_rites": 0,
+      "elder_summary": "Defiance 0/100; Elder Rites 0/3.",
+      "equipment_profile": {
+        "feet": "feet",
+        "form": "",
+        "hands": "hands",
+        "items": [
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 28,
+                  "ox": 2,
+                  "oy": 2,
+                  "sx": 503,
+                  "sy": 1411,
+                  "w": 28,
+                  "ymax": 32
+                },
+                {
+                  "h": 29,
+                  "ox": 2,
+                  "oy": 1,
+                  "sx": 203,
+                  "sy": 352,
+                  "w": 30,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": true,
+            "fits": true,
+            "inv_slot": 0,
+            "reason": "",
+            "required_slots": [
+              [
+                "body"
+              ]
+            ],
+            "slot_types": [
+              "body"
+            ]
+          },
+          {
+            "art": {
+              "layers": [
+                {
+                  "h": 27,
+                  "ox": 7,
+                  "oy": 2,
+                  "sx": 586,
+                  "sy": 602,
+                  "w": 25,
+                  "ymax": 32
+                },
+                {
+                  "h": 24,
+                  "ox": 13,
+                  "oy": 7,
+                  "sx": 461,
+                  "sy": 634,
+                  "w": 18,
+                  "ymax": 32
+                }
+              ],
+              "texture": "main"
+            },
+            "equipment": false,
+            "inv_slot": 52
+          }
+        ],
+        "portrait": {
+          "layers": [
+            {
+              "h": 9,
+              "ox": 13,
+              "oy": 23,
+              "sx": 82,
+              "sy": 2275,
+              "w": 15,
+              "ymax": 32
+            },
+            {
+              "h": 28,
+              "ox": 6,
+              "oy": 4,
+              "sx": 62,
+              "sy": 2275,
+              "w": 20,
+              "ymax": 32
+            },
+            {
+              "h": 13,
+              "ox": 10,
+              "oy": 16,
+              "sx": 794,
+              "sy": 2275,
+              "w": 12,
+              "ymax": 32
+            },
+            {
+              "h": 22,
+              "ox": 10,
+              "oy": 7,
+              "sx": 390,
+              "sy": 2307,
+              "w": 12,
+              "ymax": 32
+            }
+          ],
+          "texture": "player"
+        },
+        "restrictions": [],
+        "size": "medium",
+        "slots": [
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "weapon:0",
+            "label": "Weapon",
+            "name": "Nothing wielded",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "weapon"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "offhand:0",
+            "label": "Offhand",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "offhand"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "inv_slot": 0,
+            "key": "body:0",
+            "label": "Body Armour",
+            "name": "+0 robe",
+            "reason": "",
+            "shared": false,
+            "state": "equipped",
+            "support_only": false,
+            "type": "body"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "head:0",
+            "label": "Helmet",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "head"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "hands:0",
+            "label": "Gloves",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "hands"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "feet:0",
+            "label": "Boots",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "feet"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "barding:0",
+            "label": "Barding",
+            "reason": "You can't fit into that!",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "barding"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "cloak:0",
+            "label": "Cloak",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "cloak"
+          },
+          {
+            "alternatives": [],
+            "capacity": 2,
+            "key": "ring:0",
+            "label": "Ring 1",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "ring"
+          },
+          {
+            "alternatives": [],
+            "capacity": 2,
+            "key": "ring:1",
+            "label": "Ring 2",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "ring"
+          },
+          {
+            "alternatives": [],
+            "capacity": 1,
+            "key": "amulet:0",
+            "label": "Amulet",
+            "reason": "",
+            "state": "empty",
+            "support_only": false,
+            "type": "amulet"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "gizmo:0",
+            "label": "Gizmo",
+            "reason": "You lack an exoframe to install that in.",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "gizmo"
+          },
+          {
+            "alternatives": [
+              "weapon",
+              "offhand"
+            ],
+            "capacity": 0,
+            "key": "weapon_offhand:0",
+            "label": "Offhand weapon / shield",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "weapon_offhand"
+          },
+          {
+            "alternatives": [
+              "head",
+              "hands",
+              "feet",
+              "cloak"
+            ],
+            "capacity": 0,
+            "key": "haunted_armour:0",
+            "label": "Haunted armour",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": false,
+            "type": "haunted_armour"
+          },
+          {
+            "alternatives": [],
+            "capacity": 0,
+            "key": "twohander:0",
+            "label": "Two-handed weapon support",
+            "reason": "",
+            "state": "unavailable",
+            "support_only": true,
+            "type": "twohander"
+          }
+        ],
+        "species": "Eldritch",
+        "unarmed_attack": "Unarmed",
+        "version": 1
+      },
+      "equipment_slots": [
+        {
+          "empty": true,
+          "name": "Nothing wielded",
+          "slot_name": "Weapon"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Offhand"
+        },
+        {
+          "base_key": "robe",
+          "empty": false,
+          "inv_slot": 0,
+          "letter": "a",
+          "melded": false,
+          "name": "+0 robe",
+          "slot_name": "Body Armour"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Helmet"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Gloves"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Boots"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Cloak"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Ring 1"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Ring 2"
+        },
+        {
+          "empty": true,
+          "name": "(empty)",
+          "slot_name": "Amulet"
+        }
+      ],
+      "equipment_slots_known": true,
+      "ev": 11,
+      "exp_pool": 0,
+      "floor_items": [],
+      "floor_items_known": true,
+      "gems": [],
+      "gems_known": true,
+      "ghost_haunting": false,
+      "god": "",
+      "god_politics": "",
+      "god_relation": "",
+      "gold": 0,
+      "hp": 13,
+      "hp_max": 13,
+      "hp_regen": 22,
+      "int_max": 18,
+      "intel": 18,
+      "inventory": [
+        {
+          "base_type": 2,
+          "description": "A large, loose-fitting, wide-sleeved outer garment made of light cloth. It offers little protection against physical harm, but does not hinder evasion or spellcasting.\n",
+          "equipped": true,
+          "kind_name": "Armour",
+          "letter": "a",
+          "name": "+0 robe",
+          "qty": 1,
+          "slot": 0,
+          "training": [
+            {
+              "skill": 11,
+              "target": 0
+            }
+          ]
+        },
+        {
+          "base_type": 7,
+          "description": "A valuable potion which grants an infusion of magical energy.\n",
+          "equipped": false,
+          "kind_name": "Potions",
+          "letter": "g",
+          "name": "potion of magic",
+          "qty": 1,
+          "slot": 52,
+          "training": []
+        }
+      ],
+      "inventory_known": true,
+      "job": "Conjurer",
+      "kill_total": 0,
+      "kills_top": [],
+      "kills_top_known": true,
+      "last_action_aut": 10,
+      "move_aut": 10,
+      "move_delay_aut": 10,
+      "mp": 3,
+      "mp_max": 3,
+      "mp_regen": 8,
+      "mutations": [
+        {
+          "desc": "You shall have no god before yourself.",
+          "innate": true,
+          "level": 1,
+          "name": "forlorn",
+          "temp": false
+        }
+      ],
+      "mutations_known": true,
+      "name": "MultiGmvll4zu6",
+      "on_same_level": true,
+      "penance": 0,
+      "piety": 0,
+      "piety_rank": 0,
+      "place": "D:1",
+      "player_id": "9c4b33ff-609a-4924-ab35-8506158bc37f",
+      "poison_survival": 13,
+      "pos": {
+        "x": 105,
+        "y": 10
+      },
+      "real_hp_max": 13,
+      "region_aut_clock": 20,
+      "region_combat": false,
+      "region_id": 0,
+      "resists": {
+        "Fly": false,
+        "SeeInvis": false,
+        "Stlth": 59,
+        "Will": 3,
+        "rCold": 0,
+        "rCorr": 0,
+        "rElec": 0,
+        "rFire": 0,
+        "rNeg": 0,
+        "rPois": 0
+      },
+      "ritual_blood": 0,
+      "runes": [],
+      "runes_known": true,
+      "same_region": true,
+      "sh": 0,
+      "skills": [
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 0,
+          "level": "0.0",
+          "name": "Fighting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 2,
+                "name": "Long Blades",
+                "points": 0
+              }
+            ]
+          },
+          "id": 1,
+          "level": "0.0",
+          "name": "Short Blades",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 1,
+                "name": "Short Blades",
+                "points": 0
+              }
+            ]
+          },
+          "id": 2,
+          "level": "0.0",
+          "name": "Long Blades",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 5,
+                "name": "Polearms",
+                "points": 0
+              },
+              {
+                "id": 4,
+                "name": "Maces & Flails",
+                "points": 0
+              }
+            ]
+          },
+          "id": 3,
+          "level": "0.0",
+          "name": "Axes",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 3,
+                "name": "Axes",
+                "points": 0
+              },
+              {
+                "id": 6,
+                "name": "Staves",
+                "points": 0
+              }
+            ]
+          },
+          "id": 4,
+          "level": "0.0",
+          "name": "Maces & Flails",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 3,
+                "name": "Axes",
+                "points": 0
+              },
+              {
+                "id": 6,
+                "name": "Staves",
+                "points": 0
+              }
+            ]
+          },
+          "id": 5,
+          "level": "0.0",
+          "name": "Polearms",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": [
+              {
+                "id": 5,
+                "name": "Polearms",
+                "points": 0
+              },
+              {
+                "id": 4,
+                "name": "Maces & Flails",
+                "points": 0
+              }
+            ]
+          },
+          "id": 6,
+          "level": "0.0",
+          "name": "Staves",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 8,
+          "level": "0.0",
+          "name": "Ranged Weapons",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 10,
+          "level": "0.0",
+          "name": "Throwing",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 11,
+          "level": "0.0",
+          "name": "Armour",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "2.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 12,
+          "level": "2.0",
+          "name": "Dodging",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 8
+        },
+        {
+          "apt": 0,
+          "base_level": "1.7",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 13,
+          "level": "1.7",
+          "name": "Stealth",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 6
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 15,
+          "level": "0.0",
+          "name": "Shields",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 17,
+          "level": "0.0",
+          "name": "Unarmed Combat",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "2.1",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 18,
+          "level": "2.1",
+          "name": "Spellcasting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 9
+        },
+        {
+          "apt": 0,
+          "base_level": "4.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 19,
+          "level": "4.0",
+          "name": "Conjurations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 77
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 20,
+          "level": "0.0",
+          "name": "Hexes",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 22,
+          "level": "0.0",
+          "name": "Summonings",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 23,
+          "level": "0.0",
+          "name": "Necromancy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 24,
+          "level": "0.0",
+          "name": "Translocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 25,
+          "level": "0.0",
+          "name": "Forgecraft",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 26,
+          "level": "0.0",
+          "name": "Fire Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 27,
+          "level": "0.0",
+          "name": "Ice Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 28,
+          "level": "0.0",
+          "name": "Air Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 29,
+          "level": "0.0",
+          "name": "Earth Magic",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 30,
+          "level": "0.0",
+          "name": "Alchemy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 31,
+          "level": "0.0",
+          "name": "Invocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 32,
+          "level": "0.0",
+          "name": "Evocations",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 33,
+          "level": "0.0",
+          "name": "Shapeshifting",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        },
+        {
+          "apt": 0,
+          "base_level": "0.0",
+          "can_train": true,
+          "cross_training": {
+            "bonus": "0.0",
+            "points": 0,
+            "sources": []
+          },
+          "id": 34,
+          "level": "0.0",
+          "name": "Auramancy",
+          "target": 0,
+          "target_base": false,
+          "train": 1,
+          "training": 0
+        }
+      ],
+      "skills_known": true,
+      "slaying": 0,
+      "slot": 1,
+      "species": "Eldritch",
+      "speed_stat": 10,
+      "spell_levels_left": 3,
+      "spell_levels_total": 4,
+      "spell_library": {
+        "memorisable": 0,
+        "total": 3
+      },
+      "spell_resource": "mp",
+      "spells": [
+        {
+          "casting_cost": {
+            "amount": 1,
+            "payable": true,
+            "resource": "mp"
+          },
+          "damage": "1d6",
+          "desc": "Fires a small bolt of magical energy which never misses.\n",
+          "fail": "3%",
+          "id": 3,
+          "letter": "a",
+          "level": 1,
+          "mp_cost": 1,
+          "name": "Magic Dart",
+          "power": "64%",
+          "range": "7",
+          "schools": "Conjuration",
+          "tile": 9315
+        }
+      ],
+      "spells_known": true,
+      "stairs": "none",
+      "statuses": [],
+      "statuses_known": true,
+      "str": 7,
+      "str_max": 7,
+      "title": "the Conjurer",
+      "trade_targets": [
+        0
+      ],
+      "training_locked": "",
+      "training_supported": true,
+      "turns": 1,
+      "weapon": "Nothing wielded",
+      "xl": 1,
+      "xl_next": 0,
+      "zot_clock": {
+        "active": true,
+        "capacity_aut": 364500,
+        "immune": false,
+        "lifespan_divisor": 1,
+        "reference_aut": 270000,
+        "remaining_aut": 80990,
+        "short_lifespans": 0,
+        "warning": 0
+      }
+    }
+  ],
+  "url": "http://127.0.0.1:18887"
+}

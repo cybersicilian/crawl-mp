@@ -9,6 +9,13 @@ crawl_require('dlua/lm_1way.lua')
 TimedMarker = util.subclass(OneWayStair)
 TimedMarker.CLASS = "TimedMarker"
 
+function portal_timeout_turns(low, high)
+  local pcount = (you and you.player_count and you.player_count()) or 1
+  local extra = math.max(0, pcount - 1)
+  local scale = (100 + extra * 35) / 100
+  return crawl.random_range(math.floor(low * scale), math.floor(high * scale))
+end
+
 function TimedMarker:new(props)
   props = props or { }
 
@@ -17,6 +24,13 @@ function TimedMarker:new(props)
   if not props.msg then
     error("No messaging object provided (msg = nil)")
   end
+
+  local pcount = (you and you.player_count and you.player_count()) or 1
+  local extra = math.max(0, pcount - 1)
+  local scale = (100 + extra * 35) / 100
+  if props.high then props.high = math.floor(props.high * scale) end
+  if props.low then props.low = math.floor(props.low * scale) end
+  if props.turns then props.turns = math.floor(props.turns * scale) end
 
   props.high = props.high or props.low or props.turns or 1
   props.low  = props.low or props.high or props.turns or 1

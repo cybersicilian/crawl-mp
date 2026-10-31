@@ -65,7 +65,7 @@ class Job(MutableMapping):
         if s.get('TAG_MAJOR_VERSION', None) is not None:
             if not isinstance(s['TAG_MAJOR_VERSION'], int):
                 raise ValueError('TAG_MAJOR_VERSION must be an integer')
-        self.starting_job = s.get('difficulty') != False
+        self.starting_job = s.get('category') is not False
         has_recommended_species = bool(s.get('recommended_species'))
         if self.starting_job != has_recommended_species:
             raise ValueError('recommended_jobs must not be empty (or'
@@ -102,7 +102,7 @@ class Job(MutableMapping):
         self.print_unknown_warnings(s)
 
 JobGroup = collections.namedtuple('JobGroup', ['column', 'jobs'])
-JobGroupEntry = collections.namedtuple('JobGroupEntry', ['priority', 'enum'])
+JobGroupEntry = collections.namedtuple('JobGroupEntry', ['priority', 'enum', 'tag'])
 JOB_GROUPS_TEMPLATE = {
     'Warrior': JobGroup(0, []),
     'Warrior-mage': JobGroup(0, []),
@@ -114,8 +114,9 @@ JOB_GROUPS_TEMPLATE = {
 JOB_GROUP_TEMPLATE = """
     {{
         "{name}",
-        {position},
-        {{ {jobs} }}
+{position}
+        {{{jobs}
+        }}
     }},
 """
 
@@ -127,7 +128,7 @@ ALL_SKILLS = ('fighting', 'short blades', 'long blades', 'axes',
     'hexes', 'summonings', 'necromancy', 'translocations',
     'fire magic', 'ice magic', 'air magic', 'earth magic',
     'alchemy', 'invocations', 'evocations', 'shapeshifting', 'forgecraft',
-    'weapon')
+    'weapon', 'auramancy')
 ALL_WCHOICES = ('none', 'plain', 'good')
 
 #SPELL_ENUM = 'SPELL'
@@ -142,7 +143,9 @@ def recommended_species(species):
             race = "base draconian"
         out.append(enumify(validate_string(race, 'Species',
                                            '[A-Za-z_ ]+'), SPECIES_ENUM))
-    return make_list(', '.join(out))
+    # The job-data template supplies the outer initializer braces. Emitting
+    # an inner empty initializer would instead create one default species.
+    return make_list(', '.join(out)) if out else ''
 
 
 def skills(sk):
@@ -192,7 +195,8 @@ def update_job_group(sg, s):
     if category is False:
         # Don't add this species to the species select screen
         return sg
-    entry = JobGroupEntry(s['category_priority'], s['enum'])
+    entry = JobGroupEntry(s['category_priority'], s['enum'],
+                          s['tag_major_version_opener'])
     sg[category].jobs.append(entry)
     return sg
 
@@ -201,19 +205,29 @@ def generate_job_groups(sg):
     out = ''
     last_col = 0
     row_count = 0
+    row_count_other = 0
     for name, group in sg.items():
 
         if group.column != last_col:
             row_count = 0
+            row_count_other = 0
             last_col = group.column
 
-        group_pos = "coord_def(" + str(group.column) + ", " + str(row_count) + ")"
+        group_pos = "        coord_def(%d, %d)," % (group.column, row_count)
+        if row_count != row_count_other:
+            group_pos = ("#if TAG_MAJOR_VERSION == 34\n" + group_pos
+                         + "\n#else\n        coord_def(%d, %d),\n#endif"
+                         % (group.column, row_count_other))
         row_count += len(group.jobs) + 1
+        row_count_other += sum(not e.tag for e in group.jobs) + 1
         out += JOB_GROUP_TEMPLATE.format(
             name = name,
             position = group_pos,
-            jobs = ', '.join(
-                e.enum for e in reversed(sorted(group.jobs))),
+            jobs = ''.join(
+                ('\n' + e.tag + '\n' if e.tag else '\n')
+                + '            ' + e.enum + ','
+                + ('\n#endif' if e.tag else '')
+                for e in reversed(sorted(group.jobs))),
         )
     return out
 

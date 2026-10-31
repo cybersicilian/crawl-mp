@@ -4,6 +4,9 @@
 **/
 
 #include "AppHdr.h"
+#include "automaton.h"
+#include "chain-devil.h"
+#include "level-time.h"
 
 #include "mon-act.h"
 
@@ -44,6 +47,7 @@
 #include "mon-book.h"
 #include "mon-cast.h"
 #include "mon-death.h"
+#include "mon-explode.h"
 #include "mon-movetarget.h"
 #include "mon-place.h"
 #include "mon-poly.h"
@@ -72,6 +76,7 @@
 #include "timed-effects.h"
 #include "transform.h"
 #include "traps.h"
+#include "party.h"
 #include "viewchar.h"
 #include "view.h"
 
@@ -802,7 +807,7 @@ static bool _handle_swoop_or_flank(monster& mons)
         return false;
 
     if (mons.props.exists(SWOOP_COOLDOWN_KEY)
-        && (you.elapsed_time < mons.props[SWOOP_COOLDOWN_KEY].get_int()))
+        && (level_elapsed_time(mons) < mons.props[SWOOP_COOLDOWN_KEY].get_int()))
     {
         return false;
     }
@@ -840,7 +845,7 @@ static bool _handle_swoop_or_flank(monster& mons)
         }
         mons.move_to(tracer.path_taken[j+1], MV_DELIBERATE, true);
         mons_fight(&mons, defender);
-        mons.props[SWOOP_COOLDOWN_KEY].get_int() = you.elapsed_time
+        mons.props[SWOOP_COOLDOWN_KEY].get_int() = level_elapsed_time(mons)
                                                   + 40 + random2(51);
         mons.finalise_movement();
         return true;
@@ -1135,7 +1140,10 @@ static void _check_blazeheart_golem_link(monster& mons)
 {
     // Check distance from player. If we're non-adjacent, decrease timer
     // (we get a turn or two's grace period to make managing this less fiddly)
-    if (grid_distance(you.pos(), mons.pos()) > 1)
+    const bool owner_near = automaton_blazeheart::marked(mons)
+                            ? automaton_blazeheart::owner_adjacent(mons)
+                            : grid_distance(you.pos(), mons.pos()) <= 1;
+    if (!owner_near)
     {
         mons.blazeheart_heat -= 1;
         if (mons.blazeheart_heat <= 0 && !mons.has_ench(ENCH_PARALYSIS))
@@ -1783,6 +1791,17 @@ static int _tentacle_move_speed(monster_type type)
 
 static void _pre_monster_move(monster& mons)
 {
+    if (party::is_proxy_monster(mons))
+    {
+        if (!mons.props.exists("party_downed_ghost"))
+        {
+            mons.speed_increment = 0;
+            return;
+        }
+        _monster_add_energy(mons);
+        return;
+    }
+
     mons.hit_points = min(mons.max_hit_points, mons.hit_points);
 
     if (mons.type == MONS_SPATIAL_MAELSTROM
@@ -1984,6 +2003,34 @@ static bool _leash_range_exceeded(const monster* mons)
 void handle_monster_move(monster* mons)
 {
     ASSERT(mons); // XXX: change to monster &mons
+    if (party::is_proxy_monster(*mons))
+    {
+        if (!mons->props.exists("party_downed_ghost"))
+        {
+            mons->speed_increment = 0;
+            return;
+        }
+        if (!mons->has_action_energy())
+            return;
+        mons->foe = MHITYOU;
+        mons->target = you.pos();
+        mons->behaviour = BEH_SEEK;
+        if (grid_distance(mons->pos(), you.pos()) > 1)
+        {
+            coord_def mmov = _find_best_step(mons);
+            if (!mmov.origin() && !actor_at(mons->pos() + mmov))
+            {
+                if (_monster_move(mons, mmov))
+                {
+                    party::sync_proxy_to_player(party::proxy_slot(*mons));
+                    return;
+                }
+            }
+        }
+        mons->lose_energy(EUT_MOVE);
+        return;
+    }
+
     const monsterentry* entry = get_monster_data(mons->type);
     if (!entry)
         return;
@@ -2324,6 +2371,14 @@ void handle_monster_move(monster* mons)
     if (!mons->alive())
         return;
 
+    const int foe_party_slot =
+        (party::is_enabled() && mons->foe < MAX_MONSTERS
+         && party::is_proxy_monster(env.mons[mons->foe])
+         && !env.mons[mons->foe].props.exists("party_downed_ghost"))
+            ? party::proxy_slot(env.mons[mons->foe])
+            : party::active_slot();
+    party::scoped_player_context foe_ctx(foe_party_slot, true);
+
     ASSERT(!crawl_state.game_is_arena() || mons->foe != MHITYOU);
     ASSERT_IN_BOUNDS_OR_ORIGIN(mons->target);
 
@@ -2470,7 +2525,10 @@ void handle_monster_move(monster* mons)
         }
 
         if (!_monster_move(mons, mmov))
+        {
+            chains::strain(*mons);
             mons->speed_increment -= non_move_energy;
+        }
     }
     you.update_beholder(mons);
     you.update_fearmonger(mons);
@@ -2707,7 +2765,7 @@ static void _post_monster_move(monster* mons)
 
     // If Nobody is left alone long enough, allow their memories to return.
     if (mons->type == MONS_NAMELESS_REVENANT && mons->props.exists(NOBODY_RECOVERY_KEY)
-        && you.elapsed_time > mons->props[NOBODY_RECOVERY_KEY].get_int())
+        && level_elapsed_time(*mons) > mons->props[NOBODY_RECOVERY_KEY].get_int())
     {
         mons->props.erase(NOBODY_RECOVERY_KEY);
         initialize_nobody_memories(*mons);
@@ -2749,6 +2807,11 @@ priority_queue<pair<monster *, int>,
 // this round)
 void queue_monster_for_action(monster* mons)
 {
+    if (party::is_enabled() && mons
+        && !party::monster_in_active_region(*mons, party::active_slot()))
+    {
+        return;
+    }
     monster_queue.emplace(mons, mons->speed_increment);
 }
 
@@ -2764,7 +2827,8 @@ void clear_monster_flags()
         if (env.mons[i].defined())
         {
             env.max_mon_index = i;
-            env.mons[i].flags &= ~MF_JUST_SUMMONED & ~MF_JUST_SLEPT;
+            if (party::monster_in_active_region(env.mons[i]))
+                env.mons[i].flags &= ~MF_JUST_SUMMONED & ~MF_JUST_SLEPT;
         }
     }
 }
@@ -2826,8 +2890,15 @@ void print_mons_left_view_messages()
  */
 void handle_monsters(bool with_noise)
 {
+    vector<mid_t> aged_entities;
     for (monster_iterator mi; mi; ++mi)
     {
+        if (party::is_enabled()
+            && !party::monster_in_active_region(**mi, party::active_slot()))
+        {
+            continue;
+        }
+        aged_entities.push_back(mi->mid);
         _pre_monster_move(**mi);
         if (!invalid_monster(*mi) && mi->alive() && mi->has_action_energy())
             monster_queue.emplace(*mi, mi->speed_increment);
@@ -2882,6 +2953,12 @@ void handle_monsters(bool with_noise)
     // Process noises now (before clearing the sleep flag).
     if (with_noise)
         apply_noises();
+
+    // Advance each entity exactly once, after its complete native reaction.
+    // Its age does not change when encounter coordinates are rebased.
+    for (const mid_t mid : aged_entities)
+        if (monster* mon = monster_by_mid(mid))
+            advance_level_entity_clock(*mon, you.time_taken);
 }
 
 static bool _jelly_divide(monster& parent)
@@ -3280,6 +3357,8 @@ bool mon_can_move_to_pos(const monster* mons, const coord_def& delta,
         return true;
 
     const coord_def targ = mons->pos() + delta;
+    if (!chains::may_step(*const_cast<monster*>(mons), targ))
+        return false;
 
     // Bounds check: don't consider moving out of grid!
     if (!in_bounds(targ))
@@ -3819,6 +3898,13 @@ static bool _do_move_monster(monster& mons, const coord_def& delta)
             return true;
     }
 
+    if (!chains::may_step(mons, f))
+    {
+        chains::strain(mons);
+        _swim_or_move_energy(mons);
+        return true;
+    }
+
     if (mons.is_constricted() && !mons.cannot_move())
     {
         if (!mons.attempt_escape())
@@ -4282,7 +4368,7 @@ static bool _monster_move(monster* mons, coord_def& delta)
     return ret;
 }
 
-void seen_monsters_react()
+static void _seen_monsters_react_for_active_player()
 {
     if (you.duration[DUR_TIME_STEP] || crawl_state.game_is_arena())
         return;
@@ -4342,10 +4428,37 @@ void seen_monsters_react()
     }
 }
 
+void seen_monsters_react()
+{
+    _seen_monsters_react_for_active_player();
+    automaton::observe_encounter();
+
+    if (party::is_enabled())
+    {
+        const int orig_slot = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == orig_slot || !party::is_player_on_current_floor(i)
+                || party::is_player_downed(i))
+            {
+                continue;
+            }
+            party::scoped_player_context ctx(i, true);
+            _seen_monsters_react_for_active_player();
+            automaton::observe_encounter();
+        }
+    }
+}
+
 bool mon_enemies_around(const monster* mons)
 {
-    // If the monster has a foe, return true.
-    if (mons->foe != MHITNOT && mons->foe != MHITYOU)
+    const bool foe_is_player = mons->foe == MHITYOU
+        || (!invalid_monster_index(mons->foe)
+            && env.mons[mons->foe].alive()
+            && party::is_proxy_monster(env.mons[mons->foe]));
+
+    // If the monster has a non-player foe, return true.
+    if (mons->foe != MHITNOT && !foe_is_player)
         return true;
 
     if (crawl_state.game_is_arena())
@@ -4356,13 +4469,31 @@ bool mon_enemies_around(const monster* mons)
     }
     else if (mons->wont_attack())
     {
-        // Additionally, if an ally is nearby and *you* have a foe,
-        // consider it as the ally's enemy too.
-        return you.can_see(*mons) && there_are_monsters_nearby(true);
+        // Additionally, if an ally is nearby and *you* (or any party member)
+        // have a foe, consider it as the ally's enemy too.
+        if (you.can_see(*mons) && there_are_monsters_nearby(true))
+            return true;
+        if (party::is_enabled())
+        {
+            const int orig_slot = party::active_slot();
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (i == orig_slot || !party::is_player_on_current_floor(i)
+                    || party::is_player_downed(i))
+                {
+                    continue;
+                }
+                party::scoped_player_context ctx(i);
+                if (you.can_see(*mons) && there_are_monsters_nearby(true))
+                    return true;
+            }
+        }
+        return false;
     }
     else
     {
-        // For hostile monster* you* are the main enemy.
-        return mons->can_see(you);
+        // For hostile monster* you* (or any visible party member) are the main enemy.
+        return party::nearest_visible_player(mons) != nullptr;
     }
 }
+

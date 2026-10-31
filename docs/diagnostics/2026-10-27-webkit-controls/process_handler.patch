@@ -1,0 +1,11 @@
+--- a/webserver/webtiles/process_handler.py
++++ b/webserver/webtiles/process_handler.py
+@@ -162,7 +162,7 @@
+         self.activity_pump = ActivityPump(self.party_control, self.player_streams,
+             lambda: {self.party_control.selected(receiver) for receiver in self._receivers},
+             self._step_native_activity)
+-        self.activity_timer = PeriodicCallback(self.activity_pump.tick, 150)
++        self.activity_timer = PeriodicCallback(self.activity_pump.tick, ActivityPump.tick_interval_ms)
+         self.activity_timer.start()
+         self._was_idle = False
+         self.last_watcher_join = 0

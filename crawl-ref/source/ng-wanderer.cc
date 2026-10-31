@@ -155,6 +155,7 @@ static void _assign_wanderer_stats(skill_type sk1, skill_type sk2,
             case SK_TRANSLOCATIONS:
             case SK_ALCHEMY:
             case SK_CONJURATIONS:
+            case SK_AURAMANCY:
             case SK_HEXES:
             case SK_FIRE_MAGIC:
             case SK_ICE_MAGIC:
@@ -252,7 +253,7 @@ static skill_type _wanderer_role_skill_select(bool defense,
           SK_SHORT_BLADES, SK_LONG_BLADES, SK_STAVES, SK_UNARMED_COMBAT,
           SK_SUMMONINGS, SK_NECROMANCY, SK_TRANSLOCATIONS,
           SK_ALCHEMY, SK_CONJURATIONS, SK_FORGECRAFT,
-          SK_HEXES, SK_FIRE_MAGIC, SK_ICE_MAGIC, SK_SPELLCASTING,
+          SK_HEXES, SK_AURAMANCY, SK_FIRE_MAGIC, SK_ICE_MAGIC, SK_SPELLCASTING,
           SK_AIR_MAGIC, SK_EARTH_MAGIC, SK_SHAPESHIFTING, SK_FIGHTING };
 
     int offense_size = ARRAYSZ(offense_skills);
@@ -314,7 +315,7 @@ static void _setup_starting_skills(skill_type sk1, skill_type sk2,
     {
         if (sk <= SK_LAST_MUNDANE)
             martial++;
-        else if (sk > SK_LAST_MUNDANE && sk <= SK_LAST_MAGIC)
+        else if (is_magic_skill(sk))
             magical++;
         you.skills[sk]++;
         levels--;
@@ -452,8 +453,8 @@ static vector<spell_type> _give_wanderer_minor_spells(skill_type skill)
     // Doing a rejection loop for this because I am lazy.
     while (skill == SK_SPELLCASTING)
     {
-        int value = SK_LAST_MAGIC - SK_FIRST_MAGIC_SCHOOL + 1;
-        skill = skill_type(SK_FIRST_MAGIC_SCHOOL + random2(value));
+        const auto& schools = magic_school_skills();
+        skill = schools[random2(schools.size())];
     }
 
     spschool school = skill2spell_type(skill);
@@ -653,7 +654,7 @@ static void _give_wanderer_aux_armour(int plus = 0)
 
 static bool _wanderer_has_spell_skill(set<skill_type>& skills)
 {
-    for (skill_type sk = SK_FIRST_MAGIC_SCHOOL; sk <= SK_LAST_MAGIC; ++sk)
+    for (skill_type sk : magic_school_skills())
     {
         if (skills.count(sk))
             return true;
@@ -736,6 +737,7 @@ static vector<spell_type> _wanderer_good_equipment(skill_type skill, set<skill_t
     case SK_AIR_MAGIC:
     case SK_EARTH_MAGIC:
     case SK_ALCHEMY:
+    case SK_AURAMANCY:
     case SK_HEXES:
         return _give_wanderer_major_spells(skill, 3, 4);
 
@@ -822,6 +824,7 @@ static vector<spell_type> _wanderer_decent_equipment(skill_type skill,
     case SK_AIR_MAGIC:
     case SK_EARTH_MAGIC:
     case SK_ALCHEMY:
+    case SK_AURAMANCY:
     case SK_HEXES:
         return _give_wanderer_minor_spells(skill);
 

@@ -6,6 +6,11 @@
  */
 
 #include "AppHdr.h"
+#include "elemental-weapon.h"
+#include "god-vellum.h"
+#include "oozle-memory-effects.h"
+#include "oozle-memory.h"
+#include "bloodcraft.h"
 
 #include "attack.h"
 
@@ -35,6 +40,7 @@
 #include "mon-death.h"
 #include "mutation.h"
 #include "nearby-danger.h"
+#include "party.h"
 #include "pronoun-type.h"
 #include "religion.h"
 #include "shout.h"
@@ -158,9 +164,8 @@ void attack::handle_phase_end()
  */
 int attack::calc_pre_roll_to_hit(bool random)
 {
-    if (using_weapon()
-        && (is_unrandom_artefact(*weapon, UNRAND_WOE)
-            || is_unrandom_artefact(*weapon, UNRAND_SNIPER)))
+    if (oozle::has_equipment_effect(*attacker, weapon, UNRAND_WOE)
+        || oozle::has_equipment_effect(*attacker, weapon, UNRAND_SNIPER))
     {
         return AUTOMATIC_HIT;
     }
@@ -205,12 +210,15 @@ int attack::calc_pre_roll_to_hit(bool random)
         {
             if (weapon->base_type == OBJ_WEAPONS)
             {
-                mhit += weapon->plus;
+                mhit += effective_item_enchantment(*weapon);
                 mhit += property(*weapon, PWPN_HIT);
             }
             else if (weapon->base_type == OBJ_STAVES)
                 mhit += property(*weapon, PWPN_HIT);
         }
+
+        mhit += weapon ? oozle::body_property(ARTP_BASE_ACC)
+                       : oozle::unarmed_property(ARTP_BASE_ACC);
 
         // slaying bonus
         mhit += you.slaying(wpn_skill == SK_THROWING, random);
@@ -227,9 +235,10 @@ int attack::calc_pre_roll_to_hit(bool random)
     {
         mhit = calc_mon_to_hit_base();
         if (using_weapon())
-            mhit += weapon->plus + property(*weapon, PWPN_HIT);
+            mhit += effective_item_enchantment(*weapon) + property(*weapon, PWPN_HIT);
 
         mhit += attacker->slaying();
+        mhit = mhit * (100 - bloodcraft::accuracy_penalty(*attacker->as_monster())) / 100;
     }
 
     return mhit;
@@ -276,6 +285,15 @@ int attack::post_roll_to_hit_modifiers(int mhit, bool /*random*/)
             modifiers += BACKLIGHT_TO_HIT_BONUS;
         if (!attacker->nightvision() && defender->umbra())
             modifiers += UMBRA_TO_HIT_MALUS;
+    }
+
+    if (attacker->is_player() && defender && party::is_enabled())
+    {
+        if (const int cam = you.wearing_jewellery(RING_CAMARADERIE))
+        {
+            if (party::pos_adjacent_to_living_ally(defender->pos(), party::active_slot()))
+                modifiers += 3 * cam;
+        }
     }
 
     return modifiers;
@@ -382,7 +400,7 @@ void attack::init_attack(int attack_number)
     unrand_entry = nullptr;
     if (weapon && weapon->base_type == OBJ_WEAPONS && is_artefact(*weapon))
     {
-        if (is_unrandom_artefact(*weapon))
+        if (is_unrandom_artefact(*weapon) && vellum::native_power_enabled(*weapon))
             unrand_entry = get_unrand_entry(weapon->unrand_idx);
     }
 
@@ -846,7 +864,7 @@ int attack::get_weapon_plus()
     {
         return 0;
     }
-    return weapon->plus;
+    return effective_item_enchantment(*weapon);
 }
 
 static int _core_apply_slaying(int damage, int plus)
@@ -864,7 +882,7 @@ int attack::player_apply_slaying_bonuses(int damage, bool aux)
 {
     int damage_plus = 0;
     if (!aux && using_weapon())
-        damage_plus = get_weapon_plus();
+        damage_plus = get_weapon_plus() + elemental_weapon::damage_bonus(*attacker, weapon);
 
     const bool throwing = wpn_skill == SK_THROWING;
     const bool ranged = throwing
@@ -877,11 +895,23 @@ int attack::player_apply_slaying_bonuses(int damage, bool aux)
     if (!aux && !ranged)
         damage_plus += you.infusion_amount() * 4;
 
+    if (defender && party::is_enabled())
+    {
+        if (const int cam = you.wearing_jewellery(RING_CAMARADERIE))
+        {
+            if (party::pos_adjacent_to_living_ally(defender->pos(), party::active_slot()))
+                damage_plus += 3 * cam;
+        }
+    }
+
     return _core_apply_slaying(damage, damage_plus);
 }
 
 int attack::player_apply_final_multipliers(int damage, bool /*aux*/)
 {
+    if (you.form == transformation::shadow)
+        damage = div_rand_round(damage, 2);
+
     // Spectral weapons deal "only" 70% of the damage that their
     // owner would, matching cleaving.
     if (attacker->type == MONS_SPECTRAL_WEAPON)
@@ -932,7 +962,8 @@ int attack::calc_base_unarmed_damage() const
     if (!attacker->is_player())
         return 0;
 
-    const int dam = unarmed_base_damage(true) + unarmed_base_damage_bonus(true);
+    const int dam = unarmed_base_damage(true) + unarmed_base_damage_bonus(true)
+                    + oozle::unarmed_property(ARTP_BASE_DAM);
     return dam > 0 ? dam : 0;
 }
 
@@ -973,9 +1004,12 @@ int attack::target_debuff_count() const
 int attack::adjusted_weapon_damage() const
 {
     int wdamage = weapon_damage();
-    if (weapon && weapon->is_type(OBJ_WEAPONS, WPN_ATHAME))
+    if ((weapon && weapon->is_type(OBJ_WEAPONS, WPN_ATHAME))
+        || (attacker->is_player() && oozle::type_source(OBJ_WEAPONS, WPN_ATHAME)))
         wdamage = wdamage + target_debuff_count() * 2; // up to 66% of base 6 damage!
 
+    if (stat_source().is_player() && weapon)
+        wdamage += oozle::body_property(ARTP_BASE_DAM);
     return brand_adjust_weapon_damage(wdamage, damage_brand, true);
 }
 
@@ -1013,6 +1047,12 @@ int attack::calc_damage()
 
         potential_damage = using_weapon() ? adjusted_weapon_damage()
                                           : calc_base_unarmed_damage();
+
+        if (!using_weapon() && attacker->is_player() && you.has_mutation(MUT_ACIDIC_TOUCH))
+        {
+            potential_damage = brand_adjust_weapon_damage(potential_damage, damage_brand, true);
+            if (oozle::type_source(OBJ_WEAPONS, WPN_ATHAME)) potential_damage += target_debuff_count() * 2;
+        }
 
         // Multiply damage before modifying by stats to avoid large breakpoints.
         potential_damage = stat_modify_damage(potential_damage * 100, wpn_skill);
@@ -1278,18 +1318,17 @@ bool attack::apply_damage_brand(const char *what)
 
     case SPWPN_VAMPIRISM:
     {
-        if (!weapon
-            || damage_done < 1
+        if (damage_done < 1
             || !actor_can_drain_life_from(*attacker, *defender)
             || attacker->stat_hp() == attacker->stat_maxhp()
             || attacker->is_player() && you.duration[DUR_DEATHS_DOOR]
             || x_chance_in_y(2, 5)
-               && !is_unrandom_artefact(*weapon, UNRAND_LEECH))
+               && !oozle::has_equipment_effect(*attacker, weapon, UNRAND_LEECH))
         {
             break;
         }
 
-        int hp_boost = is_unrandom_artefact(*weapon, UNRAND_VAMPIRES_TOOTH)
+        int hp_boost = oozle::has_equipment_effect(*attacker, weapon, UNRAND_VAMPIRES_TOOTH)
                        ? damage_done : 1 + random2(damage_done);
         hp_boost = resist_adjust_damage(defender, BEAM_NEG, hp_boost);
         special_damage_flavour = BEAM_VAMPIRIC_DRAINING;
@@ -1513,7 +1552,7 @@ int attack::player_stab(int damage)
         stab_message();
         practise_stabbing();
 
-        if (using_weapon() && get_weapon_brand(*weapon) == SPWPN_DEVIOUS
+        if (oozle::effective_brand(*attacker, weapon) == SPWPN_DEVIOUS
             && !defender->wont_attack())
         {
             if (!you.duration[DUR_DEVIOUS])
@@ -1574,8 +1613,7 @@ void attack::player_stab_check()
     stab_type st = orig_st;
     // Find stab type is also used for displaying information about monsters,
     // so upgrade the stab type for !stab and the Spriggan's Knife here
-    if (using_weapon()
-        && is_unrandom_artefact(*weapon, UNRAND_SPRIGGANS_KNIFE)
+    if (oozle::has_equipment_effect(*attacker, weapon, UNRAND_SPRIGGANS_KNIFE)
         && st != STAB_NO_STAB
         && coinflip())
     {

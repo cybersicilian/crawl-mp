@@ -1,0 +1,37 @@
+#party_trade_dialog {
+    box-sizing: border-box; width: min(760px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px); padding: 18px; color: var(--tt-text, #eee4cd);
+    background: var(--tt-panel, #201e19); border: 1px solid var(--tt-border, #80704a);
+    border-radius: 10px; overflow: auto;
+}
+#party_trade_dialog::backdrop { background: #0009; }
+#party_trade_dialog h1 { margin: 0; font-size: 1.35rem; }
+#party_trade_dialog p { margin: 8px 0; }
+#party_trade_dialog button, #party_trade_dialog input, #party_trade_dialog select {
+    box-sizing: border-box; min-height: 34px; padding: 5px 9px; font: inherit;
+    color: inherit; background: #302d24; border: 1px solid #80704a; border-radius: 4px;
+}
+#party_trade_dialog button:disabled, #party_trade_dialog input:disabled { opacity: .5; }
+#party_trade_dialog :focus-visible { outline: 2px solid #fce94f; outline-offset: 2px; }
+.trade-heading, .trade-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.trade-heading p, .trade-help, #party_trade_context { font-size: .85rem; color: #c6bda5; }
+.trade-heading button { flex-shrink: 0; }
+.trade-tools { margin: 14px 0; flex-wrap: wrap; }
+.trade-tools label { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 240px; white-space: nowrap; }
+#party_trade_recipient { min-width: 0; width: 100%; }
+#party_trade_search { min-width: 0; flex: 1 1 180px; }
+#party_trade_items { max-height: 55dvh; overflow: auto; padding: 3px; }
+.trade-item { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-top: 1px solid #ffffff20; }
+.trade-item-art, .trade-item > .tt-icon { width: 32px; height: 32px; flex-shrink: 0; image-rendering: pixelated; }
+.trade-item-copy { min-width: 0; flex: 1 1 auto; overflow-wrap: anywhere; }
+.trade-item-copy strong, .trade-item-copy small { display: block; }
+.trade-item-copy small { color: #c6bda5; margin-top: 4px; font-size: .8rem; }
+.trade-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
+.trade-item-actions input { width: 64px; }
+#party_trade_notice { color: #fce94f; min-height: 1.2em; }
+@media (max-width: 520px) {
+    #party_trade_dialog { padding: 12px; }
+    .trade-item { flex-wrap: wrap; }
+    .trade-item-copy { flex-basis: calc(100% - 50px); }
+    .trade-item-actions { margin-left: auto; }
+}

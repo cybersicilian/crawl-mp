@@ -12,6 +12,7 @@
 #include <sstream>
 
 #include "ability.h"
+#include "archaeologist.h"
 #include "act-iter.h"
 #include "areas.h"
 #include "artefact.h"
@@ -75,6 +76,7 @@
 #include "notes.h"
 #include "ouch.h"
 #include "output.h"
+#include "party.h"
 #include "place.h"
 #include "player.h"
 #include "player-equip.h"
@@ -279,7 +281,7 @@ bool zin_donate_gold()
     }
 
     const int donation_cost = (you.gold / 2) + 1;
-    const int donation = _gold_to_donation(donation_cost);
+    int donation = _gold_to_donation(donation_cost);
 
 #if defined(DEBUG_DIAGNOSTICS) || defined(DEBUG_SACRIFICE) || defined(DEBUG_PIETY)
     mprf(MSGCH_DIAGNOSTICS, "A donation of $%d amounts to an "
@@ -291,6 +293,18 @@ bool zin_donate_gold()
     you.attribute[ATTR_DONATIONS] += donation_cost;
 
     you.del_gold(donation_cost);
+    if (party::is_enabled())
+    {
+        party::sync_shared_state_from_active();
+        int gozag_slot = -1;
+        if (party::any_party_member_on_floor_worships(GOD_GOZAG, &gozag_slot))
+        {
+            mprf(MSGCH_GOD,
+                 "Gozag's golden eyes narrow at %s as you donate %d shared gold to Zin!",
+                 party::Member(gozag_slot).your_name.c_str(), donation_cost);
+            donation = max(donation + 1, (donation * 115) / 100);
+        }
+    }
 
     if (donation < 1)
     {
@@ -698,6 +712,9 @@ recite_eligibility zin_check_recite_to_single_monster(const monster *mon,
 {
     ASSERT(mon);
 
+    if (party::is_enabled() && party::is_proxy_monster(*mon))
+        return RE_INELIGIBLE;
+
     // Can't recite anyway if they were recently recited to.
     if (mon->has_ench(ENCH_RECITE_TIMER))
         return RE_RECITE_TIMER;
@@ -759,7 +776,27 @@ int zin_recite_power()
     const int invo_power = you.skill_rdiv(SK_INVOCATIONS, power_mult)
                            + 3 * power_mult;
     const int piety_power = you.piety() * 3 / 2;
-    return (invo_power + piety_power) / 2 / power_mult;
+    int base = (invo_power + piety_power) / 2 / power_mult;
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_ZIN, ally.religion))
+            {
+                base += 3;
+            }
+        }
+    }
+    return base;
 }
 
 bool zin_check_able_to_recite(bool quiet)
@@ -1256,12 +1293,39 @@ bool zin_vitalisation()
     // Add divine stamina.
     const int stamina_amt =
         max(1, you.skill_rdiv(SK_INVOCATIONS, 1, 3));
+    const int dur = 60 + roll_dice(2, 10);
     you.attribute[ATTR_DIVINE_STAMINA] = stamina_amt;
-    you.set_duration(DUR_DIVINE_STAMINA, 60 + roll_dice(2, 10));
+    you.set_duration(DUR_DIVINE_STAMINA, dur);
 
     notify_stat_change(STAT_STR, stamina_amt, true);
     notify_stat_change(STAT_INT, stamina_amt, true);
     notify_stat_change(STAT_DEX, stamina_amt, true);
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_ZIN, ally.religion))
+            {
+                const int ally_stamina = max(1, (stamina_amt * 2) / 3);
+                ally.attribute[ATTR_DIVINE_STAMINA] =
+                    max(ally.attribute[ATTR_DIVINE_STAMINA], ally_stamina);
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_DIVINE_STAMINA, dur / 2,
+                    "Zin's lawful vitality fortifies", true);
+            }
+
+        }
+    }
 
     return true;
 }
@@ -1291,7 +1355,8 @@ spret zin_imprison(const coord_def& target, bool fail)
         return spret::abort;
     }
 
-    if (mons->friendly() || mons->good_neutral())
+    if (mons->friendly() || mons->good_neutral()
+        || (party::is_enabled() && party::is_proxy_monster(*mons)))
     {
         mpr("You cannot imprison a law-abiding creature!");
         return spret::abort;
@@ -1319,6 +1384,27 @@ void zin_sanctuary()
     // Pets stop attacking and converge on you.
     you.pet_target = MHITYOU;
     create_sanctuary(you.pos(), 7 + you.skill_rdiv(SK_INVOCATIONS) / 2);
+
+    if (party::is_enabled())
+    {
+        party::revive_downed_players(false, 15);
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == party::active_slot() || party::is_player_downed(i))
+                continue;
+            player &member = party::get_player(i);
+            if (member.where_are_you == you.where_are_you
+                && member.depth == you.depth
+                && you.see_cell(member.pos()))
+            {
+                if (party::are_gods_concordant(GOD_ZIN, member.religion))
+                {
+                    party::heal_or_buff_party_member(i, 0, NUM_DURATIONS, 0, true);
+                }
+
+            }
+        }
+    }
 }
 
 void tso_divine_shield()
@@ -1330,6 +1416,31 @@ void tso_divine_shield()
 
     const int charges = 3 + you.skill_rdiv(SK_INVOCATIONS, 2, 5);
     you.duration[DUR_DIVINE_SHIELD] = max(you.duration[DUR_DIVINE_SHIELD], charges);
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_SHINING_ONE, ally.religion)
+                && !(ally.holiness() & (MH_UNDEAD | MH_DEMONIC)))
+            {
+                const int ally_charges = max(2, (charges * 2) / 3);
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_DIVINE_SHIELD, ally_charges,
+                    "The Shining One extends a golden aegis around");
+            }
+
+        }
+    }
 }
 
 void elyvilon_purification()
@@ -1344,6 +1455,29 @@ void elyvilon_purification()
     you.duration[DUR_WEAK] = 0;
     undrain_hp(9999);
     you.redraw_evasion = true;
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_ELYVILON, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 0, 0, NUM_DURATIONS, 0,
+                    "Elyvilon's purifying light cleanses", true);
+            }
+
+        }
+    }
 }
 
 static const vector<enchant_type> healable_enchantments =
@@ -1360,6 +1494,16 @@ static const vector<enchant_type> healable_enchantments =
 
 bool elyvilon_divine_alms_eligible(const monster& target)
 {
+    if (party::is_enabled() && party::is_proxy_monster(target))
+    {
+        const int slot = party::proxy_slot(target);
+        if (slot >= 0 && !party::is_player_downed(slot))
+        {
+            return party::are_gods_concordant(
+                GOD_ELYVILON, party::get_player(slot).religion);
+        }
+    }
+
     if (!target.friendly() || target.is_peripheral())
         return false;
 
@@ -1400,6 +1544,36 @@ void elyvilon_divine_alms(monster& target)
 
     mprf("The light of Elyvilon comforts %s%s.",
          target.name(DESC_THE).c_str(), msg.c_str());
+
+    if (party::is_enabled())
+    {
+        if (party::is_proxy_monster(target))
+        {
+            const int slot = party::proxy_slot(target);
+            if (slot >= 0
+                && party::are_gods_concordant(GOD_ELYVILON, party::get_player(slot).religion))
+            {
+                party::heal_or_buff_party_member(slot, healed, DUR_REGENERATION, 15, true);
+            }
+        }
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == party::active_slot() || party::is_player_downed(i))
+                continue;
+            player &member = party::get_player(i);
+            if (member.where_are_you == you.where_are_you
+                && member.depth == you.depth
+                && you.see_cell(member.pos()))
+            {
+                if (party::are_gods_concordant(GOD_ELYVILON, member.religion))
+                {
+                    party::heal_or_buff_party_member(i, 12 + random2(15),
+                                                     DUR_REGENERATION, 15, false);
+                }
+
+            }
+        }
+    }
 }
 
 void elyvilon_divine_vigour()
@@ -1428,6 +1602,28 @@ void elyvilon_divine_vigour()
     }
 
     player_update_auras();
+
+    if (party::is_enabled())
+    {
+        party::revive_downed_players(false, 20);
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == party::active_slot() || party::is_player_downed(i))
+                continue;
+            player &member = party::get_player(i);
+            if (member.where_are_you == you.where_are_you
+                && member.depth == you.depth
+                && you.see_cell(member.pos()))
+            {
+                if (party::are_gods_concordant(GOD_ELYVILON, member.religion))
+                {
+                    party::heal_or_buff_party_member(i, 20 + random2(25),
+                                                     DUR_REGENERATION, 20, true);
+                }
+
+            }
+        }
+    }
 }
 
 void elyvilon_remove_divine_vigour()
@@ -1451,10 +1647,33 @@ bool vehumet_supports_spell(spell_type spell)
 
 void trog_do_trogs_hand(int pow)
 {
-    you.increase_duration(DUR_TROGS_HAND,
-                          5 + roll_dice(2, pow / 3 + 1), 100,
+    const int dur = 5 + roll_dice(2, pow / 3 + 1);
+    you.increase_duration(DUR_TROGS_HAND, dur, 100,
                           "Your skin crawls.");
     mprf(MSGCH_DURATION, "You feel strong-willed.");
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_TROG, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_TROGS_HAND, max(4, dur / 2),
+                    "Trog's iron-willed vigour toughens");
+            }
+
+        }
+    }
 }
 
 void trog_remove_trogs_hand()
@@ -1957,7 +2176,8 @@ void cheibriados_time_bend(int pow)
     for (adjacent_iterator ai(you.pos()); ai; ++ai)
     {
         monster* mon = monster_at(*ai);
-        if (mon && !mon->is_stationary())
+        if (mon && !mon->is_stationary() && !mon->wont_attack()
+            && !(party::is_enabled() && party::is_proxy_monster(*mon)))
         {
             int res_margin = roll_dice(mon->get_hit_dice(), 3);
             res_margin -= random2avg(pow, 2);
@@ -2010,7 +2230,8 @@ bool is_slouchable(coord_def where)
     monster* mon = monster_at(where);
     if (mon == nullptr || mon->is_stationary() || mon->helpless()
         || mons_is_projectile(mon->type)
-        || mon->asleep() && !mons_is_confused(*mon))
+        || mon->asleep() && !mons_is_confused(*mon)
+        || (party::is_enabled() && party::is_proxy_monster(*mon)))
     {
         return false;
     }
@@ -2254,7 +2475,7 @@ static map<curse_type, curse_data> _ashenzari_curses =
     } },
     { CURSE_COMPANIONS, {
         "Companions", "Comp",
-        { SK_SUMMONINGS, SK_NECROMANCY, SK_FORGECRAFT },
+        { SK_SUMMONINGS, SK_NECROMANCY, SK_FORGECRAFT, SK_AURAMANCY },
     } },
     { CURSE_BEGUILING, {
         "Beguiling", "Bglg",
@@ -3109,6 +3330,29 @@ spret dithmenos_nightfall(bool fail)
     you.duration[DUR_PRIMORDIAL_NIGHTFALL] = dur;
     you.props[NIGHTFALL_INITIAL_DUR_KEY] = dur;
 
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_DITHMENOS, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_INVIS, 6 + random2(6),
+                    "Dithmenos's primordial night cloaks");
+            }
+
+        }
+    }
+
     return spret::success;
 }
 
@@ -3545,11 +3789,37 @@ bool gozag_potion_petition()
     ASSERT(you.gold >= prices[keyin]);
     you.del_gold(prices[keyin]);
     you.attribute[ATTR_GOZAG_GOLD_USED] += prices[keyin];
+    if (party::is_enabled())
+        party::sync_shared_state_from_active();
 
     for (auto pot : *pots[keyin])
     {
-        potionlike_effect(static_cast<potion_type>(pot.get_int()), 40);
+        const potion_type ptype = static_cast<potion_type>(pot.get_int());
+        potionlike_effect(ptype, 40);
         flash_tile(you.pos(), YELLOW, 120, TILE_BOLT_POTION_PETITION);
+    }
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_GOZAG, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 6 + random2(8), 2 + random2(4), DUR_REGENERATION, 6 + random2(5),
+                    "Gozag's gilded elixir splashes onto");
+            }
+
+        }
     }
 
     for (int i = 0; i < GOZAG_MAX_POTIONS; i++)
@@ -3808,7 +4078,7 @@ static bool _shop_type_valid(shop_type type)
         return !you.has_mutation(MUT_NO_GRASPING);
     case SHOP_ARMOUR:
     case SHOP_ARMOUR_ANTIQUE:
-        return !you.has_mutation(MUT_NO_ARMOUR);
+        return player_can_use_armour();
     case SHOP_JEWELLERY:
         return !you.has_mutation(MUT_NO_JEWELLERY);
     case SHOP_BOOK:
@@ -3847,6 +4117,12 @@ bool gozag_call_merchant()
 
     you.del_gold(cost);
     you.attribute[ATTR_GOZAG_GOLD_USED] += cost;
+    if (party::is_enabled())
+    {
+        party::sync_shared_state_from_active();
+        party::apply_pantheon_gift_resonance(
+            party::active_slot(), GOD_GOZAG, "funded merchant");
+    }
 
     _gozag_place_shop(shop_index);
 
@@ -3892,8 +4168,12 @@ static const map<branch_type, int> branch_bribability_factor =
 // Tougher monsters have a stronger chance of being bribed.
 int gozag_type_bribable(monster_type type)
 {
-    if (!you_worship(GOD_GOZAG))
+    if (!you_worship(GOD_GOZAG)
+        && !(party::is_enabled()
+             && party::any_party_member_on_floor_worships(GOD_GOZAG)))
+    {
         return 0;
+    }
 
     if (mons_class_intel(type) < I_HUMAN)
         return 0;
@@ -4030,6 +4310,8 @@ bool gozag_bribe_branch()
     {
         you.del_gold(bribe_amount);
         you.attribute[ATTR_GOZAG_GOLD_USED] += bribe_amount;
+        if (party::is_enabled())
+            party::sync_shared_state_from_active();
         branch_bribe[branch] += bribe_amount;
         string msg = make_stringf(" spreads your bribe to %s!",
                                   branch == BRANCH_VESTIBULE ? "the Hells" :
@@ -4060,9 +4342,14 @@ static bool _qazlal_affected(coord_def pos)
         if (act->is_monster())
         {
             const monster *mon = act->as_monster();
-            // Never fire at elemental forces.
-            if (mon && mon->was_created_by(MON_SUMM_AID))
+            // Never fire at elemental forces or friendly party members.
+            if (mon && (mon->was_created_by(MON_SUMM_AID)
+                        || (party::is_enabled()
+                            && !party::friendly_fire_enabled()
+                            && party::is_proxy_monster(*mon))))
+            {
                 return false;
+            }
         }
     }
 
@@ -4083,17 +4370,18 @@ dice_def qazlal_upheaval_damage(bool allow_random)
         return calc_dice(3, 27 + 2 * pow / 5, false);
 }
 
-spret qazlal_upheaval(coord_def target, bool quiet, bool fail, dist *player_target)
+spret qazlal_upheaval(coord_def target, bool quiet, bool fail, dist *player_target, int damage_percent)
 {
     const int pow = _qazlal_upheaval_power();
     const int max_radius = _upheaval_radius(pow);
 
     bolt beam;
     beam.name        = "****";
-    beam.source_id   = MID_PLAYER;
+    beam.source_id   = you.mid;
     beam.source_name = "you";
     beam.thrower     = KILL_YOU;
     beam.damage      = qazlal_upheaval_damage();
+    beam.damage_percent = damage_percent;
     beam.hit         = AUTOMATIC_HIT;
     beam.glyph       = dchar_glyph(DCHAR_EXPLOSION);
     beam.loudness    = 10;
@@ -4475,6 +4763,7 @@ static const vector<mutation_type> _moderate_arcane_sacrifices =
     MUT_NO_ALCHEMY_MAGIC,
     MUT_NO_HEXES_MAGIC,
     MUT_NO_FORGECRAFT_MAGIC,
+    MUT_NO_AURAMANCY_MAGIC,
 };
 
 /// School-disabling mutations that are mostly easy to deal with.
@@ -5263,6 +5552,38 @@ string ru_sacrifice_description(ability_type sac)
                         _piety_asterisks(you.raw_piety + piety_gain).c_str());
 }
 
+bool ru_starting_health_sacrifice()
+{
+    if (!you_worship(GOD_RU) || !you.props.exists(HEALTH_SAC_KEY))
+        return false;
+    mutation_type chosen = MUT_NON_MUTATION;
+    for (const mutation_type mut : {MUT_FRAIL, MUT_PHYSICAL_VULNERABILITY,
+                                    MUT_SLOW_REFLEXES})
+    {
+        if (_sac_mut_maybe_valid(mut))
+        {
+            chosen = mut;
+            break;
+        }
+    }
+    if (chosen == MUT_NON_MUTATION)
+        return false;
+    CrawlVector& health = you.props[HEALTH_SAC_KEY].get_vector();
+    health.push_back(static_cast<int>(chosen));
+    const int piety_gain = get_sacrifice_piety(ABIL_RU_SACRIFICE_HEALTH);
+    if (!perma_mutate(chosen, 1, "Ru sacrifice"))
+    {
+        health.clear();
+        return false;
+    }
+    you.sacrifices[chosen]++;
+    you.props[NUM_SACRIFICES_KEY] = 1;
+    set_piety(min(piety_breakpoint(5), you.raw_piety + piety_gain));
+    _ru_expire_sacrifices();
+    ru_reset_sacrifice_timer(true);
+    return true;
+}
+
 
 bool ru_do_sacrifice(ability_type sac)
 {
@@ -5343,6 +5664,10 @@ bool ru_do_sacrifice(ability_type sac)
     }
     else
         _apply_ru_sacrifice(mut);
+
+    // All mutations are applied first, so the fallback avoids every skill in
+    // a multi-school sacrifice while retaining unrelated manuals.
+    archaeologist::reconcile_training();
 
     // Remove any no-longer-usable skills.
     if (is_sac_arcana)
@@ -5559,6 +5884,30 @@ void ru_draw_out_power()
     mp_inc += roll_dice(div_rand_round(you.piety(), 40), 4);
     inc_mp(mp_inc);
     drain_player(30, false, true);
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_RU, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, max(2, hp_inc / 2), max(1, mp_inc / 2),
+                    NUM_DURATIONS, 0,
+                    "Ru's transcendent focus flows into", true);
+            }
+
+        }
+    }
 }
 
 // Damage scales with XL amd piety.
@@ -5695,7 +6044,7 @@ bool ru_power_leap()
     wave.thrower = KILL_YOU;
     wave.name = "power leap";
     wave.source_name = "you";
-    wave.source_id = MID_PLAYER;
+    wave.source_id = you.mid;
     wave.flavour = BEAM_VISUAL;
     wave.colour = BROWN;
     wave.glyph = dchar_glyph(DCHAR_EXPLOSION);
@@ -5866,6 +6215,30 @@ bool uskayaw_stomp()
     mpr("You stomp with the beat, sending a shockwave through the revellers "
             "around you!");
     apply_monsters_around_square(_get_stomped, you.pos());
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!you.see_cell_no_trans(ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_USKAYAW, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_SWIFTNESS, 6 + random2(5),
+                    "Uskayaw's rhythmic beat quickens");
+            }
+
+        }
+    }
+
     return true;
 }
 
@@ -5888,7 +6261,7 @@ bool uskayaw_line_pass()
     line_pass.thrower = KILL_YOU;
     line_pass.name = "line pass";
     line_pass.source_name = "you";
-    line_pass.source_id = MID_PLAYER;
+    line_pass.source_id = you.mid;
     line_pass.flavour = BEAM_IRRESISTIBLE_CONFUSION;
     line_pass.source = you.pos();
     line_pass.hit = AUTOMATIC_HIT;
@@ -6199,6 +6572,30 @@ spret hepliaklqana_idealise(bool fail)
     const int dur = random_range(50, 80)
                     + random2avg(you.skill(SK_INVOCATIONS, 20), 2);
     ancestor->add_ench({ ENCH_IDEALISED, &you, dur});
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (!adjacent(ancestor->pos(), ally.pos()))
+                continue;
+            if (party::are_gods_concordant(GOD_HEPLIAKLQANA, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, max(4, healing / 2), 0, DUR_MIGHT, 6 + random2(5),
+                    "Hepliaklqana's ancestral memory empowers");
+            }
+
+        }
+    }
+
     return spret::success;
 }
 
@@ -6248,7 +6645,12 @@ spret hepliaklqana_transference(const coord_def& target, bool fail)
         victim->move_to(destination, MV_ALLOW_OVERLAP | MV_TRANSLOCATION, true);
     }
     else
-        ancestor->swap_with(victim->as_monster(), MV_TRANSLOCATION, true);
+    {
+        monster *vmon = victim->as_monster();
+        ancestor->swap_with(vmon, MV_TRANSLOCATION, true);
+        if (party::is_enabled() && vmon && party::is_proxy_monster(*vmon))
+            party::sync_proxy_to_player(party::proxy_slot(*vmon));
+    }
 
     mprf("%s swap%s with %s!",
          victim->name(DESC_THE).c_str(),
@@ -6573,6 +6975,32 @@ void wu_jian_heavenly_storm()
     you.set_duration(DUR_HEAVENLY_STORM, random_range(2, 3));
     you.props[WU_JIAN_HEAVENLY_STORM_KEY] = WU_JIAN_HEAVENLY_STORM_INITIAL;
     invalidate_agrid();
+
+    if (party::is_enabled())
+    {
+        const int active = party::active_slot();
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i == active || !party::slot_is_alive(i)
+                || !party::slot_is_on_current_floor(i))
+            {
+                continue;
+            }
+            const player &ally = party::Member(i);
+            if (grid_distance(you.pos(), ally.pos()) > 3
+                || !you.see_cell_no_trans(ally.pos()))
+            {
+                continue;
+            }
+            if (party::are_gods_concordant(GOD_WU_JIAN, ally.religion))
+            {
+                party::heal_or_buff_party_member(
+                    i, 0, 0, DUR_MIGHT, 8 + random2(6),
+                    "The Wu Jian Council's golden storm empowers");
+            }
+
+        }
+    }
 }
 
 bool okawaru_duel_active()

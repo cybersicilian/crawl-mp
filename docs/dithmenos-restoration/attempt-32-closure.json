@@ -1,0 +1,63 @@
+{
+  "reservationId": "776b3508-a74f-4751-9df4-582cdca2a3c0",
+  "owner": "codex/01a1595d-0932-78b2-8247-2ea2e862c9f0",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "776b3508-a74f-4751-9df4-582cdca2a3c0",
+      "owner": "codex/01a1595d-0932-78b2-8247-2ea2e862c9f0",
+      "label": "DCSS classic Dithmenos frozen build and focused tests",
+      "requestedAt": 1792504684.803636,
+      "supervisorPid": 40011,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "866cbcebdfc76acc871121ec3df05327d6564115f24cc9beda929e03120fc427",
+      "startedAt": 1792504684.80398,
+      "workerPid": 40017,
+      "processGroup": 40017,
+      "exitCode": 0,
+      "finishedAt": 1792504687.565653,
+      "supervisedProcessGroupGone": true
+    },
+    "validation": {
+      "startedAt": 1792504684.901314,
+      "finishedAt": 1792504687.561959,
+      "results": [
+        {
+          "command": [
+            "make",
+            "-j2",
+            "WEBTILES=y",
+            "NOWIZARD=y",
+            "NO_OPTIMIZE=y",
+            "STDFLAG=-std=c++14",
+            "PYTHON=/usr/local/bin/python3",
+            "catch2-tests-executable"
+          ],
+          "exitCode": 0
+        },
+        {
+          "command": [
+            "./catch2-tests-executable",
+            "[dithmenos]",
+            "--reporter",
+            "console"
+          ],
+          "exitCode": 0
+        },
+        {
+          "command": [
+            "./catch2-tests-executable",
+            "[save-compatibility]",
+            "--reporter",
+            "console"
+          ],
+          "exitCode": 0
+        }
+      ],
+      "snapshotMatchesRequest": true,
+      "workingSourceChangedDuringBuild": [],
+      "passed": true
+    }
+  }
+}

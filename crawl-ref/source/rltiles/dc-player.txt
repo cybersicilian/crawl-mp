@@ -185,6 +185,32 @@ cat3 FELID_SILLY
 cat6
 cat10
 %sdir player/base
+tortle TORTLE
+oozle OOZLE
+%rim 0
+chain_devil CHAIN_DEVIL
+eldritch ELDRITCH
+two_headed_ogre_m TWO_HEADED_OGRE
+two_headed_ogre_f
+%sdir player/hydras
+hydra1 HYDRA
+hydra2
+hydra3
+hydra4
+hydra5
+hydra6
+hydra7
+hydra8
+hydra9
+%sdir player/base
+hermit_crab HERMIT_CRAB
+protean_m PROTEAN
+faerie_dragon FAERIE_DRAGON
+ent ENT
+sparkborn SPARKBORN
+wight WIGHT
+meliai MELIAI
+golem AUTOMATON
 %end_ctg
 
 ###SHADOW
@@ -321,6 +347,11 @@ barding1 BARDING
 barding2 BARDING_EGO
 %enchant_variation BARDING randart
 barding3 BARDING_RANDART
+centaur_barding CENTAUR_BARDING
+%enchant_variation CENTAUR_BARDING shiny runed glowing
+centaur_barding_magic CENTAUR_BARDING_MAGIC
+%enchant_variation CENTAUR_BARDING randart
+centaur_barding_randart CENTAUR_BARDING_RANDART
 lightning_scales LIGHTNING_SCALES
 black_knight BLACK_KNIGHT
 %end_ctg
@@ -873,6 +904,7 @@ flail FLAIL
 flail2 FLAIL_MAGIC
 %enchant_variation FLAIL randart
 flail3 FLAIL_RANDART
+spiked_flail SPIKED_FLAIL
 dire_flail DIRE_FLAIL
 %enchant_variation DIRE_FLAIL shiny runed glowing
 dire_flail2 DIRE_FLAIL_MAGIC
@@ -1023,6 +1055,7 @@ axe_short AXE_SHORT
 
 ## launchers
 sling SLING
+fustibalus FUSTIBALUS
 bow BOW
 shortbow SHORTBOW
 orcbow1 ORCBOW

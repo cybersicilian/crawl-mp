@@ -1,4 +1,32 @@
-import crypt
+try:
+    import crypt
+except ImportError:
+    import hashlib as _crypt_hashlib
+    import hmac as _crypt_hmac
+
+    class _CryptFallback(object):
+        @staticmethod
+        def crypt(word, salt):
+            if not isinstance(word, str):
+                word = word.decode("utf-8", "replace")
+            if not isinstance(salt, str):
+                salt = salt.decode("utf-8", "replace")
+            # Extract salt prefix (up to 3rd '$' if modular crypt format, or first 16 chars)
+            if salt.startswith("$"):
+                parts = salt.split("$")
+                salt_core = "$".join(parts[:3]) + "$" if len(parts) >= 3 else salt[:16]
+            else:
+                salt_core = salt[:2] if len(salt) >= 2 else (salt or "dc")
+            dk = _crypt_hashlib.pbkdf2_hmac(
+                "sha256",
+                word.encode("utf-8"),
+                salt_core.encode("utf-8"),
+                100000,
+            ).hex()
+            return "{}{}".format(salt_core, dk)
+
+    crypt = _CryptFallback()
+
 import hashlib
 import logging
 import os
@@ -13,7 +41,7 @@ import collections
 from tornado.escape import to_unicode
 from tornado.escape import utf8
 
-from webtiles import config, util
+from webtiles import auth, config, util
 from webtiles.util import send_email
 from webtiles.util import validate_email_address
 
@@ -284,6 +312,10 @@ def get_user_by_id(id):  # type: (str) -> Optional[Tuple[int, str, int]]
 def user_passwd_match(username, passwd):  # type: (str, str) -> Optional[Tuple[str, str]]
     """Returns whether the check succeeded, the correctly cased username and a
     reason for failure."""
+    if auth.account_disabled(username):
+        return False, None, 'Shared accounts are disabled. Sign in with your own account.'
+    if not isinstance(passwd, str) or not passwd:
+        return False, None, 'Enter your username and password.'
     passwd = passwd[0:config.get('max_passwd_length')]
 
     # XX code semi-duplication
@@ -328,6 +360,8 @@ def encrypt_pw(passwd):  # type: (str) -> str
 
 def register_user(username, passwd, email):  # type: (str, str, str) -> Optional[str]
     """Returns an error message or None on success."""
+    if auth.account_disabled(username):
+        return "Shared accounts are disabled. Choose your own adventurer name."
     if config.get('new_accounts_disabled'):
         # XX show a message before they enter form data...
         return "New account creation is disabled."

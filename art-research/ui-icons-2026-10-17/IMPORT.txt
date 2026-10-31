@@ -1,0 +1,35 @@
+SOURCING RESULT - NO RUNTIME INSTALLATION
+
+Open report.html for the recommendation, actual 16px comparisons, licensing,
+all 112 canonical role mappings, 24 aliases and unresolved roles.
+
+import-candidates/roles/ contains 90 exact original Fugue PNG copies named for
+their proposed UI role. Only 53 have a direct semantic match. The other 37
+are labeled metaphors in role-mapping.json and require visual/meaning review.
+There are 22 unresolved roles. No PNG is supplied for a gap.
+
+import-candidates/originals/ preserves the original author filenames.
+import-candidates/fugue-partial-16px.png preserves current canonical frame order
+(16 columns, 16px cells, 256x112). Gap frames are transparent. This is a review
+atlas, not a complete drop-in replacement. manifest.json sets complete=false
+and fallback=null. Installing it blindly would hide 22 icons.
+
+Source archives are retained in sources/. Per-asset hashes, filenames,
+license identifiers and exact Shade crop rectangles are in role-mapping.json.
+Source archive URLs, versions, SHA-256 hashes and verification date are in
+provenance.json. Author notices and license texts are in licenses/.
+
+To reproduce the candidates and PNG comparisons offline:
+  python3 prepare.py
+Requires Python 3 and Pillow. The current Mac's bundled runtime is:
+  /Users/iancaltabiano/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
+
+To regenerate report.html after changing a proposed selection:
+  python3 build_report.py
+
+No runtime JS/CSS, image atlas, native game artwork, deployment settings,
+interaction behavior, tooltips, exact values, compact layout or accessibility
+labels were changed. A later integration should reuse iconAliases and canonical
+frame ordering, preserve independently rotating compass layers, and retain
+native item/spell/ability/deity/rune images. This report is static art evidence;
+it is not a live-game render or user recognition test.

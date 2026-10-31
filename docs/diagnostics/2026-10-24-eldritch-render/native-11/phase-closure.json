@@ -1,0 +1,34 @@
+{
+  "state": {
+    "runId": "1041424a-5f9b-47b1-a35d-532e5807f83c",
+    "owner": "codex/01a16b6d-f723-7503-b137-767be6599e33",
+    "label": "DCSS Eldritch real native rendering",
+    "requestedAt": 1792861061.92766,
+    "supervisorPid": 15390,
+    "status": "completed_held",
+    "reservation": true,
+    "requestId": "dedc91f1e94254e6ce250dcf738d1378c71784ef6531d14bafa864f8e8a0ca95",
+    "startedAt": 1792861061.9279559,
+    "workerPid": 15391,
+    "processGroup": 15391,
+    "exitCode": 0,
+    "finishedAt": 1792861129.655801,
+    "supervisedProcessGroupGone": true
+  },
+  "browser": {
+    "pid": 15438,
+    "exitCode": 0,
+    "signalCode": null
+  },
+  "owned": {
+    "unit": "dcss-eldritch-render-01a16b6d-qa11.service",
+    "tunnelGroup": 15392,
+    "browserExit": 0,
+    "tunnelRemaining": [],
+    "remoteStop": {
+      "exit": 0,
+      "stdout": "MainPID=0\nActiveState=inactive\nSubState=dead\n",
+      "stderr": "Existing host keys found in /Users/iancaltabiano/.ssh/google_compute_known_hosts\nWARNING: \n\nTo increase the performance of the tunnel, consider installing NumPy. For instructions,\nplease see https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth\n\n"
+    }
+  }
+}

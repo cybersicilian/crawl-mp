@@ -1,0 +1,253 @@
+[
+  {
+    "series": "typical-before-4",
+    "build": "caster",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Hive:2",
+    "turn": 4626,
+    "xl": 16,
+    "explored": [
+      "Bur:1",
+      "Bur:2",
+      "Hive:1"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 9,
+      "Haste": 2,
+      "Fear": 4,
+      "Blinking": 2,
+      "Magic": 3,
+      "Bombard": 44
+    },
+    "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c",
+    "source": "docs/design/burrows-playtest/validation/typical-before-4/games/caster-2026102701/result.json"
+  },
+  {
+    "series": "typical-before-4",
+    "build": "melee",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Worm:3",
+    "turn": 8788,
+    "xl": 17,
+    "explored": [
+      "Bur:1",
+      "Bur:2",
+      "Bur:3",
+      "Bur:4",
+      "Hive:1",
+      "Hive:2",
+      "Worm:1",
+      "Worm:2"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 10,
+      "Curing": 2,
+      "Haste": 2,
+      "Might": 5,
+      "Fear": 5,
+      "Blinking": 4,
+      "Heroism": 52,
+      "Finesse": 1
+    },
+    "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c",
+    "source": "docs/design/burrows-playtest/validation/typical-before-4/games/melee-2026102701/result.json"
+  },
+  {
+    "series": "typical-before-4",
+    "build": "ranged",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Hive:2",
+    "turn": 3608,
+    "xl": 16,
+    "explored": [
+      "Bur:1",
+      "Bur:2",
+      "Hive:1"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 5,
+      "Curing": 2,
+      "Haste": 2,
+      "Fear": 4,
+      "Heroism": 24
+    },
+    "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c",
+    "source": "docs/design/burrows-playtest/validation/typical-before-4/games/ranged-2026102701/result.json"
+  },
+  {
+    "series": "typical-after-2",
+    "build": "caster",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Bur:1",
+    "turn": 233,
+    "xl": 16,
+    "explored": [],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 6,
+      "Haste": 1,
+      "Fear": 3,
+      "Blinking": 2,
+      "Magic": 3,
+      "Bombard": 5
+    },
+    "nativeSha256": "1d25083a4113e4928d90263a5de3d3e705be6e2b0dfd781393c2204a6134b4ce",
+    "source": "docs/design/burrows-playtest/validation/typical-after-2/games/caster-2026102701/result.json"
+  },
+  {
+    "series": "typical-after-2",
+    "build": "melee",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "harness/native failure (exit -6)",
+    "place": "Hive:2",
+    "turn": 4011,
+    "xl": 16,
+    "explored": [
+      "Bur:1",
+      "Bur:2",
+      "Hive:1"
+    ],
+    "fullRoute": false,
+    "actions": {},
+    "nativeSha256": "1d25083a4113e4928d90263a5de3d3e705be6e2b0dfd781393c2204a6134b4ce",
+    "source": "docs/design/burrows-playtest/validation/typical-after-2/games/melee-2026102701/result.json"
+  },
+  {
+    "series": "typical-after-2",
+    "build": "ranged",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Bur:1",
+    "turn": 312,
+    "xl": 16,
+    "explored": [],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 6,
+      "Haste": 2,
+      "Fear": 3,
+      "Blinking": 2,
+      "Heroism": 3,
+      "Finesse": 1
+    },
+    "nativeSha256": "1d25083a4113e4928d90263a5de3d3e705be6e2b0dfd781393c2204a6134b4ce",
+    "source": "docs/design/burrows-playtest/validation/typical-after-2/games/ranged-2026102701/result.json"
+  },
+  {
+    "series": "melee-crash-regression",
+    "build": "melee",
+    "seed": "2026102701",
+    "start": "Bur:1",
+    "outcome": "died",
+    "place": "Worm:3",
+    "turn": 11054,
+    "xl": 18,
+    "explored": [
+      "Bur:1",
+      "Bur:2",
+      "Bur:3",
+      "Bur:4",
+      "Hive:1",
+      "Hive:2",
+      "Worm:1",
+      "Worm:2"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 7,
+      "Curing": 6,
+      "Haste": 2,
+      "Might": 5,
+      "Fear": 5,
+      "Blinking": 3,
+      "Heroism": 71,
+      "Finesse": 1
+    },
+    "nativeSha256": "55a76994e4424eef2bdd87bccb049d10cc21b456882bffafb3e11ee81d1fc87d",
+    "source": "docs/design/burrows-playtest/validation/melee-crash-regression/games/melee-2026102701/result.json"
+  },
+  {
+    "series": "late-wormlands-2",
+    "build": "caster",
+    "seed": "2026102701",
+    "start": "Worm:1",
+    "outcome": "died",
+    "place": "Worm:2",
+    "turn": 712,
+    "xl": 20,
+    "explored": [],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 6,
+      "Haste": 2,
+      "Fear": 3,
+      "Magic": 2,
+      "Bombard": 7
+    },
+    "nativeSha256": "dd4cdf6e3629ffc8fb9ba022729234fcde03c818302a198739c32577176ec39e",
+    "source": "docs/design/burrows-playtest/validation/late-wormlands-2/games/caster-2026102701/result.json"
+  },
+  {
+    "series": "late-wormlands-2",
+    "build": "melee",
+    "seed": "2026102701",
+    "start": "Worm:1",
+    "outcome": "died",
+    "place": "Worm:3",
+    "turn": 2212,
+    "xl": 20,
+    "explored": [
+      "Worm:1",
+      "Worm:2"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 6,
+      "Curing": 1,
+      "Haste": 2,
+      "Might": 4,
+      "Fear": 4,
+      "Blinking": 2,
+      "Heroism": 14
+    },
+    "nativeSha256": "dd4cdf6e3629ffc8fb9ba022729234fcde03c818302a198739c32577176ec39e",
+    "source": "docs/design/burrows-playtest/validation/late-wormlands-2/games/melee-2026102701/result.json"
+  },
+  {
+    "series": "late-wormlands-2",
+    "build": "ranged",
+    "seed": "2026102701",
+    "start": "Worm:1",
+    "outcome": "died",
+    "place": "Worm:2",
+    "turn": 1392,
+    "xl": 20,
+    "explored": [
+      "Worm:1"
+    ],
+    "fullRoute": false,
+    "actions": {
+      "Heal wounds": 6,
+      "Curing": 1,
+      "Haste": 1,
+      "Fear": 3,
+      "Blinking": 2,
+      "Heroism": 10
+    },
+    "nativeSha256": "dd4cdf6e3629ffc8fb9ba022729234fcde03c818302a198739c32577176ec39e",
+    "source": "docs/design/burrows-playtest/validation/late-wormlands-2/games/ranged-2026102701/result.json"
+  }
+]

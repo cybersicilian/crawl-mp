@@ -371,6 +371,10 @@ NAME:   uniq_nikola
 DEPTH:  Depths:1-2, Elf, Swamp, Snake, Shoals, Spider, Vaults:1-3
 : place_unique(_G, "Nikola")
 
+NAME:   uniq_rin
+DEPTH:  Depths:3-, Vaults:2-, Crypt
+: place_unique(_G, "Rin the nine-tailed")
+
 NAME:   uniq_parghit
 DEPTH:  Depths:3-, Zot:1-4
 : place_unique(_G, "Parghit")

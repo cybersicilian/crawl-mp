@@ -1,0 +1,56 @@
+{
+  "status": "deployed_and_verified",
+  "production_deployed": true,
+  "release": "/opt/dcss/releases/autoexplore-release-01a1801a",
+  "activated_at": "2026-10-28T04:13:46.798240+00:00",
+  "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+  "changes": [
+    "Optimized native engine compiled with -O2 using unchanged gameplay source",
+    "Resume automation at accepted native completion after yielding to the event loop",
+    "Fast web exploration default, overridden by explicit player RC settings",
+    "Reject projected, duplicate and malformed completion acknowledgements"
+  ],
+  "performance": {
+    "scenario": "Same deterministic disposable two-owner native scenario; not a physical-device FPS guarantee",
+    "explore_steps": 31,
+    "before_median_ms": 81.0610520420596,
+    "after_median_ms": 21.35123696643859,
+    "integrated_completion_to_dispatch_median_ms": 0.1844699727371335
+  },
+  "save_preservation": {
+    "backup": "/var/lib/dcss/recovery/autoexplore-release-01a1801a",
+    "all_save_files_preserved": true,
+    "active_games_checkpointed": 1,
+    "old_to_new_to_old_save_round_trip_passed": true
+  },
+  "verification": {
+    "local_scheduler_and_input_tests": 47,
+    "production_contract_tests": 5,
+    "public_browser_engines": [
+      "chromium",
+      "webkit"
+    ],
+    "public_test_campaign_saved": true,
+    "graphics_restored": true,
+    "autoexplore_public_scope": {
+      "safety_stop_verified": true,
+      "visible_enemies": 1,
+      "public_movement_verified": false,
+      "movement_coverage": "Isolated native scheduler/engine scenario",
+      "before": [
+        31,
+        9
+      ],
+      "after": [
+        31,
+        9
+      ],
+      "stopped": true
+    },
+    "native_autoexplore_progress_and_cancel": "scheduler-optimized/result.json"
+  },
+  "source_manifest": "release-manifest.json",
+  "deployment_receipt": "active-verification.json",
+  "performance_receipt": "performance-comparison.json",
+  "public_receipt": "public-result.json"
+}

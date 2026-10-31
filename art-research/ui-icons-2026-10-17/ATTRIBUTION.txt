@@ -1,0 +1,53 @@
+ARTWORK CREDITS - research and import candidates - verified 2026-10-17
+
+Fugue Icons 3.5.6
+(C) 2013 Yusuke Kamiyamane. All rights reserved.
+https://p.yusukekamiyamane.com/
+Creative Commons Attribution 3.0 Unported
+https://creativecommons.org/licenses/by/3.0/
+Selected PNGs are byte-for-byte copies of the author's icons/ files.
+The partial atlas changes arrangement only. Comparisons composite unchanged
+pixels on backgrounds; 2x copies use nearest-neighbor integer scaling.
+No icon artwork was generated, redrawn, recolored or composited from symbols.
+The source archive has separately licensed logo/symbol exceptions. The selected
+subset uses none of geotag, language, open-share, opml, share, xfn or brand logos.
+Retain licenses/fugue-original-notice.txt when redistributing the source archive.
+
+Kyrise's Free 16x16 RPG Icon Pack
+Graphics made by Kyrise (Gabie Nory).
+https://kyrise.itch.io/kyrises-free-16x16-rpg-icon-pack
+Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+Selected PNGs are byte-for-byte copies of the author's v1.2 OpenGameArt upload.
+The current itch.io listing offers v1.3; that version was not obtained.
+Comparisons change display arrangement and scale only.
+
+16x16 Assorted RPG Icons
+Graphics by Shade.
+https://merchant-shade.itch.io/16x16-mixed-rpg-icons
+https://opengameart.org/content/16x16-assorted-rpg-icons
+Creative Commons Zero 1.0 Universal (CC0)
+https://creativecommons.org/publicdomain/zero/1.0/
+Attribution is voluntary. Included here to preserve provenance.
+Selections are exact 16x16 cell crops of the author's source sheets.
+No source pixels were modified. Crop coordinates are in role-mapping.json.
+
+Screened but not selected:
+Roguelike/RPG pack by Kenney Vleugels for Kenney, with help by Lynn Evers.
+https://kenney.nl/assets/roguelike-rpg-pack
+CC0 1.0. Author's full archive retained in sources/ for reproducibility.
+
+PROJECT LICENSE BOUNDARY
+The DCSS program is GPL-2.0-or-later; most native artwork is CC0.
+These independent candidate PNGs retain their own artwork licenses.
+Do not relabel Fugue as GPL or CC0. Retain creator, title, source URL, license
+link, notices and modification statement in distribution credits and alongside
+the asset files. Do not add DRM or downstream redistribution restrictions.
+For upstream submission, CC0 is the repository's stated usual new-art policy;
+the CC BY candidates do not satisfy that default without a policy exception.
+
+Suggested in-product credit if a selected family is later installed:
+"UI artwork: Fugue Icons by Yusuke Kamiyamane, CC BY 3.0,
+https://p.yusukekamiyamane.com/. Selected PNGs unchanged; arranged in an atlas."
+Add Kyrise's CC BY 4.0 credit only if those assets are actually used.
+Keep the license links accessible in the distributed credits/license notice.

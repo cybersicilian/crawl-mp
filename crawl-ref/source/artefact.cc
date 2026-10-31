@@ -4,8 +4,13 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vellum.h"
+#include "coop-content.h"
+#include "oozle-memory-effects.h"
+#include "wight.h"
 
 #include "artefact.h"
+#include "game-record.h"
 #include "art-enum.h"
 
 #include <algorithm>
@@ -274,6 +279,24 @@ bool is_unrandom_artefact(const item_def &item, int which)
            && (!which || which == item.unrand_idx);
 }
 
+bool has_unrand_effect(const item_def& item, int which)
+{
+    return (is_unrandom_artefact(item, which) && vellum::native_power_enabled(item))
+        || vellum::has_power(item, which);
+}
+
+int effective_item_enchantment(const item_def& item)
+{
+    return native_item_enchantment(item) + wight::weapon_bonus(item)
+        + vellum::enchantment_bonus(you, item)
+        + vellum::script_enchantment(item);
+}
+
+int native_item_enchantment(const item_def& item)
+{
+    return item.plus + vellum::restored_drawback(item, ARTP_NUM_PROPERTIES);
+}
+
 bool is_special_unrandom_artefact(const item_def &item)
 {
     return item.flags & ISFLAG_UNRANDART
@@ -420,7 +443,8 @@ static map<jewellery_type, vector<intrinsic_artp>> jewellery_artps = {
  * @param props[out]   The properties list to be populated.
  */
 static void _populate_jewel_intrinsic_artps(const item_def &item,
-                                            artefact_properties_t &props)
+                                            artefact_properties_t &props,
+                                            bool default_pluses)
 {
     const jewellery_type jewel = (jewellery_type)item.sub_type;
     auto artps = map_find(jewellery_artps, jewel);
@@ -433,7 +457,7 @@ static void _populate_jewel_intrinsic_artps(const item_def &item,
         // not be set to its standard value until later. So use that value when
         // plus is zero.
         if (artp.uses_plus)
-            props[artp.type] += item.plus ? item.plus : artp.value;
+            props[artp.type] += item.plus || !default_pluses ? item.plus : artp.value;
         else
             props[artp.type] += artp.value;
     }
@@ -492,7 +516,8 @@ static void _populate_talisman_intrinsic_artps(const item_def &item,
  * @param props[out]   The properties list to be populated.
  */
 static void _populate_item_intrinsic_artps(const item_def &item,
-                                           artefact_properties_t &props)
+                                           artefact_properties_t &props,
+                                           bool default_pluses = true)
 {
     switch (item.base_type)
     {
@@ -504,7 +529,7 @@ static void _populate_item_intrinsic_artps(const item_def &item,
             _populate_staff_intrinsic_artps((stave_type)item.sub_type, props);
             break;
         case OBJ_JEWELLERY:
-            _populate_jewel_intrinsic_artps(item, props);
+            _populate_jewel_intrinsic_artps(item, props, default_pluses);
             break;
         case OBJ_TALISMANS:
             _populate_talisman_intrinsic_artps(item, props);
@@ -513,6 +538,11 @@ static void _populate_item_intrinsic_artps(const item_def &item,
         default:
             break;
     }
+}
+
+void populate_item_intrinsic_artps(const item_def &item, artefact_properties_t &props)
+{
+    _populate_item_intrinsic_artps(item, props, false);
 }
 
 void artefact_desc_properties(const item_def &item,
@@ -849,6 +879,34 @@ bool are_fixed_props_ok(item_def& item)
     }
 
     return true;
+}
+
+bool artefact_properties_compatible(const item_def& item, const artefact_properties_t& props)
+{
+    artefact_properties_t intrinsic;
+    intrinsic.init(0);
+    populate_item_intrinsic_artps(item, intrinsic);
+    for (int i = 0; i < ART_PROPERTIES; ++i)
+        if (!_artp_can_go_on_item(static_cast<artefact_prop_type>(i), props[i],
+                                  item, intrinsic, props))
+            return false;
+    return true;
+}
+
+bool artefact_property_compatible(const item_def& item, artefact_prop_type prop,
+                                  int final_value, bool enforce_generation_rules)
+{
+    if (prop < 0 || prop >= ARTP_NUM_PROPERTIES || !artp_value_is_valid(prop, final_value)
+        || (enforce_generation_rules && !_artp_can_randomly_generate(prop, item)))
+        return false;
+    artefact_properties_t intrinsic, extant;
+    intrinsic.init(0);
+    extant.init(0);
+    populate_item_intrinsic_artps(item, intrinsic);
+    if (is_artefact(item))
+        artefact_properties(item, extant);
+    extant[prop] = final_value - intrinsic[prop];
+    return artefact_properties_compatible(item, extant);
 }
 
 /// Generation info for a type of artefact property.
@@ -1415,6 +1473,8 @@ static void _get_randart_properties(const item_def &item,
 
 void setup_unrandart(item_def &item, bool creating)
 {
+    if (!creating && item.props.exists("vellum_script_source"))
+        return; // A conserved script carries mutable state, never its donor's static extras.
     ASSERT(is_unrandom_artefact(item));
     CrawlVector &rap = item.props[ARTEFACT_PROPS_KEY].get_vector();
     const unrandart_entry *unrand = _seekunrandart(item);
@@ -1428,6 +1488,7 @@ void setup_unrandart(item_def &item, bool creating)
     item.base_type = unrand->base_type;
     item.sub_type  = unrand->sub_type;
     item.plus      = unrand->plus;
+    vellum::reapply_depletion(item);
 }
 
 static bool _init_artefact_properties(item_def &item)
@@ -1472,7 +1533,8 @@ void artefact_properties(const item_def &item,
         ASSERT(rap_vec.get_max_size() == ART_PROPERTIES);
 
         for (vec_size i = 0; i < ART_PROPERTIES; i++)
-            proprt[i] = rap_vec[i].get_short();
+            proprt[i] = rap_vec[i].get_short()
+                + vellum::restored_drawback(item, static_cast<artefact_prop_type>(i));
     }
     else // if (is_unrandom_artefact(item))
     {
@@ -1483,7 +1545,19 @@ void artefact_properties(const item_def &item,
     }
 }
 
-int artefact_property(const item_def &item, artefact_prop_type prop)
+void effective_artefact_properties(const item_def& item, artefact_properties_t& props)
+{
+    artefact_properties(item, props);
+    for (int i = 0; i < ART_PROPERTIES; ++i)
+        props[i] += vellum::item_bonus(you, item, static_cast<artefact_prop_type>(i));
+}
+
+int artefact_property(const item_def& item, artefact_prop_type prop)
+{
+    return native_artefact_property(item, prop) + vellum::item_bonus(you, item, prop);
+}
+
+int native_artefact_property(const item_def &item, artefact_prop_type prop)
 {
     ASSERT(is_artefact(item));
     ASSERT(item.base_type != OBJ_BOOKS);
@@ -1492,7 +1566,7 @@ int artefact_property(const item_def &item, artefact_prop_type prop)
     {
         const CrawlVector &rap_vec =
             item.props[ARTEFACT_PROPS_KEY].get_vector();
-        return rap_vec[prop].get_short();
+        return rap_vec[prop].get_short() + vellum::restored_drawback(item, prop);
     }
     else // if (is_unrandom_artefact(item))
     {
@@ -1879,6 +1953,9 @@ int find_okay_unrandart(uint8_t aclass, uint8_t atype, int item_level,
             continue;
         }
 
+        if (!coop_content::enabled() && coop_content::exclusive_unrand(index))
+            continue;
+
         if (!_unrand_is_compatible(*entry, index, (object_class_type)aclass,
                                    atype, acquirement, mons))
         {
@@ -2052,7 +2129,10 @@ bool make_item_randart(item_def &item, bool ignore_mundane)
 
     // This item already is a randart.
     if (item.flags & ISFLAG_RANDART)
+    {
+        game_record::item_id(item);
         return true;
+    }
 
     // Not a truly random artefact.
     if (item.flags & ISFLAG_UNRANDART)
@@ -2096,6 +2176,7 @@ bool make_item_randart(item_def &item, bool ignore_mundane)
         item.props[ARTEFACT_APPEAR_KEY].get_string() =
             make_artefact_name(item, true);
 
+    game_record::item_id(item);
     return true;
 }
 
@@ -2131,6 +2212,7 @@ void make_ashenzari_randart(item_def &item)
     // This item already is a randart, just rename
     if (item.flags & ISFLAG_RANDART)
     {
+        game_record::item_id(item);
         set_artefact_name(item, _ashenzari_artefact_name(item));
         return;
     }
@@ -2145,6 +2227,7 @@ void make_ashenzari_randart(item_def &item)
     _artefact_setup_prop_vectors(item);
     item.flags |= ISFLAG_RANDART;
     item.flags |= ISFLAG_IDENTIFIED;
+    game_record::item_id(item);
 
     if (brand != SPWPN_NORMAL)
         set_artefact_brand(item, brand);
@@ -2274,6 +2357,7 @@ void fill_gizmo_properties(CrawlVector& gizmos)
         item_def& gizmo = gizmos[i].get_item();
         _artefact_setup_prop_vectors(gizmo);
         gizmo.flags |= ISFLAG_RANDART;
+        game_record::item_id(gizmo);
 
         // Apply 1 rare prop and 2 common props to each gizmo.
         // (We are gauranteed to see all common props each run, but only a few
@@ -2400,6 +2484,7 @@ bool make_item_unrandart(item_def &item, int unrand_index)
 
 void unrand_reacts()
 {
+    oozle::world_effects();
     if (you.equipment.do_unrand_reacts == 0)
         return;
 
@@ -2410,7 +2495,7 @@ void unrand_reacts()
             continue;
 
         item_def& item = entry.get_item();
-        if (is_unrandom_artefact(item))
+        if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
         {
             const unrandart_entry* uentry = get_unrand_entry(item.unrand_idx);
 
@@ -2426,6 +2511,7 @@ void unrand_reacts()
 
 void unrand_death_effects(monster* mons, killer_type killer)
 {
+    oozle::death_effects(mons, killer);
     if (you.equipment.do_unrand_death_effects == 0)
         return;
 
@@ -2436,7 +2522,7 @@ void unrand_death_effects(monster* mons, killer_type killer)
             continue;
 
         item_def& item = entry.get_item();
-        if (is_unrandom_artefact(item))
+        if (is_unrandom_artefact(item) && vellum::native_power_enabled(item))
         {
             const unrandart_entry* uentry = get_unrand_entry(item.unrand_idx);
 
@@ -2454,6 +2540,12 @@ void artefact_set_property(item_def &item, artefact_prop_type prop, int val)
 {
     ASSERT(is_artefact(item));
     ASSERT(item.props.exists(ARTEFACT_PROPS_KEY));
+
+    // Native scripts must not regenerate an enchantment that was extracted.
+    if (item.props.exists("vellum_depleted"))
+        for (const auto& depleted : item.props["vellum_depleted"].get_vector())
+            if (depleted.get_int() == prop)
+                val = 0;
 
     CrawlVector &rap_vec = item.props[ARTEFACT_PROPS_KEY].get_vector();
     ASSERT(rap_vec.get_type()     == SV_SHORT);

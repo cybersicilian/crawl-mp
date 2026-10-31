@@ -1,0 +1,889 @@
+{
+  "build": "ranged",
+  "seed": "2026102701",
+  "start": "Snake:1",
+  "exitCode": 0,
+  "timedOut": false,
+  "completed": false,
+  "death": true,
+  "audits": [
+    {
+      "tag": "enter",
+      "maxhp": 133,
+      "maxmp": 22,
+      "where": "Snake:1",
+      "vaults": "layout_cave_pods, statue_in_the_mist_lemuel and uniq_donald",
+      "hp": 133,
+      "mp": 22,
+      "gold": 0,
+      "honey": 0,
+      "xp": 19166,
+      "turn": 53,
+      "inventory": [
+        {
+          "quantity": 1,
+          "name": "+0 shortbow",
+          "class": "weapon"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 leather armour",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "ring of poison resistance",
+          "class": "jewellery"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 pair of boots",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 pair of gloves",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 cloak",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 helmet",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+2 ring mail",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+3 orcbow",
+          "class": "weapon"
+        },
+        {
+          "quantity": 1,
+          "name": "scroll of butterflies",
+          "class": "scroll"
+        },
+        {
+          "quantity": 3,
+          "name": "3 scrolls of fear",
+          "class": "scroll"
+        },
+        {
+          "quantity": 3,
+          "name": "3 scrolls of fog",
+          "class": "scroll"
+        },
+        {
+          "quantity": 2,
+          "name": "2 scrolls of teleportation",
+          "class": "scroll"
+        },
+        {
+          "quantity": 2,
+          "name": "2 scrolls of blinking",
+          "class": "scroll"
+        },
+        {
+          "quantity": 2,
+          "name": "2 potions of magic",
+          "class": "potion"
+        },
+        {
+          "quantity": 2,
+          "name": "2 potions of might",
+          "class": "potion"
+        },
+        {
+          "quantity": 2,
+          "name": "2 potions of haste",
+          "class": "potion"
+        },
+        {
+          "quantity": 6,
+          "name": "6 potions of curing",
+          "class": "potion"
+        },
+        {
+          "quantity": 6,
+          "name": "6 potions of heal wounds",
+          "class": "potion"
+        }
+      ],
+      "xl": 16,
+      "items": [
+        {
+          "x": 76,
+          "artefact": false,
+          "name": "30 gold pieces",
+          "y": 39,
+          "quantity": 30,
+          "class": "gold"
+        },
+        {
+          "x": 89,
+          "artefact": false,
+          "name": "scroll of vulnerability",
+          "y": 40,
+          "quantity": 1,
+          "class": "scroll"
+        },
+        {
+          "x": 66,
+          "artefact": false,
+          "name": "21 gold pieces",
+          "y": 44,
+          "quantity": 21,
+          "class": "gold"
+        },
+        {
+          "x": 73,
+          "artefact": false,
+          "name": "parchment of Kinetic Grapnel",
+          "y": 49,
+          "quantity": 1,
+          "class": "book"
+        },
+        {
+          "x": 89,
+          "artefact": false,
+          "name": "28 gold pieces",
+          "y": 54,
+          "quantity": 28,
+          "class": "gold"
+        },
+        {
+          "x": 83,
+          "artefact": false,
+          "name": "scale mail",
+          "y": 55,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 53,
+          "artefact": false,
+          "name": "dagger",
+          "y": 64,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 37,
+          "artefact": false,
+          "name": "leather armour",
+          "y": 66,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 65,
+          "artefact": false,
+          "name": "22 gold pieces",
+          "y": 69,
+          "quantity": 22,
+          "class": "gold"
+        },
+        {
+          "x": 74,
+          "artefact": false,
+          "name": "chain mail",
+          "y": 71,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 78,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "y": 74,
+          "quantity": 16,
+          "class": "gold"
+        },
+        {
+          "x": 35,
+          "artefact": false,
+          "name": "robe",
+          "y": 75,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 32,
+          "artefact": false,
+          "name": "3 scrolls of amnesia",
+          "y": 78,
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "x": 83,
+          "artefact": false,
+          "name": "spear",
+          "y": 78,
+          "quantity": 1,
+          "class": "weapon"
+        }
+      ],
+      "progress": 0,
+      "monsters": [
+        {
+          "x": 72,
+          "y": 45,
+          "name": "naga warrior",
+          "xp": 799
+        },
+        {
+          "x": 61,
+          "y": 49,
+          "name": "black mamba",
+          "xp": 453
+        },
+        {
+          "x": 85,
+          "y": 50,
+          "name": "mana viper",
+          "xp": 726
+        },
+        {
+          "x": 70,
+          "y": 51,
+          "name": "naga",
+          "xp": 164
+        },
+        {
+          "x": 65,
+          "y": 53,
+          "name": "black mamba",
+          "xp": 458
+        },
+        {
+          "x": 81,
+          "y": 53,
+          "name": "Donald",
+          "xp": 1354
+        },
+        {
+          "x": 82,
+          "y": 53,
+          "name": "naga mage",
+          "xp": 447
+        },
+        {
+          "x": 71,
+          "y": 55,
+          "name": "salamander",
+          "xp": 538
+        },
+        {
+          "x": 61,
+          "y": 56,
+          "name": "anaconda",
+          "xp": 840
+        },
+        {
+          "x": 62,
+          "y": 61,
+          "name": "black mamba",
+          "xp": 456
+        },
+        {
+          "x": 55,
+          "y": 63,
+          "name": "naga mage",
+          "xp": 445
+        },
+        {
+          "x": 63,
+          "y": 64,
+          "name": "mana viper",
+          "xp": 715
+        },
+        {
+          "x": 67,
+          "y": 64,
+          "name": "naga",
+          "xp": 161
+        },
+        {
+          "x": 71,
+          "y": 70,
+          "name": "black mamba",
+          "xp": 458
+        },
+        {
+          "x": 73,
+          "y": 71,
+          "name": "mana viper",
+          "xp": 706
+        },
+        {
+          "x": 74,
+          "y": 71,
+          "name": "naga ritualist",
+          "xp": 681
+        },
+        {
+          "x": 77,
+          "y": 71,
+          "name": "black mamba",
+          "xp": 468
+        },
+        {
+          "x": 29,
+          "y": 72,
+          "name": "naga warrior",
+          "xp": 793
+        },
+        {
+          "x": 72,
+          "y": 72,
+          "name": "black mamba",
+          "xp": 458
+        },
+        {
+          "x": 71,
+          "y": 74,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 36,
+          "y": 75,
+          "name": "salamander",
+          "xp": 539
+        },
+        {
+          "x": 67,
+          "y": 76,
+          "name": "naga warrior",
+          "xp": 772
+        },
+        {
+          "x": 54,
+          "y": 77,
+          "name": "naga",
+          "xp": 159
+        },
+        {
+          "x": 78,
+          "y": 77,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 71,
+          "y": 80,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 88,
+          "y": 81,
+          "name": "black mamba",
+          "xp": 453
+        },
+        {
+          "x": 34,
+          "y": 82,
+          "name": "naga",
+          "xp": 164
+        },
+        {
+          "x": 86,
+          "y": 82,
+          "name": "black mamba",
+          "xp": 470
+        },
+        {
+          "x": 89,
+          "y": 82,
+          "name": "naga ritualist",
+          "xp": 686
+        },
+        {
+          "x": 88,
+          "y": 83,
+          "name": "anaconda",
+          "xp": 832
+        },
+        {
+          "x": 89,
+          "y": 83,
+          "name": "black mamba",
+          "xp": 463
+        },
+        {
+          "x": 66,
+          "y": 84,
+          "name": "naga mage",
+          "xp": 440
+        },
+        {
+          "x": 87,
+          "y": 84,
+          "name": "black mamba",
+          "xp": 456
+        },
+        {
+          "x": 88,
+          "y": 84,
+          "name": "black mamba",
+          "xp": 458
+        }
+      ]
+    },
+    {
+      "tag": "death",
+      "maxhp": 133,
+      "maxmp": 22,
+      "where": "Snake:1",
+      "vaults": "layout_cave_pods, statue_in_the_mist_lemuel and uniq_donald",
+      "hp": -9,
+      "mp": 2,
+      "gold": 79,
+      "honey": 0,
+      "xp": 11297,
+      "turn": 747,
+      "inventory": [
+        {
+          "quantity": 1,
+          "name": "+0 shortbow",
+          "class": "weapon"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 leather armour",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "ring of poison resistance",
+          "class": "jewellery"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 pair of boots",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 pair of gloves",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 cloak",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+0 helmet",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+2 ring mail",
+          "class": "armour"
+        },
+        {
+          "quantity": 1,
+          "name": "+3 orcbow",
+          "class": "weapon"
+        },
+        {
+          "quantity": 1,
+          "name": "scroll of butterflies",
+          "class": "scroll"
+        },
+        {
+          "quantity": 1,
+          "name": "scroll of teleportation",
+          "class": "scroll"
+        },
+        {
+          "quantity": 2,
+          "name": "2 potions of magic",
+          "class": "potion"
+        },
+        {
+          "quantity": 2,
+          "name": "2 potions of might",
+          "class": "potion"
+        },
+        {
+          "quantity": 1,
+          "name": "scroll of vulnerability",
+          "class": "scroll"
+        }
+      ],
+      "xl": 16,
+      "items": [
+        {
+          "x": 63,
+          "artefact": false,
+          "name": "+0 scimitar",
+          "y": 40,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 63,
+          "artefact": false,
+          "name": "naga skeleton",
+          "y": 40,
+          "quantity": 1,
+          "class": "corpse"
+        },
+        {
+          "x": 63,
+          "artefact": false,
+          "name": "black mamba skeleton",
+          "y": 40,
+          "quantity": 1,
+          "class": "corpse"
+        },
+        {
+          "x": 76,
+          "artefact": false,
+          "name": "+0 double sword",
+          "y": 40,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 76,
+          "artefact": false,
+          "name": "+0 chain mail",
+          "y": 40,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 76,
+          "artefact": false,
+          "name": "+0 kite shield",
+          "y": 40,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 76,
+          "artefact": false,
+          "name": "human skeleton of Donald",
+          "y": 40,
+          "quantity": 1,
+          "class": "corpse"
+        },
+        {
+          "x": 65,
+          "artefact": false,
+          "name": "+0 halberd",
+          "y": 41,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 65,
+          "artefact": false,
+          "name": "naga skeleton",
+          "y": 41,
+          "quantity": 1,
+          "class": "corpse"
+        },
+        {
+          "x": 80,
+          "artefact": false,
+          "name": "+0 spear",
+          "y": 44,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 69,
+          "artefact": false,
+          "name": "+0 spear",
+          "y": 48,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 83,
+          "artefact": false,
+          "name": "+0 scale mail",
+          "y": 55,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 53,
+          "artefact": false,
+          "name": "dagger",
+          "y": 64,
+          "quantity": 1,
+          "class": "weapon"
+        },
+        {
+          "x": 77,
+          "artefact": false,
+          "name": "black mamba corpse",
+          "y": 65,
+          "quantity": 1,
+          "class": "corpse"
+        },
+        {
+          "x": 37,
+          "artefact": false,
+          "name": "leather armour",
+          "y": 66,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 65,
+          "artefact": false,
+          "name": "22 gold pieces",
+          "y": 69,
+          "quantity": 22,
+          "class": "gold"
+        },
+        {
+          "x": 74,
+          "artefact": false,
+          "name": "chain mail",
+          "y": 71,
+          "quantity": 1,
+          "class": "armour"
+        },
+        {
+          "x": 78,
+          "artefact": false,
+          "name": "16 gold pieces",
+          "y": 74,
+          "quantity": 16,
+          "class": "gold"
+        },
+        {
+          "x": 32,
+          "artefact": false,
+          "name": "3 scrolls of amnesia",
+          "y": 78,
+          "quantity": 3,
+          "class": "scroll"
+        },
+        {
+          "x": 83,
+          "artefact": false,
+          "name": "spear",
+          "y": 78,
+          "quantity": 1,
+          "class": "weapon"
+        }
+      ],
+      "progress": 15,
+      "monsters": [
+        {
+          "x": 72,
+          "y": 42,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 71,
+          "y": 45,
+          "name": "naga ritualist",
+          "xp": 681
+        },
+        {
+          "x": 62,
+          "y": 61,
+          "name": "black mamba",
+          "xp": 456
+        },
+        {
+          "x": 63,
+          "y": 62,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 55,
+          "y": 63,
+          "name": "naga mage",
+          "xp": 445
+        },
+        {
+          "x": 63,
+          "y": 64,
+          "name": "mana viper",
+          "xp": 715
+        },
+        {
+          "x": 29,
+          "y": 72,
+          "name": "naga warrior",
+          "xp": 793
+        },
+        {
+          "x": 32,
+          "y": 72,
+          "name": "naga",
+          "xp": 164
+        },
+        {
+          "x": 54,
+          "y": 77,
+          "name": "naga",
+          "xp": 159
+        },
+        {
+          "x": 76,
+          "y": 79,
+          "name": "naga",
+          "xp": 161
+        },
+        {
+          "x": 61,
+          "y": 81,
+          "name": "mana viper",
+          "xp": 718
+        },
+        {
+          "x": 88,
+          "y": 81,
+          "name": "black mamba",
+          "xp": 453
+        },
+        {
+          "x": 53,
+          "y": 82,
+          "name": "naga warrior",
+          "xp": 772
+        },
+        {
+          "x": 86,
+          "y": 82,
+          "name": "black mamba",
+          "xp": 470
+        },
+        {
+          "x": 89,
+          "y": 82,
+          "name": "naga ritualist",
+          "xp": 686
+        },
+        {
+          "x": 68,
+          "y": 83,
+          "name": "naga mage",
+          "xp": 440
+        },
+        {
+          "x": 88,
+          "y": 83,
+          "name": "anaconda",
+          "xp": 832
+        },
+        {
+          "x": 89,
+          "y": 83,
+          "name": "black mamba",
+          "xp": 463
+        },
+        {
+          "x": 87,
+          "y": 84,
+          "name": "black mamba",
+          "xp": 456
+        },
+        {
+          "x": 88,
+          "y": 84,
+          "name": "black mamba",
+          "xp": 458
+        },
+        {
+          "x": 33,
+          "y": 87,
+          "name": "salamander",
+          "xp": 539
+        }
+      ]
+    }
+  ],
+  "events": [
+    "setup 1",
+    "setup 2",
+    "setup 3",
+    "setup 4",
+    "setup 5",
+    "setup 6",
+    "setup 7",
+    "setup 8",
+    "setup 9",
+    "setup 10",
+    "setup 11",
+    "inventory +0 shortbow",
+    "inventory +0 leather armour",
+    "inventory ring of poison resistance",
+    "inventory +0 pair of boots",
+    "inventory +0 pair of gloves",
+    "inventory +0 cloak",
+    "inventory +0 helmet",
+    "inventory +2 ring mail",
+    "inventory +3 orcbow",
+    "inventory scroll of butterflies",
+    "inventory 3 scrolls of fear",
+    "inventory 3 scrolls of fog",
+    "inventory 2 scrolls of teleportation",
+    "inventory 2 scrolls of blinking",
+    "inventory 2 potions of magic",
+    "inventory 2 potions of might",
+    "inventory 2 potions of haste",
+    "inventory 6 potions of curing",
+    "inventory 6 potions of heal wounds",
+    "start ranged AC=14 EV=21 SH=0",
+    "ability Heroism turn=53",
+    "use curing turn=76 place=Snake:1",
+    "ability Heroism turn=244",
+    "ability Heroism turn=397",
+    "use haste turn=417 place=Snake:1",
+    "use heal wounds turn=418 place=Snake:1",
+    "use fear turn=422 place=Snake:1",
+    "use fog turn=423 place=Snake:1",
+    "ability Heroism turn=442",
+    "use heal wounds turn=444 place=Snake:1",
+    "use heal wounds turn=450 place=Snake:1",
+    "use heal wounds turn=451 place=Snake:1",
+    "use heal wounds turn=452 place=Snake:1",
+    "use heal wounds turn=460 place=Snake:1",
+    "ability Heroism turn=652",
+    "use curing turn=678 place=Snake:1",
+    "ability Heroism turn=682",
+    "use curing turn=686 place=Snake:1",
+    "use curing turn=687 place=Snake:1",
+    "use haste turn=692 place=Snake:1",
+    "use teleportation turn=694 place=Snake:1",
+    "use curing turn=711 place=Snake:1",
+    "use curing turn=713 place=Snake:1",
+    "use fear turn=720 place=Snake:1",
+    "use fear turn=721 place=Snake:1",
+    "use fog turn=722 place=Snake:1",
+    "use blinking turn=736 place=Snake:1",
+    "use blinking turn=737 place=Snake:1",
+    "use fog turn=740 place=Snake:1",
+    "ability Heroism turn=747",
+    "death Snake:1"
+  ],
+  "nativeSha256": "e373dc0e1068ba504c29766dba4477944670864d16617c33cb1459bc07083465",
+  "startVerified": true,
+  "routeFloorsExplored": [],
+  "scenarioCompleted": false,
+  "fullRoute": false
+}

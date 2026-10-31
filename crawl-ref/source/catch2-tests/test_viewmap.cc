@@ -12,7 +12,9 @@ TEST_CASE( "Test map search path generation works", "[single-file]" ) {
 
     SECTION ("Search path has the right size.") {
         // The current location is not included.
-        REQUIRE(search_path.size() == (78*68 - 1));
+        const int width = X_BOUND_2 - X_BOUND_1 - 1;
+        const int height = Y_BOUND_2 - Y_BOUND_1 - 1;
+        REQUIRE(search_path.size() == width * height - 1);
     }
 }
 

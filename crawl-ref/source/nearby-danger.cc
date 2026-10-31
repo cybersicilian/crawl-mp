@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "hermit-crab.h"
 
 #include "nearby-danger.h"
 
@@ -26,6 +27,7 @@
 #include "mon-movetarget.h"
 #include "mon-pathfind.h"
 #include "mon-tentacle.h"
+#include "party.h"
 #include "player.h"
 #include "player-stats.h"
 #include "spl-damage.h"
@@ -92,6 +94,9 @@ bool mons_is_irrelevant(const monster* mon)
 // of distance.
 bool mons_is_always_safe(const monster *mon)
 {
+    if (party::is_enabled() && party::is_proxy_monster(*mon))
+        return true;
+
     return (mon->wont_attack() && (!mons_blows_up(*mon) || mon->type == MONS_SHADOW_PRISM))
           || mon->type == MONS_BUTTERFLY
           || (mon->type == MONS_BALLISTOMYCETE
@@ -409,6 +414,7 @@ bool bring_to_safety()
             || env.grid(pos) != DNGN_FLOOR
             || harmful_cloud_at(pos)
             || monster_at(pos)
+            || (party::is_enabled() && party::player_at(pos, false))
             || env.pgrid(pos) & FPROP_NO_TELE_INTO
             || crawl_state.game_is_sprint()
                && grid_distance(pos, you.pos()) > 8)
@@ -509,6 +515,17 @@ void revive()
         player_die(KILLED_BY_DRAINING);
     }
 
-    mpr("You rejoin the land of the living...");
+    if (you.species == SP_HERMIT_CRAB)
+    {
+        hermit_crab::start_crab_walk(you);
+        mpr("You escape and find a smaller shell to live in.");
+        if (hermit_crab::crab_walk_ready(you))
+        {
+            hermit_crab::reconcile_equipment();
+            mpr("You can Crab Walk for a short time.");
+        }
+    }
+    else
+        mpr("You rejoin the land of the living...");
     // included in default force_more_message
 }

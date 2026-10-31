@@ -1,0 +1,22 @@
+enum: JOB_FENCER
+name: Fencer
+short_name: Fn
+category: Warrior
+category_priority: 75
+str: 0
+int: 0
+dex: 12
+equipment:
+  - "rapier"
+  - "robe"
+  - "pair of gloves"
+  - "amulet of the acrobat"
+recommended_species:
+  - merfolk
+  - minotaur
+  - kobold
+skills:
+  fighting: 1
+  dodging: 5
+  short blades: 1
+create_enum: false

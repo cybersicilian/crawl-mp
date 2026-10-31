@@ -1,0 +1,16 @@
+{
+  "files": {
+    "docs/diagnostics/2026-10-27-webkit-controls/profile.cjs": "03cc0de45209185bf892e8d3429b158bf784b54693f82aa379924ed5eee253b7",
+    "docs/diagnostics/2026-10-27-webkit-controls/run_profile.py": "6995c76e592ad9dac9308f1ada46c6820c0f35285f73423a66ac85936892e48e",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1"
+  },
+  "resources": {
+    "browsers": 2,
+    "simultaneous_browsers": 1,
+    "native_commands_per_browser": 18,
+    "new_accounts": 0,
+    "maximum_seconds_per_browser": 240
+  },
+  "campaign": "e813e777-feac-4221-9b97-4c875be376a9",
+  "purpose": "Compare WebKit native input response and rendering to Chrome on the deployed release"
+}

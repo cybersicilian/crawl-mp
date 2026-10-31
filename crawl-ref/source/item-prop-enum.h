@@ -240,6 +240,7 @@ enum jewellery_type
     RING_ICE,
     RING_TELEPORT_CONTROL,
 #endif
+    RING_CAMARADERIE,
     NUM_RINGS,                         //   keep as last ring; should not overlap
                                        //   with amulets!
     // RINGS after num_rings are for unique types for artefacts
@@ -273,6 +274,7 @@ enum jewellery_type
     AMU_WILDSHAPE,
     AMU_CHEMISTRY,
     AMU_DISSIPATION,
+    AMU_VANGUARD,
 
     NUM_JEWELLERY
 };
@@ -325,6 +327,13 @@ enum misc_item_type
     MISC_CONDENSER_VANE,
     MISC_GRAVITAMBOURINE,
     MISC_SHOP_VOUCHER,
+    MISC_AEGIS_STANDARD,
+    MISC_ASTRAL_BEACON,
+    MISC_TWIN_SPARK_CONDUIT,
+    MISC_SKALD_HORN,
+    // Quest-only items; append to preserve existing save subtype IDs.
+    MISC_ANCIENT_CRATE,
+    MISC_DUSTY_TOME,
 
     NUM_MISCELLANY,
     MISC_DECK_UNKNOWN = NUM_MISCELLANY,
@@ -358,6 +367,10 @@ const vector<misc_item_type> misc_types =
     MISC_CONDENSER_VANE,
     MISC_GRAVITAMBOURINE,
     MISC_SHOP_VOUCHER,
+    MISC_AEGIS_STANDARD,
+    MISC_ASTRAL_BEACON,
+    MISC_TWIN_SPARK_CONDUIT,
+    MISC_SKALD_HORN,
 };
 
 enum missile_type
@@ -412,6 +425,7 @@ enum rune_type
 
     RUNE_SPIDER,
     RUNE_FOREST, // only used in sprints
+    RUNE_BURROWS, // Legacy clay rune; no longer generated.
     NUM_RUNE_TYPES
 };
 
@@ -434,6 +448,7 @@ enum gem_type
     GEM_TOMB,
     GEM_DEPTHS,
     GEM_ZOT,
+    GEM_BURROWS,
     NUM_GEM_TYPES
 };
 
@@ -477,6 +492,10 @@ enum scroll_type
 #endif
     SCR_POISON,
     SCR_BUTTERFLIES,
+    SCR_SOUL_RECALL,
+    SCR_RALLYING,
+    SCR_PHASE_SWAP,
+    SCR_SHARED_VIGOUR,
     NUM_SCROLLS
 };
 

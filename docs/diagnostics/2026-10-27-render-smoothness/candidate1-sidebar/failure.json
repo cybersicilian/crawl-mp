@@ -1,0 +1,42 @@
+{
+  "errors": [
+    "Missing fixture dependency: ./shell-dash-art"
+  ],
+  "modules": [
+    "jquery",
+    "comm",
+    "client",
+    "./enums",
+    "./player",
+    "./dungeon_renderer",
+    "./display",
+    "./minimap",
+    "./party-inspector",
+    "./party-controls",
+    "./tileinfo-dngn",
+    "./tileinfo-main",
+    "./tileinfo-gui",
+    "./party-doom",
+    "./party-trade",
+    "./chat-context",
+    "./item-context-menu",
+    "./inspection-dialog",
+    "item-properties",
+    "character-stat-help",
+    "spell-cost",
+    "./status-icons",
+    "./party-model",
+    "./party-status-model",
+    "./party-faith",
+    "./portrait-status",
+    "./party-card-status",
+    "./player-card-details",
+    "./party-initiative",
+    "./workflow-actions",
+    "./party-navigation",
+    "party",
+    "./native-tile-art",
+    "./frame-update",
+    "./party-power-cards"
+  ]
+}

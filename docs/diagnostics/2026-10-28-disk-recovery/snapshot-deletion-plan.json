@@ -1,0 +1,138 @@
+{
+  "project": "chuk-437319",
+  "targets": [
+    {
+      "name": "dcss-all-oozle-20261021t194557z",
+      "id": "4146234939504109716",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-21T12:46:04.160-07:00"
+    },
+    {
+      "name": "dcss-combined-oozle-20261020t212242z",
+      "id": "3325365181981812044",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T14:22:43.527-07:00"
+    },
+    {
+      "name": "dcss-content-20261023t2318-01a16a0f",
+      "id": "8891115908189541820",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-23T16:18:43.257-07:00"
+    },
+    {
+      "name": "dcss-content-pack-20261019-predeploy-150142",
+      "id": "2280641144876142093",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T08:01:54.922-07:00"
+    },
+    {
+      "name": "dcss-jiyva-start-20261021t003900z",
+      "id": "2621377637954991946",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T17:39:01.590-07:00"
+    },
+    {
+      "name": "dcss-ooze-full-20261021t001200z",
+      "id": "963262924438486463",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T17:12:01.001-07:00"
+    },
+    {
+      "name": "dcss-oozle-20261020t024702z",
+      "id": "6700310411133806790",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T19:47:06.468-07:00"
+    },
+    {
+      "name": "dcss-oozle-ui-20261020t030743z",
+      "id": "3792755278458086894",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T20:07:45.861-07:00"
+    },
+    {
+      "name": "dcss-pre-all-20261023t162600z",
+      "id": "1062439225451224485",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-23T11:11:23.072-07:00"
+    },
+    {
+      "name": "dcss-pre-forest-recovery-20261021t1925",
+      "id": "8795711645024563157",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-21T12:23:38.896-07:00"
+    },
+    {
+      "name": "dcss-pre-graphics-20261022t151837z",
+      "id": "2434697189377152893",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-22T08:19:46.345-07:00"
+    },
+    {
+      "name": "dcss-pre-liturgist-20261019t175027z",
+      "id": "1840094705669105291",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T10:50:28.848-07:00"
+    },
+    {
+      "name": "dcss-pre-offturn-20261020t0246z",
+      "id": "8927578883452791399",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T19:40:08.529-07:00"
+    },
+    {
+      "name": "dcss-pre-premium-20261022t031626z",
+      "id": "2265580116202766064",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-21T20:16:47.736-07:00"
+    },
+    {
+      "name": "dcss-pre-tortle-dash-20261019t172610z",
+      "id": "5322137353823448090",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T10:27:18.098-07:00"
+    },
+    {
+      "name": "dcss-pre-vorr-rites-20261019t183432z",
+      "id": "682942589556218966",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T11:34:33.290-07:00"
+    },
+    {
+      "name": "dcss-pre-vorr-speed-20261019t184709z",
+      "id": "3118044898695830336",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-19T11:47:11.679-07:00"
+    },
+    {
+      "name": "dcss-rogue-scrolls-20261020t235954z",
+      "id": "6008861547386224276",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T16:59:55.763-07:00"
+    },
+    {
+      "name": "dcss-roster-20261021t012222z",
+      "id": "8056042466185686334",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T18:22:25.908-07:00"
+    },
+    {
+      "name": "dcss-sidebar-bool-20261020t133420z",
+      "id": "4548523699824415538",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T06:34:21.399-07:00"
+    },
+    {
+      "name": "dcss-soft-initiative-20261020t214415z",
+      "id": "5875086042104225375",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T14:44:16.778-07:00"
+    },
+    {
+      "name": "dcss-tactical-sidebar-20261020t125642z",
+      "id": "6406054079901653987",
+      "sourceDisk": "https://www.googleapis.com/compute/v1/projects/chuk-437319/zones/us-central1-a/disks/dcss-coop-server-data",
+      "creationTimestamp": "2026-10-20T05:56:44.748-07:00"
+    }
+  ],
+  "retained_labelled_ready_count": 25
+}

@@ -1,0 +1,27 @@
+TAG_MAJOR_VERSION: 34
+enum: JOB_DEATH_KNIGHT
+name: "Death Knight"
+short_name: DK
+category: Zealot
+category_priority: 70
+str: 5
+int: 3
+dex: 4
+equipment:
+  - "ring mail"
+  - "potion of might"
+weapon_choice: plain
+recommended_species:
+  - hill orc
+  - deep dwarf
+  - ghoul
+  - revenant
+  - demonspawn
+  - minotaur
+skills:
+  fighting: 2
+  armour: 2
+  dodging: 1
+  invocations: 3
+  weapon: 3
+create_enum: false

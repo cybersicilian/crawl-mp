@@ -1453,7 +1453,28 @@ enum monster_type                      // env.mons[].type
     MONS_JADE_CRYSTAL_FIRE,
     MONS_JADE_CRYSTAL_ICE,
     MONS_HYPNOTAIL,
+    MONS_CHAIN_WARDEN,
+    MONS_VOID_TETHER_STALKER,
 #endif
+
+    // Appended to preserve existing saved monster IDs.
+    MONS_BURROWING_BEAST,
+    MONS_CRAG_BOAR,
+    MONS_SHALE_DRAKE,
+    MONS_DEEP_TROLL_DELVER,
+    MONS_WORLDWORM,
+    MONS_GALLERY_WORM,
+    MONS_COIL_WORM,
+    MONS_CAUSTIC_WORM,
+    MONS_WAX_BEETLE,
+    MONS_VENOM_WASP,
+    MONS_OLD_COIL,
+    MONS_VESPARA,
+    MONS_FIRE_FOX,
+    MONS_RIN,
+    MONS_KILLER_BEE_LARVA,
+    MONS_FALSE_IMAGE,
+    MONS_GREENWOOD_WITCH,
 
     NUM_MONSTERS,               // used for polymorph
 

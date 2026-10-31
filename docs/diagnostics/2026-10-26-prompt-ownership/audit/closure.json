@@ -1,0 +1,21 @@
+{
+  "gate": {
+    "runId": "e74166fd-209c-49ec-987f-87822780a67f",
+    "owner": "codex/01a17b3b-e474-7e71-b44c-78b20124ab32",
+    "label": "DCSS native floor guard final audit acceptance",
+    "requestedAt": 1793077816.2672021,
+    "supervisorPid": 93390,
+    "status": "completed_held",
+    "reservation": true,
+    "requestId": "0bdcaac2c8e0435a2035080dbadb2a83d9a38b8e9d730a38851dc13d7bb4f9d3",
+    "startedAt": 1793077816.267533,
+    "workerPid": 93391,
+    "processGroup": 93391,
+    "exitCode": 0,
+    "finishedAt": 1793077864.126467,
+    "supervisedProcessGroupGone": true
+  },
+  "allOwnedProcessesGone": true,
+  "native_processes_exited": true,
+  "result_sha256": "037384771ae3d41e4762df4ae0c81fdbd7e4eb18739f97281f624517d5f41a82"
+}

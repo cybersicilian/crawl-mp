@@ -4,8 +4,11 @@
 **/
 
 #include "AppHdr.h"
+#include "hermit-crab.h"
+#include "automaton.h"
 
 #include "ouch.h"
+#include "auras.h"
 
 #include <cctype>
 #include <cmath>
@@ -35,13 +38,17 @@
 #include "fight.h"
 #include "files.h"
 #include "fineff.h"
+#include "spl-transloc.h"
+#include "ghost.h"
 #include "god-abil.h"
 #include "god-passive.h"
 #include "hints.h"
 #include "hiscores.h"
 #include "invent.h"
+#include "item-name.h"
 #include "item-prop.h"
 #include "items.h"
+#include "jobs.h"
 #include "libutil.h"
 #include "melee-attack.h"
 #include "message.h"
@@ -56,20 +63,25 @@
 #include "notes.h"
 #include "options.h"
 #include "output.h"
+#include "party.h"
+#include "place.h"
 #include "player.h"
 #include "player-stats.h"
 #include "potion.h"
 #include "prompt.h"
 #include "random.h"
 #include "religion.h"
+#include "skills.h"
 #include "shopping.h"
 #include "shout.h"
+#include "species.h"
 #include "spl-clouds.h"
 #include "spl-damage.h"
 #include "spl-goditem.h"
 #include "spl-monench.h"
 #include "spl-selfench.h"
 #include "state.h"
+#include "stats-json.h"
 #include "stringutil.h"
 #include "teleport.h"
 #include "terrain.h"
@@ -363,6 +375,13 @@ void expose_player_to_element(beam_type flavour, int strength, bool slow_cold_bl
     dprf("expose_player_to_element, strength %i, flavor %i, slow_cold_blooded is %i", strength, flavour, slow_cold_blooded);
     qazlal_element_adapt(flavour, strength);
 
+    if (flavour == BEAM_WATER && you.species == SP_SPARKBORN
+        && you.magic_points > 0)
+    {
+        mprf(MSGCH_WARN, "The water discharges your magic!");
+        drain_mp(you.magic_points, true);
+    }
+
     if (flavour == BEAM_COLD && slow_cold_blooded
         && (you.get_mutation_level(MUT_COLD_BLOODED)
             || you.form == transformation::serpent
@@ -454,6 +473,8 @@ void lose_level()
     }
 
     you.experience_level--;
+    if (you.species == SP_HIGH_ELF)
+        reset_training();
 
     mprf(MSGCH_WARN,
          "You are now level %d!", you.experience_level);
@@ -859,8 +880,18 @@ static void _powered_by_pain(int dam)
 
 static void _maybe_fog(int dam)
 {
-    const int upper_threshold = you.hp_max / 2;
-    if (you_worship(GOD_XOM) && x_chance_in_y(dam, 30 * upper_threshold))
+    const int upper_threshold = max(1, you.hp_max / 2);
+    const int minpiety = piety_breakpoint(2);
+    const int lower_threshold = upper_threshold
+        - upper_threshold * (you.piety() - minpiety) / (MAX_PIETY - minpiety);
+    if (dam > 0 && (you.form == transformation::shadow
+        || (have_passive(passive_t::hit_smoke) && dam >= lower_threshold
+            && x_chance_in_y(dam - lower_threshold, upper_threshold - lower_threshold))))
+    {
+        mpr("You emit a cloud of dark smoke.");
+        big_cloud(CLOUD_BLACK_SMOKE, &you, you.pos(), 50, 4 + random2(5));
+    }
+    else if (you_worship(GOD_XOM) && x_chance_in_y(dam, 30 * upper_threshold))
     {
         mprf(MSGCH_GOD, "You emit a cloud of colourful smoke!");
         big_cloud(CLOUD_XOM_TRAIL, &you, you.pos(), 50, 4 + random2(5), -1);
@@ -1333,6 +1364,9 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
     if (you.pending_revival)
         return;
 
+    if (party::is_enabled() && party::is_player_downed(party::active_slot()))
+        return;
+
     int drain_amount = 0;
 
     // Marionettes will never hurt the player with their spells (even if they
@@ -1357,6 +1391,11 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
         dam = max(0, do_shave_damage(dam));
 #endif
 
+    if (you.form == transformation::shadow)
+    {
+        drain_amount = dam - dam / 2;
+        dam /= 2;
+    }
     if (you.form == transformation::slaughter)
         dam = dam * 10 / 15;
     if (you.may_pruneify() && you.helpless())
@@ -1365,6 +1404,162 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
         dam /= 2;
     else if (you.petrifying())
         dam = dam * 10 / 15;
+
+    if (dam > 0 && _is_real_death(death_type)
+        && death_type != KILLED_BY_POISON && death_type != KILLED_BY_ZOT)
+    {
+        dam = auras::intercept_damage(dam);
+    }
+
+    if (party::is_enabled()
+        && dam > 1
+        && _is_real_death(death_type)
+        && death_type != KILLED_BY_POISON
+        && death_type != KILLED_BY_ZOT)
+    {
+        // 1. Aegis Standard damage redirection (35%)
+        if ((you.duration[DUR_PHALANX_BARRIER] > 0 || you.duration[DUR_HEROISM] > 0)
+            && you.props.exists(AEGIS_ANCHOR_SLOT_KEY))
+        {
+            const int anchor_slot = you.props[AEGIS_ANCHOR_SLOT_KEY].get_int();
+            const int my_slot = party::active_slot();
+            if (anchor_slot >= 0
+                && anchor_slot < party::player_count()
+                && anchor_slot != my_slot
+                && !party::is_player_downed(anchor_slot))
+            {
+                player &anchor = party::get_player(anchor_slot);
+                if (anchor.depth == you.depth
+                    && anchor.where_are_you == you.where_are_you
+                    && anchor.hp > anchor.hp_max / 4
+                    && you.see_cell_no_trans(anchor.pos()))
+                {
+                    const int max_absorb = max(0, anchor.hp - anchor.hp_max / 4);
+                    const int redirected = min(dam * 35 / 100, max_absorb);
+                    if (redirected > 0)
+                    {
+                        dam -= redirected;
+                        anchor.hp -= redirected;
+                        anchor.redraw_hit_points = true;
+                        party::sync_player_to_proxy(anchor_slot);
+                        mprf(MSGCH_FRIEND_ACTION,
+                             "%s's aegis standard absorbs %d of the damage!",
+                             anchor.your_name.c_str(), redirected);
+                    }
+                }
+            }
+        }
+
+        // 2. Amulet of the Vanguard bloodbond redirection (30%, reduced by vanguard's AC)
+        static bool s_vanguard_redirecting = false;
+        if (!s_vanguard_redirecting
+            && dam > 1
+            && !you.wearing_jewellery(AMU_VANGUARD))
+        {
+            const int victim_slot = party::active_slot();
+            int best_vanguard_slot = -1;
+            int best_vanguard_hp_pct = 30;
+
+            for (int s = 0; s < party::player_count(); ++s)
+            {
+                if (s == victim_slot || party::is_player_downed(s))
+                    continue;
+                const player &ally = party::get_player(s);
+                if (ally.hp <= 1
+                    || ally.hp_max <= 0
+                    || ally.where_are_you != you.where_are_you
+                    || ally.depth != you.depth
+                    || !ally.wearing_jewellery(AMU_VANGUARD)
+                    || !you.see_cell_no_trans(ally.pos()))
+                {
+                    continue;
+                }
+                const int hp_pct = (ally.hp * 100) / ally.hp_max;
+                if (hp_pct > best_vanguard_hp_pct)
+                {
+                    best_vanguard_hp_pct = hp_pct;
+                    best_vanguard_slot = s;
+                }
+            }
+
+            if (best_vanguard_slot >= 0)
+            {
+                const int redirected = max(1, (dam * 30) / 100);
+                dam -= redirected;
+
+                int vanguard_taken = 0;
+                string vanguard_name;
+                {
+                    unwind_bool redirect_guard(s_vanguard_redirecting, true);
+                    party::scoped_player_context ctx(best_vanguard_slot);
+                    vanguard_name = you.your_name;
+                    vanguard_taken = max(1, you.apply_ac(redirected));
+                    vanguard_taken = min(vanguard_taken, max(0, you.hp - 1));
+                    if (vanguard_taken > 0)
+                        dec_hp(vanguard_taken, false);
+                }
+
+                if (vanguard_taken > 0)
+                {
+                    mprf(MSGCH_FRIEND_ACTION,
+                         "%s's amulet of the vanguard absorbs part of the blow (%d dmg)!",
+                         vanguard_name.c_str(), vanguard_taken);
+                }
+            }
+        }
+
+        // 2b. Aegis Link spell damage redirection (35% to healthier linked partner)
+        if (dam > 1 && you.duration[DUR_AEGIS_LINK] > 0 && you.hp_max > 0)
+        {
+            const int victim_slot = party::active_slot();
+            const int my_hp_pct = (you.hp * 100) / you.hp_max;
+            int best_link_slot = -1;
+            int best_link_hp_pct = max(35, my_hp_pct);
+
+            for (int s = 0; s < party::player_count(); ++s)
+            {
+                if (s == victim_slot || party::is_player_downed(s))
+                    continue;
+                const player &ally = party::get_player(s);
+                if (ally.hp <= ally.hp_max / 3
+                    || ally.hp_max <= 0
+                    || ally.where_are_you != you.where_are_you
+                    || ally.depth != you.depth
+                    || ally.duration[DUR_AEGIS_LINK] <= 0
+                    || !you.see_cell_no_trans(ally.pos()))
+                {
+                    continue;
+                }
+                const int hp_pct = (ally.hp * 100) / ally.hp_max;
+                if (hp_pct > best_link_hp_pct)
+                {
+                    best_link_hp_pct = hp_pct;
+                    best_link_slot = s;
+                }
+            }
+
+            if (best_link_slot >= 0)
+            {
+                player &partner = party::get_player(best_link_slot);
+                const int max_absorb = max(0, partner.hp - partner.hp_max / 3);
+                const int redirected = min(dam * 35 / 100, max_absorb);
+                if (redirected > 0)
+                {
+                    dam -= redirected;
+                    partner.hp -= redirected;
+                    partner.redraw_hit_points = true;
+                    party::sync_player_to_proxy(best_link_slot);
+                    mprf(MSGCH_FRIEND_ACTION,
+                         "Your aegis link with %s deflects %d of the damage!",
+                         partner.your_name.c_str(), redirected);
+                }
+            }
+        }
+
+        // 3. Potion of Empathy damage splitting (40% across empathic teammates)
+        if (dam > 1 && you.duration[DUR_EMPATHY] > 0)
+            dam = party::split_empathy_damage(dam);
+    }
 
     ait_hp_loss hpl(dam, death_type);
     interrupt_activity(activity_interrupt::hp_loss, &hpl);
@@ -1439,6 +1634,9 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
 
     dec_hp(dam, true);
 
+    if (dam > 0)
+        automaton::interrupt_bee_engraving();
+
     // Even if we have low HP messages off, we'll still give a
     // big hit warning (in this case, a hit for half our HPs) -- bwr
     if (dam > 0 && you.hp_max <= dam * 2)
@@ -1446,6 +1644,7 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
 
     if (you.hp > 0 && dam > 0)
     {
+        automaton::mark_combat(you);
         if (death_type != KILLED_BY_POISON || poison_is_lethal())
             flush_hp();
 
@@ -1488,15 +1687,122 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
             _maybe_corrode();
             _maybe_slow();
             _maybe_silence();
+            if (you.species == SP_SPARKBORN && you.hp > 0 && dam > 1
+                && !you.duration[DUR_BLINKBOLT_COOLDOWN]
+                && (dam > you.hp_max / 10 || one_chance_in(10)))
+            {
+                const int slot = party::active_slot();
+                const mid_t owner = you.mid;
+                // Reserve the response until the deferred action fires.
+                you.duration[DUR_BLINKBOLT_COOLDOWN] = 1;
+                schedule_function_fineff([slot, owner]()
+                {
+                    if (party::is_enabled()
+                        && (!party::slot_is_alive(slot)
+                            || !party::slot_is_on_current_floor(slot)
+                            || party::mid_for_slot(slot) != owner))
+                        return;
+                    party::scoped_player_context context(slot, true);
+                    if (you.species != SP_SPARKBORN || you.mid != owner || you.hp <= 0)
+                        return;
+                    you.duration[DUR_BLINKBOLT_COOLDOWN] = 0;
+                    sparkborn_blinkbolt();
+                });
+            }
         }
         if (drain_amount > 0)
             drain_player(drain_amount, true, true);
 
         _maybe_get_vitrified(source);
+        if (death_type != KILLED_BY_POISON)
+            automaton::trigger_escape();
     }
 
     if (you.hp <= 0)
         player_die(death_type, source, dam, aux, death_source_name);
+}
+
+static string _chronicle_json_escape(const string &s)
+{
+    string out;
+    out.reserve(s.size() + 8);
+    for (unsigned char c : s)
+    {
+        if (c == '"')
+            out += "\\\"";
+        else if (c == '\\')
+            out += "\\\\";
+        else if (c == '\n')
+            out += "\\n";
+        else if (c == '\r')
+            out += "\\r";
+        else if (c == '\t')
+            out += "\\t";
+        else if (c >= 0x20)
+            out += static_cast<char>(c);
+    }
+    return out;
+}
+
+static void save_ghost(bool force = true)
+{
+    if (crawl_state.game_is_tutorial() || crawl_state.game_is_arena())
+        return;
+
+    vector<ghost_demon> gs = ghost_demon::find_ghosts(true);
+    if (gs.empty())
+    {
+        ghost_demon player_ghost;
+        player_ghost.init_player_ghost();
+        gs.push_back(player_ghost);
+    }
+    save_ghosts(gs, force, true);
+}
+
+static void _append_chronicle_ghost(const scorefile_entry &se,
+                                    const char *down_type,
+                                    bool bones_saved)
+{
+    string path = Options.save_dir.empty()
+                  ? string("./rcs/coop_chronicle.jsonl")
+                  : Options.save_dir + "coop_chronicle.jsonl";
+    FILE *fp = fopen(path.c_str(), "a");
+    if (!fp && path != "./rcs/coop_chronicle.jsonl")
+        fp = fopen("./rcs/coop_chronicle.jsonl", "a");
+    if (!fp)
+        return;
+
+    const string hero_name = _chronicle_json_escape(you.your_name);
+    const int slot = party::active_slot();
+    const string sp_name = _chronicle_json_escape(species::name(you.species));
+    const string job_name = _chronicle_json_escape(get_job_name(you.char_class));
+    const int xl = you.experience_level;
+    const string god_str = _chronicle_json_escape(
+        you_worship(GOD_NO_GOD) ? string("No God") : god_name(you.religion));
+    const string place_str = _chronicle_json_escape(level_id::current().describe());
+    const string killer_str = _chronicle_json_escape(
+        se.death_description(scorefile_entry::DDV_TERSE));
+    const int hp_max = you.hp_max;
+    const int ac = you.armour_class();
+    const int ev = you.evasion();
+    const int sh = player_shield_class();
+    const string wpn_str = _chronicle_json_escape(
+        you.weapon() ? you.weapon()->name(DESC_PLAIN, false, true)
+                     : string("unarmed"));
+    const string dtype_str = _chronicle_json_escape(
+        down_type ? string(down_type) : string("permadeath_ghost"));
+
+    fprintf(fp,
+            "{\"type\":\"ghost\",\"hero_name\":\"%s\",\"slot\":%d,"
+            "\"species\":\"%s\",\"job\":\"%s\",\"xl\":%d,\"god\":\"%s\","
+            "\"place\":\"%s\",\"killer\":\"%s\",\"hp_max\":%d,\"ac\":%d,"
+            "\"ev\":%d,\"sh\":%d,\"weapon\":\"%s\",\"down_type\":\"%s\","
+            "\"bones_saved\":%s}\n",
+            hero_name.c_str(), slot, sp_name.c_str(), job_name.c_str(),
+            xl, god_str.c_str(), place_str.c_str(), killer_str.c_str(),
+            hp_max, ac, ev, sh, wpn_str.c_str(), dtype_str.c_str(),
+            bones_saved ? "true" : "false");
+    fclose(fp);
 }
 
 void player_die(kill_method_type death_type, mid_t source, int dam,
@@ -1620,9 +1926,55 @@ void player_die(kill_method_type death_type, mid_t source, int dam,
         return;
     }
 
+    if (_is_real_death(death_type) && hermit_crab::break_shell(you))
+    {
+        mark_milestone("death", lowercase_first(se.long_kill_message()).c_str());
+        you.deaths++;
+        you.pending_revival = true;
+        stop_delay(true);
+        if (!crawl_state.disables[DIS_SAVE_CHECKPOINTS])
+            save_game(false);
+        mpr("Your shell breaks!");
+        xom_death_message(death_type);
+        return;
+    }
+
+    if (party::is_enabled() && _is_real_death(death_type)
+        && (party::prepare_survivor_for_death(party::active_slot())
+            || party::try_last_stand_revive(party::active_slot())))
+    {
+        you.deaths++;
+        stop_delay(true);
+        if (death_type != KILLED_BY_ZOT)
+            _place_player_corpse(death_type == KILLED_BY_DISINT);
+        you.stop_directly_constricting_all(false);
+        you.stop_being_constricted(true);
+        you.clear_beholders();
+        you.clear_fearmongers();
+        if (!crawl_state.game_is_tutorial() && !crawl_state.game_is_arena())
+            save_ghost(true);
+        _append_chronicle_ghost(se, "downed_ghost", true);
+        party::set_player_downed(party::active_slot(), true);
+        stats_note_hero_downed(se);
+        party::relocate_downed_ghost_to_survivor(party::active_slot());
+        mprf(MSGCH_DANGER,
+             "%s has fallen! %s's ghost travels to haunt the surviving party until revived!",
+             you.your_name.c_str(), you.your_name.c_str());
+        return;
+    }
+
     // Prevent bogus notes.
     activate_notes(false);
     _print_endgame_messages(se);
+    if (_is_real_death(death_type))
+    {
+        if (!crawl_state.game_is_tutorial() && !crawl_state.game_is_arena())
+        {
+            save_ghost(true);
+            you.props["chronicle_bones_saved_turn"] = you.num_turns;
+        }
+        _append_chronicle_ghost(se, "permadeath_ghost", true);
+    }
     end_game(se);
 }
 

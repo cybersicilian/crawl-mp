@@ -1,0 +1,31 @@
+/* Pointer / keyboard context menus share the dialog shell's dark chrome. */
+.game-context-menu {
+    position: fixed; inset: auto; margin: 0; z-index: 100000; box-sizing: border-box;
+    width: 264px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px); overflow: auto;
+    padding: 5px; border: 1px solid var(--ui-edge, #a88b58); border-radius: 6px;
+    color: var(--ui-text, #eee4d0); background: var(--ui-panel, #211e19);
+    box-shadow: 0 8px 32px #000a, inset 0 0 0 1px #ffffff10;
+    font: 13px/1.35 var(--ui-copy, var(--tt-font-ui, sans-serif)); text-align: left;
+    animation: game-context-in 90ms ease-out;
+}
+.game-context-title {
+    padding: 6px 9px 8px; margin-bottom: 3px; border-bottom: 1px solid var(--ui-edge, #a88b58);
+    color: var(--ui-accent-bright, #e5ca92); font: 600 11px/1.4 var(--ui-copy, sans-serif);
+    letter-spacing: .05em; text-transform: uppercase; overflow-wrap: anywhere;
+}
+.game-context-menu > button {
+    display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-height: 36px;
+    padding: 7px 9px; border: 1px solid transparent; border-radius: 3px; margin: 0;
+    font: inherit; color: inherit; background: transparent; text-align: left; cursor: pointer; white-space: normal;
+}
+.game-context-menu > button > span { font-weight: 600; }
+.game-context-menu > button small { font-size: 11px; line-height: 1.4; color: var(--ui-muted, #b9ae99); overflow-wrap: anywhere; }
+.game-context-menu > button:focus-visible, .game-context-menu > button:hover {
+    outline: none; border-color: var(--ui-accent, #c5a76b); background: color-mix(in srgb, var(--ui-accent, #ad8a3e) 18%, transparent);
+}
+.game-context-menu > button[aria-disabled='true'] { opacity: .5; cursor: default; }
+.game-context-menu > button.is-consequential { margin-top: 3px; border-top: 1px solid color-mix(in srgb, var(--ui-edge, #a88b58) 40%, transparent); border-radius: 0 0 3px 3px; }
+.game-context-menu > button.is-consequential > span { color: var(--ui-danger, #efb09a); }
+@keyframes game-context-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .game-context-menu { animation: none; } }
+@media (forced-colors: active) { .game-context-menu > button:focus-visible { outline: 2px solid Highlight; } }

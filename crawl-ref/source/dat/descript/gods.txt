@@ -28,14 +28,17 @@ any means to hasten themselves. In the process of so imitating their god, they
 attain perfection of mind and body, and the mysteries of time unfold before
 them. Especially devout followers may even momentarily abandon the flow of
 time and its needless disturbances.
+
+Cheibriados is one of the eight gods of the Elder Pantheon. The slow god has
+no birthright order; those who seek Cheibriados must find an altar.
 %%%%
 Dithmenos
 
-Dithmenos is the god of night and of things half-seen in flickering torchlight.
-Worshipped by actors as often as thieves, followers of Dithmenos can learn to
-control their own shadow as if it were an extension of their body - misdirecting
-onlookers and acting upon the world with force as tangible as anything that has
-ever been imagined lurking in the dark.
+Dithmenos the Shadowed desires all to be darkness. Followers of Dithmenos gain
+a strange and otherworldly affinity to the shadows of their environment. This
+god despises the physical world and constantly seeks to encroach on it.
+Dithmenos therefore rewards those who wield death and destruction while
+gradually consuming them with darkness.
 %%%%
 Elyvilon
 
@@ -43,6 +46,9 @@ Elyvilon the Healer welcomes all kind souls prepared to help others. Those
 individuals can expect to gain powerful healing abilities, by which they can
 avoid bloodshed. Elyvilon appreciates exploration of the dungeon. Elyvilon's
 followers can convert to the Shining One or Zin while keeping some piety.
+
+Elyvilon is one of the eight gods of the Elder Pantheon. Healers enter the
+Dungeon as members of Elyvilon's birthright order.
 %%%%
 Fedhas
 
@@ -90,6 +96,9 @@ the death and destruction of as many creatures as possible. In exchange,
 Kikubaaqudgha offers great assistance to the aspiring necromancer: a supply of
 useful bodies, knowledge of dark magic, and protection against necromantic
 backlash.
+
+Kikubaaqudgha is one of the eight gods of the Elder Pantheon. The god has no
+birthright order; those seeking this ancient power must find an altar.
 %%%%
 Lugonu
 
@@ -123,14 +132,16 @@ enhance their prowess. Okawaru demands that followers prove themselves by their
 own strength alone, and so worshippers are forbidden from gaining allies by any
 means. Okawaru pays little heed to easy victories, but will reward worshippers
 for heroic feats against mighty foes.
+
+Okawaru is one of the eight gods of the Elder Pantheon. The god has no
+birthright order; those seeking this ancient power must find an altar.
 %%%%
 Pakellas
 
-Pakellas the Inventive believes in the supremacy of devices, magical or
-otherwise, over spells and other forms of magic. Followers, although cut off
-from ambient magical power, are provided with magical energy to empower their
-devices so long as they use them to assert Pakellas' supremacy. Pakellas will
-grant devout worshippers access to increasingly powerful devices.
+Pakellas the Inventive sees every device as an experiment waiting to happen.
+Followers maintain a signature Prototype and push their inventions beyond
+ordinary limits. When readiness runs out, a Breakthrough can borrow power from
+the future. Progress repays the workshop; caution preserves its capacity.
 %%%%
 Qazlal
 
@@ -157,6 +168,9 @@ who seek magical knowledge. Followers who tirelessly pursue new horizons can
 call upon the Loreminder for magical power and the ability to cast spells
 beyond their magical training. The devout are rewarded with a supply of
 spellbooks taken directly from Sif Muna's legendary library.
+
+Sif Muna is one of the eight gods of the Elder Pantheon. Sages enter the
+Dungeon as members of the Loreminder's birthright order.
 %%%%
 the Shining One
 
@@ -166,6 +180,9 @@ and underhanded tactics, the Shining One rewards them and their allies with the
 power they need to slay demons and the undead. Especially devout warriors can
 even call upon angels in times of need. The Shining One's followers can convert
 to Elyvilon or Zin while keeping some piety.
+
+The Shining One is one of the eight gods of the Elder Pantheon. Paladins enter
+the Dungeon as members of the Shining One's birthright order.
 %%%%
 Trog
 
@@ -174,6 +191,9 @@ Trog's name, and especially to slay wizards. In return, worshippers of Trog
 gain the ability to go berserk at will in combat, and will be granted
 assistance in the form of powerful weapons and mighty allies. Followers are
 absolutely forbidden the use of spell magic.
+
+Trog is one of the eight gods of the Elder Pantheon. Berserkers enter the
+Dungeon as members of Trog's birthright order.
 %%%%
 Uskayaw
 
@@ -222,6 +242,9 @@ all gold gained, preferably followed by donations of more. In exchange,
 worshippers may invoke Zin's wrath upon sinners, and eventually gain various
 divine protections. Zin's followers can convert to Elyvilon or the Shining One
 while keeping some piety.
+
+Zin is one of the eight gods of the Elder Pantheon. Preachers enter the
+Dungeon as members of Zin's birthright order.
 %%%%
 Ashenzari powers
 
@@ -256,16 +279,13 @@ and finally the ability to step out of the flow of time entirely.
 %%%%
 Dithmenos powers
 
-Followers of Dithmenos are surrounded by an unnatural quiet, which helps the
-sounds they make go unnoticed. As they rise in devotion, they will find their
-own shadow begins to imitate some of their actions, attacking when they attack
-and even casting shadowy magics that mimic the form - if not the substance - of
-whichever schools of magic they had been utilising.
-
-More devout worshippers additionally gain the ability to swap places with their
-shadow to mislead enemies, grasp other beings' shadows to unleash their magic on
-the worshipper's behalf, and finally call down a night so dark that it hides all
-denizens of the dungeon from each other.
+Followers of Dithmenos are constantly surrounded in an aura of shadow, the
+extent of which is reflective of their level of devotion. Dithmenos grants
+followers the ability to instantly step into the shadow of nearby creatures,
+and protects followers by occasionally shrouding those struck by attacks in
+dark smoke. Sufficiently pious followers of Dithmenos will find their own
+shadow will begin to attack on its own, and eventually gain the ability to
+assume the form of a shadow themself.
 %%%%
 Elyvilon powers
 
@@ -379,14 +399,13 @@ Okawaru may challenge their foes to honourable single combat.
 %%%%
 Pakellas powers
 
-Followers of Pakellas do not regenerate their magic power naturally, and are
-forbidden from using external means to do so; instead, they are granted
-magical energy on killing beings. They may use increasing amounts of magical
-energy to strengthen their devices, temporarily granting them additional
-power, and can also use their magical energy to recharge their devices.
-Sufficiently devout followers will receive new devices from Pakellas, and may
-eventually petition Pakellas to personally charge one of their devices beyond
-its normal limits.
+Pakellas supplies one Field Kit and maintains one carried Prototype. Wands
+gain a bounded XP-recharged reserve; miscellaneous evokers recover faster.
+Overclock activates a device at enhanced effect for piety and extra capacity.
+Breakthrough permits one enhanced activation of an empty Prototype on credit.
+Experience repays that loan before Prototype recovery resumes. Evocations
+improves native effects and recovery. Spellcasting and normal MP regeneration
+remain available. Ordinary finite charges and other device restrictions remain.
 %%%%
 Qazlal powers
 
@@ -616,10 +635,10 @@ surrounded by titans and elvish blademasters.
 %%%%
 Pakellas wrath
 
-Those that offend Pakellas will find themselves completely unable to make use
-of their devices for the duration of Pakellas' displeasure. Those who abandon
-Pakellas altogether will also continue to be unable to regenerate their magical
-power so long as Pakellas' attention remains on them.
+Abandoning Pakellas suspends workshop powers and halves ordinary evoker
+recovery until the god's displeasure expires through experience. Existing
+workshop and Breakthrough debts persist. Ordinary devices remain usable and
+normal MP regeneration continues. Rejoining supplies no second Field Kit.
 %%%%
 Qazlal wrath
 
@@ -709,3 +728,88 @@ Wu Jian extra
 
 These prevent enemies from getting free attacks on you while you move away.
 %%%%
+Vorr
+
+Vorr the Red Wake delights in the opening of veins and the breaking of flesh.
+Worthy blood-bearing foes burst when slain, scattering fresh blood that fuels
+Vorr's rites. Devoted followers regenerate amid the spill and steal life from
+their wounds. Corpses can fuel the rites, and followers can sacrifice their own
+health through self-exsanguination when external blood runs short.
+%%%%
+Vorr powers
+
+Your worthy blood-bearing kills burst and leave fresh ritual blood. Old stains,
+summoned foes, bloodless creatures and ordinary injuries provide no fuel.
+Fresh blood remains potent for twelve ordinary turns and is gathered directly
+from visible ground when you invoke a rite. Intact blood-bearing corpses are
+consumed in place of one blood unit each, after fresh ground blood is used.
+
+Self-exsanguination can replace every missing blood unit with 10% of your
+maximum HP, rounded up per unit. Bloodless species and forms cannot supply
+their own blood. You cannot be under Death's
+Door, and must survive the complete payment. The exact HP cost is confirmed
+after targeting. Self-exsanguination fuels that rite directly and creates no
+fresh blood pool. Cancellation and failed rites consume no fuel or HP.
+
+Rupture spends two nearby blood units to tear open a blood-bearing foe. At
+three stars, Blood Communion grants regeneration while standing in fresh blood
+and capped lifesteal from damage you deal to worthy blood-bearing foes. Each
+visible fresh blood unit within four cells also grants +2% attack and movement
+speed, with no cap. Action delay is divided by the speed multiplier: fifty
+units grant +100% speed, halving attack and movement time. This affects melee,
+launched ranged and unarmed attacks and ordinary movement; spellcasting and
+throwing are unchanged. Corpses and health payments
+do not count toward the bonus. Spending blood reduces the bonus immediately.
+Red Passage consumes one blood unit at each endpoint to carry you between visible
+pools or corpse sites, erupting on arrival; self-exsanguination can supply
+either endpoint even without a pool. The Great Letting consumes eight units in its
+ritual area and piety, raising the blood into blades that strike each nearby
+target once.
+%%%%
+Vorr wrath
+
+Vorr reopens the wounds of those who abandon the Red Wake. Bloodless bodies
+cannot bleed even under divine wrath.
+
+%%%%
+Vellum
+
+Vellum, the Archbinder, sees every enchantment as a thread awaiting a worthy
+place. Followers may lift enchantments from artifacts and bind them to other
+artifacts. The source survives, depleted. Each thread exists only once.
+
+Vellum rewards victories over worthy foes. Enchanting, trading and hoarding
+items never earn favour.
+%%%%
+Vellum powers
+
+One free starter thread and an apprentice vessel make the first binding
+possible before finding two artifacts. Earned devotion increases personal
+capacity from one to six. Capacity remains unlocked when piety is spent.
+Normally an item holds one imported thread; six-star followers can designate
+one Masterwork with room for two. The six-capacity total remains unchanged.
+
+Any nonzero native artifact enchantment may be extracted, including drawbacks,
+brands and unique powers. Unique powers are conserved as complete native
+behaviour bundles and cost six capacity. Recipients must support the effect.
+Over-capacity threads may wait in the archive. Drawbacks reserve capacity even
+in the archive; restoring one ends its thread and returns it to the donor.
+A drawback is suppressed only while its original owner carries the donor
+under Vellum's favour. This prevents permanent purification or party-wide gifts.
+
+An imported property never stacks additively with the same native property;
+brands replace the active brand. Weapon and armour enchantment levels also
+move intact, at one capacity per level. Ordinary base-item subtype properties
+remain intrinsic. Named artifacts unlock at five stars. Invocations skill is
+not required.
+
+Extraction costs 2 plus twice the lesser of six and the thread's capacity.
+Moving a thread costs three piety. Most work takes five of your own actions.
+Danger, interruption, or stale item state cancels it without spending piety or
+enchantments. Exact consequences are shown before permanent extraction.
+%%%%
+Vellum wrath
+
+Vellum launches no separate attacks against former followers. Borrowed power
+becomes dormant without divine favour, and suppressed drawbacks return.
+Bindings and earned capacity remain recorded if the follower returns.

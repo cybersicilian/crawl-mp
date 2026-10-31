@@ -27,10 +27,11 @@ enum class spschool
   earth          = 1<<8,
   air            = 1<<9,
   forgecraft     = 1<<10,
-  LAST_SCHOOL    = spschool::forgecraft,
+  auramancy      = 1<<11,
+  LAST_SCHOOL    = spschool::auramancy,
   random         = spschool::LAST_SCHOOL << 1,
 };
-DEF_BITFIELD(spschools_type, spschool, 10);
+DEF_BITFIELD(spschools_type, spschool, 11);
 const int SPSCHOOL_LAST_EXPONENT = spschools_type::last_exponent;
 COMPILE_CHECK(spschools_type::exponent(SPSCHOOL_LAST_EXPONENT)
               == spschool::LAST_SCHOOL);
@@ -69,6 +70,8 @@ bool del_spell_from_memory_by_slot(int slot);
 bool del_spell_from_memory(spell_type spell);
 
 int spell_mana(spell_type which_spell, bool real_spell = true);
+// A species-specific HP payment in addition to the normal casting resource.
+int spell_additional_hp(spell_type spell, int mana);
 int spell_difficulty(spell_type which_spell);
 int spell_power_cap(spell_type spell);
 int spell_range(spell_type spell, const actor* caster = nullptr, int pow = 1,

@@ -25,6 +25,7 @@
 #include "options.h"
 #include "output.h"
 #include "religion.h"
+#include "skills.h"
 #include "state.h"
 #include "stringutil.h"
 #include "tilefont.h"
@@ -150,6 +151,9 @@ bool SkillMenuEntry::is_selectable(bool)
 
     if (is_set(SKMF_HELP))
         return true;
+
+    if (high_elf_skill_locked(you, m_sk))
+        return false;
 
     if (you.has_mutation(MUT_DISTRIBUTED_TRAINING))
         return false;
@@ -291,7 +295,7 @@ COLOURS SkillMenuEntry::get_colour() const
     }
     else if (mastered())
         return YELLOW;
-    else if (!you.training[m_sk])
+    else if (high_elf_skill_locked(you, m_sk) || !you.training[m_sk])
         return DARKGREY;
     else if (you.skill_manual_points[m_sk])
         return LIGHTBLUE;
@@ -311,7 +315,8 @@ string SkillMenuEntry::get_prefix()
     else
         letter = ' ';
 
-    const int sign = (is_useless_skill(m_sk) || mastered()) ? ' ' :
+    const int sign = (is_useless_skill(m_sk) || mastered()
+                      || high_elf_skill_locked(you, m_sk)) ? ' ' :
                                    (you.train[m_sk] == TRAINING_FOCUSED) ? '*' :
                                           you.train[m_sk] ? '+'
                                                           : '-';
@@ -1225,23 +1230,14 @@ void SkillMenu::toggle(skill_menu_switch sw)
     if (!m_switches[sw]->toggle())
         return;
 
-    // XXX: should use a pointer instead.
-    FixedVector<training_status, NUM_SKILLS> tmp;
-
     switch (sw)
     {
     case SKM_MODE:
-        you.auto_training = !you.auto_training;
+        set_training_mode(!you.auto_training);
         // TODO: these are probably now redundant
         Options.default_manual_training = !you.auto_training;
         Options.prefs_dirty = true;
 
-        // Switch the skill train state with the saved version.
-        tmp = you.train;
-        you.train = you.train_alt;
-        you.train_alt = tmp;
-
-        reset_training();
         break;
     case SKM_DO:
         you.skill_menu_do = get_state(SKM_DO);

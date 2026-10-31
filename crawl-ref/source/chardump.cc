@@ -27,6 +27,7 @@
 #include "dungeon.h"
 #include "fight.h"
 #include "files.h"
+#include "game-modifiers.h"
 #include "god-companions.h"
 #include "god-conduct.h"
 #include "god-prayer.h"
@@ -1453,6 +1454,7 @@ static const char* _aux_attack_names[] =
     "Stingers",
     "Blades",
     "Blades",
+    "Retaliatory Bite",
 };
 COMPILE_CHECK(ARRAYSZ(_aux_attack_names) == NUM_UNARMED_ATTACKS);
 
@@ -1597,6 +1599,16 @@ static string _describe_action_subtype(caction_type type, int compound_subtype)
     default:
         return "Error";
     }
+}
+
+string caction_category_name(caction_type type)
+{
+    return _describe_action(type);
+}
+
+string caction_subtype_name(caction_type type, int compound_subtype)
+{
+    return _describe_action_subtype(type, compound_subtype);
 }
 
 static caction_type _action_count_order[]
@@ -1752,6 +1764,22 @@ static void _sdump_mutations(dump_params &par)
     {
         text += "\n";
         text += (formatted_string::parse_string(describe_muts_for_chardump(false)));
+        text += "\n\n";
+    }
+    const auto mode = game_modifiers::trap_mode(you);
+    if (game_modifiers::rune_locks_disabled(you) || mode != game_modifiers::traps::normal)
+    {
+        text += "Expedition rules: ";
+        if (game_modifiers::rune_locks_disabled(you))
+            text += "rune locks disabled";
+        if (mode != game_modifiers::traps::normal)
+        {
+            if (game_modifiers::rune_locks_disabled(you))
+                text += "; ";
+            text += mode == game_modifiers::traps::none ? "ordinary traps disabled"
+                    : mode == game_modifiers::traps::floor_only ? "floor traps only"
+                    : "random trap effects only";
+        }
         text += "\n\n";
     }
 }

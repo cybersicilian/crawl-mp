@@ -1,0 +1,34 @@
+Route_caster
+
+Level 1 of the Dungeon
+
+Level 1 of the Wormlands
+(0, 0, Worm:1)
+  a scroll of identify
+(1, 10, Worm:1)
+  4 large rocks
+  a stone giant corpse
+(16, -5, Worm:1)
+  a wand of iceblast (5)
+(53, 7, Worm:1)
+  a lindwurm corpse (skeletalised by now)
+(57, 7, Worm:1)
+  a +0 robe
+(58, 10, Worm:1)
+  a potion of moonshine
+
+Level 2 of the Wormlands
+(0, 0, Worm:2)
+  a +0 troll leather armour
+  a deep troll corpse
+(2, -1, Worm:2)
+  2 potions of enlightenment
+(2, 0, Worm:2)
+  a +0 troll leather armour
+  a deep troll corpse
+(2, 1, Worm:2)
+  a +0 troll leather armour
+  a deep troll corpse
+(5, -1, Worm:2)
+  a deep troll corpse
+

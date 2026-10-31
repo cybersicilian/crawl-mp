@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "errors": [],
+  "checks": [],
+  "gameId": "9c688552-4d00-4aa2-abf3-b77c6a9fba57",
+  "error": "page.evaluate: Error: Module name \"client-transport\" has not been loaded yet for context: _. Use require([])\nhttp://requirejs.org/docs/errors.html#notloaded\n    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/public-after.cjs:30:27",
+  "saved": true
+}

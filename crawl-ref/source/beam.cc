@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "bloodcraft.h"
 
 #include "beam.h"
 
@@ -18,6 +19,7 @@
 
 #include "act-iter.h"
 #include "areas.h"
+#include "automaton.h"
 #include "attack.h"
 #include "attitude-change.h"
 #include "bloodspatter.h"
@@ -56,6 +58,7 @@
 #include "mutation.h"
 #include "nearby-danger.h"
 #include "options.h"
+#include "party.h"
 #include "player-stats.h"
 #include "potion.h"
 #include "prompt.h"
@@ -67,6 +70,7 @@
 #include "spl-damage.h"
 #include "spl-goditem.h"
 #include "spl-monench.h"
+#include "spl-rupture-blight.h"
 #include "spl-summoning.h"
 #include "spl-transloc.h"
 #include "spl-util.h"
@@ -84,6 +88,7 @@
 #include "tiles-build-specific.h"
 #include "transform.h"
 #include "traps.h"
+#include "party.h"
 #include "viewchar.h"
 #include "view.h"
 #include "xom.h"
@@ -252,7 +257,7 @@ void fire_partial_player_tracer(zap_type ztype, int power,
     zappy(ztype, power, false, pbolt);
 
     pbolt.source        = you.pos();
-    pbolt.source_id     = MID_PLAYER;
+    pbolt.source_id     = you.mid;
     pbolt.attitude      = ATT_FRIENDLY;
     pbolt.thrower       = KILL_YOU_MISSILE;
     pbolt.overshoot_prompt = false;
@@ -504,6 +509,12 @@ void zappy(zap_type z_type, int power, bool is_monster, bolt &pbolt)
 
 bool bolt::can_affect_actor(const actor *act) const
 {
+    if (act && act->is_monster()
+        && act->as_monster()->props.exists("party_downed_ghost"))
+    {
+        return false;
+    }
+
     // Blinkbolt doesn't hit its caster, since they are the bolt.
     if (origin_spell == SPELL_BLINKBOLT && act->mid == source_id)
         return false;
@@ -580,6 +591,21 @@ static void _combustion_breath_explode(bolt *parent, coord_def pos)
     beam.refine_for_explosion();
     beam.explode();
     _copy_affected_counts(*parent, beam);
+
+#if TAG_MAJOR_VERSION == 34
+    if (parent->agent() && parent->agent()->is_player()
+        && you.species == SP_MOTTLED_DRACONIAN)
+    {
+        for (adjacent_iterator ai(pos, false); ai; ++ai)
+        {
+            if (monster *mon = monster_at(*ai))
+            {
+                if (!mon->wont_attack() && !party::is_proxy_monster(*mon))
+                    sticky_flame_monster(mon, &you, 3 + random2(3));
+            }
+        }
+    }
+#endif
 }
 
 bolt::bolt(const actor& _agent, spell_type _origin_spell, int power)
@@ -684,7 +710,7 @@ void bolt::initialise_fire()
     ASSERT(!drop_item || ranged_atk);
     ASSERTM(range >= 0, "beam '%s', source '%s', has range -1",
             name.c_str(),
-            (source_id == MID_PLAYER ? "player" :
+            (party::is_party_mid(source_id) ? "player" :
                           monster_by_mid(source_id) ?
                              monster_by_mid(source_id)->name(DESC_PLAIN, true) :
                           "unknown").c_str());
@@ -1166,7 +1192,11 @@ void bolt::affect_cell()
         if (m && can_affect_actor(m))
         {
             const bool ignored = ignores_monster(m);
+            const int prev_reflections = reflections;
             affect_monster(m);
+
+            if (reflections != prev_reflections)
+                return;
 
             if (!ignored)
                 last_affected_actor_pos = pos();
@@ -1875,6 +1905,11 @@ static bool _monster_resists_mass_enchantment(monster* mons,
 
     switch (wh_enchant)
     {
+    case ENCH_CHARM:
+        if (mons->wont_attack() || party::is_proxy_monster(*mons)
+            || mons_intel(*mons) <= I_BRAINLESS)
+            return true;
+        break;
     case ENCH_FEAR:
         if (mons->wont_attack())
             return true;
@@ -1945,7 +1980,9 @@ spret mass_enchantment(enchant_type wh_enchant, int pow, bool fail)
         if (!you.see_cell_no_trans(mi->pos()))
             continue;
 
-        if (mi->has_ench(wh_enchant))
+        const bool counter_hex = wh_enchant == ENCH_CHARM
+                                 && mi->has_ench(ENCH_HEXED);
+        if (mi->has_ench(wh_enchant) && !counter_hex)
             continue;
 
         bool resisted = _monster_resists_mass_enchantment(*mi, wh_enchant,
@@ -1953,6 +1990,24 @@ spret mass_enchantment(enchant_type wh_enchant, int pow, bool fail)
 
         if (resisted)
             continue;
+
+        // A hostile enchantment takes precedence over charm. Reassert control
+        // first, as the ordinary charm beam does for opposing enchantments.
+        if (counter_hex)
+        {
+            mi->del_ench(ENCH_HEXED);
+            const bool charm_after = !mi->wont_attack()
+                                     && !mi->has_ench(ENCH_CHARM);
+            if (charm_after)
+            {
+                mi->add_ench(mon_enchant(ENCH_CHARM, &you));
+                check_lovelessness(**mi);
+            }
+            if (simple_monster_message(**mi, charm_after ? " is charmed!"
+                                          : " is freed from hostile influence!"))
+                did_msg = true;
+            continue;
+        }
 
         if ((wh_enchant == ENCH_FRENZIED && mi->go_frenzy(&you))
             || (wh_enchant != ENCH_FRENZIED
@@ -1964,6 +2019,8 @@ spret mass_enchantment(enchant_type wh_enchant, int pow, bool fail)
                 msg = " looks frightened!";
             else if (wh_enchant == ENCH_ANGUISH)
                 msg = " is haunted by guilt!";
+            else if (wh_enchant == ENCH_CHARM)
+                msg = " is charmed!";
 
             if (msg && simple_monster_message(**mi, msg))
                 did_msg = true;
@@ -1973,6 +2030,8 @@ spret mass_enchantment(enchant_type wh_enchant, int pow, bool fail)
                 behaviour_event(*mi, ME_SCARE, &you);
             else if (wh_enchant == ENCH_ANGUISH)
                 behaviour_event(*mi, ME_ALERT, &you);
+            else if (wh_enchant == ENCH_CHARM)
+                check_lovelessness(**mi);
         }
     }
 
@@ -2290,6 +2349,8 @@ void bolt_parent_init(const bolt &parent, bolt &child)
     child.range          = parent.range;
     child.hit            = parent.hit;
     child.damage         = parent.damage;
+    child.damage_percent = parent.damage_percent;
+    child.effect_duration_percent = parent.effect_duration_percent;
     if (parent.ench_power != -1)
         child.ench_power = parent.ench_power;
 
@@ -2842,7 +2903,7 @@ bool bolt::stop_at_target() const
 {
     // the pos check is to avoid a ray.cc assert for a ray that goes nowhere
     return is_explosion || is_big_cloud() ||
-            (source_id == MID_PLAYER && origin_spell == SPELL_BLINKBOLT) ||
+            (party::is_party_mid(source_id) && origin_spell == SPELL_BLINKBOLT) ||
             (aimed_at_spot && (pos() == source || flavour != BEAM_DIGGING));
 }
 
@@ -3116,25 +3177,62 @@ void bolt::affect_place_clouds()
 
 }
 
+static int _potion_beam_flavour_to_colour(beam_type flavour)
+{
+    switch (flavour)
+    {
+    case BEAM_POTION_POISON:
+        return GREEN;
+
+    case BEAM_POTION_MIASMA:
+    case BEAM_POTION_BLACK_SMOKE:
+        return DARKGREY;
+
+    case BEAM_POTION_STEAM:
+    case BEAM_POTION_GREY_SMOKE:
+        return LIGHTGREY;
+
+    case BEAM_POTION_FIRE:
+        return RED;
+
+    case BEAM_POTION_COLD:
+    case BEAM_POTION_RAIN:
+        return WHITE;
+
+    case BEAM_POTION_BLUE_SMOKE:
+        return LIGHTBLUE;
+
+    case BEAM_POTION_PURPLE_SMOKE:
+    case BEAM_POTION_MUTAGENIC:
+        return MAGENTA;
+
+    case BEAM_POTION_RANDOM:
+    default:
+        return ETC_RANDOM;
+    }
+}
+
 void bolt::affect_place_explosion_clouds()
 {
     const coord_def p = pos();
 
     // First check: fire/cold over water/lava.
-    if (env.grid(p) == DNGN_LAVA && flavour == BEAM_COLD
-        || feat_is_water(env.grid(p)) && is_fiery())
+    if ((env.grid(p) == DNGN_LAVA && (flavour == BEAM_COLD || flavour == BEAM_POTION_COLD))
+        || (feat_is_water(env.grid(p)) && (is_fiery() || flavour == BEAM_POTION_FIRE)))
     {
         place_cloud(CLOUD_STEAM, p, 2 + random2(5), agent());
         return;
     }
 
-    if (flavour == BEAM_MEPHITIC)
+    if (flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
     {
         const coord_def center = (aimed_at_feet ? source : ray.pos());
         if (p == center || x_chance_in_y(125 + ench_power, 225))
         {
-            place_cloud(CLOUD_MEPHITIC, p, roll_dice(2,
-                        8 + div_rand_round(ench_power, 20)), agent());
+            const int duration = origin_spell == SPELL_MEPHITIC_CLOUD
+                ? roll_dice(2, 8 + div_rand_round(ench_power, 20))
+                : roll_dice(2, 3 + ench_power / 20);
+            place_cloud(beam2cloud(flavour), p, duration, agent());
         }
     }
 
@@ -3208,13 +3306,13 @@ void bolt::internal_ouch(int dam)
         if (reflections > 0)
             ouch(dam, KILLED_BY_REFLECTION, reflector, name.c_str());
         else if (bounces > 0)
-            ouch(dam, KILLED_BY_BOUNCE, MID_PLAYER, name.c_str());
+            ouch(dam, KILLED_BY_BOUNCE, you.mid, name.c_str());
         else
         {
             if (self_targeted())
-                ouch(dam, KILLED_BY_SELF_AIMED, MID_PLAYER, name.c_str());
+                ouch(dam, KILLED_BY_SELF_AIMED, you.mid, name.c_str());
             else
-                ouch(dam, KILLED_BY_TARGETING, MID_PLAYER, name.c_str());
+                ouch(dam, KILLED_BY_TARGETING, you.mid, name.c_str());
         }
     }
     else if (MON_KILL(thrower))
@@ -3256,7 +3354,14 @@ bool bolt::is_harmless(const monster* mon) const
     {
     case BEAM_VISUAL:
     case BEAM_DIGGING:
+    case BEAM_POTION_BLACK_SMOKE:
+    case BEAM_POTION_GREY_SMOKE:
+    case BEAM_POTION_BLUE_SMOKE:
+    case BEAM_POTION_PURPLE_SMOKE:
         return true;
+
+    case BEAM_POTION_RAIN:
+        return !mon->is_fiery();
 
     case BEAM_HOLY:
         return mon->res_holy_energy() >= 3;
@@ -3265,15 +3370,19 @@ bool bolt::is_harmless(const monster* mon) const
         return mon->res_foul_flame() >= 3;
 
     case BEAM_STEAM:
+    case BEAM_POTION_STEAM:
         return mon->res_steam() >= 3;
 
     case BEAM_FIRE:
+    case BEAM_POTION_FIRE:
         return mon->res_fire() >= 3;
 
     case BEAM_COLD:
+    case BEAM_POTION_COLD:
         return mon->res_cold() >= 3;
 
     case BEAM_MIASMA:
+    case BEAM_POTION_MIASMA:
         return mon->res_miasma();
 
     case BEAM_NEG:
@@ -3285,11 +3394,17 @@ bool bolt::is_harmless(const monster* mon) const
     case BEAM_POISON:
         return mon->res_poison() >= 3;
 
+    case BEAM_POTION_POISON:
+        return mon->res_poison() > 0;
+
     case BEAM_ACID:
         return mon->res_corr() >= 3;
 
     case BEAM_MEPHITIC:
         return mon->res_poison() > 0 || mon->clarity();
+
+    case BEAM_POTION_MUTAGENIC:
+        return !mon->can_safely_mutate();
 
     case BEAM_UMBRAL_TORCHLIGHT:
         return mon->god == GOD_YREDELEMNUL || !mon->has_soul();
@@ -3325,6 +3440,11 @@ bool bolt::harmless_to_player() const
     {
     case BEAM_VISUAL:
     case BEAM_DIGGING:
+    case BEAM_POTION_BLACK_SMOKE:
+    case BEAM_POTION_GREY_SMOKE:
+    case BEAM_POTION_BLUE_SMOKE:
+    case BEAM_POTION_PURPLE_SMOKE:
+    case BEAM_POTION_RAIN:
         return true;
 
     // Positive enchantments.
@@ -3344,6 +3464,7 @@ bool bolt::harmless_to_player() const
         return you.res_foul_flame() >= 3;
 
     case BEAM_MIASMA:
+    case BEAM_POTION_MIASMA:
         return you.res_miasma();
 
     case BEAM_NEG:
@@ -3353,14 +3474,26 @@ bool bolt::harmless_to_player() const
         return player_res_poison(false) >= 3
                || is_big_cloud() && player_res_poison(false) > 0;
 
+    case BEAM_POTION_POISON:
+        return player_res_poison(false) > 0;
+
     case BEAM_MEPHITIC:
         return player_res_poison(false) > 0 || you.clarity();
 
     case BEAM_PETRIFY:
         return you.res_petrify() || you.petrified() || you.petrifying();
 
+    case BEAM_POTION_STEAM:
+        return actor_cloud_immune(you, CLOUD_STEAM);
+
+    case BEAM_POTION_FIRE:
+        return actor_cloud_immune(you, CLOUD_FIRE);
+
     case BEAM_COLD:
         return is_big_cloud() && actor_cloud_immune(you, CLOUD_COLD);
+
+    case BEAM_POTION_COLD:
+        return actor_cloud_immune(you, CLOUD_COLD);
 
     case BEAM_VIRULENCE:
         return player_res_poison(false) >= 3;
@@ -3418,7 +3551,7 @@ void bolt::reflect()
 
     if (pos() == you.pos())
     {
-        reflector = MID_PLAYER;
+        reflector = you.mid;
         count_action(CACT_BLOCK, -1, BLOCK_REFLECT);
     }
     else if (monster* m = monster_at(pos()))
@@ -3440,6 +3573,8 @@ void bolt::reflect()
 void bolt::tracer_affect_player()
 {
     if (flavour == BEAM_UNRAVELLING && player_is_debuffable())
+        is_explosion = true;
+    if (flavour == BEAM_MANA_RUPTURE)
         is_explosion = true;
 
     const bool friendly = agent() ? agent()->wont_attack()
@@ -3487,6 +3622,8 @@ void bolt::tracer_affect_player()
 
 int bolt::apply_to_hit_modifiers(int base_hit, const actor &targ) const
 {
+    if (base_hit != AUTOMATIC_HIT && agent() && agent()->is_monster())
+        base_hit = base_hit * (100 - bloodcraft::accuracy_penalty(*agent()->as_monster())) / 100;
     if (targ.invisible() && !can_see_invis)
         base_hit /= 2;
 
@@ -3823,7 +3960,7 @@ void bolt::affect_player_enchantment(bool resistible)
         if (aux_source.empty())
             aux_source = "by nerve-wracking pain";
 
-        const int dam = resist_adjust_damage(&you, flavour, damage.roll());
+        const int dam = resist_adjust_damage(&you, flavour, roll_damage());
         if (dam)
         {
             mpr("Pain shoots through your body!");
@@ -3852,7 +3989,7 @@ void bolt::affect_player_enchantment(bool resistible)
         if (aux_source.empty())
             aux_source = "by dispel undead";
 
-        internal_ouch(damage.roll());
+        internal_ouch(roll_damage());
         obvious_effect = true;
         break;
 
@@ -3863,7 +4000,7 @@ void bolt::affect_player_enchantment(bool resistible)
             aux_source = "mindburst bolt";
 
         {
-            int amt = damage.roll();
+            int amt = roll_damage();
             internal_ouch(amt);
 
             if (you.has_blood())
@@ -3924,7 +4061,7 @@ void bolt::affect_player_enchantment(bool resistible)
 
     case BEAM_MALIGN_OFFERING:
     {
-        const int dam = resist_adjust_damage(&you, flavour, damage.roll());
+        const int dam = resist_adjust_damage(&you, flavour, roll_damage());
         if (dam)
         {
             _malign_offering_effect(&you, agent(), dam);
@@ -3939,7 +4076,7 @@ void bolt::affect_player_enchantment(bool resistible)
     {
         const int turns = 1 + random_range(div_rand_round(ench_power, 20),
                                            div_rand_round(ench_power, 12) + 1);
-        if (start_ranged_constriction(*agent(), you, turns, CONSTRICT_ROOTS))
+        if (start_ranged_constriction(*agent(), you, turns * effect_duration_percent / 100, CONSTRICT_ROOTS))
             obvious_effect = true;
         break;
     }
@@ -3955,7 +4092,7 @@ void bolt::affect_player_enchantment(bool resistible)
 
     case BEAM_VAMPIRIC_DRAINING:
     {
-        const int dam = resist_adjust_damage(&you, flavour, damage.roll());
+        const int dam = resist_adjust_damage(&you, flavour, roll_damage());
         if (dam > 0)
         {
             _vampiric_draining_effect(you, *agent(), dam);
@@ -4020,6 +4157,14 @@ void bolt::affect_player_enchantment(bool resistible)
         obvious_effect = true;
         break;
 
+    case BEAM_BLIGHT:
+        if (in_explosion_phase)
+        {
+            blight_player(agent(), ench_power);
+            obvious_effect = true;
+        }
+        break;
+
     case BEAM_SOUL_SPLINTER:
         obvious_effect = true;
         if (you.has_soul())
@@ -4046,7 +4191,7 @@ void bolt::affect_player_enchantment(bool resistible)
             you.vitrify(agent(), random_range(12, 22));
         else
             temp_mutate(RANDOM_CORRUPT_MUTATION, "warp body");
-        you.hurt(agent(), damage.roll(), BEAM_WARP_BODY, KILLED_BY_BEAM);
+        you.hurt(agent(), roll_damage(), BEAM_WARP_BODY, KILLED_BY_BEAM);
         break;
 
     default:
@@ -4060,7 +4205,7 @@ void bolt::affect_player_enchantment(bool resistible)
         if (mons_att_wont_attack(attitude))
         {
             friends_hurt++;
-            if (source_id == MID_PLAYER)
+            if (party::is_party_mid(source_id))
             {
                 // Beam from player rebounded and hit player.
                 if (!self_targeted())
@@ -4095,6 +4240,15 @@ void bolt::affect_player_enchantment(bool resistible)
 
 void bolt::affect_actor(actor *act)
 {
+    if (act->is_monster() && party::is_proxy_monster(*act->as_monster()))
+    {
+        if (act->as_monster()->props.exists("party_downed_ghost"))
+            return;
+        int slot = party::proxy_slot(*act->as_monster());
+        party::scoped_player_context ctx(slot);
+        affect_player();
+        return;
+    }
     if (act->is_monster())
         affect_monster(act->as_monster());
     else
@@ -4233,7 +4387,7 @@ static pie_effect _random_pie_effect(const actor &defender)
 
 void bolt::affect_player()
 {
-    hit_count[MID_PLAYER]++;
+    hit_count[you.mid]++;
 
     if (ignores_player() || !could_harm(agent(), &you, !is_tracer()))
         return;
@@ -4304,7 +4458,7 @@ void bolt::affect_player()
     int pre_ac_dam = 0;
 
     // Roll the damage.
-    pre_ac_dam += damage.roll();
+    pre_ac_dam += roll_damage();
     int pre_res_dam = apply_AC(&you, pre_ac_dam);
 
 #ifdef DEBUG_DIAGNOSTICS
@@ -4449,7 +4603,7 @@ void bolt::affect_player()
             // Beam from player rebounded and hit player.
             // Xom's amusement at the player's being damaged is handled
             // elsewhere.
-            if (source_id == MID_PLAYER)
+            if (party::is_party_mid(source_id))
             {
                 if (!self_targeted())
                     xom_is_stimulated(200);
@@ -4689,7 +4843,7 @@ bool bolt::determine_damage(monster* mon, int& preac, int& postac, int& final)
     // hurt monsters with low-damage ranged attacks and high-damage
     // melee attacks. I judge this an acceptable compromise (for now).
     //
-    const int preac_max_damage = damage.num * damage.size;
+    const int preac_max_damage = damage.num * damage.size * damage_percent / 100;
 
     // preac: damage before AC modifier
     // postac: damage after AC modifier
@@ -4702,7 +4856,7 @@ bool bolt::determine_damage(monster* mon, int& preac, int& postac, int& final)
         preac = preac_max_damage;
     }
     else
-        preac = damage.roll();
+        preac = roll_damage();
 
     int tracer_postac_max = preac_max_damage;
 
@@ -4794,8 +4948,12 @@ bool bolt::has_relevant_side_effect(monster* mon)
     else if (flavour == BEAM_ENSNARE || flavour == BEAM_LIGHT)
         return true;
 
-    const cloud_type cloud = flavour == BEAM_MEPHITIC ? CLOUD_MEPHITIC
-                                                      : get_cloud_type();
+    if (flavour == BEAM_POTION_RANDOM)
+        return true;
+
+    const cloud_type cloud = (flavour >= BEAM_MEPHITIC && flavour <= BEAM_POTION_RANDOM)
+        ? beam2cloud(flavour)
+        : get_cloud_type();
     if (cloud != CLOUD_NONE && !actor_cloud_immune(*mon, cloud))
         return true;
 
@@ -4892,6 +5050,8 @@ void bolt::tracer_affect_monster(monster* mon)
     }
 
     if (flavour == BEAM_UNRAVELLING && monster_can_be_unravelled(*mon))
+        is_explosion = true;
+    if (flavour == BEAM_MANA_RUPTURE && !mon->is_summoned())
         is_explosion = true;
 
     // Trigger explosion on exploding beams.
@@ -5122,7 +5282,7 @@ void bolt::kill_monster(monster &mon)
     int kindex = actor_to_death_source(agent());
 
     killer_type ref_killer = thrower;
-    if (!YOU_KILL(thrower) && reflector == MID_PLAYER)
+    if (!YOU_KILL(thrower) && party::is_party_mid(reflector))
     {
         ref_killer = KILL_YOU_MISSILE;
         kindex = YOU_FAULTLESS;
@@ -5515,6 +5675,30 @@ void bolt::affect_monster(monster* mon)
     if (!mon->alive() || mon->type == MONS_GOD_WRATH_AVATAR)
         return;
 
+    if (party::is_proxy_monster(*mon))
+    {
+        if (mon->props.exists("party_downed_ghost") || ignores_monster(mon))
+            return;
+
+        if (is_tracer())
+        {
+            if (!YOU_KILL(thrower))
+            {
+                party::scoped_player_context ctx(party::proxy_slot(*mon));
+                if (!ignores_player() && can_affect_actor(&you))
+                    tracer_affect_player();
+                return;
+            }
+            tracer_affect_monster(mon);
+            return;
+        }
+
+        party::scoped_player_context ctx(party::proxy_slot(*mon));
+        if (!ignores_player() && can_affect_actor(&you))
+            affect_player();
+        return;
+    }
+
     hit_count[mon->mid]++;
 
     // Jiyva absorbs attacks on slimes.
@@ -5804,6 +5988,13 @@ bool bolt::ignores_monster(const monster* mon) const
     if (!mon)
         return false;
 
+    if (mon->props.exists("party_downed_ghost"))
+        return true;
+
+    // A caster can fire through their own illusory double.
+    if (mon->type == MONS_FALSE_IMAGE && source_id == mon->summoner)
+        return true;
+
     // Player shadows (or a dummy for a shadow spell tracer) can shoot through
     // other shadows (ie: where they are currently standing while contemplating
     // being somewhere else).
@@ -5917,6 +6108,8 @@ bool bolt::has_saving_throw() const
     case BEAM_SAP_MAGIC:
     case BEAM_UNRAVELLING:
     case BEAM_UNRAVELLED_MAGIC:
+    case BEAM_MANA_RUPTURE:
+    case BEAM_BLIGHT:
     case BEAM_INFESTATION:
     case BEAM_IRRESISTIBLE_CONFUSION:
     case BEAM_VILE_CLUTCH:
@@ -6195,7 +6388,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 
     case BEAM_DISPEL_UNDEAD:
     {
-        const int dam = damage.roll();
+        const int dam = roll_damage();
         if (you.see_cell(mon->pos()))
         {
             mprf("%s is dispelled%s",
@@ -6209,7 +6402,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 
     case BEAM_VAMPIRIC_DRAINING:
     {
-        const int dam = resist_adjust_damage(mon, flavour, damage.roll());
+        const int dam = resist_adjust_damage(mon, flavour, roll_damage());
         if (dam > 0)
         {
             _vampiric_draining_effect(*mon, *agent(), dam);
@@ -6222,7 +6415,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 
     case BEAM_PAIN:
     {
-        const int dam = resist_adjust_damage(mon, flavour, damage.roll());
+        const int dam = resist_adjust_damage(mon, flavour, roll_damage());
         if (!dam)
             return MON_UNAFFECTED;
         if (you.see_cell(mon->pos()))
@@ -6267,7 +6460,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 
     case BEAM_MINDBURST:
     {
-        const int dam = damage.roll();
+        const int dam = roll_damage();
         if (you.see_cell(mon->pos()))
         {
             if (mon->type == MONS_GLOWING_ORANGE_BRAIN)
@@ -6367,7 +6560,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
         return MON_AFFECTED;
 
     case BEAM_HEALING:
-        if (mon->heal(3 + damage.roll()))
+        if (mon->heal(3 + roll_damage()))
         {
             if (mon->hit_points == mon->max_hit_points)
             {
@@ -6558,7 +6751,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 
     case BEAM_MALIGN_OFFERING:
     {
-        const int dam = resist_adjust_damage(mon, flavour, damage.roll());
+        const int dam = resist_adjust_damage(mon, flavour, roll_damage());
         if (dam)
         {
             _malign_offering_effect(mon, agent(), dam);
@@ -6642,6 +6835,30 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
         _unravelling_explode(*this);
         return MON_AFFECTED;
 
+    case BEAM_MANA_RUPTURE:
+    {
+        if (mana_rupture_dismiss(*mon, agent()))
+            return MON_AFFECTED;
+        // Damage is based on the target's will before the weakening effect.
+        damage = mana_rupture_damage(mon->willpower(), ench_power);
+        mana_rupture_weaken(*mon, agent());
+        colour = ETC_MUTAGENIC;
+        flavour = BEAM_MAGIC;
+        ex_size = 1;
+        is_explosion = true;
+        obvious_effect = true;
+        return MON_AFFECTED;
+    }
+
+    case BEAM_BLIGHT:
+        if (in_explosion_phase)
+        {
+            blight_monster(*mon, agent(), ench_power);
+            obvious_effect = true;
+            return MON_AFFECTED;
+        }
+        return MON_UNAFFECTED;
+
     case BEAM_INFESTATION:
     {
         const int dur = (5 + random2avg(div_rand_round(ench_power,2), 2))
@@ -6665,7 +6882,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
     {
         const int dur = 3 + random_range(div_rand_round(ench_power, 22),
                                          div_rand_round(ench_power, 16) + 1);
-        if (start_ranged_constriction(*agent(), *mon, dur, CONSTRICT_ROOTS))
+        if (start_ranged_constriction(*agent(), *mon, dur * effect_duration_percent / 100, CONSTRICT_ROOTS))
             obvious_effect = true;
         return MON_AFFECTED;
     }
@@ -6711,7 +6928,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
             mon->vitrify(agent(), random_range(8, 12), true);
         else
             mon->malmutate(agent());
-        mon->hurt(agent(), damage.roll(), BEAM_WARP_BODY, KILLED_BY_BEAM);
+        mon->hurt(agent(), roll_damage(), BEAM_WARP_BODY, KILLED_BY_BEAM);
         return MON_AFFECTED;
 
     default:
@@ -6724,7 +6941,7 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
 // Extra range used on hit.
 int bolt::range_used_on_hit() const
 {
-    if (is_tracer() && source_id == MID_PLAYER && hit < AUTOMATIC_HIT)
+    if (is_tracer() && party::is_party_mid(source_id) && hit < AUTOMATIC_HIT)
         return 0;
 
     // Non-beams can only affect one thing (player/monster).
@@ -6769,6 +6986,10 @@ const map<spell_type, explosion_sfx> spell_explosions = {
         "The flask of dizzying concoctions shatters into a vile cloud!",
         "a loud shattering of glass",
     } },
+    { SPELL_EVAPORATE, {
+        "The potion explodes!",
+        "a loud shattering of glass",
+    } },
     { SPELL_GHOSTLY_FIREBALL, {
         "The ghostly flame explodes!",
         "the shriek of haunting fire",
@@ -6776,6 +6997,12 @@ const map<spell_type, explosion_sfx> spell_explosions = {
     { SPELL_VIOLENT_UNRAVELLING, {
         "The enchantments explode!",
         "a sharp crackling", // radiation = geiger counter
+    } },
+    { SPELL_MANA_RUPTURE, {
+        "The unstable magic explodes!", "the sound of breaking glass",
+    } },
+    { SPELL_BLIGHT, {
+        "The area erupts with magical blight!", "a squelching noise",
     } },
     { SPELL_ICEBLAST, {
         "The mass of ice explodes!",
@@ -6883,6 +7110,10 @@ void bolt::refine_for_explosion(const string& explode_msg)
         colour  = MAGENTA;
         ex_size = 2;
     }
+    else if (origin_spell == SPELL_BLIGHT)
+        ex_size = 2;
+    else if (origin_spell == SPELL_EVAPORATE && !is_tracer())
+        colour = _potion_beam_flavour_to_colour(flavour);
 
     if (!is_tracer() && !seeMsg.empty() && !hearMsg.empty())
     {
@@ -7486,7 +7717,7 @@ actor* bolt::agent(bool ignore_reflection) const
     // If the beam was reflected report a different point of origin
     if (reflections > 0 && !ignore_reflection)
     {
-        if (reflector == MID_PLAYER || source_id == MID_PLAYER)
+        if (party::is_party_mid(reflector) || party::is_party_mid(source_id))
             return &env.mons[YOU_FAULTLESS];
         nominal_source = reflector;
     }
@@ -7510,8 +7741,9 @@ actor* bolt::agent(bool ignore_reflection) const
 
 bool bolt::is_enchantment() const
 {
-    return flavour >= BEAM_FIRST_ENCHANTMENT
-           && flavour <= BEAM_LAST_ENCHANTMENT;
+    return (flavour >= BEAM_FIRST_ENCHANTMENT
+            && flavour <= BEAM_LAST_ENCHANTMENT)
+           || flavour == BEAM_MANA_RUPTURE || flavour == BEAM_BLIGHT;
 }
 
 string bolt::get_short_name() const
@@ -7563,15 +7795,18 @@ static string _beam_type_name(beam_type type)
     case BEAM_MAGIC:                 return "magic";
     case BEAM_ELECTRICITY:           return "electricity";
     case BEAM_MEPHITIC:              return "noxious fumes";
+    case BEAM_POTION_POISON:
     case BEAM_POISON:                return "poison";
     case BEAM_NEG:                   return "negative energy";
     case BEAM_ACID:                  return "acid";
     case BEAM_LIGHT:                 return "light";
+    case BEAM_POTION_MIASMA:
     case BEAM_MIASMA:                return "miasma";
     case BEAM_SPORE:                 return "spores";
     case BEAM_POISON_ARROW:          return "poison sting";
     case BEAM_DAMNATION:             return "damnation";
     case BEAM_STICKY_FLAME:          return "sticky fire";
+    case BEAM_POTION_STEAM:
     case BEAM_STEAM:                 return "steam";
     case BEAM_ENERGY:                return "energy";
     case BEAM_HOLY:                  return "cleansing flame";
@@ -7582,6 +7817,15 @@ static string _beam_type_name(beam_type type)
     case BEAM_THUNDER:               return "thunder";
     case BEAM_STUN_BOLT:             return "stunning bolt";
     case BEAM_DESTRUCTION:           return "destruction";
+    case BEAM_POTION_FIRE:           return "fire cloud";
+    case BEAM_POTION_COLD:           return "freezing cloud";
+    case BEAM_POTION_BLACK_SMOKE:    return "black smoke";
+    case BEAM_POTION_GREY_SMOKE:     return "grey smoke";
+    case BEAM_POTION_BLUE_SMOKE:     return "blue smoke";
+    case BEAM_POTION_PURPLE_SMOKE:   return "purple smoke";
+    case BEAM_POTION_MUTAGENIC:      return "mutagenic fog";
+    case BEAM_POTION_RAIN:           return "rain";
+    case BEAM_POTION_RANDOM:
     case BEAM_RANDOM:                return "random";
     case BEAM_CHAOS:                 return "chaos";
     case BEAM_SLOW:                  return "slow";
@@ -7630,6 +7874,8 @@ static string _beam_type_name(beam_type type)
     case BEAM_DEATH_RATTLE:          return "breath of the dead";
     case BEAM_RESISTANCE:            return "resistance";
     case BEAM_UNRAVELLING:           return "unravelling";
+    case BEAM_MANA_RUPTURE:          return "magical disruption";
+    case BEAM_BLIGHT:                return "vile blight";
     case BEAM_UNRAVELLED_MAGIC:      return "unravelled magic";
     case BEAM_SHARED_PAIN:           return "shared pain";
     case BEAM_IRRESISTIBLE_CONFUSION:return "confusion";
@@ -7820,6 +8066,19 @@ void player_beam_tracer::player_hit(bool /*was_friendly*/) noexcept
 
 void player_beam_tracer::monster_hit(const bolt& beam, const monster& mon)
 {
+    if (party::is_proxy_monster(mon))
+    {
+        const int slot = party::proxy_slot(mon);
+        if (slot < 0 || slot >= party::player_count()
+            || mon.props.exists("party_downed_ghost")
+            || !you.can_see(party::get_player(slot)) || beam.is_harmless(&mon))
+            return;
+        for (const bad_target& target : bad_attack_targets)
+            if (target.mon == &mon)
+                return;
+        bad_attack_targets.push_back({ &mon, "", "", false });
+        return;
+    }
     if (!you.aware_of(mon))
         return;
 
@@ -7859,6 +8118,30 @@ void player_beam_tracer::monster_hit(const bolt& beam, const monster& mon)
         if (!reason.empty())
             bad_charm_target = &mon;
     }
+}
+
+string player_beam_tracer::describe_attack_targets() const
+{
+    attacked_monster_list monsters;
+    vector<string> companions;
+    for (const bad_target& target : bad_attack_targets)
+    {
+        if (party::is_proxy_monster(*target.mon))
+        {
+            const int slot = party::proxy_slot(*target.mon);
+            if (slot >= 0 && slot < party::player_count())
+                companions.push_back("your ally " + party::get_player(slot).your_name);
+        }
+        else
+            monsters.add(*target.mon, target.adj, target.suffix, target.penance);
+    }
+    string result = monsters.empty() ? "" : monsters.describe();
+    if (!companions.empty())
+    {
+        const string names = comma_separated_line(companions.begin(), companions.end());
+        result = result.empty() ? names : result + " and " + names;
+    }
+    return result;
 }
 
 // Returns true if there is anything this tracer might possibly want to prompt
@@ -7906,6 +8189,9 @@ int targeting_tracer::player_hit_count() noexcept
 // returns true if the player wishes to cancel firing the bolt, false otherwise
 bool cancel_beam_prompt(const bolt& beam, const player_beam_tracer& tracer)
 {
+    if (automaton::casting_automatically()
+        && automaton::beam_requires_confirmation(tracer))
+        return true;
     const spell_type spell = beam.origin_spell;
 
     if (tracer.god_hated_target)
@@ -7955,7 +8241,7 @@ bool cancel_beam_prompt(const bolt& beam, const player_beam_tracer& tracer)
         for (auto& target : tracer.bad_attack_targets)
             victims.add(*target.mon, target.adj, target.suffix, target.penance);
 
-        string mon_name = victims.describe();
+        string mon_name = tracer.describe_attack_targets();
         string verb = "fire ";
         if (tracer.bad_attack_targets.size() == 1)
         {

@@ -1,0 +1,45 @@
+{
+  "reservationId": "61be6b7a-4267-4c5e-98bd-1f6b6c200c4d",
+  "owner": "codex/01a1595d-0932-78b2-8247-2ea2e862c9f0",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "61be6b7a-4267-4c5e-98bd-1f6b6c200c4d",
+      "owner": "codex/01a1595d-0932-78b2-8247-2ea2e862c9f0",
+      "label": "DCSS classic Dithmenos isolated native build and focused tests",
+      "requestedAt": 1792501493.6869829,
+      "supervisorPid": 82075,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "db3d73184022dcc050147f51318c9b590bfacd7295126f7d902a020cbf44ed96",
+      "startedAt": 1792501493.687664,
+      "workerPid": 82080,
+      "processGroup": 82080,
+      "exitCode": 1,
+      "finishedAt": 1792501505.581344,
+      "supervisedProcessGroupGone": true
+    },
+    "result": {
+      "startedAt": 1792501494.025216,
+      "finishedAt": 1792501505.5697541,
+      "results": [
+        {
+          "command": [
+            "make",
+            "-j2",
+            "WEBTILES=y",
+            "NOWIZARD=y",
+            "NO_OPTIMIZE=y",
+            "STDFLAG=-std=c++14",
+            "catch2-tests-executable"
+          ],
+          "exitCode": 2
+        }
+      ],
+      "snapshotMatchesRequest": true,
+      "workingSourceChangedDuringBuild": [],
+      "passed": false
+    },
+    "reason": "Build generator Python lacked PyYAML; installed Python3.13 dependency verified for fresh attempt"
+  }
+}

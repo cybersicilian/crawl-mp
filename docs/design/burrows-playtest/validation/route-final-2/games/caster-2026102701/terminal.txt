@@ -1,0 +1,870 @@
+=Route_caster the Digger           *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 11Int: 19SH:  0Dex: 15XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)-) Nothing wieldedCast: Sandblast♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Sneak 3/30ROUTE_EVENT setup 2
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  3/3========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  1 Next: 10947Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 15/15     ========================Magic:  4/4========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  2 Next: 54732Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 19/19     ========================Magic:  5/5========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  3 Next: 27361Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 24/24     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  4 Next: 15471Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 28/28     ========================Magic:  7/7========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  5 Next: 83189Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 32/32     ========================Magic:  8/8========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  6 Next: 43187Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 36/36     ========================Magic:  9/9========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  7 Next: 22010Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 41/41     ========================Magic:  10/10     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  8 Next: 11066Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 45/45     ========================Magic:  11/11     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  9 Next: 5513%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 50/50     ========================Magic:  12/12     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 10 Next: 2713%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 54/54     ========================Magic:  13/13     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 11 Next: 1308%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 59/59     ========================Magic:  14/14     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 12 Next: 811% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 63/63     ========================Magic:  15/15     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 13 Next: 435% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 68/68     ========================Magic:  16/16     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 14 Next: 231% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 72/72     ========================Magic:  17/17     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 15 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 6/768/186 0% ROUTE_EVENT setup 3
+
+_Experience level set to 16.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 8 28 148284ROUTE_EVENT setup 4
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 76/76     ========================Magic:  18/18     ========================AC:  2 (19%)Str: 8EV: 10Int: 28SH:  0Dex: 14XL: 16 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 16.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+new experience level: Experience level set to 16.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which god (by name)? Vehumet
+ Vehumet welcomes you!Vehumet offers you knowledge of Kiss of Death. of Vehumet ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 6hield-BearerROUTE_EVENT setup 6
+
+_Increased Shields to skill level 6.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Conjurations
+ Conjurations
+ To what level? (current = 0.0) 16Devastator   ROUTE_EVENT setup 7
+
+_Increased Conjurations to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fire Magic
+ Fire Magic
+ To what level? (current = 0.0) 12ROUTE_EVENT setup 8
+
+_Increased Fire Magic to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 12101/101ROUTE_EVENT setup 9
+
+_Increased Fighting to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Earth Magic
+ Earth Magic
+ To what level? (current = 0.0) 16ROUTE_EVENT setup 10
+
+_Increased Earth Magic to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 8ROUTE_EVENT setup 11
+
+_Increased Evocations to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Translocations
+ Translocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 12
+
+_Increased Translocations to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 148ROUTE_EVENT setup 13
+
+_Increased Dodging to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Spellcasting
+ Spellcasting
+ To what level? (current = 0.0) 1618/3-------------ROUTE_EVENT setup 14
+
+_Increased Spellcasting to skill level 16.0.
+ Enter Wizard Command (? - help): Memorise which spell? Stone ArrowROUTE_EVENT setup 15
+_Memorise which spell? Enter Wizard Command (? - help): FireballROUTE_EVENT setup 16
+_Memorise which spell? Enter Wizard Command (? - help): Iskenderun's Mystic BlastROUTE_EVENT setup 17
+_Memorise which spell? Enter Wizard Command (? - help): Bombard
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): 
+_Memorise which spell? 
+ Enter Wizard Command (? - help): Memorise which spell? 
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog9=------------2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking20=4
+_
+_g - 3 potions of magic (gained 2)5
+_
+_m - 2 potions of might1=6
+_
+_h - 2 potions of haste7
+_
+_c - 6 potions of curing2=8
+_
+_w - 6 potions of heal wounds9
+_
+_b - a ring of poison resistance3=10.0 (1.0)
+_
+_c - a +0 pair of boots1
+_
+_d - a +0 pair of gloves4==2
+_
+_e - a +0 cloak3
+_
+_f - a +0 helmet5=4
+_
+_g - a +0 buckler5
+_
+_h - a +2 robe6=6
+_
+_i - a +2 devious dagger7
+_
+ You feel a baleful cunning.
+_i - a +2 devious dagger (weapon)7==5 (0.5i) +2 dagger (devious)
+_08.5 (18=9.5 (220.5 (39=1.5 (42.5 (5
+0 (0%) 
+_You start removing your armour. You continue removing your +0 robe. x5
+ You finish removing your +0 robe.30=3.5 (64.5 (71=5.5 (86.5 (92==7.5 (10.0)
+4 (22%)
+_You start putting on your armour. You continue putting on your +2 robe. x5
+_You finish putting on your +2 robe.0.0)
+_
+ You start putting on your armour.8.5 (13=9.5 (230.5 (34=1.5 (42.5 (5
+75
+_You continue putting on your +0 buckler. x5
+_You finish putting on your +0 buckler.0
+_5==3.5 (14.5 (26=5.5 (36.5 (47=7.5 (5
+5 (23
+_You start putting on your armour. You continue putting on your +0 helmet. x5
+_You finish putting on your +0 helmet.0
+_
+ You start putting on your armour. You continue putting on your +0 cloak.8==8.5 (1
+_Magic restored.9.5 (240.5 (31.5 (4=2.5 (5
+6 (25
+_You continue putting on your +0 cloak. x4
+_You finish putting on your +0 cloak.0
+_
+ You start putting on your armour.3.5 (14.5 (25.5 (36.5 (47.5 (5
+7 (26
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.8.5 (19.5 (250.5 (31.5 (42.5 (5
+8
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_b - a ring of poison resistance (worn)3.0 (0.5
+_ROUTE_EVENT inventory +0 robe
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +0 buckler
+ROUTE_EVENT inventory +2 robe
+ROUTE_EVENT inventory +2 devious dagger
+ROUTE_EVENT inventory 3 potions of magic
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of might
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 101/101   ========================##.....##Magic:  38/38     ========================#.......##AC:  8 (26%)Str: 8....B....##EV: 17Int: 28..........SH:  5Dex: 14#.........XL: 16 Next:  0%  Place: Burrows:1#.........Noise:  0 ------  Time: 53.0 (0.0)#..^..)a#i) +2 dagger (devious)#a@....#Cast: Sandblast#...>.#####..##...#B   boulder beetle (asleep)...#aa  2 crag boars#!.#......#
+_b - a ring of poison resistance (worn)
+ You can now gain magical power from killing.Vehumet is now aiding your destructive spells.Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Burrows? (default 1, ? - help) 1Sandblast
+ Vehumet is now extending the range of your destructive spells.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Burrows? (default 1, ? - help) 
+ The crag boar squeals angrily.
+ Found a battleaxe and a potion of curing.
+ Found a tunnel back to the Lair and a stone staircase leading down.ROUTE_AUDIT {"tag":"enter","gold":0,"maxhp":101,"xl":16,"inventory":[{"class":"armour","name":"+0 robe","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"armour","name":"+2 robe","quantity":1},{"class":"weapon","name":"+2 devious dagger","quantity":1},{"class":"potion","name":"3 potions of magic","quantity":3},{"class":"scroll","name":"3 scrolls of fear","quantity":3},{"class":"scroll","name":"3 scrolls of fog","quantity":3},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"scroll","name":"2 scrolls of blinking","quantity":2},{"class":"potion","name":"2 potions of might","quantity":2},{"class":"potion","name":"2 potions of haste","quantity":2},{"class":"potion","name":"6 potions of curing","quantity":6},{"class":"potion","name":"6 potions of heal wounds","quantity":6}],"progress":0,"hp":101,"mp":38,"turn":60,"vaults":"layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket","honey":0,"xp":16169,"where":"Bur:1","items":[{"artefact":false,"quantity":1,"class":"book","x":37,"name":"parchment of Detonation Catalyst","y":25},{"artefact":false,"quantity":1,"class":"weapon","x":47,"name":"long sword","y":27},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"battleaxe","y":28},{"artefact":false,"quantity":12,"class":"gold","x":47,"name":"12 gold pieces","y":29},{"artefact":false,"quantity":9,"class":"gold","x":63,"name":"9 gold pieces","y":29},{"artefact":false,"quantity":16,"class":"gold","x":42,"name":"16 gold pieces","y":31},{"artefact":false,"quantity":1,"class":"potion","x":52,"name":"potion of curing","y":34},{"artefact":false,"quantity":1,"class":"scroll","x":81,"name":"scroll of noise","y":39},{"artefact":false,"quantity":1,"class":"scroll","x":40,"name":"scroll of teleportation","y":42},{"artefact":false,"quantity":1,"class":"book","x":40,"name":"parchment of Leda's Liquefaction","y":43},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"short sword","y":44},{"artefact":false,"quantity":1,"class":"weapon","x":63,"name":"dagger","y":44},{"artefact":false,"quantity":1,"class":"book","x":40,"name":"parchment of Shock","y":45},{"artefact":false,"quantity":1,"class":"scroll","x":71,"name":"scroll of vulnerability","y":47},{"artefact":false,"quantity":26,"class":"gold","x":73,"name":"26 gold pieces","y":47},{"artefact":false,"quantity":1,"class":"armour","x":77,"name":"embroidered hat","y":47},{"artefact":false,"quantity":1,"class":"jewellery","x":44,"name":"amulet of wildshape","y":52},{"artefact":false,"quantity":1,"class":"armour","x":82,"name":"robe","y":52},{"artefact":false,"quantity":1,"class":"potion","x":78,"name":"potion of curing","y":61},{"artefact":false,"quantity":1,"class":"book","x":53,"name":"parchment of Martyr's Knell","y":62},{"artefact":false,"quantity":15,"class":"gold","x":69,"name":"15 gold pieces","y":63},{"artefact":false,"quantity":1,"class":"armour","x":74,"name":"scale mail","y":63},{"artefact":false,"quantity":20,"class":"gold","x":69,"name":"20 gold pieces","y":66},{"artefact":false,"quantity":1,"class":"armour","x":67,"name":"chain mail","y":73},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"rapier","y":74},{"artefact":false,"quantity":7,"class":"gold","x":69,"name":"7 gold pieces","y":74},{"artefact":false,"quantity":1,"class":"scroll","x":41,"name":"scroll of identify","y":77},{"artefact":false,"quantity":1,"class":"armour","x":53,"name":"leather armour","y":78}],"maxmp":38,"monsters":[{"x":49,"xp":603,"name":"burrowing beast","y":20},{"x":68,"xp":550,"name":"crag boar","y":23},{"x":51,"xp":841,"name":"boulder beetle","y":24},{"x":67,"xp":828,"name":"boulder beetle","y":25},{"x":66,"xp":547,"name":"crag boar","y":27},{"x":70,"xp":554,"name":"crag boar","y":27},{"x":55,"xp":545,"name":"crag boar","y":28},{"x":61,"xp":591,"name":"burrowing beast","y":28},{"x":49,"xp":554,"name":"crag boar","y":29},{"x":43,"xp":600,"name":"burrowing beast","y":30},{"x":84,"xp":600,"name":"shale drake","y":33},{"x":42,"xp":602,"name":"shale drake","y":44},{"x":59,"xp":849,"name":"boulder beetle","y":45},{"x":65,"xp":554,"name":"crag boar","y":46},{"x":51,"xp":551,"name":"crag boar","y":54},{"x":72,"xp":588,"name":"burrowing beast","y":58},{"x":78,"xp":365,"name":"komodo dragon","y":58},{"x":80,"xp":367,"name":"komodo dragon","y":58},{"x":55,"xp":608,"name":"burrowing beast","y":59},{"x":48,"xp":555,"name":"crag boar","y":61},{"x":40,"xp":548,"name":"crag boar","y":62},{"x":37,"xp":597,"name":"shale drake","y":65},{"x":44,"xp":83,"name":"earth elemental","y":76},{"x":48,"xp":834,"name":"boulder beetle","y":76},{"x":77,"xp":606,"name":"burrowing beast","y":76},{"x":36,"xp":555,"name":"crag boar","y":77},{"x":72,"xp":550,"name":"crag boar","y":77},{"x":41,"xp":544,"name":"crag boar","y":78}]}
+ROUTE_EVENT start caster AC=8 EV=17 SH=5
+
+ You encounter a boulder beetle and 2 crag boars.
+BBYou erupt in a blast of force! The mystic blast hits the crag boar.
+ The crag boar is lightly wounded.
+ The crag boar is knocked back by the mystic blast.
+ The crag boar slams into the rock wall!
+_The crag boar is lightly wounded.4---10 ====-- 4.0 (1
+_You hear an angry growl.
+.B
+ You erupt in a blast of force! The mystic blast hits the crag boar!
+ The crag boar is moderately wounded.The crag boar is knocked back by the mystic blast.
+ The crag boar slams into the rock wall.
+_The crag boar is moderately wounded.a.1-----5
+_
+)aYou erupt in a blast of force! The mystic blast hits the crag boar!
+ The crag boar is heavily wounded.The crag boar is knocked back by the mystic blast.
+ The crag boar slams into the rock wall.
+_The crag boar is severely wounded.a.Ba   burrowing beast27----6
+_You encounter a burrowing beast..amystic blast hits the crag boar!!
+ The crag boar is moderately wounded.
+ The crag boar is knocked back by the mystic blast.
+ The crag boar slams into the rock wall.moderately wounded.mystic blast hits the crag boar!
+ The crag boar is severely wounded.
+ The crag boar is knocked back by the mystic blast.
+_The crag boar slams into the rock wall..B.a4----7
+_
+.You erupt in a blast of force!mystic blast hits the boulder beetle!!boulder beetle is moderately wounded.almost dead.
+ !
+ You kill the crag boar!Vehumet accepts your kill.
+a.
+_You feel your power returning..a.B    crag boar3---8
+_You hear an angry growl..a
+ You kill the crag boar!
+ Vehumet accepts your kill.
+_You feel your power returning.
+_You hear an angry growl.
+ You erupt in a blast of force! The mystic blast hits the crag boar!!
+ The crag boar is heavily wounded.mystic blast hits the boulder beetle but does no damage.
+_The boulder beetle is moderately wounded..a94/101 --0--- 8 ===-9
+_The boulder beetle bites you!
+a.You erupt in a blast of force!
+ The mystic blast hits the boulder beetle but does no damage.
+_The boulder beetle is moderately wounded.
+.a
+ You hear an angry growl.16-----60
+_The boulder beetle bites you but does no damage.a.B....a  ......#
+ The mystic blast hits the burrowing beast!!
+ The burrowing beast is moderately wounded.The burrowing beast is knocked back by the mystic blast.
+ The mystic blast hits the crag boar!
+ The crag boar is severely wounded.!!
+ heavi
+_is knocked back by the mystic blast.3----1
+_You hear an angry squeal.
+a.You erupt in a blast of force!
+ The mystic blast hits the boulder beetle.
+ The boulder beetle is heavily wounded.
+_The boulder beetle is knocked back by the mystic blast..aB.5--9/38 -----2
+_You hear an angry growl.
+.B
+ You erupt in a blast of force! The mystic blast hits the crag boar.
+ The crag boar is almost dead.The crag boar is knocked back by the mystic blast.
+ The crag boar slams into the rock wall.
+_The crag boar is almost dead..a.a 6-----3
+_
+.B
+ You erupt in a blast of force!
+ The mystic blast hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.a..a62----4
+_
+a.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded..aa
+ζBThe boulder beetle curls into a ball and begins rolling!a.ℓB(rolling)a  2 burrowing beasts-- 2 =----- 5.5 (1.5ℓ
+.a
+_You encounter a burrowing beast.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.The boulder beetle closely misses you.a.
+.a
+ The boulder beetle stops rolling and uncurls.
+ The crag boar gores you!
+ The boulder beetle completely misses you..BB84---4 ==-7.0
+Bℓ
+_You block the burrowing beast's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded..a.49-----------68.5ROUTE_EVENT use haste turn=74 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 49/101    ===========-------------##.....##Magic:  2/38=-----------------------#.......##AC:  8 (26%)Str: 8....B....##EV: 17Int: 28..........SH:  5Dex: 14#.........XL: 16 Next:  0%  Place: Burrows:1#.........Noise:  6 ==----  Time: 68.5 (0.0)#a.^..).#i) +2 dagger (devious)#.@a..a#Cast: Sandblast#...>.#####..##...#B   boulder beetle...#a   crag boar#!.#aa  2 burrowing beasts......#
+_The boulder beetle is heavily wounded.The boulder beetle closely misses you.The boulder beetle stops rolling and uncurls.
+ The crag boar gores you!
+ The boulder beetle completely misses you.
+_You block the burrowing beast's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.
+_The crag boar barely misses you. The boulder beetle leaps! The burrowing beast bites you!! The crag boar gores you!.Ba.502 =-9.5 (1Fast ROUTE_EVENT use fear turn=75 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  2/38=-----------------------#.......##AC:  8 (26%)Str: 8.........##EV: 17Int: 28..B.......SH:  5Dex: 14#.........XL: 16 Next:  0%  Place: Burrows:1#.........Noise:  2 =-----  Time: 69.5 (0.0)#a.^..).#i) +2 dagger (devious)#.@a.a.#Cast: Sandblast#...>.##Fast ###..##...#B   boulder beetle...#a   crag boar#!.#aa  2 burrowing beasts......#The boulder beetle closely misses you.The boulder beetle stops rolling and uncurls.
+ The crag boar gores you!
+ The boulder beetle completely misses you.
+_You block the burrowing beast's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.
+_The crag boar barely misses you. The boulder beetle leaps! The burrowing beast bites you!! The crag boar gores you!
+_You feel yourself speed up. The burrowing beast closely misses you. The crag boar closely misses you.Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  2/38=-----------------------#.......##AC:  8 (26%)Str: 8.........##EV: 17Int: 28..ζ.......SH:  5Dex: 14#.........XL: 16 Next:  0%  Place: Burrows:1#........BNoise:  2 =-----  Time: 69.5 (0.0)#a.^..).#i) +2 dagger (devious)#.@a.a.#Cast: Sandblast#...>.##Fast ###..##...#B   boulder beetle...#a   crag boar#!.#aa  2 burrowing beasts......#
+_You block the burrowing beast's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.
+_The crag boar barely misses you. The boulder beetle leaps! The burrowing beast bites you!! The crag boar gores you!
+_You feel yourself speed up. The burrowing beast closely misses you. The crag boar closely misses you.Press: ? - help, Dir - look around, f - activateLook: a boulder beetle (heavily wounded, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!a.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is heavily wounded.
+_The crag boar barely misses you. The boulder beetle leaps! The burrowing beast bites you!! The crag boar gores you!
+_You feel yourself speed up. The burrowing beast closely misses you. The crag boar closely misses you.
+ Press: ? - help, Dir - look around, f - activate
+ Look: a boulder beetle (heavily wounded, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!
+ The boulder beetle leaps!.a.a....~.  ..ℓ..#)B(fleeing)a(fleeing)aa(fleeing)0 -70.2 (0.7
+_You hear a grinding noise.ROUTE_EVENT use fear turn=76 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  2/38=-----------------------.   #.......##AC:  8 (26%)Str: 8..  .........##EV: 17Int: 28.~.  ..ℓ.......SH:  5Dex: 14..##.........XL: 16 Next:  0%  Place: Burrows:1)a........BNoise:  0 ------  Time: 70.2 (0.0)#..^..).#i) +2 dagger (devious)#.@.a.a#Cast: Sandblast#...>.##Fast ###..##...#B   boulder beetle (fleeing)...#a   crag boar (fleeing)#!.#aa  2 burrowing beasts (fleeing)......#
+_The crag boar barely misses you. The boulder beetle leaps! The burrowing beast bites you!! The crag boar gores you!
+_You feel yourself speed up. The burrowing beast closely misses you. The crag boar closely misses you.Press: ? - help, Dir - look around, f - activateLook: a boulder beetle (heavily wounded, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!
+ The boulder beetle leaps!
+_You hear a grinding noise.
+_Found a long sword.Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  2/38=-----------------------.   #.......##AC:  8 (26%)Str: 8..  .........##EV: 17Int: 28.~.  ..ℓ.......SH:  5Dex: 14..##.........XL: 16 Next:  0%  Place: Burrows:1)a........ζNoise:  0 ------  Time: 70.2 (0.0)#..^..).#i) +2 dagger (devious)#.@.a.a#Cast: Sandblast#...>.##Fast ###..##...#B   boulder beetle (fleeing)...#a   crag boar (fleeing)#!.#aa  2 burrowing beasts (fleeing)......#Look: a boulder beetle (heavily wounded, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!
+ The boulder beetle leaps!
+_You hear a grinding noise.
+_Found a long sword.
+ Press: ? - help, Dir - look around, f - activateLook: a boulder beetle (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.a.As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!
+ The boulder beetle leaps!
+_You hear a grinding noise.
+_Found a long sword.
+ Press: ? - help, Dir - look around, f - activate
+ Look: a boulder beetle (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. Nothing appears to happen. The boulder beetle leaps!##ℓa   crag boaraa  2 burrowing beasts (fleeing)39 (0.7ROUTE_EVENT use fear turn=77 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  3/38=-----------------------.   #.......##AC:  8 (26%)Str: 8..  .........##EV: 17Int: 28.~.##..ℓ.......SH:  5Dex: 14..a#.........XL: 16 Next:  0%  Place: Burrows:1).........ℓNoise:  0 ------  Time: 70.9 (0.0)#..^..).#i) +2 dagger (devious)#.@.a.a#Cast: Sandblast#...>.##Fast ###..##...#a   crag boar (fleeing)...#aa  2 burrowing beasts (fleeing)#!.#......#You assume a fearsome visage. The boulder beetle looks frightened! The burrowing beast looks frightened! x2; The crag boar looks frightened!
+ The boulder beetle leaps!
+_You hear a grinding noise.
+_Found a long sword.
+ Press: ? - help, Dir - look around, f - activateLook: a boulder beetle (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. Nothing appears to happen. The boulder beetle leaps!
+_You hear a grinding noise.Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 50/101    ===========-------------##.....##Magic:  3/38=-----------------------.   #.......##AC:  8 (26%)Str: 8..  .........##EV: 17Int: 28.~.##..ℓ.......SH:  5Dex: 14..a#.........XL: 16 Next:  0%  Place: Burrows:1).........ℓNoise:  0 ------  Time: 70.9 (0.0)#..^..).#i) +2 dagger (devious)#.@.a..aCast: Sandblast#...>.##Fast ###..##...#a   crag boar (fleeing)...#aa  2 burrowing beasts (fleeing)#!.#......#Press: ? - help, Dir - look around, f - activateLook: a boulder beetle (heavily wounded, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. Nothing appears to happen. The boulder beetle leaps!
+_You hear a grinding noise.
+ Press: ? - help, Dir - look around, f - activateLook: a crag boar (almost dead, fleeing, chance to affect: 90%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. Nothing appears to happen..a.##1.6 (0.7ℓ
+a.
+_You hear a grinding noise.
+ The blast of sand hits the crag boar but does no damage.
+ The crag boar is almost dead.
+_Your attack snaps the crag boar out of its fear..aa.#....#.###a1=2 =2.6 (1.0
+.
+_You hear a grinding noise. x2
+ The blast of sand hits the crag boar!
+ You kill the crag boar!Vehumet accepts your kill.
+a.
+_You feel your power returning..a†aa  2 burrowing beasts (fleeing)=4=13
+.a
+_You hear a grinding noise.
+ The stone arrow hits the burrowing beast!!
+ The burrowing beast is severely wounded.
+_Your attack snaps the burrowing beast out of its fear..a   burrowing beast2-4 ==4.2 (0.6ROUTE_EVENT use magic turn=81 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 51/101    ============------------#.  ##.....##Magic:  2/38=-----------------------... #.......##AC:  8 (26%)Str: 8...#.........##EV: 17Int: 28.~.a#..........SH:  5Dex: 14...#.........XL: 16 Next:  1%  Place: Burrows:1)..........Noise:  4 ==----  Time: 74.2 (0.0)#..^..).##i) +2 dagger (devious)#.@.†.....Cast: Sandblast#...>.####Fast ###..##...#a   burrowing beast...##!.#......#The blast of sand hits the crag boar!
+ You kill the crag boar!Vehumet accepts your kill.
+_You feel your power returning.
+_You hear a grinding noise.
+ The stone arrow hits the burrowing beast!!
+ The burrowing beast is severely wounded.
+_Your attack snaps the burrowing beast out of its fear.
+_You hear a grinding noise..a24/38==============0 --9 (0.7
+a
+_You feel your power returning.
+_You hear a grinding noise.
+ The stone arrow hits the burrowing beast!!
+ The burrowing beast is severely wounded.
+_Your attack snaps the burrowing beast out of its fear.
+_You hear a grinding noise.
+_Magic courses through your body.
+ The blast of sand hits the burrowing beast!
+_The burrowing beast is severely wounded..aa  2 burrowing beasts23=============-2 =-5.9 (1.0
+_
+a.You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!
+ The burrowing beast is almost dead.
+_The burrowing beast is knocked back by the mystic blast.a.0--- 8 ===--- 6.6 (0.7
+_You hear an angry growl.
+a.You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!
+ The burrowing beast is almost dead.
+_The burrowing beast is knocked back by the mystic blast.a.16----7.3
+_
+.The fireball explodes!
+ The fireball engulfs the burrowing beast!!
+ You kill the burrowing beast!
+a.
+_Vehumet accepts your kill.   burrowing beast32-----213 ====8.0
+_
+ #.  ##.....## ... #.## ...#..## .~..#. ...#... ). #..^..).## #@<.†.a... #...>.####
+ ###..## ...#  ...# #!.# ... ...#The iron shot hits the burrowing beast!!!
+ The burrowing beast is severely wounded.
+_The blast sends you backwards.6/38 ------- 7 ===-6 (0.6
+_
+.The stone arrow hits the burrowing beast!!
+ You kill the burrowing beast!Vehumet accepts your kill.
+†
+_You feel your power returning.5----3 4 ==---- 9.3 (0.7Sandblast
+_a
+ You start resting.6-Sandblasta   burrowing beast (wandering)00 --80.0 (0.7
+.a
+_You encounter a burrowing beast.
+_The blast of sand hits the burrowing beast but does no damage.a452 =-1.0 (1.0
+_
+ The blast of sand hits the burrowing beast.
+_The burrowing beast is lightly wounded.2
+ 
+_You block the burrowing beast's attack.
+ The blast of sand hits the burrowing beast!!
+_The burrowing beast is moderately wounded.40---4-4 ==3ROUTE_EVENT use heal wounds turn=92 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 40/101    =========---------------#.  ##.....##Magic:  4/38==----------------------... #.......##AC:  8 (26%)Str: 8...#.........##EV: 17Int: 28.~..#..........SH:  5Dex: 14...#.........XL: 16 Next:  3%  Place: Burrows:1)..........Noise:  4 ==----  Time: 83.0 (0.0)#a.^..).##i) +2 dagger (devious)#@<.†.†...Cast: Sandblast#...>.####Fast ###..##...#a   burrowing beast...##!.#......#You start resting.
+_You encounter a burrowing beast.
+_The blast of sand hits the burrowing beast but does no damage.
+ The blast of sand hits the burrowing beast.
+_The burrowing beast is lightly wounded.
+_You block the burrowing beast's attack.
+ The blast of sand hits the burrowing beast!!
+_The burrowing beast is moderately wounded.
+_The burrowing beast bites you!69=======0 --7 (0.7
+B
+ The blast of sand hits the burrowing beast.
+_The burrowing beast is lightly wounded
+_You block the burrowing beast's attack.
+ The blast of sand hits the burrowing beast!!
+_The burrowing beast is moderately wounded.
+_The burrowing beast bites you!
+_You feel much better.
+ The blast of sand hits the burrowing beast but does no damage.
+_The burrowing beast is moderately wounded.B   boulder beetlea   burrowing beast2 =-4.7 (1.0
+_The burrowing beast barely misses you.
+a. You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!!
+ The burrowing beast is severely wounded.
+_The burrowing beast is knocked back by the mystic blast.0-- 8 ===--- 5.4 (0.7Sandblast
+_ROUTE_EVENT use magic turn=95 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 69/101    ================--------#.  ##.....##Magic:  0/38------------------------... #.......##AC:  8 (26%)Str: 8...#.........##EV: 17Int: 28.~..#..........SH:  5Dex: 14...#a........XL: 16 Next:  3%  Place: Burrows:1)........B.Noise:  8 ===---  Time: 85.4 (0.0)#..^..).##i) +2 dagger (devious)#@<.†.†...Cast: Sandblast#...>.####Fast ###..##...#B   boulder beetle...#a   burrowing beast#!.#......#
+_The burrowing beast bites you!
+_You feel much better.
+ The blast of sand hits the burrowing beast but does no damage.
+_The burrowing beast is moderately wounded.
+_The burrowing beast barely misses you.You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!!
+ The burrowing beast is severely wounded.
+_The burrowing beast is knocked back by the mystic blast..a.B7020/38     ============ 0 ------ 6.1 (0.7Sandblast
+_Magic courses through your body.
+.a
+ You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!
+_The burrowing beast is almost dead..B 16==========-- 8 ===--- 8
+_
+ You erupt in a blast of force!
+ The mystic blast hits the burrowing beast.
+_The burrowing beast is almost dead.2-----7.4 (0.6
+_
+.You erupt in a blast of force!
+ The mystic blast hits the burrowing beast!
+ You kill the burrowing beast!
+B†
+_Vehumet accepts your kill.9/38 -----48.1 (0.7
+_
+BB(rolling)The stone arrow hits the boulder beetle.
+_The boulder beetle is moderately wounded.6---- 4 ==---- 7 (0.6
+ 
+_The boulder beetle curls into a ball and begins rolling!
+ The stone arrow hits the boulder beetle!!
+_The boulder beetle is severely wounded.13-----9.4 (0.7
+_
+BζThe stone arrow hits the boulder beetle!
+_The boulder beetle is severely wounded.ℓ1---90.0 (0.6
+_ROUTE_EVENT use magic turn=102 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 71/101    ================--------#.  ##.....##Magic:  1/38------------------------... #.......##AC:  8 (26%)Str: 8...#.........##EV: 17Int: 28.~..#..........SH:  5Dex: 14...#.........XL: 16 Next:  4%  Place: Burrows:1)..........Noise:  4 ==----  Time: 90.0 (0.0)#..^..).##i) +2 dagger (devious)#@<.Bℓ†...Cast: Sandblast#...>.####Fast ###..##...#B   boulder beetle (rolling)...##!.#......#You kill the burrowing beast!
+_Vehumet accepts your kill.The stone arrow hits the boulder beetle.
+_The boulder beetle is moderately wounded.
+_The boulder beetle curls into a ball and begins rolling!
+ The stone arrow hits the boulder beetle!!
+_The boulder beetle is severely wounded.The stone arrow hits the boulder beetle!
+_The boulder beetle is severely wounded.BζBζℓℓB26/38     ================0 --7 (0.7BℓℓℓB
+Bℓℓ.B  
+_Magic courses through your body.
+ The blast of sand hits the boulder beetle!
+_The boulder beetle is almost dead.The boulder beetle misses you.72=================2 =-1.7 (1.0ℓ
+..†
+_The boulder beetle stops rolling and uncurls.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.57----5-4 ==2.6 (0.9
+_The boulder beetle bites you!
+ The blast of sand hits the boulder beetle.
+_The boulder beetle is almost dead.41---------53.6 (1.0ROUTE_EVENT use heal wounds turn=106 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 41/101    =========---------------#.  ##.....##Magic:  25/38     ===============---------... #.......##AC:  8 (26%)Str: 8...#.........##EV: 17Int: 28.~..#..........SH:  5Dex: 14...#.........XL: 16 Next:  4%  Place: Burrows:1)..........Noise:  5 ==----  Time: 93.6 (0.0)#..^..).##i) +2 dagger (devious)#@B.†.†...Cast: Sandblast#...>.####Fast ###..##...#B   boulder beetle...##!.#......#
+_The boulder beetle is almost dead.The boulder beetle misses you.
+_The boulder beetle stops rolling and uncurls.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.
+_The boulder beetle bites you!
+ The blast of sand hits the boulder beetle.
+_The boulder beetle is almost dead.
+_The boulder beetle bites you!70=======2 =-4.2 (0.6
+a
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.
+_The boulder beetle bites you!
+ The blast of sand hits the boulder beetle.
+_The boulder beetle is almost dead.
+_The boulder beetle bites you!
+_You feel much better. The boulder beetle closely misses you.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.
+a   crag boar (wandering)You encounter a crag boar.1=======4=-5.2 (1.0
+_The boulder beetle closely misses you.
+aaYou erupt in a blast of force!
+ The mystic blast hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.1-- 8 ===--- 8 (0.6
+_The crag boar squeals angrily.
+<You erupt in a blast of force!
+ The mystic blast hits the boulder beetle!
+ You kill the boulder beetle!Vehumet accepts your kill.
+a.
+_You feel your power returning.a   crag boar3=-56.5 (0.7Sandblast
+_    #.#####  #.  ##.....##  ...##.##  ...#..## .~..#.... ~~...#.. ~...).......a.. #.@^..).## #.<.†.†... #...>#######..## ...#...##!.#......#
+.a
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x272=4== 0 ------ 7.2Sandblast
+_
+#    #.######.  ##.....###...##.##.#..##.~..#..~~...#....~...)... #@.^..a.## #.<.†.†... #...>.#### ###..##  ...#
+ ...# #!.#
+ ...
+ ...#The iron shot hits the crag boar!!
+ The crag boar is moderately wounded.
+_The blast sends you backwards.18---- 7 ===--- 9
+_
+a)The stone arrow hits the crag boar!
+_The crag boar is heavily wounded.5------ 4 ==---- 8.6
+_
+a.The stone arrow hits the crag boar!
+_The crag boar is severely wounded. 3----9.3
+_
+a.The blast of sand hits the crag boar.
+_The crag boar is severely wounded.
+§Your extra speed is starting to run out.3=2--2 =-100.3 (1.0)SandblastFast 
+_The teleport trap disappears. The crag boar disappears!3=44=
+_You start resting.0 --.3.7 (3.4a
+a   crag boar (wandering)You feel yourself slow down.-4.4 (4.1
+#    #.##### ##.  ##.....## #...##.## ....#..## ..~..#. .~~...#... .~...)........a. #.@...).## #.<.†.†...#...>.#######..## ...#
+#!.#
+_You encounter a crag boar.
+a.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2a5=4 ==5.4 (1.0Sandblast
+ #    #.##### ##.  ##.....## #...##.## ....#..## ..~..#. .~~...#... .~...).......a.. #@....).## #.<.†.†... #...>.#### ###..##  ...#
+ ...# #!.#
+ ...
+ ...#
+_The crag boar squeals angrily.
+ The iron shot hits the crag boar!!
+ The crag boar is heavily wounded.
+a.
+_The blast sends you backwards.59/38 ---- 7 ===--- 6
+_
+a.The stone arrow hits the crag boar!
+_The crag boar is severely wounded. 7----- 4 ==---- 7
+_
+.a
+_The stone arrow misses the crag boar.6=4----8
+_
+a.
+_The blast of sand misses the crag boar.--2 =-9.9 (1.5
+_
+a.The blast of sand hits the crag boar!
+_The crag boar is almost dead.=-11.4
+ 
+_The crag boar gores you.
+ The blast of sand hits the crag boar.
+_The crag boar is almost dead.48------- 8 ===--- 2.9
+.
+_The crag boar gores you!!
+ The blast of sand hits the crag boar!
+ You kill the crag boar!Vehumet accepts your kill.
+
+_You feel your power returning.9-------5=6 2 =----- 4.4Sandblast
+_6=507=8==1=9=
+_You start resting.a0 ---a   crag boar (wandering)20.4 (6.0-1.4 (7
+    ..      #    #.#####  ##.  ###  #...##.##  ....#..## ..~..#........a. .~~...#.. .~...)..@....... ..~..#.....).##..~  #.<.†.†....    #...>.#######..##...#...##!.#......#
+_You encounter a crag boar.
+.a
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2a2=10/38=4 ==2.4 (1Sandblast
+ ..# #    #.##### ##.  ##.....## #...##.## ....#.## ..~..#. .~~...#......a.. .~...).@.........~..#.....).##.~~ #.<.†.†......  #...>.#### $..   ###..###. ...## ...#
+ #!.#
+ ...
+ ...#
+_The crag boar squeals angrily.
+ The iron shot hits the crag boar!!
+ The crag boar is moderately wounded.
+.a
+_The blast sends you backwards. Found 16 gold pieces.4/38 ---- 7 ===--- 3
+_
+a.The stone arrow hits the crag boar!
+_The crag boar is heavily wounded.2----- 4 ==---- 4
+_..# #    #.##### ##.  ##.....## #...##.## ....#.## ..~..#. .~~...#......... .~...)..@..a.... ...~..#.....).##...~~ #.<.†.†.......  #...>.#### $..#.#
+a.30 ---5
+a.The blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.-2 =-6.9 (1.5
+_
+ The blast of sand hits the crag boar!
+_The crag boar is heavily wounded.48.4
+_The crag boar closely misses you. The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.The crag boar gores you!!29------ 7 ===--- 9.9ROUTE_EVENT use heal wounds turn=143 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 29/101    ======------------------..#Magic:  2/38=-----------------------#    #.#####AC:  8 (26%)Str: 8##.  ##.....##EV: 17Int: 28#...##.......##SH:  5Dex: 14....#.........##XL: 16 Next:  6%  Place: Burrows:1..~..#..........Noise:  7 ===---  Time: 129.9 (0.0).~~...#.........i) +2 dagger (devious).~...)..@a......Cast: Sandblast...~..#.....).##...~~ #.<.†.†.......  #...>.####a   crag boar$..   ###..###....##...##!.#......#The blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.The blast of sand hits the crag boar!
+_The crag boar is heavily wounded.
+_The crag boar closely misses you. The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.The crag boar gores you!!
+_* * * LOW HITPOINT WARNING * * *.32=30.9 (1ROUTE_EVENT use heal wounds turn=144 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 32/101    =======-----------------..#Magic:  2/38=-----------------------#    #.#####AC:  8 (26%)Str: 8##.  ##.....##EV: 17Int: 28#...##.......##SH:  5Dex: 14....#.........##XL: 16 Next:  6%  Place: Burrows:1..~..#..........Noise:  7 ===---  Time: 130.9 (0.0).~~...#.........i) +2 dagger (devious).~...)..@a......Cast: Sandblast...~..#.....).##...~~ #.<.†.†.......  #...>.####a   crag boar$..   ###..###....##...##!.#......#
+_The crag boar is heavily wounded.The blast of sand hits the crag boar!
+_The crag boar is heavily wounded.
+_The crag boar closely misses you. The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.The crag boar gores you!!
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better. The crag boar gores you!!52=====3 2 =----- 1.9 (1
+ 
+_The crag boar closely misses you. The crag boar barely misses you.blast of sand hits the crag boar but does no damage.
+_The crag boar is heavily wounded.
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better. The crag boar gores you!!
+_You feel much better. The crag boar gores you!
+ The blast of sand hits the crag boar.
+_The crag boar is severely wounded.1=====2--3.4 (1.5
+ 
+_The crag boar closely misses you. The crag boar gores you.
+ The blast of sand hits the crag boar!!
+_The crag boar is almost dead.4.9
+_The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is almost dead.The crag boar gores you! x227------4 ==6.4ROUTE_EVENT use heal wounds turn=148 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 27/101    ======------------------..#Magic:  2/38=-----------------------#    #.#####AC:  8 (26%)Str: 8##.  ##.....##EV: 17Int: 28#...##.......##SH:  5Dex: 14....#.........##XL: 16 Next:  6%  Place: Burrows:1..~..#..........Noise:  4 ==----  Time: 136.4 (0.0).~~...#.........i) +2 dagger (devious).~...)..@a......Cast: Sandblast...~..#.....).##...~~ #.<.†.†.......  #...>.####a   crag boar$..   ###..###....##...##!.#......#
+_The crag boar is severely wounded.
+_The crag boar closely misses you. The crag boar gores you.
+ The blast of sand hits the crag boar!!
+_The crag boar is almost dead.
+_The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is almost dead.The crag boar gores you! x2
+_* * * LOW HITPOINT WARNING * * *49=====2 =-7.4 (1almost dead.barely misses you. but does no damage.
+ The crag boar gores you! x2
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better. The crag boar barely misses you.blast of sand hits the crag boar but does no damage.
+_The crag boar is almost dead.50=====-8.9 (1.5
+_The crag boar barely misses you.The blast of sand hits the crag boar.
+_The crag boar is almost dead.39--340.4ROUTE_EVENT use heal wounds turn=151 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 39/101    =========---------------..#Magic:  2/38=-----------------------#    #.#####AC:  8 (26%)Str: 8##.  ##.....##EV: 17Int: 28#...##.......##SH:  5Dex: 14....#.........##XL: 16 Next:  6%  Place: Burrows:1..~..#..........Noise:  3 =-----  Time: 140.4 (0.0).~~...#.........i) +2 dagger (devious).~...)..@a......Cast: Sandblast...~..#.....).##...~~ #.<.†.†.......  #...>.####a   crag boar$..   ###..###....##...##!.#......#The crag boar gores you! x2
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better. The crag boar barely misses you.The blast of sand hits the crag boar but does no damage.
+_The crag boar is almost dead.
+_The crag boar barely misses you.The blast of sand hits the crag boar.
+_The crag boar is almost dead.
+_The crag boar gores you! The crag boar barely misses you.62=====21.4 (1.
+_The crag boar is almost dead.The crag boar barely misses you.
+ The blast of sand hits the crag boar.
+_The crag boar is almost dead.
+_The crag boar gores you! The crag boar barely misses you.You feel much better. The crag boar barely misses you.!
+ You kill the crag boar!
+ Vehumet accepts your kill.
+†
+_You feel your power returning.3=====6==72.9 (1.5Sandblast
+_7===4=8==5=9=10/38=61=72=3==8=4=9=5=6==707=18=72=9==20=3=1=42=3=54==6=5=6=7=7==88=9=930=80=1=
+_You start resting.0 -BB   boulder beetle (wandering)89.9 (47.0)-90.9 (48
+..# #    #.##### ##.  ##.....## #...##.## ....#.#..~..#..~~...#.........~...)...@.....B....~..#.....).#...~~ #.<.†.†.....  #...>.#
+#.      #...## #...###!.#
+_You encounter a boulder beetle.
+B.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.) x2B1=2==1.9 (1.0)Sandblast
+_
+B.You see here a crag boar corpse.
+ The iron shot hits the boulder beetle!!
+_The boulder beetle is moderately wounded. 26---- 7 ===--- 2
+_
+B.The stone arrow hits the boulder beetle!
+_The boulder beetle is heavily wounded.4----- 4 ==---- 3
+_
+BℓThe blast of sand hits the boulder beetle!!
+_The boulder beetle is severely wounded.B.. 2-2 =--5.4 (1.5
+.B
+_The boulder beetle leaps!
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.3--6.9
+_
+.B
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.3-8.4
+_You block the boulder beetle's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.9.9
+_The boulder beetle barely misses you.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.4201.4
+_The boulder beetle closely misses you. The boulder beetle barely misses you.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.5=2-2.9
+_The boulder beetle bites you but does no damage.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.43-----------6 ==4.4
+.
+_The boulder beetle bites you!! x2
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!!24---------------5.9ROUTE_EVENT use blinking turn=212 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 24/101    =====-------------------..#Magic:  22/38     =============-----------#    #.#####AC:  8 (26%)Str: 8##.  ##.....##EV: 17Int: 28#...##.......##SH:  5Dex: 14....#.........###XL: 16 Next:  7%  Place: Burrows:1..~..#...........Noise:  6 ==----  Time: 205.9 (0.0).~~...#..........i) +2 dagger (devious).~...)...@B......Cast: Sandblast...~..#.....).###...~~ #.<.†.†........  #...>.#####B   boulder beetle$..   ###..###.#...###...###!.#......#
+_The boulder beetle is severely wounded.
+_The boulder beetle bites you but does no damage.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.
+_The boulder beetle bites you!! x2
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!!
+_* * * LOW HITPOINT WARNING * * *Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 24/101    =====-------------------#^.#Magic:  22/38     =============-----------#..# ..#AC:  8 (26%)Str: 8#..# #.#####EV: 17Int: 28##..###.....##SH:  5Dex: 14##...##.......##XL: 16 Next:  7%  Place: Burrows:1##....#.........###Noise:  6 ==----  Time: 205.9 (0.0)#...~..#...........i) +2 dagger (devious)#..~~@..#..........Cast: Sandblast#..~...)...§B......#....~..#.....).####....~~$#.<.†.†....B   boulder beetle#.......#...>.#######$....####..####..###  #...####     #...###!.#......#The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.
+_The boulder beetle bites you!! x2
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!!
+_* * * LOW HITPOINT WARNING * * *Blink to where?Press: ? - help, Dir - move target
+ζ
+_x2
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!!
+_* * * LOW HITPOINT WARNING * * *Blink to where?Press: ? - help, Dir - move targetFound 12 gold pieces.
+ As you read the scroll of blinking, it crumbles to dust.3=0 --6.9 (1Sandblast
+_The boulder beetle leaps!54==5=6=6=7=
+_You start resting.A boulder beetle comes into view.7==--SandblastB..†.B   boulder beetle13.9 (74.9 (8
+_ROUTE_EVENT use blinking turn=221 place=Bur:1
+Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 27/101    ======------------------#^.#Magic:  27/38     =================-------#..# ..#AC:  8 (26%)Str: 8#..# #.#####EV: 17Int: 28##..###.....##SH:  5Dex: 14##...##.......##XL: 16 Next:  7%  Place: Burrows:1##....#.........###Noise:  0 ------  Time: 214.9 (0.0)#...~..#...........i) +2 dagger (devious)#..~~@..#..........Cast: Sandblast#..~...)B..†.......#....~..#.....).####....~~$#.<.†.†....B   boulder beetle#.......#...>.#######$....####..####..###  #...####     #...###!.#......#The boulder beetle bites you!!
+_* * * LOW HITPOINT WARNING * * *Blink to where?Press: ? - help, Dir - move targetFound 12 gold pieces.
+ As you read the scroll of blinking, it crumbles to dust.
+_The boulder beetle leaps!
+_You start resting.
+_A boulder beetle comes into view.Route_caster the Devastator       *WIZARD*Deep Elf of Vehumet ****..Health: 27/101    ======------------------Magic:  27/38     =================-------AC:  8 (26%)Str: 8EV: 17Int: 28SH:  5Dex: 14####XL: 16 Next:  7%  Place: Burrows:1##...Noise:  0 ------  Time: 214.9 (0.0)#^.#i) +2 dagger (devious)#@.# ..#Cast: Sandblast#..# #.#######..###.....####...##.......####....#.........####...~..#...........#..~~§..#..........#..~...)B..†.......#....~..#.....).####....~~$#.<.†.†....#.......#...>.#####Blink to where?Press: ? - help, Dir - move targetFound 12 gold pieces.
+ As you read the scroll of blinking, it crumbles to dust.
+_The boulder beetle leaps!
+_You start resting.
+_A boulder beetle comes into view.Blink to where?Press: ? - help, Dir - move target5.9 (1Sandblast
+ Press: ? - help, Dir - move target
+ Found 12 gold pieces.
+ As you read the scroll of blinking, it crumbles to dust.
+_The boulder beetle leaps!
+_You start resting.
+_A boulder beetle comes into view.
+ Blink to where?Press: ? - help, Dir - move target
+_As you read the scroll of blinking, it crumbles to dust.B
+ You start resting.A boulder beetle comes into view.88B   boulder beetle.06.9 (1
+_#######...  #^.#  #..# ..##.@# #.#######..###.....##...##..##....#..##...~..#..#..~~§B.##..~...)...†#....~..#.....).####....~~$#.<.†.†....#.......#...>.#######$....####..##
+B.
+_You can't see any susceptible monsters within range! (Use Z to cast anyway.)..7Sandblast
+_
+B.The stone arrow hits the boulder beetle!!
+_The boulder beetle is severely wounded. 6-4 ==8
+_
+B.The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.BB(rolling)9-2 =-20.4 (1.5
+Bζ
+_The boulder beetle curls into a ball and begins rolling!
+ The blast of sand hits the boulder beetle.
+_The boulder beetle is almost dead.
+BℓB  The boulder beetle completely misses you.5--1.9
+.
+_The boulder beetle stops rolling and uncurls.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.The boulder beetle bites you.4--3.4
+ 
+_* * * LOW HITPOINT WARNING * * *The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is almost dead.You block the boulder beetle's attack. The boulder beetle bites you.1--4.9
+_* * * LOW HITPOINT WARNING * * *The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!10---4 ==6.4
+_* * * LOW HITPOINT WARNING * * *The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.1--42 =-7.9
+_The boulder beetle barely misses you. You block the boulder beetle's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.-9.4
+_The boulder beetle is severely wounded.
+_The boulder beetle barely misses you. You block the boulder beetle's attack.last of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.
+_The boulder beetle misses you.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.oulder beetle bites you!
+ * * * LOW HITPOINT WARNING * * */101     --330.9ROUTE_AUDIT {"tag":"death","gold":0,"maxhp":101,"xl":16,"inventory":[{"class":"armour","name":"+0 robe","quantity":1},{"class":"jewellery","name":"ring of poison resistance","quantity":1},{"class":"armour","name":"+0 pair of boots","quantity":1},{"class":"armour","name":"+0 pair of gloves","quantity":1},{"class":"armour","name":"+0 cloak","quantity":1},{"class":"armour","name":"+0 helmet","quantity":1},{"class":"armour","name":"+0 buckler","quantity":1},{"class":"armour","name":"+2 robe","quantity":1},{"class":"weapon","name":"+2 devious dagger","quantity":1},{"class":"scroll","name":"3 scrolls of fog","quantity":3},{"class":"scroll","name":"2 scrolls of teleportation","quantity":2},{"class":"potion","name":"2 potions of might","quantity":2},{"class":"potion","name":"potion of haste","quantity":1},{"class":"potion","name":"6 potions of curing","quantity":6}],"progress":7,"hp":-20,"mp":24,"turn":233,"vaults":"layout_burrows, bur_flooded_roots, bur_side_den and bur_root_pocket","honey":0,"xp":11338,"where":"Bur:1","items":[{"artefact":false,"quantity":1,"class":"book","x":37,"name":"parchment of Detonation Catalyst","y":25},{"artefact":false,"quantity":1,"class":"weapon","x":47,"name":"long sword","y":27},{"artefact":false,"quantity":1,"class":"corpse","x":51,"name":"crag boar corpse","y":27},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"battleaxe","y":28},{"artefact":false,"quantity":12,"class":"gold","x":47,"name":"12 gold pieces","y":29},{"artefact":false,"quantity":1,"class":"corpse","x":52,"name":"crag boar corpse","y":29},{"artefact":false,"quantity":1,"class":"corpse","x":54,"name":"burrowing beast corpse","y":29},{"artefact":false,"quantity":9,"class":"gold","x":63,"name":"9 gold pieces","y":29},{"artefact":false,"quantity":16,"class":"gold","x":42,"name":"16 gold pieces","y":31},{"artefact":false,"quantity":1,"class":"potion","x":52,"name":"potion of curing","y":34},{"artefact":false,"quantity":1,"class":"scroll","x":81,"name":"scroll of noise","y":39},{"artefact":false,"quantity":1,"class":"scroll","x":40,"name":"scroll of teleportation","y":42},{"artefact":false,"quantity":1,"class":"book","x":40,"name":"parchment of Leda's Liquefaction","y":43},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"short sword","y":44},{"artefact":false,"quantity":1,"class":"weapon","x":63,"name":"dagger","y":44},{"artefact":false,"quantity":1,"class":"book","x":40,"name":"parchment of Shock","y":45},{"artefact":false,"quantity":1,"class":"scroll","x":71,"name":"scroll of vulnerability","y":47},{"artefact":false,"quantity":26,"class":"gold","x":73,"name":"26 gold pieces","y":47},{"artefact":false,"quantity":1,"class":"armour","x":77,"name":"embroidered hat","y":47},{"artefact":false,"quantity":1,"class":"jewellery","x":44,"name":"amulet of wildshape","y":52},{"artefact":false,"quantity":1,"class":"armour","x":82,"name":"robe","y":52},{"artefact":false,"quantity":1,"class":"potion","x":78,"name":"potion of curing","y":61},{"artefact":false,"quantity":1,"class":"book","x":53,"name":"parchment of Martyr's Knell","y":62},{"artefact":false,"quantity":15,"class":"gold","x":69,"name":"15 gold pieces","y":63},{"artefact":false,"quantity":1,"class":"armour","x":74,"name":"scale mail","y":63},{"artefact":false,"quantity":20,"class":"gold","x":69,"name":"20 gold pieces","y":66},{"artefact":false,"quantity":1,"class":"armour","x":67,"name":"chain mail","y":73},{"artefact":false,"quantity":1,"class":"weapon","x":54,"name":"rapier","y":74},{"artefact":false,"quantity":7,"class":"gold","x":69,"name":"7 gold pieces","y":74},{"artefact":false,"quantity":1,"class":"scroll","x":41,"name":"scroll of identify","y":77},{"artefact":false,"quantity":1,"class":"armour","x":53,"name":"leather armour","y":78}],"maxmp":38,"monsters":[{"x":45,"xp":828,"name":"boulder beetle","y":22},{"x":38,"xp":608,"name":"burrowing beast","y":28},{"x":84,"xp":600,"name":"shale drake","y":33},{"x":84,"xp":367,"name":"komodo dragon","y":41},{"x":42,"xp":602,"name":"shale drake","y":44},{"x":59,"xp":849,"name":"boulder beetle","y":45},{"x":65,"xp":554,"name":"crag boar","y":46},{"x":51,"xp":551,"name":"crag boar","y":54},{"x":72,"xp":588,"name":"burrowing beast","y":58},{"x":78,"xp":365,"name":"komodo dragon","y":58},{"x":48,"xp":555,"name":"crag boar","y":61},{"x":40,"xp":548,"name":"crag boar","y":62},{"x":37,"xp":597,"name":"shale drake","y":65},{"x":37,"xp":555,"name":"crag boar","y":72},{"x":38,"xp":554,"name":"crag boar","y":76},{"x":48,"xp":834,"name":"boulder beetle","y":76},{"x":77,"xp":606,"name":"burrowing beast","y":76},{"x":72,"xp":550,"name":"crag boar","y":77},{"x":41,"xp":544,"name":"crag boar","y":78},{"x":68,"xp":83,"name":"earth elemental","y":86}]}
+ROUTE_EVENT death Bur:1
+
+_You block the boulder beetle's attack.
+ The blast of sand hits the boulder beetle but does no damage.
+_The boulder beetle is severely wounded.The boulder beetle bites you!!
+ You die...Gear: 9/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ i - a +2 devious dagger (weapon)
+Armour         (go to first with [)
+ c - a +0 pair of boots (worn)
+ d - a +0 pair of gloves (worn)
+ e - a +0 cloak (worn)
+ f - a +0 helmet (worn)
+ g - a +0 buckler (worn)
+ h - a +2 robe (worn)a - a +0 robe
+Jewellery      (go to first with "=)
+ b - a ring of poison resistance (worn)
+ i - a +2 devious dagger (weapon)
+Goodbye, Route_caster.110667 Route_caster the Devastator (level 16, -20/101 HPs) *WIZ*Began as a Deep Elf Earth Elementalist on Oct 27, 2026.Was an Elder of Vehumet.Demolished by a boulder beetle (21 damage)... on level 1 of the Burrows.The game lasted 00:00:01 (233 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/route-final-2/games/caster-2026102701
+>

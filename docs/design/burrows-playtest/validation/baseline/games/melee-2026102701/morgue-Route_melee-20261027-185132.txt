@@ -1,0 +1,499 @@
+ Seeded DCSS version 0.33-a0 (console) character file.
+
+Game seed: 2026102701 (custom seed)
+
+114637 Route_melee the Severer (level 16, -5/155 HPs) *WIZ*
+             Began as a Minotaur Fighter on Oct 27, 2026.
+             Constricted to death by a coil worm (9 damage)
+             ... on level 3 of the Wormlands.
+             The game lasted 00:01:18 (10907 turns).
+
+Route_melee the Severer (Minotaur Fighter)         Turns: 10907, Time: 00:01:18
+
+Health: -5/155     AC: 24    Str: 27    XL:     16   Next: 16%
+Magic:  15/15      EV:  0    Int:  8    God:    No God 0 (0)
+Gold:   585        SH: 14    Dex: 16    Spells: 15/15 levels left
+
+rFire   . . .  (100%)   k - +3 broad axe
+rCold   . . .  (100%)   i - +1 kite shield
+rNeg    . . .  (100%)   j - +2 plate armour
+rPois   +      (33%)    (no helmet)
+rElec   .      (100%)   g - +0 cloak {Stlth+}
+rCorr   .      (100%)   f - +0 pair of gloves
+SInv    .               e - +0 pair of boots
+Will    +....           (no amulet)
+Stlth                   d - ring of poison resistance
+HPRegen 0.45/turn       (no ring)
+MPRegen 0.14/turn
+
+%: no passive effects
+@: constricted
+A: horns 2, retaliatory headbutt
+a: Build terrain (0%), Set terrain to build (0%), Clear terrain to floor (0%)
+
+
+You were on level 3 of the Wormlands.
+You visited 4 branches of the dungeon, and saw 10 of its levels.
+
+You collected 585 gold pieces.
+
+Inventory:
+
+Hand Weapons
+ a - a +0 war axe
+ k - a +3 broad axe (weapon)
+Armour
+ b - a +0 scale mail
+ c - a +0 buckler
+ e - a +0 pair of boots (worn)
+ f - a +0 pair of gloves (worn)
+ g - a +0 cloak of stealth (worn)
+ h - a +0 helmet
+ i - a +1 kite shield (worn)
+ j - a +2 plate armour (worn)
+Jewellery
+ d - a ring of poison resistance (worn)
+ l - an amulet of chemistry
+ m - an amulet of regeneration
+Wands
+ b - a wand of light (6)
+ c - a wand of iceblast (12)
+ f - a wand of mindburst (19)
+ e - a wand of charming (3)
+ p - a wand of polymorph (6)
+Scrolls
+ p - 2 scrolls of poison
+ g - 4 scrolls of fog
+ t - 3 scrolls of teleportation
+ r - 2 scrolls of revelation
+ a - a scroll of enchant armour
+ W - a scroll of brand weapon
+ x - a scroll of amnesia
+ I - a scroll of immolation
+ T - a scroll of torment
+Potions
+ g - 4 potions of magic
+ b - 2 potions of brilliance
+ c - 5 potions of curing
+ L - 2 potions of lignification
+ i - 2 potions of invisibility
+ C - 3 potions of cancellation
+ M - a potion of mutation
+
+
+   Skills:
+ + Level 17.0 Fighting
+ + Level 18.7 Axes
+ + Level 16.3 Armour
+ - Level 6.0 Dodging
+ + Level 14.2 Shields
+ - Level 6.0 Evocations
+
+
+You had 15 spell levels left.
+You didn't know any spells.
+Your spell library contained the following spells:
+
+ Spells                   Type           Power      Damage    Failure   Level
+ Kiss of Death            Conj/Necr      0 (25)     2d5       98%         1
+ Tukima's Dance           Hex            0 (100)    N/A       100%        3
+ Cause Fear               Hex            0 (200)    N/A       100%        4
+ Force Lance              Conj/Tloc      0 (100)    3d6       100%        4
+ Passage of Golubria      Tloc           0 (100)    N/A       100%        4
+ Haste                    Hex            0 (200)    N/A       100%        6
+ Mass Confusion           Hex            0 (200)    N/A       100%        6
+ Magnavolt                Erth/Air       0 (200)    4d9       100%        7
+
+
+Dungeon Overview and Level Annotations
+
+Branches:
+Dungeon (1/15)               Worm (3/4) Bur:4          Hive (2/2) Bur:2       
+
+Altars:
+
+
+Innate Abilities, Weirdness & Mutations
+
+You have a pair of horns on your head.
+You reflexively headbutt those who attack you in melee.
+
+Message History
+
+You block the iron troll's attack. x2; The iron troll bites you!!
+* * * LOW HITPOINT WARNING * * *
+You block the iron troll's attack. The iron troll claws you!
+* * * LOW HITPOINT WARNING * * *
+Cornered, the deep troll shaman turns to fight!
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+Blink to where?
+Press: ? - help, Dir - move target
+You encounter a deep troll delver.
+Found a parchment of Discord. Found a stone staircase leading down.
+As you read the scroll of blinking, it crumbles to dust.
+The deep troll delver shouts!
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+You start resting.
+A deep troll delver comes into view.
+Blink to where?
+Press: ? - help, Dir - move target
+You encounter a coil worm.
+As you read the scroll of blinking, it crumbles to dust.
+You encounter a gallery worm.
+You hit the coil worm. You headbutt the coil worm!
+The coil worm is moderately wounded.
+You slice the coil worm!!
+The coil worm is heavily wounded.
+You block the coil worm's attack. The coil worm bites you.
+* * * LOW HITPOINT WARNING * * *
+You barely miss the coil worm. You headbutt the coil worm!
+The coil worm is heavily wounded.
+The coil worm grabs you. The coil worm completely misses you. You furiously
+retaliate! You headbutt the coil worm. The coil worm constricts you.
+* * * LOW HITPOINT WARNING * * *
+You slash the coil worm! You headbutt the coil worm.
+The coil worm is severely wounded.
+The coil worm bites you.
+* * * LOW HITPOINT WARNING * * *
+The coil worm constricts you!
+You die...
+
+    ##..............
+    #..............#
+    #..............#
+    #...#...........
+    #...#########...
+    #...#       #...
+    #...##     #....
+    #....##    #....
+  ##......#    ###..
+ ##........      #.T
+ #.@....T..      #..
+#..w.......       #<
+#..........       #.
+#..........       ##
+#......w...       ..
+#..........       ..
+##.........       ..
+ ##........
+
+
+You could see a gallery worm, a coil worm and a deep troll earth mage.
+
+Vanquished Creatures
+  A stone giant (Worm:1)
+  6 gallery worms
+  3 spark wasps (Hive:2)
+  11 coil worms
+  A great orb of eyes (Worm:1)
+  A catoblepas (Bur:4)
+  10 boulder beetles
+  2 death yaks (Bur:4)
+  3 caustic worms (Worm:2)
+  2 iron trolls
+  A deep troll (Worm:2)
+  2 deep troll delvers
+  5 lindwurms
+  5 wax beetles
+  21 burrowing beasts
+  12 shale drakes
+  26 crag boars
+  2 venom wasps
+  19 meliai
+  3 komodo dragons
+  8 wandering mushrooms
+  6 queen bees
+  3 hornets
+  2 earth elementals
+  64 killer bees
+  A deathcap (Worm:2)
+220 creatures vanquished.
+
+Notes
+Turn   | Place    | Note
+-------+----------+-------------------------------------------
+     0 | D:1      | Route_melee the Minotaur Fighter began the quest for the
+                  | Orb.
+     0 | D:1      | You started the game in wizard mode.
+     0 | D:1      | Reached XP level 1. HP: 19/19 MP: 0/0
+     0 | D:1      | Reached XP level 2. HP: 20/20 MP: 1/1
+     0 | D:1      | Reached XP level 3. HP: 26/26 MP: 2/2
+     0 | D:1      | Reached XP level 4. HP: 33/33 MP: 3/3
+     0 | D:1      | Reached XP level 5. HP: 38/38 MP: 4/4
+     0 | D:1      | Reached XP level 6. HP: 45/45 MP: 5/5
+     0 | D:1      | Reached XP level 7. HP: 50/50 MP: 6/6
+     0 | D:1      | Reached XP level 8. HP: 57/57 MP: 7/7
+     0 | D:1      | Reached XP level 9. HP: 62/62 MP: 8/8
+     0 | D:1      | Reached XP level 10. HP: 69/69 MP: 9/9
+     0 | D:1      | Reached XP level 11. HP: 74/74 MP: 10/10
+     0 | D:1      | Reached XP level 12. HP: 81/81 MP: 11/11
+     0 | D:1      | Reached XP level 13. HP: 86/86 MP: 12/12
+     0 | D:1      | Reached XP level 14. HP: 93/93 MP: 13/13
+    59 | Bur:1    | Entered Level 1 of the Burrows
+  1975 | Bur:2    | Found an opening to the Hive.
+  3141 | Hive:1   | Entered Level 1 of the Hive
+  3248 | Hive:1   | Reached skill level 15 in Fighting
+  3572 | Hive:1   | Identified the +5 battleaxe of War {drain, Str+3 Int+4}
+  3957 | Hive:2   | Entered Level 2 of the Hive
+  3968 | Hive:2   | Reached skill level 17 in Axes
+  4531 | Hive:2   | Reached XP level 15. HP: 73/141 MP: 14/14
+  5739 | Bur:3    | Reached skill level 15 in Armour
+  6135 | Bur:4    | Entered Level 4 of the Burrows
+  6866 | Bur:4    | Identified the wellspring talisman of the Bruised Things
+                  | {rElec Dex+3}
+  6880 | Bur:4    | Found a tunnel to the Wormlands.
+  7190 | Bur:4    | Reached skill level 18 in Axes
+  7791 | Worm:1   | Entered Level 1 of the Wormlands
+  9538 | Worm:2   | Reached XP level 16. HP: 85/154 MP: 15/15
+ 10906 | Worm:3   | HP: 7/155 [constriction (4)]
+ 10907 | Worm:3   | Constricted to death by a coil worm
+
+Illustrated notes
+
+Levels and vault maps discovered:
+[+gen,+vis] D:1:      erik_arrival_cave_to_civilisation
+                      [erik_arrival_cave_to_hall], layout_basic
+[+gen,-vis] D:2
+[+gen,-vis] D:3
+[+gen,-vis] D:4
+[+gen,-vis] D:5
+[+gen,-vis] D:6
+[+gen,-vis] D:7
+[+gen,-vis] D:8
+[+gen,-vis] D:9
+[+gen,-vis] D:10
+[+gen,-vis] D:11
+[+gen,-vis] D:12
+[+gen,-vis] D:13
+[+gen,-vis] D:14
+[+gen,-vis] D:15
+[+gen,-vis] Temple
+[+gen,-vis] Lair:1
+[+gen,-vis] Lair:2
+[+gen,-vis] Lair:3
+[+gen,-vis] Lair:4
+[+gen,-vis] Lair:5
+[+gen,-vis] Swamp:1
+[+gen,-vis] Swamp:2
+[+gen,-vis] Swamp:3
+[+gen,-vis] Swamp:4
+[+gen,-vis] Shoals:1
+[+gen,-vis] Shoals:2
+[+gen,-vis] Shoals:3
+[+gen,-vis] Shoals:4
+[+gen,-vis] Snake:1
+[+gen,-vis] Snake:2
+[+gen,-vis] Snake:3
+[+gen,-vis] Snake:4
+[+gen,-vis] Spider:1
+[+gen,-vis] Spider:2
+[+gen,-vis] Spider:3
+[+gen,-vis] Spider:4
+[+gen,-vis] Slime:1
+[+gen,-vis] Slime:2
+[+gen,-vis] Slime:3
+[+gen,-vis] Slime:4
+[+gen,-vis] Slime:5
+[+gen,-vis] Orc:1
+[+gen,-vis] Orc:2
+[+gen,-vis] Elf:1
+[+gen,-vis] Elf:2
+[+gen,-vis] Elf:3
+[+gen,-vis] Vaults:1
+[+gen,-vis] Vaults:2
+[+gen,-vis] Vaults:3
+[+gen,-vis] Vaults:4
+[+gen,-vis] Vaults:5
+[+gen,-vis] Blade
+[+gen,-vis] Forest:1
+[+gen,-vis] Forest:2
+[+gen,-vis] Forest:3
+[+gen,-vis] Forest:4
+[+gen,-vis] Crypt:1
+[+gen,-vis] Crypt:2
+[+gen,-vis] Crypt:3
+[+gen,-vis] Tomb:1
+[+gen,-vis] Tomb:2
+[+gen,-vis] Tomb:3
+[+gen,-vis] Depths:1
+[+gen,-vis] Depths:2
+[+gen,-vis] Depths:3
+[+gen,-vis] Depths:4
+[+gen,-vis] Hell
+[+gen,-vis] Dis:1
+[+gen,-vis] Dis:2
+[+gen,-vis] Dis:3
+[+gen,-vis] Dis:4
+[+gen,-vis] Dis:5
+[+gen,-vis] Dis:6
+[+gen,-vis] Dis:7
+[+gen,-vis] Geh:1
+[+gen,-vis] Geh:2
+[+gen,-vis] Geh:3
+[+gen,-vis] Geh:4
+[+gen,-vis] Geh:5
+[+gen,-vis] Geh:6
+[+gen,-vis] Geh:7
+[+gen,-vis] Coc:1
+[+gen,-vis] Coc:2
+[+gen,-vis] Coc:3
+[+gen,-vis] Coc:4
+[+gen,-vis] Coc:5
+[+gen,-vis] Coc:6
+[+gen,-vis] Coc:7
+[+gen,-vis] Tar:1
+[+gen,-vis] Tar:2
+[+gen,-vis] Tar:3
+[+gen,-vis] Tar:4
+[+gen,-vis] Tar:5
+[+gen,-vis] Tar:6
+[+gen,-vis] Tar:7
+[+gen,-vis] Zot:1
+[+gen,-vis] Zot:2
+[+gen,-vis] Zot:3
+[+gen,-vis] Zot:4
+[+gen,-vis] Zot:5
+[+gen,-vis] Abyss:1
+[+gen,-vis] Abyss:2
+[+gen,-vis] Abyss:3
+[+gen,-vis] Abyss:4
+[+gen,-vis] Abyss:5
+[+gen,-vis] Abyss:6
+[+gen,-vis] Abyss:7
+[+gen,-vis] Pan
+[+gen,-vis] Zig:1
+[+gen,-vis] Zig:2
+[+gen,-vis] Zig:3
+[+gen,-vis] Zig:4
+[+gen,-vis] Zig:5
+[+gen,-vis] Zig:6
+[+gen,-vis] Zig:7
+[+gen,-vis] Zig:8
+[+gen,-vis] Zig:9
+[+gen,-vis] Zig:10
+[+gen,-vis] Zig:11
+[+gen,-vis] Zig:12
+[+gen,-vis] Zig:13
+[+gen,-vis] Zig:14
+[+gen,-vis] Zig:15
+[+gen,-vis] Zig:16
+[+gen,-vis] Zig:17
+[+gen,-vis] Zig:18
+[+gen,-vis] Zig:19
+[+gen,-vis] Zig:20
+[+gen,-vis] Zig:21
+[+gen,-vis] Zig:22
+[+gen,-vis] Zig:23
+[+gen,-vis] Zig:24
+[+gen,-vis] Zig:25
+[+gen,-vis] Zig:26
+[+gen,-vis] Zig:27
+[+gen,-vis] Bazaar
+[+gen,-vis] Trove
+[+gen,-vis] Sewer
+[+gen,-vis] Ossuary
+[+gen,-vis] Bailey
+[+gen,-vis] IceCv
+[+gen,-vis] Volcano
+[+gen,-vis] WizLab
+[+gen,-vis] Desolation
+[+gen,-vis] Gauntlet
+[+gen,-vis] Arena
+[+gen,-vis] Crucible
+[+gen,-vis] Necropolis
+[+gen,-vis] Gulch
+[+gen,+vis] Bur:1:    layout_burrows, bur_flooded_roots, bur_side_den,
+                      bur_root_pocket
+[+gen,+vis] Bur:2:    layout_burrows, hive_entry_comb, bur_bone_cache
+[+gen,+vis] Bur:3:    layout_burrows, bur_bent_gallery, bur_troll_store,
+                      bur_animal_den
+[+gen,+vis] Bur:4:    bur_end_old_warren, bur_beetle_burrow, bur_split_passage
+[+gen,+vis] Worm:1:   layout_wormlands, worm_mushroom_grove
+[+gen,+vis] Worm:2:   layout_wormlands, worm_corroded_gallery, worm_shale_shelf
+[+gen,+vis] Worm:3:   layout_wormlands, worm_cross_gallery
+[+gen,-vis] Worm:4
+[+gen,+vis] Hive:1:   layout_hive
+[+gen,+vis] Hive:2:   hive_end_inner_combs
+
+Skill      XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 |
+---------------+-------------------------------------------------+-----
+Shields        |                                        12 13 14 | 14.2
+Armour         |                                        14 16    | 16.3
+Fighting       |                                        15 16 17 | 17.0
+Axes           |                                        17 18    | 18.7
+Dodging        |                                                 |  6.0
+Evocations     |                                                 |  6.0
+
+Percentage of experience gained in each form (* = 100%):
+
+Form     XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 | XLs as
+-------------+-------------------------------------------------+---------
+None         |                                         *  *  * |  3
+
+Action                     |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+---------------------------+-------+-------+-------+-------+-------+-------++-------
+ Attack: Normal            |       |       |       |       |   926 |    95 ||  1021
+  Melee: Broad axe         |       |       |       |       |  1222 |   131 ||  1353
+         Headbutt          |       |       |       |       |   400 |    51 ||   451
+  Drink: Might             |       |       |       |       |     5 |       ||     5
+         Heal wounds       |       |       |       |       |     9 |     1 ||    10
+         Haste             |       |       |       |       |     2 |       ||     2
+         Curing            |       |       |       |       |     2 |       ||     2
+   Read: Fear              |       |       |       |       |     4 |     1 ||     5
+         Blinking          |       |       |       |       |       |     4 ||     4
+   Stab: Fleeing           |       |       |       |       |       |     1 ||     1
+ Armour: Plate armour      |       |       |       |       |   589 |   104 ||   693
+  Dodge: Dodged            |       |       |       |       |   225 |    21 ||   246
+  Block: Kite shield       |       |       |       |       |   533 |    53 ||   586
+
+Table legend: (Time is in decaauts)
+ A = Elapsed time spent in this place.
+ B = Non-inter-level travel time spent in this place.
+ C = Inter-level travel time spent in this place.
+ D = Time resting spent in this place.
+ E = Time spent auto-exploring this place.
+ F = Levels seen in this place.
+ G = Mean time per level.
+                   A        B        C        D        E      F       G
+               +--------+--------+--------+--------+--------+-----+--------+
+         Total |  10678 |  10678 |      0 |   5530 |   3315 |  10 | 1067.8 |
+       Dungeon |     53 |     53 |      0 |      0 |      0 |   1 |   53.0 |
+       Burrows |   5345 |   5345 |      0 |   2540 |   1889 |   4 | 1336.2 |
+     Wormlands |   3055 |   3055 |      0 |   1943 |    696 |   3 | 1018.3 |
+          Hive |   2223 |   2223 |      0 |   1047 |    730 |   2 | 1111.5 |
+               +--------+--------+--------+--------+--------+-----+--------+
+
+Top non-repeatable levels by time:
+   Bur:4: 1622 daAuts
+   Bur:2: 1544 daAuts
+  Worm:2: 1541 daAuts
+  Worm:1: 1489 daAuts
+   Bur:1: 1486 daAuts
+  Hive:2: 1356 daAuts
+  Hive:1: 867 daAuts
+   Bur:3: 692 daAuts
+     D:1: 53 daAuts
+  Worm:3: 24 daAuts
+
+DLua errors:
+
+Table legend:
+ A = God
+ B = Rank
+ C = Start time
+ D = Start piety
+ E = Piety gained
+ F = Piety on gifts
+ G = Piety on penance
+ H = Piety on stepdowns
+ I = Piety wasted at max piety
+ J = Piety decays
+ K = Piety lost (inc. decay)
+         A          B      C       D     E     F     G     H     I     J     K   
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+

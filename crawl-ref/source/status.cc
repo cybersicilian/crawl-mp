@@ -1,8 +1,16 @@
 #include "AppHdr.h"
+#include "god-pakellas.h"
+#include "auras.h"
+#include "shell.h"
+#include "hermit-crab.h"
+#include "protean.h"
+#include "god-vorr.h"
+#include "bloodcraft.h"
 
 #include "status.h"
 
 #include "ability.h"
+#include "automaton.h"
 #include "art-enum.h" // bearserk
 #include "artefact.h"
 #include "branch.h"
@@ -19,6 +27,7 @@
 #include "mutation.h"
 #include "options.h"
 #include "orb.h" // orb_limits_translocation in fill_status_info
+#include "party.h"
 #include "player-stats.h"
 #include "religion.h"
 #include "spl-damage.h" // COUPLING_TIME_KEY
@@ -229,6 +238,73 @@ bool fill_status_info(int status, status_info& inf)
     // completing or overriding the defaults set above.
     switch (status)
     {
+    case STATUS_PROTEAN_BODY:
+    {
+        if (you.species != SP_PROTEAN)
+            return false;
+        static const char* const sizes[] = {
+            "tiny", "little", "small", "medium", "large", "giant"
+        };
+        const int bonus = protean::health_bonus_percent(you);
+        const char* size = sizes[protean::size_for_hp(you.hp_max)];
+        inf.light_colour = LIGHTGREEN;
+        inf.light_text = make_stringf("Growth +%d%%", bonus);
+        inf.short_text = make_stringf("%s body, mutation health +%d%%", size, bonus);
+        inf.long_text = make_stringf("Your %s protean body gains %d%% maximum health "
+                                     "from non-innate mutations. Its size depends on "
+                                     "your maximum health.", size, bonus);
+        break;
+    }
+
+    case STATUS_HERMIT_CRAB_SHELL:
+    {
+        if (you.species != SP_HERMIT_CRAB)
+            return false;
+        static const char* const sizes[] = {
+            "tiny", "little", "small", "medium", "large", "giant"
+        };
+        const size_type size = hermit_crab::shell_size(you);
+        const int bonus = hermit_crab::armour_bonus(you);
+        inf.light_colour = LIGHTGREEN;
+        inf.light_text = make_stringf("Shell +%d", bonus);
+        inf.short_text = make_stringf("sheltered in a %s shell (AC +%d)",
+                                      sizes[size], bonus);
+        inf.long_text = make_stringf("Your %s shell gives you %d armour class. "
+                                     "It can break %d more time%s to save you from death. "
+                                     "You have %d molting opportunit%s.",
+                                     sizes[size], bonus, static_cast<int>(size),
+                                     size == 1 ? "" : "s", hermit_crab::moult_chances(you),
+                                     hermit_crab::moult_chances(you) == 1 ? "y" : "ies");
+        break;
+    }
+
+    case STATUS_CRAB_WALK:
+    {
+        const int remaining = hermit_crab::crab_walk_remaining(you);
+        if (!remaining)
+            return false;
+        const int turns = (remaining + BASELINE_DELAY - 1) / BASELINE_DELAY;
+        inf.light_colour = CYAN;
+        inf.light_text = make_stringf("Crab Walk %d", turns);
+        inf.short_text = make_stringf("able to Crab Walk for up to %d normal-speed turn%s",
+                                      turns, turns == 1 ? "" : "s");
+        inf.long_text = make_stringf("You can Crab Walk for up to %d more normal-speed turn%s. "
+                                     "Actions with different speeds use this time accordingly.",
+                                     turns, turns == 1 ? "" : "s");
+        break;
+    }
+
+    case STATUS_RETRACTED_SHELL:
+        if (!shell::retracted())
+            return false;
+        inf.light_colour = LIGHTGREEN;
+        inf.light_text = "Shell";
+        inf.short_text = "retracted into your shell";
+        inf.long_text = "You are retracted into your shell: +50% shell AC and "
+                        "half evasion and movement speed. Use Shell Dash to roll until blocked; "
+                        "other physical actions bring you out of your shell.";
+        break;
+
     case STATUS_STAT_ZERO:
     {
         if (!you.attribute[ATTR_STAT_ZERO])
@@ -680,6 +756,20 @@ bool fill_status_info(int status, status_info& inf)
         _describe_channelled_spell(inf);
         break;
 
+    case STATUS_AUTOMATON_BEE:
+    {
+        const int remaining = automaton::bee_winding_remaining(you);
+        if (!remaining)
+            return false;
+        const int turns = (remaining + BASELINE_DELAY - 1) / BASELINE_DELAY;
+        inf.light_colour = CYAN;
+        inf.light_text = make_stringf("Bee %d", turns);
+        inf.short_text = make_stringf("winding a clockwork bee (%d normal turns)", turns);
+        inf.long_text = make_stringf("Your clockwork bee is winding for up to %d more normal-speed turns. "
+                                     "Taking damage or losing the target interrupts it.", turns);
+        break;
+    }
+
     case STATUS_DIG:
         if (you.digging)
         {
@@ -1072,6 +1162,120 @@ bool fill_status_info(int status, status_info& inf)
     }
     break;
 
+    case STATUS_PAKELLAS_WORKSHOP:
+        if (!you_worship(GOD_PAKELLAS) && !pakellas::workshop().loan)
+            return false;
+        inf.light_text = pakellas::workshop().loan ? "Loan" : "Workshop";
+        inf.light_colour = pakellas::workshop().loan ? YELLOW : LIGHTGREEN;
+        inf.short_text = "Pakellas workshop";
+        inf.long_text = pakellas::summary();
+        break;
+
+    case STATUS_VORR_BLOOD:
+    {
+        if (!you_worship(GOD_VORR))
+            return false;
+        const int blood = vorr::nearby_blood(), corpses = vorr::nearby_corpses();
+        inf.light_text = make_stringf("Blood:%d", blood);
+        if (corpses)
+            inf.light_text += make_stringf(" +%d corpse%s", corpses, corpses == 1 ? "" : "s");
+        inf.light_colour = blood || corpses ? LIGHTRED : DARKGREY;
+        inf.short_text = "Vorr ritual fuel";
+        inf.long_text = make_stringf("%d fresh blood units and %d usable corpses visible within four cells. "
+            "Each corpse supplies one blood unit. Self-exsanguination replaces each missing unit "
+            "with 10%% of maximum HP (%d HP), rounded up; you must survive the payment. "
+            "Old stains are inert. The Great Letting draws from its targeted area.",
+            blood, corpses, vorr::self_blood_cost());
+        if (!vorr::self_blood_available())
+            inf.long_text += " Self-exsanguination is unavailable to your bloodless species or current form.";
+        break;
+    }
+    case STATUS_VORR_COMMUNION:
+        if (!vorr::active(3))
+            return false;
+        inf.light_text = "Communion";
+        inf.light_colour = vorr::regeneration_bonus() ? LIGHTRED : RED;
+        inf.short_text = "Blood Communion";
+        inf.long_text = vorr::regeneration_bonus()
+            ? "Regenerating in fresh blood; your damage to worthy blood-bearing foes steals life."
+            : "Your damage to worthy blood-bearing foes steals life; stand in fresh blood to regenerate.";
+        inf.long_text += make_stringf(" Nearby fresh blood grants +%d%% attack and movement speed "
+            "(2%% per visible unit within four cells, with no cap). "
+            "Corpses and self-exsanguination do not grant this bonus.", vorr::speed_bonus());
+        break;
+
+    case STATUS_BLOOD_RITE:
+    {
+        const spell_type rite = bloodcraft::active_rite();
+        if (rite == SPELL_NO_SPELL)
+            return false;
+        inf.light_text = make_stringf("Rite:%d", bloodcraft::reserved_hp(bloodcraft::unreserved_hp()));
+        inf.light_colour = LIGHTRED;
+        inf.short_text = spell_title(rite);
+        inf.long_text = make_stringf("%s; %d HP reserved; %s", spell_title(rite),
+            bloodcraft::reserved_hp(bloodcraft::unreserved_hp()),
+            bloodcraft::effect_description(rite).c_str());
+        break;
+    }
+    case STATUS_PALADIN_AURA:
+    {
+        struct aura_desc_entry
+        {
+            spell_type spell;
+            const char *short_tag;
+            const char *name;
+            const char *effects;
+            colour_t colour;
+        };
+        static const aura_desc_entry k_auras[] =
+        {
+            { SPELL_AURA_OF_PROTECTION, "Aura:Prot", "Protection", "+1-3 AC; +1-3 SH beside a companion", YELLOW },
+            { SPELL_AURA_OF_ZEAL,       "Aura:Zeal", "Zeal",       "+1-3 Slay, fear immunity, holy strikes against flanked foes/undead/demons", LIGHTRED },
+            { SPELL_AURA_OF_RIME,       "Aura:Rime", "Rime",       "rC+; melee attackers may be slowed", LIGHTBLUE },
+            { SPELL_AURA_OF_VITALITY,   "Aura:Vit",  "Vitality",   "+0.50-1.00 HP/turn, doubled below half HP", LIGHTGREEN },
+            { SPELL_AURA_OF_SANCTUARY,  "Aura:Sanc", "Sanctuary",  "healthier bearers absorb 15-30% of companions' damage", LIGHTCYAN },
+            { SPELL_AURA_OF_PASSAGE,    "Aura:Pass", "Passage",    "10-20% less movement time toward another bearer", MAGENTA },
+            { SPELL_AURA_OF_RESONANCE,  "Aura:Res",  "Resonance",  "+10-25% power to non-Auramancy spells", LIGHTMAGENTA },
+        };
+
+        vector<const aura_desc_entry*> active;
+        for (const auto &entry : k_auras)
+            if (party::has_active_aura_near(you.pos(), entry.spell, nullptr))
+                active.push_back(&entry);
+
+        if (!active.empty())
+        {
+            if (active.size() == 1)
+            {
+                inf.light_colour = active[0]->colour;
+                inf.light_text   = active[0]->short_tag;
+                inf.short_text   = make_stringf("aura of %s", lowercase_string(active[0]->name).c_str());
+                inf.long_text    = make_stringf("You are within an Aura of %s (%s).",
+                                                active[0]->name, active[0]->effects);
+            }
+            else
+            {
+                inf.light_colour = WHITE;
+                inf.light_text   = make_stringf("Aura+%d", (int)active.size());
+                vector<string> names;
+                vector<string> details;
+                for (const auto *a : active)
+                {
+                    names.push_back(lowercase_string(a->name));
+                    details.push_back(make_stringf("%s (%s)", a->name, a->effects));
+                }
+                inf.short_text = make_stringf("auras (%s)",
+                                              comma_separated_line(names.begin(), names.end()).c_str());
+                inf.long_text  = make_stringf("You are within overlapping Auras: %s.",
+                                              comma_separated_line(details.begin(), details.end()).c_str());
+            }
+            if (you.duration[DUR_PALADIN_ZEAL] > 0)
+                inf.long_text += make_stringf(" Your Auramancy projects %d tiles through clear line of sight.",
+                                              auras::radius(you));
+        }
+        break;
+    }
+
     default:
         if (!found)
         {
@@ -1089,6 +1293,21 @@ bool fill_status_info(int status, status_info& inf)
 
 string status_light_description(const status_info& inf)
 {
+    if (you.species == SP_AUTOMATON && inf.light_text.find("Bee ") == 0)
+        return inf.long_text;
+    if (you.species == SP_FAERIE_DRAGON && inf.light_text == "Fly")
+        return inf.long_text;
+    if (you.species == SP_SPARKBORN && inf.light_text == "Water(-Cast)")
+        return inf.long_text;
+    if (you.species == SP_HERMIT_CRAB
+        && inf.light_text.find("Shell +") == 0)
+        return inf.long_text;
+    if (you.species == SP_HERMIT_CRAB
+        && inf.light_text.find("Crab Walk ") == 0)
+        return inf.long_text;
+    if (you.species == SP_PROTEAN
+        && inf.light_text.find("Growth +") == 0)
+        return inf.long_text;
     // Split off any extra info, e.g. counts for things like Zot and Flay.
     // (Status db descriptions never have spaces. Except Trog's Hand.)
     string dbname = split_string(" ", inf.light_text, true, true, 1)[0];
@@ -1309,6 +1528,11 @@ static void _describe_airborne(status_info& inf)
     inf.light_text   = "Fly";
     inf.short_text   = "flying";
     inf.long_text    = "You are flying.";
+    if (you.species == SP_FAERIE_DRAGON)
+    {
+        inf.short_text = "flying evasively";
+        inf.long_text = "Your flight increases evasion by 10%, with a minimum bonus of 1 EV.";
+    }
     inf.light_colour = _dur_colour(inf.light_colour, expiring);
     _mark_expiring(inf, expiring);
 }
@@ -1341,10 +1565,24 @@ static void _describe_terrain(status_info& inf)
     case DNGN_SHALLOW_WATER:
         inf.light_colour = LIGHTBLUE;
         inf.light_text = "Water";
+        if (you.species == SP_SPARKBORN && you.in_water())
+        {
+            inf.light_colour = YELLOW;
+            inf.light_text = "Water(-Cast)";
+            inf.short_text = "water prevents spellcasting";
+            inf.long_text = "Grounded water prevents you from casting spells.";
+        }
         break;
     case DNGN_DEEP_WATER:
         inf.light_colour = BLUE;
         inf.light_text = "Water";
+        if (you.species == SP_SPARKBORN && you.in_water())
+        {
+            inf.light_colour = RED;
+            inf.light_text = "Water(-Cast)";
+            inf.short_text = "water prevents spellcasting";
+            inf.long_text = "Grounded water prevents you from casting spells.";
+        }
         break;
     case DNGN_LAVA:
         inf.light_colour = RED;
@@ -1357,10 +1595,12 @@ static void _describe_terrain(status_info& inf)
 
 static void _describe_invisible(status_info& inf)
 {
-    if (!you.duration[DUR_INVIS])
+    if (!you.duration[DUR_INVIS] && you.form != transformation::shadow)
         return;
 
-    inf.light_colour = _dur_colour(BLUE, dur_expiring(DUR_INVIS));
+    const duration_type invis_duration = you.form == transformation::shadow
+        ? DUR_TRANSFORMATION : DUR_INVIS;
+    inf.light_colour = _dur_colour(BLUE, dur_expiring(invis_duration));
     inf.light_text   = "Invis";
     inf.short_text   = "invisible";
     if (you.backlit())
@@ -1369,7 +1609,7 @@ static void _describe_invisible(status_info& inf)
         inf.short_text += " (but backlit and visible)";
     }
     inf.long_text = "You are " + inf.short_text + ".";
-    _mark_expiring(inf, dur_expiring(DUR_INVIS));
+    _mark_expiring(inf, dur_expiring(invis_duration));
 }
 
 static vector<string> _charge_strings = { "Charge-", "Charge/",

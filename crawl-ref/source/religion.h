@@ -73,6 +73,7 @@ bool player_can_join_god(god_type which_god, bool include_temp = true);
 bool god_forbids_form(god_type which_god, transformation which_trans);
 bool transformed_player_can_join_god(god_type which_god);
 void join_trog_skills(void);
+void prepare_starting_ru();
 void join_religion(god_type which_god);
 void god_pitch(god_type which_god);
 god_type choose_god(god_type def_god = NUM_GODS);

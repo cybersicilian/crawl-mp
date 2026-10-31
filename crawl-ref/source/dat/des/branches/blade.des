@@ -7,9 +7,25 @@
 ##############################################################################
 : crawl_require('dlua/vault.lua')
 
+# Branch entry vault
+NAME:    enter_hall_of_blades
+TAGS:    blade_entry extra transparent
+DEPTH:   Vaults:2-4
+MONS:    dancing weapon
+KFEAT:   O = enter_hall_of_blades
+MAP
+.......
+.vv.vv.
+.v1.1v.
+...O...
+.v1.1v.
+.vv.vv.
+.......
+ENDMAP
+
 # Main layout
 NAME:    hall_of_blades
-TAGS:    no_dump no_monster_gen removed
+TAGS:    no_dump no_monster_gen
 PLACE:   Blade
 ORIENT:  encompass
 : hall_of_blades_weapon(_G)

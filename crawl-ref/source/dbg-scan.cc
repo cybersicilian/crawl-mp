@@ -20,6 +20,7 @@
 #include "dungeon.h"
 #include "end.h"
 #include "env.h"
+#include "party.h"
 #include "god-abil.h"
 #include "invent.h"
 #include "item-prop.h"
@@ -330,7 +331,7 @@ void debug_mons_scan()
         }
 
     ASSERT(you.type == MONS_PLAYER);
-    ASSERT(you.mid == MID_PLAYER);
+    ASSERT(you.mid == party::mid_for_slot(party::active_slot()));
 
     vector<int> floating_mons;
     bool             is_floating[MAX_MONSTERS];

@@ -1,0 +1,38 @@
+Filters: [vellum]
+Randomness seeded to: 1208791167
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+catch2-tests-executable is a Catch2 v3.2.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+A unique power is conserved and spends the full budget
+-------------------------------------------------------------------------------
+catch2-tests/test_vellum.cc:177
+...............................................................................
+
+catch2-tests/test_vellum_fixture.h:86: FAILED:
+  REQUIRE( quote.blocked.empty() )
+with expansion:
+  false
+with message:
+  This unique power requires the same equipment family.
+
+-------------------------------------------------------------------------------
+Property serialization preserves borrowed scripts without recreating static
+extras
+-------------------------------------------------------------------------------
+catch2-tests/test_vellum_integrations.cc:81
+...............................................................................
+
+catch2-tests/test_vellum_fixture.h:86: FAILED:
+  REQUIRE( quote.blocked.empty() )
+with expansion:
+  false
+with message:
+  This unique power requires the same equipment family.
+
+===============================================================================
+test cases:  21 |  19 passed | 2 failed
+assertions: 718 | 716 passed | 2 failed
+

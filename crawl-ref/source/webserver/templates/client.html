@@ -1,188 +1,281 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
   <head>
-    <title>WebTiles - Dungeon Crawl Stone Soup</title>
-    <link rel="icon" href="/static/stone_soup_icon-32x32.png" type="image/png">
+    <title>Pebble Broth — Cooperative Tactics Roguelike</title>
+    <link rel="icon" href="/static/tabletop/assets/lobby-expedition-mark.svg" type="image/svg+xml">
     <script type="text/javascript">
       {% set fail_safe_game_version = globals().get('game_version', '') %}
       var socket_server = "{{ socket_server }}";
       var game_version = "{{ fail_safe_game_version }}";
+      {% set browser_revision = globals().get('client_asset_revision', static_url("scripts/lobby-navigation.js").split("?v=")[-1]) %}
+      var client_asset_version = "{{ browser_revision }}";
+      // Configure the loader before its data-main request can time out.
+      var require = { waitSeconds: 0 };
     </script>
-    <script src="{{ static_url("scripts/contrib/require.js") }}" data-main="/static/scripts/app"></script>
-    <link rel="stylesheet" type="text/css" href="{{ static_url("style.css") }}">
+    <script src="{{ static_url("scripts/contrib/require.js") }}" data-main="{{ static_url("scripts/app.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_url("style.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/ui-themes.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/tokens.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/navigation.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url('tabletop/site-resources.css') }}">
+    <link rel="stylesheet" href="{{ static_url("styles/account-actions.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("styles/connection-quality.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-workspace.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/character-builder.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/character-folio.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/starting-sheet.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/party-setup.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-dashboard.css") }}&amp;ui={{ browser_revision }}">
+    <link rel="stylesheet" href="{{ static_url("tabletop/layout-rhythm.css") }}&amp;ui={{ browser_revision }}">
     <link rel="stylesheet" type="text/css" href="{{ static_url("fonts/fonts.css") }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=860, initial-scale=1.0">
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ static_url('tabletop/art-direction.css') }}&amp;ui={{ browser_revision }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/outgame-hierarchy.css') }}&amp;ui={{ browser_revision }}">
+</head>
   <body>
     <noscript>Please enable javascript!</noscript>
 
     <div id="lobby" style="display: none;">
-      <div class="login_placeholder">
+
+      <section class="welcome-entry" aria-label="Enter Pebble Broth">
+        <header class="welcome-intro">
+          <div class="welcome-brand"><span class="welcome-brand-mark" aria-hidden="true">✦</span><span><strong>Pebble Broth</strong> · Cooperative tactics roguelike</span></div>
+          <div class="welcome-eyebrow">A 1–4 hero tactical dungeon crawl</div>
+          <h1>Gather your party.<br><em>Descend together.</em></h1>
+          <p>Each player commands one hero. Your party shares every explored floor, its gold and its spell library, then fights on an initiative clock where banked time and recovery debt decide who moves next. Choose your friendly-fire rules, take today's seed, and see how deep four heroes can go.</p>
+          <figure class="welcome-art" aria-labelledby="welcome_art_caption">
+            <div class="welcome-art-scene" aria-hidden="true">
+              <span class="welcome-art-plate"><span class="welcome-art-plate-kicker">Shared floor</span><span class="welcome-art-plate-value">Dungeon 3 · Tactical combat</span></span>
+              <ol class="welcome-table">
+                <li class="welcome-seat is-active"><span class="welcome-seat-token">A</span><span class="welcome-seat-name">Aldric</span><span class="welcome-seat-role" data-role="frontline">Frontline</span><span class="welcome-seat-turn">Now</span></li>
+                <li class="welcome-seat"><span class="welcome-seat-token">L</span><span class="welcome-seat-name">Lyra</span><span class="welcome-seat-role" data-role="caster">Caster</span><span class="welcome-seat-turn">Next</span></li>
+                <li class="welcome-seat"><span class="welcome-seat-token">K</span><span class="welcome-seat-name">Karn</span><span class="welcome-seat-role" data-role="striker">Striker</span><span class="welcome-seat-turn">+2</span></li>
+                <li class="welcome-seat"><span class="welcome-seat-token">V</span><span class="welcome-seat-name">Vex</span><span class="welcome-seat-role" data-role="support">Support</span><span class="welcome-seat-turn">+4</span></li>
+              </ol>
+            </div>
+            <figcaption id="welcome_art_caption" class="welcome-visually-hidden">A party of four heroes at the dungeon threshold, with Aldric the frontline fighter next on the initiative clock.</figcaption>
+          </figure>
+          <ul class="welcome-props" aria-label="What Pebble Broth offers">
+            <li><span class="welcome-prop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M14 18c.3-2.4 2-4 4.5-4 1.6 0 2.8.6 3 1.8"/></svg></span><strong>Party of 1–4 heroes</strong><span>Friends, companions you steer, or Jev AI players filling the empty seats.</span></li>
+            <li><span class="welcome-prop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/><path d="M12 3.5v-1M20.5 12h1M12 20.5v1M3.5 12h-1"/></svg></span><strong>Initiative-based tactical combat</strong><span>Bank time, pay recovery debt, and queue a plan before you commit.</span></li>
+            <li><span class="welcome-prop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></svg></span><strong>Shared map, personal perception</strong><span>Explored floors, gold and spells are pooled; what each hero sees is their own.</span></li>
+            <li><span class="welcome-prop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="m9.5 15.5 2 2 3.5-4"/></svg></span><strong>Daily seeded expedition</strong><span>One dungeon per day for every party, with friendly fire set to classic or safe.</span></li>
+          </ul>
+        </header>
+
+      <div class="login_placeholder welcome-account">
         <div id="login">
-          <span id="login_message"></span>
-          <form action="#" id="login_form">
-            <label for="username">User:</label>
-            <input class="text" type="text" name="username" id="username">
-            <label for="password">Pass:</label>
-            <input class="text" type="password" name="password" id="password">
-            <input class="button" type="submit" name="submit" id="submit" value="Login">
+            <div class="welcome-account-heading"><span class="welcome-eyebrow">Your account</span><h2>Sign in to play.</h2><p>Resume an expedition, join a friend's party, or start a new one.</p></div>
+          <span id="login_message" class="welcome-callout" role="status" aria-live="polite"></span>
+          <form action="#" id="login_form" novalidate>
+            <div class="welcome-field">
+              <label for="username">Account name</label>
+              <input class="text" type="text" name="username" id="username" placeholder="Your adventurer name" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+            </div>
+            <div class="welcome-field">
+              <label for="password">Password</label>
+              <div class="welcome-password">
+                <input class="text" type="password" name="password" id="password" placeholder="Your password" autocomplete="current-password" required>
+                <button type="button" id="password_toggle" class="welcome-password-toggle" aria-controls="password" aria-pressed="false" aria-label="Show password">Show</button>
+              </div>
+            </div>
+            <input class="button" type="submit" name="submit" id="submit" value="Sign in">
           </form>
-          <span class="extra_links">|
-          <a id="reg_link" href="javascript:">Register</a>
+          <div class="extra_links welcome-account-actions">
+          <a id="reg_link" class="welcome-secondary-action" href="javascript:">Create an account</a>
 {% if getattr(config, "allow_password_reset", False) %}
-          <a id="forgot_link" href="javascript:">Forgot Password</a>
+          <a id="forgot_link" href="javascript:">Forgot password?</a>
 {% end %}
-          <a id="chem_link" href="javascript:" style="display: none;">Change Email</a>
-          <a id="chpw_link" href="javascript:" style="display: none;">Change Password</a>
-          <a id="logout_link" href="javascript:" style="display: none;">Logout</a></span>
+          <a id="chem_link" href="javascript:" style="display: none;">Change email</a>
+          <a id="chpw_link" href="javascript:" style="display: none;">Change password</a>
+          </div>
+          {% include "logout.html" %}
         </div>
       </div>
 
-      <div id="register" class="floating_dialog" style="display: none;">
-        <span id="register_message"></span>
-        <form action="#" id="register_form">
-          <label for="username">Username:</label>
-          <input class="text" type="text" name="username" id="reg_username">
-          <br>
-          <label for="reg_password">Password:</label>
-          <input class="text" type="password" name="reg_password" id="reg_password">
-          <br>
-          <label for="reg_repeat_password">Repeat password:</label>
-          <input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password">
-          <br>
-          <label for="reg_email">Email address:</label>
-          <input class="text" type="text" name="reg_email" id="reg_email">
-          <br>
-          <p>If you do not enter an email, you can't recover your password.</p>
-          <input class="button" type="button" name="cancel" id="reg_cancel"
-                 value="Cancel">
-          <input class="button" type="submit" name="submit" id="reg_submit" value="Submit">
+      <p class="welcome-footnote">Every floor is shared. Every hero sees it differently.</p>
+      </section>
+
+      <div id="register" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="register_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="register_title" class="account-dialog-title">Create your account</h2>
+          <p class="account-dialog-lede">One account for every party you join. Pick a name your friends will recognise.</p>
+        </div>
+        <span id="register_message" class="account-dialog-message tr-callout" role="alert"></span>
+        <form action="#" id="register_form" class="account-dialog-form" novalidate>
+          <div class="account-field">
+            <label for="reg_username">Account name</label>
+            <input class="text" type="text" name="username" id="reg_username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+          </div>
+          <div class="account-field">
+            <label for="reg_password">Password</label>
+            <input class="text" type="password" name="reg_password" id="reg_password" autocomplete="new-password" required>
+          </div>
+          <div class="account-field">
+            <label for="reg_repeat_password">Repeat password</label>
+            <input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password" autocomplete="new-password" aria-describedby="reg_repeat_hint" required>
+            <span id="reg_repeat_hint" class="account-field-hint" aria-live="polite"></span>
+          </div>
+          <div class="account-field">
+            <label for="reg_email">Email <span class="account-field-optional">optional</span></label>
+            <input class="text" type="email" name="reg_email" id="reg_email" autocomplete="email" aria-describedby="reg_email_help">
+            <span id="reg_email_help" class="account-field-help">Add one if you want to be able to reset a forgotten password. Nothing else is sent.</span>
+          </div>
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="reg_cancel" value="Cancel">
+            <input class="button tr-btn tr-btn-primary" type="submit" name="submit" id="reg_submit" value="Create account">
+          </div>
         </form>
       </div>
 
-      <div id="change_password" class="floating_dialog" style="display: none;">
-        <span id="chpw_message"></span>
-        <form action="#" id="chpw_form">
-          <label for="change_cur_password">Current password:</label>
-          <input class="text" type="password" name="change_cur_password" id="change_cur_password">
-          <br>
-          <label for="change_password">New password:</label>
-          <input class="text" type="password" name="change_new_password" id="change_new_password">
-          <br>
-          <label for="change_repeat_password">Repeat password:</label>
-          <input class="text" type="password" name="change_repeat_password" id="change_repeat_password">
-          <br><br>
-          <input class="button" type="button" name="cancel" id="chpw_cancel"
-                 value="Cancel">
-          <input class="button" type="submit" name="submit" id="chpw_submit" value="Submit">
+      <div id="change_password" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="change_password_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="change_password_title" class="account-dialog-title">Change password</h2>
+        </div>
+        <span id="chpw_message" class="account-dialog-message tr-callout" role="alert"></span>
+        <form action="#" id="chpw_form" class="account-dialog-form" novalidate>
+          <div class="account-field">
+            <label for="change_cur_password">Current password</label>
+            <input class="text" type="password" name="change_cur_password" id="change_cur_password" autocomplete="current-password">
+          </div>
+          <div class="account-field">
+            <label for="change_new_password">New password</label>
+            <input class="text" type="password" name="change_new_password" id="change_new_password" autocomplete="new-password">
+          </div>
+          <div class="account-field">
+            <label for="change_repeat_password">Repeat new password</label>
+            <input class="text" type="password" name="change_repeat_password" id="change_repeat_password" autocomplete="new-password" aria-describedby="chpw_repeat_hint">
+            <span id="chpw_repeat_hint" class="account-field-hint" aria-live="polite"></span>
+          </div>
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="chpw_cancel" value="Cancel">
+            <input class="button tr-btn tr-btn-primary" type="submit" name="submit" id="chpw_submit" value="Save password">
+          </div>
         </form>
       </div>
 
-      <div id="change_email" class="floating_dialog" style="display: none;">
-        <p>Your current email address is: <span id="chem_current"></span></p>
-        <span id="chem_message"></span>
-        <form action="#" id="chem_form">
-          <label for="chem_email">Email:</label>
-          <input class="text" type="text" name="chem_email" id="chem_email">
-          <br />
-          <p>If you do not enter an email, you can't recover your password.</p>
-          <input class="button" type="button" name="cancel" id="chem_cancel" value="Cancel">
-          <input class="button" type="submit" name="submit" id="chem_submit" value="Submit">
+      <div id="change_email" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="change_email_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="change_email_title" class="account-dialog-title">Account email</h2>
+          <p class="account-dialog-lede">Current address: <span id="chem_current" class="account-dialog-value"></span></p>
+        </div>
+        <span id="chem_message" class="account-dialog-message tr-callout" role="alert"></span>
+        <form action="#" id="chem_form" class="account-dialog-form" novalidate>
+          <div class="account-field">
+            <label for="chem_email">New email <span class="account-field-optional">leave blank to remove</span></label>
+            <input class="text" type="email" name="chem_email" id="chem_email" autocomplete="email" aria-describedby="chem_email_help">
+            <span id="chem_email_help" class="account-field-help">Only used to reset a forgotten password.</span>
+          </div>
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="chem_cancel" value="Cancel">
+            <input class="button tr-btn tr-btn-primary" type="submit" name="submit" id="chem_submit" value="Save email">
+          </div>
         </form>
       </div>
 
-      <div id="floating_ok_message" class="floating_dialog" style="display: none;">
-        <span id="ok_message_content"></span>
-        <input class="button" type="submit" name="submit" value="OK">
+      <div id="floating_ok_message" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="ok_message_content" tabindex="-1" style="display: none;">
+        <span id="ok_message_content" class="account-dialog-body"></span>
+        <div class="account-dialog-actions">
+          <input class="button tr-btn tr-btn-primary" type="submit" name="submit" value="OK">
+        </div>
       </div>
 
 {% if getattr(config, "allow_password_reset", False) %}
-      <div id="forgot" class="floating_dialog" style="display: none;">
-        <span id="forgot_message"></span>
-        <form action="#" id="forgot_form">
-          <label for="forgot_email">Email address:</label>
-          <input class="text" type="text" name="forgot_email" id="forgot_email">
-          <br>
-          <input class="button" type="button" name="cancel" id="forgot_cancel"
-                 value="Cancel">
-          <input class="button" type="submit" name="submit" id="forgot_submit" value="Submit">
+      <div id="forgot" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="forgot_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="forgot_title" class="account-dialog-title">Reset your password</h2>
+          <p class="account-dialog-lede">Enter the email on your account and we'll send a reset link.</p>
+        </div>
+        <span id="forgot_message" class="account-dialog-message tr-callout" role="alert"></span>
+        <form action="#" id="forgot_form" class="account-dialog-form" novalidate>
+          <div class="account-field">
+            <label for="forgot_email">Email address</label>
+            <input class="text" type="email" name="forgot_email" id="forgot_email" autocomplete="email">
+          </div>
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="forgot_cancel" value="Cancel">
+            <input class="button tr-btn tr-btn-primary" type="submit" name="submit" id="forgot_submit" value="Send reset link">
+          </div>
         </form>
       </div>
 
-      <div id="forgot_2" class="floating_dialog" style="display: none;">
-        <span>If a matching account was found, then an email was sent to reset your password.</span>
-        <input class="button" type="submit" name="submit" value="OK">
+      <div id="forgot_2" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="forgot_2_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="forgot_2_title" class="account-dialog-title">Check your email</h2>
+        </div>
+        <span class="account-dialog-body">If a matching account was found, an email with a password reset link is on its way.</span>
+        <div class="account-dialog-actions">
+          <input class="button tr-btn tr-btn-primary" type="submit" name="submit" value="OK">
+        </div>
       </div>
 {% end %}
 
 {% if reset_token %}
-      <div id="reset_pw" class="floating_dialog" style="display: none;">
+      <div id="reset_pw" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="reset_pw_title" tabindex="-1" style="display: none;">
+        <div class="account-dialog-head">
+          <h2 id="reset_pw_title" class="account-dialog-title">Choose a new password</h2>
+        </div>
   {% if reset_token_error %}
-        <form action="#" id="reset_pw_form">
-          <span>{{ reset_token_error }}</span>
-          <br><br>
-          <input class="button" type="button" name="cancel" id="reset_pw_cancel" value="Cancel">
+        <span class="account-dialog-message tr-callout is-error" role="alert">{{ reset_token_error }}</span>
+        <form action="#" id="reset_pw_form" class="account-dialog-form">
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="reset_pw_cancel" value="Back to sign-in">
+          </div>
         </form>
   {% else %}
-        <span>Please choose a new password.</span>
-        <br>
-        <span id="reset_pw_message"></span>
-        <form action="#" id="reset_pw_form">
+        <span id="reset_pw_message" class="account-dialog-message tr-callout" role="alert"></span>
+        <form action="#" id="reset_pw_form" class="account-dialog-form" novalidate>
           <input class="text" type="hidden" readonly="readonly" name="reset_pw_token" id="reset_pw_token" value="{{ reset_token }}">
-          <br>
-          <label for="reset_pw_password">Password:</label>
-          <input class="text" type="password" name="reset_pw_password" id="reset_pw_password">
-          <br>
-          <label for="reset_pw_repeat_password">Repeat password:</label>
-          <input class="text" type="password" name="reset_pw_repeat_password" id="reset_pw_repeat_password">
-          <br>
-          <input class="button" type="button" name="cancel" id="reset_pw_cancel" value="Cancel">
-          <input class="button" type="submit" name="submit" id="reset_pw_submit" value="Submit">
+          <div class="account-field">
+            <label for="reset_pw_password">New password</label>
+            <input class="text" type="password" name="reset_pw_password" id="reset_pw_password" autocomplete="new-password">
+          </div>
+          <div class="account-field">
+            <label for="reset_pw_repeat_password">Repeat new password</label>
+            <input class="text" type="password" name="reset_pw_repeat_password" id="reset_pw_repeat_password" autocomplete="new-password" aria-describedby="reset_pw_repeat_hint">
+            <span id="reset_pw_repeat_hint" class="account-field-hint" aria-live="polite"></span>
+          </div>
+          <div class="account-dialog-actions">
+            <input class="button tr-btn" type="button" name="cancel" id="reset_pw_cancel" value="Cancel">
+            <input class="button tr-btn tr-btn-primary" type="submit" name="submit" id="reset_pw_submit" value="Save password">
+          </div>
         </form>
   {% end %}
       </div>
 {% end %}
 
-      <div id="rc_edit" class="floating_dialog" style="display: none;">
-        <form action="#" id="rc_edit_form">
-          <textarea class="text" name="rc_file_contents" id="rc_file_contents"
-                    cols="80" rows="25">
-          </textarea>
-          <br>
-          <input class="button" type="submit" name="submit" id="rc_submit" value="Save"
-                 style="float: right;">
-        </form>
-      </div>
+      {% include game-settings.html %}
 
-      <div id="exit_game" class="floating_dialog" style="display: none;">
-          <p id="exit_game_reason"></p>
-          <pre id="exit_game_message"></pre>
-          <p id="exit_game_dump"></p>
-          <a class="hide_dialog" href="javascript:">Close</a>
+      <div id="exit_game" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="exit_game_reason" tabindex="-1" style="display: none;">
+          <p id="exit_game_reason" class="account-dialog-title account-dialog-title-small"></p>
+          <pre id="exit_game_message" class="account-dialog-pre"></pre>
+          <p id="exit_game_dump" class="account-dialog-links"></p>
+          <div class="account-dialog-actions">
+            <a class="hide_dialog tr-btn" href="javascript:">Close</a>
+          </div>
       </div>
 
       <div id="banner">{% include banner.html %}</div>
 
-      <div id="account_restricted" style="display:none;">
-        This account is being held for administrator approval. Until approved,
-        community features and some game modes may be restricted, and games
-        will not be visible to other players.
+      <div id="account_restricted" class="tr-callout account-notice" role="status" style="display:none;">
+        <strong>Awaiting administrator approval.</strong> Until then, community features and some
+        game modes may be restricted, and your games will not be visible to other players.
       </div>
-      <div>
+      <div class="admin-tools">
         <div id="admin_panel_button" style="display:none;">
-          <span><a href="javascript:">Toggle admin panel</a></span>
+          <span><a href="javascript:" class="tr-btn admin-panel-toggle">Toggle admin panel</a></span>
         </div>
-        <div id="admin_panel" style="display: none;">
-          <div><span><b>Admin panel</b></span></div>
+        <div id="admin_panel" class="tr-card admin-panel" style="display: none;">
+          <div class="admin-panel-head"><span><b>Admin panel</b></span></div>
           <hr />
           <div id="admin_announcements">
             <span>Enter text to broadcast to all players. Please do not use this frivolously!</span>
             <form>
               <label for="announcement_text">Announcement: </label>
               <input class="text" type="text" name="announcement_text" id="announcement_text" />
-              <span><a href="javascript:" id="announcement_submit">send announcement</a></span>
+              <span><a href="javascript:" id="announcement_submit" class="tr-btn">Send announcement</a></span>
             </form>
           </div>
           <hr />
@@ -191,8 +284,8 @@
             <form action="#" id="admin_user_control">
             <label for="admin_username">User:</label>
             <input class="text" type="text" name="admin_username" id="admin_username">
-            <input class="button" type="button" name="admin_pw_reset" id="admin_pw_reset" value="Generate password token">
-            <input class="button" type="button" name="admin_pw_reset_clear" id="admin_pw_reset_clear" value="Clear password token">
+            <input class="button tr-btn" type="button" name="admin_pw_reset" id="admin_pw_reset" value="Generate password token">
+            <input class="button tr-btn" type="button" name="admin_pw_reset_clear" id="admin_pw_reset_clear" value="Clear password token">
             </form>
           </div>
           <hr />
@@ -201,27 +294,163 @@
         </div>
       </div>
 
+      <div id="party_lobby_panel" style="display: none;">
+        <div class="party-hall-header">
+          <h2 class="party-hall-title">Your party</h2>
+          <div class="party-hall-controls">
+            <button type="button" id="party_game_settings" class="dcss-btn" hidden>Game settings</button>
+            <a class="party-other-modes" href="#play_now" data-lobby-section="play_now">Other modes ↗</a>
+            <span id="party_turn_pacing_badge" class="dcss-badge-pacing" tabindex="0"
+                  data-tip-title="Simultaneous Co-op Turn Pacing"
+                  data-tip-body="All active heroes queue and execute actions simultaneously on a shared dungeon clock with a 250ms hybrid tactical grace window. Exploration stays snappy while combat remains synchronized."
+                  data-tip-meta="Turn Mode: Simultaneous + 250ms Hybrid Window">[Turns: Simultaneous + Hybrid]</span>
+            <button type="button" id="btn_toggle_party_ff" class="dcss-btn dcss-btn-gold"
+                    data-tip-title="Friendly Fire &amp; Projectile Rules"
+                    data-tip-body="Classic Friendly Fire (ON): Beams, bolts, and AoE explosions can strike party allies in the line of fire — positioning matters! Safe Shoot-Through (OFF): Allied projectiles and spells pass harmlessly through party members."
+                    data-tip-meta="Click to toggle Classic Friendly Fire vs Safe Shoot-Through">[FF: Classic | Safe]</button>
+            <button type="button" id="btn_create_party_room" class="dcss-btn dcss-btn-primary"
+                    data-tip-title="Create Co-op Party Staging Room"
+                    data-tip-body="Opens a 4-slot Expedition Staging Room where you can customize 1-4 heroes (Species, Background, Archetype presets), toggle Friendly Fire, or invite friends before entering D:1."
+                    data-tip-meta="Host Controls: 1-4 Heroes | Custom Species &amp; Backgrounds">New party</button>
+          </div>
+        </div>
+
+        <div id="party_rooms_list_view">
+          <div id="party_rooms_empty" class="party-empty-notice tr-callout">
+            <span>No parties are gathering right now. Start a new expedition to pick your heroes and open seats for friends.</span>
+            <button type="button" id="btn_create_party_room_empty" class="dcss-btn dcss-btn-primary"
+                    data-tip-title="Create Co-op Party Staging Room"
+                    data-tip-body="Opens a 4-slot Expedition Staging Room where you can customize 1-4 heroes (Species, Background, Archetype presets), toggle Friendly Fire, or invite friends before entering D:1."
+                    data-tip-meta="Host Controls: 1-4 Heroes | Custom Species &amp; Backgrounds">Create party</button>
+          </div>
+          <table id="party_rooms_table" class="lobby-card-table" style="display: none;" aria-label="Gathering parties">
+            <thead>
+              <tr>
+                <th>Party</th>
+                <th>Host</th>
+                <th>Seats</th>
+                <th>Roster</th>
+                <th>Friendly fire</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="party_rooms_tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="party_room_view" style="display: none;">
+          <div id="party_room_command" class="party-room-command">
+            <div class="party-room-banner">
+              <div class="party-room-identity">
+                <span id="party_room_title_text">Your party</span>
+                <span id="party_room_host_text"></span>
+                <span id="party_room_hero_count" class="party-room-hero-count" aria-live="polite"></span>
+              </div>
+              <div class="party-room-banner-legacy">
+                <span class="dcss-badge-pacing-inline" tabindex="0"
+                      data-tip-title="Simultaneous Co-op Turn Pacing"
+                      data-tip-body="All active heroes queue and execute actions simultaneously on a shared dungeon clock with a 250ms hybrid tactical grace window."
+                      data-tip-meta="Turn Mode: Simultaneous + 250ms Hybrid Window">Simultaneous turns</span>
+                <span>
+                  <span>Friendly fire: </span>
+                  <span id="party_room_ff_badge" class="party-room-ff-badge" tabindex="0"
+                        data-tip-title="Friendly Fire &amp; Projectile Rules"
+                        data-tip-body="On: beams, bolts, and area effects can strike party allies in the line of fire. Off: allied projectiles and spells pass harmlessly through party members."
+                        data-tip-meta="The host toggles friendly fire under Expedition rules">On</span>
+                </span>
+              </div>
+            </div>
+            <div id="party_room_footer">
+              <div class="party-launch-controls">
+                <button type="button" id="btn_launch_party_room" class="dcss-btn dcss-btn-primary"
+                        data-tip-title="Begin the expedition (enter D:1)"
+                        data-tip-body="Starts the co-op expedition on Dungeon:1 with every active seat, applying each hero's name, species, background, trait and starting weapon."
+                        data-tip-meta="Host action · Guests toggle their readiness">Begin expedition</button>
+                <span id="party_room_status_hint"></span>
+              </div>
+              <div id="party_rules_summary" class="party-rules-summary">
+                <a class="party-rules-summary-link" href="#party_expedition_rules">Rules</a>
+                <span id="party_rules_summary_text" class="party-rules-summary-text"></span>
+                <span id="party_rules_score" class="party-rules-score">Base score</span>
+              </div>
+              <div class="party-room-leave">
+                <button type="button" id="btn_leave_party_room" class="dcss-btn dcss-btn-danger"
+                        data-tip-title="Leave the party"
+                        data-tip-body="Leaves this staging room and returns to the party browser. The host leaving disbands the room."
+                        data-tip-meta="Room control · Leave / disband">Leave party</button>
+              </div>
+            </div>
+          </div>
+
+          <p class="party-builder-intro">Pick a seat in the roster to edit that hero. Composition and rules update as you go.</p>
+
+          <div class="party-builder-workspace">
+            <div class="party-builder-main">
+              <div id="party_slots_grid"></div>
+            </div>
+            <aside class="party-builder-side" aria-label="Party composition and rules">
+              <section id="party_composition_view" class="party-composition-view"></section>
+              <div id="party_rules_panel" class="party-rules-panel"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+
+      <div id="coop_chronicle_panel" style="display: none;">
+        <div class="party-hall-header">
+          <h1 class="party-hall-title">The Chronicle</h1>
+          <div class="party-hall-controls">
+            <button type="button" id="btn_refresh_chronicle" class="dcss-btn dcss-btn-gold"
+                    data-tip-title="Refresh Dungeon Chronicle Vault"
+                    data-tip-body="Fetches the latest Stored Party Compositions, Hall of Player Ghosts (DCSS bones.* files), and Cool Items &amp; Relics discovered across expeditions."
+                    data-tip-meta="Syncs live with server chronicle &amp; bones vault">Refresh</button>
+          </div>
+        </div>
+        <div id="coop_chronicle_grid" class="chronicle-hall">
+          <div class="chronicle-box chronicle-col tr-card" data-collection="builds">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Party builds"
+                 data-tip-body="Recorded 1-4 hero rosters from past expeditions, with their seed, seasonings and friendly-fire rule. Use build applies one to your party builder."
+                 data-tip-meta="Reusable rosters">Party builds <span id="chronicle_comps_count" class="chronicle-count tr-badge">0</span></div>
+            <div id="chronicle_comps_list" class="chronicle-list"></div>
+          </div>
+          <div class="chronicle-box chronicle-col tr-card" data-collection="ghosts">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Ghosts"
+                 data-tip-body="Fallen heroes from solo and co-op expeditions. Their bones persist, so they can return as dangerous ghosts on the floor where they fell."
+                 data-tip-meta="Persistent bones registry">Ghosts <span id="chronicle_ghosts_count" class="chronicle-count tr-badge">0</span></div>
+            <div id="chronicle_ghosts_list" class="chronicle-list"></div>
+          </div>
+          <div class="chronicle-box chronicle-col tr-card" data-collection="relics">
+            <div class="chronicle-box-header" tabindex="0"
+                 data-tip-title="Relics"
+                 data-tip-body="Notable discoveries across your expeditions: unrandarts, runes of Zot, randarts and skill manuals, with the hero who found them and the floor."
+                 data-tip-meta="Unrandarts | Runes of Zot | Randarts | Manuals">Relics <span id="chronicle_items_count" class="chronicle-count tr-badge">0</span></div>
+            <div id="chronicle_items_list" class="chronicle-list"></div>
+          </div>
+        </div>
+      </div>
+
       <div id="play_now"></div>
 
       <br>
 
       <div id="lobby_body">
-        <span>
-          Games currently running:
-        </span>
-        <table id="player_list" class="no_game_times">
+        <h2>Live expeditions</h2>
+        <table id="player_list" class="no_game_times lobby-card-table" aria-label="Live expeditions">
           <thead>
             <tr>
-              <th class="username">User</th>
-              <th class="game_id">Game</th>
-              <th class="xl">XL</th>
-              <th class="char">Char</th>
+              <th class="username">Host</th>
+              <th class="coop_join">Action</th>
+              <th class="game_id">Mode</th>
+              <th class="xl">Level</th>
+              <th class="char">Hero</th>
               <th class="place">Place</th>
               <th class="turn">Turn</th>
               <th class="dur">Time</th>
               <th class="god">God</th>
               <th class="idle_time">Idle</th>
-              <th class="spectator_count">Specs</th>
+              <th class="spectator_count">Watching</th>
               <th class="milestone_col">Milestone</th>
             </tr>
           </thead>
@@ -232,6 +461,7 @@
           <table>
             <tr id="game_entry_template">
               <td class="username"></td>
+              <td class="coop_join"></td>
               <td class="game_id"></td>
               <td class="xl"></td>
               <td class="char"></td>
@@ -252,7 +482,9 @@
         </div>
       </div>
 
+      {% include "site-resources.html" %}
       <div id="footer">{% include footer.html %}</div>
+      <div id="lobby_rich_tooltip" style="display: none" aria-hidden="true"></div>
     </div>
 
     <div id="game">
@@ -331,7 +563,7 @@
 
     <div id="chat" style="display: none;">
       <a href="javascript:" id="chat_hide_button">
-        <span id="chat_hide_button_span">(-)</span>
+        <span id="chat_hide_button_span">×</span>
       </a>
       <a href="javascript:" id="chat_caption">
         <span id="spectator_count">0 spectators</span>
@@ -345,8 +577,11 @@
           <span id="chat_history"></span>
         </div>
 
+        <div class="chat-compose">
         <input class="text" type="text" name="chat_input"
                id="chat_input" style="display: none">
+        <button type="button" id="chat_send_btn" class="dcss-btn dcss-btn-primary">Send</button>
+        </div>
         <div id="chat_login_text">
           <a id="chat_login_link" href="javascript:">Login</a> to chat
         </div>

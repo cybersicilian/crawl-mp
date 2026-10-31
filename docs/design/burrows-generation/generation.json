@@ -1,0 +1,55 @@
+{
+  "seed": 20261023,
+  "nativeBinarySha256": "258fdda8ea3ce32cff0dc9dbef2579c230a8de555780dd192d1ef0e161046bcd",
+  "levels": [
+    {
+      "id": "bur-1",
+      "title": "Burrows:1",
+      "mode": "native generated floor",
+      "vaults": "layout_caves"
+    },
+    {
+      "id": "bur-2",
+      "title": "Burrows:2",
+      "mode": "native generated floor",
+      "vaults": "layout_caves"
+    },
+    {
+      "id": "bur-3",
+      "title": "Burrows:3",
+      "mode": "native generated floor",
+      "vaults": "layout_caves and bur_old_hoard"
+    },
+    {
+      "id": "bur-4",
+      "title": "Burrows:4",
+      "mode": "native generated floor",
+      "vaults": "bur_rune_old_warren, layout_caves and bur_winding_tunnel"
+    },
+    {
+      "id": "old_warren",
+      "title": "The Old Warren",
+      "mode": "native placed rune vault",
+      "vaults": "bur_rune_old_warren"
+    },
+    {
+      "id": "troll_cairn",
+      "title": "The Troll Cairn",
+      "mode": "native placed rune vault",
+      "vaults": "bur_rune_troll_cairn"
+    },
+    {
+      "id": "worldworm",
+      "title": "The Worldworm's Den",
+      "mode": "native placed rune vault",
+      "vaults": "bur_rune_worldworm"
+    }
+  ],
+  "closeUpBounds": [
+    46,
+    55,
+    70,
+    71
+  ],
+  "preview": "Native geometry/occupants with offline classic atlas composition; no gameplay fog or client shading."
+}

@@ -99,6 +99,15 @@ Necromancer
 Necromancers start out with the Soul Splinter spell. Eventually, they can turn
 the dead into allies and use the life force of the living to restore themselves.
 %%%%
+Blood Liturgist
+
+Blood Liturgists worship Vorr, the Red Wake. They enter the dungeon with a
+chosen vampiric weapon, leather armour, a potion of curing and a scroll of fog. They
+know Kindled Veins and have Winter's Due, Borrowed Thunder, Scarlet Fetters
+and Stolen Sight in their spell library. Their training balances weapon combat,
+survival, Necromancy and Hexes. Anyone may learn these spells, and a Blood
+Liturgist may freely develop another style.
+%%%%
 Reaver
 
 Reavers start with a weapon of their choice and deadly magic to supplement it
@@ -138,4 +147,111 @@ Warper
 
 Warpers start with a weapon of their choice, a scroll of blinking, darts of
 disjunction, and some Translocation spells in their library.
+%%%%
+Healer
+
+Healers are devoted followers of Elyvilon, the Healer, starting with healing
+potions and divine abilities to mend wounds, purify ailments, and protect their
+allies.
+%%%%
+Death Knight
+
+Death Knights serve Yredelemnul the Dark, marching into battle in heavy armour
+to harvest souls and lead an undying host alongside their companions.
+%%%%
+Skald
+
+Skalds are warrior-poets who weave battle-songs and enchantments, empowering
+themselves and their allies with Song of Slaying, Shroud of Golubria, and
+Regeneration.
+%%%%
+Jester
+
+Jesters are manic, capering servants of Xom who enter the dungeon wielding an
+enchanted chaos-branded quarterstaff.
+%%%%
+Paladin
+
+Paladins are holy knights of The Shining One, combining a chosen weapon, ring
+mail and buckler with supportive magic. They begin with Aura of Protection
+learned and a library containing Protection, Zeal, Rime, Vitality and Sanctuary.
+Each caster sustains one aura at a time, with range and strength improved by
+Auramancy. Clear line of sight is required. Different auras combine; copies use
+only the strongest caster's power. Lay on Hands & Intervene heals and briefly
+wards the Paladin and a nearby ally, costs 3 MP, scales with Invocations, and
+requires 30 turns of recovery. This invocation requires continued service to
+The Shining One. Demigods, undead and demonspawn cannot become Paladins.
+%%%%
+Preacher
+
+Preachers enter the dungeon in Zin's service with a chosen weapon, a robe and
+silver javelins. They train stealth and invocations. Demigods, undead and
+demonspawn cannot become Preachers; undead traits are also incompatible.
+%%%%
+Sage
+
+Sages serve Sif Muna and begin with Apportation and the contents of a random
+spellbook in their library. They wear a robe, carry a dagger and rely on their
+knowledge of spellcasting. Demigods cannot become Sages.
+%%%%
+Abyssal Knight
+
+Abyssal Knights serve Lugonu the Unformed, entering the dungeon with a rift-touched
+weapon, leather armour, and dimensional invocations to bend and corrupt space.
+%%%%
+Hermit
+
+Hermits begin as followers of Ru, having already sacrificed a part of
+themselves for power. Their path is a special devotion, not a birthright order.
+%%%%
+Slime Priest
+
+Slime Priests enter the dungeon as followers of Jiyva, already changed by the
+slime god's mutations.
+%%%%
+Archaeologist
+
+Archaeologists carry a whip, curare darts, a dusty tome and a sealed crate.
+At experience level 3 they can decipher the tome and train the named skill;
+after 700 bonus training points, their crate reveals a reserved ancient relic.
+Inspect the tome or crate to see the owner's progress.
+%%%%
+Rogue
+
+Rogues combine stealth and poisoned weapons with magical devices. They begin
+with a +2 dagger, robe, cloak, poisoned darts, and wands of flame and charming.
+%%%%
+Fencer
+
+Fencers begin as nimble duelists with a rapier, fencer's gloves and an amulet
+of the acrobat. The gloves enable ripostes; the amulet rewards movement. If
+their gloves are already reserved by the party, they receive ordinary gloves.
+%%%%
+Ronin
+
+Ronin enter the dungeon without a god. Their first faith grants extra piety,
+or a faster first sacrifice for Ru; Gozag instead halves the first joining fee.
+%%%%
+Apothecary
+
+Apothecaries venture into the dungeon with a selection of homebrewed potions
+and the hat of the Alchemist. If their hat is already reserved by the party,
+they receive an ordinary hat.
+%%%%
+Billionaire
+
+Billionaires enter the dungeon in a bathrobe with one million gold, relying on
+stealth and evasiveness to protect their fortune. A party receives this shared
+fortune once, even if more than one member is a Billionaire.
+%%%%
+Neckbeard
+
+Neckbeards carry a battered blade and can Step Behind a visible enemy for 2 MP.
+The move shares Blink's cooldown and obeys translocation restrictions.
+%%%%
+Philosopher
+
+Philosophers enter the dungeon with the hat of Pondering and little else,
+relying on their intellect to make the most of a difficult start. If their hat
+is already reserved by the party, they receive an ordinary hat.
 %%%%

@@ -90,6 +90,10 @@ bool is_artefact(const item_def &item);
 bool is_random_artefact(const item_def &item);
 bool is_unrandom_artefact(const item_def &item, int which = 0);
 bool is_special_unrandom_artefact(const item_def &item);
+// Runtime power identity, distinct from name/generation/save identity.
+bool has_unrand_effect(const item_def& item, int which);
+int effective_item_enchantment(const item_def& item);
+int native_item_enchantment(const item_def& item);
 
 void artefact_fixup_props(item_def &item);
 
@@ -118,8 +122,13 @@ void artefact_properties(const item_def &item,
                               artefact_properties_t  &proprt);
 void populate_armour_intrinsic_artps(const armour_type arm,
                                      artefact_properties_t &proprt);
+// Concrete item values, including zero enchantment; excludes artefact bonuses.
+void populate_item_intrinsic_artps(const item_def &item,
+                                   artefact_properties_t &props);
 
+int native_artefact_property(const item_def& item, artefact_prop_type prop);
 int artefact_property(const item_def &item, artefact_prop_type prop);
+void effective_artefact_properties(const item_def& item, artefact_properties_t& props);
 
 bool make_item_randart(item_def &item, bool ignore_mundane = false);
 void make_ashenzari_randart(item_def &item);
@@ -166,3 +175,7 @@ void unrand_death_effects(monster* mons, killer_type killer);
 bool item_type_can_be_artefact(object_class_type typ);
 
 bool are_fixed_props_ok(item_def& item);
+// Validate an explicit final property against native placement and conflicts.
+bool artefact_properties_compatible(const item_def& item, const artefact_properties_t& props);
+bool artefact_property_compatible(const item_def& item, artefact_prop_type prop,
+                                  int final_value, bool enforce_generation_rules);

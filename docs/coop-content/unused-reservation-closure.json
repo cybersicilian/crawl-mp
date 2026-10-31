@@ -1,0 +1,9 @@
+{
+  "reservationId": "69539659-97f2-48b3-8ab2-aa12b5fab27c",
+  "owner": "codex/01a15b5a-8a11-7d93-85f8-fc4a093e3a65",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "jobLaunched": false,
+    "reason": "Correcting request hash before dispatch"
+  }
+}

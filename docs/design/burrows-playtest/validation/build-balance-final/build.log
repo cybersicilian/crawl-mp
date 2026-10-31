@@ -1,0 +1,120 @@
+{"runId": "8a0f206d-ade7-45c9-a663-8fcda5bb1e5b", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final Wormlands crowding calibration build", "requestId": "8a5c92510088646e38a867c615440e9eb82aa385bb83ca0ecb5c21ec080bfc79", "status": "reserved", "reservedAt": 1793156211.132753}
+ 
+{"runId": "8a0f206d-ade7-45c9-a663-8fcda5bb1e5b", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final Wormlands crowding calibration build", "requestedAt": 1793156211.1608, "supervisorPid": 92854, "status": "running", "reservation": true, "requestId": "8a5c92510088646e38a867c615440e9eb82aa385bb83ca0ecb5c21ec080bfc79", "startedAt": 1793156211.1611001, "workerPid": 92856, "processGroup": 92856}
+fatal: not a git repository (or any of the parent directories): .git
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    PYTHON rltilesstatus-icon-sizes.h
+    CXX dungeon.o
+    CXX catch2-tests/test_branch_population.o
+In file included from catch2-tests/test_branch_population.cc:1:
+In file included from catch2-tests/catch_amalgamated.hpp:93:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstddef:39:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+In file included from dungeon.cc:6:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+In file included from dungeon.cc:27:
+./coordit.h:12:35: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   12 | class rectangle_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from dungeon.cc:27:
+./coordit.h:38:42: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   38 | class random_rectangle_iterator : public iterator<forward_iterator_tag,
+      |                                          ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from dungeon.cc:27:
+./coordit.h:66:32: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   66 | class radius_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from dungeon.cc:27:
+./coordit.h:113:34: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+  113 | class adjacent_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                  ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from dungeon.cc:27:
+./coordit.h:145:34: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+  145 | class distance_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                  ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+1 warning generated.
+In file included from dungeon.cc:47:
+./items.h:205:31: warning: 'iterator<std::forward_iterator_tag, item_def>' is deprecated [-Wdeprecated-declarations]
+  205 | class stack_iterator : public iterator<forward_iterator_tag, item_def>
+      |                               ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, item_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from dungeon.cc:47:
+./items.h:226:33: warning: 'iterator<std::forward_iterator_tag, item_def>' is deprecated [-Wdeprecated-declarations]
+  226 | class mon_inv_iterator : public iterator<forward_iterator_tag, item_def>
+      |                                 ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, item_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+8 warnings generated.
+    LINK crawl
+    LINK catch2-tests-executable
+ld: warning: ignoring duplicate libraries: 'contrib/install/arm64-apple-darwin27.0.0/lib/libz.a'
+ld: warning: ignoring duplicate libraries: 'contrib/install/arm64-apple-darwin27.0.0/lib/libz.a'
+{"runId": "8a0f206d-ade7-45c9-a663-8fcda5bb1e5b", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS final Wormlands crowding calibration build", "requestedAt": 1793156211.1608, "supervisorPid": 92854, "status": "released", "reservation": true, "requestId": "8a5c92510088646e38a867c615440e9eb82aa385bb83ca0ecb5c21ec080bfc79", "startedAt": 1793156211.1611001, "workerPid": 92856, "processGroup": 92856, "exitCode": 0, "finishedAt": 1793156213.311431, "supervisedProcessGroupGone": true, "releasedAt": 1793156213.340417, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/build-balance-final/closure.json", "releaseEvidenceSha256": "5d7f26fda58f9a65ddcd7ed8934bf96071dcd98b94196acdca0ee11220a39a49"}

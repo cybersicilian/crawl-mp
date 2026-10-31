@@ -39,6 +39,8 @@ statue_form STATUE_FORM
 stone_arrow STONE_ARROW
 
 %sdir gui/spells/enchantment
+elemental_weapon ELEMENTAL_WEAPON
+shackle SHACKLE
 anguish ANGUISH
 berserker_rage BERSERKER_RAGE
 cause_fear CAUSE_FEAR
@@ -59,6 +61,7 @@ tukimas_dance TUKIMAS_DANCE
 violent_unravelling VIOLENT_UNRAVELLING
 
 %sdir gui/spells/fire
+steam_barrier STEAM_BARRIER
 volatile_blastmotes BLASTMOTE
 bolt_of_fire BOLT_OF_FIRE
 bolt_of_magma BOLT_OF_MAGMA
@@ -78,6 +81,7 @@ sticky_flame STICKY_FLAME
 throw_flame THROW_FLAME
 
 %sdir gui/spells/ice
+icicle_burst ICICLE_BURST
 bolt_of_cold BOLT_OF_COLD
 ensorcelled_hibernation ENSORCELLED_HIBERNATION
 freeze FREEZE
@@ -98,6 +102,7 @@ throw_icicle THROW_ICICLE
 polar_vortex POLAR_VORTEX
 
 %sdir gui/spells/necromancy
+blight BLIGHT
 agony AGONY
 animate_dead ANIMATE_DEAD
 bolt_of_draining BOLT_OF_DRAINING
@@ -123,7 +128,12 @@ symbol_of_torment SYMBOL_OF_TORMENT
 vampiric_draining VAMPIRIC_DRAINING
 
 %sdir gui/spells/alchemy
+olgrebs_last_mercy OLGREBS_LAST_MERCY
+eringyas_rootspike ERINGYAS_ROOTSPIKE
+scorpion_form SCORPION_FORM
 alistairs_intoxication ALISTAIRS_INTOXICATION
+evaporate EVAPORATE
+fulsome_distillation FULSOME_DISTILLATION
 fulsome_fusillade FULSOME_FUSILLADE
 mephitic_cloud MEPHITIC_CLOUD
 mercury_vapours MERCURY_VAPOURS
@@ -135,6 +145,7 @@ sting STING
 venom_bolt VENOM_BOLT
 
 %sdir gui/spells/summoning
+false_image FALSE_IMAGE
 call_canine_familiar CALL_CANINE_FAMILIAR
 call_imp CALL_IMP
 malign_gateway MALIGN_GATEWAY

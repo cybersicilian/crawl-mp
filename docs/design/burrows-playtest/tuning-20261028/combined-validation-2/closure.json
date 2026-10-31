@@ -1,0 +1,24 @@
+{
+  "reservationId": "d21ee40f-648e-4d0e-bf8d-80988d763d8b",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "d21ee40f-648e-4d0e-bf8d-80988d763d8b",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS combined registered contracts and exact floor economy compatibility",
+      "requestedAt": 1793201057.945558,
+      "supervisorPid": 37982,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "229022419f5ebbc602e9945bab79b9dfa9ef969038b088e832ea9a36b438910d",
+      "startedAt": 1793201057.9462988,
+      "workerPid": 37983,
+      "processGroup": 37983,
+      "exitCode": 1,
+      "finishedAt": 1793201090.967733,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "229022419f5ebbc602e9945bab79b9dfa9ef969038b088e832ea9a36b438910d"
+  }
+}

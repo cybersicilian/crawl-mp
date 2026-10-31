@@ -371,7 +371,13 @@ enum tag_minor_version
     TAG_MINOR_UNIQUE_ITEM_ID,      // Implement unique item IDs for better-handling transient weapons
     TAG_MINOR_FORM_XP_TRACKING,    // Tracking of how much XP per level was gained in each form
     TAG_MINOR_MONINFO_SPELLS,      // Marshall monster_info::spells
+    TAG_MINOR_AURAMANCY,          // Append Auramancy and rebalance old Djinni magic XP
+    TAG_MINOR_BURROWS,            // Append Burrows IDs; Descent stores its selected land branch.
+    TAG_MINOR_BURROWS_ROUTE,      // Wormlands, Hive and the fixed Depths link.
+    TAG_MINOR_BURROWS_CREATURES,  // Append regional monsters and optional uniques.
+    TAG_MINOR_HONEY_TERRAIN,     // Append shallow honey; existing terrain IDs retain their values.
 #endif
+    TAG_MINOR_PROTECTED_CLOUDS,    // Preserve per-cloud nonhostile protection.
     NUM_TAG_MINORS,
     TAG_MINOR_VERSION = NUM_TAG_MINORS - 1
 };

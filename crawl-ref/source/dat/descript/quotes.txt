@@ -4414,3 +4414,38 @@ zombie
  never, ever be afraid!”
     -Max Brooks, _World War Z: An Oral History of the Zombie War_. 2006.
 %%%%
+Aura of Protection spell
+
+"A shield is a promise made to the person beside you."
+    -Inscription on a road-warden's buckler.
+%%%%
+Aura of Zeal spell
+
+"Do not follow my sword. Meet it on the other side."
+    -Instruction of the lantern-knights.
+%%%%
+Aura of Rime spell
+
+"They counted our footprints going north. They did not count us coming home."
+    -Song of the Winter Rearguard.
+%%%%
+Aura of Vitality spell
+
+"No flame is too small to carry the next."
+    -Saying of the caravan healers.
+%%%%
+Aura of Sanctuary spell
+
+"Then let it fall on me."
+    -The oath of the first sanctuary.
+%%%%
+Aura of Passage spell
+
+"Keep the lantern where the last traveller can see it."
+    -Rule of the Lantern Road.
+%%%%
+Aura of Resonance spell
+
+"Alone, a note. Together, the room begins to sing."
+    -Teaching of the glass choirs.
+%%%%

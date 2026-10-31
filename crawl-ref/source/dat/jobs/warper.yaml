@@ -8,10 +8,12 @@ int: 5
 dex: 4
 spells:
   - SPELL_BLINK
+  - SPELL_AURA_OF_PASSAGE
   - SPELL_BECKONING
   - SPELL_TELEPORT_OTHER
-  - SPELL_PILEDRIVER
-  - SPELL_ELECTRIC_CHARGE
+  - SPELL_AEGIS_LINK
+  - SPELL_PHASE_SHIFT
+  - SPELL_AURA_OF_SANCTUARY
 equipment:
   - "leather armour"
   - "scroll of blinking"

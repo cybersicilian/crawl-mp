@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "url": "https://dcss.iancaltabiano.com",
+  "nativeGameStarted": false,
+  "newAccounts": 0,
+  "checks": [
+    "Authenticated settings menu: 131 controls, seven categories, live base defaults and no raw RC editor",
+    "Number, boolean and multiline-list changes saved with authoritative acknowledgement",
+    "Saved choices persist after reload; reset and undo work without changing the saved configuration",
+    "Search, customized filter, 390px layout and modal keyboard focus verified on delivered production assets",
+    "Existing QA preferences restored; no game was opened or advanced; all four changed UI assets match release hashes"
+  ],
+  "assets": {
+    "webserver/static/styles/rc-settings.css": {
+      "sha256": "481ed4c83e531061d992a2f61f2085b4574f2f4fa9f50185ac9884233c08a327",
+      "status": 200
+    },
+    "webserver/static/scripts/client.js": {
+      "sha256": "06edc705488f60a6b329c4fe63658ee6289fcce6a4c375ce77e1c13759d567dc",
+      "status": 200
+    },
+    "webserver/static/scripts/client-lobby.js": {
+      "sha256": "3913a3e95729e9c2a8913a0ea80d77b84880e8d774815832bd8257f6de3e03aa",
+      "status": 200
+    },
+    "webserver/static/scripts/rc-settings.js": {
+      "sha256": "94c615517923f37c496947e14af02391d0c2f408821e98b441327d1b47fb9032",
+      "status": 200
+    }
+  },
+  "errors": [],
+  "qaPreferencesRestored": true
+}

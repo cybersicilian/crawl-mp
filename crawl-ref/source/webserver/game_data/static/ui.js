@@ -1,5 +1,5 @@
-define(["jquery", "comm", "client", "./options", "./focus-trap"],
-function ($, comm, client, options, focus_trap) {
+define(["jquery", "comm", "client", "./options", "./focus-trap", "./popup-controls", "game-loading"],
+function ($, comm, client, options, focus_trap, controls, loading) {
     "use strict";
 
     // Touch event duration
@@ -41,8 +41,34 @@ function ($, comm, client, options, focus_trap) {
         var focused = document.activeElement != document.body ?
                 document.activeElement : null;
 
+        // Dialogs above the native stack and chat own their keyboard input.
+        if ($(focused).closest("dialog[open], #chat, #input_dialog").length) return;
+        if (focused && !wrapper[0].contains(focused)) return;
+        if ($(focused).is(".rich-text a[href]") && (ev.key === "Enter" || ev.key === " ")) {
+            ev.stopPropagation(); return;
+        }
+        var surface = top_popup();
+        if (surface && controls.keydown(surface[0], ev)) return;
+
+        // Native inventory Tab keeps cycling categories in command focus.
+        // Once a control is focused, Tab follows the accessible control order.
+        if (ev.key === "Tab" && !ev.shiftKey && !focused
+            && wrapper.find(".workflow-inventory").length)
+        {
+            comm.send_message("key", { keycode: 9 });
+            ev.preventDefault(); ev.stopImmediatePropagation(); return;
+        }
+
+        if (ev.key === "Tab" && !focused && wrapper.find(".workflow-action-menu").length) {
+            var actions = Array.from(wrapper[0].querySelectorAll("button:not(:disabled)"));
+            (ev.shiftKey ? actions[actions.length - 1] : actions[0])?.focus();
+            ev.preventDefault(); ev.stopImmediatePropagation(); return;
+        }
+
         // bail if inside a (legacy) input dialog (from line_reader)
         if ($(focused).closest("#input_dialog").length === 1)
+            return;
+        if ($(focused).closest("#workflow_help_dialog").length === 1)
             return;
         // or if outside the ui stack (probably the chat dialog)
         if ($(focused).closest("#ui-stack").length !== 1)
@@ -50,8 +76,11 @@ function ($, comm, client, options, focus_trap) {
 
         if (ev.key == "Escape" && focused)
         {
-            document.activeElement.blur();
+            if (focused.id === "title_prompt") focused.blur();
+            else comm.send_message("key", { keycode: 27 });
+            ev.preventDefault();
             ev.stopPropagation();
+            return;
         }
 
         if (ev.key == "Tab")
@@ -72,12 +101,22 @@ function ($, comm, client, options, focus_trap) {
             ev.preventDefault();
             ev.stopPropagation();
         }
+        if ($(focused).is("input, textarea, select, [contenteditable='true']") && ev.key !== "Enter") {
+            ev.stopPropagation(); return;
+        }
         ui_hotkey_handler(ev);
         maybe_prevent_server_from_handling_key(ev);
     }
 
     function popup_keypress_handler(ev)
     {
+        if ($(ev.target).is(".rich-text a[href]")) {
+            ev.stopPropagation(); return;
+        }
+        // Editing a UI field must never also type into the dungeon/menu.
+        if ($(ev.target).is("input, textarea, select, [contenteditable='true']")) {
+            ev.stopPropagation(); return;
+        }
         maybe_prevent_server_from_handling_key(ev);
     }
 
@@ -150,14 +189,26 @@ function ($, comm, client, options, focus_trap) {
 
         console.assert(elem.length === 1, "no popup to show");
         var wrapper = wrap_popup(elem, ephemeral);
+        wrapper.data("return-focus", document.activeElement);
         wrapper.toggleClass("centred", centred == true);
         wrapper.attr("data-generation-id", generation_id);
         $("#ui-stack").append(wrapper);
-        wrapper.stop(true, true).fadeIn(100, function () {
+        loading.setPopupCount($ui_stack.children().length);
+        controls.attach(elem, $ui_stack.children().length);
+        wrapper.attr({ role: "dialog", "aria-label": elem.find(".menu_title, .header").first().text().trim() || "Dungeon menu" });
+        // A pointer-opened native menu starts in command focus too. Otherwise
+        // the dock's input isolation keeps swallowing its letter shortcuts.
+        var active = document.activeElement;
+        if (active && $(active).closest("#game").length && !wrapper[0].contains(active)) active.blur();
+        wrapper.stop(true, true).fadeIn(popup_duration(), function () {
             if (client.is_watching())
                 return;
             wrapper[0].focus_trap = focus_trap(elem[0], {
                 escapeDeactivates: false, // explicitly handled
+                initialFocus: function () {
+                    return elem[0].contains(document.activeElement) ? document.activeElement : document.body;
+                }, // This bundled trap predates the initialFocus:false option.
+                returnFocusOnDeactivate: false, // Restore after removal, before workflow return.
                 clickOutsideDeactivates: false, // explicitly handled
                 fallbackFocus: document.body,
                 onActivate: function () {
@@ -203,6 +254,7 @@ function ($, comm, client, options, focus_trap) {
             wrapper.find("input, button").attr("disabled", true);
         if (elem.find(".paneset").length > 0)
             ui_resize_handler();
+        $(document).trigger("game_popup_changed", [$ui_stack.children().length]);
     }
 
     function hide_popup(show_below)
@@ -216,7 +268,10 @@ function ($, comm, client, options, focus_trap) {
             elem.detach().addClass("hidden").appendTo("body");
         if (wrapper[0].focus_trap)
             wrapper[0].focus_trap.deactivate();
+        var previousFocus = wrapper.data("return-focus");
         wrapper.remove();
+        loading.setPopupCount($ui_stack.children().length);
+        $(document).trigger("game_popup_changed", [$ui_stack.children().length]);
 
         if (show_below === false)
             return;
@@ -226,10 +281,19 @@ function ($, comm, client, options, focus_trap) {
         if (wrapper.length > 0)
         {
             elem = unwrap_popup(wrapper);
-            wrapper.stop(true, true).fadeIn(100, function () {
-                elem.focus();
+            wrapper.stop(true, true).fadeIn(popup_duration(), function () {
+                // A resumed focus trap may choose Close. Prefer the connected
+                // initiator; native action adapters restore replaced controls.
+                if (wrapper[0] !== $ui_stack.children().last()[0]) return;
+                if (previousFocus && previousFocus.isConnected && wrapper[0].contains(previousFocus))
+                    previousFocus.focus({ preventScroll: true });
             }).css("display","");
         }
+        else if (previousFocus && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+    }
+
+    function popup_duration() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 100;
     }
 
     function top_popup()
@@ -304,16 +368,20 @@ function ($, comm, client, options, focus_trap) {
     }
 
     function ui_hotkey_handler(ev) {
+        if (client.is_watching()) return;
         if (ev.type === "click") {
             var key_value = $(ev.currentTarget).attr("data-hotkey");
             var keycode = utf8_from_key_value(key_value);
             if (keycode)
                 comm.send_message("key", { keycode: keycode });
         } else if (ev.type == "keydown") {
+            if (ev.isComposing || ev.ctrlKey || ev.altKey || ev.metaKey) return;
             var $top = top_popup();
             if ($top === undefined)
                 return;
-            var $elem = $top.find("[data-hotkey=\""+ev.key+"\"]");
+            var $elem = $top.find("[data-hotkey]").filter(function () {
+                return this.getAttribute("data-hotkey") === ev.key;
+            });
             if ($elem.length === 1) {
                 $elem.click();
                 ev.preventDefault();
@@ -465,6 +533,9 @@ function ($, comm, client, options, focus_trap) {
 
     function sync_focus_state(elem)
     {
+        // A late native focus reset must not steal focus from a local folio,
+        // persistent help, or the chat composer after the native popup closes.
+        if (document.querySelector("dialog[open]")) return;
         if (client.is_watching())
             top_popup().find(".style-focused").removeClass("style-focused");
         if (elem)
@@ -473,7 +544,7 @@ function ($, comm, client, options, focus_trap) {
             if (client.is_watching())
                 $(elem).addClass("style-focused");
         }
-        else
+        else if ($(document.activeElement).closest("#ui-stack").length)
             document.activeElement.blur();
     }
 

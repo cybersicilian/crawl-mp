@@ -1,0 +1,26 @@
+Route_ranged
+
+Level 1 of the Dungeon
+
+Level 1 of the Snake Pit
+(0, 0, Snake:1)
+  a +0 scimitar
+  a naga skeleton
+  a black mamba skeleton
+(2, 1, Snake:1)
+  a +0 halberd
+  a naga skeleton
+(6, 8, Snake:1)
+  a +0 spear
+(13, 0, Snake:1)
+  a +0 double sword
+  a +0 chain mail
+  a +0 kite shield
+  the human skeleton of Donald
+(14, 25, Snake:1)
+  a black mamba corpse
+(17, 4, Snake:1)
+  a +0 spear
+(20, 15, Snake:1)
+  a +0 scale mail
+

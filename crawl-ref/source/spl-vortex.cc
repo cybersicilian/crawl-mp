@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "spl-damage.h"
 
@@ -219,7 +220,8 @@ static int _vortex_age(const actor *caster)
 {
     const string name = POLAR_VORTEX_KEY;
     if (caster->props.exists(name.c_str()))
-        return you.elapsed_time - caster->props[name.c_str()].get_int();
+        return (caster->is_player() ? caster->as_player()->elapsed_time : level_elapsed_time(*caster->as_monster()))
+               - caster->props[name.c_str()].get_int();
     return 100; // for permanent vortices
 }
 

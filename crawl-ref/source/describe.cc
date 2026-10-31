@@ -4,6 +4,13 @@
 **/
 
 #include "AppHdr.h"
+#include "archaeologist.h"
+#include "elemental-weapon.h"
+#include "god-vellum.h"
+#include "god-pakellas.h"
+#include "bloodcraft.h"
+#include "automaton.h"
+#include "god-vorr.h"
 
 #include "describe.h"
 
@@ -40,6 +47,7 @@
 #include "tile-env.h"
 #include "evoke.h"
 #include "fight.h"
+#include "game-record.h"
 #include "ghost.h"
 #include "god-abil.h"
 #include "god-item.h"
@@ -66,6 +74,7 @@
 #include "potion.h"
 #include "prompt.h"
 #include "player.h"
+#include "party.h"
 #include "ranged-attack.h" // describe_to_hit
 #include "religion.h"
 #include "rltiles/tiledef-feat.h"
@@ -75,8 +84,10 @@
 #include "spl-cast.h"
 #include "spl-damage.h"
 #include "spl-book.h"
+#include "spl-clouds.h"
 #include "spl-goditem.h"
 #include "spl-miscast.h"
+#include "spl-other.h"
 #include "spl-summoning.h"
 #include "spl-util.h"
 #include "spl-zap.h"
@@ -1156,7 +1167,7 @@ static string _describe_mutant_beast(const monster_info &mi)
  *
  * @return the goal, or 0 if there is none, scaled by 10.
  */
-static int _item_training_target(const item_def &item)
+int item_training_target(const item_def &item)
 {
     const int throw_dam = property(item, PWPN_DAMAGE);
     if (item.base_type == OBJ_WEAPONS || item.base_type == OBJ_STAVES)
@@ -1186,7 +1197,7 @@ static int _item_training_target(const item_def &item)
  *
  * @return the skill, or SK_NONE if there is none. Note: SK_NONE is *not* 0.
  */
-static skill_type _item_training_skill(const item_def &item)
+skill_type item_training_skill(const item_def &item)
 {
     if (item.base_type == OBJ_WEAPONS || item.base_type == OBJ_STAVES)
         return item_attack_skill(item);
@@ -1216,11 +1227,11 @@ static bool _is_below_training_target(const item_def &item, bool ignore_current)
     if (!crawl_state.need_save || is_useless_item(item))
         return false;
 
-    const skill_type skill = _item_training_skill(item);
+    const skill_type skill = item_training_skill(item);
     if (skill == SK_NONE)
         return false;
 
-    const int target = min(_item_training_target(item), 270);
+    const int target = min(item_training_target(item), 270);
 
     return target && !is_useless_skill(skill)
        && you.skill(skill, 10, false, false) < target
@@ -1396,7 +1407,7 @@ string damage_rating(const item_def *item, int *rating_value)
     const int extra_base_dam = thrown ? throwing_base_damage_bonus(*item, false) :
                                !item ? unarmed_base_damage_bonus(false) :
                                     heavy_dam; // 0 for non-heavy weapons
-    const skill_type skill = item ? _item_training_skill(*item) : SK_UNARMED_COMBAT;
+    const skill_type skill = item ? item_training_skill(*item) : SK_UNARMED_COMBAT;
     const int stat_mult = stat_modify_damage(100, skill);
     const bool use_str = weapon_uses_strength(skill);
     // Throwing weapons and UC only get a damage mult from Fighting skill,
@@ -1406,7 +1417,7 @@ string damage_rating(const item_def *item, int *rating_value)
     const int skill_mult = apply_fighting_skill(weapon_skill_mult, false, false);
 
     const int slaying = you.slaying(thrown, false);
-    const int ench = item && item->is_identified() ? item->plus : 0;
+    const int ench = item && item->is_identified() ? effective_item_enchantment(*item) : 0;
     const int plusses = slaying + ench;
 
     const int DAM_RATE_SCALE = 100;
@@ -1533,8 +1544,8 @@ static bool _is_original_inventory_item(const item_def &item)
 static void _append_skill_needed(string &description, const item_def &item,
                                  bool indent = true, string skill_padding = "")
 {
-    const skill_type skill = _item_training_skill(item);
-    const int target_skill = _item_training_target(item);
+    const skill_type skill = item_training_skill(item);
+    const int target_skill = item_training_target(item);
     const bool below_target = _is_below_training_target(item, true);
     const bool can_set_target = below_target && _is_original_inventory_item(item)
                                 && !you.has_mutation(MUT_DISTRIBUTED_TRAINING);
@@ -1652,7 +1663,7 @@ static string _player_staff_damage_string(const item_def &item)
 static void _append_weapon_stats(string &description, const item_def &item)
 {
     const int base_dam = property(item, PWPN_DAMAGE);
-    const int mindelay_skill = _item_training_target(item);
+    const int mindelay_skill = item_training_target(item);
 
     if (is_unrandom_artefact(item, UNRAND_WOE))
     {
@@ -2335,7 +2346,7 @@ static string _describe_ammo(const item_def &item)
     if (player_throwable)
     {
         const int throw_delay = (10 + dam / 2);
-        const int target_skill = _item_training_target(item);
+        const int target_skill = item_training_target(item);
 
         description += make_stringf(
             "\n\nBase damage: %d  Base attack delay: %.1f"
@@ -2910,6 +2921,15 @@ string get_item_description(const item_def &item,
                             item_description_mode mode)
 {
     ostringstream description;
+    const string elemental = elemental_weapon::description(you, item);
+    if (!elemental.empty())
+        description << elemental << "\n\n";
+    const string quest = archaeologist::item_description(item);
+    if (!quest.empty())
+        description << quest << "\n\n";
+    const string workshop = pakellas::description(item);
+    if (!workshop.empty())
+        description << workshop << "\n\n";
     const bool verbose = mode == IDM_DEFAULT || mode == IDM_MONSTER;
 
 #ifdef DEBUG_DIAGNOSTICS
@@ -3168,6 +3188,13 @@ string get_item_description(const item_def &item,
                     description << "\n\nIf you drink this now, you will no longer be " <<
                         describe_player_cancellation() << ".";
                 }
+
+                if (you.has_spell(SPELL_EVAPORATE) || you.spell_library[SPELL_EVAPORATE])
+                {
+                    description << "\n\nEvaporating this potion will create clouds of "
+                                << get_evaporate_result_list(item.sub_type)
+                                << ".";
+                }
             }
             description << "\n\n" << describe_item_rarity(item);
             need_extra_line = false;
@@ -3291,6 +3318,9 @@ string get_item_description(const item_def &item,
         }
     }
 
+    if (item.is_identified())
+        description << vellum::item_description(you, item);
+
     if (verbose && origin_describable(item))
         description << "\n" << origin_desc(item) << ".";
 
@@ -3387,9 +3417,19 @@ static vector<extra_feature_desc> _get_feature_extra_descs(const coord_def &pos)
     }
     if (const auto cloud = env.map_knowledge(pos).cloudinfo())
     {
+        string cloud_desc = get_cloud_desc(cloud->type, false);
+        const cloud_struct* actual = you.see_cell(pos) ? cloud_at(pos) : nullptr;
+        if (actual && actual->type == cloud->type && actual->protects_nonhostiles())
+        {
+            if (actual->type == CLOUD_BLASTMOTES)
+                cloud_desc += "\nThese blastmotes disperse harmlessly if a protected "
+                              "creature would be caught in their blast.";
+            else
+                cloud_desc += "\nThese fumes disperse beneath friendly and neutral creatures.";
+        }
         ret.push_back({
             "A cloud of " + cloud_type_name(cloud->type) + ".",
-            get_cloud_desc(cloud->type, false),
+            cloud_desc,
             tile_def(tileidx_cloud(*cloud)),
         });
     }
@@ -3498,6 +3538,15 @@ void get_feature_desc(const coord_def &pos, describe_info &inf, bool include_ext
     string db_name   = feat == DNGN_ENTER_SHOP ? "a shop" : desc;
     strip_suffix(db_name, " (summoned)");
     string long_desc = getLongDescription(db_name);
+    if (feat == DNGN_BINDING_SIGIL && you.see_cell(pos)
+        && env.grid(pos) == feat && automatic_binding_sigil_at(pos))
+    {
+        long_desc += "\nFriendly, neutral and protected creatures pass safely; "
+                     "susceptible hostile creatures trigger this sigil.";
+    }
+    const string ritual_blood = vorr::blood_description(pos);
+    if (!ritual_blood.empty())
+        long_desc += "\n" + ritual_blood;
 
     inf.title = uppercase_first(desc);
     if (!ends_with(desc, ".") && !ends_with(desc, "!")
@@ -3653,8 +3702,11 @@ void get_feature_desc(const coord_def &pos, describe_info &inf, bool include_ext
         map_active_feature_marker* mark = env.markers.get_active_feature_at(pos, DNGN_SPIKE_LAUNCHER);
         if (mark)
         {
-            dice_def dmg = zap_damage(ZAP_SPIKE_LAUNCHER, mark->power, mark->owner != MID_PLAYER, false);
+            const bool monster_owned = mark->owner != MID_PLAYER && !party::is_party_mid(mark->owner);
+            dice_def dmg = zap_damage(ZAP_SPIKE_LAUNCHER, mark->spike_power(), monster_owned, false);
             long_desc += make_stringf("\nIt does %dd%d damage.", dmg.num, dmg.size);
+            if (mark->automatic_spike())
+                long_desc += "\nIt avoids neutral and friendly creatures.";
         }
     }
     else if (feat_is_dragon_vein(feat))
@@ -3982,6 +4034,8 @@ static vector<command_type> _allowed_actions(const item_def& item)
     case OBJ_POTIONS:
         if (cannot_drink_item_reason(&item, true).empty())
             actions.push_back(CMD_QUAFF);
+        if (in_inventory(item) && can_throw_potion())
+            actions.push_back(CMD_FIRE);
         break;
     default:
         break;
@@ -4064,6 +4118,7 @@ static string _actions_desc(const vector<command_type>& actions)
         { CMD_WEAR_JEWELLERY, "(p)ut on" },
         { CMD_REMOVE_JEWELLERY, "(r)emove" },
         { CMD_QUAFF, "(q)uaff" },
+        { CMD_FIRE, "(t)hrow" },
         { CMD_PICKUP, "(g)et" },
         { CMD_DROP, "(d)rop" },
         { CMD_INSCRIBE_ITEM, "(i)nscribe" },
@@ -4101,6 +4156,7 @@ static command_type _get_action(int key, vector<command_type> actions)
         { CMD_WEAR_JEWELLERY,   'p' },
         { CMD_REMOVE_JEWELLERY, 'r' },
         { CMD_QUAFF,            'q' },
+        { CMD_FIRE,             't' },
         { CMD_DROP,             'd' },
         { CMD_INSCRIBE_ITEM,    'i' },
         { CMD_PICKUP,           'g' },
@@ -4212,6 +4268,10 @@ static bool _do_action(item_def &item, const command_type action)
         quiver::set_to_quiver(quiver::slot_to_action(slot), you.quiver_action); // ugh
         break;
 
+    case CMD_FIRE:
+        throw_potion(you.inv[slot]);
+        break;
+
     case CMD_DROP:
         // TODO: it would be better if the inscription was checked before the
         // popup closes, but that is hard
@@ -4234,11 +4294,11 @@ static bool _do_action(item_def &item, const command_type action)
 
 void target_item(item_def &item)
 {
-    const skill_type skill = _item_training_skill(item);
+    const skill_type skill = item_training_skill(item);
     if (skill == SK_NONE)
         return;
 
-    const int target = min(270, _item_training_target(item));
+    const int target = min(270, item_training_target(item));
     if (target == 0)
         return;
 
@@ -4418,14 +4478,47 @@ command_type describe_item_popup(const item_def &item,
     });
 
 #ifdef USE_TILE_WEB
+    // Publish known discoveries before exposing a link, without requiring a save.
+    const string record_id = game_record::known_item_id(item);
+    if (!record_id.empty())
+        game_record::publish();
     tiles.json_open_object();
     tiles.json_write_string("title", name);
+    if (!record_id.empty())
+        tiles.json_write_string("record_id", record_id);
     desc_without_spells += "SPELLSET_PLACEHOLDER";
     trim_string(desc_without_spells);
     tiles.json_write_string("body", desc_without_spells);
     write_spellset(spells, &item, nullptr);
 
     tiles.json_write_string("actions", footer_text.tostring());
+    tiles.json_open_array("action_buttons");
+    for (command_type cmd : actions)
+    {
+        int hotkey = 0;
+        for (int key = 'a'; key <= 'z'; ++key)
+            if (_get_action(key, actions) == cmd)
+            {
+                hotkey = key;
+                break;
+            }
+        for (int key = 32; !hotkey && key < 127; ++key)
+            if (_get_action(key, actions) == cmd)
+                hotkey = key;
+        if (!hotkey)
+            continue;
+        string label = _actions_desc({cmd});
+        erase_if(label, [](char ch) { return ch == '(' || ch == ')' || ch == '.'; });
+        if (cmd == CMD_ADJUST_INVENTORY)
+            label = "Adjust letter";
+        else if (cmd == CMD_SET_SKILL_TARGET)
+            label = "Set skill target";
+        tiles.json_open_object();
+        tiles.json_write_string("label", uppercase_first(label));
+        tiles.json_write_string("key", string(1, hotkey));
+        tiles.json_close_object();
+    }
+    tiles.json_close_array();
     tiles.json_open_array("tiles");
     for (const auto &tile : item_tiles)
     {
@@ -4461,6 +4554,7 @@ command_type describe_item_popup(const item_def &item,
  */
 bool describe_item(item_def &item, function<void (string&)> fixup_desc, bool do_actions)
 {
+    game_record::observe_item(item);
     command_type action = describe_item_popup(item, fixup_desc, do_actions);
     return _do_action(item, action);
 }
@@ -4521,6 +4615,12 @@ static string _player_spell_stats(const spell_type spell)
         description += "\n";
         return description; // all other info is player-dependent
     }
+
+    const int additional_hp = spell_additional_hp(spell, spell_mana(spell));
+    if (additional_hp)
+        description += make_stringf("\nCasting cost: %d %s + %d HP",
+            spell_mana(spell), you.has_mutation(MUT_HP_CASTING) ? "HP" : "MP",
+            additional_hp);
 
 
     string failure;
@@ -4754,6 +4854,7 @@ static string _miscast_damage_string(spell_type spell)
         { spschool::hexes, "slows you" },
         { spschool::alchemy, "poisons you" },
         { spschool::forgecraft, "corrodes you" },
+        { spschool::auramancy, "weakens you" },
     };
 
     spschools_type disciplines = get_spell_disciplines(spell);
@@ -4920,7 +5021,10 @@ static string _player_spell_desc(spell_type spell)
  */
 string player_spell_desc(spell_type spell)
 {
-    return _player_spell_stats(spell) + _player_spell_desc(spell);
+    return _player_spell_stats(spell) + _player_spell_desc(spell)
+        + (bloodcraft::is_rite(spell) || bloodcraft::is_curse(spell)
+            ? "\n" + bloodcraft::cost_description(spell)
+                + "\n" + bloodcraft::effect_description(spell) + "\n" : "");
 }
 
 /**
@@ -5050,7 +5154,11 @@ static void _get_spell_description(const spell_type spell,
 
     }
     else
+    {
         description += player_spell_desc(spell);
+        if (you.species == SP_AUTOMATON)
+            description += "\n" + automaton::engraving_guidance(spell) + "\n";
+    }
 
     const string quote = getQuoteString(string(spell_title(spell)) + " spell");
     if (!quote.empty())
@@ -5782,7 +5890,7 @@ static void _attacks_table_row(const monster_info &mi, mon_attack_desc_info &di,
         dam += brand_adjust_weapon_damage(base_dam, get_weapon_brand(*wpn), false) - 1;
         if (ranged && mons_class_flag(mi.type, M_ARCHER))
             dam += archer_bonus_damage(mi.hd);
-        slaying += wpn->plus;
+        slaying += effective_item_enchantment(*wpn);
     }
     dam += max(slaying, 0);
 
@@ -6269,7 +6377,7 @@ static void _describe_mons_to_hit(const monster_info& mi, ostringstream &result)
     const bool melee = weapon == nullptr || !is_range_weapon(*weapon);
     const bool skilled = mons_class_flag(mi.type, melee ? M_FIGHTER : M_ARCHER);
     const int base_to_hit = mon_to_hit_base(mi.hd, skilled);
-    const int weapon_to_hit = weapon ? weapon->plus + property(*weapon, PWPN_HIT) : 0;
+    const int weapon_to_hit = weapon ? effective_item_enchantment(*weapon) + property(*weapon, PWPN_HIT) : 0;
     const int total_base_hit = base_to_hit + weapon_to_hit;
 
     int post_roll_modifiers = 0;
@@ -7125,7 +7233,13 @@ void get_monster_db_desc(const monster_info& mi, describe_info &inf,
         break;
 
     case MONS_PLAYER_ILLUSION:
-        inf.body << "An illusion of " << get_ghost_description(mi) << ".\n";
+        if (mi.props.exists("party_player_slot"))
+        {
+            inf.body << uppercase_first(get_ghost_description(mi))
+                     << ".\nA member of your party.\n";
+        }
+        else
+            inf.body << "An illusion of " << get_ghost_description(mi) << ".\n";
         break;
 
     case MONS_PANDEMONIUM_LORD:
@@ -7727,6 +7841,9 @@ void describe_skill(skill_type skill)
     describe_info inf;
     inf.title = skill_name(skill);
     inf.body << get_skill_description(skill, false);
+    const string training_reason = high_elf_skill_lock_reason(you, skill);
+    if (!training_reason.empty())
+        inf.body << "\n\n" << training_reason;
     tile_def tile = tile_def(tileidx_skill(skill, TRAINING_ENABLED));
     show_description(inf, &tile);
 }

@@ -1,0 +1,192 @@
+[
+  {
+    "id": "burrowing_beast",
+    "prompt": "Use case: stylized-concept.\nAsset type: one Dungeon Crawl Stone Soup native monster tile.\nPrimary request: a burrowing beast, a squat powerful pale-furred cave mammal with wedge-shaped head, tiny dark eyes, broad digging foreclaws, heavy jaw. Quadruped, facing left in three-quarter overhead view. Clearly a mammal, not an insect.\nStyle: authentic tiny traditional roguelike pixel art, designed on an EXACT 32 by 32 pixel logical grid, enlarged with nearest-neighbor blocks if necessary. Very chunky deliberate pixels, approximately 16 colors, one-pixel dark brown outline, upper-left highlight. Readable compact silhouette occupying 28 by 27 logical pixels centered in the square.\nPalette: ivory fur, dusty taupe shading, brown claws, dark nose.\nBackground: genuinely transparent outside the creature. Tiny grounding shadow only.\nConstraints: ONE complete sprite, no scenery, no floor, no text, no grid, no border, no UI, no antialiasing, no soft painting, no extra characters, no equipment, no aura. Keep simple and consistent with DCSS 32-pixel animal tiles.",
+    "source": "sources/burrowing_beast.png",
+    "sourceSha256": "28788496218e9de52a95aef726a35a2ae3655735b278c918b1b848e494abd262",
+    "tool": "built-in image_gen",
+    "tile": "mon/burrows/burrowing_beast.png",
+    "tileSha256": "d964a06ce0d00c3e632a325ba64f686636ccb6010a8cc539ac3d76be447d4276"
+  },
+  {
+    "id": "crag_boar",
+    "prompt": "Use case: stylized-concept. Asset type: ONE native Dungeon Crawl Stone Soup 32x32 monster sprite. True very low-resolution pixel art: precisely 32 by 32 logical pixels, enlarged only by nearest neighbor. Chunky pixel clusters, limited 16-color palette, single dark outline, upper-left light. Three-quarter slightly overhead view. Full creature centered, about 28 pixels across, with a transparent margin on all four sides. Genuinely transparent background. No text, no grid, no scenery, no floor, no UI, no smooth illustration, no aura. Keep the design plain and readable at 32 pixels. A heavy stocky crag boar facing left, thick dark brown hide, mineral-stained gray bristles along arched back, short powerful legs, two pale forward tusks. Natural animal, no armor, no crystal growths, no accessories.",
+    "source": "sources/crag_boar.png",
+    "sourceSha256": "c047e0b54484e1a0dba6a3b902a7a37588b26a3f9b4a4c337cebfe935fb71529",
+    "tool": "built-in image_gen",
+    "tile": "mon/burrows/crag_boar.png",
+    "tileSha256": "4ec81af1b374fe86ea8d00da3ae148daa8a135d12204b866996e15a6e1b12120"
+  },
+  {
+    "id": "shale_drake",
+    "prompt": "Use case: stylized-concept. Asset type: ONE native Dungeon Crawl Stone Soup 32x32 monster sprite. True very low-resolution pixel art: precisely 32 by 32 logical pixels, enlarged only by nearest neighbor. Chunky pixel clusters, limited 16-color palette, single dark outline, upper-left light. Three-quarter slightly overhead view. Full creature centered, about 28 pixels across, with a transparent margin on all four sides. Genuinely transparent background. No text, no grid, no scenery, no floor, no UI, no smooth illustration, no aura. Keep the design plain and readable at 32 pixels. A squat flightless shale drake facing left. Four short legs, broad reptile head with heavy jaws, compact curled tail, gray layered rocky scales, dusty olive belly. No wings, no fire, no glowing eyes, no floating rocks. Low broad animal silhouette, a simple cave drake.",
+    "source": "sources/shale_drake.png",
+    "sourceSha256": "2fb29c61a4f21ce0de6ee65957aecaaf636e8dbc5dc01a98f7ec1ff90cc423dc",
+    "tool": "built-in image_gen",
+    "tile": "mon/burrows/shale_drake.png",
+    "tileSha256": "cc375165b410ca4abbf6d3f7111db974cf1dd98898837c28d0105caeb9b60692"
+  },
+  {
+    "id": "deep_troll_delver",
+    "prompt": "Use case: stylized-concept. Asset type: ONE native Dungeon Crawl Stone Soup 32x32 monster sprite. True very low-resolution pixel art: precisely 32 by 32 logical pixels, enlarged only by nearest neighbor. Chunky pixel clusters, limited 16-color palette, single dark outline, upper-left light. Three-quarter slightly overhead view. Full creature centered, about 28 pixels across, with a transparent margin on all four sides. Genuinely transparent background. No text, no grid, no scenery, no floor, no UI, no smooth illustration, no aura. Keep the design plain and readable at 32 pixels. A deep troll delver, long-armed muscular cave troll standing hunched, blue-gray skin, large hands with claws, broad nose, small yellow eyes. Simple ochre loincloth. Front view slightly turned left. One small rough stone held in a hand suggests earth magic, no staff, no robe, no aura or particles. Rustic and plainly equipped.",
+    "source": "sources/deep_troll_delver.png",
+    "sourceSha256": "d4cbc010d0700c79b548b777afab9f3dc12e10190e59152c0828d26e83bcd063",
+    "tool": "built-in image_gen",
+    "tile": "mon/burrows/deep_troll_delver.png",
+    "tileSha256": "58c535c670dfce024228994b6761f637946b7a5f34bad2ac6249e7440f89d7f7"
+  },
+  {
+    "id": "worldworm",
+    "prompt": "Use case: stylized-concept. Asset type: ONE native Dungeon Crawl Stone Soup 32x32 monster sprite. True very low-resolution pixel art: precisely 32 by 32 logical pixels, enlarged only by nearest neighbor. Chunky pixel clusters, limited 16-color palette, single dark outline, upper-left light. Three-quarter slightly overhead view. Full creature centered, about 28 pixels across, with a transparent margin on all four sides. Genuinely transparent background. No text, no grid, no scenery, no floor, no UI, no smooth illustration, no aura. Keep the design plain and readable at 32 pixels. Worldworm, an enormous pale ivory cave worm tightly curled into a heavy upright S shape, thick muscular segmented body, scarred dusty hide, a blunt dark biting mouth facing left. A single huge natural tunneling worm, with no humanoid anatomy, no legs, no crown, no armor, no aura. Taupe shadows and dark brown mouth. Silhouette much thicker than an ordinary ribbon worm.",
+    "source": "sources/worldworm.png",
+    "sourceSha256": "40afbf6fd217cd8558e99dc76b1c962c4fbe25b866665fcfbe131252e0dcbea5",
+    "tool": "built-in image_gen",
+    "tile": "mon/burrows/worldworm.png",
+    "tileSha256": "83889201e898c2c63ce1934f4253c6a3ee360332c8c31ab1f380c6d9b81c60fc"
+  },
+  {
+    "id": "enter_burrows",
+    "prompt": "Use case: stylized-concept. Asset type: ONE Dungeon Crawl Stone Soup native 32x32 pixel tile. Deliberate very chunky low-resolution pixel art on a 32 by 32 logical pixel grid, approximately 12 colors, dark outline and upper-left highlights. Design must be readable at 32 pixels, no fine detail. Single centered object fully inside canvas with transparent margins. Genuinely transparent background. No labels, letters, watermark, scenery, UI, frame, antialiasing, glow, or smooth painting. Branch entrance tile: a low rounded cave mouth enclosed in warm ochre rocks and dry brown roots. Black tunnel opening with three visibly descending dark steps. Three-quarter overhead view like Crawl branch stair tiles. Compact silhouette. No plants, webs, animals, doors, torch or floating symbols.",
+    "source": "sources/enter_burrows.png",
+    "sourceSha256": "93f0f7e5c4942132a83c2b9d0e1883084edace7b2e2562b002df707351189150",
+    "tool": "built-in image_gen",
+    "tile": "dngn/gateways/enter_burrows.png",
+    "tileSha256": "1a5a5bb64bd9282f8da3c7d923e388d454c2a884a49a62618485fc6b07260866"
+  },
+  {
+    "id": "exit_burrows",
+    "prompt": "Use case: stylized-concept. Asset type: ONE Dungeon Crawl Stone Soup native 32x32 pixel tile. Deliberate very chunky low-resolution pixel art on a 32 by 32 logical pixel grid, approximately 12 colors, dark outline and upper-left highlights. Design must be readable at 32 pixels, no fine detail. Single centered object fully inside canvas with transparent margins. Genuinely transparent background. No labels, letters, watermark, scenery, UI, frame, antialiasing, glow, or smooth painting. Branch exit tile: a low rounded cave arch enclosed in warm ochre rocks and dry brown roots. Three visibly ascending pale stone steps lead up through the arch into light. Three-quarter overhead view like Crawl branch stair tiles. Compact silhouette. No plants, webs, animals, doors, torch or floating symbols.",
+    "source": "sources/exit_burrows.png",
+    "sourceSha256": "a37342a1f29518c880e45254150afbb12c97464431ebcae11093cbd225436830",
+    "tool": "built-in image_gen",
+    "tile": "dngn/gateways/exit_burrows.png",
+    "tileSha256": "531763324ce62f1da1d76675139155af3c711b7dd6532a303e6232aaf78903be"
+  },
+  {
+    "id": "rune_burrows",
+    "prompt": "Use case: stylized-concept. Asset type: ONE Dungeon Crawl Stone Soup native 32x32 pixel tile. Deliberate very chunky low-resolution pixel art on a 32 by 32 logical pixel grid, approximately 12 colors, dark outline and upper-left highlights. Design must be readable at 32 pixels, no fine detail. Single centered object fully inside canvas with transparent margins. Genuinely transparent background. No labels, letters, watermark, scenery, UI, frame, antialiasing, glow, or smooth painting. The clay rune of Zot: one small irregular baked ochre clay tablet with chipped corners, a single deeply incised angular branching rune sigil (abstract shape, not writing). Tablet viewed from slightly above, warm burnt-sienna body, golden upper-left edge and dark grooves. Familiar small collectible Crawl rune tile, object about 20 by 24 logical pixels, modest and earthy.",
+    "source": "sources/rune_burrows.png",
+    "sourceSha256": "ab7769254525c02d3711e23c5685c3b9678115743b970fe06120bb4cc12d380d",
+    "tool": "built-in image_gen",
+    "tile": "item/misc/runes/rune_burrows.png",
+    "tileSha256": "a55d5ea80397175c839fd1977f4c33bc0c8eba3c2ae96826854600033deffe91"
+  },
+  {
+    "id": "uncollected_rune_burrows",
+    "prompt": "Edit this clay rune sprite into its uncollected inventory state. Preserve the tablet's exact silhouette, shape, proportions, chipped edges, pixel geometry, and the SAME angular branching incised sigil. Change ONLY its palette to very dark desaturated charcoal blue-gray; maximum brightness about RGB 55,60,65, no bright highlights. Keep the transparent background and no other changes. A subdued native Dungeon Crawl Stone Soup uncollected rune icon.",
+    "source": "sources/uncollected_rune_burrows.png",
+    "sourceSha256": "d076174150855213c0ce9ff5eee88c9b200ef209e57ba574cd4a7dcb764f4be9",
+    "tool": "built-in image_gen",
+    "tile": "item/misc/uncollected_runes/rune_burrows.png",
+    "tileSha256": "d7fa60320e0afe9f8e8700d85b98a68fa5017d72e97aaeebbd8d66bcc78ff746",
+    "reference": "sources/rune_burrows.png"
+  },
+  {
+    "id": "burrows_found_whole",
+    "prompt": "Use case: stylized-concept. Asset type: ONE Dungeon Crawl Stone Soup native 32x32 pixel tile. Deliberate very chunky low-resolution pixel art on a 32 by 32 logical pixel grid, approximately 12 colors, dark outline and upper-left highlights. Design must be readable at 32 pixels, no fine detail. Single centered object fully inside canvas with transparent margins. Genuinely transparent background. No labels, letters, watermark, scenery, UI, frame, antialiasing, glow, or smooth painting. One ochre gemstone, warm golden-brown faceted irregular oval jewel viewed from overhead, about 18 by 23 logical pixels, thick dark brown outline, small ivory upper-left highlight, large simple amber facets. A plain native Crawl collectible gem icon. No setting or jewelry.",
+    "source": "sources/burrows_found_whole.png",
+    "sourceSha256": "7c6eca2de19cf10093403196f48e0a19873078150dc22f3e9ea5c1b32f652e02",
+    "tool": "built-in image_gen",
+    "tile": "item/gem/burrows_found_whole.png",
+    "tileSha256": "49966c62b9e8f992c7979c7358181ab57e1245b712ff300d209375d532a62cbc"
+  },
+  {
+    "id": "burrows_found_broken",
+    "prompt": "Use case: stylized-concept. Asset type: ONE Dungeon Crawl Stone Soup native 32x32 pixel tile. Deliberate very chunky low-resolution pixel art on a 32 by 32 logical pixel grid, approximately 12 colors, dark outline and upper-left highlights. Design must be readable at 32 pixels, no fine detail. Single centered object fully inside canvas with transparent margins. Genuinely transparent background. No labels, letters, watermark, scenery, UI, frame, antialiasing, glow, or smooth painting. A broken ochre gemstone: three separated angular golden-brown jewel shards in a compact arrangement occupying about 20 by 23 logical pixels. Thick dark brown outlines, small pale upper-left highlights, large simple amber facets. A plain native Crawl broken collectible gem icon. No setting or jewelry.",
+    "source": "sources/burrows_found_broken.png",
+    "sourceSha256": "c5ef19cb2567151ec505be6e1c61be6bb21fbd2d4b45e0155b57718c70b530e1",
+    "tool": "built-in image_gen",
+    "tile": "item/gem/burrows_found_broken.png",
+    "tileSha256": "cdfdbac39ef3e993a48c3b84591061042e4c7dfd5a205d179f4eeb12c4a1eb7f"
+  },
+  {
+    "id": "floor_burrows0",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Top-down dry packed cave floor, muted dark umber clay, sparse small flat pebbles, low contrast, almost level and unobtrusive beneath monsters and items. Palette centered on hex #403024, brightest pebbles no lighter than #62503b. Small irregular clustered marks, no big cracks or raised boulders. Variant 1: mostly smooth dry compact earth with a few tiny gravel patches. No green moss, plants, webs, water or lava.",
+    "source": "sources/floor_burrows0.png",
+    "sourceSha256": "719ac23a7529df5f0ad89cb5911024b42cb7372b4ab5bd65312f6f35d2cb07d1",
+    "tool": "built-in image_gen",
+    "tile": "dngn/floor/floor_burrows0.png",
+    "tileSha256": "f68b71a1cf06046a81fc3f96a26048fecb4949edbe58726ebe0bb71f35c98ee5"
+  },
+  {
+    "id": "floor_burrows1",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Top-down dry packed cave floor, muted dark umber clay, sparse small flat pebbles, low contrast, almost level and unobtrusive beneath monsters and items. Palette centered on hex #403024, brightest pebbles no lighter than #62503b. Small irregular clustered marks, no big cracks or raised boulders. Variant 2: scattered dark gravel and one faint thin dry root. No green moss, plants, webs, water or lava.",
+    "source": "sources/floor_burrows1.png",
+    "sourceSha256": "03508d84b2732aa1b9157214c877e141605be7525f6fe92aa3d84f37316a7848",
+    "tool": "built-in image_gen",
+    "tile": "dngn/floor/floor_burrows1.png",
+    "tileSha256": "573dbb5f5495e46c5853e1c95ef860e97732f3e4e720ca2215830b8c66411349"
+  },
+  {
+    "id": "floor_burrows2",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Top-down dry packed cave floor, muted dark umber clay, sparse small flat pebbles, low contrast, almost level and unobtrusive beneath monsters and items. Palette centered on hex #403024, brightest pebbles no lighter than #62503b. Small irregular clustered marks, no big cracks or raised boulders. Variant 3: sparse flat ochre chips in smooth dark soil. No green moss, plants, webs, water or lava.",
+    "source": "sources/floor_burrows2.png",
+    "sourceSha256": "8f24eafd8435ecee10f7eddb2963bc0b17e62750fa501ccb1ed758f21744113e",
+    "tool": "built-in image_gen",
+    "tile": "dngn/floor/floor_burrows2.png",
+    "tileSha256": "c9dbcd4a3770b2318453cef9fc3993b8053c60a8f9b7140082270b781a1b1d18"
+  },
+  {
+    "id": "floor_burrows3",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Top-down dry packed cave floor, muted dark umber clay, sparse small flat pebbles, low contrast, almost level and unobtrusive beneath monsters and items. Palette centered on hex #403024, brightest pebbles no lighter than #62503b. Small irregular clustered marks, no big cracks or raised boulders. Variant 4: faint compacted earth ridges with tiny charcoal pebbles. No green moss, plants, webs, water or lava.",
+    "source": "sources/floor_burrows3.png",
+    "sourceSha256": "02f7cfb897b0713b2938846fd6cd1ef2eadfc5077f82e5da188ff7b1e69c706d",
+    "tool": "built-in image_gen",
+    "tile": "dngn/floor/floor_burrows3.png",
+    "tileSha256": "657b31e0ecce90b5d46005016015fb70f815353507bebdcacf5a4677043de157"
+  },
+  {
+    "id": "wall_burrows0",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Diggable natural rock wall texture, front/top view in Crawl's flat square wall convention. Dense irregular chunky warm ochre-brown rock forms embedded in dry clay, dark cracks, lit upper-left edges. Mid-value earthy palette centered around #806044 with highlights around #ac8858. Fill whole tile; this is continuous solid rock, NOT a free-standing stone, NOT a cave entrance. Variant 1: rough rounded rock clumps with horizontal dusty seams. No gold treasure, ore sparkle, green vegetation or webs.",
+    "source": "sources/wall_burrows0.png",
+    "sourceSha256": "f6792be46882ec98aa6389968dc24a5b5bb68819faa992b4b7aac66deb1ba605",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/wall_burrows0.png",
+    "tileSha256": "ee4e664129012bcb2100b1231203fe4bc31f748f479079791f60bb48df1f1b62"
+  },
+  {
+    "id": "wall_burrows1",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Diggable natural rock wall texture, front/top view in Crawl's flat square wall convention. Dense irregular chunky warm ochre-brown rock forms embedded in dry clay, dark cracks, lit upper-left edges. Mid-value earthy palette centered around #806044 with highlights around #ac8858. Fill whole tile; this is continuous solid rock, NOT a free-standing stone, NOT a cave entrance. Variant 2: angular ochre chunks with a few thin brown dry roots. No gold treasure, ore sparkle, green vegetation or webs.",
+    "source": "sources/wall_burrows1.png",
+    "sourceSha256": "d1a1f6fb55c2afb18a3cb360a647d04e09754923cf35da4c86bd48af2c45b446",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/wall_burrows1.png",
+    "tileSha256": "978a0a1c43a09b171eb024d453af64d3964984b6d86c470106316a86d58d53eb"
+  },
+  {
+    "id": "wall_burrows2",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Diggable natural rock wall texture, front/top view in Crawl's flat square wall convention. Dense irregular chunky warm ochre-brown rock forms embedded in dry clay, dark cracks, lit upper-left edges. Mid-value earthy palette centered around #806044 with highlights around #ac8858. Fill whole tile; this is continuous solid rock, NOT a free-standing stone, NOT a cave entrance. Variant 3: layered clay-packed rocks with small dull mineral veins. No gold treasure, ore sparkle, green vegetation or webs.",
+    "source": "sources/wall_burrows2.png",
+    "sourceSha256": "e05114166440da416e4ffaf220f7f7ccffc5be34bbae8a562251672413453f5f",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/wall_burrows2.png",
+    "tileSha256": "a3f89eb0d49c7dba1f21c7bc7874cca14c7ce6a2769188588c1867eced107bec"
+  },
+  {
+    "id": "wall_burrows3",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Diggable natural rock wall texture, front/top view in Crawl's flat square wall convention. Dense irregular chunky warm ochre-brown rock forms embedded in dry clay, dark cracks, lit upper-left edges. Mid-value earthy palette centered around #806044 with highlights around #ac8858. Fill whole tile; this is continuous solid rock, NOT a free-standing stone, NOT a cave entrance. Variant 4: dense rounded stones divided by dry dark soil. No gold treasure, ore sparkle, green vegetation or webs.",
+    "source": "sources/wall_burrows3.png",
+    "sourceSha256": "b160279f4cb6d805c67f9ef9e26ae574f9a6b47cd829b82bd4bdb83b44b3e180",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/wall_burrows3.png",
+    "tileSha256": "c09ba8fbf7b8e5913e7cc5378ff413743ac513c9466398b66a4eb216fdff7ca3"
+  },
+  {
+    "id": "stone_wall_burrows0",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Undiggable natural solid stone wall texture, front/top view in Crawl's flat square wall convention. Dense cool slate-gray angular shale slabs with dark narrow cracks and dull pale gray upper-left edges. Clearly harder, cooler and more angular than ochre soil-packed rock. Mid-value palette centered #62626a and highlight #92928e. Fill whole tile as continuous solid stone, NOT a free-standing rock. Variant 1: large tightly stacked angular slabs. No moss, plants, crystals, glyphs or webs.",
+    "source": "sources/stone_wall_burrows0.png",
+    "sourceSha256": "26c445066958560b2f4f7379b8a3cf6d67c90a36608878ab25daad1954708753",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/stone_wall_burrows0.png",
+    "tileSha256": "59c2edefa1ef27cd35c3397b1e0bc0e09839d98a16a1fcb84a4304bde4903dfe"
+  },
+  {
+    "id": "stone_wall_burrows1",
+    "prompt": "Use case: stylized-concept. Asset type: ONE square Dungeon Crawl Stone Soup 32x32 native terrain texture. Exact low resolution pixel art on 32 by 32 logical pixel grid, enlarged with hard nearest-neighbor blocks, limited earthy palette, no soft shading or antialiasing. Texture fills EVERY pixel to EVERY edge, completely opaque, no margin, border, vignette, frame, objects, text or transparency. Must tile quietly with neighboring identical tiles and other variants. Undiggable natural solid stone wall texture, front/top view in Crawl's flat square wall convention. Dense cool slate-gray angular shale slabs with dark narrow cracks and dull pale gray upper-left edges. Clearly harder, cooler and more angular than ochre soil-packed rock. Mid-value palette centered #62626a and highlight #92928e. Fill whole tile as continuous solid stone, NOT a free-standing rock. Variant 2: smaller interlocking angular slabs with diagonal fracture seams. No moss, plants, crystals, glyphs or webs.",
+    "source": "sources/stone_wall_burrows1.png",
+    "sourceSha256": "fc43f64cf29b1d1acd0d4d8ae300c94f9c8228286ea9746146918137db762752",
+    "tool": "built-in image_gen",
+    "tile": "dngn/wall/stone_wall_burrows1.png",
+    "tileSha256": "fb6be0aa614b6483559f4f90f3a5f20d8a2159de15feb686b5b1809919a39876"
+  }
+]

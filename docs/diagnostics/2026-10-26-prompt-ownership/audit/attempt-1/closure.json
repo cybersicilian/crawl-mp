@@ -1,0 +1,20 @@
+{
+  "gate": {
+    "runId": "34a464cc-52dd-4d9b-a399-09ed5afab98d",
+    "owner": "codex/01a17b3b-e474-7e71-b44c-78b20124ab32",
+    "label": "DCSS full input lifecycle audit validation",
+    "requestedAt": 1793077023.611913,
+    "supervisorPid": 5340,
+    "status": "failed_held",
+    "reservation": true,
+    "requestId": "6656499091f22ad0f299a926a43ffa4d769583dd82692f79983eed92193a83a4",
+    "startedAt": 1793077023.6123369,
+    "workerPid": 5341,
+    "processGroup": 5341,
+    "exitCode": 1,
+    "finishedAt": 1793077024.398299,
+    "supervisedProcessGroupGone": true
+  },
+  "native_processes_started": false,
+  "allOwnedProcessesGone": true
+}

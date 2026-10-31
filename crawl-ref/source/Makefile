@@ -94,6 +94,9 @@
 ifndef GAME
 	GAME = crawl
 endif
+ifndef TILES
+	WEBTILES ?= y
+endif
 
 # Disable GNU Make implicit rules and variables. Leaving them enabled will slow
 # down MinGW and Cygwin builds by a very VERY noticeable degree. Besides, we have
@@ -1348,7 +1351,7 @@ STATICFILES = $(TILEIMAGEFILES:%=webserver/game_data/static/%.png) \
 $(TILEINFOJS:%=$(RLTILES)/tileinfo-%.js): build-rltiles
 
 webserver/webtiles/version.txt: .ver
-	@git describe $(MERGE_BASE) > webserver/webtiles/version.txt
+	@echo '$(SRC_VERSION)' > webserver/webtiles/version.txt
 
 webserver/game_data/static/%.js: $(RLTILES)/%.js
 	$(QUIET_COPY)$(COPY) $< webserver/game_data/static/

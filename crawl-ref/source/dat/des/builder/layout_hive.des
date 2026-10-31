@@ -1,0 +1,24 @@
+# Compact, connected comb cells with multiple flight approaches.
+: crawl_require("dlua/vault.lua")
+: crawl_require("dlua/layout/hive.lua")
+: crawl_require("dlua/layout/minimum_map_area.lua")
+
+NAME:   layout_hive
+DEPTH:  Hive:1
+WEIGHT: 10
+ORIENT: encompass
+TAGS:   overwritable layout allow_dup unrand layout_type_narrow_caves
+TILE:   x = wall_wax
+COLOUR: x = yellow
+KMONS:  Q = queen bee / meliai
+KMONS:  W = spark wasp
+KITEM:  $ = gold
+KITEM:  * = any good_item
+{{
+    hive_layout(_G, false)
+}}
+validate {{
+    return minimum_map_area.is_map_big_enough(_G, minimum_map_area.NARROW_CAVES)
+}}
+MAP
+ENDMAP

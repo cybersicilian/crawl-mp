@@ -1,0 +1,37 @@
+{
+  "owner": "codex/01a1838c-0238-7422-9b21-9f9dc9392c41",
+  "phase": "Isolated settings browser with local fixture and SQLite; no native game",
+  "resourceLimit": {
+    "browsers": 1,
+    "pages": 1,
+    "fixtureServers": 1,
+    "nativeGames": 0
+  },
+  "source": {
+    "crawl-ref/source/webserver/static/game-settings.json": "53c27abd026b774120338ead6b06ad96b2643337c99416766846c3992df36503",
+    "crawl-ref/source/webserver/static/scripts/rc-settings.js": "94c615517923f37c496947e14af02391d0c2f408821e98b441327d1b47fb9032",
+    "crawl-ref/source/webserver/static/styles/rc-settings.css": "481ed4c83e531061d992a2f61f2085b4574f2f4fa9f50185ac9884233c08a327",
+    "crawl-ref/source/webserver/templates/game-settings.html": "83e635818f12dc4601f5842dab7cd09fa898be6f91df4ca9ae8c77acc912f5e2",
+    "crawl-ref/source/webserver/templates/client.html": "c0441556be3db1e6a271d31c7c65b8ece3ec096b360101f50ba2e273115daf77",
+    "crawl-ref/source/webserver/templates/game_links.html": "45b6627fe9489c1cc645b6cc50f1f97ea42ead679e63cd9bb1651474b9a1f838",
+    "crawl-ref/source/webserver/static/scripts/client-lobby.js": "6bf710fa8a3dc084dff0c64231252a342dab16d48126be290fe4f98c757cc592",
+    "crawl-ref/source/webserver/static/scripts/client.js": "d890e2d008f9505d5a696a522f11dd27944d02ae7f0473efa16a603fe531cfcb",
+    "crawl-ref/source/webserver/webtiles/game_settings.py": "959552e2fc2e5abe7008aa39f4204ab3185499ced3496779b57dd9abed419f1c",
+    "crawl-ref/source/webserver/webtiles/game_settings_model.py": "3a7b6f58178a8e26bd831599383d3f2157f9b4eec6137b15c7e5bed5ca5cdf57",
+    "crawl-ref/source/webserver/webtiles/game_settings_socket.py": "13fb857df8118e63c6f4f1b7274773e1aa5e3b4b02c81f14e41a4a7a42b67a0a",
+    "crawl-ref/source/webserver/webtiles/game_settings_test.py": "334aa3c2b75caed9df6d8800b930040bfbaf1dd6d5200ee0d22012f700ddcd8c",
+    "crawl-ref/source/webserver/webtiles/process_handler.py": "09cea0f5435dea289d623648d9b55a12e53d218ead1caeec0b7bd6d479da2c25",
+    "crawl-ref/source/webserver/webtiles/ws_handler.py": "e1f310d460f307c348c340bb7bb74e468cfa32f2614bf49e633150c32a6609af",
+    "crawl-ref/source/webserver/tests/rc-settings-test.cjs": "c355b0e60fb790e92a966b11de1dcff7a770a9a33e0657f9429612f98fc95131",
+    "crawl-ref/source/webserver/tests/helpers/game-settings-fixture.py": "d7e8cc4126019704b48b573b894d1314ab2f83ee76ce62318f11b721f9bcce2c"
+  },
+  "command": [
+    "node",
+    "crawl-ref/source/webserver/tests/rc-settings-test.cjs"
+  ],
+  "cwd": "/Users/iancaltabiano/Documents/Projects/dcss",
+  "environment": {
+    "NODE_PATH": "/Users/iancaltabiano/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
+    "SETTINGS_PROOF_DIR": "/Users/iancaltabiano/Documents/Projects/dcss/docs/game-settings-2026-10-28/final"
+  }
+}

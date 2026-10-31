@@ -9,19 +9,26 @@
 #include "spl-other.h"
 
 #include "act-iter.h"
+#include "automaton.h"
 #include "beam.h"
 #include "coordit.h"
 #include "delay.h"
 #include "env.h"
 #include "fight.h"
 #include "god-companions.h"
+#include "god-conduct.h"
+#include "item-prop.h"
+#include "items.h"
 #include "libutil.h"
+#include "makeitem.h"
 #include "message.h"
 #include "mon-death.h"
 #include "mon-place.h"
 #include "mon-util.h"
 #include "movement.h" // passwall
 #include "place.h"
+#include "party.h"
+#include "player.h"
 #include "potion.h"
 #include "religion.h"
 #include "spl-util.h"
@@ -223,16 +230,18 @@ static bool _feat_is_passwallable(dungeon_feature_type feat)
     }
 }
 
-static bool _grid_is_passwallable(coord_def pos)
+static bool _grid_is_passwallable(const actor& act, coord_def pos)
 {
-    return _feat_is_passwallable(env.grid(pos))
+    const bool ent_tree = act.is_player() && act.as_player()->species == SP_ENT
+                          && feat_is_tree(env.grid(pos));
+    return (_feat_is_passwallable(env.grid(pos)) || ent_tree)
             && !is_temp_terrain(pos);
 }
 
 bool passwall_simplified_check(const actor &act)
 {
     for (adjacent_iterator ai(act.pos(), true); ai; ++ai)
-        if (_grid_is_passwallable(*ai))
+        if (_grid_is_passwallable(act, *ai))
             return true;
     return false;
 }
@@ -254,7 +263,7 @@ passwall_path::passwall_path(const actor &act, const coord_def& dir, int max_ran
         path.emplace_back(pos);
         if (in_bounds(pos))
         {
-            if (!_grid_is_passwallable(pos))
+            if (!_grid_is_passwallable(act, pos))
             {
                 if (!dest_found)
                 {
@@ -404,7 +413,8 @@ spret cast_passwall(const coord_def& c, int pow, bool fail)
     }
     else if (p.check_moveto())
     {
-        start_delay<PasswallDelay>(p.actual_walls() + 1, p.actual_dest);
+        start_delay<PasswallDelay>(p.actual_walls() + 1, p.actual_dest,
+                                  automaton::casting_automatically());
 
         // Give bonus AC while moving through the wall.
         you.props[PASSWALL_ARMOUR_KEY].get_int() = 5 + div_rand_round(pow, 10);
@@ -511,11 +521,28 @@ vector<coord_def> find_sigil_locations(bool tracer)
     return positions;
 }
 
+// Binding sigils historically leave marker power at zero. A negative value
+// marks an automatically engraved sigil and survives the existing signed
+// short marker serialization; old saves continue to read as ordinary sigils.
+static constexpr int AUTO_SIGIL_POWER = -1;
+
+bool automatic_binding_sigil_at(const coord_def& pos)
+{
+    const auto* marker = env.markers.get_terrain_change_at(
+        pos, TERRAIN_CHANGE_BINDING_SIGIL);
+    return marker && marker->power == AUTO_SIGIL_POWER;
+}
+
 spret cast_sigil_of_binding(int pow, bool fail, bool tracer)
 {
     // Fill list of viable locations to create the sigil (keeping separate lists
     // for distance 1 and 2)
     vector<coord_def> positions = find_sigil_locations(tracer);
+    const bool automatic = automaton::casting_automatically();
+    if (automatic)
+        positions.erase(remove_if(positions.begin(), positions.end(),
+            [](const coord_def& p) { return party::player_at(p, false); }),
+            positions.end());
     vector<coord_def> sigil_pos_d1;
     vector<coord_def> sigil_pos_d2;
     for (auto p : positions)
@@ -554,7 +581,8 @@ spret cast_sigil_of_binding(int pow, bool fail, bool tracer)
     if (!sigil_pos_d1.empty())
     {
         temp_change_terrain(sigil_pos_d1[0], DNGN_BINDING_SIGIL, dur,
-                            TERRAIN_CHANGE_BINDING_SIGIL, you.mid);
+                            TERRAIN_CHANGE_BINDING_SIGIL, you.mid,
+                            automatic ? AUTO_SIGIL_POWER : 0);
     }
 
     if (!sigil_pos_d2.empty())
@@ -571,7 +599,8 @@ spret cast_sigil_of_binding(int pow, bool fail, bool tracer)
                     continue;
 
                 temp_change_terrain(sigil_pos_d2[i], DNGN_BINDING_SIGIL, dur,
-                                    TERRAIN_CHANGE_BINDING_SIGIL, you.mid);
+                                    TERRAIN_CHANGE_BINDING_SIGIL, you.mid,
+                                    automatic ? AUTO_SIGIL_POWER : 0);
                 non_adj = true;
                 break;
             }
@@ -582,7 +611,8 @@ spret cast_sigil_of_binding(int pow, bool fail, bool tracer)
         if (!non_adj)
         {
             temp_change_terrain(sigil_pos_d2[0], DNGN_BINDING_SIGIL, dur,
-                                TERRAIN_CHANGE_BINDING_SIGIL, you.mid);
+                                TERRAIN_CHANGE_BINDING_SIGIL, you.mid,
+                                automatic ? AUTO_SIGIL_POWER : 0);
         }
     }
 
@@ -596,6 +626,36 @@ spret cast_sigil_of_binding(int pow, bool fail, bool tracer)
 
 void trigger_binding_sigil(actor& actor)
 {
+    const auto* marker = env.markers.get_terrain_change_at(
+        actor.pos(), TERRAIN_CHANGE_BINDING_SIGIL);
+    if (marker && marker->power == AUTO_SIGIL_POWER)
+    {
+        monster* mon = actor.as_monster();
+        const int owner_slot = party::slot_for_mid(marker->source_mid);
+        if (!mon || actor.is_binding_sigil_immune() || owner_slot < 0
+            || (party::is_enabled() && !party::slot_is_alive(owner_slot))
+            || mon->wont_attack() || mon->neutral() || party::is_proxy_monster(*mon))
+            return;
+        party::scoped_player_context owner(owner_slot);
+        string adj, suffix;
+        bool penance = false;
+        if (bad_attack(mon, adj, suffix, penance))
+            return;
+        const int pow = calc_spell_power(SPELL_SIGIL_OF_BINDING);
+        const int dur = max(2, random_range(4 + div_rand_round(pow, 12),
+                                            7 + div_rand_round(pow, 8))
+                            - div_rand_round(mon->get_hit_dice(), 4))
+                        * BASELINE_DELAY;
+        if (mon->add_ench(mon_enchant(ENCH_BOUND, &you, dur)))
+        {
+            simple_monster_message(*mon,
+                " moves over the binding sigil and is bound in place!",
+                false, MSGCH_FRIEND_SPELL);
+            mon->props[BINDING_SIGIL_DURATION_KEY] = dur * 2;
+        }
+        revert_terrain_change(mon->pos(), TERRAIN_CHANGE_BINDING_SIGIL);
+        return;
+    }
     if (actor.is_binding_sigil_immune())
     {
         if (actor.is_player())
@@ -645,6 +705,13 @@ spret cast_spike_launcher(const actor& agent, int pow, bool fail)
     // make it useful and might waste time recasting)
     vector<coord_def> spots = find_spike_launcher_walls(agent.pos(),
                                                         !agent.is_player() ? &agent : nullptr);
+    const bool automatic = agent.is_player() && automaton::casting_automatically();
+    if (automatic)
+    {
+        spots.erase(remove_if(spots.begin(), spots.end(), [](const coord_def& wall) {
+            return !automaton::spike_wall_has_foe(wall);
+        }), spots.end());
+    }
 
     // Targeter should prevent this from happening.
     if (spots.empty())
@@ -663,7 +730,8 @@ spret cast_spike_launcher(const actor& agent, int pow, bool fail)
     const int timer = agent.is_player() ? 10 : 0;   // Don't delay monster launchers a second turn.
     temp_change_terrain(spot, DNGN_SPIKE_LAUNCHER, dur, TERRAIN_CHANGE_SPIKE_LAUNCHER, agent.mid);
     env.markers.add(new map_active_feature_marker(spot, DNGN_SPIKE_LAUNCHER, agent.mid,
-                    agent.attitude(), pow, dur, timer, true));
+                    agent.attitude(), map_active_feature_marker::encoded_spike_power(pow, automatic),
+                    dur, timer, true));
 
     if (you.see_cell(spot))
     {
@@ -770,3 +838,207 @@ spret cast_ice_thorns(const actor& agent, const coord_def& pos, int pow, bool fa
 
     return spret::success;
 }
+
+static potion_type _corpse_potion_type(monster_type mc)
+{
+    const monsterentry *me = get_monster_data(mc);
+    if (!me)
+        return POT_WATER;
+
+    if (mons_class_flag(mc, M_ACID_SPLASH))
+        return POT_MUTATION;
+
+    potion_type best = NUM_POTIONS;
+    auto consider = [&best](potion_type cand)
+    {
+        auto rank = [](potion_type p) -> int
+        {
+            switch (p)
+            {
+            case POT_MUTATION:      return 6;
+            case POT_DECAY:         return 5;
+            case POT_STRONG_POISON: return 4;
+            case POT_SLOWING:       return 3;
+            case POT_MOONSHINE:     return 2;
+            case POT_POISON:        return 1;
+            default:                return 0;
+            }
+        };
+        if (best == NUM_POTIONS || rank(cand) > rank(best))
+            best = cand;
+    };
+
+    for (int i = 0; i < MAX_NUM_ATTACKS; ++i)
+    {
+        switch (me->attack[i].flavour)
+        {
+        case AF_MUTATE:
+        case AF_CORRODE:
+        case AF_CHAOTIC:
+            consider(POT_MUTATION);
+            break;
+        case AF_ROT:
+        case AF_DRAIN:
+        case AF_FOUL_FLAME:
+            consider(POT_DECAY);
+            break;
+        case AF_POISON_STRONG:
+            consider(POT_STRONG_POISON);
+            break;
+        case AF_SLEEP:
+        case AF_WEAKNESS:
+        case AF_COLD:
+            consider(POT_SLOWING);
+            break;
+        case AF_CONFUSE:
+            consider(POT_MOONSHINE);
+            break;
+        case AF_POISON:
+            consider(POT_POISON);
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (mons_class_holiness(mc) & MH_UNDEAD)
+        consider(POT_DECAY);
+
+    if (best != NUM_POTIONS)
+        return best;
+
+    const resists_t resists = get_mons_class_resists(mc);
+    if ((resists & MR_RES_CORR) && mons_class_hit_dice(mc) >= 8)
+        return POT_MUTATION;
+    if ((resists & MR_RES_POISON) && mons_class_hit_dice(mc) >= 6)
+        return POT_POISON;
+
+    return POT_WATER;
+}
+
+static int _potion_distill_rank(potion_type pot)
+{
+    switch (pot)
+    {
+    case POT_MUTATION:      return 6;
+    case POT_DECAY:         return 5;
+    case POT_STRONG_POISON: return 4;
+    case POT_SLOWING:       return 3;
+    case POT_MOONSHINE:     return 2;
+    case POT_POISON:        return 1;
+    case POT_WATER:
+    default:                return 0;
+    }
+}
+
+static int _find_best_corpse_in_los(bool check_range)
+{
+    int best_idx = -1;
+    bool best_at_feet = false;
+    int best_rank = -1;
+    int best_hd = -1;
+    int best_dist = INT_MAX;
+
+    for (radius_iterator ri(you.pos(), LOS_NO_TRANS); ri; ++ri)
+    {
+        if (check_range && !in_bounds(*ri))
+            continue;
+        for (stack_iterator si(*ri, true); si; ++si)
+        {
+            if (si->is_type(OBJ_CORPSES, CORPSE_BODY))
+            {
+                const bool at_feet = (*ri == you.pos());
+                const monster_type mc = si->mon_type;
+                const int rank = _potion_distill_rank(_corpse_potion_type(mc));
+                const int hd = mons_class_hit_dice(mc);
+                const int dist = grid_distance(you.pos(), *ri);
+
+                if (best_idx == -1
+                    || (at_feet && !best_at_feet)
+                    || (at_feet == best_at_feet && rank > best_rank)
+                    || (at_feet == best_at_feet && rank == best_rank && hd > best_hd)
+                    || (at_feet == best_at_feet && rank == best_rank && hd == best_hd && dist < best_dist))
+                {
+                    best_idx = si.index();
+                    best_at_feet = at_feet;
+                    best_rank = rank;
+                    best_hd = hd;
+                    best_dist = dist;
+                }
+            }
+        }
+    }
+
+    return best_idx;
+}
+
+bool corpse_in_los()
+{
+    return _find_best_corpse_in_los(true) != -1;
+}
+
+spret cast_fulsome_distillation(int pow, bool check_range, bool fail)
+{
+    const int corpse_idx = _find_best_corpse_in_los(check_range);
+    if (corpse_idx == -1)
+    {
+        mpr("There are no corpses in view to distill!");
+        return spret::abort;
+    }
+
+    fail_check();
+
+    item_def &corpse = env.item[corpse_idx];
+    const monster_type mc = corpse.mon_type;
+    const int hd = mons_class_hit_dice(mc);
+
+    potion_type potion = _corpse_potion_type(mc);
+
+    switch (potion)
+    {
+    case POT_STRONG_POISON:
+        if (hd < 9 - random2(pow / 10))
+            potion = POT_POISON;
+        break;
+
+    case POT_MUTATION:
+        if (hd < 11 - random2(pow / 10) || !one_chance_in(4))
+            potion = POT_DECAY;
+        break;
+
+    default:
+        break;
+    }
+
+    // Check whether the player had enough power to extract the full effect.
+    const bool weakened = (potion != POT_WATER
+                           && !x_chance_in_y(hd * 5 + pow, 40));
+    if (weakened)
+        potion = POT_WATER;
+
+    int obj = items(false, OBJ_POTIONS, potion, 0);
+    if (obj == NON_ITEM)
+    {
+        canned_msg(MSG_NOTHING_HAPPENS);
+        return spret::success;
+    }
+
+    identify_item(env.item[obj]);
+
+    mprf("You extract %s from %s%s",
+         env.item[obj].name(DESC_A).c_str(),
+         corpse.name(DESC_THE).c_str(),
+         weakened ? " (it seems diluted)." : ".");
+
+    if (mons_class_holiness(mc) & MH_HOLY)
+        did_god_conduct(DID_EVIL, 2);
+
+    destroy_item(corpse_idx, true);
+
+    move_item_to_grid(&obj, you.pos());
+    if (obj != NON_ITEM)
+        move_item_to_inv(obj, 1, false);
+
+    return spret::success;
+}
+

@@ -1,0 +1,306 @@
+<div id="stats">
+      <div id="stats_wizmode" style="float: right"></div>
+      <div
+        id="stats_titleline"
+        data-tip-title="Character Identity &amp; Title"
+        data-tip-badge="[Hero]"
+        data-tip-body="Your character's name and current skill title, determined by your highest trained skill."
+        data-tip-meta="Press '%' for character overview"
+      ></div>
+      <div>
+        <span
+          id="stats_species_god"
+          data-tip-title="Species &amp; Religion"
+          data-tip-badge="[Origin]"
+          data-tip-body="Your species determines innate traits, attribute growth, and skill aptitudes. Your god grants divine powers as piety increases."
+          data-tip-meta="Press 'A' for traits or '^' for religion details"
+        ></span>
+        <span
+          id="stats_piety"
+          data-tip-title="Divine Piety &amp; Favour"
+          data-tip-badge="[Religion]"
+          data-tip-body="Represents your standing with your deity (up to 6 stars). Higher piety unlocks divine abilities and gifts."
+          data-tip-meta="Press '^' to inspect god powers &amp; wrath"
+        ></span>
+        <span id="party_hud_gold" class="hud-shared-gold"
+          data-tip-title="Shared party gold"
+          data-tip-body="Gold is shared by the expedition and can be spent by any hero."
+          data-tip-meta="Press '$' for gold and shopping">Gold unavailable</span>
+        <span id="stats_gozag_gold_label" class="stats_caption"></span>
+        <span
+          id="stats_gozag_gold"
+          data-tip-title="Gold Pieces"
+          data-tip-badge="[Wealth]"
+          data-tip-body="Your collected dungeon gold. Used at shops and for Gozag divine petitions."
+          data-tip-meta="Press '$' to check gold &amp; shopping list"
+        ></span>
+      </div>
+      <div
+        id="stats_hpline"
+        class="stat-row-interactive"
+        data-tip-title="Health Points (HP)"
+        data-tip-badge="[Vital]"
+        data-tip-body="Your current and maximum life force. Yellow bar segments show projected HP remaining after poison wears off."
+        data-tip-meta="Press '5' to rest &amp; heal"
+      >
+        <!-- These <span>s must be on the same logical line to prevent rendering bugs -->
+        <span id="stats_hp_bar" class="bar" style="float: right; width: 55%; height: 11px"><span id="stats_hp_bar_full"></span><span id="stats_hp_bar_poison"></span><span id="stats_hp_bar_decrease"></span><span id="stats_hp_bar_increase"></span></span>
+        <span class="stats_caption">HP:</span>
+        <!-- These <span>s must be on the same logical line to prevent rendering bugs -->
+        <span id="stats_hp"></span><span id="stats_hp_separator">/</span><span id="stats_hp_max"></span>
+        <span id="stats_real_hp_max"></span>
+      </div>
+      <div
+        id="stats_mpline"
+        class="stat-row-interactive"
+        data-tip-title="Magic Points (MP)"
+        data-tip-badge="[Vital]"
+        data-tip-body="Your arcane and divine energy pool used to cast spells ('z') and invoke abilities ('a')."
+        data-tip-meta="Scales with Spellcasting, Invocations &amp; Evocations"
+      >
+        <!-- These <span>s must be on the same logical line to prevent rendering bugs -->
+        <span id="stats_mp_bar" class="bar" style="float: right; width: 55%; height: 11px"><span id="stats_mp_bar_full"></span><span id="stats_mp_bar_decrease"></span><span id="stats_mp_bar_increase"></span></span>
+        <span class="stats_caption">Magic:</span>
+        <!-- These <span>s must be on the same logical line to prevent rendering bugs -->
+        <span id="stats_mp"></span><span id="stats_mp_separator">/</span><span id="stats_mp_max"></span>
+        <span id="stats_dd_real_mp_max"></span>
+      </div>
+      <div class="hud-stats-details">
+        <div id="stats_leftcolumn" style="float: left; width: 45%">
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Armour Class (AC)"
+            data-tip-badge="[Defense]"
+            data-tip-body="Reduces physical damage taken from attacks via random damage reduction and guaranteed damage shaving."
+            data-tip-meta="Governs physical damage mitigation"
+          >
+            <span class="stats_caption">AC:</span>
+            <span
+              id="stats_ac"
+              data-tip-title="Armour Class (AC)"
+              data-tip-badge="[Defense]"
+              data-tip-body="Reduces physical damage taken from attacks via random damage reduction and guaranteed damage shaving."
+              data-tip-meta="Governs physical damage mitigation"
+            ></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Evasion (EV)"
+            data-tip-badge="[Defense]"
+            data-tip-body="Chance to completely dodge melee attacks, ranged projectiles, and bolt spells."
+            data-tip-meta="Scales with Dodging skill &amp; Dexterity"
+          >
+            <span class="stats_caption">EV:</span>
+            <span
+              id="stats_ev"
+              data-tip-title="Evasion (EV)"
+              data-tip-badge="[Defense]"
+              data-tip-body="Chance to completely dodge melee attacks, ranged projectiles, and bolt spells."
+              data-tip-meta="Scales with Dodging skill &amp; Dexterity"
+            ></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Shields (SH)"
+            data-tip-badge="[Defense]"
+            data-tip-body="Chance to block physical attacks and piercing ranged projectiles before EV or AC checks."
+            data-tip-meta="Scales with equipped Shield, Shields skill &amp; Dex"
+          >
+            <span class="stats_caption">SH:</span>
+            <span
+              id="stats_sh"
+              data-tip-title="Shields (SH)"
+              data-tip-badge="[Defense]"
+              data-tip-body="Chance to block physical attacks and piercing ranged projectiles before EV or AC checks."
+              data-tip-meta="Scales with equipped Shield, Shields skill &amp; Dex"
+            ></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Experience Level (XL)"
+            data-tip-badge="[Progression]"
+            data-tip-body="Your character level (max 27) and percentage progress toward the next level."
+            data-tip-meta="Grants HP, MP, Willpower &amp; attribute increases"
+          >
+            <span class="stats_caption">XL:</span>
+            <span
+              id="stats_xl"
+              data-tip-title="Experience Level (XL)"
+              data-tip-badge="[Progression]"
+              data-tip-body="Your character level (max 27) and percentage progress toward the next level."
+              data-tip-meta="Grants HP, MP, Willpower &amp; attribute increases"
+            ></span>
+            <span class="stats_caption">Next:</span>
+            <span id="stats_progress"></span>%
+          </div>
+          <div
+            id="stats_noise"
+            class="stat-row-interactive"
+            style="float: left; width: 95%"
+            data-tip-title="Noise &amp; Stealth"
+            data-tip-badge="[Stealth]"
+            data-tip-body="Sound produced by your recent combat, spells, or effects. Loud noises wake and attract distant monsters."
+            data-tip-meta="Train Stealth ('m') to reduce detection range"
+          >
+            <div id="stats_noise_inter" style="float: right; height: 1em">
+              <!-- These <span>s must be on the same logical line to prevent rendering bugs -->
+              <span
+                id="stats_noise_bar"
+                class="bar"
+                style="float: left; height: 1em"
+                ><span id="stats_noise_bar_full"></span
+                ><span id="stats_noise_bar_decrease"></span
+              ></span>
+            </div>
+            <span
+              id="stats_noise_status"
+              style="float: right; width: 0%"
+            ></span>
+            <span class="stats_caption">Noise:</span>
+            <span id="stats_noise_num"></span>
+          </div>
+        </div>
+        <div id="stats_rightcolumn" style="float: right; width: 55%">
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Strength (Str)"
+            data-tip-badge="[Attribute]"
+            data-tip-body="Increases weapon damage and reduces heavy armour and shield encumbrance penalties to EV and spellcasting."
+            data-tip-meta="Governs physical power &amp; armour comfort"
+          >
+            <span class="stats_caption">Str:</span>
+            <span
+              id="stats_str"
+              data-tip-title="Strength (Str)"
+              data-tip-badge="[Attribute]"
+              data-tip-body="Increases weapon damage and reduces heavy armour and shield encumbrance penalties to EV and spellcasting."
+              data-tip-meta="Governs physical power &amp; armour comfort"
+            ></span>
+            <span
+              id="stats_doom_ui"
+              data-tip-title="Doom"
+              data-tip-badge="[Hazard]"
+              data-tip-body="Accumulated Doom. Reaching 100% Doom triggers severe planar consequences."
+              data-tip-meta="Avoid doom-inflicting attacks"
+            ><span class="stats_caption" style="margin-left:2.2em">Doom:</span><span id="stats_doom"></span></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Intelligence (Int)"
+            data-tip-badge="[Attribute]"
+            data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
+            data-tip-meta="Governs spell success &amp; arcane potency"
+          >
+            <span class="stats_caption">Int:</span>
+            <span
+              id="stats_int"
+              data-tip-title="Intelligence (Int)"
+              data-tip-badge="[Attribute]"
+              data-tip-body="Increases spell power and lowers spellcasting failure rates across all magic schools."
+              data-tip-meta="Governs spell success &amp; arcane potency"
+            ></span>
+            <span
+              id="stats_contam_ui"
+              data-tip-title="Magical Contamination"
+              data-tip-badge="[Hazard]"
+              data-tip-body="Residual magical radiation. High contamination can cause harmful explosions and temporary mutations."
+              data-tip-meta="Dissipates naturally over time"
+            ><span class="stats_caption" style="margin-left:1.1em">Contam:</span><span id="stats_contam"></span></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Dexterity (Dex)"
+            data-tip-badge="[Attribute]"
+            data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
+            data-tip-meta="Governs agility, accuracy &amp; evasion"
+          >
+            <span class="stats_caption">Dex:</span>
+            <span
+              id="stats_dex"
+              data-tip-title="Dexterity (Dex)"
+              data-tip-badge="[Attribute]"
+              data-tip-body="Boosts Evasion (EV), Shield blocking (SH), Stealth, and weapon/ranged attack accuracy."
+              data-tip-meta="Governs agility, accuracy &amp; evasion"
+            ></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Dungeon Branch &amp; Depth"
+            data-tip-badge="[World]"
+            data-tip-body="Your current dungeon branch and floor level. Deeper floors hold deadlier threats and runes of Zot."
+            data-tip-meta="Press 'Ctrl+O' for Dungeon Overview"
+          >
+            <span class="stats_caption">Place:</span>
+            <span
+              id="stats_place"
+              data-tip-title="Dungeon Branch &amp; Depth"
+              data-tip-badge="[World]"
+              data-tip-body="Your current dungeon branch and floor level. Deeper floors hold deadlier threats and runes of Zot."
+              data-tip-meta="Press 'Ctrl+O' for Dungeon Overview"
+            ></span>
+          </div>
+          <div
+            class="stat-row-interactive"
+            data-tip-title="Elapsed Time &amp; Turn"
+            data-tip-badge="[Chronicle]"
+            data-tip-body="Total turns and elapsed time (in auts). The number in parentheses shows the duration of your last action."
+            data-tip-meta="1.0 aut = standard action duration"
+          >
+            <span class="stats_caption" id="stats_time_caption"></span>
+            <span
+              id="stats_time"
+              data-tip-title="Elapsed Time &amp; Turn"
+              data-tip-badge="[Chronicle]"
+              data-tip-body="Total turns and elapsed time (in auts). The number in parentheses shows the duration of your last action."
+              data-tip-meta="1.0 aut = standard action duration"
+            ></span>
+          </div>
+        </div>
+        <div
+          class="stat-row-interactive"
+          style="float: left; width: 100%"
+          data-tip-title="Wielded Primary Weapon"
+          data-tip-badge="[Weapon]"
+          data-tip-body="Your active weapon used for melee or ranged attacks."
+          data-tip-meta="Press 'w' to change weapon | ''' to quick-swap a/b"
+        >
+          <span class="stats_caption" id="stats_weapon_letter"></span>
+          <span
+            id="stats_weapon_container"
+            data-tip-title="Wielded Primary Weapon"
+            data-tip-badge="[Weapon]"
+            data-tip-body="Your active weapon used for melee or ranged attacks."
+            data-tip-meta="Press 'w' to change weapon | ''' to quick-swap a/b"
+            ><span id="stats_weapon"></span
+          ></span>
+        </div>
+        <div
+          id="stats_offhand_weapon_line"
+          class="stat-row-interactive"
+          style="float: left; width: 100%"
+          data-tip-title="Offhand Weapon"
+          data-tip-badge="[Offhand]"
+          data-tip-body="Your secondary dual-wielded weapon."
+          data-tip-meta="Attacks alongside your primary weapon"
+        >
+          <span class="stats_caption" id="stats_offhand_weapon_letter"></span>
+          <span id="stats_offhand_weapon_container"
+            ><span id="stats_offhand_weapon"></span
+          ></span>
+        </div>
+        <div
+          id="stats_quiver_line"
+          class="stat-row-interactive"
+          style="float: left; width: 100%"
+          data-tip-title="Quivered Action / Projectile"
+          data-tip-badge="[Quiver]"
+          data-tip-body="Your readied ranged ammo, throwing weapon, spell, or ability triggered with 'f'."
+          data-tip-meta="Press 'f' to fire | 'Q' to select quiver item"
+        >
+          <span class="stats_caption" id="stats_quiver_letter"></span>
+          <span id="stats_quiver"></span>
+        </div>
+        <div id="stats_status_lights" style="float: left; width: 100%"></div>
+        <div id="stats_status_lights_tooltip" class="fg7" style="display: none;"></div>
+      </div>
+    </div>

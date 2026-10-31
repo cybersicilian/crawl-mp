@@ -1,0 +1,69 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/prompts.json",
+  "assets": {
+    "reel-in-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/reel-in-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "f6965cdd90237c93ba54cb26ac75c1cd0353a6e663e72e0ab3bc87a1d84f52b9"
+    },
+    "chain-lash-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/chain-lash-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "011b5a5f480893897a05d946604aa8c0525cd16a72bcd5f0f500bd705512b476"
+    },
+    "chain-devil-base-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/chain-devil-base-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "549734d9dff6ea5e94ef8c5db9c8d6dc8b2f77841a63ea7b739bf6bb6396c2d8"
+    },
+    "release-chain-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/release-chain-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "1f7fa5dca38ebcd0f36deadbf569547cf0f86bec984b0a5e6cabad57333e5460"
+    },
+    "elder-rite-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/elder-rite-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "c4e4ca3a8e70581bf7d16b2c8a6648568122baeebb37269ba7ca5d2ffa13f098"
+    },
+    "profane-altar-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/profane-altar-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "c02f03c76de9a2001ea302dc734e6ea990f00fbb1b4e57475e57bd44647dcd97"
+    },
+    "pinning-chain-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/pinning-chain-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "5e9b3f89ae0bbb8cc22301b3df6f9c6cfa0028ec07ff4d4da3e09a36588d3ae5"
+    },
+    "eldritch-base-native": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/content-art/eldritch-base-native.png",
+      "width": 32,
+      "height": 32,
+      "alpha": true,
+      "sha256": "2be16138f9fae12b4c01743137a6371750d5136870ed12d81911c10c827669ba"
+    }
+  },
+  "export": "Base source crop to1024 square followed by separate sips32x32 export; ability sources resized32x32. Alpha preserved.",
+  "existing_vellum_art": {
+    "prompts": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/art/prompts.json",
+    "altar": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/dngn/altars/vellum.png",
+    "weave": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/gui/invocations/vellum_weave.png"
+  },
+  "native_pixel_pipeline": "DCSS tilegen uses raw RGBA without source gamma/chromaticity conversion; verification compares exact alpha and exact rounded premultiplied pixels."
+}

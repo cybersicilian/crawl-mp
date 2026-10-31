@@ -1,0 +1,278 @@
+--- a/tileweb.cc
++++ b/tileweb.cc
+@@ -112,7 +112,12 @@
+ // Server automation has an explicit completion token; input-mode updates can
+ // already be buffered when another character submits a command.
+ static int pending_activity_request = 0;
++static int completed_activity_request = 0;
++static int completed_activity_plan = 0;
++static int completed_activity_turns = 0;
++static int completed_activity_owner = 0;
+ static int pending_plan_request = 0;
++static int control_message_depth = 0;
+ 
+ //#define DEBUG_WEBSOCKETS
+ 
+@@ -575,6 +580,7 @@
+ 
+ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
+ {
++    unwind_var<int> handling_control(control_message_depth, control_message_depth + 1);
+     JsonWrapper obj = json_decode(data.c_str());
+     obj.check(JSON_OBJECT);
+ 
+@@ -585,12 +591,58 @@
+     const JsonNode* sender = json_find_member(obj.node, "player_id");
+     unwind_var<int> sender_view(m_viewer_slot,
+         sender && sender->tag == JSON_NUMBER ? static_cast<int>(sender->number_) : -1);
++    if (msgtype == "party_activity_probe")
++    {
++        const JsonNode* request = json_find_member(obj.node, "request_id");
++        if (_training_integer(request, 1, 2147483647))
++        {
++            const int id = static_cast<int>(request->number_);
++            const bool prompt = !m_menu_stack.empty()
++                || mouse_control::current_mode() > MOUSE_MODE_COMMAND;
++            const bool idle = control_message_depth == 1 && !m_projecting_view
++                && mouse_control::current_mode() == MOUSE_MODE_COMMAND
++                && m_menu_stack.empty() && !has_pending_input()
++                && m_pending_text_input.empty();
++            const char* state = id == completed_activity_request
++                && !pending_activity_request && idle ? "complete"
++                : id == pending_activity_request ? (prompt ? "prompt" : "busy")
++                : "unknown";
++            json_open_object();
++            json_write_string("msg", "party_activity_status");
++            json_write_int("activity_id", id);
++            json_write_string("state", state);
++            json_write_int("owner", string(state) == "complete"
++                ? completed_activity_owner : party::active_slot());
++            json_write_int("pending_activity_id", pending_activity_request);
++            json_write_int("input_mode", mouse_control::current_mode());
++            if (string(state) == "complete" && completed_activity_plan)
++            {
++                json_write_int("plan_id", completed_activity_plan);
++                json_write_int("plan_turns", completed_activity_turns);
++            }
++            json_close_object();
++            finish_message();
++        }
++        return 0;
++    }
++    const JsonNode* prompt_request = json_find_member(obj.node, "prompt_activity_id");
++    if (prompt_request && msgtype != "ai_prompt"
++        && (!_training_integer(prompt_request, 1, 2147483647)
++            || prompt_request->number_ != pending_activity_request
++            || (mouse_control::current_mode() == MOUSE_MODE_COMMAND && m_menu_stack.empty())
++            || m_viewer_slot != party::active_slot()))
++    {
++        // A delayed response must never become a new command after its prompt
++        // closes, or complete a newer request owned by another character.
++        send_message("{\"msg\":\"game_action_error\",\"message\":\"That prompt has finished.\"}");
++        return 0;
++    }
+ #ifdef DEBUG_WEBSOCKETS
+     fprintf(stderr, "websocket: Received control message '%s' in %d byte.\n", msgtype.c_str(), (int) data.size());
+ #endif
+ 
+     wint_t c = 0;
+-    const auto action_error = [this, &obj](const string& message)
++    const auto action_error = [this, &obj](const string& message) -> wint_t
+     {
+         json_open_object();
+         json_write_string("msg", "game_action_error");
+@@ -600,11 +652,13 @@
+             json_write_string("request_id", request->string_);
+         json_close_object();
+         finish_message();
+-        if (pending_activity_request && mouse_control::current_mode() == MOUSE_MODE_COMMAND)
+-        {
+-            send_message("{\"msg\":\"party_activity_ready\",\"activity_id\":%d}", pending_activity_request);
+-            pending_activity_request = 0;
+-        }
++        const JsonNode* activity = json_find_member(obj.node, "activity_id");
++        // Rejections must use the same completion boundary as accepted input.
++        // In particular, an inline dialog can retain COMMAND mouse mode.
++        return _training_integer(activity, 1, 2147483647)
++            && activity->number_ == pending_activity_request
++            && mouse_control::current_mode() == MOUSE_MODE_COMMAND
++            && m_menu_stack.empty() ? CK_MOUSE_CMD : 0;
+     };
+     const auto acknowledge_control = [this, &obj]()
+     {
+@@ -636,6 +690,10 @@
+     if (activity_id && activity_id->tag == JSON_NUMBER
+         && mouse_control::current_mode() == MOUSE_MODE_COMMAND)
+         pending_activity_request = static_cast<int>(activity_id->number_);
++    const JsonNode* input_floor = json_find_member(obj.node, "input_floor");
++    if (input_floor && (input_floor->tag != JSON_STRING
++        || level_id::current().describe() != input_floor->string_))
++        return action_error("The queued action belongs to another floor. Choose it again.");
+     const JsonNode* plan_id = json_find_member(obj.node, "plan_id");
+     if ((msgtype == "key" || msgtype == "power_action")
+         && mouse_control::current_mode() == MOUSE_MODE_COMMAND
+@@ -647,8 +705,7 @@
+         if (!_training_integer(expected, 0, party::player_count() - 1)
+             || expected->number_ != party::active_slot())
+         {
+-            action_error("The planned hero changed. Queue this action again.");
+-            return 0;
++            return action_error("The planned hero changed. Queue this action again.");
+         }
+         pending_plan_request = static_cast<int>(plan_id->number_);
+     }
+@@ -682,15 +739,13 @@
+         && mouse_control::current_mode() != MOUSE_MODE_COMMAND
+         && m_viewer_slot != party::active_slot())
+     {
+-        action_error("Another hero is finishing an action. Your view is unchanged.");
+-        return 0;
++        return action_error("Another hero is finishing an action. Your view is unchanged.");
+     }
+     if ((msgtype == "inv_item_describe" || msgtype == "inv_item_use" || msgtype == "power_action"
+          || msgtype == "floor_item_action" || msgtype == "party_trade")
+         && mouse_control::current_mode() != MOUSE_MODE_COMMAND)
+     {
+-        action_error("Finish or cancel the current action first.");
+-        return 0;
++        return action_error("Finish or cancel the current action first.");
+     }
+ 
+     if (party::is_enabled()
+@@ -705,8 +760,7 @@
+             int incoming_slot = (int) player_id_node->number_;
+             if (incoming_slot < 0 || incoming_slot >= party::player_count())
+             {
+-                action_error("This hero is no longer available.");
+-                return 0;
++                return action_error("This hero is no longer available.");
+             }
+             if (incoming_slot >= 0 && incoming_slot < party::player_count())
+             {
+@@ -715,16 +769,14 @@
+                     if (mouse_control::current_mode() != MOUSE_MODE_COMMAND
+                         && incoming_slot != party::active_slot())
+                     {
+-                        action_error("Another hero is finishing an action. Your view is unchanged.");
+-                        return 0;
++                        return action_error("Another hero is finishing an action. Your view is unchanged.");
+                     }
+                     if (mouse_control::current_mode() == MOUSE_MODE_COMMAND)
+                     {
+                         party::switch_to_player(incoming_slot);
+                         if (msgtype != "inv_item_describe" && !party::member_can_act(incoming_slot))
+                         {
+-                            action_error("Wait for your hero's recovery on this floor.");
+-                            return 0;
++                            return action_error("Wait for your hero's recovery on this floor.");
+                         }
+                     }
+                 }
+@@ -740,8 +792,7 @@
+                     }
+                     else
+                     {
+-                        action_error("Wait for your hero's turn, or for the current action to finish.");
+-                        return 0;
++                        return action_error("Wait for your hero's turn, or for the current action to finish.");
+                     }
+                 }
+             }
+@@ -1076,18 +1127,15 @@
+                 || !place || place->tag != JSON_STRING
+                 || level_id::current().describe() != place->string_)
+             {
+-                action_error("Tile selection changed. Choose Out of Bounds Tile again.");
+-                return 0;
++                return action_error("Tile selection changed. Choose Out of Bounds Tile again.");
+             }
+             if (!in_bounds(gc) || !env.map_knowledge(gc).known())
+             {
+-                action_error("Choose an explored dungeon tile.");
+-                return 0;
++                return action_error("Choose an explored dungeon tile.");
+             }
+             if (!is_map_persistent())
+             {
+-                action_error("You cannot set exclusions on this level.");
+-                return 0;
++                return action_error("You cannot set exclusions on this level.");
+             }
+             if (is_exclude_root(gc))
+             {
+@@ -1163,9 +1211,9 @@
+             if (use_item && action != "use" && action != "weave"
+                 && item_is_equipped(you.inv[inv_slot]) != (action == "unequip"))
+             {
+-                action_error("The item's equipment changed. Select the item again.");
++                const wint_t rejected = action_error("The item's equipment changed. Select the item again.");
+                 _send_party_state();
+-                return 0;
++                return rejected;
+             }
+             if (use_item && action == "assimilate")
+             {
+@@ -1180,9 +1228,9 @@
+                     || !_training_integer(quantity, 1, INT_MAX)
+                     || quantity->number_ != item.quantity)
+                 {
+-                    action_error("The item changed or assimilation is unavailable. Select it again.");
++                    const wint_t rejected = action_error("The item changed or assimilation is unavailable. Select it again.");
+                     _send_party_state();
+-                    return 0;
++                    return rejected;
+                 }
+             }
+             if (use_item && action == "weave")
+@@ -1192,8 +1240,7 @@
+                 if (!player_has_ability(ABIL_VELLUM_WEAVE) || !_training_integer(uid, 1, INT_MAX)
+                     || uid->number_ != vellum::item_id(item))
+                 {
+-                    action_error("The hero or item changed. Select it again.");
+-                    return 0;
++                    return action_error("The hero or item changed. Select it again.");
+                 }
+             }
+             if (use_item && workshop_action)
+@@ -1206,9 +1253,9 @@
+                     || !stamp || stamp->tag != JSON_STRING
+                     || stamp->string_ != pakellas::fingerprint(item))
+                 {
+-                    action_error("The device or workshop funding changed. Choose the action again.");
++                    const wint_t rejected = action_error("The device or workshop funding changed. Choose the action again.");
+                     _send_party_state();
+-                    return 0;
++                    return rejected;
+                 }
+             }
+             if (use_item)
+@@ -1880,8 +1927,18 @@
+     json_write_int("mode", mode);
+     // Personal-view COMMAND snapshots are not command acknowledgements.
+     // Echo the exact plan token only at the native action boundary.
+-    if (mode == MOUSE_MODE_COMMAND && prev_mode != MOUSE_MODE_COMMAND
+-        && !m_projecting_view && pending_plan_request)
++    const bool command_complete = mode == MOUSE_MODE_COMMAND
++        && prev_mode != MOUSE_MODE_COMMAND && !m_projecting_view
++        && !control_message_depth && !has_pending_input()
++        && m_pending_text_input.empty();
++    if (command_complete && pending_activity_request)
++    {
++        completed_activity_request = pending_activity_request;
++        completed_activity_plan = pending_plan_request;
++        completed_activity_turns = you.num_turns;
++        completed_activity_owner = party::active_slot();
++    }
++    if (command_complete && pending_plan_request)
+     {
+         json_write_int("plan_id", pending_plan_request);
+         json_write_int("plan_turns", you.num_turns);
+@@ -1889,7 +1946,7 @@
+     }
+     json_close_object();
+     finish_message();
+-    if (mode == MOUSE_MODE_COMMAND && prev_mode != MOUSE_MODE_COMMAND && pending_activity_request)
++    if (command_complete && pending_activity_request)
+     {
+         json_open_object();
+         json_write_string("msg", "party_activity_ready");

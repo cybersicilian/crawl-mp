@@ -2685,4 +2685,61 @@ static const mon_spellbook mspell_list[] =
        { SPELL_PHANTOM_MIRROR, 33, MON_SPELL_MAGICAL },
       }
     },
+
+    {  MST_SILVER_STAR,
+      {
+       { SPELL_CLEANSING_FLAME, 35, MON_SPELL_MAGICAL },
+       { SPELL_LIGHTNING_BOLT, 35, MON_SPELL_MAGICAL },
+       { SPELL_BLINK_OTHER, 20, MON_SPELL_MAGICAL },
+      }
+    },
+
+    {  MST_CHAIN_WARDEN,
+      {
+       { SPELL_HARPOON_SHOT, 35, MON_SPELL_WIZARD },
+       { SPELL_THROW_BOLAS, 30, MON_SPELL_WIZARD },
+       { SPELL_SEAL_DOORS, 25, MON_SPELL_WIZARD },
+      }
+    },
+
+    {  MST_VOID_TETHER_STALKER,
+      {
+       { SPELL_WARP_SPACE, 30, MON_SPELL_MAGICAL },
+       { SPELL_BLINK_OTHER_CLOSE, 30, MON_SPELL_MAGICAL },
+       { SPELL_CORRUPTING_PULSE, 25, MON_SPELL_MAGICAL },
+      }
+    },
+    {  MST_SHALE_DRAKE,
+      {
+       { SPELL_STONE_ARROW, 50, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+      }
+    },
+
+    {  MST_DEEP_TROLL_DELVER,
+      {
+       { SPELL_DIG, 29, MON_SPELL_WIZARD },
+       { SPELL_STONE_ARROW, 40, MON_SPELL_WIZARD },
+      }
+    },
+    { MST_FIRE_FOX,
+      {
+       { SPELL_FOXFIRE, 39, MON_SPELL_NATURAL },
+       { SPELL_BLINK, 6, MON_SPELL_WIZARD | MON_SPELL_EMERGENCY },
+      }
+    },
+    { MST_RIN,
+      {
+       { SPELL_FORCE_LANCE, 65, MON_SPELL_WIZARD },
+       { SPELL_BATTLESPHERE, 65, MON_SPELL_WIZARD },
+       { SPELL_IOOD, 13, MON_SPELL_WIZARD },
+       { SPELL_MESMERISE, 39, MON_SPELL_WIZARD },
+      }
+    },
+    { MST_GREENWOOD_WITCH,
+      {
+       { SPELL_SLEEP, 15, MON_SPELL_WIZARD },
+       { SPELL_POLYMORPH, 15, MON_SPELL_WIZARD },
+       { SPELL_BOLT_OF_DRAINING, 30, MON_SPELL_WIZARD },
+      }
+    },
 };

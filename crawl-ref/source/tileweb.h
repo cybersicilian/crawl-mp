@@ -9,11 +9,14 @@
 
 #include <bitset>
 #include <map>
+#include <memory>
+#include <set>
 #include <vector>
 
 #include <sys/un.h>
 
 #include "cursor-type.h"
+#include "json.h"
 #include "map-cell.h"
 #include "map-knowledge.h"
 #include "status.h"
@@ -161,6 +164,8 @@ public:
 
     void send_exit_reason(const string& type, const string& message = "");
     void send_dump_info(const string& type, const string& filename);
+    void send_traversal_effect(const vector<coord_def>& path, bool impact,
+                               const string& sprite = "");
 
     string get_message();
     void write_message(PRINTF(1, ));
@@ -236,6 +241,26 @@ protected:
     int m_sock;
     int m_max_msg_size;
     string m_msg_buf;
+    int m_viewer_slot = -1;
+    bool m_projecting_view = false;
+    string m_ai_snapshots[4];
+    string m_ai_guards[4];
+    int m_ai_revisions[4] = {};
+    int m_ai_slots = 0;
+    bool m_personal_dirty = true;
+    // Last party_state / ai_state frame sent to each hero's personal stream.
+    // A byte-identical projection is skipped (the server also dedups, but
+    // the socket and fan-out cost is native).
+    string m_personal_party_frames[4];
+    string m_personal_ai_frames[4];
+    string* m_frame_sink = nullptr;
+    bool m_raw_frame = false;
+    struct personal_view_cache;
+    struct personal_floor_cache;
+    vector<std::shared_ptr<personal_view_cache>> m_personal_views;
+    map<string, std::shared_ptr<personal_floor_cache>> m_personal_floors;
+    set<coord_def> m_personal_changed;
+    bool m_personal_reset = true;
     vector<sockaddr_un> m_dest_addrs;
 
     bool m_controlled_from_web;
@@ -346,6 +371,18 @@ protected:
                     bool& current_uselessness,
                     bool force_full);
     void _send_messages();
+    void _send_party_state();
+    string _ai_state_json();
+    string _ai_guard();
+    void _send_ai_state();
+    bool _handle_ai_action(const JsonNode* obj);
+    void _send_enemy_initiative();
+    void _write_item_training(const item_def &item);
+    void _send_personal_views(bool force_full = false, int force_slot = -1);
+    void _clear_personal_views();
+    void _send_captured_frame(string& frame);
+    void _reset_personal_frames();
+    string _personal_cell_json(const coord_def& cell);
 };
 
 // Main interface for tiles functions

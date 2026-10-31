@@ -140,6 +140,9 @@ public:
     }
 
     virtual ~MenuEntry() { }
+#ifdef USE_TILE_WEB
+    virtual void webtiles_write_metadata() const { }
+#endif
 
     bool is_enabled() const { return m_enabled; }
     void set_enabled(bool b) { m_enabled = b; }
@@ -318,6 +321,7 @@ public:
     int  get_flags() const        { return flags; }
     virtual bool is_set(int flag) const;
     void set_tag(const string& t) { tag = t; }
+    const string& get_tag() const { return tag; }
 
     bool minus_is_command() const;
     // Sets a replacement for the default -more- string.
@@ -397,6 +401,9 @@ public:
     void webtiles_write_menu(bool replace = false) const;
     void webtiles_scroll(int first, int hover);
     void webtiles_handle_item_request(int start, int end);
+    virtual void webtiles_set_category(int) { }
+    // Return a native key to finish selection through the normal menu loop.
+    virtual int webtiles_action(const string&, int) { return 0; }
 #endif
 protected:
     string _title_prompt_help_tag;

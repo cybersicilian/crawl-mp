@@ -1,0 +1,136 @@
+/* Account dialogs share one modal shell: title, body, actions row.
+ * Native submit/cancel behavior and field ids are unchanged.
+ *
+ * .tr-btn / .tr-callout / .tr-card are the design-system classes. The global
+ * definitions were not present when this file was written, so minimal local
+ * equivalents are scoped to .account-dialog and .account-notice below. Remove
+ * the scoped copies once tr-components ship. */
+#lobby .account-dialog {
+    --dialog-ink: var(--ui-text, var(--tt-text, #efe5cf));
+    --dialog-muted: var(--ui-muted, var(--tt-muted, #c2b295));
+    --dialog-panel: var(--ui-panel, #141b18);
+    --dialog-recess: var(--ui-recess, #091310);
+    --dialog-edge: var(--ui-edge, #8c714c);
+    --dialog-gold: var(--ui-accent-bright, var(--tt-brass-light, #f4cb78));
+    --dialog-brass: var(--ui-accent, var(--tt-brass, #d89b48));
+    --dialog-danger: #e8958a;
+    position: fixed;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3000;
+    box-sizing: border-box;
+    width: min(460px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    padding: 24px 26px 22px;
+    border: 1px solid #c8ac7270;
+    border-radius: 10px;
+    background: linear-gradient(140deg, #24342c60, transparent), var(--dialog-panel);
+    box-shadow: 0 20px 80px #000b, 0 0 0 100vmax #060c0bb3;
+    color: var(--dialog-ink);
+    font: 13px/1.6 var(--tt-font-ui);
+}
+#lobby .account-dialog:focus { outline: none; }
+#lobby .account-dialog:focus-visible { outline: 2px solid var(--dialog-gold); outline-offset: -4px; }
+.account-dialog-head { margin: 0 0 16px; }
+.account-dialog-title { margin: 0; color: #e3c58b; font: 600 26px/1.2 var(--tt-font-title); }
+.account-dialog-title-small { font-size: 19px; }
+.account-dialog-lede { margin: 6px 0 0; color: var(--dialog-muted); font-size: 12px; line-height: 1.55; }
+.account-dialog-value { color: var(--dialog-ink); font-weight: 600; }
+.account-dialog-body { display: block; margin: 0 0 16px; color: var(--dialog-ink); overflow-wrap: anywhere; }
+.account-dialog-body pre { max-width: 100%; overflow: auto; }
+.account-dialog-pre { max-width: 100%; margin: 0 0 12px; overflow: auto; color: var(--dialog-muted); font: 12px/1.5 var(--tt-font-mono); white-space: pre-wrap; }
+.account-dialog-links { margin: 0 0 12px; text-align: left; }
+#lobby .account-dialog-form { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+#lobby .account-dialog-form br { display: none; }
+.account-field { display: grid; gap: 6px; min-width: 0; }
+#lobby .account-field label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    float: none;
+    width: auto;
+    margin: 0;
+    color: #dfd2b9;
+    font: 600 11px/1.5 var(--tt-font-ui);
+}
+.account-field-optional { color: var(--dialog-muted); font-weight: 500; letter-spacing: 0.02em; text-transform: lowercase; }
+#lobby .account-dialog .text {
+    box-sizing: border-box;
+    float: none;
+    width: 100%;
+    min-height: 42px;
+    margin: 0;
+    padding: 9px 11px;
+    border: 1px solid #c3b88750;
+    border-radius: 6px;
+    background: var(--dialog-recess);
+    color: #eee8d5;
+    font: 13px/1.5 var(--tt-font-ui);
+}
+#lobby .account-dialog .text:focus { border-color: var(--dialog-gold); outline: 2px solid var(--dialog-gold); outline-offset: 1px; }
+#lobby .account-dialog .text[aria-invalid="true"] { border-color: var(--dialog-danger); }
+.account-field-hint, .account-field-help { display: block; color: var(--dialog-muted); font-size: 11px; line-height: 1.5; }
+.account-field-hint:empty { display: none; }
+.account-field-hint.is-mismatch { color: var(--dialog-danger); }
+.account-field-hint.is-match { color: #b9dcb5; }
+.account-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+#lobby .account-dialog-actions > * { float: none; }
+
+/* Local equivalents of the shared design-system classes (scoped). */
+#lobby .account-dialog .tr-btn, #lobby .admin-tools .tr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 8px 16px;
+    border: 1px solid #bba57170;
+    border-radius: 6px;
+    background: #ffffff0a;
+    color: #e4ddc7;
+    font: 600 12px/1.4 var(--tt-font-ui);
+    text-decoration: none;
+    cursor: pointer;
+}
+#lobby .account-dialog .tr-btn:hover, #lobby .admin-tools .tr-btn:hover { background: #ffffff14; border-color: var(--dialog-brass, #d89b48); color: #fff6df; }
+#lobby .account-dialog .tr-btn:focus-visible, #lobby .admin-tools .tr-btn:focus-visible { outline: 2px solid var(--dialog-gold, #f4cb78); outline-offset: 3px; }
+#lobby .account-dialog .tr-btn-primary {
+    border-color: #e6b05c;
+    background: linear-gradient(180deg, #e8ad52, #b85f2e);
+    color: #fffaf0;
+    font-weight: 700;
+    text-shadow: 0 1px 1px #00000050;
+}
+#lobby .account-dialog .tr-btn-primary:hover { background: linear-gradient(180deg, #f2be68, #c96c38); color: #fffaf0; }
+#lobby .account-dialog .tr-callout, #lobby .account-notice.tr-callout {
+    display: none;
+    box-sizing: border-box;
+    margin: 0 0 14px;
+    padding: 9px 12px;
+    border: 1px solid #d89b4860;
+    border-left-width: 3px;
+    border-radius: 5px;
+    background: #d89b4814;
+    color: #f4cb78;
+    font-size: 12px;
+    line-height: 1.5;
+}
+#lobby .account-dialog .tr-callout:not(:empty) { display: block; color: #f3c3ba; border-color: #e07a6c; background: #a82e2418; }
+#lobby .account-dialog .tr-callout.is-error { color: #f3c3ba; border-color: #e07a6c; background: #a82e2418; }
+#lobby .account-notice.tr-callout { display: block; max-width: 760px; margin: 12px auto; color: #f0d9a8; }
+#lobby .account-notice.tr-callout[style*="display: none"] { display: none; }
+#lobby .admin-tools { max-width: 1160px; margin: 0 auto; }
+#lobby .admin-panel { padding: 16px; border: 1px solid #c8ac7250; border-radius: 8px; background: #141b18; color: var(--tt-text, #efe5cf); }
+#lobby .admin-panel hr { border: 0; border-top: 1px solid #c8ac7230; }
+#lobby .admin-panel .text { box-sizing: border-box; min-height: 36px; padding: 6px 10px; border-radius: 5px; }
+#lobby .admin-tools .tr-btn { min-height: 36px; margin: 4px 0; }
+@media (max-width: 480px) {
+    #lobby .account-dialog { padding: 20px 18px 18px; }
+    .account-dialog-title { font-size: 23px; }
+    .account-dialog-actions > .tr-btn { flex: 1 1 120px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #lobby .account-dialog { transition: none; }
+}

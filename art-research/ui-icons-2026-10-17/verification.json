@@ -1,0 +1,18 @@
+{
+  "verifiedOn": "2026-10-17",
+  "canonicalCount": 112,
+  "aliasCount": 24,
+  "allMappingsAccountedFor": true,
+  "sourcePngHashMatches": true,
+  "allSelectedIconsNative16px": true,
+  "atlasPixelsMatchSources": true,
+  "gapFramesTransparentAndExplicit": true,
+  "runtimeInstalled": false,
+  "semanticAssessment": "Reviewer judgment, not user recognition testing.",
+  "liveHudProof": false,
+  "comparisonSurfaces": [
+    "#24282b",
+    "#f8f2e4",
+    "#fffdf7"
+  ]
+}

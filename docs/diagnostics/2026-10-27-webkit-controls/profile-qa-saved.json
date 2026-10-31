@@ -1,0 +1,15 @@
+{
+  "owner": "Perf0mvr3l91d",
+  "native_processes": [],
+  "games": [
+    {
+      "id": "e813e777-feac-4221-9b97-4c875be376a9",
+      "owner": "Perf0mvr3l91d",
+      "status": "saved",
+      "save_dir": "/var/lib/dcss/rcs/library/saves/e813e777-feac-4221-9b97-4c875be376a9",
+      "native_packages": [
+        "/var/lib/dcss/rcs/library/saves/e813e777-feac-4221-9b97-4c875be376a9/Perf0mvr3l91d.cs"
+      ]
+    }
+  ]
+}

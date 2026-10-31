@@ -76,6 +76,8 @@ string describe_item_rarity(const item_def &item, bool terse = false);
 void get_item_desc(const item_def &item, describe_info &inf);
 void inscribe_item(item_def &item);
 void target_item(item_def &item);
+int item_training_target(const item_def &item); // level scaled by 10, or 0
+skill_type item_training_skill(const item_def &item);
 void desc_randart_props(const item_def &item, vector<string> &lines);
 string damage_rating(const item_def *item, int *rating_value = nullptr);
 

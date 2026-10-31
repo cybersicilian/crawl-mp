@@ -25,6 +25,7 @@
 #include "macro.h"
 #include "map-knowledge.h"
 #include "message.h"
+#include "party.h"
 #include "religion.h"
 #include "showsymb.h"
 #include "tag-version.h"
@@ -357,6 +358,33 @@ static void player_view_update()
             update_excludes.push_back(*ri);
         if (flags & update_flag::added_exclude)
             need_update = true;
+    }
+    if (party::is_enabled() && !party::multiplayer_enabled())
+    {
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == party::active_slot() || party::is_player_downed(slot))
+                continue;
+            const player &p = party::get_player(slot);
+            if (!p.on_current_level
+                || p.where_are_you != you.where_are_you || p.depth != you.depth
+                || !in_bounds(p.pos()))
+            {
+                continue;
+            }
+            for (radius_iterator ri(p.pos(), LOS_DEFAULT); ri; ++ri)
+            {
+                if (p.see_cell(*ri))
+                {
+                    set_terrain_visible(*ri);
+                    update_flags flags = player_view_update_at(*ri);
+                    if (flags & update_flag::affect_excludes)
+                        update_excludes.push_back(*ri);
+                    if (flags & update_flag::added_exclude)
+                        need_update = true;
+                }
+            }
+        }
     }
     // Update exclusion LOS for possibly affected excludes.
     update_exclusion_los(update_excludes);

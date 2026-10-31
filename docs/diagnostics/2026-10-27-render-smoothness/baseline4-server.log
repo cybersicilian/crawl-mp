@@ -1,0 +1,34 @@
+WARN:root:Skipping game definitions in `games.d/` based on config
+WARN:root:User database '/tmp/dcss-smooth-g2x3mhpu/accounts.db3' didn't exist; creating it now.
+WARN:root:User settings database didn't exist at '/tmp/dcss-smooth-g2x3mhpu/settings.db3'; creating it now.
+WARN:root:#0     Error while handling JSON message (''{"username":"Smoothmvrfsz2x","password":"crawl","e'...')!
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/ws_handler.py", line 1928, in on_message
+    handler(**obj)
+    ~~~~~~~^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/ws_handler.py", line 1304, in register
+    self.do_login(username)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/ws_handler.py", line 1086, in do_login
+    self.init_user(login_callback)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/webtiles/ws_handler.py", line 1018, in init_user
+    p = tornado.process.Subprocess(
+            [config.get('init_player_program'), self.username],
+            stdout = f, stderr = subprocess.STDOUT)
+  File "/Users/iancaltabiano/Documents/Projects/dcss/.venv/lib/python3.13/site-packages/tornado/process.py", line 240, in __init__
+    self.proc = subprocess.Popen(*args, **kwargs)
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1991, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: './util/webtiles-init-player.sh'

@@ -47,6 +47,9 @@
 #include "throw.h"
 #include "tilepick.h"
 #include "tile-env.h"
+#ifdef USE_TILE_WEB
+#include "tileweb.h"
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Inventory menu shenanigans
@@ -401,6 +404,50 @@ void InvMenu::cycle_page(int dir)
     while (items.empty());
 }
 
+#ifdef USE_TILE_WEB
+void InvEntry::webtiles_write_metadata() const
+{
+    ::tiles.json_write_string("label", item->name(DESC_PLAIN, true, false, true));
+    if (!hotkeys.empty())
+        ::tiles.json_write_string("letter", string(1, hotkeys.front()));
+    ::tiles.json_write_bool("equipped", is_equipped());
+    ::tiles.json_write_string("item_kind", item_class_name(item->base_type));
+}
+
+void InvMenu::webtiles_set_category(int page)
+{
+    if (page >= 0 && page < static_cast<int>(ARRAYSZ(modes))
+        && is_set(MF_PAGED_INVENTORY))
+    {
+        set_page(page);
+        webtiles_update_title();
+    }
+}
+
+void InvMenu::webtiles_write_title() const
+{
+    Menu::webtiles_write_title();
+    if (!is_set(MF_PAGED_INVENTORY))
+        return;
+    static const char* labels[] = { "Gear", "Potions", "Scrolls", "Evocables" };
+    tiles.json_write_int("active_category", cur_osel);
+    tiles.json_open_array("categories");
+    for (size_t page = 0; page < ARRAYSZ(modes); ++page)
+    {
+        int count = 0;
+        for (const item_def& item : you.inv)
+            if (item.defined() && item_is_selected(item, modes[page]))
+                ++count;
+        tiles.json_open_object();
+        tiles.json_write_int("id", page);
+        tiles.json_write_string("label", labels[page]);
+        tiles.json_write_int("count", count);
+        tiles.json_close_object();
+    }
+    tiles.json_close_array();
+}
+#endif
+
 void InvMenu::set_page(int page)
 {
     ASSERT(page >= 0 && page < static_cast<int>(ARRAYSZ(modes)));
@@ -686,7 +733,7 @@ bool get_tiles_for_item(const item_def &item, vector<tile_def>& tileset, bool sh
         if (testbits(item.flags, ISFLAG_CHAOTIC))
             tileset.emplace_back(TILE_MODIFIER_CHAOTIC);
 
-        tileidx_t base_item = tileidx_known_base_item(idx);
+        tileidx_t base_item = tileidx_known_base_item(item);
         if (base_item)
             tileset.emplace_back(base_item);
         tileset.emplace_back(idx);
@@ -706,7 +753,7 @@ bool get_tiles_for_item(const item_def &item, vector<tile_def>& tileset, bool sh
             ch = tileidx_feature(c);
             tileset.emplace_back(ch);
         }
-        tileidx_t base_item = tileidx_known_base_item(idx);
+        tileidx_t base_item = tileidx_known_base_item(item);
         if (base_item)
             tileset.emplace_back(base_item);
 
@@ -1715,7 +1762,7 @@ bool needs_handle_warning(const item_def &item, operation_types oper,
     if ((oper == OPER_EQUIP || oper == OPER_UNEQUIP))
     {
         if ((item.is_type(OBJ_JEWELLERY, AMU_FAITH)
-            || is_unrandom_artefact(item, UNRAND_FORGEWARDEN))
+            || has_unrand_effect(item, UNRAND_FORGEWARDEN))
             && faith_has_penalty())
         {
             return true;
@@ -1736,7 +1783,7 @@ bool needs_handle_warning(const item_def &item, operation_types oper,
         }
     }
 
-    if (oper == OPER_UNEQUIP && is_unrandom_artefact(item, UNRAND_VICTORY)
+    if (oper == OPER_UNEQUIP && has_unrand_effect(item, UNRAND_VICTORY)
         && item.props[VICTORY_STAT_KEY].get_int() > 0)
     {
         return true;

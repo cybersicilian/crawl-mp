@@ -68,6 +68,7 @@ bool check_selected_skills();
 void init_train();
 void init_training();
 void reset_training();
+void set_training_mode(bool automatic);
 int calc_skill_level_change(skill_type sk, int starting_level, int sk_points);
 void check_skill_level_change(skill_type sk, bool do_level_up = true);
 void change_skill_level(skill_type exsk, int num_level);
@@ -75,6 +76,8 @@ void change_skill_points(skill_type sk, int points, bool do_level_up);
 
 bool is_mundane_skill(skill_type sk);
 bool is_magic_skill(skill_type sk);
+const vector<skill_type>& magic_skills();
+const vector<skill_type>& magic_school_skills();
 
 void exercise(skill_type exsk, int deg);
 void train_skills(bool simu = false);
@@ -114,6 +117,8 @@ skill_type random_skill();
 bool can_sacrifice_skill(mutation_type mut);
 bool is_forbidden_skill(skill_type skill);
 bool is_useless_skill(skill_type skill, bool include_god = true);
+bool high_elf_skill_locked(const player& p, skill_type sk);
+string high_elf_skill_lock_reason(const player& p, skill_type sk);
 bool can_enable_skill(skill_type sk);
 bool trainable_skills();
 bool skills_being_trained();
@@ -128,6 +133,7 @@ skill_diff skill_level_to_diffs(skill_type skill, double amount,
 
 vector<skill_type> get_crosstrain_skills(skill_type sk);
 int get_crosstrain_points(skill_type sk);
+int get_crosstrain_bonus(skill_type sk, int scale = 10);
 
 void skill_menu(int flag = 0, int exp = 0);
 void dump_skills(string &text);
@@ -172,7 +178,7 @@ static const skill_type skill_display_order[] =
 
     SK_BLANK_LINE,
 
-    SK_CONJURATIONS, SK_HEXES, SK_SUMMONINGS,
+    SK_CONJURATIONS, SK_HEXES, SK_AURAMANCY, SK_SUMMONINGS,
     SK_NECROMANCY, SK_FORGECRAFT, SK_TRANSLOCATIONS, SK_ALCHEMY,
     SK_FIRE_MAGIC, SK_ICE_MAGIC, SK_AIR_MAGIC, SK_EARTH_MAGIC,
 

@@ -1,0 +1,25 @@
+{
+  "reservationId": "2c0a2a12-cd4e-466f-b56a-8e5f7c75f5cd",
+  "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "2c0a2a12-cd4e-466f-b56a-8e5f7c75f5cd",
+      "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+      "label": "DCSS adaptive player sidebar browser check",
+      "requestedAt": 1792462661.9920099,
+      "supervisorPid": 99904,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "c41973b32d5ef3fd7e77c70ee15725169eace55eed6fb14dc2647b100511485c",
+      "startedAt": 1792462661.992435,
+      "workerPid": 99905,
+      "processGroup": 99905,
+      "exitCode": 1,
+      "finishedAt": 1792462663.4281769,
+      "supervisedProcessGroupGone": true
+    },
+    "browserFinallyClosed": true,
+    "result": "fixture_dependency_failure; source preflight also observed concurrent inventory edit; no acceptance claim"
+  }
+}

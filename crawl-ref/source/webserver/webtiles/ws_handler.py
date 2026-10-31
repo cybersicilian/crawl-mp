@@ -2,6 +2,7 @@ import codecs
 import collections
 import datetime
 import errno
+import functools
 import logging
 import os
 import random
@@ -11,6 +12,7 @@ import time
 import zlib
 
 import tornado.ioloop
+import tornado.iostream
 import tornado.template
 import tornado.websocket
 import tornado.gen
@@ -20,7 +22,12 @@ from tornado.escape import to_unicode
 from tornado.escape import utf8
 from tornado.ioloop import IOLoop
 
-from webtiles import auth, checkoutput, config, userdb, util, load_games
+from webtiles import auth, checkoutput, chronicle, config, userdb, util, load_games
+from webtiles import game_library, library_socket, starting_weapons, crash_reports, system_one
+from webtiles.character_preview import ensure_seed
+from webtiles import session_recovery, party_roster
+from webtiles import profile_appearance, profile_graphics, game_settings_socket
+from webtiles.state_transport import append_snapshot
 
 try:
     from typing import Dict, Set, Tuple, Any, Union, Optional
@@ -31,6 +38,116 @@ sockets = set() # type: Set[CrawlWebSocket]
 current_id = 0
 shutting_down = False
 rand = random.SystemRandom()
+
+PARTY_ROOMS = collections.OrderedDict() # type: Dict[str, Dict[str, Any]]
+USER_PARTY_SPECS = {} # type: Dict[str, Dict[str, Any]]
+
+DEFAULT_PARTY_SLOTS = [
+    {"slot": 0, "state": "player", "username": "", "hero_name": "Aldric", "species": "Minotaur", "job": "Fighter", "ready": True},
+    {"slot": 1, "state": "companion", "username": "", "hero_name": "Lyra", "species": "Deep Elf", "job": "Conjurer", "ready": True},
+    {"slot": 2, "state": "open", "username": "", "hero_name": "Karn", "species": "Gargoyle", "job": "Earth Elementalist", "ready": True},
+    {"slot": 3, "state": "open", "username": "", "hero_name": "Vex", "species": "Spriggan", "job": "Enchanter", "ready": True},
+]
+
+def _sanitize_hero_name(raw_name, fallback="Hero"):
+    if not raw_name:
+        return fallback
+    cleaned = "".join(ch for ch in str(raw_name).strip() if ch not in ",:/\r\n\t")
+    cleaned = cleaned[:20].strip()
+    return cleaned if cleaned else fallback
+
+def _get_chronicle_payload():
+    try:
+        return chronicle.get_chronicle_summary(limit=25)
+    except Exception:
+        return {"ghosts": [], "party_comps": [], "cool_items": []}
+
+def _finish_record(record_id, reason):
+    """Library worker: merge the last event snapshot and close the record."""
+    game_library.ingest(record_id)
+    game_library.finish_game(record_id, reason)
+    return game_library.get_game(record_id)
+
+def broadcast_party_rooms():
+    rooms_list = [party_roster.describe(room) for room in PARTY_ROOMS.values()]
+    for room in rooms_list:
+        for slot in room.get("slots", []):
+            starting_weapons.normalize_slot(slot)
+            ensure_seed(slot)
+    lobby_sockets = [s for s in list(sockets) if s.is_in_lobby()]
+    if not lobby_sockets:
+        return
+    # Serialize once, then deliver both updates in a single frame per socket
+    # instead of re-encoding the room list for every recipient.
+    rooms_msg = json_encode(dict(msg="party_rooms_list", rooms=rooms_list))
+    chronicle_msg = json_encode(dict(msg="coop_chronicle", **_get_chronicle_payload()))
+    for socket in lobby_sockets:
+        socket.append_message(rooms_msg, False)
+        socket.append_message(chronicle_msg, True)
+
+def _reset_party_slot(slot):
+    idx = slot["slot"]
+    slot["username"] = ""
+    slot["state"] = "companion" if idx == 1 else "open"
+    slot["hero_name"] = DEFAULT_PARTY_SLOTS[idx]["hero_name"]
+    slot["ready"] = True
+
+def _vacate_party_rooms(username):
+    """Drop a departed user's staging room and free their guest seats.
+
+    Launched rooms belong to a running game and are handled by _on_crawl_end.
+    Returns whether anything changed."""
+    changed = False
+    lowered = username.lower()
+    for rid, room in list(PARTY_ROOMS.items()):
+        if room.get("host", "").lower() == lowered:
+            if room.get("status") != "launched":
+                del PARTY_ROOMS[rid]
+                changed = True
+            continue
+        for slot in room.get("slots", [])[1:]:
+            if slot.get("username", "").lower() == lowered:
+                _reset_party_slot(slot)
+                changed = True
+    return changed
+
+def _expire_party_presence(username):
+    if any(not s.client_closed for s in find_user_sockets(username)):
+        return
+    if _vacate_party_rooms(username):
+        broadcast_party_rooms()
+
+def _schedule_party_presence_check(username):
+    # Rooms used to outlive their members forever: a host whose socket
+    # dropped left a permanent staging room in every lobby broadcast. Give a
+    # reconnecting browser the same grace period as a running game.
+    delay = config.get('reconnect_grace_period') or 0
+    if delay <= 0:
+        _expire_party_presence(username)
+        return
+    IOLoop.current().call_later(delay, _expire_party_presence, username)
+
+def _resolve_party_room(room_id=None, username=None):
+    if room_id and room_id in PARTY_ROOMS:
+        return PARTY_ROOMS[room_id]
+    if room_id and ("room-" + str(room_id)) in PARTY_ROOMS:
+        return PARTY_ROOMS["room-" + str(room_id)]
+    if room_id:
+        for r in PARTY_ROOMS.values():
+            if r.get("host", "").lower() == str(room_id).lower():
+                return r
+    if username:
+        for r in PARTY_ROOMS.values():
+            if r.get("host", "").lower() == username.lower():
+                return r
+            for s in r.get("slots", []):
+                if s.get("username", "").lower() == username.lower():
+                    return r
+    # A supplied identity must resolve to its own room. Falling back here can
+    # make a new host's build apply to an unrelated player's sole room.
+    if not room_id and not username and len(PARTY_ROOMS) == 1:
+        return next(iter(PARTY_ROOMS.values()))
+    return None
 
 def shutdown():
     global shutting_down
@@ -283,7 +400,7 @@ def admin_only(f):
 MessageBundle = collections.namedtuple('MessageBundle', ["binmsg", "compressed"])
 MessageBundle.__bool__ = lambda self: bool(self.binmsg)
 
-class CrawlWebSocket(tornado.websocket.WebSocketHandler):
+class CrawlWebSocket(library_socket.LibrarySocketMethods, tornado.websocket.WebSocketHandler):
     def __init__(self, app, req, **kwargs):
         tornado.websocket.WebSocketHandler.__init__(self, app, req, **kwargs)
         self.username = None
@@ -295,7 +412,16 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         self.process = None
         self.game_id = None
         self.received_pong = None
+        self.reconnect_timeout = None
+        # True once on_close has run; client_closed alone is True as soon as
+        # the server initiates a close, before the handshake completes.
+        self.close_handled = False
+        # The library worker's Future closing the last expedition's record.
+        self._record_finish = None
         self.save_info = dict()
+        self.party_member_active = False
+        self.party_slot = 0
+        self.state_deltas = False
 
         tornado.ioloop.IOLoop.current()
 
@@ -304,9 +430,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         current_id += 1
 
         self.deflate = True
-        self._compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION,
-                                             zlib.DEFLATED,
-                                             -zlib.MAX_WBITS)
+        self._compressobj = None
         self.total_message_bytes = 0
         self.compressed_bytes_sent = 0
         self.uncompressed_bytes_sent = 0
@@ -328,7 +452,28 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             "forget_login_cookie": self.forget_login_cookie,
             "play": self.start_crawl,
             "pong": self.pong,
+            "ping": self.connection_ping,
+            "transport_hello": self.transport_hello,
+            "transport_resync": self.transport_resync,
+            "latency_probe": self.latency_probe,
             "watch": self.watch,
+            "join_party": self.join_party,
+            "party_lobby_list": self.party_lobby_list,
+            "party_room_create": self.party_room_create,
+            "party_room_join": self.party_room_join,
+            "party_room_leave": self.party_room_leave,
+            "party_room_update_slot": self.party_room_update_slot,
+            "party_room_settings": self.party_room_settings,
+            "party_room_launch": self.party_room_launch,
+            "party_room_apply_comp": self.party_room_apply_comp,
+            "chronicle_fetch": self.chronicle_fetch,
+            "library_fetch": self.library_fetch_async,
+            "profile_appearance_fetch": lambda **kwargs: profile_appearance.send_state(self),
+            "profile_graphics_fetch": lambda **kwargs: profile_graphics.send_state(self),
+            "library_load": self.library_load,
+            "expedition_open": self.expedition_open,
+            "library_save": self.library_save,
+            "library_delete": self.library_delete,
             "chat_msg": self.post_chat_message,
             "register": self.register,
             "start_change_email": self.start_change_email,
@@ -339,6 +484,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             "reset_password": self.reset_password,
             "go_lobby": self.go_lobby,
             "go_admin": self.go_admin,
+            "get_game_settings": lambda **kwargs: game_settings_socket.handle(self, **kwargs),
+            "set_game_settings": lambda **kwargs: game_settings_socket.handle(self, save=True, **kwargs),
             "get_rc": self.get_rc,
             "set_rc": self.set_rc,
             "admin_announce": self.admin_announce,
@@ -400,13 +547,33 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         return True
 
     def select_subprotocol(self, subprotocols):
+        if "native-deflate-v1" in subprotocols:
+            self.deflate = False
+            self.subprotocol = "native-deflate-v1"
+            return self.subprotocol
         if "no-compression" in subprotocols:
             self.deflate = False
             self.subprotocol = "no-compression"
             return "no-compression"
         return None
 
+    def get_compression_options(self):
+        protocols = self.request.headers.get("Sec-WebSocket-Protocol", "").split(",")
+        if "native-deflate-v1" in [protocol.strip() for protocol in protocols]:
+            return {"compression_level": 1}
+        return None
+
     def open(self):
+        # Keystroke responses should not wait for TCP small-packet coalescing.
+        self.set_nodelay(True)
+        limit = config.get('websocket_max_write_buffer')
+        stream = getattr(self.ws_connection, "stream", None)
+        if limit and stream is not None:
+            # A client that stops reading must not hold the whole game in
+            # server memory. Tornado 6.5 write_message -> _write_frame ->
+            # IOStream.write raises StreamBufferFullError past this size;
+            # _send_raw_message then aborts only this socket.
+            stream.max_write_buffer_size = limit
         compression = "on"
         if isinstance(self.ws_connection, getattr(tornado.websocket, "WebSocketProtocol76", ())):
             # Old Websocket versions don't support binary messages
@@ -414,6 +581,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             compression = "off, old websockets"
         elif self.subprotocol == "no-compression":
             compression = "off, client request"
+        elif self.subprotocol == "native-deflate-v1":
+            compression = "native permessage-deflate"
         if hasattr(self, "get_extensions"):
             if any(s.endswith("deflate-frame") for s in self.get_extensions()):
                 self.deflate = False
@@ -427,10 +596,9 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
         self.reset_idle_timeouts()
 
-        if config.get('max_connections') < len(sockets):
-            self.append_message("connection_closed('The maximum number of "
-                              + "connections has been reached, sorry :(');")
-            self.close()
+        if config.get('max_connections') < sum(not s.client_closed for s in sockets):
+            self.send_message("close", reason="The maximum number of connections has been reached.")
+            self.close(1008, "Server connection limit reached")
         elif shutting_down:
             self.close()
         else:
@@ -465,7 +633,25 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             if process.account_restricted() and not self.is_admin():
                 continue
             self.queue_message("lobby_entry", **process.lobby_entry())
-        self.send_message("lobby_complete")
+        self.send_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
+        # The chronicle summary and save library read SQLite and files, so
+        # both run on the library worker (FIFO). Each reply is dropped if this
+        # socket closed or left the lobby first; otherwise the client still
+        # sees coop_chronicle, game_library, lobby_complete in that order.
+        library_socket.when_done(library_socket.run_in_db_thread(_get_chronicle_payload),
+                                 self._queue_chronicle)
+        self._start_library_fetch(lambda: self.send_message("lobby_complete"))
+
+    def _queue_chronicle(self, future):
+        if self.client_closed or self.is_running(partial=True):
+            return
+        try:
+            payload = future.result()
+        except Exception:
+            self.logger.warning("Chronicle summary failed", exc_info=True)
+            return
+        # Queued only: the game_library reply that follows flushes both.
+        self.queue_message("coop_chronicle", **payload)
 
     def send_lobby(self):
         self.send_lobby_data()
@@ -658,6 +844,10 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
     def reset_lobby_timeout(self):
         self.clear_timeouts(lobby=True)
+        if self.client_closed:
+            # Deferred callbacks (go_lobby, login) can land after the socket
+            # closed; a new timer would only keep this handler alive.
+            return
         # warning: there is a somewhat painful interval at game start while
         # self.process is partly set up, but before self.process.process is
         # still unset. Don't call this function during that time...
@@ -681,10 +871,12 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         # unconditionally close if we reach the lobby idle time
         # XX: possibly print a more informative message on the client side?
         self.logger.info("Lobby connection timed out.")
-        self.close()
+        self.close(1000, "Lobby idle time limit reached")
 
     def reset_timeout(self):
         self.clear_timeouts(lobby=False)
+        if self.client_closed:
+            return
 
         self.received_pong = False
         self.send_message("ping")
@@ -722,6 +914,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         # won't detect a change in hold state on first login...
         old_restriction = self.user_flags is not None and self.account_restricted()
         u = userdb.get_user_info(self.username)
+        if not u or auth.account_disabled(self.username):
+            return False
         self.username = u.username # canonicalize
         self.user_id = u.id
         self.user_email = u.email
@@ -746,7 +940,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         # start.
         return "allowed_with_hold" not in game or game["allowed_with_hold"]
 
-    def start_crawl(self, game_id):
+    def start_crawl(self, game_id, reconnect=False, character_name=None):
         if config.get('dgl_mode') and game_id not in config.games:
             self.go_lobby()
             return
@@ -779,11 +973,21 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             self.go_lobby()
             return
 
+        if config.get('dgl_mode') and session_recovery.reclaim(self, sockets, reconnect is True):
+            return
+
         from webtiles import process_handler
 
         if config.get('dgl_mode'):
+            try:
+                library_game = self.library_prepare_start(game_id, character_name=character_name)
+            except (ValueError, OSError) as error:
+                self.go_lobby()
+                self.library_error(str(error))
+                return
             self.process = process_handler.CrawlProcessHandler(
                             config.games[game_id], self.username, self.logger)
+            library_socket.configure_process(self.process, library_game)
         else:
             self.process = process_handler.DGLLessCrawlProcessHandler(self.logger)
 
@@ -797,6 +1001,10 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             self.process.start()
         except Exception:
             self.logger.warning("Exception starting process!", exc_info=True)
+            if getattr(self.process, "release_unstarted", None):
+                # Stop its periodic callbacks; the lobby return is handled here.
+                self.process.end_callback = None
+                self.process.release_unstarted()
             self.process = None
             self.go_lobby()
         else:
@@ -804,7 +1012,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                 # lobby should be handled in exit callback
                 return
 
-            self.send_message("game_started")
+            self.send_message("game_started", game_id=self.game_id,
+                              expedition_id=getattr(self.process, "record_id", None))
             self.restore_blocklist()
             self.process.handle_notification(self.process.username,
                             "'/help' to see available chat commands")
@@ -820,19 +1029,55 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                     update_all_lobbys(self.process)
                 update_global_status()
 
+    async def _send_game_recovery(self, game, report_url):
+        loadable = await crash_reports.checkpoint_loadable(game)
+        if (self.client_closed or self.process is not None or not self.username
+                or self.username.lower() != game["owner"].lower()):
+            return
+        snapshot = game_library.public_game(game)
+        self.send_message("game_recovery", id=game["id"], loadable=loadable,
+                          saved_at=snapshot.get("saved_at"),
+                          turns=snapshot.get("state", {}).get("turns"), report_url=report_url)
+
     def _on_crawl_end(self):
+        session_recovery.cancel(self)
         if self.process:
+            record_id = getattr(self.process, "record_id", None)
             if config.get('dgl_mode'):
                 remove_in_lobbys(self.process)
 
             reason = self.process.exit_reason
             message = self.process.exit_message
             dump_url = self.process.exit_dump_url
+            if reason in {"crash", "error"} and record_id:
+                dump_url = crash_reports.register(self.process)
+            if record_id:
+                # The final snapshot ingest and status update are SQLite and
+                # file work: run them on the library worker. It is FIFO, so
+                # the lobby refresh queued below sees the finished status;
+                # on_message holds this socket's input until then as well.
+                self._record_finish = library_socket.run_in_db_thread(
+                    _finish_record, record_id, reason)
+                library_socket.when_done(self._record_finish, functools.partial(
+                    self._on_record_finished, reason, dump_url + ".txt" if dump_url else None))
         else:
             # XX under what circumstance is this reachable?
             reason = None
 
         self.process = None
+
+        if self.username:
+            room_changed = False
+            for r in PARTY_ROOMS.values():
+                if r.get("host", "").lower() == self.username.lower() and r.get("status") == "launched":
+                    r["status"] = "staging"
+                    room_changed = True
+            # Every solo game end used to re-query the chronicle and push the
+            # room list to all lobby sockets even when nothing changed.
+            if room_changed:
+                broadcast_party_rooms()
+            if self.client_closed:
+                _schedule_party_presence_check(self.username)
 
         if not self.client_closed:
             if shutting_down:
@@ -857,6 +1102,16 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             update_global_status()
 
         self.try_cleanup()
+
+    def _on_record_finished(self, reason, report_url, future):
+        try:
+            game = future.result()
+        except Exception:
+            self.logger.warning("Failed to close the expedition record", exc_info=True)
+            return
+        if (reason in {"crash", "error"} and game and self.username
+                and game["owner"].lower() == self.username.lower()):
+            IOLoop.current().spawn_callback(self._send_game_recovery, game, report_url)
 
     def init_user(self, callback):
         # this would be more cleanly implemented with wait_for_exit, but I
@@ -893,8 +1148,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                                     self.username and self.username or "[Anon]",
                                     self.id)
             msg = to_unicode(self.render_string("shutdown.html", game=self))
-            self.send_message("close", reason = msg)
-            self.close()
+            self.send_message("close", reason=msg, retry=True)
+            self.close(1012, "Server restarting")
         if self.is_running():
             self.process.stop()
 
@@ -907,6 +1162,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             fail_reason = 'Account is disabled.'
             self.logger.warning("[Account] Failed login for user %s: %s", self.username,
                                     fail_reason)
+            self.username = self.user_email = self.user_flags = self.user_id = None
             self.send_message("login_fail", reason=fail_reason)
             return
 
@@ -925,20 +1181,27 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
             self.queue_message("login_success", username=username,
                                admin=self.is_admin())
+            profile_appearance.send_state(self, queued=True)
+            profile_graphics.send_state(self, queued=True)
+            self.library_fetch_async()
             if self.account_restricted():
                 self.queue_message("set_account_hold")
+            self.queue_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
             if self.watched_game:
                 self.watched_game.update_watcher_description()
             elif self.is_admin():
                 self.send_lobby()
             else:
                 self.send_lobby_html()
+                self.flush_messages()
 
             self.reset_lobby_timeout()
 
         self.init_user(login_callback)
 
     def login(self, username, password):
+        if username:
+            username = username.strip()
         success, real_username, fail_reason = userdb.user_passwd_match(username, password)
         if success and real_username:
             self.logger.info("User %s logging in from %s.",
@@ -1004,6 +1267,31 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
     def pong(self):
         self.received_pong = True
 
+    def on_pong(self, data):
+        # Protocol pongs also keep background tabs alive when JS is suspended.
+        self.received_pong = True
+
+    def connection_ping(self):
+        self.received_pong = True
+        self.send_message("pong")
+
+    def transport_hello(self, version=None):
+        if type(version) is int and version == 1:
+            self.state_deltas = True
+            self.last_party_snapshot = None
+            self.send_message("transport_ready", version=1)
+
+    def transport_resync(self, channel=None):
+        process = self.process or self.watched_game
+        if self.state_deltas and channel == "party_state" and process and process.party_control.state:
+            self.last_party_snapshot = None
+            append_snapshot(self, process.party_control, process.party_control.snapshot(self), True)
+
+    def latency_probe(self, sequence=None):
+        if type(sequence) is int and 0 <= sequence <= 9007199254740991:
+            self.received_pong = True
+            self.send_message("transport_pong", sequence=sequence)
+
     def rcfile_path(self, game_id):
         if game_id not in config.games:
             return None
@@ -1040,7 +1328,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
         checkoutput.check_output(call, do_send)
 
-    def watch(self, username):
+    def watch(self, username, expedition_id=None):
         if self.is_running():
             self.process.stop()
 
@@ -1053,14 +1341,13 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             return
 
         if not self.username and not config.get('allow_anon_spectate'):
-            self.send_message("auth_error",
-                        reason="Anonymous spectating disabled")
-            self.go_lobby()
+            self.send_message("login_required", game="this expedition")
             return
 
         from webtiles.process_handler import processes
         procs = [process for process in list(processes.values())
-                 if process.username.lower() == username.lower()]
+                 if process.username.lower() == username.lower()
+                 and (expedition_id is None or getattr(process, "record_id", None) == expedition_id)]
         if len(procs) >= 1:
             process = procs[0]
             # has the spectatee blocked this user?
@@ -1086,7 +1373,8 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
             self.watched_game = process
             process.add_watcher(self)
-            self.send_message("watching_started", username = process.username)
+            self.send_message("watching_started", username=process.username,
+                              expedition_id=getattr(process, "record_id", None))
             if not config.get('max_chat_length'):
                 process.handle_notification(self.username,
                                             "Chat is disabled on this server")
@@ -1095,19 +1383,19 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                 self.stop_watching()
             self.go_lobby()
 
-    def post_chat_message(self, text):
+    def post_chat_message(self, text, tags=None):
+        if not isinstance(text, str):
+            return
         max_length = config.get('max_chat_length')
         if max_length:
             max_length = max(100, int(max_length)) # if it's set, enforce a minimum
             if len(text) >= max_length:
                 text = text[:max_length - 5] + "[...]"
-        receiver = None
-        if self.process:
-            receiver = self.process
-        elif self.watched_game:
-            receiver = self.watched_game
+        # A previous owned process can still be stopping while this socket is
+        # already watching another expedition. Chat follows the visible game.
+        receiver = self.watched_game or self.process
 
-        if receiver:
+        if receiver and self in receiver._receivers:
             if self.account_restricted():
                 self.send_message("chat",
                         content='Your account is restricted; chat unavailable')
@@ -1120,7 +1408,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             if not receiver.handle_chat_command(self, text):
                 if not max_length:
                     return # chat disabled!
-                receiver.handle_chat_message(self.username, text)
+                receiver.handle_chat_message(self.username, text, tags)
 
     def register(self, username, password, email):
         error = userdb.register_user(username, password, email)
@@ -1302,7 +1590,512 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             return False
         return True
 
+    def join_party(self, slot=None, **kwargs):
+        target_game = self.watched_game or self.process
+        if not target_game:
+            return
+        assigned_slot = target_game.join_party_member(self, slot=slot)
+        if assigned_slot is None:
+            return
+        self.party_member_active = True
+        self.party_slot = assigned_slot
+        self.send_message("party_joined", slot=assigned_slot)
+
+    def party_lobby_list(self, **kwargs):
+        self.reset_lobby_timeout()
+        self.send_message("party_rooms_list", rooms=[party_roster.describe(room) for room in PARTY_ROOMS.values()])
+        self.send_message("coop_chronicle", **_get_chronicle_payload())
+
+    def chronicle_fetch(self, **kwargs):
+        self.reset_lobby_timeout()
+        self.send_message("coop_chronicle", **_get_chronicle_payload())
+
+    def party_room_apply_comp(self, party_spec=None, friendly_fire=None, members=None, comp_name=None, seasonings=None, seed=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        room = _resolve_party_room(username=self.username)
+        if not room:
+            self.party_room_create(name=comp_name or ("%s's Expedition" % self.username),
+                                   friendly_fire=True if friendly_fire is None else bool(friendly_fire),
+                                   seasonings=seasonings, seed=seed)
+            room = _resolve_party_room(username=self.username)
+        if not room or room.get("host", "").lower() != self.username.lower():
+            return
+        if friendly_fire is not None:
+            room["friendly_fire"] = bool(friendly_fire)
+        if comp_name:
+            room["name"] = str(comp_name)[:40]
+        if isinstance(seasonings, list):
+            room["seasonings"] = [str(s) for s in seasonings[:6]]
+        if seed is not None:
+            room["seed"] = str(seed).strip()[:24]
+        parsed_members = []
+        if isinstance(members, list) and len(members) > 0:
+            for m in members[:4]:
+                if isinstance(m, dict):
+                    parsed_members.append({
+                        "hero_name": _sanitize_hero_name(m.get("name") or m.get("hero_name"), "Hero"),
+                        "species": m.get("species", "Minotaur"),
+                        "job": m.get("job", "Fighter"),
+                        "weapon": m.get("weapon", ""),
+                        "trait": m.get("trait", "none"),
+                    })
+        elif party_spec:
+            for tok in str(party_spec).split(","):
+                tok = tok.strip()
+                if not tok or tok.isdigit() or tok.lower().startswith("ff=") or tok.lower().startswith("friendly_fire="):
+                    continue
+                hname = "Hero"
+                combo = tok
+                if ":" in tok:
+                    hname, combo = tok.split(":", 1)
+                if "/" in combo:
+                    parts = combo.split("/")
+                    sp, jb = parts[:2]
+                    parsed_members.append({
+                        "hero_name": _sanitize_hero_name(hname, "Hero"),
+                        "species": sp.strip(),
+                        "job": jb.strip(),
+                        "weapon": parts[2].strip() if len(parts) > 2 else "",
+                        "trait": parts[4].strip() if len(parts) > 4 else "none",
+                    })
+        if parsed_members:
+            slots = room.get("slots", [])
+            for idx in range(4):
+                if idx < len(parsed_members):
+                    pm = parsed_members[idx]
+                    slots[idx]["hero_name"] = pm["hero_name"]
+                    slots[idx]["species"] = pm["species"]
+                    slots[idx]["job"] = pm["job"]
+                    slots[idx]["weapon"] = pm["weapon"]
+                    slots[idx]["trait"] = pm.get("trait", "none")
+                    if idx == 0:
+                        slots[idx]["state"] = "player"
+                        slots[idx]["username"] = self.username
+                    elif not slots[idx].get("username"):
+                        slots[idx]["state"] = "companion"
+                    slots[idx]["ready"] = True
+                elif idx > 0 and not slots[idx].get("username"):
+                    slots[idx]["state"] = "open"
+        broadcast_party_rooms()
+
+    def party_room_create(self, room_id=None, name=None, friendly_fire=True, game_id=None, seasonings=None, seed=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        host = self.username
+        # First remove host from any other room they might be in as a guest
+        for r_id, r in list(PARTY_ROOMS.items()):
+            if r.get("host", "").lower() != host.lower():
+                for s in r.get("slots", [])[1:]:
+                    if s.get("username", "").lower() == host.lower():
+                        s["username"] = ""
+                        s["state"] = "companion" if s["slot"] == 1 else "open"
+                        s["hero_name"] = DEFAULT_PARTY_SLOTS[s["slot"]]["hero_name"]
+                        s["ready"] = True
+
+        rid = room_id or ("room-%s" % host)
+        existing = PARTY_ROOMS.get(rid)
+        if existing is not None and existing.get("host", "").lower() != host.lower():
+            # A client-supplied identity must never replace another host's room.
+            rid = "room-%s" % host
+        # A host owns at most one room; a stale one under another id would
+        # otherwise linger in every lobby and shadow leave/launch resolution.
+        for r_id, r in list(PARTY_ROOMS.items()):
+            if (r.get("host", "").lower() == host.lower()
+                    and r.get("status") != "launched"):
+                del PARTY_ROOMS[r_id]
+        default_game_id = game_id or "coop-2p-web-trunk"
+        if default_game_id not in config.games and len(config.games) > 0:
+            default_game_id = next(iter(config.games.keys()))
+
+        slots = []
+        for idx, tmpl in enumerate(DEFAULT_PARTY_SLOTS):
+            s_copy = dict(tmpl)
+            if idx == 0:
+                s_copy["state"] = "player"
+                s_copy["username"] = host
+                s_copy["hero_name"] = _sanitize_hero_name(kwargs.get("hero_name") or host, host)
+                s_copy["ready"] = True
+            slots.append(s_copy)
+
+        PARTY_ROOMS[rid] = {
+            "room_id": rid,
+            "name": str(name)[:40] if name else ("%s's Expedition" % host),
+            "host": host,
+            "friendly_fire": bool(friendly_fire),
+            "seasonings": [str(s) for s in seasonings[:6]] if isinstance(seasonings, list) else [],
+            "seed": str(seed).strip()[:24] if seed else "",
+            "status": "staging",
+            "game_id": default_game_id,
+            "slots": slots,
+        }
+        broadcast_party_rooms()
+
+    def party_room_join(self, room_id=None, slot=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        room = _resolve_party_room(room_id=room_id, username=None)
+        if not room:
+            return
+
+        uname = self.username
+        if room.get("host", "").lower() != uname.lower() and any(
+                r is not room and r.get("host", "").lower() == uname.lower()
+                for r in PARTY_ROOMS.values()):
+            self.library_error("Leave your own party before joining another.")
+            return
+        # Check if already in room
+        existing_slot = None
+        for s in room["slots"]:
+            if s.get("username", "").lower() == uname.lower():
+                existing_slot = s
+                break
+
+        target_slot_obj = existing_slot
+        if target_slot_obj is None and slot is not None:
+            try:
+                req_idx = int(slot)
+                if 1 <= req_idx < len(room["slots"]):
+                    cand = room["slots"][req_idx]
+                    if cand["state"] != "ai" and (cand["state"] != "player" or not cand.get("username")):
+                        target_slot_obj = cand
+            except (ValueError, TypeError):
+                pass
+
+        if target_slot_obj is None:
+            for cand in room["slots"][1:]:
+                if cand["state"] in ("open", "companion") and not cand.get("username"):
+                    target_slot_obj = cand
+                    break
+
+        if target_slot_obj is None:
+            for cand in room["slots"][1:]:
+                if cand.get("state") != "ai" and not cand.get("username"):
+                    target_slot_obj = cand
+                    break
+
+        if target_slot_obj is not None:
+            # One seat per user: a guest who hops rooms must not stay listed
+            # in the old one (leave only cleared the first room it found).
+            for other in PARTY_ROOMS.values():
+                if other is room:
+                    continue
+                for s in other.get("slots", [])[1:]:
+                    if s.get("username", "").lower() == uname.lower():
+                        _reset_party_slot(s)
+            target_slot_obj["state"] = "player"
+            target_slot_obj["username"] = uname
+            target_slot_obj["hero_name"] = _sanitize_hero_name(kwargs.get("hero_name") or uname, uname)
+            target_slot_obj["ready"] = True
+            if kwargs.get("species"):
+                target_slot_obj["species"] = str(kwargs["species"])
+            if kwargs.get("job"):
+                target_slot_obj["job"] = str(kwargs["job"])
+
+        broadcast_party_rooms()
+
+    def party_room_leave(self, room_id=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        room = _resolve_party_room(room_id=room_id, username=self.username)
+        if not room:
+            return
+
+        uname = self.username
+        if room.get("host", "").lower() == uname.lower():
+            rid = room.get("room_id")
+            if rid in PARTY_ROOMS:
+                del PARTY_ROOMS[rid]
+        else:
+            for s in room.get("slots", [])[1:]:
+                if s.get("username", "").lower() == uname.lower():
+                    idx = s["slot"]
+                    s["username"] = ""
+                    s["state"] = "companion" if idx == 1 else "open"
+                    s["hero_name"] = DEFAULT_PARTY_SLOTS[idx]["hero_name"]
+                    s["ready"] = True
+
+        broadcast_party_rooms()
+
+    def party_room_update_slot(self, room_id=None, slot=0, hero_name=None,
+                               species=None, job=None, weapon=None, state=None, ready=None, trait=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        room = _resolve_party_room(room_id=room_id, username=self.username)
+        if not room:
+            return
+
+        try:
+            slot_idx = int(slot)
+        except (ValueError, TypeError):
+            return
+        if slot_idx < 0 or slot_idx >= len(room["slots"]):
+            return
+
+        slot_obj = room["slots"][slot_idx]
+        is_host = (room.get("host", "").lower() == self.username.lower())
+        if str(state).lower() == "ai" and not is_host:
+            return
+        is_owner = (slot_obj.get("username", "").lower() == self.username.lower())
+        if not is_host and not is_owner:
+            # Allow a connected player to claim an open/companion slot
+            if slot_idx >= 1 and slot_obj.get("state") != "ai" and not slot_obj.get("username"):
+                slot_obj["username"] = self.username
+                slot_obj["state"] = "player"
+                is_owner = True
+            else:
+                return
+
+        if state is not None and slot_idx >= 1:
+            st = str(state).lower()
+            if st == "ai" and (not is_host or slot_obj.get("username")):
+                return
+            if st in ("player", "companion", "open", "closed", "ai"):
+                slot_obj["state"] = st
+                if st in ("companion", "open", "closed", "ai"):
+                    slot_obj["username"] = ""
+                    slot_obj["ready"] = True
+                    if not hero_name and slot_obj.get("hero_name") == self.username:
+                        slot_obj["hero_name"] = DEFAULT_PARTY_SLOTS[slot_idx]["hero_name"]
+
+        if hero_name is not None:
+            fallback = slot_obj.get("username") or DEFAULT_PARTY_SLOTS[slot_idx]["hero_name"]
+            slot_obj["hero_name"] = _sanitize_hero_name(hero_name, fallback)
+
+        if species is not None and str(species).strip():
+            slot_obj["species"] = str(species).strip()
+
+        if job is not None and str(job).strip():
+            slot_obj["job"] = str(job).strip()
+
+        if weapon is not None:
+            slot_obj["weapon"] = weapon
+
+        if trait is not None and trait in ("none", "mummy", "zombie", "ghost"):
+            slot_obj["trait"] = trait
+
+        if ready is not None:
+            slot_obj["ready"] = bool(ready)
+
+        broadcast_party_rooms()
+
+    def party_room_settings(self, room_id=None, friendly_fire=None, name=None, game_id=None, seasonings=None, seed=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        room = _resolve_party_room(room_id=room_id, username=self.username)
+        if not room:
+            return
+        if room.get("host", "").lower() != self.username.lower():
+            return
+
+        if friendly_fire is not None:
+            room["friendly_fire"] = bool(friendly_fire)
+        if name is not None and str(name).strip():
+            room["name"] = str(name).strip()[:40]
+        if game_id is not None and game_id in config.games:
+            room["game_id"] = game_id
+        if isinstance(seasonings, list):
+            room["seasonings"] = [str(s) for s in seasonings[:6]]
+        if seed is not None:
+            room["seed"] = str(seed).strip()[:24]
+
+        if isinstance(kwargs.get("rune_locks"), bool):
+            room["rune_locks"] = kwargs["rune_locks"]
+        if kwargs.get("trap_mode") in ("normal", "none", "floor", "random"):
+            room["trap_mode"] = kwargs["trap_mode"]
+
+        broadcast_party_rooms()
+
+    def party_room_launch(self, room_id=None, fresh=True, slots=None, friendly_fire=None, **kwargs):
+        self.reset_lobby_timeout()
+        if not self.username:
+            return
+        if not self.is_in_lobby():
+            self.library_error("Save and return to the lobby before starting a new expedition.")
+            return
+        room = _resolve_party_room(room_id=room_id, username=self.username)
+        if not room:
+            return
+        host = room.get("host")
+        if not host or host.lower() != self.username.lower():
+            return
+
+        if friendly_fire is not None:
+            room["friendly_fire"] = bool(friendly_fire)
+
+        if isinstance(slots, list):
+            for s_update in slots:
+                if not isinstance(s_update, dict):
+                    continue
+                try:
+                    idx = int(s_update.get("slot", -1))
+                except (ValueError, TypeError):
+                    continue
+                if 0 <= idx < len(room["slots"]):
+                    target = room["slots"][idx]
+                    if s_update.get("hero_name"):
+                        target["hero_name"] = _sanitize_hero_name(s_update["hero_name"], target["hero_name"])
+                    if s_update.get("species"):
+                        target["species"] = str(s_update["species"]).strip()
+                    if s_update.get("job"):
+                        target["job"] = str(s_update["job"]).strip()
+                    if "weapon" in s_update:
+                        target["weapon"] = s_update["weapon"]
+                    if (s_update.get("trait") in ("none", "mummy", "zombie", "ghost")
+                            and (not target.get("username")
+                                 or target["username"].lower() == self.username.lower())):
+                        target["trait"] = s_update["trait"]
+                    if (idx >= 1 and not target.get("username")
+                            and s_update.get("state") in ("player", "companion", "open", "closed", "ai")):
+                        target["state"] = s_update["state"]
+
+        active_slots = party_roster.launch_slots(room)
+        if any(slot.get("state") == "ai" for slot in active_slots) and not system_one.configured():
+            self.library_error("AI players require TYPESAFE_API_KEY on the server. Configure it or change the AI seats before launching.")
+            return
+        for active_slot in active_slots:
+            starting_weapons.normalize_slot(active_slot)
+            selection_error = starting_weapons.selection_error(active_slot)
+            if selection_error:
+                self.library_error("%s: %s" % (active_slot.get("hero_name", "Hero"), selection_error))
+                return
+        ai_slots = [idx for idx, slot in enumerate(active_slots) if slot.get("state") == "ai"]
+        multiplayer = sum(party_roster.occupied(slot) for slot in active_slots) > 1 or bool(ai_slots)
+
+        game_id = room.get("game_id") or "coop-2p-web-trunk"
+        if game_id not in config.games and len(config.games) > 0:
+            game_id = next(iter(config.games.keys()))
+
+        slot0 = active_slots[0]
+        slot0_hero = _sanitize_hero_name(slot0.get("hero_name"), host)
+        slot0_species = slot0.get("species", "Minotaur")
+        slot0_job = slot0.get("job", "Fighter")
+        starting_weapons.normalize_slot(slot0)
+        weapon_choice = slot0["weapon"] or "unarmed"
+
+        rc_path = self.rcfile_path(game_id) or os.path.join("./rcs", host + ".rc")
+        try:
+            rc_dir = os.path.dirname(rc_path)
+            if rc_dir and not os.path.exists(rc_dir):
+                os.makedirs(rc_dir)
+            seed_line = ("game_seed = %s\n" % room["seed"]) if room.get("seed") and str(room["seed"]).isdigit() else ""
+            rc_contents = (
+                "name = %s\n"
+                "species = %s\n"
+                "background = %s\n"
+                "weapon = %s\n"
+                "%s"
+                "restart_after_game = false\n"
+            ) % (slot0_hero, slot0_species, slot0_job, weapon_choice, seed_line)
+            with open(rc_path, "wb") as f:
+                f.write(utf8(rc_contents))
+        except Exception:
+            self.logger.warning("Failed to write host rcfile for party launch: %s", rc_path, exc_info=True)
+
+        ff_str = "on" if room.get("friendly_fire", True) else "off"
+        seasonings_list = room.get("seasonings") or []
+        seasonings_tokens = [f"seasoning={s}" for s in seasonings_list if s in ("fast_boil", "shared_ladle", "heavy_pebbles", "soul_tether", "chaotic_ladle")]
+        member_specs = []
+        slot_users = {}
+        slot_specs = {}
+        for idx, s in enumerate(active_slots):
+            hname = _sanitize_hero_name(s.get("hero_name"), "Hero%d" % (idx + 1))
+            sp = s.get("species", "Minotaur")
+            jb = s.get("job", "Fighter")
+            s["hero_name"] = hname
+            ensure_seed(s)
+            spec_token = starting_weapons.member_spec(s)
+            member_specs.append(spec_token)
+            slot_specs[idx] = spec_token
+            if s.get("username"):
+                slot_users[s["username"]] = idx
+
+        campaign_tokens = []
+        if room.get("rune_locks") is False:
+            campaign_tokens.append("runelocks=off")
+        if room.get("trap_mode") in ("none", "floor", "random"):
+            campaign_tokens.append("traps=" + room["trap_mode"])
+        all_spec_tokens = (["mp=on"] if multiplayer else []) + seasonings_tokens + campaign_tokens + member_specs
+        party_spec = "%d,ff=%s,%s" % (len(active_slots), ff_str, ",".join(all_spec_tokens))
+        USER_PARTY_SPECS[host] = {
+            "party_arg": party_spec,
+            "slot_users": slot_users,
+            "slot_specs": slot_specs,
+            "room_id": room["room_id"],
+            "multiplayer": multiplayer,
+            "ai_slots": ai_slots,
+        }
+
+        try:
+            chronicle.record_party_comp(
+                comp_name=room.get("name", "%s's Expedition" % host),
+                host=host,
+                player_count=len(active_slots),
+                friendly_fire=bool(room.get("friendly_fire", True)),
+                seed=room.get("seed", ""),
+                party_spec=",".join(all_spec_tokens),
+                members=[
+                    {
+                        "slot": idx,
+                        "name": _sanitize_hero_name(s.get("hero_name"), "Hero%d" % (idx + 1)),
+                        "username": s.get("username", ""),
+                        "species": s.get("species", "Minotaur"),
+                        "job": s.get("job", "Fighter"),
+                        "weapon": s.get("weapon", ""),
+                        "xl": 1,
+                    }
+                    for idx, s in enumerate(active_slots)
+                ],
+                deepest_place="D:1",
+                status="Active",
+            )
+        except Exception:
+            self.logger.warning("Failed to record party comp in chronicle", exc_info=True)
+
+        room["status"] = "launched"
+        broadcast_party_rooms()
+
+        self._library_fresh = bool(fresh)
+        self.start_crawl(game_id)
+
+        def _notify_launched_players():
+            for idx, s in enumerate(active_slots):
+                uname = s.get("username")
+                if idx >= 1 and uname and uname.lower() != host.lower():
+                    for u_sock in list(find_user_sockets(uname)):
+                        u_sock.send_message(
+                            "party_room_launched",
+                            room_id=room["room_id"],
+                            host=host,
+                            slot=idx,
+                            hero_name=s.get("hero_name", uname),
+                        )
+
+        _notify_launched_players()
+        process = getattr(self, "process", None)
+        if not (process and getattr(process, "process", None)):
+            # The engine is not registered yet (e.g. a stale-lock dialog), so
+            # a guest's watch request would find nothing: tell them again
+            # shortly. A running engine needs the one notice.
+            IOLoop.current().call_later(0.35, _notify_launched_players)
+
     def on_message(self, message): # type: (Union[str, bytes]) -> None
+        pending = self._record_finish
+        if pending is not None and not pending.done():
+            # The last expedition's record is still closing on the library
+            # worker: a quick play/resume must not read its old status.
+            # Future callbacks run in order, so input order is preserved.
+            def redeliver(_future):
+                if not self.client_closed:
+                    self.on_message(message)
+            library_socket.when_done(pending, redeliver)
+            return
         try:
             obj = json_decode(message) # type: Dict[str, Any]
             if obj["msg"] in self.message_handlers:
@@ -1310,7 +2103,11 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                 del obj["msg"]
                 handler(**obj)
             elif self.process:
-                self.process.handle_input(message)
+                # Decoded once here; handle_input accepts the object.
+                self.process.handle_input(obj, source=self)
+            elif self.watched_game and (self.watched_game.is_party_member(self)
+                                        or obj.get("msg") == "party_ping"):
+                self.watched_game.handle_input(obj, source=self)
             elif (not self.watched_game
                     and obj["msg"] != 'ui_state_sync'
                     and obj["msg"] != 'key'):
@@ -1358,6 +2155,9 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
         try:
             binmsg = utf8(msg)
             if deflate:
+                if self._compressobj is None:
+                    self._compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION,
+                                                        zlib.DEFLATED, -zlib.MAX_WBITS)
                 # Compress like in deflate-frame extension:
                 # Apply deflate, flush, then remove the 00 00 FF FF
                 # at the end
@@ -1395,9 +2195,6 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                 self.uncompressed_bytes_sent += len(bundle.binmsg)
                 f = self.write_message(bundle.binmsg)
 
-            import traceback
-            cur_stack = traceback.format_stack()
-
             # handle any exceptions lingering in the Future
             # TODO: this whole call chain should be converted to use coroutines
             def after_write_callback(f):
@@ -1418,8 +2215,7 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                     if self.ws_connection is not None:
                         self.ws_connection._abort()
                 except Exception as e:
-                    self.logger.warning("Exception during async write_message, stack at call:")
-                    self.logger.warning("".join(cur_stack))
+                    self.logger.warning("Exception during async write_message")
                     self.logger.warning(e, exc_info=True)
                     self.failed_messages += 1
                     if self.ws_connection is not None:
@@ -1440,6 +2236,14 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
             self.failed_messages += 1
             if self.ws_connection is not None:
                 self.ws_connection._abort()
+        except tornado.iostream.StreamBufferFullError:
+            # This client is not reading fast enough; drop it alone.
+            self.logger.warning("Write buffer over %s; closing slow connection",
+                                util.humanise_bytes(config.get('websocket_max_write_buffer') or 0))
+            self.failed_messages += 1
+            if self.ws_connection is not None:
+                self.ws_connection._abort()
+            return False
         except:
             self.logger.warning("Exception trying to send message.", exc_info = True)
             self.failed_messages += 1
@@ -1506,12 +2310,23 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         # at this point, self.client_closed is guaranteed to be true
+        self.close_handled = True
         extra = []
         if self.is_running():
             # this will (sooner or later) trigger _on_crawl_end, which will
             # remove `self` from `sockets`
             # XX would it be better to handle on_close messaging at that point?
-            self.process.stop()
+            # Browsers echo 1000 after Tornado's own ping-timeout close, so it
+            # is a detected drop, not a deliberate quit: it gets the grace
+            # period like any other drop. Only policy closures stop at once.
+            if (shutting_down or self.close_code == 1008
+                    or not session_recovery.defer_stop(self)):
+                self.process.stop()
+        elif self.process and getattr(self.process, "release_unstarted", None) \
+                and self.process.release_unstarted():
+            # The browser left during the stale-lock dialog: the handler
+            # never started a process, so nothing else would stop its timers.
+            extra += ["abandoned pending start"]
         elif self in sockets and self.process:
             # buggy state (I think): `self.process` did not get set to
             # None, but process is not actually running.
@@ -1536,3 +2351,6 @@ class CrawlWebSocket(tornado.websocket.WebSocketHandler):
                          util.humanise_bytes(self.total_message_bytes),
                          comp_ratio,
                          extra_msg)
+
+        if self.username:
+            _schedule_party_presence_check(self.username)

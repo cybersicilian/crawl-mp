@@ -1,0 +1,293 @@
+###############################################################################
+# Wax chambers, short flight lanes, and guarded inner combs.
+###############################################################################
+: crawl_require("dlua/vault.lua")
+: crawl_require("dlua/layout/hive.lua")
+
+NAME:   hive_end_inner_combs
+PLACE:  Hive:$
+ORIENT: encompass
+TAGS:   transparent
+KMONS:  Q = queen bee / meliai
+KMONS:  W = spark wasp
+KITEM:  $ = gold
+KITEM:  * = any jewellery good_item / any book / any wand
+TILE:   x = wall_wax
+COLOUR: x = yellow
+{{
+    hive_layout(_G, true)
+}}
+MAP
+ENDMAP
+
+NAME:   hive_outer_cells
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+SUBST:  1 = 11.
+MAP
+xxxxxxxxxxxxxxx
+xx.....x.....xx
+@..1......1...@
+...............
+xx..1..x..1..xx
+xxxxxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_queen_cell
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   queen bee, killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+xxxxxxxxxxxxxxx
+xx.....x.....xx
+@..2......1..xx
+...........$.xx
+xx.....x..2..xx
+xxxxxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_flight_lane
+DEPTH:  Hive
+TAGS:   extra transparent no_monster_gen
+CHANCE: 30%
+MONS:   killer bee / hornet
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+xxxxxxxxxxxxxxxxxxx
+xx.....x...x.....xx
+@........1........@
+...................
+xx..1..x...x.....xx
+xxxxxxxxxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_meliai_cache
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen
+MONS:   meliai, killer bee
+KITEM:  * = any jewellery good_item / any book / any wand
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+xxxxxxxxxxxxxxxxx
+xx.....xx......xx
+@...2.......1..xx
+.............*.xx
+xx.....xx....$.xx
+xxxxxxxxxxxxxxxxx
+ENDMAP
+
+NAME:   hive_torn_comb
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   killer bee
+SUBST:  1 = 11.
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+     xxxxxxx
+    xx.....xx
+xxxxxx..1...xxx
+@.............x
+......xx......xx
+xxxx..xxxx..1..x
+   x.....x.....x
+   xx.........xx
+    xxxxx..xxxx
+        xxxx
+ENDMAP
+
+NAME:   hive_wax_island
+DEPTH:  Hive
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+MONS:   killer bee / hornet
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+      xxxxxxxx
+     xx......xx
+xxxxxx..1.....xx
+@..............@
+.....xxxx.......
+xxxx..xxx.....xx
+   xx......1..x
+    xx.......xx
+     xxxxxxxxx
+ENDMAP
+
+NAME:   hive_split_brood
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen
+MONS:   queen bee, killer bee, killer bee larva
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+    xxxxxxx
+   xx.333.xxx
+xxxx.......xx
+@.....xx....x
+......xxx...xxx
+xxxx...xx..2..xx
+   xx..........x
+    xx.....1...x
+     xx.....$.xx
+      xxxxxxxxx
+ENDMAP
+
+NAME:   hive_wasp_roost
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen
+MONS:   spark wasp, killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+       xxxxxxx
+      xx.....xx
+xxxxxxx...1...x
+@.............x
+.....xx......xx
+xxxx..xx....xx
+   xx....2..x
+    xx.....xx
+     xxxxxxx
+ENDMAP
+
+NAME:   hive_abandoned_cells
+DEPTH:  Hive
+TAGS:   extra transparent no_monster_gen
+CHANCE: 25%
+TILE:   x = wall_wax
+COLOUR: x = yellow
+SUBST:  $ = $..
+MAP
+     xxxxxxx
+    xx.....xx
+xxxxx.......x
+@.......$...x
+.....xx....xx
+xxxx..xx..xx
+   xx.....x
+    xx...xx
+     xxxxx
+ENDMAP
+
+NAME:   hive_meliai_shelter
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen
+MONS:   meliai, killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+     xxxxxxx
+    xx.....xx
+xxxxx...2...xx
+@............x
+.......xxx...xx
+xxxx....xx..1..x
+   xx....x.....x
+    xx....$...xx
+     xxxxxxxxxx
+ENDMAP
+
+NAME:   hive_end_hollow_heart
+PLACE:  Hive:$
+ORIENT: encompass
+TAGS:   transparent
+KMONS:  Q = meliai
+KMONS:  W = spark wasp
+KITEM:  $ = gold
+KITEM:  * = any jewellery good_item / any book / any wand
+TILE:   x = wall_wax
+COLOUR: x = yellow
+{{
+    hive_layout(_G, true, true)
+}}
+MAP
+ENDMAP
+
+NAME:   hive_amber_store
+DEPTH:  Hive
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   wax beetle, venom wasp
+KITEM:  a = any jewellery good_item
+KITEM:  p = potion of curing
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+     xxxxxxxx
+    xx......xx
+xxxxx...2....x
+@............xx
+.....xx...1...x
+xxxx..xx....a.x
+   xx....p.p.xx
+    xx...$..xx
+     xxxxxxxx
+ENDMAP
+
+NAME:   hive_raided_satchel
+DEPTH:  Hive:2
+TAGS:   transparent no_monster_gen no_item_gen
+MONS:   meliai, wax beetle
+KITEM:  a = any book / any wand
+KITEM:  p = potion of heal wounds / potion of haste
+KITEM:  s = scroll of blinking / scroll of fog
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+      xxxxxxx
+     xx.....xx
+xxxxxx..2....xx
+@.............x
+......xx...1..xx
+xxxx...xx...a..x
+   xx.......ps.x
+    xx...$....xx
+     xxxxxxxxxx
+ENDMAP
+
+NAME:   hive_guard_line
+DEPTH:  Hive
+TAGS:   extra transparent no_monster_gen
+CHANCE: 30%
+MONS:   wax beetle, venom wasp, killer bee
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+     xxxxxxxx
+    xx......xx
+xxxxx...2....x
+@............xx
+......1.......@
+xxxx...xx..3...
+   xx...x....xx
+    xx......xx
+     xxxxxxxx
+ENDMAP
+
+NAME:   uniq_vespara
+DEPTH:  Hive
+WEIGHT: 20
+TAGS:   place_unique transparent no_monster_gen no_item_gen
+MONS:   Vespara, killer bee, wax beetle
+KITEM:  a = any jewellery randart
+TILE:   x = wall_wax
+COLOUR: x = yellow
+MAP
+      xxxxxxxx
+     xx......xx
+xxxxxx....2...x
+@.............xx
+......3....1...x
+xxxx...xx....a.x
+   xx..xx..2.$xx
+    xx.......xx
+     xxxxxxxxx
+ENDMAP

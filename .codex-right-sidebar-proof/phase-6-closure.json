@@ -1,0 +1,25 @@
+{
+  "reservationId": "1b9912f3-01bb-426f-9742-423a17a2ccc7",
+  "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "1b9912f3-01bb-426f-9742-423a17a2ccc7",
+      "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+      "label": "DCSS sidebar touch header final regression",
+      "requestedAt": 1792463157.311587,
+      "supervisorPid": 16237,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "88e821e7fc83c99244d24289024d3b5a0a9f706501fe0d5849ee5d18ca41ebf4",
+      "startedAt": 1792463157.312062,
+      "workerPid": 16238,
+      "processGroup": 16238,
+      "exitCode": 1,
+      "finishedAt": 1792463161.0544288,
+      "supervisedProcessGroupGone": true
+    },
+    "browserFinallyClosed": true,
+    "result": "Desktop PASS; touch narrower accessible header consumes the space previously assumed for a companion pack"
+  }
+}

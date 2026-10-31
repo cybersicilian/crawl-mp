@@ -105,6 +105,9 @@ public:
     bool         is_ego() const;
     bool         is_art() const;
     bool         is_equipped() const;
+#ifdef USE_TILE_WEB
+    void webtiles_write_metadata() const override;
+#endif
 
     virtual int highlight_colour(bool temp=false) const override;
 
@@ -168,6 +171,9 @@ public:
 
     void cycle_page(int dir);
     void set_page(int page);
+#ifdef USE_TILE_WEB
+    void webtiles_set_category(int page) override;
+#endif
 
 protected:
     void do_preselect(InvEntry *ie);
@@ -179,6 +185,9 @@ protected:
     virtual bool is_selectable(int index) const override;
     virtual string help_key() const override;
     void select_index(int index, int qty) override;
+#ifdef USE_TILE_WEB
+    void webtiles_write_title() const override;
+#endif
 
 protected:
     menu_type type;

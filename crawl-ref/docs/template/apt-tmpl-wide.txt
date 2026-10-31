@@ -47,9 +47,9 @@ Thr - Throwing               SBl - Short Blades          Ice - Ice Magic
                              LBl - Long Blades           Air - Air Magic
 HP  - hit points             Rng - Ranged Weapons        Ear - Earth Magic
 MP  - magic points                                       Alc - Alchemy
-Exp - experience
+Exp - experience                                         Aur - Auramancy
 WL  - willpower
 
 
-                 Arm Ddg Sth Shd Shp   Inv Evo Thr   HP  MP Exp  WL   Fgt M&F Axs Pla Stv UC SBl LBl Rng   Spc Coj Hex Sum Nec Frg Trl   Fir Ice Air Ear Alc
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+                 Arm Ddg Sth Shd Shp   Inv Evo Thr   HP  MP Exp  WL   Fgt M&F Axs Pla Stv UC SBl LBl Rng   Spc Coj Hex Sum Nec Frg Trl   Fir Ice Air Ear Alc Aur
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

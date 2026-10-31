@@ -1,0 +1,96 @@
+/* Status lives inside the arch; sprites, deity craft, and compass stay clear. */
+#normal .party-portrait.has-portrait-status { isolation: isolate; }
+#normal .party-portrait.has-portrait-status .hud-hero-medallion { z-index: 1; background: transparent; }
+#normal .party-portrait .portrait-status-interior {
+    position: absolute; left: 1px; top: 1px; width: 40px; height: 48px; z-index: 0;
+    overflow: hidden; border-radius: 20px 20px 2px 2px / 19px 19px 2px 2px; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 45%, #30352f, #12191d 80%);
+}
+.party-portrait .portrait-status-layer,
+.party-portrait .portrait-status-layer::before,
+.party-portrait .portrait-status-layer::after { position: absolute; inset: 0; pointer-events: none; }
+.party-portrait .portrait-status-layer::before,
+.party-portrait .portrait-status-layer::after { content: ''; }
+.party-portrait .portrait-status-layer + .portrait-status-layer { opacity: .62; }
+.party-portrait [data-portrait-effect='berserk'] {
+    background: radial-gradient(ellipse at 50% 92%, #ef6d346e, transparent 68%), linear-gradient(0deg, #8a222c8c, #3c151e60);
+}
+.party-portrait [data-portrait-effect='berserk']::before {
+    inset: 9px -3px -11px; background: repeating-linear-gradient(103deg, transparent 0 8px, #f6834938 9px 10px, transparent 11px 17px);
+    mask-image: linear-gradient(0deg, #000, transparent); animation: portrait-heat 3.2s ease-in-out infinite alternate;
+}
+.party-portrait [data-portrait-effect='berserk']::after {
+    background: radial-gradient(circle at 13% 69%, #ffd296a1 0 .65px, transparent 1.1px), radial-gradient(circle at 84% 50%, #eeaf787d 0 .7px, transparent 1.2px);
+}
+.party-portrait [data-portrait-effect='burning'] { background: radial-gradient(ellipse at 50% 100%, #ff9e3470, #9b3e4b4d 48%, transparent 85%); }
+.party-portrait [data-portrait-effect='burning']::before {
+    background: radial-gradient(ellipse at 8% 84%, #ffb6508c, transparent 24%), radial-gradient(ellipse at 92% 91%, #f188468c, transparent 26%);
+    animation: portrait-heat 2.8s ease-in-out infinite alternate;
+}
+.party-portrait [data-portrait-effect='poison'] { background: radial-gradient(ellipse at 45% 86%, #a2c64b78, #3d693e4d 50%, transparent 82%); }
+.party-portrait [data-portrait-effect='poison']::before {
+    background: radial-gradient(ellipse at 13% 70%, #bbde6a59, transparent 31%), radial-gradient(ellipse at 91% 36%, #7bd38445, transparent 28%);
+    animation: portrait-miasma 5.6s ease-in-out infinite alternate;
+}
+.party-portrait [data-portrait-effect='poison']::after {
+    background: radial-gradient(circle at 16% 40%, #d6e08b94 0 1px, transparent 1.5px), radial-gradient(circle at 85% 78%, #c3d47c8c 0 .8px, transparent 1.3px);
+}
+.party-portrait [data-portrait-effect='haste'] { background: linear-gradient(145deg, #335a664d, #326d675e 65%, #92cdb559); }
+.party-portrait [data-portrait-effect='haste']::before {
+    inset: -12px -5px; background: repeating-linear-gradient(132deg, transparent 0 9px, #c0e5cd69 10px 10.7px, transparent 12px 18px);
+    mask-image: linear-gradient(90deg, #000, transparent 35% 67%, #000); animation: portrait-streaks 2s linear infinite;
+}
+.party-portrait [data-portrait-effect='slow'] { background: radial-gradient(ellipse at 50% 95%, #6285bd6e, #293b5f59 56%, transparent 86%); }
+.party-portrait [data-portrait-effect='slow']::before {
+    inset: -18px -14px; background: repeating-radial-gradient(ellipse at 50% 95%, transparent 0 10px, #a9c9ee4d 11px 11.7px, transparent 13px 20px);
+    animation: portrait-ripples 7s ease-in-out infinite alternate;
+}
+.party-portrait [data-portrait-effect='confused'] { background: radial-gradient(ellipse at 50% 28%, #886fb05e, #4436514d 58%, transparent 86%); }
+.party-portrait [data-portrait-effect='confused']::before {
+    background: radial-gradient(circle at 17% 32%, #efd4abbd 0 1px, transparent 1.6px), radial-gradient(circle at 82% 25%, #b7acf2c7 0 1px, transparent 1.6px), radial-gradient(circle at 85% 63%, #d3b8e8a6 0 .8px, transparent 1.4px);
+    animation: portrait-motes 4.8s ease-in-out infinite alternate;
+}
+.party-portrait [data-portrait-effect='petrify'] {
+    background: repeating-linear-gradient(29deg, transparent 0 9px, #c6c5b23b 10px 10.6px, transparent 11px 18px), linear-gradient(100deg, #6f706c8c, #484c4f80 55%, #8c887757);
+}
+.party-portrait [data-portrait-effect='petrify']::before {
+    background: linear-gradient(72deg, transparent 23%, #c8c7b74d 24% 25%, transparent 26% 75%, #171d2570 76% 77%, transparent 78%);
+}
+.party-portrait [data-portrait-effect='frozen'] { background: radial-gradient(ellipse at 50% 90%, #9fddf078, #4775956b 56%, #273d5154); }
+.party-portrait [data-portrait-effect='frozen']::before {
+    background: repeating-linear-gradient(61deg, transparent 0 13px, #d7f5ff59 14px 14.7px, transparent 16px 24px), repeating-linear-gradient(119deg, transparent 0 17px, #c0eaf74d 18px 18.7px, transparent 20px 28px);
+    mask-image: linear-gradient(90deg, #000, transparent 37% 64%, #000);
+}
+.party-portrait [data-portrait-effect='invisible'] { background: radial-gradient(ellipse at 50% 50%, #aab6d940, #4655753b 55%, transparent 85%); }
+.party-portrait [data-portrait-effect='invisible']::before { background: repeating-linear-gradient(0deg, transparent 0 5px, #b9cae521 6px 6.5px, transparent 7px 11px); }
+#normal .party-portrait[data-portrait-ghost='true'] .hud-hero-medallion > img { opacity: .6; filter: saturate(.5); }
+.party-portrait .portrait-status-layer::before,
+.party-portrait .portrait-status-layer::after { animation-delay: var(--portrait-motion-phase, 0s); }
+@keyframes portrait-heat { from { transform: translateY(2px) scaleX(.94); opacity: .55; } to { transform: translateY(-3px) scaleX(1.04); opacity: .95; } }
+@keyframes portrait-miasma { from { transform: translate(-2px, 3px); opacity: .5; } to { transform: translate(2px, -3px); opacity: 1; } }
+@keyframes portrait-streaks { from { transform: translate(0, 0); } to { transform: translate(0, -17px); } }
+@keyframes portrait-ripples { from { transform: scale(.95); opacity: .55; } to { transform: scale(1.09); opacity: .95; } }
+@keyframes portrait-motes { from { transform: translate(-1px, 2px) rotate(-5deg); opacity: .6; } to { transform: translate(1px, -2px) rotate(6deg); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .party-portrait .portrait-status-layer::before, .party-portrait .portrait-status-layer::after { animation: none; transform: none; }
+}
+@property --cooldown-pct {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+}
+#normal .party-portrait .portrait-cooldown-ring {
+    position: absolute; left: 1px; top: 1px; width: 40px; height: 48px; z-index: 2;
+    border-radius: 20px 20px 2px 2px / 19px 19px 2px 2px; pointer-events: none;
+    background: conic-gradient(from 0deg, rgba(233, 185, 110, 0.78) var(--cooldown-pct, 0%), transparent 0%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, transparent 62%, #000 66%);
+    mask-image: radial-gradient(ellipse at 50% 50%, transparent 62%, #000 66%);
+}
+#normal .party-portrait .portrait-cooldown-ring[data-queued='true'] {
+    background: conic-gradient(from 0deg, rgba(52, 226, 226, 0.82) var(--cooldown-pct, 100%), transparent 0%);
+}
+@media (prefers-reduced-motion: no-preference) {
+    #normal .party-portrait .portrait-cooldown-ring {
+        transition: --cooldown-pct 120ms linear;
+    }
+}

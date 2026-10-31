@@ -1,0 +1,566 @@
+=Route_ranged the Shooter          *WIZARD*HumanHealth: 16/16     ========================Magic:  1/1========================AC:  3 (21%)Str: 11EV: 11Int: 9SH:  0Dex: 16XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)a) +0 shortbowFire: a) +0 shortbow♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 03/13 9ROUTE_EVENT setup 2
+Route_ranged the Shooter          *WIZARD*HumanHealth: 13/13     ========================Magic:  1/1========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  1 Next: 36281Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 19/19     ========================Magic:  2/2========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  2 Next: 16628Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 24/24     ========================Magic:  3/3========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  3 Next: 83136Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 30/30     ========================Magic:  4/4========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  4 Next: 48073Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 35/35     ========================Magic:  5/5========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  5 Next: 25737Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 41/41     ========================Magic:  6/6========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  6 Next: 13426Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 46/46     ========================Magic:  7/7========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  7 Next: 68348Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 52/52     ========================Magic:  8/8========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  8 Next: 34509Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 57/57     ========================Magic:  9/9========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL:  9 Next: 17287Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 63/63     ========================Magic:  10/10     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 10 Next: 8614%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 68/68     ========================Magic:  11/11     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 11 Next: 4263%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 74/74     ========================Magic:  12/12     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 12 Next: 2797%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 79/79     ========================Magic:  13/13     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 13 Next: 1651%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 85/85     ========================Magic:  14/14     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 14 Next: 1067%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 90/90     ========================Magic:  15/15     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 15 Next: 737% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 96/96     ========================Magic:  16/16     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 16 Next: 515% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the Shooter          *WIZARD*HumanHealth: 101/101   ========================Magic:  17/17     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 17 Next: 348% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the True Ascetic     *WIZARD*HumanHealth: 107/107   ========================Magic:  18/18     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 18 Next: 213% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_ranged the True Ascetic     *WIZARD*HumanHealth: 112/112   ========================Magic:  19/19     ========================AC:  3 (21%)Str: 11EV:  9Int: 9SH:  0Dex: 16XL: 19 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_ranged the Human Hunter.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 8/11820/2020 0% ROUTE_EVENT setup 3
+
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 14 10 244101024ROUTE_EVENT setup 4
+Route_ranged the True Ascetic     *WIZARD*HumanHealth: 118/118   ========================Magic:  20/20     ========================AC:  3 (21%)Str: 14EV: 10Int: 10SH:  0Dex: 24XL: 20 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣a) +0 shortbow♣@♣Fire: a) +0 shortbow♣..♣♣♣♣..♣♣.♣.♣♣
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 
+_Experience level set to 20.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 14, 10, 24
+ Enter Wizard Command (? - help): Which god (by name)? Okawaru
+new experience level: Experience level set to 20.
+ Enter values for Str, Int, Dex (space separated): 
+_Setting attributes (Str, Int, Dex) to: 14, 10, 24
+ Enter Wizard Command (? - help): Which god (by name)? Okawaru
+ Okawaru welcomes you! of Okawaru ......ROUTE_EVENT setup 5
+
+_Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 6
+
+_Increased Evocations to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 1664/164ROUTE_EVENT setup 7
+
+_Increased Fighting to skill level 16.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Armour
+ Armour
+ To what level? (current = 0.0) 114 (22ROUTE_EVENT setup 8
+
+_Increased Armour to skill level 11.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Ranged Weapons
+ Ranged Weapons
+ To what level? (current = 0.0) 20ROUTE_EVENT setup 9
+
+_Increased Ranged Weapons to skill level 20.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 1725ROUTE_EVENT setup 10
+
+_Increased Dodging to skill level 17.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Invocations
+ Invocations
+ To what level? (current = 0.0) 86------ROUTE_EVENT setup 11
+
+_Increased Invocations to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Stealth
+ Stealth
+ To what level? (current = 0.0) 9
+ Increased Stealth to skill level 9.0.
+_f - 3 scrolls of fear1.0 (1
+_
+_g - 3 scrolls of fog2
+_
+_t - 2 scrolls of teleportation3
+_
+_b - 2 scrolls of blinking------4
+_
+_g - 2 potions of magic1=5
+_
+_m - 2 potions of might6
+_
+_h - 2 potions of haste7
+_
+_c - 6 potions of curing8
+_
+_w - 6 potions of heal wounds=9
+_
+_c - a ring of poison resistance2=10.0 (1.0)
+_
+_d - a +0 pair of boots1
+_
+_e - a +0 pair of gloves2
+_
+_f - a +0 cloak3
+_
+_g - a +0 helmet=4
+_
+_h - a +2 ring mail3=5
+_
+_i - a +3 orcbow6
+_
+ You unwield your +0 shortbow.
+_i - a +3 orcbow (weapon)7i) +3 orcbow  i) +3 orcbow  
+_0
+ You start removing your armour.=8.0 (19.0 (24=20.0 (31.0 (42.0 (5
+0 (0%) 6
+_You continue removing your +0 leather armour. x5
+ You finish removing your +0 leather armour.
+ You start putting on your armour.3.0 (6=4.0 (75=5.0 (86.0 (97.0 (10.0)
+9 (27%)3
+_You continue putting on your +2 ring mail. x5
+_You finish putting on your +2 ring mail.0.0)
+_=8.0 (19.0 (2
+_You start putting on your armour. You continue putting on your +0 helmet. x36=30.0 (3
+_Magic restored.1.0 (42.0 (5
+11 (29
+_You continue putting on your +0 helmet. x2
+_You finish putting on your +0 helmet.0
+_=3.0 (14.0 (25.0 (36.0 (47.0 (5
+2
+_You start putting on your armour. You continue putting on your +0 cloak. x5
+_You finish putting on your +0 cloak.0
+_
+ You start putting on your armour.8.0 (19.0 (240.0 (31.0 (42.0 (5
+4 (30
+_You continue putting on your +0 pair of gloves. x5
+_You finish putting on your +0 pair of gloves.0
+_
+ You start putting on your armour.3.0 (14.0 (25.0 (36.0 (47.0 (5
+5 (31
+_You continue putting on your +0 pair of boots. x5
+ You finish putting on your +0 pair of boots.
+_c - a ring of poison resistance (worn)5 (0.5
+_ROUTE_EVENT inventory +0 shortbow
+ROUTE_EVENT inventory +0 leather armour
+ROUTE_EVENT inventory ring of poison resistance
+ROUTE_EVENT inventory +0 pair of boots
+ROUTE_EVENT inventory +0 pair of gloves
+ROUTE_EVENT inventory +0 cloak
+ROUTE_EVENT inventory +0 helmet
+ROUTE_EVENT inventory +2 ring mail
+ROUTE_EVENT inventory +3 orcbow
+ROUTE_EVENT inventory scroll of butterflies
+ROUTE_EVENT inventory 3 scrolls of fear
+ROUTE_EVENT inventory 3 scrolls of fog
+ROUTE_EVENT inventory 2 scrolls of teleportation
+ROUTE_EVENT inventory 2 scrolls of blinking
+ROUTE_EVENT inventory 2 potions of magic
+ROUTE_EVENT inventory 2 potions of might
+ROUTE_EVENT inventory 2 potions of haste
+ROUTE_EVENT inventory 6 potions of curing
+ROUTE_EVENT inventory 6 potions of heal wounds
+
+ You can now gain great but temporary skills.You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): ****Route_ranged the True Ascetic     *WIZARD*Human of Okawaru ****..Health: 164/164   ========================##.....##Magic:  26/26     ========================##.......##AC: 15 (31%)Str: 14#.........#EV: 23Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 47.5 (0.0)##..w........#i) +3 orcbow.......@.....#Fire: i) +3 orcbow#..T.........##............##....C......##w   gallery worm (asleep)....w......##T   iron troll (asleep)#.........##C   stone giant (missile, asleep)##...######w   coil worm (constriction, asleep)####f   deathcap (dormant)You finish putting on your +0 pair of boots.
+_c - a ring of poison resistance (worn)
+ You can now gain great but temporary skills.You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) 4
+_c - a ring of poison resistance (worn)
+ You can now gain great but temporary skills.
+ You can now speed up your combat.
+_You feel a rush of knowledge.
+ Enter Wizard Command (? - help): 
+_Healing.
+ Enter Wizard Command (? - help): What level of the Wormlands? (default 1, ? - help) Found a stone staircase leading up.ROUTE_AUDIT {"mp":26,"gold":0,"xp":41493,"progress":0,"turn":53,"inventory":[{"class":"weapon","quantity":1,"name":"+0 shortbow"},{"class":"armour","quantity":1,"name":"+0 leather armour"},{"class":"jewellery","quantity":1,"name":"ring of poison resistance"},{"class":"armour","quantity":1,"name":"+0 pair of boots"},{"class":"armour","quantity":1,"name":"+0 pair of gloves"},{"class":"armour","quantity":1,"name":"+0 cloak"},{"class":"armour","quantity":1,"name":"+0 helmet"},{"class":"armour","quantity":1,"name":"+2 ring mail"},{"class":"weapon","quantity":1,"name":"+3 orcbow"},{"class":"scroll","quantity":1,"name":"scroll of butterflies"},{"class":"scroll","quantity":3,"name":"3 scrolls of fear"},{"class":"scroll","quantity":3,"name":"3 scrolls of fog"},{"class":"scroll","quantity":2,"name":"2 scrolls of teleportation"},{"class":"scroll","quantity":2,"name":"2 scrolls of blinking"},{"class":"potion","quantity":2,"name":"2 potions of magic"},{"class":"potion","quantity":2,"name":"2 potions of might"},{"class":"potion","quantity":2,"name":"2 potions of haste"},{"class":"potion","quantity":6,"name":"6 potions of curing"},{"class":"potion","quantity":6,"name":"6 potions of heal wounds"}],"vaults":"worm_end_dragon_cavern","hp":164,"maxhp":164,"where":"Worm:4","honey":0,"items":[{"artefact":false,"quantity":14,"name":"14 gold pieces","class":"gold","x":73,"y":27},{"artefact":false,"quantity":1,"name":"wand of light (6)","class":"wand","x":31,"y":29},{"artefact":false,"quantity":1,"name":"staff of earth","class":"magical staff","x":32,"y":29},{"artefact":false,"quantity":1,"name":"glowing great sword","class":"weapon","x":33,"y":29},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":27,"y":31},{"artefact":false,"quantity":17,"name":"17 gold pieces","class":"gold","x":31,"y":33},{"artefact":false,"quantity":21,"name":"21 gold pieces","class":"gold","x":32,"y":33},{"artefact":false,"quantity":17,"name":"17 gold pieces","class":"gold","x":33,"y":33},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":68,"y":37},{"artefact":false,"quantity":1,"name":"staff of air","class":"magical staff","x":32,"y":45},{"artefact":false,"quantity":12,"name":"12 gold pieces","class":"gold","x":67,"y":45},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":32,"y":46},{"artefact":false,"quantity":1,"name":"scroll of identify","class":"scroll","x":57,"y":48},{"artefact":false,"quantity":1,"name":"potion of moonshine","class":"potion","x":38,"y":55},{"artefact":false,"quantity":1,"name":"scroll of blinking","class":"scroll","x":34,"y":57},{"artefact":false,"quantity":1,"name":"potion of curing","class":"potion","x":29,"y":58},{"artefact":false,"quantity":1,"name":"quarterstaff","class":"weapon","x":37,"y":64},{"artefact":false,"quantity":1,"name":"scroll of fog","class":"scroll","x":75,"y":65},{"artefact":false,"quantity":1,"name":"club","class":"weapon","x":76,"y":66},{"artefact":false,"quantity":18,"name":"18 gold pieces","class":"gold","x":39,"y":67},{"artefact":false,"quantity":1,"name":"parchment of Controlled Blink","class":"book","x":49,"y":68},{"artefact":false,"quantity":1,"name":"plate armour","class":"armour","x":67,"y":69}],"xl":20,"tag":"enter","maxmp":26,"monsters":[{"x":36,"y":27,"xp":84,"name":"earth elemental"},{"x":38,"y":28,"xp":961,"name":"coil worm"},{"x":38,"y":30,"xp":746,"name":"iron troll"},{"x":42,"y":30,"xp":1235,"name":"iron dragon"},{"x":32,"y":31,"xp":1031,"name":"gallery worm"},{"x":39,"y":32,"xp":82,"name":"earth elemental"},{"x":38,"y":33,"xp":781,"name":"iron troll"},{"x":73,"y":33,"xp":1054,"name":"gallery worm"},{"x":27,"y":34,"xp":1037,"name":"gallery worm"},{"x":34,"y":34,"xp":641,"name":"lindwurm"},{"x":90,"y":34,"xp":6,"name":"deathcap"},{"x":28,"y":35,"xp":765,"name":"iron troll"},{"x":32,"y":35,"xp":768,"name":"iron troll"},{"x":73,"y":35,"xp":950,"name":"coil worm"},{"x":36,"y":36,"xp":885,"name":"great orb of eyes"},{"x":36,"y":37,"xp":1043,"name":"gallery worm"},{"x":78,"y":37,"xp":5,"name":"deathcap"},{"x":85,"y":37,"xp":1066,"name":"gallery worm"},{"x":33,"y":39,"xp":1056,"name":"gallery worm"},{"x":84,"y":39,"xp":763,"name":"iron troll"},{"x":68,"y":40,"xp":885,"name":"great orb of eyes"},{"x":37,"y":41,"xp":760,"name":"iron troll"},{"x":68,"y":41,"xp":972,"name":"coil worm"},{"x":78,"y":41,"xp":779,"name":"iron troll"},{"x":86,"y":41,"xp":1091,"name":"stone giant"},{"x":65,"y":42,"xp":1043,"name":"gallery worm"},{"x":85,"y":42,"xp":952,"name":"coil worm"},{"x":73,"y":43,"xp":1060,"name":"gallery worm"},{"x":37,"y":44,"xp":6,"name":"deathcap"},{"x":45,"y":46,"xp":1016,"name":"gallery worm"},{"x":61,"y":47,"xp":767,"name":"iron troll"},{"x":61,"y":56,"xp":979,"name":"coil worm"},{"x":32,"y":57,"xp":1045,"name":"gallery worm"},{"x":59,"y":58,"xp":748,"name":"iron troll"},{"x":69,"y":58,"xp":800,"name":"caustic worm"},{"x":32,"y":59,"xp":1031,"name":"gallery worm"},{"x":59,"y":60,"xp":963,"name":"coil worm"},{"x":29,"y":61,"xp":814,"name":"caustic worm"},{"x":39,"y":61,"xp":6,"name":"deathcap"},{"x":39,"y":65,"xp":6,"name":"deathcap"},{"x":43,"y":65,"xp":961,"name":"coil worm"},{"x":73,"y":65,"xp":801,"name":"deep troll earth mage"},{"x":37,"y":66,"xp":735,"name":"deep troll"},{"x":72,"y":66,"xp":746,"name":"deep troll"},{"x":34,"y":67,"xp":1050,"name":"gallery worm"},{"x":70,"y":67,"xp":808,"name":"deep troll earth mage"},{"x":72,"y":68,"xp":725,"name":"deep troll"},{"x":52,"y":69,"xp":1054,"name":"gallery worm"},{"x":46,"y":70,"xp":1033,"name":"gallery worm"},{"x":49,"y":70,"xp":1043,"name":"gallery worm"},{"x":59,"y":71,"xp":6,"name":"deathcap"},{"x":75,"y":72,"xp":793,"name":"caustic worm"},{"x":78,"y":74,"xp":1056,"name":"gallery worm"}]}
+ROUTE_EVENT start ranged AC=15 EV=23 SH=0
+ROUTE_EVENT ability Heroism turn=53
+
+ You encounter a stone giant, a coil worm, an iron troll, a deathcap and a gallery worm.You gain the combat prowess of a mighty hero.
+_You can no longer speed up your combat..4--7 (3278.5 (1Hero 
+_
+fwTCwwTC)w)fYou shoot an arrow.
+_The arrow hits the gallery worm but does no damage.6 ==9.3 (0.8
+_
+.wYou shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.w..T
+ The stone giant throws a large rock. The large rock hits you!!!25------10 ====-- 50.1
+.w
+_You hear a shout!
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.w..89/164 -----------9ROUTE_EVENT use haste turn=57 place=Worm:4
+Route_ranged the True Ascetic     *WIZARD*Human of Okawaru ***...Health: 89/164    =============-----------##.....##Magic:  24/26     ======================--##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise: 10 ====--  Time: 50.9 (0.0)##...........#i) +3 orcbow......w@.....#Fire: i) +3 orcbow#...T........#Hero #....w.......##....C......##w   gallery worm...........##T   iron troll#.........##C   stone giant (missile)##...######w   coil worm (constriction)####f   deathcapYou shoot an arrow.
+_The arrow hits the gallery worm but does no damage.
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+ The stone giant throws a large rock. The large rock hits you!!!
+_You hear a shout!
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+_The stone giant throws a large rock. The large rock hits you!!!w.C.T.Markshuman  1-- 3 =----- 1.9 (1Fast Hero ROUTE_EVENT use fear turn=58 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 81/164    ===========-------------##.....##Magic:  24/26     ======================--##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  3 =-----  Time: 51.9 (0.0)##...........#i) +3 orcbow.....Tw@.....#Fire: i) +3 orcbow#.....w......#Fast Hero #.....C......##...........##w   gallery worm...........##T   iron troll#.........##C   stone giant (missile)##...######w   coil worm (constriction)####f   deathcap
+_The arrow hits the gallery worm but does no damage.
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+ The stone giant throws a large rock. The large rock hits you!!!
+_You hear a shout!
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+_The stone giant throws a large rock. The large rock hits you!!!
+_You feel yourself speed up. The gallery worm bites you!Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 81/164    ===========-------------##.....##Magic:  24/26     ======================--##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  3 =-----  Time: 51.9 (0.0)##...........#i) +3 orcbow.....T.@.....#Fire: i) +3 orcbow#....ww......#Fast Hero #.....C......##...........##w   gallery worm...........##T   iron troll#.........##C   stone giant (missile)##...######w   coil worm (constriction)####f   deathcap
+_You hear a shout!
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+_The stone giant throws a large rock. The large rock hits you!!!
+_You feel yourself speed up. The gallery worm bites you!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The stone giant looks frightened! The coil worm resists with some effort. The iron troll looks frightened!.CTw(fleeing)T(fleeing)C, fleeing)5=22.6 (0.7ROUTE_EVENT use fear turn=59 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 81/164    ===========-------------##.....##Magic:  25/26     =======================-##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 52.6 (0.0)##...........#i) +3 orcbow.....T.@.....#Fire: i) +3 orcbow#....ww......#Fast Hero #............##....C......##w   gallery worm (fleeing)...........##T   iron troll (fleeing)#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction)####f   deathcapYou shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is lightly wounded.
+_The stone giant throws a large rock. The large rock hits you!!!
+_You feel yourself speed up. The gallery worm bites you!
+ Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The stone giant looks frightened! The coil worm resists with some effort. The iron troll looks frightened!
+_The deathcap is unaffected. The gallery worm looks frightened! The coil worm misses you. The coil worm completely misses you.Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 81/164    ===========-------------##.....##Magic:  25/26     =======================-##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 52.6 (0.0)##...........#i) +3 orcbow....T..@.....#Fire: i) +3 orcbow#....ww......#Fast Hero #............##....C......##w   gallery worm (fleeing)...........##T   iron troll (fleeing)#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction)####f   deathcapPress: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The stone giant looks frightened! The coil worm resists with some effort. The iron troll looks frightened!
+_The deathcap is unaffected. The gallery worm looks frightened! The coil worm misses you. The coil worm completely misses you.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The coil worm looks frightened! The deathcap is unaffected.ww, fleeing)2=0 -3.2 (0.6ROUTE_EVENT use fear turn=60 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 82/164    ============------------##.....##Magic:  25/26     =======================-##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 53.2 (0.0)##...........#i) +3 orcbow....T..@.....#Fire: i) +3 orcbow#....ww......#Fast Hero #............##....C......##w   gallery worm (fleeing)...........##T   iron troll (fleeing)#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction, fleeing)####f   deathcapLook: a gallery worm (lightly wounded, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The stone giant looks frightened! The coil worm resists with some effort. The iron troll looks frightened!
+_The deathcap is unaffected. The gallery worm looks frightened! The coil worm misses you. The coil worm completely misses you.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The coil worm looks frightened! The deathcap is unaffected.
+_The iron troll cowers, then darts away.Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 82/164    ============------------##.....##Magic:  25/26     =======================-##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 53.2 (0.0)##...........#i) +3 orcbow....T..@.....#Fire: i) +3 orcbow#.....w......#Fast Hero #...w........##....C......##w   gallery worm (fleeing)...........##T   iron troll (fleeing)#.........##C   stone giant (missile, fleeing)##...######w   coil worm (constriction, fleeing)####f   deathcap
+_The deathcap is unaffected. The gallery worm looks frightened! The coil worm misses you. The coil worm completely misses you.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+ You assume a fearsome visage. The coil worm looks frightened! The deathcap is unaffected.
+_The iron troll cowers, then darts away.Press: ? - help, Dir - look around, f - activateLook: a gallery worm (lightly wounded, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust..w.C9 (0.7T
+ You assume a fearsome visage. The coil worm looks frightened! The deathcap is unaffected.
+_The iron troll cowers, then darts away.
+ Press: ? - help, Dir - look around, f - activate
+ Look: a gallery worm (lightly wounded, fleeing, chance to affect: 79%)
+ As you read the scroll of fear, it crumbles to dust.
+_You assume a fearsome visage. The deathcap is unaffected.
+ You shoot an arrow. The arrow barely misses the coil worm. The arrow hits the gallery worm!!!
+ Your attack snaps the gallery worm out of its fear.
+_The gallery worm is heavily wounded.ww  T  2 iron trolls (1 fleeing) 7 ===--- 4.4 (0.5
+w.
+_You encounter an iron troll.You shoot an arrow. The arrow hits the coil worm!
+ Your attack snaps the coil worm out of its fear.
+_The coil worm is lightly wounded.w..CT.w) 6 ==---- 8 (0.4
+_
+.TYou shoot an arrow. The arrow hits the coil worm!
+_The coil worm is moderately wounded. 3-5.3 (0.5
+_
+w.
+ You shoot an arrow. The arrow hits the coil worm!
+_The coil worm is heavily wounded.f
+.CThe iron troll seems to regain its courage.
+ You encounter a deathcap.The coil worm closely misses you. The coil worm barely misses you..TTf  2 deathcaps9 (0.6
+ 
+_The stone giant cowers, then darts away.You shoot an arrow. The arrow hits the gallery worm!!
+_The gallery worm is severely wounded. 6 ===--- 6.3 (0.4
+_
+ C)C
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is almost dead.The stone giant seems to regain its courage.
+T.
+ The gallery worm bites you. The coil worm barely misses you. The coil worm closely misses you. The stone giant throws a large rock. The large rock hits you!!43------98 (0.5ROUTE_EVENT use heal wounds turn=67 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 43/164    ======------------------##.....##Magic:  25/26     =======================-##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  9 ===---  Time: 56.8 (0.0)##...........#i) +3 orcbowf...T.w@.....#Fire: i) +3 orcbow#.....w......#Fast Hero #............##.T.........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##..C######w   coil worm (constriction)####ff  2 deathcapsThe coil worm closely misses you. The coil worm barely misses you.
+_The stone giant cowers, then darts away.You shoot an arrow. The arrow hits the gallery worm!!
+_The gallery worm is severely wounded.You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is almost dead.The stone giant seems to regain its courage.
+ The gallery worm bites you. The coil worm barely misses you. The coil worm closely misses you. The stone giant throws a large rock. The large rock hits you!!
+_* * * LOW HITPOINT WARNING * * *
+.T
+_The stone giant cowers, then darts away.
+ You shoot an arrow. The arrow hits the gallery worm!!
+_The gallery worm is severely wounded.
+ You shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is almost dead.stone giant seems to regain its courage.
+ The gallery worm bites you. The coil worm barely misses you. The coil worm closely misses you. The stone giant throws a large rock. The large rock hits you!!
+_* * * LOW HITPOINT WARNING * * *You feel much better. The gallery worm bites you!!C.
+ * * * LOW HITPOINT WARNING * * *The coil worm grabs you. The coil worm closely misses you. The coil worm constricts you.46=          17              6 ==---- 7.5 (0.7Constr ROUTE_EVENT use heal wounds turn=68 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 44/164    ======------------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  6 ==----  Time: 57.5 (0.0)##...........#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....w......#Fast Hero Constr #............##.T.........##w   gallery worm...........##TT  2 iron trolls#...C.....##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcapsYou shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is almost dead.The stone giant seems to regain its courage.
+ The gallery worm bites you. The coil worm barely misses you. The coil worm closely misses you. The stone giant throws a large rock. The large rock hits you!!
+_* * * LOW HITPOINT WARNING * * *You feel much better. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *The coil worm grabs you. The coil worm closely misses you. The coil worm constricts you.
+_* * * LOW HITPOINT WARNING * * *T.74====0 --8.1 (0.6
+C.
+ The gallery worm bites you. The coil worm barely misses you. The coil worm closely misses you. The stone giant throws a large rock. The large rock hits you!!
+_* * * LOW HITPOINT WARNING * * *
+ You feel much better. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *
+ The coil worm grabs you. The coil worm closely misses you. The coil worm constricts you.
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better.
+ You shoot an arrow. The arrow barely misses the coil worm.
+_The arrow hits the iron troll but does no damage.3====6 ==7ROUTE_EVENT use heal wounds turn=70 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 73/164    ==========--------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  6 ==----  Time: 58.7 (0.0)##...........#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....w......#Fast Hero Constr #..T.........##...........##w   gallery worm....C......##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcaps
+_* * * LOW HITPOINT WARNING * * *You feel much better. The gallery worm bites you!!
+ * * * LOW HITPOINT WARNING * * *The coil worm grabs you. The coil worm closely misses you. The coil worm constricts you.
+_* * * LOW HITPOINT WARNING * * *
+_You feel much better.
+ You shoot an arrow. The arrow barely misses the coil worm.
+_The arrow hits the iron troll but does no damage.
+_The gallery worm completely misses you. The coil worm completely misses you. The coil worm constricts you.T.98====0 --9.4 (0.7C.
+_
+ You shoot an arrow. The arrow barely misses the coil worm.
+_The arrow hits the iron troll but does no damage.
+_The gallery worm completely misses you. The coil worm completely misses you. The coil worm constricts you.The arrow hits the coil worm!The coil worm is heavily wounded.
+ The gallery worm bites you but does no damage.T.89===-6 ==8 (0.4You feel much better.
+ You shoot an arrow. The arrow hits the coil worm!
+_The coil worm is heavily wounded.
+ The gallery worm bites youcoil worm closely misses you. The coil worm constricts you!
+ You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+ The iron troll bites you!iron troll claw78---60.4 (0.6
+C.
+_The iron troll barely misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.T..54------1.0ROUTE_EVENT use heal wounds turn=74 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 54/164    =======-----------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  6 ==----  Time: 61.0 (0.0)##....T......#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....w......#Fast Hero Constr #.....C......##...........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcaps
+_The coil worm closely misses you. The coil worm constricts you!You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.The iron troll bites you!
+ The iron troll claws you but does no damage.
+_The iron troll barely misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+_The gallery worm misses you. The coil worm bites you! The coil worm constricts you!C.60=2 =-7 (0.7ROUTE_EVENT use heal wounds turn=75 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 60/164    ========----------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  2 =-----  Time: 61.7 (0.0)##....T......#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....wC.....#Fast Hero Constr #............##...........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcapsYou shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.The iron troll bites you!
+ The iron troll claws you but does no damage.
+_The iron troll barely misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+_The gallery worm misses you. The coil worm bites you! The coil worm constricts you!
+_You feel much better. The coil worm closely misses you. The coil worm constricts you! The gallery worm bites you..T84====0 -2.4 (0.7 
+_The gallery worm misses you. The coil worm bites you! The coil worm constricts you!
+_You feel much better. The coil worm closely misses you. The coil worm constricts you! The gallery worm bites you.
+_You feel much better.
+ The arrow hits the coil worm but does no damage.
+_The coil worm is heavily wounded.
+ The gallery worm bites you but does no damage.0===-6 ==8 (0.4
+_The coil worm barely misses you. The coil worm constricts you. The stone giant misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.54-----3.3 (0.5ROUTE_EVENT use heal wounds turn=78 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 54/164    =======-----------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  6 ==----  Time: 63.3 (0.0)##.....T.....#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....wC.....#Fast Hero Constr #............##...........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcaps
+_You feel much better.
+ You shoot an arrow.
+ The arrow hits the coil worm but does no damage.
+_The coil worm is heavily wounded.The gallery worm bites you but does no damage.
+_The coil worm barely misses you. The coil worm constricts you. The stone giant misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+_The iron troll bites you. The iron troll claws you! x2
+.
+ The gallery worm bites you but does no damage.
+_The coil worm barely misses you. The coil worm constricts you. The stone giant misses you.
+ You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+_The iron troll bites you. The iron troll claws you! x2
+ You feel much better. The gallery worm bites you!
+ The coil worm bites you but does no damage.
+ The coil worm constricts you!* * * LOW HITPOINT WARNING * * *4954.0 (0.7ROUTE_EVENT use blinking turn=79 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 49/164    =======-----------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 17 Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  5 ==----  Time: 64.0 (0.0)##.....T.....#i) +3 orcbowf....Tw@.....#Fire: i) +3 orcbow#.....wC.....#Fast Hero Constr #............##...........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####ff  2 deathcaps
+_The coil worm barely misses you. The coil worm constricts you. The stone giant misses you.You shoot an arrow. The arrow hits the coil worm.
+_The coil worm is heavily wounded.
+_The iron troll bites you. The iron troll claws you! x2
+ You feel much better. The gallery worm bites you!
+ The coil worm bites you but does no damage.
+ The coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+_The stone giant hits you but does no damage.Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...##.....##Health: 49/164    =======-----------------##.......##Magic:  26/26     ========================#.........#AC: 17 (32%)Str: 14##.....f...#EV: 17 Int: 10##..........#SH:  0Dex: 24#...........#XL: 20 Next:  0%  Place: Wormlands:4##.....T.....#Noise:  5 ==----  Time: 64.0 (0.0)f....Tw§.....#i) +3 orcbow#.....wC....@#Fire: i) +3 orcbow#............#Fast Hero Constr #...........##...........##w   gallery worm#.........##TT  2 iron trolls##...######C   stone giant (missile)####w   coil worm (constriction)f   deathcap
+_The coil worm is heavily wounded.
+_The iron troll bites you. The iron troll claws you! x2
+ You feel much better. The gallery worm bites you!
+ The coil worm bites you but does no damage.
+ The coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+_The stone giant hits you but does no damage.
+ Blink to where?Press: ? - help, Dir - move target
+.w
+_The iron troll bites you. The iron troll claws you! x2
+ You feel much better. The gallery worm bites you!
+ The coil worm bite
+ The coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+_The stone giant hits you but does no damage.
+ Blink to where?Press: ? - help, Dir - move targetYou blink free of the coil worm!.w.C27  0 --7 (0.7ROUTE_EVENT use blinking turn=80 place=Worm:4
+Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...##.....##Health: 49/164    =======-----------------##.......##Magic:  26/26     ========================#.........#AC: 17 (32%)Str: 14##.....f...#EV: 27Int: 10##..........#SH:  0Dex: 24#...........#XL: 20 Next:  0%  Place: Wormlands:4##.....T.....#Noise:  0 ------  Time: 64.7 (0.0)f....T.w.....#i) +3 orcbow#.......C...@#Fire: i) +3 orcbow#......w.....#Fast Hero #...........##...........##w   gallery worm#.........##TT  2 iron trolls##...######C   stone giant (missile)####w   coil worm (constriction)f   deathcapYou feel much better. The gallery worm bites you!
+ The coil worm bites you but does no damage.
+ The coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+_The stone giant hits you but does no damage.
+ Blink to where?Press: ? - help, Dir - move targetYou blink free of the coil worm!
+_As you read the scroll of blinking, it crumbles to dust.Route_ranged the Markshuman       *WIZARD*Human of Okawaru ***...Health: 49/164    =======-----------------##.....##Magic:  26/26     ========================##.......##AC: 17 (32%)Str: 14#.........#EV: 27Int: 10##.....f...#SH:  0Dex: 24##..........#XL: 20 Next:  0%  Place: Wormlands:4#...........#Noise:  0 ------  Time: 64.7 (0.0)##.....T.....#i) +3 orcbowf....T.w....@#Fire: i) +3 orcbow#.......C...§#Fast Hero #......w.....##...........##w   gallery worm...........##TT  2 iron trolls#.........##C   stone giant (missile)##...######w   coil worm (constriction)####f   deathcapThe coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+_The stone giant hits you but does no damage.
+ Blink to where?Press: ? - help, Dir - move targetYou blink free of the coil worm!
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?Press: ? - help, Dir - move target.T.T5.4 (0.7w§Blink to where?
+ Press: ? - help, Dir - move target
+ You blink free of the coil worm!
+_As you read the scroll of blinking, it crumbles to dust.
+ Blink to where?
+ Press: ? - help, Dir - move targetYou shoot an arrow. The arrow hits the iron troll!!
+_The iron troll is moderately wounded..w<.506 ==6.0 (0.6.T
+_As you read the scroll of blinking, it crumbles to dust.
+ You shoot an arrow. The arrow hits the iron troll!!
+_The iron troll is moderately wounded.
+_The stone giant throws a large rock. The large rock completely misses you.
+ You shoot an arrow.
+ The arrow hits the gallery worm but does no damage.The gallery worm is severely wounded..w.w.C5 (0.5
+_
+.TYou shoot an arrow. The arrow hits the gallery worm!
+_The gallery worm is almost dead. 7.0
+_
+.wYou shoot an arrow.
+ The arrow hits the gallery worm but does no damage.
+_The gallery worm is almost dead.w.5
+_
+T.
+ You shoot an arrow. The arrow hits the gallery worm.
+_The gallery worm is almost dead.<T18.1 (0.6
+_
+.wYou shoot an arrow. The arrow hits the gallery worm.
+_The gallery worm is almost dead..wfC..f  2 deathcaps6 (0.5
+_wTThe arrow hits the gallery worm but does no damage.
+_The gallery worm is almost dead.You shoot an arrow. The arrow hits the gallery worm.
+_The gallery worm is almost dead..
+_9.1
+_.TYou shoot an arrow. The arrow hits the gallery worm.
+ The arrow hits the gallery worm but does no damage.
+_The gallery worm is almost dead.You shoot an arrow.
+_The arrow completely misses the coil worm.
+ The coil worm grabs you. The coil worm misses you. The coil worm constricts you!* * * LOW HITPOINT WARNING * * *
+ The deathcap draws from the surrounding life force!.wCw17-----          17             7 (0.6Constr 
+ 
+_* * * LOW HITPOINT WARNING * * *You shoot an arrow. The arrow hits the coil worm!
+_The coil worm is severely wounded.The iron troll bites you but does no damage.8-----70.3
+ww
+_The iron troll claws you but does no damage. x2
+ You shoot an arrow. The arrow hits the coil worm!!
+_The coil worm is almost dead.T. 27 9
+.
+_You break free of the coil worm! The stone giant misses you.You shoot an arrow. The arrow hits the gallery worm!
+ You kill the gallery worm!
+.C
+_Okawaru accepts your kill..wTT  2 iron trollsC   stone giant (missile)w   coil worm (constriction)ff  2 deathcaps11.5
+_
+.
+ You shoot an arrow. The arrow hits the coil worm!
+ You kill the coil worm!
+.T
+_Okawaru accepts your kill.†ff  2 deathcaps22.1
+_The iron troll completely misses you. The iron troll misses you. The iron troll barely misses you.You shoot an arrow. The arrow hits the iron troll.
+_The iron troll is moderately wounded.96 (0.5
+_The stone giant misses you.You shoot an arrow. The arrow hits the iron troll.
+_The iron troll is moderately wounded.3.1
+_The stone giant misses you.
+ You shoot an arrow. The arrow hits the iron troll.The iron troll is moderately wounded.closely misses you. The iron troll completely misses you.
+ The arrow hits the iron troll but does no damage.
+_The iron troll is moderately wounded.The iron troll closely misses you. The iron troll barely misses you.
+ The iron troll claws you but does no damage.6
+_The stone giant completely misses you.You shoot an arrow.
+ The arrow hits the iron troll but does no damage.
+_The iron troll is moderately wounded.4.1Fast 
+_Your extra speed is starting to run out.
+ You shoot an arrow.
+ The arrow hits the iron troll but does no damage.
+_The iron troll is moderately wounded.The stone giant misses you. The iron troll bites you!!
+ * * * LOW HITPOINT WARNING * * */164     --6ROUTE_AUDIT {"mp":26,"gold":0,"xp":39475,"progress":2,"turn":98,"inventory":[{"class":"weapon","quantity":1,"name":"+0 shortbow"},{"class":"armour","quantity":1,"name":"+0 leather armour"},{"class":"jewellery","quantity":1,"name":"ring of poison resistance"},{"class":"armour","quantity":1,"name":"+0 pair of boots"},{"class":"armour","quantity":1,"name":"+0 pair of gloves"},{"class":"armour","quantity":1,"name":"+0 cloak"},{"class":"armour","quantity":1,"name":"+0 helmet"},{"class":"armour","quantity":1,"name":"+2 ring mail"},{"class":"weapon","quantity":1,"name":"+3 orcbow"},{"class":"scroll","quantity":1,"name":"scroll of butterflies"},{"class":"scroll","quantity":3,"name":"3 scrolls of fog"},{"class":"scroll","quantity":2,"name":"2 scrolls of teleportation"},{"class":"potion","quantity":2,"name":"2 potions of magic"},{"class":"potion","quantity":2,"name":"2 potions of might"},{"class":"potion","quantity":1,"name":"potion of haste"},{"class":"potion","quantity":6,"name":"6 potions of curing"}],"vaults":"worm_end_dragon_cavern","hp":-8,"maxhp":164,"where":"Worm:4","honey":0,"items":[{"artefact":false,"quantity":14,"name":"14 gold pieces","class":"gold","x":73,"y":27},{"artefact":false,"quantity":1,"name":"wand of light (6)","class":"wand","x":31,"y":29},{"artefact":false,"quantity":1,"name":"staff of earth","class":"magical staff","x":32,"y":29},{"artefact":false,"quantity":1,"name":"glowing great sword","class":"weapon","x":33,"y":29},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":27,"y":31},{"artefact":false,"quantity":17,"name":"17 gold pieces","class":"gold","x":31,"y":33},{"artefact":false,"quantity":21,"name":"21 gold pieces","class":"gold","x":32,"y":33},{"artefact":false,"quantity":17,"name":"17 gold pieces","class":"gold","x":33,"y":33},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":68,"y":37},{"artefact":false,"quantity":1,"name":"coil worm corpse","class":"corpse","x":92,"y":39},{"artefact":false,"quantity":1,"name":"staff of air","class":"magical staff","x":32,"y":45},{"artefact":false,"quantity":12,"name":"12 gold pieces","class":"gold","x":67,"y":45},{"artefact":false,"quantity":20,"name":"20 gold pieces","class":"gold","x":32,"y":46},{"artefact":false,"quantity":1,"name":"scroll of identify","class":"scroll","x":57,"y":48},{"artefact":false,"quantity":1,"name":"potion of moonshine","class":"potion","x":38,"y":55},{"artefact":false,"quantity":1,"name":"scroll of blinking","class":"scroll","x":34,"y":57},{"artefact":false,"quantity":1,"name":"potion of curing","class":"potion","x":29,"y":58},{"artefact":false,"quantity":1,"name":"quarterstaff","class":"weapon","x":37,"y":64},{"artefact":false,"quantity":1,"name":"scroll of fog","class":"scroll","x":75,"y":65},{"artefact":false,"quantity":1,"name":"club","class":"weapon","x":76,"y":66},{"artefact":false,"quantity":18,"name":"18 gold pieces","class":"gold","x":39,"y":67},{"artefact":false,"quantity":1,"name":"parchment of Controlled Blink","class":"book","x":49,"y":68},{"artefact":false,"quantity":1,"name":"plate armour","class":"armour","x":67,"y":69}],"xl":20,"tag":"death","maxmp":26,"monsters":[{"x":72,"y":25,"xp":1054,"name":"gallery worm"},{"x":76,"y":25,"xp":950,"name":"coil worm"},{"x":36,"y":27,"xp":84,"name":"earth elemental"},{"x":38,"y":28,"xp":961,"name":"coil worm"},{"x":38,"y":30,"xp":746,"name":"iron troll"},{"x":42,"y":30,"xp":1235,"name":"iron dragon"},{"x":32,"y":31,"xp":1031,"name":"gallery worm"},{"x":39,"y":32,"xp":82,"name":"earth elemental"},{"x":38,"y":33,"xp":781,"name":"iron troll"},{"x":27,"y":34,"xp":1037,"name":"gallery worm"},{"x":34,"y":34,"xp":641,"name":"lindwurm"},{"x":90,"y":34,"xp":6,"name":"deathcap"},{"x":28,"y":35,"xp":765,"name":"iron troll"},{"x":32,"y":35,"xp":768,"name":"iron troll"},{"x":36,"y":36,"xp":885,"name":"great orb of eyes"},{"x":36,"y":37,"xp":1043,"name":"gallery worm"},{"x":92,"y":37,"xp":779,"name":"iron troll"},{"x":93,"y":37,"xp":1091,"name":"stone giant"},{"x":86,"y":38,"xp":5,"name":"deathcap"},{"x":92,"y":38,"xp":763,"name":"iron troll"},{"x":80,"y":39,"xp":1060,"name":"gallery worm"},{"x":68,"y":40,"xp":885,"name":"great orb of eyes"},{"x":37,"y":41,"xp":760,"name":"iron troll"},{"x":68,"y":41,"xp":972,"name":"coil worm"},{"x":31,"y":42,"xp":1056,"name":"gallery worm"},{"x":65,"y":42,"xp":1043,"name":"gallery worm"},{"x":37,"y":44,"xp":6,"name":"deathcap"},{"x":45,"y":46,"xp":1016,"name":"gallery worm"},{"x":61,"y":47,"xp":767,"name":"iron troll"},{"x":61,"y":56,"xp":979,"name":"coil worm"},{"x":32,"y":57,"xp":1045,"name":"gallery worm"},{"x":59,"y":58,"xp":748,"name":"iron troll"},{"x":69,"y":58,"xp":800,"name":"caustic worm"},{"x":32,"y":59,"xp":1031,"name":"gallery worm"},{"x":59,"y":60,"xp":963,"name":"coil worm"},{"x":29,"y":61,"xp":814,"name":"caustic worm"},{"x":39,"y":61,"xp":6,"name":"deathcap"},{"x":32,"y":62,"xp":1050,"name":"gallery worm"},{"x":39,"y":65,"xp":6,"name":"deathcap"},{"x":73,"y":65,"xp":801,"name":"deep troll earth mage"},{"x":37,"y":66,"xp":735,"name":"deep troll"},{"x":72,"y":66,"xp":746,"name":"deep troll"},{"x":70,"y":67,"xp":808,"name":"deep troll earth mage"},{"x":72,"y":68,"xp":725,"name":"deep troll"},{"x":52,"y":69,"xp":1054,"name":"gallery worm"},{"x":46,"y":70,"xp":1033,"name":"gallery worm"},{"x":49,"y":70,"xp":1043,"name":"gallery worm"},{"x":51,"y":70,"xp":961,"name":"coil worm"},{"x":59,"y":71,"xp":6,"name":"deathcap"},{"x":75,"y":72,"xp":793,"name":"caustic worm"},{"x":78,"y":74,"xp":1056,"name":"gallery worm"}]}
+ROUTE_EVENT death Worm:4
+The stone giant misses you. The iron troll bites you!!
+ * * * LOW HITPOINT WARNING * * *
+_The iron troll completely misses you. The iron troll closely misses you.
+ You shoot an arrow.
+ The arrow completely misses the iron troll.deathcap!deathcap is moderately damaged.iron troll completely misses you. The iron troll claws you!
+ You die...Gear: 9/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ i - a +3 orcbow (weapon)a - a +0 shortbow
+Armour         (go to first with [)
+ d - a +0 pair of boots (worn)
+ e - a +0 pair of gloves (worn)
+ f - a +0 cloak (worn)
+ g - a +0 helmet (worn)
+ h - a +2 ring mail (worn)b - a +0 leather armour
+Jewellery      (go to first with "=)
+ c - a ring of poison resistance (worn)
+ i - a +3 orcbow (weapon)
+Goodbye, Route_ranged.235443 Route_ranged the Markshuman (level 20, -8/164 HPs) *WIZ*Began as a Human Hunter on Oct 27, 2026.Was a Priest of Okawaru.Mangled by an iron troll (9 damage)... on level 4 of the Wormlands.The game lasted 00:00:00 (98 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/bottom-final-2/games/ranged-202610270
+>

@@ -22,6 +22,15 @@ from tornado.netutil import bind_sockets
 import webtiles
 from webtiles import auth, load_games, process_handler, userdb, config
 from webtiles import game_data_handler, util, ws_handler, status
+from webtiles.library_http import LibraryPageHandler, LibraryAPIHandler
+from webtiles.stats_http import StatsPageHandler, StatsAPIHandler
+from webtiles import stats as stats_module
+from webtiles.crash_reports import CrashReportHandler
+from webtiles.character_preview_http import CharacterPreviewHandler, CharacterPreviewAtlasHandler
+from webtiles.asset_revision import revision as asset_revision
+from webtiles.auth_http import LogoutHandler
+from webtiles.profile_http import ProfilePageHandler, AppearanceAPIHandler
+from webtiles.graphics_http import GraphicsAPIHandler, GraphicsPageHandler
 
 
 servers = None
@@ -61,6 +70,7 @@ class MainHandler(tornado.web.RequestHandler):
         with util.SlowWarning("Slow IO: render client.html"):
             self.render("client.html", socket_server = protocol + host + "/socket",
                     game_version = _crawl_version,
+                    client_asset_revision = asset_revision(config.get('static_path')),
                     username = None,
                     config = config,
                     reset_token = recovery_token, reset_token_error = recovery_token_error)
@@ -270,14 +280,37 @@ def bind_server(nonsecure_sockets, secure_sockets):
         "static_path": config.get('static_path'),
         "template_loader": util.DynamicTemplateLoader.get(config.get('template_path')),
         "debug": bool(config.get('development_mode', False)),
+        "static_hash_cache": not (config.get('live_debug', False) or config.get('no_cache', False)),
         }
+
+    from webtiles.websocket_settings import heartbeat_settings
+    settings.update(heartbeat_settings(config.get('websocket_ping_interval'),
+                                       config.get('websocket_ping_timeout')))
 
     if config.get('no_cache', False):
         settings["static_handler_class"] = NoCacheHandler
 
     handlers = [
             (r"/", MainHandler),
+            (r"/logout", LogoutHandler),
+            (r"/profile/?", ProfilePageHandler),
+            (r"/api/profile/appearance", AppearanceAPIHandler),
+            (r"/api/profile/graphics", GraphicsAPIHandler),
+            (r"/settings/graphics/?", GraphicsPageHandler),
             (r"/socket", ws_handler.CrawlWebSocket),
+            (r"/api/character-preview", CharacterPreviewHandler),
+            (r"/api/character-preview/atlas/([a-f0-9]{24})\.png", CharacterPreviewAtlasHandler),
+            (r"/api/crash-report/([0-9a-f-]+)\.txt", CrashReportHandler),
+            (r"/(games|players|randarts)/?", LibraryPageHandler),
+            (r"/(games|players|randarts)/([0-9a-f-]+)", LibraryPageHandler),
+            (r"/api/library/(games|players|randarts)/?", LibraryAPIHandler),
+            (r"/api/library/(games|players|randarts)/([0-9a-f-]+)", LibraryAPIHandler),
+            (r"/stats/?", StatsPageHandler),
+            (r"/stats/([a-z]+)/?", StatsPageHandler),
+            (r"/stats/([a-z]+)/([^/]+)", StatsPageHandler),
+            (r"/api/stats/?", StatsAPIHandler),
+            (r"/api/stats/([a-z]+)/?", StatsAPIHandler),
+            (r"/api/stats/([a-z]+)/([^/]+)", StatsAPIHandler),
             (r"/gamedata/([0-9a-f]*\/.*)", game_data_handler.GameDataHandler),
             (r"/status/lobby/", status.LobbyHandler),
             (r"/status/version/", status.VersionHandler),
@@ -752,6 +785,10 @@ async def async_run_server(nonsecure_sockets, secure_sockets):
     # set up various timeout loops
     ws_handler.do_periodic_lobby_updates()
     webtiles.config.init_config_timeouts()
+    try:
+        stats_module.start_periodic()
+    except Exception:
+        logging.warning("Could not schedule /stats ingestion", exc_info=True)
 
     bind_server(nonsecure_sockets, secure_sockets)
 

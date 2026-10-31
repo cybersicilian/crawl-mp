@@ -1,0 +1,22 @@
+{
+  "recordedAt": "2026-10-19T20:16:55.532487+00:00",
+  "nativeContracts": {
+    "passed": true,
+    "cases": 30,
+    "assertions": 466
+  },
+  "legalBackgrounds": 35,
+  "nativeCreationPassed": true,
+  "catalogGenerated": true,
+  "binarySha256": {
+    "crawl": "c4d23506aa861da3bf4d42cd95eb61ef55dadadafe7fa57a50f7e650e1d2081e",
+    "catch2-tests-executable": "15abe219d6003dd6fdd2d02f5f35802733c4da4c8f67816594675d2f4bbaf829"
+  },
+  "logs": {
+    "native-contracts.log": "2e014839ba1dacc0a7a6934ea2ab2c5d27ca65dcf6c36a1add38f434b07eb849",
+    "character-creation.log": "9e9b70a00268e0f33b048fbb23d41924f241543ce639a74817a9796ecae1de27",
+    "character-catalog.log": "3f00580054761cf50d26722b58659f2169176e6d3464839e5cdc6b9829368a82"
+  },
+  "browserGameplay": "acceptance6 partial: cancellation, exact5ownerturn armor consumption/bodyAC, independent peers passed; re-equip snapshot acknowledgement stopped wear/save/dissolution checks; fresh7 prepared.",
+  "deployed": false
+}

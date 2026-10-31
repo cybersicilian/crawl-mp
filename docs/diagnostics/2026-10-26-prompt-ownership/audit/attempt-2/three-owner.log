@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/three-player-input-native.py", line 284, in <module>
+    verify(args.source.resolve(), args.output.resolve(), args.expect_failure)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/three-player-input-native.py", line 237, in verify
+    assert probe.until(lambda: probe.mode is not None and probe.mode > 1), "Real native inventory prompt"
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Real native inventory prompt

@@ -1,0 +1,29 @@
+{
+  "passed": false,
+  "startedAt": 1792796843.768398,
+  "finishedAt": 1792796964.610206,
+  "sourceManifestSha256": "18f3b80f0037589c67fd560250d05c49a1ffd901662efd065cd7919b9899f277",
+  "requestSha256": "e8f0c60b62704370e03537ff2803b4f0e20f04a529b37da8d6614240c7e13228",
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "STDFLAG=-std=c++17",
+        "NO_OPTIMIZE=y",
+        "PYTHON=/usr/local/bin/python3",
+        "crawl",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 2,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-validation/build.log"
+    }
+  ],
+  "notClaimed": [
+    "balance over full runs",
+    "deployment",
+    "new custom artwork"
+  ]
+}

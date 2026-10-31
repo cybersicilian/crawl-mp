@@ -5,6 +5,12 @@
 
 #pragma once
 
+#include <cstdint>
+
+// Keep the creation stream independent of the dungeon RNG's sequence as well
+// as its seed. The one-argument subgenerator deliberately inherits a sequence.
+constexpr uint64_t STARTING_CHARACTER_SEQUENCE = 0x6372656174696f6eULL;
+
 #include "item-prop-enum.h"
 
 // Djinn need to be prevented from hitting MAX_KNOWN_SPELLS as they level up.
@@ -23,3 +29,4 @@ void initial_dungeon_setup();
 
 void give_throwing_ammo(int n);
 void give_items_skills(const newgame_def& ng);
+void apply_starting_background_effects();

@@ -1,0 +1,34 @@
+{
+  "source": "/private/tmp/dcss-input-freeze-01a17b3b/crawl-ref/source",
+  "native_sha256": "56921362ecf5708400dbb02db0e6a3b8976e49efd1e8116f33e3d4956f855694",
+  "existing_saves_used": false,
+  "checks": [
+    {
+      "request": 1,
+      "command": "menu_action",
+      "completed": true
+    },
+    {
+      "request": 2,
+      "command": "target_cursor",
+      "completed": true
+    },
+    {
+      "request": 3,
+      "command": "inv_item_action",
+      "completed": true
+    },
+    {
+      "request": 4,
+      "command": "key",
+      "completed": true
+    },
+    {
+      "alternating_actions": 3,
+      "actor_ownership_preserved": true
+    }
+  ],
+  "expect_missing": false,
+  "passed": true,
+  "owned_process_exited": true
+}

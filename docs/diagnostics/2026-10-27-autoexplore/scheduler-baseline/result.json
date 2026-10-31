@@ -1,0 +1,152 @@
+{
+  "passed": true,
+  "source": "/opt/dcss/releases/render-smoothness-01a1801a/crawl-ref/source",
+  "backend": "/opt/dcss/releases/render-smoothness-01a1801a/crawl-ref/source/webserver",
+  "native_sha256": "8adcfbcb080e95ee7c3859dd91fd570b26b8bebb6cedbc05c1c004df0fb00a37",
+  "existing_saves_used": false,
+  "steps": [
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 3,
+      "time": 967726.759417388
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 4,
+      "time": 967726.910117905
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 5,
+      "time": 967727.110386508
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 6,
+      "time": 967727.259662085
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 7,
+      "time": 967727.459685277
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 8,
+      "time": 967727.66089623
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 9,
+      "time": 967727.809575177
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 10,
+      "time": 967728.00985188
+    },
+    {
+      "slot": 0,
+      "cancel": true,
+      "request": 11,
+      "time": 967728.209803202
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 12,
+      "time": 967728.260183978
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 13,
+      "time": 967728.359493519
+    }
+  ],
+  "completions": [
+    {
+      "request": 1,
+      "time": 967726.61613619
+    },
+    {
+      "request": 2,
+      "time": 967726.703424613
+    },
+    {
+      "request": 3,
+      "time": 967726.885181427
+    },
+    {
+      "request": 4,
+      "time": 967727.065701602
+    },
+    {
+      "request": 5,
+      "time": 967727.246409386
+    },
+    {
+      "request": 6,
+      "time": 967727.42667963
+    },
+    {
+      "request": 7,
+      "time": 967727.611206554
+    },
+    {
+      "request": 8,
+      "time": 967727.791260189
+    },
+    {
+      "request": 9,
+      "time": 967727.972638143
+    },
+    {
+      "request": 10,
+      "time": 967728.161961357
+    },
+    {
+      "request": 11,
+      "time": 967728.254707479
+    },
+    {
+      "request": 12,
+      "time": 967728.344178481
+    },
+    {
+      "request": 13,
+      "time": 967728.551525273
+    }
+  ],
+  "stop_checks": [
+    {
+      "slot": 0,
+      "native_activity_cleared": true,
+      "no_turn_after_stop": true,
+      "dispatch_ms": 199.80332197155803
+    }
+  ],
+  "elapsed_seconds": 1.8424679409945384,
+  "completion_to_next_step_ms": [
+    55.99277501460165,
+    24.936478002928197,
+    44.68490602448583,
+    13.252698932774365,
+    33.00564701203257,
+    49.689676030538976,
+    18.314988003112376,
+    37.21373702865094,
+    5.476498976349831,
+    15.315037919208407
+  ],
+  "automatic_steps": 10,
+  "owned_native_exited": true
+}

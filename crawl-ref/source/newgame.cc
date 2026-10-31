@@ -26,6 +26,7 @@
 #include "ng-input.h"
 #include "ng-restr.h"
 #include "options.h"
+#include "party.h"
 #include "playable.h"
 #include "prompt.h"
 #include "skills.h"
@@ -96,6 +97,9 @@ enum MenuOptions
     M_VIABLE_CHAR = -7,
     M_RANDOM_CHAR = -8,
     M_DEFAULT_CHOICE = -9,
+    M_TRAIT = -10,
+    M_RUNE_LOCKS = -11,
+    M_TRAPS = -12,
 };
 
 enum MenuChoices
@@ -138,8 +142,20 @@ static bool _char_defined(const newgame_def& ng)
     return ng.species != SP_UNKNOWN && ng.job != JOB_UNKNOWN;
 }
 
+static bool _trait_allows(species_type sp, job_type job)
+{
+    if (!species::is_valid(sp))
+        sp = SP_HUMAN;
+    if (!is_starting_job(job))
+        job = JOB_FIGHTER;
+    return check_trait(party::starting_member(0).trait, sp, job)
+           == trait_restriction::allowed;
+}
+
 static char_choice_restriction _job_allowed(species_type sp, job_type job) {
     if (job == JOB_DELVER && crawl_state.game_is_sprint())
+        return CC_BANNED;
+    if (!_trait_allows(sp, job))
         return CC_BANNED;
     return job_allowed(sp, job);
 }
@@ -208,7 +224,8 @@ static void _resolve_species(newgame_def& ng, const newgame_def& ng_choice)
         return;
     }
 
-    if (!is_starting_job(ng.job)) // VIABLE, RANDOM, UNKNOWN, or disabled
+    if (!is_starting_job(ng.job)
+        && party::starting_member(0).trait == character_trait::none)
     {
         ng.species = species::random_starting_species();
         return;
@@ -216,16 +233,34 @@ static void _resolve_species(newgame_def& ng, const newgame_def& ng_choice)
 
     auto candidate_species = playable_species();
 
+    if (!is_starting_job(ng.job))
+    {
+        erase_if(candidate_species, [&](const species_type sp) {
+            return !_trait_allows(sp, JOB_FIGHTER);
+        });
+        ASSERT(!candidate_species.empty());
+        ng.species = candidate_species[random2(candidate_species.size())];
+        return;
+    }
+
     if (ng_choice.species == SP_VIABLE)
     {
         erase_if(candidate_species, [&](const species_type sp) {
-            return !job_recommends_species(ng.job, sp);
+            return !job_recommends_species(ng.job, sp) || !_trait_allows(sp, ng.job);
         });
     }
     else
         erase_if(candidate_species, [&](const species_type sp) {
-            return !character_is_allowed(sp, ng.job);
+            return !character_is_allowed(sp, ng.job) || !_trait_allows(sp, ng.job);
         });
+
+    if (candidate_species.empty() && ng_choice.species == SP_VIABLE)
+    {
+        candidate_species = playable_species();
+        erase_if(candidate_species, [&](species_type sp) {
+            return !character_is_allowed(sp, ng.job) || !_trait_allows(sp, ng.job);
+        });
+    }
 
     ASSERT(candidate_species.size() > 0);
     ng.species = candidate_species[random2(candidate_species.size())];
@@ -242,7 +277,8 @@ static void _resolve_job(newgame_def& ng, const newgame_def& ng_choice)
         return;
     }
 
-    if (!species::is_starting_species(ng.species)) // VIABLE, RANDOM, UNKNOWN, or disabled
+    if (!species::is_starting_species(ng.species)
+        && party::starting_member(0).trait == character_trait::none)
     {
         ng.job = random_starting_job();
         return;
@@ -250,16 +286,37 @@ static void _resolve_job(newgame_def& ng, const newgame_def& ng_choice)
 
     auto candidate_jobs = playable_jobs();
 
+    if (!species::is_starting_species(ng.species))
+    {
+        erase_if(candidate_jobs, [&](const job_type job) {
+            return !_trait_allows(SP_HUMAN, job);
+        });
+        ASSERT(!candidate_jobs.empty());
+        ng.job = candidate_jobs[random2(candidate_jobs.size())];
+        return;
+    }
+
     if (ng_choice.job == JOB_VIABLE)
     {
         erase_if(candidate_jobs, [&](const job_type job) {
-            return !species::recommends_job(ng.species, job);
+            return !species::recommends_job(ng.species, job)
+                   || !_trait_allows(ng.species, job);
         });
     }
     else
         erase_if(candidate_jobs, [&](const job_type job) {
-            return !character_is_allowed(ng.species, job);
+            return !character_is_allowed(ng.species, job)
+                   || !_trait_allows(ng.species, job);
         });
+
+    if (candidate_jobs.empty() && ng_choice.job == JOB_VIABLE)
+    {
+        candidate_jobs = playable_jobs();
+        erase_if(candidate_jobs, [&](job_type job) {
+            return !character_is_allowed(ng.species, job)
+                   || !_trait_allows(ng.species, job);
+        });
+    }
 
     ASSERT(candidate_jobs.size() > 0);
     ng.job = candidate_jobs[random2(candidate_jobs.size())];
@@ -1187,7 +1244,7 @@ public:
         else
             _construct_species_menu(m_ng, m_defaults, this);
 
-        m_sub_items = make_shared<OuterMenu>(false, 2, 4);
+        m_sub_items = make_shared<OuterMenu>(false, 2, 6);
         m_sub_items->menu_id = m_choice_type == C_JOB ?
             "background-sub" : "species-sub";
         m_sub_items->descriptions = descriptions;
@@ -1303,6 +1360,14 @@ protected:
 
         string desc = unwrap_desc(getGameStartDescription(item_name));
         trim_string(desc);
+        if (m_choice_type == C_SPECIES)
+        {
+            const auto sp = static_cast<species_type>(id);
+            const auto job = is_starting_job(m_ng.job) ? m_ng.job : JOB_FIGHTER;
+            const auto reason = check_trait(party::starting_member(0).trait, sp, job);
+            if (reason != trait_restriction::allowed)
+                desc += string("\n\nUnavailable: ") + trait_restriction_reason(reason);
+        }
 
         auto btn = make_shared<MenuButton>();
 #ifdef USE_TILE
@@ -1376,6 +1441,27 @@ protected:
         _add_choice_menu_option(0, 3,
                 "? - Help", '?', M_HELP,
                 "Opens the help screen.");
+
+        text = string("~ - Trait: ") + character_trait_name(party::starting_member(0).trait);
+        string trait_desc = "Cycle character traits. Undead and nonliving species cannot take undead traits; "
+                            "good-god and shapeshifting backgrounds are incompatible.";
+        if (party::starting_member(0).trait != character_trait::none)
+        {
+            const string title = uppercase_first(character_trait_name(party::starting_member(0).trait));
+            trait_desc += "\n\n" + unwrap_desc(getLongDescription(title + " trait"));
+        }
+        _add_choice_menu_option(0, 4, text, '~', M_TRAIT,
+                                trait_desc);
+        text = string("^R - Rune locks: ") + (party::starting_no_rune_locks() ? "off" : "on");
+        _add_choice_menu_option(1, 4, text, CONTROL('R'), M_RUNE_LOCKS,
+                "Toggle rune locks for the whole expedition.");
+        const auto traps = party::starting_trap_mode();
+        const char* trap_name = traps == game_modifiers::traps::none ? "none"
+            : traps == game_modifiers::traps::floor_only ? "floor only"
+            : traps == game_modifiers::traps::random_only ? "random only" : "normal";
+        _add_choice_menu_option(0, 5, string("^T - Traps: ") + trap_name,
+                                CONTROL('T'), M_TRAPS,
+                                "Cycle trap modes; vault travel traps and puzzle mechanisms remain active.");
 
         _add_choice_menu_option(1, 0,
                 "    * - Random " + choice_name, '*', M_RANDOM,
@@ -1452,6 +1538,34 @@ void UINewGameMenu::menu_item_activated(int id)
     bool viable = false;
     switch (id)
     {
+    case M_RUNE_LOCKS:
+        party::set_starting_campaign_modifiers(!party::starting_no_rune_locks(),
+                                               party::starting_trap_mode());
+        done = true;
+        return;
+    case M_TRAPS:
+        party::set_starting_campaign_modifiers(party::starting_no_rune_locks(),
+            static_cast<game_modifiers::traps>((static_cast<int>(party::starting_trap_mode()) + 1) % 4));
+        done = true;
+        return;
+    case M_TRAIT:
+    {
+        int next = static_cast<int>(party::starting_member(0).trait);
+        for (int i = 0; i < 4; ++i)
+        {
+            next = (next + 1) % 4;
+            const auto trait = static_cast<character_trait>(next);
+            const species_type sp = species::is_valid(m_ng.species) ? m_ng.species : SP_HUMAN;
+            const job_type job = is_starting_job(m_ng.job) ? m_ng.job : JOB_FIGHTER;
+            if (check_trait(trait, sp, job) == trait_restriction::allowed)
+            {
+                party::set_starting_trait(0, trait);
+                break;
+            }
+        }
+        done = true; // Rebuild the menu and its compatible choices.
+        return;
+    }
     case M_VIABLE_CHAR:
         viable = true;
         // intentional fall-through
@@ -1497,8 +1611,9 @@ void UINewGameMenu::menu_item_activated(int id)
         if (m_choice_type == C_JOB)
         {
             job_type job = static_cast<job_type> (id);
-            if (m_ng.species == SP_UNKNOWN
-                || _job_allowed(m_ng.species, job) != CC_BANNED)
+            if (_trait_allows(m_ng.species, job)
+                && (m_ng.species == SP_UNKNOWN
+                    || _job_allowed(m_ng.species, job) != CC_BANNED))
             {
                 m_ng_choice.job = job;
                 done = true;
@@ -1507,8 +1622,9 @@ void UINewGameMenu::menu_item_activated(int id)
         else
         {
             species_type species = static_cast<species_type> (id);
-            if (m_ng.job == JOB_UNKNOWN
-                || species_allowed(m_ng.job, species) != CC_BANNED)
+            if (_trait_allows(species, m_ng.job)
+                && (m_ng.job == JOB_UNKNOWN
+                    || species_allowed(m_ng.job, species) != CC_BANNED))
             {
                 m_ng_choice.species = species;
                 done = true;
@@ -1531,6 +1647,9 @@ void job_group::attach(const newgame_def& ng, const newgame_def& defaults,
             break;
 
         if (job == JOB_DELVER && ng.type == GAME_TYPE_SPRINT)
+            continue;
+
+        if (!_trait_allows(ng.species, job))
             continue;
 
         if (ng.species != SP_UNKNOWN
@@ -1588,7 +1707,9 @@ void species_group::attach(const newgame_def& ng, const newgame_def& defaults,
         }
 
         int item_status;
-        if (ng.job == JOB_UNKNOWN)
+        if (!_trait_allows(this_species, ng.job))
+            item_status = ITEM_STATUS_RESTRICTED;
+        else if (ng.job == JOB_UNKNOWN)
             item_status = ITEM_STATUS_UNKNOWN;
         else if (species_allowed(ng.job, this_species) == CC_RESTRICTED)
             item_status = ITEM_STATUS_RESTRICTED;
@@ -1643,14 +1764,12 @@ static void _prompt_choice(int choice_type, newgame_def& ng, newgame_def& ng_cho
         game_ended(game_exit::abort);
 }
 
-typedef pair<weapon_type, char_choice_restriction> weap_choice;
-
 static weapon_type _fixup_weapon(weapon_type wp,
-                                 const vector<weap_choice>& weapons)
+                                 const vector<starting_weapon_choice>& weapons)
 {
     if (wp == WPN_UNKNOWN || wp == WPN_RANDOM || wp == WPN_VIABLE)
         return wp;
-    for (weap_choice choice : weapons)
+    for (starting_weapon_choice choice : weapons)
         if (wp == choice.first)
             return wp;
     return WPN_UNKNOWN;
@@ -1658,7 +1777,7 @@ static weapon_type _fixup_weapon(weapon_type wp,
 
 static void _construct_weapon_menu(const newgame_def& ng,
                                    const weapon_type& defweapon,
-                                   const vector<weap_choice>& weapons,
+                                   const vector<starting_weapon_choice>& weapons,
                                    shared_ptr<OuterMenu>& main_items,
                                    shared_ptr<OuterMenu>& sub_items)
 {
@@ -1792,7 +1911,7 @@ static void _construct_weapon_menu(const newgame_def& ng,
  */
 static bool _prompt_weapon(const newgame_def& ng, newgame_def& ng_choice,
                            const newgame_def& defaults,
-                           const vector<weap_choice>& weapons)
+                           const vector<starting_weapon_choice>& weapons)
 {
     weapon_type defweapon = _fixup_weapon(defaults.weapon, weapons);
 
@@ -1938,15 +2057,20 @@ weapon_type starting_weapon_upgrade(weapon_type wp, job_type job,
     }
 }
 
-static vector<weap_choice> _get_weapons(const newgame_def& ng)
+vector<starting_weapon_choice> starting_weapon_choices(const newgame_def& ng)
 {
-    vector<weap_choice> weapons;
+    vector<starting_weapon_choice> weapons;
+    if (species::mutation_level(ng.species, MUT_NO_GRASPING))
+        return {{WPN_UNARMED, CC_UNRESTRICTED}};
+    if (!job_has_weapon_choice(ng.job))
+        return weapons;
+
     weapon_type startwep[7] = { WPN_SHORT_SWORD, WPN_MACE, WPN_HAND_AXE,
                                 WPN_SPEAR, WPN_FALCHION, WPN_QUARTERSTAFF,
                                 WPN_UNARMED };
     for (int i = 0; i < 7; ++i)
     {
-        weap_choice wp;
+        starting_weapon_choice wp;
         wp.first = startwep[i];
         if (job_gets_good_weapons(ng.job))
         {
@@ -1961,8 +2085,25 @@ static vector<weap_choice> _get_weapons(const newgame_def& ng)
     return weapons;
 }
 
+// Deterministic quickstart defaults, always drawn from the native legal menu.
+weapon_type default_starting_weapon(const newgame_def& ng)
+{
+    const auto choices = starting_weapon_choices(ng);
+    weapon_type preferred = WPN_HAND_AXE;
+    if (ng.job == JOB_MONK)
+        preferred = WPN_UNARMED;
+    else if (ng.job == JOB_FIGHTER)
+        preferred = species::size(ng.species) <= SIZE_SMALL ? WPN_RAPIER : WPN_WAR_AXE;
+    else if (species::size(ng.species) <= SIZE_SMALL)
+        preferred = WPN_SHORT_SWORD;
+    for (const auto& choice : choices)
+        if (choice.first == preferred)
+            return preferred;
+    return choices.empty() ? WPN_UNKNOWN : choices.front().first;
+}
+
 static void _resolve_weapon(newgame_def& ng, newgame_def& ng_choice,
-                            const vector<weap_choice>& weapons)
+                            const vector<starting_weapon_choice>& weapons)
 {
     int weapon = ng_choice.weapon;
 
@@ -1978,7 +2119,7 @@ static void _resolve_weapon(newgame_def& ng, newgame_def& ng_choice,
     case WPN_VIABLE:
     {
         int good_choices = 0;
-        for (weap_choice choice : weapons)
+        for (starting_weapon_choice choice : weapons)
         {
             if (choice.second == CC_UNRESTRICTED
                 && one_chance_in(++good_choices))
@@ -2015,7 +2156,7 @@ static bool _choose_weapon(newgame_def& ng, newgame_def& ng_choice,
     if (!job_has_weapon_choice(ng.job))
         return true;
 
-    vector<weap_choice> weapons = _get_weapons(ng);
+    vector<starting_weapon_choice> weapons = starting_weapon_choices(ng);
 
     ASSERT(!weapons.empty());
     if (weapons.size() == 1)
@@ -2025,6 +2166,12 @@ static bool _choose_weapon(newgame_def& ng, newgame_def& ng_choice,
     }
 
     _resolve_weapon(ng, ng_choice, weapons);
+    if (ng.weapon == WPN_UNKNOWN && party::is_enabled())
+    {
+        // Co-op quickstart never shows the weapon menu.
+        ng_choice.weapon = WPN_VIABLE;
+        _resolve_weapon(ng, ng_choice, weapons);
+    }
     if (ng.weapon == WPN_UNKNOWN)
     {
         if (!_prompt_weapon(ng, ng_choice, defaults, weapons))

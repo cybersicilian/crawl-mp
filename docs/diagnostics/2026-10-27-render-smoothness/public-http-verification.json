@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "assets": {
+    "webserver/static/scripts/visibility-feather.js": "647001da1bf6a0d4aa1c1f6ecd9d9f177cf7d8775ed569b54db57a631acd4838"
+  },
+  "health": {
+    "ok": true,
+    "checked_at": "2026-10-28T02:49:23.398412+00:00",
+    "application": true,
+    "disk": true
+  }
+}

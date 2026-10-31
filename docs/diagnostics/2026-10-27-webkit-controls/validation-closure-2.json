@@ -1,0 +1,9 @@
+{
+  "reservationId": "202a1fea-ab50-4a8c-bac6-a62299320d7a",
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/catchup-result.json",
+  "browserClosed": true,
+  "passed": false,
+  "failure": "QA login restores its existing staging room, hiding the New expedition button. No new native game started. Existing save remains preserved."
+}

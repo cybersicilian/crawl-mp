@@ -1,8 +1,13 @@
 #include "catch_amalgamated.hpp"
 
 #include "AppHdr.h"
+#include "delay.h"
 #include "spl-util.h"
+#include "player.h"
+#include "skills.h"
+#include "spl-book.h"
 #include "rltiles/tiledef-gui.h"
+#include "test_player_fixture.h"
 
 TEST_CASE("All spells are valid")
 {
@@ -54,5 +59,126 @@ TEST_CASE("Removed spells and AXED_SPELLs are in sync" )
 
         INFO("Testing removedness for " << spell_title(spell));
         REQUIRE(spell_removed(spell) == spell_is_axed);
+    }
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Spell library counts match the hero's memorisation limits",
+                 "[spell-library]")
+{
+    init_spell_descs();
+    you.spell_library.reset();
+    you.vehumet_gifts.clear();
+    you.spells.fill(SPELL_NO_SPELL);
+    you.spell_no = 0;
+    you.experience_level = 5;
+    REQUIRE(player_spell_levels() == 4);
+    REQUIRE(get_spell_library_summary().total == 0);
+    REQUIRE(get_spell_library_summary().memorisable == 0);
+
+    for (spell_type spell : {SPELL_MAGIC_DART, SPELL_SEARING_RAY, SPELL_FIREBALL})
+        you.spell_library.set(spell, true);
+
+    int total = 3;
+    int memorisable = 2;
+    SECTION("Unlearned spells include those above free spell levels") {}
+    SECTION("Known spells are counted with casting powers instead")
+    {
+        you.spells[0] = SPELL_MAGIC_DART;
+        you.spell_no = 1;
+        total = 2;
+        memorisable = 1;
+    }
+    SECTION("Experience limits eligibility even with enough free levels")
+    {
+        you.experience_level = 1;
+        set_skill_level(SK_SPELLCASTING, 5, true);
+        REQUIRE(player_spell_levels() >= 5);
+        memorisable = 1;
+    }
+    SECTION("No free levels prevents memorisation")
+    {
+        you.experience_level = 1;
+        memorisable = 0;
+    }
+    SECTION("Hidden spells and divine offers use unique spell IDs")
+    {
+        you.hidden_spells.set(SPELL_MAGIC_DART, true);
+        you.vehumet_gifts.insert(SPELL_SEARING_RAY);
+        you.vehumet_gifts.insert(SPELL_FROZEN_RAMPARTS);
+        total = 4;
+        memorisable = 3;
+    }
+    SECTION("Confusion temporarily prevents learning")
+    {
+        you.duration[DUR_CONF] = 10;
+        memorisable = 0;
+    }
+    SECTION("Berserk temporarily prevents learning")
+    {
+        you.duration[DUR_BERSERK] = 10;
+        memorisable = 0;
+    }
+    SECTION("Full spell memory prevents further learning")
+    {
+        you.spell_no = MAX_KNOWN_SPELLS;
+        memorisable = 0;
+    }
+    SECTION("Spells already being learned are not offered twice")
+    {
+        you.delay_queue.push_back(make_shared<MemoriseDelay>(2, SPELL_SEARING_RAY));
+        memorisable = 1;
+    }
+    SECTION("Sacrificed schools cannot be memorised")
+    {
+        you.mutation[MUT_NO_CONJURATION_MAGIC] = 1;
+        memorisable = 0;
+    }
+    SECTION("Religious restrictions apply to every library entry")
+    {
+        you.religion = GOD_TROG;
+        memorisable = 0;
+    }
+    const spell_library_summary summary = get_spell_library_summary();
+    REQUIRE(summary.total == total);
+    REQUIRE(summary.memorisable == memorisable);
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Automaton library counts unlearned spells without triggers separately",
+                 "[spell-library]")
+{
+    init_spell_descs();
+    you.species = SP_AUTOMATON;
+    you.spell_library.reset();
+    you.hidden_spells.reset();
+    you.vehumet_gifts.clear();
+    you.spells.fill(SPELL_NO_SPELL);
+    you.spell_no = 0;
+    you.experience_level = 27;
+    you.spell_library.set(SPELL_MAGIC_DART, true);
+    you.spell_library.set(SPELL_SUMMON_FOREST, true);
+    you.hidden_spells.set(SPELL_SUMMON_FOREST, true);
+
+    SECTION("unsupported and hidden spells remain memorisable")
+    {
+        const auto summary = get_spell_library_summary();
+        CHECK(summary.total == 2);
+        CHECK(summary.memorisable == 2);
+        CHECK(summary.without_automatic_trigger == 1);
+        CHECK(you_can_memorise(SPELL_SUMMON_FOREST));
+    }
+    SECTION("known spells leave the library count")
+    {
+        you.spells[0] = SPELL_SUMMON_FOREST;
+        you.spell_no = 1;
+        const auto summary = get_spell_library_summary();
+        CHECK(summary.total == 1);
+        CHECK(summary.without_automatic_trigger == 0);
+    }
+    SECTION("other species do not report an Automaton trigger count")
+    {
+        you.species = SP_HUMAN;
+        CHECK(get_spell_library_summary().without_automatic_trigger == 0);
     }
 }

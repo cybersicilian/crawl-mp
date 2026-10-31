@@ -1338,7 +1338,13 @@ static int _get_help_section(int section, formatted_string &header_out, formatte
             char buf[200];
             string fname = canonicalise_file_separator(help_files[i].name);
             FILE* fp = fopen_u(datafile_path(fname, false).c_str(), "r");
-            ASSERTM(fp, "Failed to open '%s'!", fname.c_str());
+            if (!fp)
+            {
+                page_text[help_files[i].hotkey] = formatted_string::parse_string(
+                    "This help document is unavailable in this installation.\n"
+                    "You can still use key help (?) and description lookup (/).\n");
+                continue;
+            }
             while (fgets(buf, sizeof buf, fp))
             {
                 text += string(buf);
@@ -1352,7 +1358,8 @@ static int _get_help_section(int section, formatted_string &header_out, formatte
                     strstr(buf, "------------------------------------------"
                                         "------------------------------") == buf;
             }
-            trim_string_right(text.ops.back().text);
+            if (!text.ops.empty())
+                trim_string_right(text.ops.back().text);
             page_text[help_files[i].hotkey] = text;
         }
     }

@@ -1,0 +1,169 @@
+ Host slot is locked; no reservation change.
+
+ Host slot is locked; no reservation change.
+
+ Host slot is locked; no reservation change.
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+ Host slot is occupied: {"runId": "31e4a56b-ee5d-431e-a473-4867b9feb7b6", "owner": "codex/01a1801a-25ec-7ee2-9a44-520284f080eb", "label": "DCSS exact-expedition staged acceptance", "requestedAt": 1793154404.5192692, "supervisorPid": 74091, "status": "failed_held", "reservation": true, "requestId": "8e153cba89c6be405b79645e2fdbe5e68dc6e340ba5b0c6a5488265b22065d2f", "startedAt": 1793154404.52249, "workerPid": 74099, "processGroup": 74099, "exitCode": 1, "finishedAt": 1793154522.804437, "supervisedProcessGroupGone": true}
+
+{"runId": "e61de17c-7681-440e-8250-9386f7e78615", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native fustibalus crash regression build", "requestId": "bead6b3002c315f80ee456739db9cc9ecf85a23bf85b429d7465407c9a0cdda0", "status": "reserved", "reservedAt": 1793154720.823091}
+ 
+{"runId": "e61de17c-7681-440e-8250-9386f7e78615", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native fustibalus crash regression build", "requestedAt": 1793154720.880272, "supervisorPid": 2849, "status": "running", "reservation": true, "requestId": "bead6b3002c315f80ee456739db9cc9ecf85a23bf85b429d7465407c9a0cdda0", "startedAt": 1793154720.88105, "workerPid": 2851, "processGroup": 2851}
+fatal: not a git repository (or any of the parent directories): .git
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C rltiles all ARCH=arm64-apple-darwin27.0.0 NO_PKGCONFIG=Yes TILES=y
+    PYTHON rltilesstatus-icon-sizes.h
+    GEN compflag.h
+    CXX throw.o
+    GEN build.h
+In file included from throw.cc:6:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+    CXX version.o
+In file included from version.cc:6:
+In file included from ./AppHdr.h:22:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdint.h:18:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:15:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/availability.h:204:4: warning: "The selected platform is no longer supported by libc++." [-W#warnings]
+  204 | #  warning "The selected platform is no longer supported by libc++."
+      |    ^
+1 warning generated.
+In file included from throw.cc:22:
+./coordit.h:12:35: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   12 | class rectangle_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:22:
+./coordit.h:38:42: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   38 | class random_rectangle_iterator : public iterator<forward_iterator_tag,
+      |                                          ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:22:
+./coordit.h:66:32: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+   66 | class radius_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:22:
+./coordit.h:113:34: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+  113 | class adjacent_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                  ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:22:
+./coordit.h:145:34: warning: 'iterator<std::forward_iterator_tag, coord_def>' is deprecated [-Wdeprecated-declarations]
+  145 | class distance_iterator : public iterator<forward_iterator_tag, coord_def>
+      |                                  ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, coord_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:32:
+In file included from ./invent.h:15:
+In file included from ./menu.h:16:
+In file included from ./tiles-build-specific.h:17:
+In file included from ./tileweb.h:22:
+./status.h:110:32: warning: 'iterator<std::forward_iterator_tag, int>' is deprecated [-Wdeprecated-declarations]
+  110 | class status_iterator : public iterator<forward_iterator_tag, int>
+      |                                ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, int>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:35:
+./items.h:205:31: warning: 'iterator<std::forward_iterator_tag, item_def>' is deprecated [-Wdeprecated-declarations]
+  205 | class stack_iterator : public iterator<forward_iterator_tag, item_def>
+      |                               ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, item_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from throw.cc:35:
+./items.h:226:33: warning: 'iterator<std::forward_iterator_tag, item_def>' is deprecated [-Wdeprecated-declarations]
+  226 | class mon_inv_iterator : public iterator<forward_iterator_tag, item_def>
+      |                                 ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/iterator.h:23:8: note: 'iterator<std::forward_iterator_tag, item_def>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_DEPRECATED_IN_CXX17 iterator {
+      |        ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:540:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX17'
+  540 | #    define _LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:504:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  504 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+9 warnings generated.
+    LINK crawl
+    LINK catch2-tests-executable
+ld: warning: ignoring duplicate libraries: 'contrib/install/arm64-apple-darwin27.0.0/lib/libz.a'
+ld: warning: ignoring duplicate libraries: 'contrib/install/arm64-apple-darwin27.0.0/lib/libz.a'
+{"runId": "e61de17c-7681-440e-8250-9386f7e78615", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS native fustibalus crash regression build", "requestedAt": 1793154720.880272, "supervisorPid": 2849, "status": "released", "reservation": true, "requestId": "bead6b3002c315f80ee456739db9cc9ecf85a23bf85b429d7465407c9a0cdda0", "startedAt": 1793154720.88105, "workerPid": 2851, "processGroup": 2851, "exitCode": 0, "finishedAt": 1793154729.6529121, "supervisedProcessGroupGone": true, "releasedAt": 1793154729.7867992, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/validation/build-launcher-fix/closure.json", "releaseEvidenceSha256": "28ccad7db4941b5dd48e5d524ebebe295e6d1c424374ab10bfec517a1ba6813b"}

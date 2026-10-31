@@ -1,0 +1,23 @@
+{"runId": "72af99d9-c43c-4c88-a4a0-8dc6561f4fd5", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS causal tactics baseline and comparable-branch controls", "requestId": "471df130dfc1573386fea9784e3a82b9a67f2a1af6917b31c2f9e2a01667f0a2", "status": "reserved", "reservedAt": 1793194662.371534}
+ 
+{"runId": "72af99d9-c43c-4c88-a4a0-8dc6561f4fd5", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS causal tactics baseline and comparable-branch controls", "requestedAt": 1793194662.401005, "supervisorPid": 27811, "status": "running", "reservation": true, "requestId": "471df130dfc1573386fea9784e3a82b9a67f2a1af6917b31c2f9e2a01667f0a2", "startedAt": 1793194662.4050639, "workerPid": 27812, "processGroup": 27812}
+Traceback (most recent call last):
+  File "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/baseline/run.py", line 12, in <module>
+    r=subprocess.run(command,cwd=src,stdout=log,stderr=subprocess.STDOUT)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1214, in communicate
+    self.wait()
+    ~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1280, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2085, in _wait
+    (pid, sts) = self._try_wait(0)
+                 ~~~~~~~~~~~~~~^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2043, in _try_wait
+    (pid, sts) = os.waitpid(self.pid, wait_flags)
+                 ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+{"runId": "72af99d9-c43c-4c88-a4a0-8dc6561f4fd5", "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7", "label": "DCSS causal tactics baseline and comparable-branch controls", "requestedAt": 1793194662.401005, "supervisorPid": 27811, "status": "released", "reservation": true, "requestId": "471df130dfc1573386fea9784e3a82b9a67f2a1af6917b31c2f9e2a01667f0a2", "startedAt": 1793194662.4050639, "workerPid": 27812, "processGroup": 27812, "exitCode": -2, "finishedAt": 1793194858.317149, "supervisedProcessGroupGone": true, "releasedAt": 1793194858.350243, "releaseEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/baseline/closure.json", "releaseEvidenceSha256": "4c0b1a8c1c9a40e29550d2575a1ed76016c3d0dc40e4799e471b442cc6fc0800"}

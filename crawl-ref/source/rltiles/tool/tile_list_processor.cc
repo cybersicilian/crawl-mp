@@ -1827,6 +1827,13 @@ bool tile_list_processor::write_data(bool image, bool code)
 
         string old_enum_name = "";
         int count = 0;
+        // Keep generated metadata below the web-source line limit as atlases grow.
+        unsigned int js_statements = 0;
+        for (const auto* tile : m_page.m_tiles)
+            js_statements += std::max(1, tile->enumcount());
+        const unsigned int js_columns = std::max(16u, js_statements / 96 + 1);
+        unsigned int js_column = 0;
+        const auto js_break = [&]() { fputc(++js_column % js_columns ? ' ' : '\n', fp); };
         for (unsigned int i = 0; i < m_page.m_tiles.size(); i++)
         {
             const string &parts_ctg = m_page.m_tiles[i]->parts_ctg();
@@ -1836,19 +1843,19 @@ bool tile_list_processor::write_data(bool image, bool code)
             {
                 if (old_enum_name.empty())
                 {
-                    fprintf(fp, "exports.%s_FILLER_%u = val++;\n",
+                    fprintf(fp, "exports.%s_FILLER_%u = val++;",
                             ucname.c_str(), i);
                 }
                 else
                 {
-                    fprintf(fp, "exports.%s_%d = val++;\n",
+                    fprintf(fp, "exports.%s_%d = val++;",
                             old_enum_name.c_str(), ++count);
                 }
             }
             else if (parts_ctg.empty())
             {
                 const string &enumname = m_page.m_tiles[i]->enumname(0);
-                fprintf(fp, "exports.%s = val++;\n",
+                fprintf(fp, "exports.%s = val++;",
                         enumname.c_str());
                 old_enum_name = enumname;
                 count = 0;
@@ -1856,12 +1863,13 @@ bool tile_list_processor::write_data(bool image, bool code)
             else
             {
                 const string &enumname = m_page.m_tiles[i]->enumname(0);
-                fprintf(fp, "exports.%s_%s = val++;\n",
+                fprintf(fp, "exports.%s_%s = val++;",
                         parts_ctg.c_str(), enumname.c_str());
                 old_enum_name = enumname;
                 count = 0;
             }
 
+            js_break();
             for (int c = 1; c < enumcount; ++c)
             {
                 const string &basename = m_page.m_tiles[i]->enumname(0);
@@ -1869,17 +1877,19 @@ bool tile_list_processor::write_data(bool image, bool code)
 
                 if (parts_ctg.empty())
                 {
-                    fprintf(fp, "val = exports.%s = exports.%s; val++;\n",
+                    fprintf(fp, "val = exports.%s = exports.%s; val++;",
                             enumname.c_str(), basename.c_str());
                 }
                 else
                 {
-                    fprintf(fp, "val = exports.%s_%s = exports.%s_%s; val++;\n",
+                    fprintf(fp, "val = exports.%s_%s = exports.%s_%s; val++;",
                             parts_ctg.c_str(), enumname.c_str(),
                             parts_ctg.c_str(), basename.c_str());
                 }
+                js_break();
             }
         }
+        fprintf(fp, "\n");
 
         if (m_abstract.size() == 0)
         {
@@ -1887,13 +1897,15 @@ bool tile_list_processor::write_data(bool image, bool code)
                     ucname.c_str(), m_prefix.c_str(), ucname.c_str());
 
             fprintf(fp, "var tile_info = [\n");
+            const unsigned int offset_columns = std::max(8u, static_cast<unsigned int>(m_page.m_offsets.size() / 4 / 96 + 1));
             for (unsigned int i = 0; i < m_page.m_offsets.size(); i+=4)
             {
-                fprintf(fp, "  {w: %d, h: %d, ox: %d, oy: %d, sx: %d, sy: %d, ex: %d, ey: %d},\n",
+                fprintf(fp, "  {w: %d, h: %d, ox: %d, oy: %d, sx: %d, sy: %d, ex: %d, ey: %d},%s",
                         m_page.m_offsets[i+2], m_page.m_offsets[i+3],
                         m_page.m_offsets[i], m_page.m_offsets[i+1],
                         m_page.m_texcoords[i], m_page.m_texcoords[i+1],
-                        m_page.m_texcoords[i+2], m_page.m_texcoords[i+3]);
+                        m_page.m_texcoords[i+2], m_page.m_texcoords[i+3],
+                        (i / 4 + 1) % offset_columns ? " " : "\n");
             }
             fprintf(fp, "];\n\n");
 
@@ -1904,8 +1916,9 @@ bool tile_list_processor::write_data(bool image, bool code)
             fprintf(fp, "};\n\n");
 
             fprintf(fp, "var _tile_count =\n[\n");
+            const unsigned int count_columns = std::max(32u, static_cast<unsigned int>(m_page.m_counts.size() / 96 + 1));
             for (unsigned int i = 0; i < m_page.m_counts.size(); i++)
-                fprintf(fp, "    %u,\n", m_page.m_counts[i]);
+                fprintf(fp, "%u,%s", m_page.m_counts[i], (i + 1) % count_columns ? " " : "\n");
             fprintf(fp, "];\n\n");
 
             fprintf(fp, "exports.tile_count = function (idx)\n{\n");
@@ -1915,8 +1928,9 @@ bool tile_list_processor::write_data(bool image, bool code)
             fprintf(fp, "}\n\n");
 
             fprintf(fp, "var _basetiles =\n[\n");
+            const unsigned int base_columns = std::max(32u, static_cast<unsigned int>(m_page.m_base_tiles.size() / 96 + 1));
             for (unsigned int i = 0; i < m_page.m_base_tiles.size(); i++)
-                fprintf(fp, "    %u,\n", m_page.m_base_tiles[i]);
+                fprintf(fp, "%u,%s", m_page.m_base_tiles[i], (i + 1) % base_columns ? " " : "\n");
             fprintf(fp, "];\n\n");
 
             fprintf(fp, "exports.basetile = function (idx)\n{\n");

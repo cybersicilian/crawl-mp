@@ -608,3 +608,7 @@ void clear_travel_trail();
 int travel_trail_index(const coord_def& gc);
 
 bool stairs_destination_is_excluded(const stair_info &si);
+
+// Per-character continuation state for cooperative run/rest/travel scheduling.
+void switch_travel_context(int previous, int next);
+void reset_travel_contexts();

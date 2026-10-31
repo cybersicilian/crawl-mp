@@ -1,0 +1,24 @@
+{
+  "reservationId": "67c692ce-1883-4bdb-883d-84b8c2a605c8",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "67c692ce-1883-4bdb-883d-84b8c2a605c8",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS threat-aligned brute XP and reduced population build",
+      "requestedAt": 1793195893.696304,
+      "supervisorPid": 37456,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "626e50b5156418545c63ad61c2317347f3f51f5c930132de972dfdbe0221dab1",
+      "startedAt": 1793195893.6966028,
+      "workerPid": 37457,
+      "processGroup": 37457,
+      "exitCode": 0,
+      "finishedAt": 1793195900.97373,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "626e50b5156418545c63ad61c2317347f3f51f5c930132de972dfdbe0221dab1"
+  }
+}

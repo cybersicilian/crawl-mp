@@ -1,0 +1,60 @@
+/* Illustrated expedition materials. Shared by the tavern, journal and game. */
+:root {
+    --art-night: #111615;
+    --art-frame: #1a211f;
+    --art-raised: #242c28;
+    --art-recess: #0c110f;
+    --art-ivory: #eee7d6;
+    --art-muted: #b2b5a4;
+    --art-brass: #b9a173;
+    --art-brass-light: #e2cea1;
+    --art-brass-dim: #70674e;
+    --art-rule: #8f83514d;
+    --art-paper: #ebe5d5;
+    --art-paper-light: #f6f1e6;
+    --art-paper-shade: #d9d1ba;
+    --art-ink: #282d27;
+    --art-ink-muted: #616657;
+    --art-teal: #86b9ad;
+    --art-teal-ink: #315e53;
+    --art-ember: #a85d3c;
+    --art-line: inset 0 1px 0 #ede0ba0d;
+    --art-shadow: 0 12px 32px #0005;
+    --art-cover: url("assets/expedition-vault.png");
+    --art-title: Georgia, "Palatino Linotype", serif;
+    --art-copy: "DejaVu Sans", system-ui, sans-serif;
+    --art-fiber: repeating-linear-gradient(12deg, #433d2805 0 1px, transparent 1px 5px);
+    --tt-leather-deep: var(--art-night);
+    --tt-leather: var(--art-frame);
+    --tt-saddle: var(--art-raised);
+    --tt-brass: var(--art-brass);
+    --tt-brass-light: var(--art-brass-light);
+    --tt-brass-dark: #514b39;
+    --tt-brass-shadow: #7e7152;
+    --tt-brass-edge: var(--art-brass-dim);
+    --tt-vellum: var(--art-paper);
+    --tt-vellum-light: var(--art-paper-light);
+    --tt-vellum-aged: var(--art-paper-shade);
+    --tt-ink: var(--art-ink);
+    --tt-ink-soft: var(--art-ink-muted);
+    --tt-folio-paper: var(--art-paper);
+    --tt-folio-raised: var(--art-paper-light);
+    --tt-folio-ink: var(--art-ink);
+    --tt-folio-muted: var(--art-ink-muted);
+    --tt-folio-crimson: var(--art-teal-ink);
+    --tt-folio-rule: #b8b29b;
+    --tt-text: var(--art-ivory);
+    --tt-muted: var(--art-muted);
+    --tt-rule: var(--art-rule);
+    --tt-font-title: var(--art-title);
+    --tt-font-copy: var(--art-copy);
+    --tt-font-ui: var(--art-copy);
+    --tt-glass: linear-gradient(180deg, #ffffff10, #00000020);
+    --tt-hide: linear-gradient(145deg, var(--art-raised), var(--art-frame) 65%, var(--art-night));
+    --tt-paper: var(--art-fiber), linear-gradient(110deg, var(--art-paper-light), var(--art-paper));
+    --tt-lift: 0 3px 9px #0004, var(--art-line);
+    --tt-recess: inset 0 2px 4px #0005;
+}
+@media (forced-colors: active) {
+    :root { --art-rule: CanvasText; --art-brass: LinkText; }
+}

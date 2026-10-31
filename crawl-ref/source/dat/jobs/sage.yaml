@@ -1,0 +1,23 @@
+enum: JOB_SAGE
+name: Sage
+short_name: Sa
+category: Zealot
+category_priority: 60
+str: 0
+int: 9
+dex: 3
+equipment:
+  - "robe"
+  - "dagger"
+spells:
+  - SPELL_APPORTATION
+recommended_species:
+  - spriggan
+  - octopode
+  - vine stalker
+  - deep elf
+skills:
+  dodging: 2
+  stealth: 2
+  spellcasting: 4
+create_enum: false

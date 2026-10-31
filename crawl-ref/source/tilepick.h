@@ -52,6 +52,7 @@ tileidx_t tileidx_tentacle(const monster_info& mon);
 tileidx_t tileidx_item(const item_def &item);
 tileidx_t tileidx_item_projectile(const item_def &item);
 tileidx_t tileidx_known_base_item(tileidx_t label);
+tileidx_t tileidx_known_base_item(const item_def &item);
 
 tileidx_t tileidx_cloud(const cloud_info &cl);
 tileidx_t tileidx_bolt(const bolt &bolt);

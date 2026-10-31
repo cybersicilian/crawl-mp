@@ -1,4 +1,42 @@
 %%%%
+Invoke Smite ability
+
+Call down a smite on a visible enemy. A successful invocation temporarily
+drains maximum health; the lost maximum health recovers with experience.
+%%%%
+Charm Monsters ability
+
+Attempt to charm hostile, thinking creatures in sight. Creatures can resist
+with willpower. The effort leaves you exhausted, preventing another use until
+you recover.
+%%%%
+Burialize Weapon ability
+
+Bind your wielded weapon in your memories and enhance it according to its
+base damage. This temporarily drains maximum health, which recovers as you
+gain experience. The binding prevents removing the weapon until released.
+%%%%
+Release Buried Weapon ability
+
+Release the Wight's binding from your wielded weapon, removing its burial
+enhancement. Any curse that was already on the weapon remains.
+%%%%
+Passwall ability
+
+Pass through a nearby wall or tree using an innate magic that costs one magic
+point. The passage takes time, and thicker barriers take longer to traverse.
+%%%%
+Molt ability
+
+Spend one molting opportunity to recover health and clear poison and
+confusion. Molting takes five turns and can be interrupted; a new opportunity
+is earned at each new experience level.
+%%%%
+Crab Walk ability
+
+For ten turns after escaping a broken shell, scuttle to a visible square in
+an L shape: two spaces in one direction and one at a right angle.
+%%%%
 No ability ability
 
 If you get this description, it is a bug.
@@ -116,6 +154,29 @@ Evoke Invisibility ability
 Turns the user invisible for a short period of time.
 
 [[player invis desc]]
+%%%%
+Dismiss Rite ability
+
+Releases the active weapon rite and restores reserved maximum HP without
+restoring current HP. This takes one normal action and costs no MP. Activating
+a rite again pays its HP commitment again; switching directly between rites
+instead retains the reservation.
+%%%%
+Amplify Scarlet Fetters ability
+
+Casts the learned Scarlet Fetters spell with amplification. It costs the normal
+spell cost plus 2 MP and 6% of unreserved maximum HP, rounded up (minimum 2).
+The caster's normal spell failure, armour, silence and religious restrictions
+apply. Blood is spent only after a successful cast, before the resistance check.
+This action requires the spell to be memorized, not a particular background.
+%%%%
+Amplify Stolen Sight ability
+
+Casts the learned Stolen Sight spell with amplification. It costs the normal
+spell cost plus 2 MP and 6% of unreserved maximum HP, rounded up (minimum 2).
+The caster's normal spell failure, armour, silence and religious restrictions
+apply. Blood is spent only after a successful cast, before the resistance check.
+This action requires the spell to be memorized, not a particular background.
 %%%%
 End Transformation ability
 
@@ -485,6 +546,11 @@ Forget Spell ability
 
 Removes a known spell from memory, so as to free memory to learn others.
 %%%%
+Delete Spell ability
+
+Removes an engraved spell from memory, freeing space for another. Rewriting the
+automaton's memory temporarily drains its maximum health.
+%%%%
 Divine Exegesis ability
 
 Casts any spell from your spell library with guaranteed success. You receive a
@@ -732,6 +798,21 @@ Destroys a chosen bound item, relieving the wearer of its weight, but lessening
 their favour in Ashenzari's eyes.
 %%%%
 # Dithmenos
+Shadow Step ability
+
+Allows you to step into the shadow of any hostile creature within your umbra,
+landing on a random spot adjacent to the target.
+%%%%
+Shadow Form ability
+
+Transforms you into a swirling mass of dark shadows. While in this form, you
+are permanently invisible and are immune to poison, draining, and torment.
+All incoming damage is halved, you bleed smoke on any incoming attack, and
+you have infinite willpower. However, your ability to deal damage in melee
+and with ranged attacks is halved, your spellcasting power is greatly
+hampered, and your maximum health is further drained when taking damage.
+Invocations skill increases the duration of the transformation.
+%%%%
 Shadowslip ability
 
 Instantly swaps places with your shadow (so long as it is active) and misleads
@@ -1056,6 +1137,37 @@ Sends you floating upward and, after a short delay for Ignis to gather enough
 power, blasts you through the ceiling and into the level above. This ability
 may only be used once.
 %%%%
+Retract into Shell ability
+
+Withdraws your head and limbs into your shell. While retracted, your shell
+grants 50% more natural armour, but your evasion is halved. Moving in any of
+the eight compass directions takes twice as long while retracted. Use Shell
+Dash for a targeted roll; you automatically emerge afterward. Use this ability
+again to emerge without dashing; other physical actions also bring you out
+automatically. Retracting and emerging
+each take a turn and cost no MP.
+%%%%
+Shell Dash ability
+
+Launches your retracted shell in one of the eight compass directions, rolling
+until a wall or creature blocks the way. The first creature struck takes physical
+damage, reduced by armour, and stops the shell even if killed. Impacts can also
+harm friends, neutral creatures and co-op heroes, following the game's friendly
+fire rules and attack confirmations. Dangerous terrain and movement effects
+still apply, and traps can interrupt the roll.
+
+The dash takes one ordinary action regardless of distance. Damage is
+2d(3 + floor(XL/2) + Unarmed Combat + 2*distance), where distance counts empty
+tiles crossed plus the final impact. Weapons do not affect this damage.
+After a successful dash, you must recover for five standard turns before
+dashing again. You automatically emerge when the dash ends.
+An attempt blocked before moving or striking a creature costs no turn and
+does not trigger recovery.
+The roll also causes 1-5 recoil damage, increasing with distance and creature
+impacts. This damage ignores armour but cannot reduce you below 1 HP.
+The targeting reticle previews the visible path and first collision; the dash
+can continue beyond sight, and unseen creatures or traps can interrupt it.
+%%%%
 Hop ability
 
 Hops toward a chosen destination, landing somewhere nearby. After using this
@@ -1126,3 +1238,183 @@ always perform a Howl afterward.
 
 Can only target an enemy who is afraid, and who has at least one occupiable tile
 adjacent to them.
+%%%%
+Designate Prototype ability
+
+Maintain one carried wand or experience-charged evoker. A wand gains a small
+XP-recharged workshop reserve, separate from its finite charges. A miscellaneous
+evoker keeps its native charges and recovers 50% faster. Replacing a Prototype
+costs four piety and one action. Earned credit and all outstanding debt persist.
+%%%%
+Evoke Prototype ability
+
+Activate your designated device using its renewable readiness. This never
+silently spends ordinary finite wand charges. Gain experience to recharge.
+%%%%
+Overclock ability
+
+Activate a device immediately with its specific enhancement: greater direct
+damage, stronger hex application, longer lasting effects or improved support.
+Costs four piety and 150% of normal recharge debt, rounded up, or two ordinary
+wand charges. Native targeting, resistance and item restrictions still apply.
+Cancellation costs nothing; a committed miss or failure pays the quoted cost.
+%%%%
+Breakthrough ability
+
+Overclock your empty Prototype on credit. Costs eight piety and a personal loan
+of two ordinary activations of recharge. Your existing device debt remains.
+Experience repays the loan before your Prototype can recover. A second loan is
+blocked until repayment. Rebinding, trading, leaving Pakellas and saving do not
+erase the loan. Only charge readiness is bypassed; native item limits remain.
+%%%%
+Receive Field Kit ability
+
+Choose a wand of flame with six charges, iceblast with three, or paralysis with
+three. This finite gift is available once per character. Cancelling the choice
+leaves the offer available for later.
+%%%%
+Prayer of Fellowship ability
+
+Offers a prayer to Zin, Elyvilon or The Shining One for faithful companions.
+The supplicant and living worshippers of the good gods in clear sight regain
+5 to (5 + half Invocations) HP and regenerate health for 5 + Invocations/3
+turns. Worshippers under penance cannot join the prayer. It cannot heal through
+Death's Door, restore magic, grant another god's powers or harm unbelievers.
+
+Available only in multiplayer, from three stars of piety. A living companion
+who serves one of the good gods and is free of penance must be in clear sight.
+Costs 4 MP and piety; Invocations improves the chance of success.
+%%%%
+Lay on Hands & Intervene ability
+
+Heals you and your nearest living companion within three tiles and clear line
+of sight, and grants a short Aegis Link (+2 AC and +1 SH in a party; +3 AC and
++1.5 SH alone). While linked companions remain in sight, the healthier partner
+can absorb 35% of the more wounded partner's damage. Healing and ward duration
+improve with Invocations. If a companion is present, you receive half healing.
+Costs 3 MP and requires 30 turns of recovery, continued worship of The Shining
+One, and freedom from divine penance. Does not move you or cleanse conditions.
+%%%%
+Aura of Crusader's Zeal ability
+
+This old invocation has been replaced by the Aura of Zeal spell, governed by
+Auramancy and Fire Magic. It is no longer available as a class ability.
+%%%%
+Aura of Vitality & Warding ability
+
+This old invocation has been replaced by the Aura of Vitality spell, governed
+by Auramancy and Alchemy. It is no longer available as a class ability.
+%%%%
+Rupture ability
+
+Tear open a visible, blood-bearing enemy within five cells, dealing physical
+damage that increases with Invocations and is reduced by armour. A lethal
+Rupture makes the victim's death burst reach two cells instead of one.
+
+Cost: two blood units from visible ground within four cells of you. Fresh
+ritual blood is used first, followed by intact blood-bearing corpses. Each
+corpse is consumed for one unit. Each missing unit can instead be supplied by
+self-exsanguination: lose 10% of your maximum HP, rounded up per missing unit.
+Bloodless species and bloodless forms cannot self-exsanguinate. You must have
+enough HP to survive the entire payment. The exact
+health cost is confirmed before use. Cancelled or failed rites consume nothing.
+%%%%
+Red Passage ability
+
+Sink into blood at your feet and emerge at a visible, unoccupied destination
+within six cells. Your arrival strikes adjacent visible creatures once with
+physical damage, increased by Invocations and reduced by armour. Allies can
+be struck; ordinary movement warnings and blink restrictions still apply.
+
+Cost: one blood unit at each endpoint. Either endpoint can use fresh ritual
+blood, an intact blood-bearing corpse (consumed for one unit), or
+self-exsanguination for a missing unit. Each missing unit costs 10% of your
+maximum HP, rounded up, and the exact total is confirmed before use. You must
+belong to a blood-bearing species, have a blood-bearing body, and survive the
+payment. Thus you can open either or both endpoints
+with your own blood. This does not leave fresh blood behind. Regeneration
+requires an actual blood pool remaining beneath you. Cancellation or failure
+spends no blood, corpses or HP.
+%%%%
+The Great Letting ability
+
+Raise blades of blood around a visible center within six cells. Fuel is drawn
+from visible ground within two cells of that center. Each visible creature
+adjacent to a consumed pool or corpse is struck once, even where areas overlap.
+Self-exsanguination raises additional blades around the chosen center. Damage
+increases with Invocations and is reduced by armour. Allies can be hit.
+
+Cost: eight blood units and piety. Fresh ritual blood is used before intact
+blood-bearing corpses, each consumed for one unit. Each missing unit can be
+replaced through self-exsanguination for 10% of your maximum HP, rounded up.
+With no external fuel this costs eight such payments (at least 80% of maximum
+HP). Bloodless species and bloodless forms cannot self-exsanguinate. You must
+survive the full payment; the exact HP cost is
+confirmed before use. Cancellation or failure spends nothing. The blades can
+damage bloodless creatures, which supply neither blood nor Communion healing.
+
+%%%%
+Assimilate
+
+Consume one chosen inventory item over five of your own turns and retain all
+its extracted properties together in one memory slot. Items need not fit your
+body. Remove worn items before actively assimilating them.
+A random empty unlocked slot fills; otherwise your oldest whole memory is replaced.
+Equipment is only consumed by this ability, never passively by wearing or using it.
+Memories last until overwritten. Slots unlock at XL 1, 3, 7, 13, 19 and 25.
+Shapeshifting scales numeric bonuses when applied, improving existing memories
+as the skill grows. Qualitative traits such as cleaving remain intact.
+All memories improve your body once, independently of equipped items or their
+type. Duplicate effects use the strongest memory. Weapon memories can enhance
+natural unarmed attacks. Danger or cancellation stops the work
+without consuming the item or replacing a memory.
+
+%%%%
+Weave Enchantments
+
+Move a complete artifact enchantment into your personal archive or onto a
+compatible recipient. The donor survives, depleted. Your bound enchantments
+share at most six capacity, with one thread per property and normally one per
+item. A Masterwork holds two threads within the same budget.
+
+Drawbacks reserve capacity even in the archive and can be restored to their
+donor. Brands replace the recipient's active brand. Unique powers retain their
+native state and cost all six capacity. Borrowed powers require your equipped
+recipient and Vellum's favour. Trading or consuming an item cannot copy them.
+
+The menu shows exact eligibility, capacity and piety costs. Ordinary work takes
+five of your own actions and commits only when complete; interruption spends
+nothing. The starter gift and destruction/restoration of a thread take one
+action. Overweave is not part of this ability.
+%%%%
+Chain Lash ability
+
+Strike one visible hostile within four tiles with a bodily chain. A successful physical hit deals 1d(5 + XL/3) damage before armour and may tether an eligible body, even if armour absorbs all the damage. The original distance sets the chain's reach; the foe can move within it and still attack or cast. When your movement pulls it beyond that reach, a Strength check determines whether you keep your grip. Success lengthens the tether to the new distance; failure releases it. Higher current Strength and smaller stretches improve your chance. Lash lasts eight, twelve or sixteen standard turns at XL1, XL7 or XL13. One chain can be maintained at a time. A miss or ended hold begins five turns of recovery.
+%%%%
+Reel In ability
+
+Consume your existing mobile tether and physically pull its target up to two consecutive cells toward you, stopping at adjacency or the first obstruction. A foe at range three ends adjacent on a clear path; a foe at range four ends two tiles away. There is no second accuracy or Willpower roll, added damage, stun or free attack. An adjacent target or a visibly blocked pull spends nothing and preserves the hold.
+%%%%
+Pinning Chain ability
+
+Replace your mobile tether with a fixed anchor at its target's current solid-floor cell. The target can move within one tile of the anchor. The pin lasts at most eight standard turns and never extends the original hold. At least two turns must remain before activation. Pinning requires XL13 and uses the existing target without another selection.
+%%%%
+Release Chain ability
+
+Release your one living chain instantly and begin the same five-turn recovery as any other ending. Moving beyond a mobile tether's reach makes a Strength check to keep your grip; a failed check releases it. Releasing never resets or shortens recovery.
+%%%%
+Profane Altar ability
+
+At an available god's own altar, permanently steal its single offered benefit and accept its wrath. Choose at most three distinct gods. The first theft supplies forty Defiance once; later thefts never refill it. Duplicate and ecumenical altars grant nothing. Profanation does not consume the altar or prevent an ally from worshipping there.
+%%%%
+Invoke Elder Rites ability
+
+At XL9, XL15 and XL21, complete one short two-wave encounter to strengthen all your stolen benefits. Begin on safe open ground. The second wave arrives after four standard turns without waiting for the first wave to die. Trial actors grant no rewards. Killing or permanently banishing every trial actor wins; pacification, conversion and dismissal do not. Leaving the floor abandons the attempt, preserving completed rites. Only one party rite can be active on a floor.
+%%%%
+Step Behind ability
+
+Blink to the highlighted square immediately beyond a visible enemy. The square
+must be visible and clear. This costs 2 MP (or 2 HP for health-powered casters)
+and shares Blink's cooldown for five normal-speed turns. Stasis and the Orb's
+interference prevent the move.
+%%%%

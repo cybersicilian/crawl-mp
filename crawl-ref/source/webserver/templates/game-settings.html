@@ -1,0 +1,36 @@
+<div id="rc_edit" class="floating_dialog rc-dialog" role="dialog" aria-modal="true" aria-labelledby="rc_settings_title" tabindex="-1" style="display: none;">
+  <form action="#" id="rc_edit_form" novalidate>
+    <header class="rc-settings-header">
+      <div class="rc-settings-heading">
+        <p class="rc-settings-eyebrow">Expedition setup</p>
+        <h2 id="rc_settings_title">Game settings <span id="rc_settings_badge" class="rc-settings-badge" aria-hidden="true" hidden></span></h2>
+        <p class="rc-settings-lede">Travel, items, combat prompts, messages, interface and records. Saved changes apply the next time a game process starts.</p>
+      </div>
+      <p id="rc_settings_warning" class="rc-settings-notice tr-callout tr-callout-warn" hidden></p>
+      <p id="rc_settings_error" class="rc-settings-notice rc-settings-notice-error tr-callout tr-callout-danger" role="alert" hidden></p>
+    </header>
+    <div id="rc_settings_workspace" hidden>
+      <div class="rc-settings-toolbar">
+        <div class="rc-search">
+          <label class="rc-search-label" for="rc_settings_search">Find a setting</label>
+          <input id="rc_settings_search" type="search" placeholder="Search every category" autocomplete="off">
+        </div>
+        <label class="rc-changed-filter"><input id="rc_settings_changed" type="checkbox"> <span>Customized only</span></label>
+        <span id="rc_settings_count" role="status"></span>
+      </div>
+      <div class="rc-settings-body">
+        <nav id="rc_settings_categories" aria-label="Settings categories"></nav>
+        <div class="rc-settings-scroll">
+          <div id="rc_settings_sections"></div>
+          <p id="rc_settings_empty" class="rc-settings-empty" hidden>No settings match. Try another search or turn off Customized only.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="rc-settings-actions">
+      <span id="rc_settings_status" class="rc-settings-status" role="status" aria-live="polite"></span>
+      <button class="button rc-action tr-btn" type="button" id="rc_settings_undo" disabled>Undo changes</button>
+      <button class="button rc-action tr-btn hide_dialog" type="button" id="rc_settings_close">Close</button>
+      <button class="button rc-action rc-action-primary tr-btn tr-btn-primary" type="submit" id="rc_submit" disabled>Save settings</button>
+    </footer>
+  </form>
+</div>

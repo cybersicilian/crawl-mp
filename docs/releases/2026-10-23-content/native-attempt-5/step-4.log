@@ -1,0 +1,22 @@
+Filters: [new-species]
+Randomness seeded to: 3507012445
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+catch2-tests-executable is a Catch2 v3.2.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Elder Rites require both scheduled waves and grant no kill resources
+-------------------------------------------------------------------------------
+catch2-tests/test_new_species.cc:268
+...............................................................................
+
+catch2-tests/test_new_species.cc:289: FAILED:
+  REQUIRE( actors.size() == 4 )
+with expansion:
+  2 == 4
+
+===============================================================================
+test cases:  14 |  13 passed | 1 failed
+assertions: 383 | 382 passed | 1 failed
+

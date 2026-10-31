@@ -1,0 +1,155 @@
+/* The game owns all canvas sizes and tile coordinates. No scaling here. */
+:root {
+    --stat-font: var(--tt-font-mono);
+    --msg-font: var(--tt-font-mono);
+    --lbl-font: var(--tt-font-mono);
+    --action-font: var(--tt-font-mono);
+}
+#left_column { width: min-content; }
+/* The renderer supplies pixels; contain the log inside its leather frame. */
+#message_pane #messages_container { width: 100% !important; }
+#right_column { padding-right: 4px; max-height: 100vh; overflow-y: auto; }
+#stats { padding: 6px 8px; font-size: 11px; line-height: 1.28; }
+#stats_titleline {
+    font: bold 14px/1.3 var(--tt-font-title);
+    color: var(--tt-brass-light);
+    border-bottom: 1px solid var(--tt-rule);
+    padding: 2px 0 4px;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 2px #000;
+}
+#stats_species_god { color: var(--tt-vellum-aged); }
+#stats_piety:not(.penance):not(.monk) { color: var(--tt-brass); }
+.stats_caption { color: var(--tt-vellum-aged); }
+.stat-row-interactive:hover { background-color: #d9b15f0d; }
+:is(#stats_ac, #stats_ev, #stats_sh, #stats_xl, #stats_str, #stats_int, #stats_dex) {
+    font-variant-numeric: tabular-nums;
+}
+:is(#stats_place, #stats_time) { color: var(--tt-vellum); }
+:is(#stats_weapon_container, #stats_quiver_line) { border-top: 1px solid var(--tt-rule); }
+#stats_status_lights { margin-top: 3px; }
+/* Keep the engine's 11px segmented bars, including poison and change amounts. */
+:is(#stats_hp_bar, #stats_mp_bar) {
+    position: relative;
+    border: 1px solid var(--tt-brass-shadow);
+    border-top-color: var(--tt-brass);
+    border-bottom-color: var(--tt-brass-dark);
+    border-radius: 5px;
+    background: #200e13;
+    box-shadow: inset 0 1px 3px #000, 0 1px 0 #d9b15f22;
+}
+#stats_mp_bar { background: #10192a; }
+:is(#stats_hp_bar, #stats_mp_bar)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 0 #ffffff40, inset 2px 0 2px #ffffff26;
+    pointer-events: none;
+}
+#stats_hp_bar_full { background: var(--tt-hp-liquid); }
+#stats_hp_bar_poison { background: var(--tt-glass), #ad922b; }
+:is(#stats_hp_bar_increase, #stats_hp_bar_inc) { background: var(--tt-glass), #688e50; }
+:is(#stats_hp_bar_decrease, #stats_hp_bar_dec) { background: var(--tt-glass), #ed8e74; }
+#stats_mp_bar_full { background: var(--tt-mp-liquid); }
+#stats_mp_bar_decrease { background: var(--tt-glass), #9876af; }
+#stats_mp_bar_increase { background: var(--tt-glass), #71aacd; }
+.status_light {
+    border: 1px solid var(--tt-brass-shadow);
+    border-radius: 3px 3px 5px 5px;
+    background: linear-gradient(180deg, #d9b15f19, #00000030), #241b13;
+    padding: 0 3px;
+    box-shadow: inset 0 1px 0 #ffffff12;
+    text-shadow: 0 1px 1px #000;
+}
+/* The initiative tracker floats over the viewport, as it did before. */
+#party_turn_banner {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 16px);
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 6px;
+    padding: 5px 10px;
+    font: 10px/1.3 var(--tt-font-mono);
+    background: var(--tt-brass-rivet) 3px 50% / 8px 8px no-repeat,
+        var(--tt-brass-rivet) calc(100% - 3px) 50% / 8px 8px no-repeat, var(--tt-hide);
+    box-shadow: var(--tt-lift), 0 3px 10px #000000a0;
+}
+.party-banner-label { color: var(--tt-muted); font-family: var(--tt-font-title); }
+#party_banner_who { font-weight: bold; text-shadow: 0 1px 2px #000; }
+.party-banner-dot { box-shadow: 0 0 0 2px var(--tt-brass-shadow); }
+#dcss_quick_dock { gap: 4px; padding: 6px; margin: 2px 0; }
+.dcss-dock-btn { padding: 3px 5px; font-size: 10px; min-height: 25px; }
+.dcss-dock-btn .dock-key {
+    display: inline-block;
+    min-width: 10px;
+    padding: 0 3px;
+    background: var(--tt-metal);
+    border: 1px solid #e7d2a433;
+    border-radius: 2px;
+    color: #24170a;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 1px 0 #f3d78b55;
+    box-shadow: inset 0 1px 0 #fff5, 0 1px 2px #000;
+}
+:is(.dcss-dock-btn.dock-btn-accent, .dcss-dock-btn-party) {
+    margin-left: auto;
+    color: var(--tt-brass-light);
+    border-color: var(--tt-brass);
+}
+#message_pane { padding: 5px 8px; }
+#messages { line-height: 1.4em; }
+#minimap_block { box-shadow: var(--tt-recess), inset 0 0 0 2px #d9b15f20; }
+#monster_list { padding: 5px 8px; }
+/* Keep fg0..fg15 and custom_text_colours owned by DCSS. Relief helps dark ink. */
+:is(#monster_list, #message_pane, #stats_status_lights, .party-buff-pill:not(.status-icon-frame)) {
+    text-shadow: 0 1px 1px #000, 0 0 1px #e7d2a480;
+}
+#tooltip { background: var(--tt-hide); border-color: var(--tt-brass); }
+:is(.menu, .ui-popup-outer) {
+    outline: 1px solid #140b06;
+    box-shadow: inset 5px 0 12px #00000090, inset 0 0 0 4px #d9b15f12, 0 12px 36px #000000c0;
+}
+.menu_title { color: var(--tt-brass-light); font-family: var(--tt-font-title); }
+.menu_contents li.hovered { background: #d9b15f19; }
+.menu_contents li.selectable:active { background: #d9b15f2e; }
+.ui-popup-outer { border-width: 2px; }
+:is(#input_dialog, #stats_status_lights_tooltip, #action-panel-tooltip, #action-panel-settings) {
+    background: var(--tt-hide);
+    border-color: var(--tt-brass-shadow);
+    color: var(--tt-text);
+}
+.tt-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: -2px;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.status_light .tt-icon { margin-right: 3px; }
+.dcss-dock-btn > .tt-icon { color: var(--tt-brass); margin-right: 3px; }
+#dock_chat_count { background: var(--tt-wax); color: #fff0da; padding: 1px 4px; border-radius: 5px; }
+#chat { width: min(400px, calc(100vw - 32px)); border-radius: 3px; padding: 9px; box-sizing: border-box; }
+#chat_input { width: 100%; box-sizing: border-box; padding: 7px; font-size: 12px; }
+#chat_history_container { max-height: min(240px, 30vh); font: 12px/1.5 var(--tt-font-mono); }
+#chat_history { overflow-wrap: anywhere; }
+#chat_caption { color: var(--tt-brass-light); }
+@media (max-height: 820px) {
+    #stats { font-size: 10.5px; line-height: 1.15; }
+    #stats_titleline { font-size: 13px; }
+}
+/* Width accounting matches the space reserved by the renderer. */
+#right_column { padding-right: 0; }
+#minimap_block { border: 0; outline: 1px solid var(--tt-brass-shadow); outline-offset: -1px; }
+#monster_list { max-height: 96px; overflow-y: auto; }
+.ui-popup { z-index: 100; }

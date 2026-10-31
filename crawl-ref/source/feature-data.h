@@ -267,6 +267,13 @@ static feature_def feat_defs[] =
 },
 
 {
+    DNGN_SHALLOW_HONEY, "a pool of honey", "shallow_honey",
+    DCHAR_SHALLOW_WAVY, NUM_DCHAR_TYPES,
+    COLOUR_AND_MAP(YELLOW),
+    FFT_NONE, MF_FEATURE,
+},
+
+{
     DNGN_MUD, "some mud", "mud",
     DCHAR_SHALLOW_WAVY, NUM_DCHAR_TYPES,
     COLOUR_IS(BROWN),
@@ -658,6 +665,16 @@ BRANCH_EXIT(DNGN_EXIT_SHOALS, "staircase back to the Lair", "exit_shoals"),
 BRANCH_ENTRANCE(DNGN_ENTER_SPIDER, "hole to the Spider Nest", "enter_spider_nest"),
 BRANCH_EXIT(DNGN_EXIT_SPIDER, "crawl-hole back to the Lair", "exit_spider_nest"),
 
+BRANCH_ENTRANCE(DNGN_ENTER_BURROWS, "tunnel to the Burrows", "enter_burrows"),
+BRANCH_EXIT(DNGN_EXIT_BURROWS, "tunnel back to the Lair", "exit_burrows"),
+
+BRANCH_ENTRANCE(DNGN_ENTER_WORMLANDS, "tunnel to the Wormlands", "enter_wormlands"),
+BRANCH_EXIT(DNGN_EXIT_WORMLANDS, "tunnel back to the Burrows", "exit_wormlands"),
+BRANCH_ENTRANCE(DNGN_ENTER_HIVE, "opening to the Hive", "enter_hive"),
+BRANCH_EXIT(DNGN_EXIT_HIVE, "opening back to the Burrows", "exit_hive"),
+BRANCH_ENTRANCE(DNGN_WORMLANDS_TO_DEPTHS, "passage to the Depths", "wormlands_to_depths"),
+BRANCH_EXIT(DNGN_DEPTHS_TO_WORMLANDS, "passage back to the Wormlands", "depths_to_wormlands"),
+
 BRANCH_ENTRANCE(DNGN_ENTER_DEPTHS, "staircase to the Depths", "enter_depths"),
 BRANCH_EXIT(DNGN_EXIT_DEPTHS, "staircase back to the Dungeon", "exit_depths"),
 
@@ -700,6 +717,8 @@ ALTAR(DNGN_ALTAR_USKAYAW, "hide-covered altar of Uskayaw", "altar_uskayaw", ETC_
 ALTAR(DNGN_ALTAR_HEPLIAKLQANA, "hazy altar of Hepliaklqana", "altar_hepliaklqana", LIGHTGREEN),
 ALTAR(DNGN_ALTAR_WU_JIAN, "ornate altar of the Wu Jian Council", "altar_wu_jian", ETC_WU_JIAN),
 ALTAR(DNGN_ALTAR_IGNIS, "candlelit altar of Ignis", "altar_ignis", ETC_CANDLES),
+ALTAR(DNGN_ALTAR_VORR, "blood-filled altar of Vorr", "altar_vorr", RED),
+ALTAR(DNGN_ALTAR_VELLUM, "thread-wreathed altar of Vellum", "altar_vellum", LIGHTMAGENTA),
 
 #define FOUNTAIN(enum, name, vaultname, colour)\
 {\

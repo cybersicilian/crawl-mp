@@ -1,0 +1,62 @@
+enum: SP_TORTLE
+monster: MONS_SNAPPING_TURTLE
+name: Tortle
+short_name: To
+genus: Turtle
+difficulty: Intermediate
+difficulty_priority: 50
+species_flags:
+  - no_hair
+aptitudes:
+  xp: 0
+  hp: 1
+  mp_mod: 0
+  wl: 3
+  fighting: 1
+  axes: 1
+  maces_and_flails: 1
+  ranged weapons: -1
+  armour: 2
+  dodging: -3
+  stealth: -3
+  shields: 2
+  spellcasting: -2
+  conjurations: -1
+  hexes: -1
+  summoning: -1
+  forgecraft: -1
+  necromancy: -1
+  translocations: -1
+  shapeshifting: -1
+  fire_magic: -1
+  ice_magic: -1
+  air_magic: -1
+  earth_magic: 1
+  alchemy: -1
+can_swim: true
+size: large
+str: 13
+int: 7
+dex: 4
+levelup_stat_frequency: 4
+levelup_stats:
+  - str
+mutations:
+  1:
+    MUT_ARMOURED_SHELL: 1
+    MUT_COLD_BLOODED: 1
+    MUT_RETALIATORY_BITE: 1
+recommended_jobs:
+  - fighter
+  - gladiator
+  - berserker
+  - monk
+recommended_weapons:
+  - maces and flails
+  - axes
+  - polearms
+fake_mutations:
+  - long: You can swim through deep water, but gain no swimming speed or evasion bonus.
+    short: slow swimmer
+child_name: Hatchling
+orc_name: Tortlorc

@@ -1,0 +1,25 @@
+enum: JOB_ARCHAEOLOGIST
+name: Archaeologist
+short_name: Ac
+category: Adventurer
+category_priority: 65
+str: 3
+int: 6
+dex: 3
+equipment:
+  - "whip"
+  - "robe plus:1"
+  - "hat plus:1"
+  - "pair of boots plus:1"
+  - "dart ego:curare q:6"
+recommended_species:
+  - human
+  - formicid
+  - minotaur
+  - vine stalker
+skills:
+  fighting: 1
+  maces and flails: 1
+  dodging: 3
+  stealth: 3
+create_enum: false

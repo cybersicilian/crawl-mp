@@ -1,0 +1,12 @@
+START melee 2026102701
+END melee 2026102701 complete False death True audits 11 exit 0
+START melee 2026102702
+END melee 2026102702 complete False death True audits 34 exit 0
+START ranged 2026102701
+END ranged 2026102701 complete False death True audits 6 exit 0
+START ranged 2026102702
+END ranged 2026102702 complete False death True audits 8 exit 0
+START caster 2026102701
+END caster 2026102701 complete False death True audits 11 exit 0
+START caster 2026102702
+END caster 2026102702 complete False death True audits 12 exit 0

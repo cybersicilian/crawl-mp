@@ -1,0 +1,47 @@
+{
+  "deployed": true,
+  "release": "/opt/dcss/releases/multiplayer-performance-01a17ea4-ui",
+  "previous": "/opt/dcss/releases/multiplayer-performance-01a17ea4",
+  "activated_at": "2026-10-27T20:12:55.699316+00:00",
+  "healthy": true,
+  "public_ui_verified": true,
+  "test_game_saved": true,
+  "native_unchanged": true,
+  "performance_changes_preserved": true,
+  "live_game_saved_before_restart": true,
+  "original_save_files_preserved_at_cutover": true,
+  "backup_verified": true,
+  "backup": "/var/lib/dcss/recovery/multiplayer-performance-01a17ea4-ui",
+  "focused_browser_checks": [
+    "direction-pad-feedback",
+    "common-hotkeys",
+    "quickbar-hotkeys",
+    "hud-input"
+  ],
+  "public_checks": [
+    "Compact keypad renders all eight labelled directions with accessible touch targets",
+    "Common hotkeys opens in one click, contains focus, returns it on Escape and spends no turn",
+    "Gameplay keys work immediately after closing help with exactly one owner action"
+  ],
+  "browser_viewports": [
+    1280,
+    768,
+    390,
+    320
+  ],
+  "physical_device_tested": false,
+  "screenshots": [
+    "public-controls.png",
+    "public-hotkeys.png"
+  ],
+  "evidence_sha256": {
+    "active-verification.json": "9b8fb7133af7873b7e6da120e4e2ba9c9ed77f656831dc20261eb64375329ede",
+    "save-verification.json": "6f3aefe99d096229e04bd716392ae22a774b318c641bed385f23cb5ca7036815",
+    "public-ui-result.json": "850466a9c8daf0791d2943d715381d97dcaa40f3357e9ebff517b6bc92c2bcaa",
+    "public-health-final.json": "5c56569ce0b5f9b64e80d4ca0ddbb59873ae6d90f36b516789880869ee7e55c4",
+    "result.json": "5858e44585c95384fc45a5c9fa4e9f1f2655f85f5d34db0f9e900a2ca9bd7126",
+    "binding.json": "14f57bd3d267cc7475ee8c0e27d3f932bea029dc7cf124b351ee1e21f5e7fb7e",
+    "public-binding.json": "391b53c1baae617d735c015509fa2a4b1ac32318eaeb7a819c25b39d646abc3d",
+    "public-closure.json": "13f338f6d2d91e816e6e04b2cd185aad678b95ca964b943389775ce5578cfc8f"
+  }
+}

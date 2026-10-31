@@ -1,0 +1,25 @@
+{
+  "reservationId": "33bcd40a-30ee-4159-925f-37bea694ab6a",
+  "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "33bcd40a-30ee-4159-925f-37bea694ab6a",
+      "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+      "label": "DCSS adaptive sidebar frozen browser fixture",
+      "requestedAt": 1792462726.8057249,
+      "supervisorPid": 1913,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "332aeda6307f11e9c3891c8d8f8cdb3fee9effc61d5164673d7eb76efb9b8236",
+      "startedAt": 1792462726.806182,
+      "workerPid": 1914,
+      "processGroup": 1914,
+      "exitCode": 1,
+      "finishedAt": 1792462728.3439019,
+      "supervisedProcessGroupGone": true
+    },
+    "browserFinallyClosed": true,
+    "result": "Fixture needs newly added inspection-dialog dependency"
+  }
+}

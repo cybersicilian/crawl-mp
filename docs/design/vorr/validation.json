@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-18",
+  "scope": "local native prototype; no production deployment",
+  "native_binary_sha256": "59ce590c5342d601d452953824164081618f3e108a183a30f0e932313f7cdbbd",
+  "build": {
+    "command": "make -j4 WEBTILES=y STDFLAG=-std=c++14 crawl catch2-tests-executable",
+    "passed": true
+  },
+  "cpp": {
+    "filter": "[vorr],[bloodcraft]",
+    "passed": true,
+    "test_cases": 27,
+    "assertions": 271,
+    "vorr_cases": 15,
+    "bloodcraft_cases": 12
+  },
+  "native_game": {
+    "passed": true,
+    "evidence": "evidence/native-game.json",
+    "checks": [
+      "Native worship exposes rites only at one, three and five stars",
+      "Live hero portrait uses the Vorr plinth and native altar pixels",
+      "Native combat and deferred death effects create finite visible blood",
+      "Red Passage targets once, consumes both endpoints and completes native movement"
+    ]
+  },
+  "faith_gallery": {
+    "deities": 28,
+    "tiers": 7,
+    "nativeArt": 198,
+    "maxParticles": 6,
+    "phasePreserved": true,
+    "integratedAltars": true,
+    "reducedMotion": true,
+    "errors": [],
+    "note": "Controlled presentation fixture; no gameplay or piety changes executed."
+  },
+  "vorr_art": {
+    "passed": true,
+    "distinct_native_rite_tiles": 3
+  },
+  "broader_checks": [
+    {
+      "name": "power-art.cjs full catalog",
+      "passed": false,
+      "baseline_failure": "Kindled Veins has no exact-name fallback in the pre-existing browser catalog; this is present in the captured baseline."
+    }
+  ],
+  "limits": [
+    "Initial balance and provisional pixel art",
+    "No fresh two-client co-op acceptance",
+    "No full legacy-save migration acceptance",
+    "No deployment"
+  ]
+}

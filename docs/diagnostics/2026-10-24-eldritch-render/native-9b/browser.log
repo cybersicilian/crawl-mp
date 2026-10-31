@@ -1,0 +1,45 @@
+Signed in to isolated QA account
+Launched Eldritch
+Native Eldritch state received
+{"label":"0-Eldritch-start","species":"Eldritch","turns":0,"position":{"x":0,"y":0},"actorPixels":7337,"blankFloors":0,"floors":29,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-south","species":"Eldritch","turns":1,"position":{"x":0,"y":1},"actorPixels":7578,"blankFloors":0,"floors":28,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-east","species":"Eldritch","turns":2,"position":{"x":1,"y":1},"actorPixels":7524,"blankFloors":0,"floors":25,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-resumed","species":"Eldritch","turns":2,"position":{"x":0,"y":0},"actorPixels":7524,"blankFloors":0,"floors":25,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#lobby_home [data-lobby-create]')[22m
+[2m    - locator resolved to <button type="button" data-lobby-create="true" class="lobby-primary-action">New expedition</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is not visible[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-24-eldritch-render/verify-native.cjs:123:67 {
+  log: [
+    "  - waiting for locator('#lobby_home [data-lobby-create]')",
+    '    - locator resolved to <button type="button" data-lobby-create="true" class="lobby-primary-action">New expedition</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not visible',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not visible',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be visible, enabled and stable',
+    '       - element is not visible',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}

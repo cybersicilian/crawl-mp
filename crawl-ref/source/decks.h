@@ -80,7 +80,8 @@ bool stack_five();
 
 void card_effect(card_type which_card, bool dealt = false,
         bool punishment = false,
-        bool tell_card = true);
+        bool tell_card = true, int application_power = -1);
+void draw_destruction(int application_power);
 void draw_from_deck_of_punishment(bool deal = false);
 
 string deck_status(deck_type deck);

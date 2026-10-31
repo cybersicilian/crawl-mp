@@ -1,0 +1,7 @@
+Signed in to isolated QA account
+Launched Eldritch
+Native Eldritch state received
+{"label":"0-Eldritch-start","species":"Eldritch","turns":0,"position":{"x":0,"y":0},"actorPixels":7364,"blankFloors":0,"floors":29,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-south","species":"Eldritch","turns":1,"position":{"x":0,"y":1},"actorPixels":7596,"blankFloors":0,"floors":28,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-east","species":"Eldritch","turns":2,"position":{"x":1,"y":1},"actorPixels":7605,"blankFloors":0,"floors":25,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}
+{"label":"0-Eldritch-resumed","species":"Eldritch","turns":2,"position":{"x":0,"y":0},"actorPixels":7605,"blankFloors":0,"floors":25,"atlases":[{"id":"floor","width":1024},{"id":"wall","width":1024},{"id":"feat","width":1024},{"id":"main","width":1024},{"id":"player","width":1024},{"id":"gui","width":1024},{"id":"icons","width":1024}],"zoom":"Dungeon zoom 150%"}

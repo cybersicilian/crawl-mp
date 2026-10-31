@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "mon-lurk.h"
 
@@ -21,6 +22,7 @@
 #include "mon-pathfind.h"
 #include "mon-place.h"
 #include "player-notices.h"
+#include "party.h"
 #include "religion.h"
 #include "stringutil.h"
 #include "terrain.h"
@@ -172,7 +174,7 @@ void alert_lurker_at(const coord_def& pos, bool do_pathfind_check)
                 if (do_pathfind_check)
                 {
                     // If pathfinding has recently failed, skip until later.
-                    if (lurker.timer > you.elapsed_time)
+                    if (lurker.timer > level_elapsed_time(lurker.mon.mons))
                         continue;
 
                     monster_pathfind mp;
@@ -183,13 +185,13 @@ void alert_lurker_at(const coord_def& pos, bool do_pathfind_check)
                     // doing additional pathfinding every single turn.
                     if (!mp.start_pathfind())
                     {
-                        lurker.timer = you.elapsed_time + random_range(70, 120);
+                        lurker.timer = level_elapsed_time(lurker.mon.mons) + random_range(70, 120);
                         continue;
                     }
                 }
 
                 lurker.alerted = true;
-                lurker.timer = you.elapsed_time + random_range(40, 120);
+                lurker.timer = level_elapsed_time(lurker.mon.mons) + random_range(40, 120);
             }
         }
     }
@@ -205,7 +207,8 @@ static bool _monster_threat_is_sufficient()
 {
     vector<lurker_data*> ready_lurkers;
     for (lurker_data& lurker : env.lurkers)
-        if (lurker.alerted && lurker.timer <= you.elapsed_time + 50)
+        if (party::position_in_active_region(lurker.pos)
+            && lurker.alerted && lurker.timer <= level_elapsed_time(lurker.mon.mons) + 50)
             ready_lurkers.push_back(&lurker);
 
     // XXX: This is a bit of an approximation, since it's not guaranteed we'll
@@ -248,6 +251,9 @@ static bool _monster_threat_is_sufficient()
 
 void handle_lurkers()
 {
+    for (auto& lurker : env.lurkers)
+        if (party::position_in_active_region(lurker.pos))
+            advance_level_entity_clock(lurker.mon.mons, you.time_taken);
     // Handle Ash revealing nearby lurkers.
     // (This works even through walls so that monster detection can pick them up)
     if (have_passive(passive_t::see_unseen))
@@ -275,7 +281,8 @@ void handle_lurkers()
     for (int i = env.lurkers.size() - 1; i >= 0; --i)
     {
         lurker_data &data = env.lurkers[i];
-        if (!data.alerted || data.timer > you.elapsed_time)
+        if (!party::position_in_active_region(data.pos)
+            || !data.alerted || data.timer > level_elapsed_time(data.mon.mons))
             continue;
 
         // Calculate threat (just once for the whole batch)
@@ -287,7 +294,7 @@ void handle_lurkers()
         // threat changes.
         if (!threat_ok && !data.ignore_threat)
         {
-            data.timer = you.elapsed_time + random_range(40, 100);
+            data.timer = level_elapsed_time(data.mon.mons) + random_range(40, 100);
             continue;
         }
 
@@ -298,12 +305,13 @@ void handle_lurkers()
             // Increase timer of all other lurkers slightly,
             // to avoid placing too many at once.
             for (lurker_data& lurker : env.lurkers)
-                lurker.timer += roll_dice(5, 12);
+                if (party::position_in_active_region(lurker.pos))
+                    lurker.timer += roll_dice(5, 12);
         }
         // If we can't place this monster, wait a short time before trying again.
         else
         {
-            data.timer = you.elapsed_time + random_range(40, 100);
+            data.timer = level_elapsed_time(data.mon.mons) + random_range(40, 100);
             data.ignore_threat = false;
         }
     }

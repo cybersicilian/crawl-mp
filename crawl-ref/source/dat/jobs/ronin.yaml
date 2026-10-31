@@ -1,0 +1,23 @@
+enum: JOB_RONIN
+name: Ronin
+short_name: Ro
+category: Warrior
+category_priority: 60
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "long sword"
+  - "rapier"
+  - "shortbow"
+  - "leather armour"
+recommended_species:
+  - human
+skills:
+  fighting: 1
+  long blades: 2
+  short blades: 1
+  ranged weapons: 2
+  armour: 1
+  dodging: 1
+create_enum: false

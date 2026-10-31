@@ -1,0 +1,26 @@
+{
+  "browser_assertion_failed": true,
+  "source_and_extracted_atlas_visually_identical": true,
+  "raw_png_rgba_analysis": {
+    "different_pixels": 1,
+    "different_channels": 1,
+    "maximum_channel_difference": 1,
+    "alpha_differences": 0,
+    "opaque_pixel_differences": 0,
+    "maximum_composited_premultiplied_channel_difference": 0,
+    "source_pixel": [
+      30,
+      23,
+      19,
+      136
+    ],
+    "atlas_canvas_pixel": [
+      30,
+      22,
+      19,
+      136
+    ]
+  },
+  "cause": "Source PNG gamma/chromaticity metadata is applied by browser Image decoding but ignored by native libpng tile loader. Native atlas PNGs omit that metadata. Direct expected-browser decoding was therefore the wrong reference.",
+  "correction": "Decode raw source RGBA as native tile.cc does, then compare exact alpha and exact rounded premultiplied pixels after browser Canvas normalization. No artwork/native source changed."
+}

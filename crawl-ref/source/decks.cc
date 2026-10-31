@@ -633,6 +633,11 @@ static void _evoke_deck(deck_type deck, bool dealt = false)
 }
 
 // Draw one card from a deck, prompting the user for a choice
+void draw_destruction(int application_power)
+{
+    card_effect(_random_card(DECK_OF_DESTRUCTION), false, false, true, application_power);
+}
+
 bool deck_draw(deck_type deck)
 {
     if (!deck_cards(deck))
@@ -1518,7 +1523,7 @@ static void _storm_card(int power)
         beam.real_flavour      = beam.flavour;
         beam.colour            = LIGHTCYAN;
         beam.tile_explode      = TILE_BOLT_ELECTRIC_BLAST;
-        beam.source_id         = MID_PLAYER;
+        beam.source_id         = you.mid;
         beam.thrower           = KILL_YOU;
         beam.is_explosion      = true;
         beam.ex_size           = 3;
@@ -1675,10 +1680,10 @@ static int _card_power(bool punishment)
 
 void card_effect(card_type which_card,
                  bool dealt,
-                 bool punishment, bool tell_card)
+                 bool punishment, bool tell_card, int application_power)
 {
     const char *participle = dealt ? "dealt" : "drawn";
-    const int power = _card_power(punishment);
+    const int power = application_power < 0 ? _card_power(punishment) : application_power;
 
     dprf("Card power: %d", power);
 

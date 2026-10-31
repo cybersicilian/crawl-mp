@@ -1,0 +1,30 @@
+{
+  "processes": [
+    {
+      "pid": 378195,
+      "start_ticks": "96106381",
+      "name": "Rogue",
+      "cwd": "/opt/dcss/releases/session-handoff-01a18019/crawl-ref/source"
+    },
+    {
+      "pid": 378762,
+      "start_ticks": "96228465",
+      "name": "Perf0mvr3l91d",
+      "cwd": "/opt/dcss/releases/session-handoff-01a18019/crawl-ref/source"
+    }
+  ],
+  "records": [
+    {
+      "id": "e813e777-feac-4221-9b97-4c875be376a9",
+      "owner": "Perf0mvr3l91d",
+      "status": "active",
+      "save_dir": "/var/lib/dcss/rcs/library/saves/e813e777-feac-4221-9b97-4c875be376a9"
+    },
+    {
+      "id": "904f3790-0541-4d28-ab9a-325506030311",
+      "owner": "Rogue",
+      "status": "active",
+      "save_dir": "/var/lib/dcss/rcs/library/saves/904f3790-0541-4d28-ab9a-325506030311"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "complete": false,
+  "passed": false,
+  "requestId": "d8a071d9be4c98ace256fe2b54144537ab78604b31a479a9d33f90e1292e0909",
+  "results": [
+    {
+      "command": [
+        "make",
+        "-k",
+        "-j2",
+        "WEBTILES=y",
+        "STDFLAG=-std=c++17",
+        "NO_OPTIMIZE=y",
+        "PYTHON=/usr/local/bin/python3",
+        "crawl",
+        "catch2-tests-executable"
+      ],
+      "exitCode": 2,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/vellum/validation/step-1.log"
+    }
+  ],
+  "snapshot": "/private/tmp/dcss-vellum-baae6b032ea87023"
+}

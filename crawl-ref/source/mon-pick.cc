@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
 
 #include "mon-pick.h"
 #include "mon-pick-data.h"
@@ -54,7 +55,7 @@ monster_type pick_monster_no_rarity(branch_type branch)
     if (!population[branch].size())
         return MONS_0;
 
-    return population[branch][random2(population[branch].size())].value;
+    return pick_monster_by_hash(branch, random2(population[branch].size()));
 }
 
 monster_type pick_monster_by_hash(branch_type branch, uint32_t hash)
@@ -62,7 +63,15 @@ monster_type pick_monster_by_hash(branch_type branch, uint32_t hash)
     if (!population[branch].size())
         return MONS_0;
 
-    return population[branch][hash % population[branch].size()].value;
+    const auto &entries = population[branch];
+    const size_t start = hash % entries.size();
+    for (size_t offset = 0; offset < entries.size(); ++offset)
+    {
+        const monster_type mon = entries[(start + offset) % entries.size()].value;
+        if (coop_content::enabled() || !coop_content::exclusive_monster(mon))
+            return mon;
+    }
+    return MONS_0;
 }
 
 monster_type pick_monster(level_id place, mon_pick_vetoer veto)
@@ -101,7 +110,8 @@ monster_type monster_picker::pick_with_veto(const vector<pop_entry>& weights,
 // stored veto function. Can subclass further for more complex veto behaviour.
 bool monster_picker::veto(monster_type mon)
 {
-    return _veto && (invalid_monster_type(mon) || _veto(mon));
+    return (!coop_content::enabled() && coop_content::exclusive_monster(mon))
+        || (_veto && (invalid_monster_type(mon) || _veto(mon)));
 }
 
 bool positioned_monster_picker::veto(monster_type mon)
@@ -145,7 +155,8 @@ monster_type pick_monster_all_branches(int absdepth0, monster_picker &picker,
             if (depth < pop.minr || depth > pop.maxr)
                 continue;
 
-            if (veto ? (*veto)(pop.value) : picker.veto(pop.value))
+            if ((!coop_content::enabled() && coop_content::exclusive_monster(pop.value))
+                || (veto ? (*veto)(pop.value) : picker.veto(pop.value)))
                 continue;
 
             int rar = picker.rarity_at(pop, depth);

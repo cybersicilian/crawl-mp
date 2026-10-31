@@ -4,8 +4,13 @@
 **/
 
 #include "AppHdr.h"
+#include "archaeologist.h"
+#include "god-vellum.h"
+#include "god-pakellas.h"
+#include "game-record.h"
 
 #include "items.h"
+#include "inventory-transfer.h"
 
 #include <algorithm>
 #include <cctype>
@@ -48,6 +53,7 @@
 #include "item-prop.h"
 #include "item-status-flag-type.h"
 #include "item-use.h"
+#include "jobs.h"
 #include "libutil.h"
 #include "macro.h"
 #include "makeitem.h"
@@ -57,6 +63,7 @@
 #include "options.h"
 #include "orb.h"
 #include "output.h"
+#include "party.h"
 #include "place.h"
 #include "player-equip.h"
 #include "player.h"
@@ -69,6 +76,7 @@
 #include "skills.h"
 #include "slot-select-mode.h"
 #include "sound.h"
+#include "species.h"
 #include "spl-book.h"
 #include "spl-util.h"
 #include "stash.h"
@@ -91,8 +99,6 @@ static void _autoinscribe_floor_items();
 static void _autoinscribe_inventory();
 static void _maybe_disable_autopickup_for_dropped_items(vector<SelItem> &items);
 static void _multidrop(vector<SelItem> tmp_items);
-static bool _merge_items_into_inv(item_def &it, int quant_got,
-                                  int &inv_slot, bool quiet);
 
 static bool will_autopickup   = false;
 static bool will_autoinscribe = false;
@@ -657,12 +663,14 @@ static void _handle_gone_item(const item_def &item)
 
 void item_was_lost(const item_def &item)
 {
+    vellum::on_destroyed(item);
     _handle_gone_item(item);
     xom_check_lost_item(item);
 }
 
 void item_was_destroyed(const item_def &item)
 {
+    vellum::on_destroyed(item);
     _handle_gone_item(item);
     xom_check_destroyed_item(item);
 }
@@ -1603,6 +1611,8 @@ bool items_similar(const item_def &item1, const item_def &item2)
 
 bool items_stack(const item_def &item1, const item_def &item2)
 {
+    if (pakellas::preserve_wand(item1) || pakellas::preserve_wand(item2))
+        return false;
     // Both items must be stackable.
     if (!is_stackable_item(item1) || !is_stackable_item(item2)
         || static_cast<long long>(item1.quantity) + item2.quantity
@@ -1720,12 +1730,43 @@ static void _got_item(item_def& item)
 void get_gold(const item_def& item, int quant, bool quiet)
 {
     you.attribute[ATTR_GOLD_FOUND] += quant;
+    if (party::is_enabled())
+    {
+        for (int i = 0; i < party::player_count(); ++i)
+        {
+            if (i != party::active_slot())
+                party::get_player(i).attribute[ATTR_GOLD_FOUND] += quant;
+        }
+    }
 
-    if (you_worship(GOD_ZIN))
+    int zin_slot = -1;
+    if (party::is_enabled()
+        && party::any_party_member_on_floor_worships(GOD_ZIN, &zin_slot)
+        && zin_slot >= 0)
+    {
+        const bool gozag_present =
+            party::any_party_member_on_floor_worships(GOD_GOZAG);
+        const int tithe_pool = gozag_present ? max(1, quant / 2) : quant;
+        int taken = 0;
+        {
+            party::scoped_player_context ctx(zin_slot);
+            taken = zin_tithe(item, tithe_pool, quiet);
+        }
+        if (taken > 0 && gozag_present && !quiet)
+        {
+            mprf(MSGCH_GOD,
+                 "Gozag's greed intercepts half of Zin's tithe from the party coffers!");
+        }
+        quant -= taken;
+    }
+    else if (you_worship(GOD_ZIN))
         quant -= zin_tithe(item, quant, quiet);
+
     if (quant <= 0)
         return;
     you.add_gold(quant);
+    if (party::is_enabled())
+        party::sync_shared_state_from_active();
 
     if (!quiet)
     {
@@ -1746,6 +1787,122 @@ void note_inscribe_item(item_def &item)
     _check_note_item(item);
 }
 
+static string _items_json_escape(const string &s)
+{
+    string out;
+    out.reserve(s.size() + 8);
+    for (unsigned char c : s)
+    {
+        if (c == '"')
+            out += "\\\"";
+        else if (c == '\\')
+            out += "\\\\";
+        else if (c == '\n')
+            out += "\\n";
+        else if (c == '\r')
+            out += "\\r";
+        else if (c == '\t')
+            out += "\\t";
+        else if (c >= 0x20)
+            out += static_cast<char>(c);
+    }
+    return out;
+}
+
+static const char* _cool_item_category(const item_def &item, int *out_score)
+{
+    if (item.base_type == OBJ_RUNES)
+    {
+        if (out_score) *out_score = 500;
+        return "rune";
+    }
+    if (item_is_orb(item))
+    {
+        if (out_score) *out_score = 1000;
+        return "orb";
+    }
+    if (item.base_type == OBJ_GEMS)
+    {
+        if (out_score) *out_score = 400;
+        return "gem";
+    }
+    if (is_unrandom_artefact(item))
+    {
+        if (out_score) *out_score = 350;
+        return "unrandart";
+    }
+    if (is_artefact(item))
+    {
+        if (out_score) *out_score = 250;
+        return "randart";
+    }
+    if (item.is_type(OBJ_BOOKS, BOOK_MANUAL))
+    {
+        if (out_score) *out_score = 200;
+        return "manual";
+    }
+    if (item.is_type(OBJ_SCROLLS, SCR_ACQUIREMENT)
+        || item.is_type(OBJ_POTIONS, POT_EXPERIENCE))
+    {
+        if (out_score) *out_score = 180;
+        return "rare_consumable";
+    }
+    if ((item.base_type == OBJ_WEAPONS || item.base_type == OBJ_ARMOUR)
+        && (item.plus >= 2
+            || get_weapon_brand(item) != SPWPN_NORMAL
+            || get_armour_ego_type(item) != SPARM_NORMAL))
+    {
+        if (out_score) *out_score = 100 + max(0, (int)item.plus) * 10;
+        return "ego_gear";
+    }
+    return nullptr;
+}
+
+static void _maybe_log_cool_item(item_def &item)
+{
+    game_record::observe_item(item);
+    if (crawl_state.game_is_tutorial()
+        || crawl_state.game_is_arena()
+        || _origin_is_original_equip(item)
+        || item.props.exists("chronicle_logged"))
+    {
+        return;
+    }
+
+    int value_score = 100;
+    const char *category = _cool_item_category(item, &value_score);
+    if (!category)
+        return;
+
+    item.props["chronicle_logged"] = true;
+
+    string path = Options.save_dir.empty()
+                  ? string("./rcs/coop_chronicle.jsonl")
+                  : Options.save_dir + "coop_chronicle.jsonl";
+    FILE *fp = fopen(path.c_str(), "a");
+    if (!fp && path != "./rcs/coop_chronicle.jsonl")
+        fp = fopen("./rcs/coop_chronicle.jsonl", "a");
+    if (!fp)
+        return;
+
+    const string item_name = _items_json_escape(item.name(DESC_A, false, true));
+    const string finder_name = _items_json_escape(you.your_name);
+    const string finder_sp = _items_json_escape(species::name(you.species));
+    const string finder_job = _items_json_escape(get_job_name(you.char_class));
+    const int slot = party::active_slot();
+    const string place_str = _items_json_escape(level_id::current().describe());
+
+    fprintf(fp,
+            "{\"type\":\"cool_item\",\"item_name\":\"%s\",\"category\":\"%s\","
+            "\"finder_name\":\"%s\",\"finder_species\":\"%s\","
+            "\"finder_job\":\"%s\",\"slot\":%d,\"place\":\"%s\","
+            "\"value_score\":%d}\n",
+            item_name.c_str(), category, finder_name.c_str(),
+            finder_sp.c_str(), finder_job.c_str(), slot,
+            place_str.c_str(), value_score);
+    fclose(fp);
+}
+
 static bool _put_item_in_inv(item_def& it, int quant_got, bool quiet, bool& put_in_inv)
 {
     put_in_inv = false;
@@ -1764,7 +1921,7 @@ static bool _put_item_in_inv(item_def& it, int quant_got, bool quiet, bool& put_
 
     // attempt to put the item into your inventory.
     int inv_slot;
-    if (_merge_items_into_inv(it, quant_got, inv_slot, quiet))
+    if (merge_items_into_inv(it, quant_got, inv_slot, quiet))
     {
         put_in_inv = true;
 
@@ -1774,6 +1931,11 @@ static bool _put_item_in_inv(item_def& it, int quant_got, bool quiet, bool& put_
         else if (it.base_type == OBJ_BOOKS)
             _got_item(it);
         _check_note_item(inv_slot == -1 ? it : you.inv[inv_slot]);
+        if (inv_slot != -1 && it.props.exists("chronicle_logged"))
+            you.inv[inv_slot].props["chronicle_logged"] = true;
+        _maybe_log_cool_item(inv_slot == -1 ? it : you.inv[inv_slot]);
+        if (inv_slot != -1 && you.inv[inv_slot].props.exists("chronicle_logged"))
+            it.props["chronicle_logged"] = true;
         return true;
     }
 
@@ -1843,6 +2005,9 @@ static void _get_book(item_def& it)
 
         if (!library_add_spells(spells_in_book(it)))
             mpr("Unfortunately, you learned nothing new or useful.");
+
+        if (party::is_enabled())
+            party::sync_shared_state_from_active();
 
         taken_new_item(it.base_type);
 
@@ -1917,6 +2082,9 @@ static void _get_rune(const item_def& it, bool quiet)
     if (!you.runes[it.sub_type])
         you.runes.set(it.sub_type);
 
+    if (party::is_enabled())
+        party::sync_shared_state_from_active();
+
     if (!quiet)
     {
         flash_view_delay(UA_PICKUP, rune_colour(it.sub_type), 300);
@@ -1943,6 +2111,12 @@ static void _get_rune(const item_def& it, bool quiet)
 
     if (it.sub_type == RUNE_ABYSSAL)
         mpr("You feel the abyssal rune guiding you out of this place.");
+
+    if (party::is_enabled())
+    {
+        party::revive_downed_players(false, 0);
+        party::sync_all_proxies();
+    }
 }
 
 static bool _is_disabled_gem(gem_type gem)
@@ -1982,6 +2156,8 @@ static bool _got_all_gems()
 static void _get_gem(const item_def& it, bool quiet)
 {
     you.gems_found.set(it.sub_type);
+    if (party::is_enabled())
+        party::sync_shared_state_from_active();
     if (quiet)
         return;
 
@@ -2441,7 +2617,7 @@ static int _place_item_in_free_slot(item_def &it, int quant_got,
  *              item pickup failure) aren't printed.
  * @return Whether something was successfully picked up.
  */
-static bool _merge_items_into_inv(item_def &it, int quant_got,
+bool merge_items_into_inv(item_def &it, int quant_got,
                                   int &inv_slot, bool quiet)
 {
     inv_slot = -1;
@@ -2449,6 +2625,9 @@ static bool _merge_items_into_inv(item_def &it, int quant_got,
     // sanity
     if (quant_got > it.quantity || quant_got <= 0)
         quant_got = it.quantity;
+
+    if (archaeologist::on_pickup(it))
+        return true;
 
     // Gold has no mass, so we handle it first.
     if (it.base_type == OBJ_GOLD)
@@ -2509,6 +2688,8 @@ static bool _merge_items_into_inv(item_def &it, int quant_got,
 
     // Can't combine, check for slot space.
     if (inventory_category_for(it) == INVENT_GEAR && inv_count(INVENT_GEAR) >= MAX_GEAR)
+        return false;
+    if (inventory_category_for(it) == INVENT_CONSUMABLE && find_free_slot(it) < 0)
         return false;
 
     inv_slot = _place_item_in_free_slot(it, quant_got, quiet);
@@ -4082,6 +4263,9 @@ colour_t item_def::rune_colour() const
         case RUNE_SPIDER:
             return ETC_BONE;
 
+        case RUNE_BURROWS:
+            return BROWN;
+
         case RUNE_SLIME:                    // slimy
             return ETC_SLIME;
 
@@ -4151,6 +4335,7 @@ colour_t item_def::gem_colour() const
     case GEM_SHOALS:  return ETC_ENCHANT;
     case GEM_SNAKE:   return ETC_POISON;
     case GEM_SPIDER:  return WHITE;
+    case GEM_BURROWS: return BROWN;
 
     case GEM_SLIME:   return ETC_AIR;
     case GEM_VAULTS:  return ETC_STEEL;
@@ -4292,6 +4477,14 @@ colour_t item_def::miscellany_colour() const
             return ETC_DARK;
         case MISC_ZIGGURAT:
             return _zigfig_colour();
+        case MISC_AEGIS_STANDARD:
+            return YELLOW;
+        case MISC_ASTRAL_BEACON:
+            return LIGHTCYAN;
+        case MISC_TWIN_SPARK_CONDUIT:
+            return LIGHTMAGENTA;
+        case MISC_SKALD_HORN:
+            return YELLOW;
         default:
             return LIGHTGREEN;
     }

@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "god-vorr.h"
 
 #include "god-conduct.h"
 
@@ -11,6 +12,7 @@
 #include "message.h"
 #include "monster.h"
 #include "mon-util.h"
+#include "party.h"
 #include "religion.h"
 #include "state.h"
 #include "stringutil.h" // uppercase_first
@@ -276,6 +278,10 @@ static forbidden_map divine_prohibitions[] =
     forbidden_map(),
     // GOD_IGNIS,
     forbidden_map(),
+    // GOD_VORR
+    forbidden_map(),
+    // GOD_VELLUM
+    forbidden_map(),
 };
 
 /// A definition of the way in which a god dislikes a conduct being taken.
@@ -480,6 +486,10 @@ static peeve_map divine_peeves[] =
     peeve_map(),
     // GOD_IGNIS,
     peeve_map(),
+    // GOD_VORR
+    peeve_map(),
+    // GOD_VELLUM
+    peeve_map(),
 };
 
 string get_god_dislikes(god_type which_god)
@@ -610,6 +620,8 @@ struct like_response
         // may modify gain/denom
         if (special)
             special(gain, denom, victim);
+        if (victim && party::is_enabled())
+            gain = party::adjust_kill_piety_for_party_politics(gain);
         you.piety_info.record_conduct_like(thing_done, gain, denom);
 
         _handle_piety_penance(max(0, gain), max(1, denom), 0, thing_done);
@@ -978,6 +990,10 @@ static like_map divine_likes[] =
     DEFAULT_KILL_CONDUCT,
     // GOD_IGNIS,
     like_map(),
+    // GOD_VORR: ordinary reward weighting, restricted to actual blood.
+    DEFAULT_KILL_CONDUCT,
+    // GOD_VELLUM: crafting itself never awards piety.
+    DEFAULT_KILL_CONDUCT,
 };
 
 /**
@@ -1005,6 +1021,10 @@ static void _handle_your_gods_response(conduct_type thing_done, int level,
     if (auto peeve = map_find(divine_peeves[you.religion], thing_done))
         (*peeve)(thing_done, level, known, victim);
 
+    // Bloodless opposition never feeds Vorr, including shared conduct.
+    if (you_worship(GOD_VORR) && (!victim || !vorr::worthy(*victim)))
+        return;
+
     // If your god liked the action, evaluate its response.
     if (auto like = map_find(divine_likes[you.religion], thing_done))
         (*like)(thing_done, level, known, victim);
@@ -1028,6 +1048,8 @@ void did_god_conduct(conduct_type thing_done, int level, bool known,
     ASSERT(!crawl_state.game_is_arena());
 
     _handle_your_gods_response(thing_done, level, known, victim);
+    if (party::is_enabled())
+        party::on_party_witness_conduct(thing_done, level, victim);
 }
 
 // A Beogh worshipper zapping an orc with lightning might cause it to become a
@@ -1044,6 +1066,7 @@ void god_conduct_turn_start()
 
 void trigger_exploration_conducts()
 {
+    const int revealed = you.newly_revealed_cells;
     if (you.form == transformation::hypnogecko
         && you.props.exists(HYPNOGECKO_LOST_TAIL_KEY))
     {
@@ -1064,6 +1087,19 @@ void trigger_exploration_conducts()
     {
         you.newly_revealed_cells--;
         did_god_conduct(DID_EXPLORATION, 0);
+    }
+
+    if (party::is_enabled() && revealed > 0)
+    {
+        const int active = party::active_slot();
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == active || party::is_player_downed(slot))
+                continue;
+            party::scoped_player_context ctx(slot);
+            for (int i = 0; i < revealed; ++i)
+                did_god_conduct(DID_EXPLORATION, 0);
+        }
     }
 }
 
@@ -1245,6 +1281,9 @@ void did_hurt_monster(const monster &victim, int damage_done,
         int bonus = min(victim.hit_points, min(damage_done, victim.max_hit_points / 2));
         you.props[BEOGH_DAMAGE_DONE_KEY].get_int() += bonus;
     }
+
+    if (party::is_enabled())
+        party::on_party_hurt_monster(victim, damage_done, flavour, kill_type);
 }
 
 /**

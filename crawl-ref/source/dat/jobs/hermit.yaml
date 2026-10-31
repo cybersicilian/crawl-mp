@@ -1,0 +1,20 @@
+enum: JOB_HERMIT
+name: Hermit
+short_name: Hm
+category: Adventurer
+category_priority: 70
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "club"
+  - "robe"
+recommended_species:
+  - human
+  - kobold
+  - troll
+skills:
+  fighting: 3
+  dodging: 3
+  stealth: 3
+create_enum: false

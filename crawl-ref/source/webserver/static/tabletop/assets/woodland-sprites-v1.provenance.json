@@ -1,0 +1,28 @@
+{
+  "tool": "built-in image_gen",
+  "direction": "Illustrated dark fantasy",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a159af-557f-7b82-b6c3-0d5fc2984231/exec-32f5b7b3-6d7d-4404-8812-6109b0924934.png",
+  "sha256": "ecd363a6efac7f5e70ab5b2d1ed20626f3a92ad5be98337eaf0cd8812877fd4a",
+  "layout": {
+    "width": 1448,
+    "height": 1086,
+    "columns": 4,
+    "rows": 3
+  },
+  "transparent_background": true,
+  "entries": [
+    "gnarled oak",
+    "slender woodland tree",
+    "ochre autumn tree",
+    "copper autumn tree",
+    "dead tree",
+    "mangrove",
+    "petrified tree",
+    "blue tree of woe",
+    "dead tree of woe",
+    "mossy boulders",
+    "fungal stump",
+    "mushroom cluster"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent environmental sprite sheet for a top-down dark-fantasy dungeon game. Output a 1536 by 1152 RGBA PNG, exactly FOUR equal columns by THREE equal rows, each cell 384 by 384 pixels. Genuine transparent background including all spaces between sprites; no checkerboard drawn into image. ONE completely separate centered object per cell, all art contained within the middle 320 by 320 pixels of its own cell, generous transparent padding, nothing touches another cell. Consistent orthographic three-quarter overhead game sprite camera with front face visible, compact upright silhouettes, no isometric diamond bases. Row1 left to right: (1) a stout gnarled living oak with dense muted sage-green rounded crown and visible twisted trunk, (2) a slender old woodland tree with a narrower irregular dark olive crown, (3) a gold-ochre autumn oak with clear trunk, (4) a muted copper-red autumn tree. Row2 left to right: (5) bare dead tree with chunky twisted branches and no foliage, (6) swamp mangrove with olive canopy and readable splayed woody roots, (7) a petrified tree of weathered gray stone with broad angular branches, (8) an eerie old tree with subdued pale blue foliage and charcoal trunk, no magical effects. Row3 left to right: (9) a dead eerie tree with ash-blue bare branches, (10) a low cluster of angular mossy gray boulders, (11) a hollow broken stump with a few small cream shelf fungi, (12) a compact cluster of broad tawny mushrooms on a tiny dark earthy root patch. Art direction: cohesive illustrated dark fantasy expedition journal, painterly gouache and sparse engraved accents, matte warm ivory edge lights, soot-dark outlines and umber crevices, restrained moss, sage, copper and blue-gray. Strong clean silhouettes and broad distinct masses designed to remain readable after downscaling to 32-pixel native tiles. Foliage must read as a few large clumps, not detailed leaf noise. Opaque object interiors, crisp antialiased alpha edges, minimal contact shadow attached to base only. Absolutely no full ground squares, no rectangular backgrounds, no scene, no UI, no numbers, no lettering, no labels, no grid lines, no borders, no watermark, no people or animals. Exact regular 4 by 3 sheet; every cell has transparent perimeter."
+}

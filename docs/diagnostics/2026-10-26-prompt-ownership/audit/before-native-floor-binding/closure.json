@@ -1,0 +1,20 @@
+{
+  "gate": {
+    "runId": "9a1776cd-e8b5-42db-9b9e-5d637bed037d",
+    "owner": "codex/01a17b3b-e474-7e71-b44c-78b20124ab32",
+    "label": "DCSS complete audit packet acceptance",
+    "requestedAt": 1793077694.200215,
+    "supervisorPid": 81747,
+    "status": "completed_held",
+    "reservation": true,
+    "requestId": "460f6e406dca55ede035f111a5e1036956025e388377952fcf7cb0ad977cd3a6",
+    "startedAt": 1793077694.200833,
+    "workerPid": 81748,
+    "processGroup": 81748,
+    "exitCode": 0,
+    "finishedAt": 1793077741.064228,
+    "supervisedProcessGroupGone": true
+  },
+  "allOwnedProcessesGone": true,
+  "native_processes_exited": true
+}

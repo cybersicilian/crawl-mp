@@ -1,0 +1,28 @@
+{
+  "startedAt": 1792534609.304505,
+  "finishedAt": 1792534797.108905,
+  "results": [
+    {
+      "command": [
+        "make",
+        "-j2",
+        "WEBTILES=y",
+        "STDFLAG=-std=c++14",
+        "PYTHON=/usr/local/bin/python3",
+        "catch2-tests-executable",
+        "crawl"
+      ],
+      "exitCode": 2,
+      "log": "/Users/iancaltabiano/Documents/Projects/dcss/docs/coop-content/step-1.log"
+    }
+  ],
+  "snapshotMatchesRequest": true,
+  "workingSourceChangedDuringBuild": [
+    "catch2-tests/test_item_tiles.cc",
+    "rltiles/dc-item.txt",
+    "rltiles/dc-player.txt",
+    "tilepick-p.cc",
+    "tilepick.cc"
+  ],
+  "passed": false
+}

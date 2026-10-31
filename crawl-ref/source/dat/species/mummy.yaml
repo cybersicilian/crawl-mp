@@ -1,8 +1,7 @@
 enum: SP_MUMMY
 monster: MONS_MUMMY
 name: Mummy
-difficulty: Advanced
-difficulty_priority: 20
+difficulty: False
 species_flags:
   - no_blood
 aptitudes:
@@ -54,13 +53,5 @@ mutations:
     MUT_ACCURSED: 1
   13:
     MUT_NECRO_ENHANCER: 1
-recommended_jobs:
-  - cinder acolyte
-  - hedge wizard
-  - conjurer
-  - necromancer
-  - ice elementalist
-  - summoner
-
 orc_name: Orcish Mummy
 orcification_msg: A small pair of tusks begins to pierce through your wrappings.

@@ -1,0 +1,23 @@
+{
+  "backend": {
+    "passed": true,
+    "exact_candidate_contract_tests": 13,
+    "controlled_timer": {
+      "before_ticks": 3,
+      "after_ticks": 10,
+      "interval_ms": 50,
+      "fair_rotation": true,
+      "native_ack_required": true
+    },
+    "native_engine_test": false
+  },
+  "graceful_save_passed": true,
+  "forced_kill": false,
+  "native_games_checkpointed": 1,
+  "checkpointed_game_ids": [
+    "1d5cd1cb-59ba-43e8-917d-9c1cdce5bff6"
+  ],
+  "backup_verified": true,
+  "preserved_save_file_count": 8871,
+  "database_backup_count": 306
+}

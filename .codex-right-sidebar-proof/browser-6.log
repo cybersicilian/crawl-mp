@@ -1,0 +1,14 @@
+{"passed":true,"viewports":5,"nativeActionsPreserved":true,"output":"/tmp/dcss-party-sidebar-proof"}
+[]
+AssertionError [ERR_ASSERTION]: A companion pack is visible when it fits
+
+0 !== 1
+
+    at /Users/iancaltabiano/Documents/Projects/dcss/.codex-right-sidebar-proof/source-6/tests/party-sidebar.cjs:123:20 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

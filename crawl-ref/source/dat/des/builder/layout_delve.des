@@ -150,6 +150,12 @@ TAGS:   no_rotate no_vmirror no_hmirror uniq_layout_twisted_delve
         branch_type[other_index] = i
     end
 
+    local area_scale = (gxm * gym) / (80 * 70)
+    local arm_x = math.floor(25 * gxm / 80)
+    local arm_y = math.floor(25 * gym / 70)
+    local room_arm_x = math.floor(20 * gxm / 80)
+    local room_arm_y = math.floor(20 * gym / 70)
+
     local quarter_glyphs = { "c", "v", "m", "n" }
     for i = 1, 4 do
         subst(quarter_glyphs[i] .. ' = x')
@@ -157,19 +163,19 @@ TAGS:   no_rotate no_vmirror no_hmirror uniq_layout_twisted_delve
         -- !send infiniplex LUA switch statements
         if (branch_type[i] == 0) then
             -- classic twisted cavern branch
-            delve(3, 3, 0,  crawl.random_range(200, 400), 1)
+            delve(3, 3, 0,  math.floor(crawl.random_range(200, 400) * area_scale), 1)
 
         elseif (branch_type[i] == 1) then
             -- "roomier" twisted cavern branch
-            delve(3, 4, 0,  crawl.random_range(250, 500), 1)
+            delve(3, 4, 0,  math.floor(crawl.random_range(250, 500) * area_scale), 1)
 
         elseif (branch_type[i] == 2) then
             -- narrower twisted cavern branch
-            delve(2, 4, 10, crawl.random_range(150, 250), 1)
+            delve(2, 4, 10, math.floor(crawl.random_range(150, 250) * area_scale), 1)
 
         elseif (branch_type[i] == 3) then
             -- a mess of interconnected areas
-            delve(2, 3, 25, crawl.random_range(200, 300), 10000)
+            delve(2, 3, 25, math.floor(crawl.random_range(200, 300) * area_scale), 10000)
 
         elseif (branch_type[i] == 4) then
             -- draw a straight "cross" arm outward
@@ -178,20 +184,20 @@ TAGS:   no_rotate no_vmirror no_hmirror uniq_layout_twisted_delve
             local arm_thickness = crawl.random_range(1, 2)
 
             if (i == 1) then
-                fill_area { x1 = center_x - 25, y1 = center_y - arm_thickness,
-                            x2 = center_x,      y2 = center_y + arm_thickness,
+                fill_area { x1 = center_x - arm_x, y1 = center_y - arm_thickness,
+                            x2 = center_x,         y2 = center_y + arm_thickness,
                             fill = "." }
             elseif (i == 2) then
-                fill_area { x1 = center_x,      y1 = center_y - arm_thickness,
-                            x2 = center_x + 25, y2 = center_y + arm_thickness,
+                fill_area { x1 = center_x,         y1 = center_y - arm_thickness,
+                            x2 = center_x + arm_x, y2 = center_y + arm_thickness,
                             fill = "." }
             elseif (i == 3) then
-                fill_area { x1 = center_x - arm_thickness, y1 = center_y - 25,
+                fill_area { x1 = center_x - arm_thickness, y1 = center_y - arm_y,
                             x2 = center_x + arm_thickness, y2 = center_y,
                             fill = "." }
             else
                 fill_area { x1 = center_x - arm_thickness, y1 = center_y,
-                            x2 = center_x + arm_thickness, y2 = center_y + 25,
+                            x2 = center_x + arm_thickness, y2 = center_y + arm_y,
                             fill = "." }
             end
 
@@ -207,31 +213,31 @@ TAGS:   no_rotate no_vmirror no_hmirror uniq_layout_twisted_delve
                 {make_diamond,        3},
                 {make_square,         2},
                 {make_rounded_square, 1} } )
-            local room_radius = crawl.random_range(4, 7)
+            local room_radius = crawl.random_range(5, 9)
 
             if (i == 1) then
-                fill_area { x1 = center_x - 20, y1 = center_y - arm_thickness,
-                            x2 = center_x,      y2 = center_y + arm_thickness,
+                fill_area { x1 = center_x - room_arm_x, y1 = center_y - arm_thickness,
+                            x2 = center_x,              y2 = center_y + arm_thickness,
                             fill = "." }
-                room_func({x = center_x - 20, y = center_y,
+                room_func({x = center_x - room_arm_x, y = center_y,
                            radius = room_radius, fill = "." })
             elseif (i == 2) then
-                fill_area { x1 = center_x,      y1 = center_y - arm_thickness,
-                            x2 = center_x + 20, y2 = center_y + arm_thickness,
+                fill_area { x1 = center_x,              y1 = center_y - arm_thickness,
+                            x2 = center_x + room_arm_x, y2 = center_y + arm_thickness,
                             fill = "." }
-                room_func({x = center_x + 20, y = center_y,
+                room_func({x = center_x + room_arm_x, y = center_y,
                            radius = room_radius, fill = "." })
             elseif (i == 3) then
-                fill_area { x1 = center_x - arm_thickness, y1 = center_y - 20,
+                fill_area { x1 = center_x - arm_thickness, y1 = center_y - room_arm_y,
                             x2 = center_x + arm_thickness, y2 = center_y,
                             fill = "." }
-                room_func({x = center_x, y = center_y - 20,
+                room_func({x = center_x, y = center_y - room_arm_y,
                            radius = room_radius, fill = "." })
             else
                 fill_area { x1 = center_x - arm_thickness, y1 = center_y,
-                            x2 = center_x + arm_thickness, y2 = center_y + 20,
+                            x2 = center_x + arm_thickness, y2 = center_y + room_arm_y,
                             fill = "." }
-                room_func({x = center_x, y = center_y + 20,
+                room_func({x = center_x, y = center_y + room_arm_y,
                            radius = room_radius, fill = "." })
             end
         end
@@ -280,18 +286,19 @@ ORIENT: encompass
 TAGS:   overwritable layout unrand allow_dup layout_type_narrow_caves
 TAGS:   no_rotate no_vmirror no_hmirror
 {{
-    local MAP_RADIUS = 28
+    local gxm, gym = dgn.max_bounds()
+    local area_scale = (gxm * gym) / (80 * 70)
+    local MAP_RADIUS = math.floor(28 * math.min(gxm / 80, gym / 70))
 
     local ROOM_RADIUS_MIN = 3
-    local ROOM_RADIUS_MAX = 5
-    local room_count      = crawl.random_range(10, 15)
+    local ROOM_RADIUS_MAX = gxm > 80 and 6 or 5
+    local room_count      = math.floor(crawl.random_range(10, 15) * area_scale)
 
-    local DELVE_SIZE_MIN = 50
-    local DELVE_SIZE_MAX = 100
-    local delve_count    = crawl.random_range(15, 20)
-    local delve_sanity   = 1000
+    local DELVE_SIZE_MIN = math.floor(50 * area_scale)
+    local DELVE_SIZE_MAX = math.floor(100 * area_scale)
+    local delve_count    = math.floor(crawl.random_range(15, 20) * (1 + (area_scale - 1) * 0.6))
+    local delve_sanity   = math.floor(1000 * area_scale)
 
-    local gxm, gym = dgn.max_bounds()
     extend_map{width = gxm, height = gym, fill = "X"}
 
     -- this is the area we will use for the map
@@ -508,7 +515,8 @@ TAGS:   no_rotate no_vmirror no_hmirror
     --    1. Add some circles of floor
     --    2. Expand the floor circles using spotty_map
     --    3. Convert the floor to unbreakable wall (later water)
-    for i = 1, crawl.random_range((20 * gym) / dgn.GYM, (30 * gym) / dgn.GYM) do
+    local area_scale = (gxm * gym) / (80 * 70)
+    for i = 1, crawl.random_range(math.floor((20 * gym) / 70), math.floor((30 * gym) / 70)) do
         local x = crawl.random_range(map_x_min, map_x_max)
         local y = crawl.random_range(map_y_min, map_y_max)
         local radius = crawl.random_range(0, 1)
@@ -518,7 +526,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
 
         make_circle ({ x = x, y = y, radius = radius, fill = '.'})
     end
-    local iterations = (crawl.random_range(100, 300) * gym) / dgn.GYM
+    local iterations = math.floor(crawl.random_range(100, 300) * area_scale)
     spotty_map { boxy = false, iterations = iterations }
     subst('. = R')
 
@@ -527,7 +535,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
     local ngb_max = 4
     -- chance of connecting to an adjacent passage
     local connchance = 0
-    local total_count = crawl.random_range(100, 300)
+    local total_count = math.floor(crawl.random_range(100, 300) * area_scale)
     local top = 10
 
     -- Delve the main path and add two sets of stairs.  This

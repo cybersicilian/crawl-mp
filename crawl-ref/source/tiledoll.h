@@ -31,6 +31,8 @@ extern int doll_gender;
 
 void init_player_doll();
 void fill_doll_equipment(dolls_data &result);
+// Build the current hero from native species appearance and actual equipment.
+void fill_player_equipment_doll(dolls_data &result);
 void create_random_doll(dolls_data &result);
 void save_doll_file(writer &dollf);
 

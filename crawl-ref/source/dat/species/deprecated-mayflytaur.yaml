@@ -3,7 +3,7 @@ enum: SP_MAYFLYTAUR
 monster: MONS_BUTTERFLY
 name: Mayflytaur
 short_name: My
-difficulty: False
+difficulty: Advanced
 aptitudes:
   xp: 0
   hp: 2
@@ -60,6 +60,14 @@ mutations:
 fake_mutations:
   - long: You are resistant to damage.
     short: damage resistance
+recommended_jobs:
+  - fighter
+  - gladiator
+  - monk
+  - brigand
+  - skald
+  - summoner
+  - warper
 recommended_weapons:
   - maces and flails
   - polearms

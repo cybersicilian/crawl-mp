@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "mon-abil.h"
 
@@ -1480,7 +1481,7 @@ bool pyrrhic_recollection(monster& nobody)
         }
     }
 
-    nobody.props[NOBODY_RECOVERY_KEY] = you.elapsed_time + (random_range(300, 500));
+    nobody.props[NOBODY_RECOVERY_KEY] = level_elapsed_time(nobody) + (random_range(300, 500));
 
     // Allow Nobody to wake up if you kill them in their sleep
     behaviour_event(&nobody, ME_ALERT);
@@ -1600,7 +1601,7 @@ void activate_tesseracts()
             mark_milestone("tesseract.activate", "activated a tesseract");
             // Tracked on the player instead of the monster so status lookup is quicker.
             you.props[TESSERACT_SPAWN_COUNTER_KEY] = 0;
-            mi->props[TESSERACT_SPAWN_TIMER_KEY] = you.elapsed_time;
+            mi->props[TESSERACT_SPAWN_TIMER_KEY] = level_elapsed_time(**mi);
 
             // Remove patrolling from everything but Orb guardians.
             for (monster_iterator mi2; mi2; ++mi2)
@@ -1640,11 +1641,11 @@ void tesseract_action(monster& mon)
     // off-level at all to prevent it being correct to return to Zot:4 every
     // time you want to rest, and this is hopefully long enough to cover those
     // situations.)
-    if (you.elapsed_time - timer > 5000)
-        timer = you.elapsed_time - 5000;
+    if (level_elapsed_time(mon) - timer > 5000)
+        timer = level_elapsed_time(mon) - 5000;
 
     // Exit early if it's not yet time to spawn things.
-    if (you.elapsed_time < timer)
+    if (level_elapsed_time(mon) < timer)
         return;
 
     // Count number of both tesseract spawns and remaining non-tesseract
@@ -1666,7 +1667,7 @@ void tesseract_action(monster& mon)
 
     // Catch up however many spawns should have happened since the last time
     // we activated.
-    while (you.elapsed_time >= timer && allowed > 0)
+    while (level_elapsed_time(mon) >= timer && allowed > 0)
     {
         // Spawn a monster every ~50 turns.
         timer += random_range(350, 650);

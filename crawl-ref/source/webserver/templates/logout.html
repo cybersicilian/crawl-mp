@@ -1,0 +1,4 @@
+<form id="logout_form" class="site-logout" method="post" action="/logout"{% if not handler.get_cookie('login') %} style="display: none;"{% end %}>
+  {% raw xsrf_form_html() %}
+  <button id="logout_link" type="submit">Log out</button>
+</form>

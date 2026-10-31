@@ -1,0 +1,27 @@
+{
+  "reservationId": "e7673f07-dc11-4ef5-8d0e-180667c7ab4d",
+  "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gateState": {
+      "runId": "e7673f07-dc11-4ef5-8d0e-180667c7ab4d",
+      "owner": "codex/01a15713-daf3-7ae2-b41b-7446c716a1ee",
+      "label": "DCSS sidebar frozen layout and interaction check",
+      "requestedAt": 1792462810.166687,
+      "supervisorPid": 4069,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "0bf2a773a25ac955e7f4d262f2f94ed8405fcbbdb27ffe13ec3492fcdd37bd0f",
+      "startedAt": 1792462810.167058,
+      "workerPid": 4070,
+      "processGroup": 4070,
+      "exitCode": 0,
+      "finishedAt": 1792462812.561696,
+      "supervisedProcessGroupGone": true
+    },
+    "browserFinallyClosed": true,
+    "result": "PASS",
+    "evidencePath": "/tmp/dcss-party-sidebar-proof/evidence.json",
+    "evidenceSha256": "ab9180cd61696ded7eefb76d7358b87b7564e902718a1bc563a6f1bbd4341262"
+  }
+}

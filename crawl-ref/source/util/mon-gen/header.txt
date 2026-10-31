@@ -11,6 +11,13 @@
  * (It'll just be blown away on the next compile.)
  */
 
+#ifndef MONS_PURGY
+#define MONS_PURGY MONS_PARGI
+#endif
+#ifndef TILEP_MONS_PURGY
+#define TILEP_MONS_PURGY TILEP_MONS_PARGI
+#endif
+
 static monsterentry mondata[] =
 {
 
@@ -76,13 +83,11 @@ static monsterentry mondata[] =
     AXED_MON(MONS_VAPOUR, "vapour")
     AXED_MON(MONS_THORN_LOTUS, "thorn lotus")
     AXED_MON(MONS_GIANT_GOLDFISH, "giant goldfish")
-    AXED_MON(MONS_SILVER_STAR, "silver star")
     AXED_MON(MONS_FLAMING_CORPSE, "flaming corpse")
     AXED_MON(MONS_GRIZZLY_BEAR, "grizzly bear")
     AXED_MON(MONS_SPRIGGAN_ENCHANTER, "spriggan enchanter")
     AXED_MON(MONS_PHOENIX, "phoenix")
     AXED_MON(MONS_SHEDU, "shedu")
-    AXED_MON(MONS_PLAGUE_SHAMBLER, "plague shambler")
     AXED_MON(MONS_GIANT_SLUG, "giant slug")
     AXED_MON(MONS_FIREFLY, "firefly")
     AXED_MON(MONS_BROWN_OOZE, "brown ooze")
@@ -148,7 +153,6 @@ static monsterentry mondata[] =
     AXED_MON(MONS_TORTUROUS_DEMONSPAWN, "torturous demonspawn")
     AXED_MON(MONS_LOROCYPROCA, "lorocyproca")
     AXED_MON(MONS_ELECTROFERRIC_VORTEX, "electroferric vortex")
-    AXED_MON(MONS_DEEP_DWARF, "deep dwarf")
     AXED_MON(MONS_ZOMBIE_SMALL, "small zombie")
     AXED_MON(MONS_ZOMBIE_LARGE, "large zombie")
     AXED_MON(MONS_SKELETON_SMALL, "small skeleton")
@@ -158,7 +162,6 @@ static monsterentry mondata[] =
     AXED_MON(MONS_MERGED_SLIME_CREATURE, "merged slime creature")
     AXED_MON(MONS_PSYCHE, "psyche")
     AXED_MON(MONS_GIANT_COCKROACH, "giant cockroach")
-    AXED_MON(MONS_INSUBSTANTIAL_WISP, "insubstantial wisp")
     AXED_MON(MONS_ARMATAUR, "armataur")
 #endif
 

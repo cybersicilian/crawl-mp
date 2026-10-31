@@ -1,0 +1,152 @@
+/* Descriptive notes are part of the character folio, not another setup step. */
+#party_lobby_panel .character-choice-note {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 7px;
+    margin: 2px 0 1px;
+}
+#party_lobby_panel .character-choice-copy {
+    min-height: 30px;
+    margin: 0;
+    color: #78664d;
+    font: 10px/1.5 var(--tt-font-ui);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+#party_lobby_panel .character-choice-details {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 30px;
+    padding: 4px 5px;
+    color: #784b38;
+    border: 1px solid #a8885247;
+    border-radius: 3px;
+    background: #fff9e861;
+    font: 600 9px/1.4 var(--tt-font-ui);
+    cursor: pointer;
+}
+#party_lobby_panel .character-choice-details .tt-icon { width: 16px; height: 16px; }
+#party_lobby_panel .character-choice-details:hover { background: #fffcf1; border-color: #9d7545; }
+#party_lobby_panel .character-choice-details:focus-visible { outline: 2px solid #a47a47; outline-offset: 2px; }
+#party_lobby_panel .character-choice-details:disabled { opacity: .45; cursor: default; }
+/* Guides open as a side sheet in the top layer; the squad screen never reflows. */
+html .character-guide-dialog.character-side-sheet {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(640px, calc(100vw - 24px));
+    height: auto;
+    max-height: none;
+    margin: 0;
+    border-top: 0;
+    border-right: 0;
+    border-left: 4px solid var(--ui-chapter, #713b36);
+    border-radius: 0;
+    box-shadow: -18px 0 60px #0007;
+}
+.character-guide-dialog.character-side-sheet[open] { animation: character-side-sheet-in .18s ease-out; }
+@keyframes character-side-sheet-in { from { transform: translateX(28px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .character-guide-dialog.character-side-sheet[open] { animation: none; } }
+html .character-guide-dialog {
+    box-sizing: border-box;
+    width: min(720px, calc(100vw - 40px));
+    max-width: none;
+    max-height: min(800px, calc(100dvh - 56px));
+    margin: auto;
+    padding: 0;
+    color: #3c342a;
+    background: #f3ecd9;
+    border: 1px solid #b99b6b;
+    border-radius: 5px;
+    box-shadow: 0 22px 90px #0009, inset 0 0 0 4px #fff9e42b;
+    font: 13px/1.65 var(--tt-font-ui);
+    color-scheme: light;
+    overflow: hidden;
+}
+.character-guide-dialog[open] { display: flex; flex-direction: column; }
+.character-guide-dialog *, .character-guide-dialog *::before, .character-guide-dialog *::after { box-sizing: border-box; }
+.character-guide-dialog::backdrop { background: #100e0bc2; backdrop-filter: blur(3px); }
+.character-guide-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 26px 20px;
+    border-bottom: 1px solid #b4966055;
+    background: linear-gradient(90deg, #f7efda, #ece1c6ed 72%, #ece1c6b0),
+        url("assets/dungeon-threshold.png") center 48% / cover;
+}
+.character-guide-crest {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 49px;
+    color: #915f39;
+    border: 1px solid #aa875952;
+    border-radius: 4px 4px 16px 16px;
+    background: #a8814210;
+    flex-shrink: 0;
+}
+.character-guide-crest .tt-icon { width: 16px; height: 16px; }
+.character-guide-heading { min-width: 0; flex: 1; }
+.character-guide-eyebrow { margin: 0 0 4px; color: #94734a; font: 600 10px/1.4 var(--tt-font-ui); text-transform: uppercase; letter-spacing: .13em; }
+.character-guide-dialog h2 { margin: 0; color: #713b36; font: 600 31px/1.15 var(--tt-font-title); font-variant-caps: small-caps; overflow-wrap: anywhere; }
+.character-guide-context { margin: 5px 0 0; color: #817055; font-size: 11px; }
+.character-guide-close { align-self: start; min-height: 34px; padding: 6px 11px; color: #775642; border: 1px solid #a1845b66; border-radius: 3px; background: #fff8e887; font: 600 11px/1.4 var(--tt-font-ui); cursor: pointer; }
+.character-guide-close:hover { background: #fffbf0; border-color: #96713f; }
+.character-guide-tabs { display: flex; flex-shrink: 0; gap: 4px; padding: 11px 24px 0; background: #ece2ca; border-bottom: 1px solid #b79a6647; }
+.character-guide-tabs button { flex: 1; min-width: 0; min-height: 39px; padding: 8px; border: 0; border-bottom: 2px solid transparent; border-radius: 3px 3px 0 0; color: #7b6a4f; background: transparent; font: 500 12px/1.4 var(--tt-font-ui); cursor: pointer; }
+.character-guide-tabs button[aria-selected="true"] { color: #713b36; border-color: #8d5546; background: #f9f2e1; font-weight: 600; }
+.character-guide-body { min-height: 0; padding: 22px 28px 28px; overflow: auto; overscroll-behavior: contain; scrollbar-color: #b59c72 #e7dcc4; }
+.character-guide-dialog :is(button, summary):focus-visible { outline: 2px solid #a47a47; outline-offset: 2px; }
+.character-guide-dialog :is(h2, .character-guide-body):focus { outline: none; }
+.character-guide-description { color: #5d4f3c; font-size: 14px; line-height: 1.75; }
+.character-guide-description p { margin: 0 0 12px; }
+.character-guide-section { margin-top: 22px; }
+.character-guide-section h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 1px solid #ab8c5540; color: #713b36; font: 600 20px/1.3 var(--tt-font-title); font-variant-caps: small-caps; }
+.character-guide-section h3 .tt-icon { width: 16px; height: 16px; color: #947141; }
+.character-guide-list { margin: 0; padding-left: 19px; color: #64533d; }
+.character-guide-list li { padding-left: 3px; margin: 5px 0; }
+.character-guide-list li::marker { color: #a18452; }
+.character-guide-numbers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.character-guide-numbers > div { min-width: 0; padding: 9px 11px; border: 1px solid #ad94603b; border-radius: 3px; background: #fff9e876; }
+.character-guide-numbers dt { display: flex; gap: 6px; align-items: center; color: #817052; font-size: 11px; overflow-wrap: anywhere; }
+.character-guide-numbers dt .tt-icon { width: 16px; height: 16px; }
+.character-guide-numbers dd { margin: 3px 0 0; color: #624936; font: 600 19px/1.3 var(--tt-font-title); font-variant-numeric: tabular-nums; }
+.character-guide-note { color: #867457; font-size: 11px; line-height: 1.6; margin: 10px 0 0; }
+.character-guide-aptitudes { margin-top: 23px; border-top: 1px solid #aa8a5447; padding-top: 14px; }
+.character-guide-aptitudes summary { width: fit-content; cursor: pointer; color: #77513d; font-weight: 600; }
+.character-guide-aptitudes .character-guide-numbers { margin-top: 13px; }
+@media (max-width: 680px) {
+    #party_lobby_panel .character-choice-copy { min-height: 34px; font-size: 11px; }
+    #party_lobby_panel .character-choice-details { min-height: 34px; padding: 5px 8px; font-size: 10px; }
+    html .character-guide-dialog { width: calc(100vw - 20px); max-height: calc(100dvh - 28px); }
+    html .character-guide-dialog.character-side-sheet { width: 100vw; max-height: none; border-left-width: 0; }
+    .character-guide-header { padding: 19px 17px 17px; gap: 10px; }
+    .character-guide-crest { width: 34px; height: 40px; }
+    .character-guide-crest .tt-icon { width: 16px; height: 16px; }
+    .character-guide-dialog h2 { font-size: 27px; }
+    .character-guide-eyebrow { font-size: 9px; }
+    .character-guide-close { padding: 6px 8px; font-size: 10px; }
+    .character-guide-tabs { padding: 8px 12px 0; }
+    .character-guide-tabs button { font-size: 11px; }
+    .character-guide-body { padding: 19px; }
+    .character-guide-description { font-size: 13px; }
+    .character-guide-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .character-guide-section h3 { font-size: 19px; }
+}
+/* Dark page themes: the guide reads from semantic page tokens instead of parchment inks. */
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog { background: var(--ui-page); color: var(--ui-ink); border-color: var(--ui-rule); color-scheme: var(--ui-page-scheme); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-header, .character-guide-tabs) { background: var(--ui-page-inset); border-color: var(--ui-rule); background-image: none; }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(h2, .character-guide-section h3, .character-guide-tabs button[aria-selected="true"]) { color: var(--ui-chapter); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-description, .character-guide-list, .character-guide-numbers dd, .character-guide-close, .character-guide-aptitudes summary) { color: var(--ui-ink); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-eyebrow, .character-guide-context, .character-guide-note, .character-guide-numbers dt, .character-guide-tabs button) { color: var(--ui-quiet); }
+html[data-ui-theme]:not([data-ui-theme="folio"]) .character-guide-dialog :is(.character-guide-tabs button[aria-selected="true"], .character-guide-close, .character-guide-numbers > div, .character-guide-crest) { background: var(--ui-page-raised); border-color: var(--ui-rule); }
+@media (forced-colors: active) {
+    .character-choice-details, .character-guide-dialog, .character-guide-numbers > div { border-color: CanvasText; }
+    .character-guide-tabs button[aria-selected="true"] { border-bottom-color: Highlight; }
+}

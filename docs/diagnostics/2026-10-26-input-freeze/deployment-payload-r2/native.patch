@@ -1,0 +1,28 @@
+--- a/tileweb.cc
++++ b/tileweb.cc
+@@ -1473,6 +1473,25 @@
+         c = _remove_first_character_utf8(m_pending_text_input);
+     }
+ 
++    // A redraw or ignored control packet never leaves the command reader's
++    // inner loop. A tracked request must reach the ordinary command boundary
++    // even when it spends no turn, or the server will retain it forever.
++    // Only finish this packet's token: unrelated view/hover packets must not
++    // acknowledge a command whose key is still buffered.
++    if (activity_id && activity_id->tag == JSON_NUMBER
++        && pending_activity_request
++        && activity_id->number_ == pending_activity_request
++        && mouse_control::current_mode() == MOUSE_MODE_COMMAND
++        && (c == 0 || c == CK_REDRAW))
++    {
++        if (c == CK_REDRAW)
++        {
++            redraw_screen();
++            update_screen();
++        }
++        c = CK_MOUSE_CMD;
++    }
++
+     return c;
+ }
+ 

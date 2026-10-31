@@ -1,0 +1,14 @@
+{
+  "build": "melee",
+  "seed": "2026102701",
+  "exitCode": 124,
+  "timedOut": true,
+  "completed": false,
+  "death": false,
+  "audits": [],
+  "events": [
+    "start melee AC=22 EV=8 SH=12",
+    "turn-limit turn=234 minimumHp=0.40151515151515"
+  ],
+  "nativeSha256": "337d6869498de1d5271edf6f5f06b7a9bb011d848a9997f25dfee3616d44903c"
+}

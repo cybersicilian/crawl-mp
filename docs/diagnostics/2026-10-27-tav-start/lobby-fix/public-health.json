@@ -1,0 +1,20 @@
+{
+  "https://dcss.iancaltabiano.com/healthz": {
+    "status": 200,
+    "body": {
+      "ok": true,
+      "checked_at": "2026-10-27T22:43:41.071614+00:00",
+      "application": true,
+      "disk": true
+    }
+  },
+  "https://dcss.iancaltabiano.com/status/version/": {
+    "status": 200,
+    "body": {
+      "webtiles": "0.33-coop",
+      "tornado": "6.4",
+      "python": "3.12.3",
+      "python_supported": true
+    }
+  }
+}

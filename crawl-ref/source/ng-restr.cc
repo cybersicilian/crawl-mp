@@ -20,11 +20,56 @@
 
 static bool _banned_combination(job_type job, species_type species)
 {
+    // These starts are defined by equipment the character must be able to use.
+    if (job == JOB_FENCER
+        && (species == SP_HYDRA || species == SP_PROTEAN
+            || species == SP_OCTOPODE
+            || species::mutation_level(species, MUT_NO_GRASPING)
+            || species::mutation_level(species, MUT_FORMLESS)
+            || species::mutation_level(species, MUT_NO_ARMOUR)
+            || species::mutation_level(species, MUT_SOFT_EQUIPMENT)
+            || species::mutation_level(species, MUT_CLAWS) >= 3
+            || species::size(species) <= SIZE_LITTLE
+            || species::size(species) >= SIZE_LARGE))
+        return true;
+
+    if ((job == JOB_APOTHECARY || job == JOB_PHILOSOPHER)
+        && (species == SP_KITSUNE
+            || species::mutation_level(species, MUT_FORMLESS)
+            || species::mutation_level(species, MUT_NO_ARMOUR)
+            || species::mutation_level(species, MUT_HORNS) >= 3
+            || species::mutation_level(species, MUT_ANTENNAE) >= 3))
+        return true;
+
+    if (job == JOB_APOTHECARY && species::mutation_level(species, MUT_NO_DRINK))
+        return true;
+
+    if (species == SP_ENT && (job == JOB_SHAPESHIFTER || job == JOB_STALKER))
+        return true;
+
+    // These backgrounds rely on launchers, which hydras cannot wield.
+    if (species == SP_HYDRA && (job == JOB_HUNTER || job == JOB_HEXSLINGER))
+        return true;
+
+    // Proteans begin tiny and cannot change forms. These jobs depend on
+    // launchers or shapeshifting for their starting kit.
+    if (species == SP_PROTEAN
+        && (job == JOB_HUNTER || job == JOB_HEXSLINGER
+            || job == JOB_SHAPESHIFTER || job == JOB_STALKER))
+    {
+        return true;
+    }
+
     if (species::mutation_level(species, MUT_NO_GRASPING)
         && (job == JOB_GLADIATOR
             || job == JOB_BRIGAND
+            || job == JOB_ROGUE
             || job == JOB_HUNTER
-            || job == JOB_HEXSLINGER))
+            || job == JOB_HEXSLINGER
+#if TAG_MAJOR_VERSION == 34
+            || job == JOB_JESTER
+#endif
+            ))
     {
         return true;
     }
@@ -33,7 +78,37 @@ static bool _banned_combination(job_type job, species_type species)
         && (job == JOB_BERSERKER
             || job == JOB_CHAOS_KNIGHT
             || job == JOB_CINDER_ACOLYTE
-            || job == JOB_MONK))
+            || job == JOB_BLOOD_HUNTER
+            || job == JOB_MONK
+            || job == JOB_PALADIN
+            || job == JOB_PREACHER
+            || job == JOB_SAGE
+            || job == JOB_HEALER
+            || job == JOB_HERMIT
+            || job == JOB_SLIME_PRIEST
+#if TAG_MAJOR_VERSION == 34
+            || job == JOB_DEATH_KNIGHT
+            || job == JOB_PRIEST
+            || job == JOB_JESTER
+#endif
+            ))
+    {
+        return true;
+    }
+
+    // Jiyva's starting gifts require a living, mutable body.
+    if (job == JOB_SLIME_PRIEST
+        && (species::is_undead(species) || species::is_nonliving(species)))
+    {
+        return true;
+    }
+
+    if ((job == JOB_PALADIN || job == JOB_PREACHER || job == JOB_HEALER
+#if TAG_MAJOR_VERSION == 34
+         || job == JOB_PRIEST
+#endif
+         )
+        && (species::is_undead(species) || species::is_demonic(species)))
     {
         return true;
     }
@@ -90,13 +165,20 @@ char_choice_restriction weapon_restriction(weapon_type wpn,
 
     // Some special cases:
 
-    if (species::mutation_level(ng.species, MUT_NO_GRASPING) && wpn != WPN_UNARMED)
+    // No weapon fits a Protean until it grows beyond tiny size.
+    if (ng.species == SP_PROTEAN)
+        return wpn == WPN_UNARMED ? CC_UNRESTRICTED : CC_BANNED;
+
+    if ((ng.species == SP_HYDRA
+         || species::mutation_level(ng.species, MUT_NO_GRASPING))
+        && wpn != WPN_UNARMED)
         return CC_BANNED;
 
     if (wpn == WPN_QUARTERSTAFF && ng.job != JOB_GLADIATOR
         && !(ng.job == JOB_FIGHTER
-             // formicids are allowed to have shield + quarterstaff
-             && species::mutation_level(ng.species, MUT_QUADRUMANOUS)))
+             // formicids and ents can use a shield with a quarterstaff
+             && (ng.species == SP_ENT
+                 || species::mutation_level(ng.species, MUT_QUADRUMANOUS))))
     {
         return CC_BANNED;
     }

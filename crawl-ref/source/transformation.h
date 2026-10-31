@@ -23,8 +23,8 @@ enum class transformation
     wisp,
     jelly,
     fungus,
-#if TAG_MAJOR_VERSION == 34
     shadow,
+#if TAG_MAJOR_VERSION == 34
     hydra,
 #endif
     storm,
@@ -49,6 +49,7 @@ enum class transformation
     jademantle,
     hypnogecko,
     mistmane,
+    scorpion,
     COUNT
 };
 constexpr int NUM_TRANSFORMS = static_cast<int>(transformation::COUNT);

@@ -39,6 +39,10 @@ const species_def& get_species_def(species_type species)
 
 namespace species
 {
+bool is_demonic(species_type value)
+{
+    return value == SP_DEMONSPAWN || value == SP_CHAIN_DEVIL;
+}
     /**
      * Return the name of the given species.
      * @param speci       the species to be named.
@@ -133,7 +137,11 @@ namespace species
 
     bool is_elven(species_type species)
     {
-        return species == SP_DEEP_ELF;
+        return species == SP_DEEP_ELF || species == SP_HIGH_ELF
+#if TAG_MAJOR_VERSION == 34
+            || species == SP_SLUDGE_ELF
+#endif
+            ;
     }
 
     bool is_undead(species_type species)
@@ -183,6 +191,10 @@ namespace species
         {
             case SP_RED_DRACONIAN:
                 return "fiery red";
+#if TAG_MAJOR_VERSION == 34
+            case SP_MOTTLED_DRACONIAN:
+                return "weird mottled";
+#endif
             case SP_WHITE_DRACONIAN:
                 return "icy white";
             case SP_GREEN_DRACONIAN:
@@ -223,6 +235,9 @@ namespace species
         case SP_PALE_DRACONIAN:
             return MONS_STEAM_DRAGON;
         case SP_RED_DRACONIAN:
+#if TAG_MAJOR_VERSION == 34
+        case SP_MOTTLED_DRACONIAN:
+#endif
             return MONS_FIRE_DRAGON;
         default:
             return MONS_GOLDEN_DRAGON;
@@ -234,7 +249,11 @@ namespace species
         switch (species)
         {
         case SP_GREEN_DRACONIAN:   return ABIL_NOXIOUS_BREATH;
-        case SP_RED_DRACONIAN:     return ABIL_COMBUSTION_BREATH;
+        case SP_RED_DRACONIAN:
+#if TAG_MAJOR_VERSION == 34
+        case SP_MOTTLED_DRACONIAN:
+#endif
+            return ABIL_COMBUSTION_BREATH;
         case SP_WHITE_DRACONIAN:   return ABIL_GLACIAL_BREATH;
         case SP_YELLOW_DRACONIAN:  return ABIL_CAUSTIC_BREATH;
         case SP_BLACK_DRACONIAN:   return ABIL_GALVANIC_BREATH;
@@ -313,12 +332,13 @@ namespace species
     bool is_nonliving(species_type species)
     {
         // XXX: move to data?
-        return species == SP_GARGOYLE || species == SP_DJINNI;
+        return species == SP_GARGOYLE || species == SP_DJINNI
+               || species == SP_AUTOMATON;
     }
 
     bool is_plant(species_type species)
     {
-        return species == SP_VINE_STALKER;
+        return species == SP_VINE_STALKER || species == SP_ENT;
     }
 
     bool can_swim(species_type species)
@@ -482,6 +502,8 @@ namespace species
             return adj ? "ectoplasmic" : "ectoplasm";
         else if (species == SP_REVENANT)
             return adj ? "bony" : "bones";
+        else if (species == SP_OOZLE)
+            return adj ? "gelatinous" : "gel";
         else
             return adj ? "fleshy" : "skin";
     }
@@ -494,6 +516,8 @@ namespace species
             return "leg";
         else if (species == SP_POLTERGEIST)
             return "tendril";
+        else if (species == SP_OOZLE)
+            return "pseudopod";
         else
             return "arm";
     }
@@ -507,10 +531,16 @@ namespace species
             return "tentacle";
         else if (mutation_level(species, MUT_CLAWS))
             return "claw"; // overridden for felids by first check
+        else if (species == SP_HYDRA)
+            return "neck";
+        else if (species == SP_HERMIT_CRAB)
+            return "claw";
         else if (species == SP_COGLIN)
             return "grasper";
         else if (species == SP_POLTERGEIST)
             return "tendril";
+        else if (species == SP_OOZLE)
+            return "pseudopod";
         else
             return "hand";
     }
@@ -594,10 +624,6 @@ namespace species
 
     bool is_removed(species_type species)
     {
-    #if TAG_MAJOR_VERSION == 34
-        if (species == SP_MOTTLED_DRACONIAN)
-            return true;
-    #endif
         // all other derived Dr are ok and don't have recommended jobs
         if (is_draconian(species))
             return false;

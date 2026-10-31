@@ -6,6 +6,8 @@
 #include "AppHdr.h"
 
 #include "startup.h"
+#include "account-start.h"
+#include "character-preview.h"
 
 #include "abyss.h"
 #include "arena.h"
@@ -20,6 +22,7 @@
 #include "end.h"
 #include "exclude.h"
 #include "files.h"
+#include "game-record.h"
 #include "god-abil.h"
 #include "god-passive.h"
 #include "hints.h"
@@ -42,6 +45,7 @@
 #include "ng-setup.h"
 #include "notes.h"
 #include "output.h"
+#include "party.h"
 #include "player-save-info.h"
 #include "shopping.h"
 #include "skills.h"
@@ -145,6 +149,15 @@ static void _initialize()
 #ifdef DEBUG
     validate_spellbooks();
 #endif
+
+    // Character inspection needs the initialized engine, but no dungeon,
+    // records, or persistent player package.
+    if (!crawl_state.character_preview.empty())
+    {
+        dgn_reset_level();
+        fprintf(stdout, "%s\n", character_preview_json(crawl_state.character_preview).c_str());
+        end(0, false);
+    }
 
     // Read special levels and vaults.
     _loading_message("Loading maps...");
@@ -271,13 +284,20 @@ static void _post_init(bool newc)
     macro_init();
 
     crawl_state.need_save = crawl_state.game_started = true;
+    game_record::game_id();
     crawl_state.last_type = crawl_state.type;
     crawl_state.marked_as_won = false;
 
     destroy_abyss();
 
-    calc_hp();
-    calc_mp();
+    // Maximum HP is derived rather than serialized. Rebuild each hero's
+    // resource limits after loading, not only the active player's caches.
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        party::scoped_player_context context(slot);
+        calc_hp();
+        calc_mp();
+    }
     shopping_list.refresh();
     populate_sets_by_obj_type();
 
@@ -314,6 +334,9 @@ static void _post_init(bool newc)
                you.entering_level ? LOAD_ENTER_LEVEL :
                newc               ? LOAD_START_GAME : LOAD_RESTART_GAME,
                old_level);
+
+    if (newc)
+        account_start::place_features();
 
 #ifdef WIZARD
     // Save-less games are pointless except for tests.
@@ -364,7 +387,7 @@ static void _post_init(bool newc)
     init_monster_symbols();
 
 #ifdef USE_TILE
-    if (newc)
+    if (newc && !party::starting_member(0).starting_seed)
         randomize_doll_base();
     init_player_doll();
 
@@ -418,9 +441,13 @@ static void _post_init(bool newc)
 
 #ifndef DGAMELAUNCH
 
+static constexpr int MENU_ID_PARTY_2P = -102;
+static constexpr int MENU_ID_PARTY_3P = -103;
+static constexpr int MENU_ID_PARTY_4P = -104;
+
 struct game_modes_menu_item
 {
-    game_type id;
+    int id;
     const char *label;
     const char *description;
 };
@@ -430,6 +457,13 @@ static const vector<game_modes_menu_item> entries =
     {GAME_TYPE_NORMAL, "Dungeon Crawl",
         "Dungeon Crawl: The main game: full of monsters, items, "
         "gods and danger!" },
+    {MENU_ID_PARTY_2P, "Co-op Party (2 Players)",
+        "Start a 2-Player Co-op Party run with Dynamic Hybrid turns, "
+        "Shared Vision, and Clutch-to-Revive!" },
+    {MENU_ID_PARTY_3P, "Co-op Party (3 Players)",
+        "Start a 3-Player Co-op Party run with your friends!" },
+    {MENU_ID_PARTY_4P, "Co-op Party (4 Players)",
+        "Start a full 4-Player Co-op Party expedition into the Dungeon!" },
     {GAME_TYPE_CUSTOM_SEED, "Choose Game Seed",
         "Play with a chosen custom dungeon seed." },
     {GAME_TYPE_TUTORIAL, "Tutorial for Dungeon Crawl",
@@ -462,13 +496,17 @@ static void _construct_game_modes_menu(shared_ptr<OuterMenu>& container)
         auto hbox = make_shared<Box>(Box::HORZ);
         hbox->set_cross_alignment(Widget::Align::CENTER);
         auto tile = make_shared<Image>();
-        tile->set_tile(tile_def(tileidx_gametype(entry.id)));
+        const game_type tile_gt = entry.id < 0
+            ? GAME_TYPE_NORMAL
+            : static_cast<game_type>(entry.id);
+        tile->set_tile(tile_def(tileidx_gametype(tile_gt)));
         tile->set_margin_for_sdl(0, 6, 0, 0);
         hbox->add_child(std::move(tile));
         hbox->add_child(label);
 #endif
 
-        label->set_text(formatted_string(entry.label, WHITE));
+        const COLOURS label_col = entry.id < 0 ? LIGHTCYAN : WHITE;
+        label->set_text(formatted_string(entry.label, label_col));
 
         auto btn = make_shared<MenuButton>();
 #ifdef USE_TILE_LOCAL
@@ -744,6 +782,9 @@ private:
         selected_game_type = btn.id;
         switch (selected_game_type)
         {
+        case MENU_ID_PARTY_2P:
+        case MENU_ID_PARTY_3P:
+        case MENU_ID_PARTY_4P:
         case GAME_TYPE_NORMAL:
         case GAME_TYPE_DESCENT:
         case GAME_TYPE_CUSTOM_SEED:
@@ -925,6 +966,21 @@ void UIStartupMenu::menu_item_activated(int id)
 {
     switch (id)
     {
+    case MENU_ID_PARTY_2P:
+    case MENU_ID_PARTY_3P:
+    case MENU_ID_PARTY_4P:
+        trim_string(input_string);
+        if (is_good_name(input_string, true))
+        {
+            const int party_cnt = (id == MENU_ID_PARTY_4P) ? 4
+                                : (id == MENU_ID_PARTY_3P) ? 3 : 2;
+            party::set_player_count(party_cnt);
+            ng_choice.type = GAME_TYPE_NORMAL;
+            ng_choice.name = input_string;
+            done = true;
+        }
+        return;
+
     case GAME_TYPE_NORMAL:
     case GAME_TYPE_DESCENT:
     case GAME_TYPE_CUSTOM_SEED:
@@ -1102,6 +1158,23 @@ bool startup_step()
     newgame_def ng;
     if (choice.filename.empty() && !choice.name.empty())
         choice.filename = get_save_filename(choice.name);
+
+    // Co-op party quickstart: skip character creation entirely. Anything the
+    // rcfile (or the lobby room, which writes the rcfile) didn't specify is
+    // filled with a random viable choice instead of showing the menus.
+    if (party::is_enabled()
+        && (choice.type == GAME_TYPE_NORMAL
+            || choice.type == GAME_TYPE_DESCENT)
+        && choice.allowed_combos.empty())
+    {
+        if (choice.species == SP_UNKNOWN && choice.allowed_species.empty())
+            choice.species = SP_VIABLE;
+        if (choice.job == JOB_UNKNOWN && choice.allowed_jobs.empty())
+            choice.job = JOB_VIABLE;
+        if (choice.weapon == WPN_UNKNOWN && choice.allowed_weapons.empty())
+            choice.weapon = WPN_VIABLE;
+        choice.fully_random = false;
+    }
 
     if (save_exists(choice.filename) && restore_game(choice.filename))
         save_player_name();

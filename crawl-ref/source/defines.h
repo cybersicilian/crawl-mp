@@ -46,7 +46,7 @@ const int MAX_GHOSTS = 127;
 
 enum extra_monster_index_type
 {
-    MAX_MONSTERS = 700,                  // max size of monster array {dlb}
+    MAX_MONSTERS = 1500,                 // max size of monster array {dlb}
     ANON_FRIENDLY_MONSTER = MAX_MONSTERS,// unknown/dead ally, for actor blaming
     YOU_FAULTLESS,                       // full xp but no penalty (reflection)
     NON_MONSTER  = 27000,                // no monster
@@ -65,7 +65,7 @@ enum extra_monster_index_type
 #define MAX_SUBTYPES   64
 
 // max size of item list {dlb}:
-#define MAX_ITEMS 2000
+#define MAX_ITEMS 4000
 // non-item -- (ITEMS + 1) {dlb}
 #define NON_ITEM 27000
 #define ITEM_IN_INVENTORY (coord_def(-1, -1))
@@ -80,13 +80,13 @@ COMPILE_CHECK(ITEM_IN_SHOP > NON_ITEM + MAX_MONSTERS);
 #endif
 
 // max x-bound for level generation {dlb}
-#define GXM 80
+#define GXM 120
 // max y-bound for level generation {dlb}
-#define GYM 70
+#define GYM 104
 
 const int INFINITE_DISTANCE = 30000;
 // max distance on a map
-#define GDM 105
+#define GDM 160
 
 // this is the size of the border around the playing area (see in_bounds())
 #define BOUNDARY_BORDER         1

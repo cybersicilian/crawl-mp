@@ -5,6 +5,7 @@
 **/
 
 #include "AppHdr.h"
+#include "oozle-memory-effects.h"
 
 #include "act-iter.h"
 #include "areas.h"
@@ -639,14 +640,7 @@ void seen_monster(monster* mons, bool do_encounter_message)
 
     if (you.unrand_equipped(UNRAND_WYRMBANE))
     {
-        const item_def *wyrmbane = nullptr;
-        const item_def *wpn = you.weapon();
-        const item_def *offhand_wpn = you.offhand_weapon();
-
-        if (wpn && wpn->unrand_idx == UNRAND_WYRMBANE)
-            wyrmbane = wpn;
-        else if (offhand_wpn && offhand_wpn->unrand_idx == UNRAND_WYRMBANE)
-            wyrmbane = offhand_wpn;
+        const item_def *wyrmbane = oozle::unrand_source(UNRAND_WYRMBANE);
 
         if (wyrmbane && mons->dragon_level() > wyrmbane->plus)
             mpr("<green>Wyrmbane glows as a worthy foe approaches.</green>");

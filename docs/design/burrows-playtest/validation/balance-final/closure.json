@@ -1,0 +1,24 @@
+{
+  "reservationId": "51769731-3d14-4d78-a940-d04e4672eba2",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "51769731-3d14-4d78-a940-d04e4672eba2",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS final calibrated economy and full native route playtests",
+      "requestedAt": 1793156278.4834769,
+      "supervisorPid": 94608,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "b2e29df7ef65dd56b44f0cca1cb201e0ed3f4a784bfa6d43f95d62b54d7cc38b",
+      "startedAt": 1793156278.483775,
+      "workerPid": 94609,
+      "processGroup": 94609,
+      "exitCode": -2,
+      "finishedAt": 1793156806.570435,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "b2e29df7ef65dd56b44f0cca1cb201e0ed3f4a784bfa6d43f95d62b54d7cc38b"
+  }
+}

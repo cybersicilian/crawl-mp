@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "timed-effects.h"
 
@@ -42,6 +43,7 @@
 #include "mon-project.h"
 #include "mutation.h"
 #include "notes.h"
+#include "party.h"
 #include "player.h"
 #include "player-notices.h"
 #include "player-stats.h"
@@ -168,7 +170,10 @@ static void _abyss_speed(int /*time_delta*/)
 
 static void _jiyva_effects(int /*time_delta*/)
 {
-    if (have_passive(passive_t::jellies_army) && one_chance_in(10))
+    const bool has_army = party::is_enabled()
+        ? party::any_party_member_on_floor_has_passive(passive_t::jellies_army)
+        : have_passive(passive_t::jellies_army);
+    if (has_army && one_chance_in(10))
     {
         int total_jellies = 1 + random2(5);
         bool success = false;
@@ -199,7 +204,7 @@ static void _jiyva_effects(int /*time_delta*/)
             switch (random2(3))
             {
                 case 0:
-                    simple_god_message(" gurgles merrily.");
+                    simple_god_message(" gurgles merrily.", false, GOD_JIYVA);
                     break;
                 case 1:
                     mprf(MSGCH_SOUND, "You hear %s splatter%s.",
@@ -207,14 +212,34 @@ static void _jiyva_effects(int /*time_delta*/)
                          total_jellies > 1 ? "s" : "");
                     break;
                 case 2:
-                    simple_god_message(" says: Divide and consume!");
+                    simple_god_message(" says: Divide and consume!", false, GOD_JIYVA);
                     break;
             }
         }
     }
 
-    if (have_passive(passive_t::jelly_eating) && one_chance_in(25))
-        jiyva_eat_offlevel_items();
+    const bool has_eating = party::is_enabled()
+        ? party::any_party_member_on_floor_has_passive(passive_t::jelly_eating)
+        : have_passive(passive_t::jelly_eating);
+    if (has_eating && one_chance_in(25))
+    {
+        if (party::is_enabled() && !have_passive(passive_t::jelly_eating))
+        {
+            for (int i = 0; i < party::player_count(); ++i)
+            {
+                if (!party::slot_is_alive(i) || !party::slot_is_on_current_floor(i))
+                    continue;
+                party::scoped_player_context ctx(i);
+                if (have_passive(passive_t::jelly_eating))
+                {
+                    jiyva_eat_offlevel_items();
+                    break;
+                }
+            }
+        }
+        else
+            jiyva_eat_offlevel_items();
+    }
 }
 
 static void _evolve(int /*time_delta*/)
@@ -421,10 +446,10 @@ static struct timed_effect timed_effects[] =
 };
 
 // Do various time related actions...
-void handle_time()
+void handle_time(int world_delta)
 {
-    int base_time = you.elapsed_time % 200;
-    int old_time = base_time - you.time_taken;
+    int base_time = level_elapsed_time() % 200;
+    int old_time = base_time - (world_delta < 0 ? you.time_taken : world_delta);
 
     // The checks below assume the function is called at least
     // once every 50 elapsed time units.
@@ -921,6 +946,8 @@ void timeout_terrain_changes(int duration, bool force)
     {
         map_terrain_change_marker *marker =
                 dynamic_cast<map_terrain_change_marker*>(mark);
+        if (!force && !party::position_in_active_region(marker->pos))
+            continue;
 
         actor* src = actor_by_mid(marker->source_mid);
 
@@ -956,10 +983,12 @@ void timeout_terrain_changes(int duration, bool force)
             continue;
         }
 
-        if ((marker->source_mid == MID_PLAYER
+        if (((marker->source_mid == MID_PLAYER
              && (marker->change_type == TERRAIN_CHANGE_BOG
                  || marker->change_type == TERRAIN_CHANGE_BINDING_SIGIL
                  || marker->change_type == TERRAIN_CHANGE_ICE_THORNS))
+             || (marker->source_mid == you.mid
+                 && marker->change_type == TERRAIN_CHANGE_AUTOMATON_BOG))
             && !you.see_cell(marker->pos))
         {
             marker->duration = 0;
@@ -1092,13 +1121,18 @@ void run_environment_effects()
             nsels += random2(nsels * 3);
 
         for (int i = 0; i < nsels; ++i)
-            apply_environment_effect(sfx_seeds[ random2(nseeds) ]);
+        {
+            const coord_def pos = sfx_seeds[random2(nseeds)];
+            if (party::position_in_active_region(pos))
+                apply_environment_effect(pos);
+        }
     }
     else
     {
         for (int i = 0; i < nseeds; ++i)
         {
-            if (random2(100) >= sfx_chance)
+            if (!party::position_in_active_region(sfx_seeds[i])
+                || random2(100) >= sfx_chance)
                 continue;
 
             apply_environment_effect(sfx_seeds[i]);
@@ -1108,6 +1142,8 @@ void run_environment_effects()
     // If any mould patches have become unoccupied, schedule a new fungus spawning.
     for (const coord_def& pos : mould_patches)
     {
+        if (!party::position_in_active_region(pos))
+            continue;
         if (env.grid(pos) != DNGN_MOULD_PATCH)
             continue;
 
@@ -1238,9 +1274,14 @@ bool map_active_feature_marker::run_spike_launcher(int time)
         {
             if (actor* targ = actor_at(*ai))
             {
+                const monster* mon = targ->as_monster();
                 if (!act->see_cell_no_trans(*ai)
                     || mons_atts_aligned(attitude, targ->attitude())
-                    || targ->is_firewood())
+                    || targ->is_firewood()
+                    || (automatic_spike()
+                        && (targ->is_player()
+                            || (mon && (party::is_proxy_monster(*mon)
+                                        || mon->wont_attack() || mon->neutral())))))
                 {
                     continue;
                 }
@@ -1253,7 +1294,7 @@ bool map_active_feature_marker::run_spike_launcher(int time)
             break;
         }
 
-        _fire_spike_launcher(targets.at(random2(targets.size())), act, pos, power);
+        _fire_spike_launcher(targets.at(random2(targets.size())), act, pos, spike_power());
         action_timer += BASELINE_DELAY;
     }
 

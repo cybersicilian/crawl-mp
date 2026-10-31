@@ -278,7 +278,26 @@ void mons_update_aura(const monster& mon)
     _update_aura(aura, mon.pos(), mon.mid, mon.attitude());
 }
 
-static const aura_data AURA_OF_VIGOR = {ENCH_DOUBLED_VIGOUR, 1, false};
+#include "party.h"
+
+static const aura_data AURA_OF_VIGOR =
+{
+    ENCH_DOUBLED_VIGOUR, 1, false, NUM_DURATIONS, "",
+    [](const actor& targ, mid_t)
+    {
+        if (party::is_enabled() && targ.is_monster()
+            && party::is_proxy_monster(*targ.as_monster()))
+        {
+            const int slot = party::proxy_slot(*targ.as_monster());
+            if (slot >= 0)
+            {
+                return party::are_gods_concordant(
+                    you.religion, party::get_player(slot).religion);
+            }
+        }
+        return true;
+    }
+};
 
 void player_update_auras()
 {

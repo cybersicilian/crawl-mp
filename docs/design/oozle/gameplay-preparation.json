@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-19T19:26:00.046753+00:00",
+  "status": "prepared_not_native_executed",
+  "checks": {
+    "javascriptSyntax": "passed",
+    "pythonAST": "passed",
+    "webFileUnder600Lines": true,
+    "compatibleNative4OozleInputs": "all matched"
+  },
+  "inputs": {
+    "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/tests/oozle-gameplay-native.cjs": "62740f2b6253818fda7b1a41ea91c3819410f26d624d37a3466e24a559dc920e",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/oozle/run_native_acceptance.py": "ba371b71914dd9ff72f8316c003cd849ebf69e67992e062f1bc88033630111f4",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/oozle/phase_processes.py": "01c3461470c1be3f17bd9cdcda7949302dd4b6745bd11713a8acfa73bafcb3a4"
+  },
+  "heartbeat": "finish-oozle-native-gameplay-acceptance",
+  "nativeGameplayPassed": false,
+  "gateReservationOwned": false,
+  "producerBuildFailure": {
+    "requestId": "7a0eb5a789df636aba705ee9926d900b2a7760a09b6ebbf531ca3171aed12f67",
+    "reason": "Isolated source snapshot lacks util/release_ver. gen_ver.pl does not consume the Makefile SRC_VERSION override. Native4 compiled the corrected Oozle UI and species tests successfully, then failed its build.h prerequisite before linking.",
+    "repair": "The producing owner needs a fresh bound build phase with util/release_ver in its owned snapshot, using the bound canonical version. Preserve native4 artifacts.",
+    "successorPolicy": "A later successful compatible build may replace native4 after verifying the Oozle inputs and binding its binary and matching assets."
+  }
+}

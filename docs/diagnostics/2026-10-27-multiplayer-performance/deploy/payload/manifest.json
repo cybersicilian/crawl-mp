@@ -1,0 +1,39 @@
+{
+  "baseline": {
+    "current": "/opt/dcss/releases/input-completion-01a17b3b-r2",
+    "previous": "/opt/dcss/releases/20261026T223529Z-elf3-fix-r6",
+    "hashes": {
+      "crawl": "9ef564707993b7f23aa55d34bd46d306a1d8f99196e485ad8508d882ec973ad8",
+      "webserver/webtiles/player_stream.py": "5cf6a8ae9353578274927399027bc4b8ea2fd797559bd7f9b9e8b2d74b7039bd",
+      "webserver/webtiles/state_transport.py": "e149cc7681d6b8fef4a29a9713fdbbd23951e1eae0c5054a7fd46b4f51a19e15",
+      "webserver/webtiles/map_snapshot.py": "edc37dcee5f9af4a4c107e4b9cc0f60e262661962193a3556df222b5ae574ee4",
+      "webserver/webtiles/party_control.py": "5aa8635ddc43049c1f5cbf5bd5ebfd8f722901355129e47c353e94603aed8ce4",
+      "webserver/webtiles/activity_pump.py": "3a9d5aaede43d17930dc234201af4eba5c802c73ea797b697ba28862336b1961",
+      "webserver/webtiles/process_handler.py": "e464c961d0cf644c75e39522af8203551d296221fb95fac2153e0d3edbf545e6",
+      "webserver/webtiles/ws_handler.py": "d1c85282588e8683dc789a677b61f10ddecff2898c1e2a9fa243f1f851bd5580",
+      "webserver/game_data/static/player.js": "bde04d3c4cf2ebc3197001ccc4bf5021d75b085963c90a4f9185e3af48393ec1",
+      "webserver/static/scripts/state-stream.js": "97b5c392f720d9c052d02a1163541291eabb1b19a62aa8ba27949d91937644fa"
+    },
+    "state_links": {
+      "rcs": "/var/lib/dcss/rcs",
+      "saves": "/var/lib/dcss/saves"
+    },
+    "service": "active",
+    "native_processes": []
+  },
+  "files": {
+    "before/player_stream.py": "5cf6a8ae9353578274927399027bc4b8ea2fd797559bd7f9b9e8b2d74b7039bd",
+    "crawl-ref/source/webserver/tests/native-command-completion.py": "824278146a927bbbb41c14f7a06b3545a40172dd19e43cfb060c37c7108cb99b",
+    "crawl-ref/source/webserver/webtiles/player_stream.py": "a7c2382667ffb608403157f843816f7ba6d8b965726af3314ae896ea6313b940",
+    "crawl-ref/source/webserver/webtiles/player_stream.py.orig": "5cf6a8ae9353578274927399027bc4b8ea2fd797559bd7f9b9e8b2d74b7039bd",
+    "crawl-ref/source/webserver/webtiles/player_update.py": "e66fd391d534bdf38ca5273168253df6bcdd2d68676ea2791dec32887135952e",
+    "crawl-ref/source/webserver/webtiles/state_transport.py": "c45a3364e3c63ea92c1499ebd8fe5f65e732ce4a97a41f4110a8e1bfc4fd3768",
+    "deploy_performance.py": "fb5b5ae85323064c05e9780f33e108ca75f26258c8ff3ed7915ab9b2ff00d7b3",
+    "deployment_core.py": "64511a249cb6f1c6d995b9a8f01e04b86ecc82e2ca4b91731c067e13de646f1e",
+    "native_transport_probe.py": "eae0caf84809df91307933e2fdd5bca8afe35c6cd199a78476773bfc65571be3",
+    "tests/map_snapshot_test.py": "dd7b5c9742850656d7b4c66a7592208dd95bd10a23dbd53766b62aa435a97614",
+    "tests/player_update_test.py": "fa0421bc77645e59f7c9b7bdd6c010a5035763c5e040055c06a2c369f58621cc",
+    "tests/state_transport_test.py": "fdcef9b3dd81ce7c4b3d08de17af7c9f24014aa1b85319108d3dca0d47ff070d",
+    "tests/stream_performance_test.py": "e43a1fc98e805ce7f3cde816dd1f0a997a4a464d39c7ff7f8d1c4845f3218b07"
+  }
+}

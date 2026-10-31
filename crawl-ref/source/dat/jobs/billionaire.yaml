@@ -1,0 +1,17 @@
+enum: JOB_BILLIONAIRE
+name: Billionaire
+short_name: Bi
+category: Adventurer
+category_priority: 70
+str: 4
+int: 4
+dex: 4
+equipment:
+  - "robe"
+recommended_species:
+  - troll
+  - human
+skills:
+  stealth: 1
+  dodging: 4
+create_enum: false

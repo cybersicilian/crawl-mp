@@ -1,0 +1,161 @@
+--- a/crawl-ref/source/branch-population.h
++++ b/crawl-ref/source/branch-population.h
+@@ -15,8 +15,8 @@
+ inline const std::array<branch_population_profile, 3>& branch_population_profiles()
+ {
+     static const std::array<branch_population_profile, 3> profiles = {{
+-        { BRANCH_BURROWS, {22, 22, 22, 44} },
+-        { BRANCH_WORMLANDS, {14, 18, 24, 26} },
++        { BRANCH_BURROWS, {19, 20, 20, 44} },
++        { BRANCH_WORMLANDS, {14, 20, 26, 36} },
+         { BRANCH_HIVE, {26, 38} },
+     }};
+     return profiles;
+--- a/crawl-ref/source/catch2-tests/test_burrows.cc
++++ b/crawl-ref/source/catch2-tests/test_burrows.cc
+@@ -344,3 +344,16 @@
+     CHECK(restored.quantity == 1);
+     CHECK_FALSE(input.valid());
+ }
++
++TEST_CASE("Regional populations separate overlapping late threats", "[burrows][encounters]")
++{
++    for (monster_type type : {MONS_DEEP_TROLL_SHAMAN, MONS_DEEP_TROLL_EARTH_MAGE,
++                              MONS_GREAT_ORB_OF_EYES})
++        CHECK_FALSE(monster_in_population(BRANCH_WORMLANDS, type, false));
++    CHECK(monster_probability(level_id(BRANCH_BURROWS,1), MONS_BOULDER_BEETLE)==0);
++    CHECK(monster_probability(level_id(BRANCH_BURROWS,2), MONS_BOULDER_BEETLE)>0);
++    CHECK(monster_probability(level_id(BRANCH_WORMLANDS,2), MONS_DEATHCAP)==0);
++    CHECK(monster_probability(level_id(BRANCH_WORMLANDS,3), MONS_DEATHCAP)>0);
++    CHECK(monster_in_population(BRANCH_WORMLANDS, MONS_WANDERING_MUSHROOM));
++    CHECK(monster_in_population(BRANCH_DEPTHS, MONS_DEEP_TROLL_SHAMAN));
++}
+--- a/crawl-ref/source/dat/dlua/layout/chamber_graph.lua
++++ b/crawl-ref/source/dat/dlua/layout/chamber_graph.lua
+@@ -135,3 +135,19 @@
+     end
+     return ordered_nodes(nodes,edges)
+ end
++
++-- Keep initial stair rooms readable using native placement masks. Monsters can
++-- enter them normally after generation; these flags create no combat sanctuary.
++function chamber_graph.reserve_arrivals(e, nodes, radius)
++    e.kfeat('e = floor')
++    e.kmask('e{([ = no_monster_gen')
++    e.kmask('e{([ = no_trap_gen')
++    for i=1,3 do
++        local node=nodes[i]
++        for dx=-radius,radius do for dy=-radius,radius do
++            if e.mapgrd[node.x+dx][node.y+dy]=='.' then
++                e.mapgrd[node.x+dx][node.y+dy]='e'
++            end
++        end end
++    end
++end
+--- a/crawl-ref/source/dat/dlua/layout/hive.lua
++++ b/crawl-ref/source/dat/dlua/layout/hive.lua
+@@ -52,6 +52,7 @@
+     e.make_circle { x=flight.x,y=flight.y,radius=hollow and 7 or 5,fill='.' }
+     honey_pools(e,nodes)
+     if ending then
++        chamber_graph.reserve_arrivals(e,nodes,3)
+         for i, stair in ipairs({'{','(','['}) do
+             e.mapgrd[nodes[i].x][nodes[i].y] = stair
+         end
+--- a/crawl-ref/source/dat/dlua/layout/wormlands.lua
++++ b/crawl-ref/source/dat/dlua/layout/wormlands.lua
+@@ -29,6 +29,7 @@
+ -- Ending roles use graph distance, not a row/column position in a fixed grid.
+ function wormlands_ending(e, cache_offset)
+     local nodes = wormlands_layout(e)
++    chamber_graph.reserve_arrivals(e,nodes,4)
+     for i, stair in ipairs({'{','(','['}) do
+         e.mapgrd[nodes[i].x][nodes[i].y] = stair
+     end
+--- a/crawl-ref/source/dat/mons/burrowing-beast.yaml
++++ b/crawl-ref/source/dat/mons/burrowing-beast.yaml
+@@ -1,7 +1,7 @@
+ name: "burrowing beast"
+ glyph: {char: "a", colour: lightgray}
+ flags: [warm_blood, burrows]
+-exp: 600
++exp: 700
+ will: 40
+ attacks:
+  - {type: bite, damage: 28}
+--- a/crawl-ref/source/dat/mons/crag-boar.yaml
++++ b/crawl-ref/source/dat/mons/crag-boar.yaml
+@@ -1,7 +1,7 @@
+ name: "crag boar"
+ glyph: {char: "a", colour: brown}
+ flags: [warm_blood]
+-exp: 550
++exp: 700
+ genus: hog
+ will: 40
+ attacks:
+--- a/crawl-ref/source/mon-pick-data.h
++++ b/crawl-ref/source/mon-pick-data.h
+@@ -1234,34 +1234,31 @@
+   {  1,  4,  950, RISE, MONS_SHALE_DRAKE },
+   {  1,  4,  650, RISE, MONS_DEEP_TROLL_DELVER },
+   {  1,  2,  350, FALL, MONS_KOMODO_DRAGON },
+-  {  1,  4,  200, FLAT, MONS_BOULDER_BEETLE },
++  {  2,  4,  200, FLAT, MONS_BOULDER_BEETLE },
+   {  2,  4,  175, SEMI, MONS_EARTH_ELEMENTAL },
+ },
+-{ // Wormlands: worm galleries interspersed with dangerous fungal groves.
++{ // Wormlands: sustained damage and fungal positioning; support bands stay in vaults.
+   {  1,  4, 1000, FLAT, MONS_GALLERY_WORM },
+-  {  1,  4,  800, FLAT, MONS_COIL_WORM },
+-  {  2,  4,  300, FLAT, MONS_CAUSTIC_WORM },
+-  {  1,  4,  700, FALL, MONS_WANDERING_MUSHROOM },
+-  {  2,  4,  600, RISE, MONS_DEATHCAP },
++  {  1,  4,  650, FLAT, MONS_COIL_WORM },
++  {  2,  4,  180, FLAT, MONS_CAUSTIC_WORM },
++  {  1,  4,  900, FLAT, MONS_WANDERING_MUSHROOM },
++  {  3,  4,  250, RISE, MONS_DEATHCAP },
+   {  1,  3,  250, FALL, MONS_DEEP_TROLL_DELVER },
+-  {  1,  4,  150, FLAT, MONS_DEEP_TROLL },
+-  {  1,  3,  200, FALL, MONS_LINDWURM },
++  {  1,  4,  250, FLAT, MONS_DEEP_TROLL },
++  {  1,  4,  250, FLAT, MONS_LINDWURM },
+   {  1,  4,  100, FLAT, MONS_EARTH_ELEMENTAL },
+-  {  2,  4,  200, RISE, MONS_DEEP_TROLL_EARTH_MAGE },
+-  {  2,  4,  150, RISE, MONS_GREAT_ORB_OF_EYES },
+-  {  2,  4,  250, RISE, MONS_IRON_TROLL },
+-  {  3,  4,  100, RISE, MONS_DEEP_TROLL_SHAMAN },
+-  {  3,  4,  150, RISE, MONS_STONE_GIANT },
+-  {  3,  4,  100, RISE, MONS_IRON_DRAGON },
++  {  2,  4,  300, RISE, MONS_IRON_TROLL },
++  {  3,  4,  200, RISE, MONS_STONE_GIANT },
++  {  4,  4,  100, FLAT, MONS_IRON_DRAGON },
+ },
+ { // Hive: fast flying packs, with poison and deeper electrical threats.
+-  {  1,  2,  350, FALL, MONS_KILLER_BEE },
+-  {  1,  2,  700, FLAT, MONS_WAX_BEETLE },
+-  {  1,  2,  650, FLAT, MONS_VENOM_WASP },
+-  {  1,  2,  150, FLAT, MONS_QUEEN_BEE },
++  {  1,  2,  200, FALL, MONS_KILLER_BEE },
++  {  1,  2, 1000, FLAT, MONS_WAX_BEETLE },
++  {  1,  2,  750, FLAT, MONS_VENOM_WASP },
++  {  1,  2,  100, FLAT, MONS_QUEEN_BEE },
+   {  1,  2,  250, FLAT, MONS_HORNET },
+-  {  1,  2,  250, RISE, MONS_MELIAI },
+-  {  2,  2,  600, FLAT, MONS_SPARK_WASP },
++  {  1,  2,  150, RISE, MONS_MELIAI },
++  {  2,  2,  400, FLAT, MONS_SPARK_WASP },
+ },
+ };
+ 
+--- a/crawl-ref/source/Makefile.obj
++++ b/crawl-ref/source/Makefile.obj
+@@ -365,6 +365,8 @@
+ catch2-tests/test_bloodcraft.o \
+ catch2-tests/test_branch.o \
+ catch2-tests/test_burrows.o \
++catch2-tests/test_branch_population.o \
++catch2-tests/test_honey.o \
+ catch2-tests/test_coordit.o \
+ catch2-tests/test_describe.o \
+ catch2-tests/test_english.o \

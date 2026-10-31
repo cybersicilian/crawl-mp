@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "binding_sha256": "5c29be6bbdcf0b65154f4705a91b65ed0c69efea93b227cf8d5afa2ea1c22854",
+  "existing_saves_used": false,
+  "production_mutation": false,
+  "original_deadlock_reproduced": true,
+  "elapsed_seconds": 36.6745109579997
+}

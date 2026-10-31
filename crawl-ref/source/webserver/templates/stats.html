@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" data-ui-theme="{{ data.get('ui_theme') or 'folio' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ data['title'] }} · Stats · Pebble Broth</title>
+  <link rel="stylesheet" href="{{ static_url('tabletop/tokens.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/ui-themes.css') }}">
+  <link rel="stylesheet" href="{{ static_url('fonts/fonts.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/typography.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/library.css') }}">
+  <link rel="stylesheet" href="{{ static_url('styles/account-actions.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/stats.css') }}">
+  <script src="{{ static_url('scripts/stats.js') }}" defer></script>
+  <script src="{{ static_url('scripts/stats-search.js') }}" defer></script>
+  <script src="{{ static_url('scripts/stats-impact.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ static_url('tabletop/outgame-archive.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/layout-rhythm.css') }}">
+  <script src="{{ static_url('scripts/archive-navigation.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ static_url('tabletop/art-direction.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/stats-layout.css') }}">
+  <link rel="stylesheet" href="{{ static_url('tabletop/site-resources.css') }}">
+  <script src="{{ static_url('scripts/stats-tables.js') }}" defer></script>
+</head>
+{% set qs = data['filter_query'] %}
+{% set f = data['filters'] %}
+<body class="library-page stats-page {{ 'stats-detail' if data['key'] else 'stats-collection' }}" data-stats-section="{{ data['section'] }}">
+<a class="stats-skip" href="#stats_content">Skip to content</a>
+<main>
+  {% set outgame_section = "stats" %}
+  {% include "outgame-navigation.html" %}
+  <article class="library-book stats-book">
+  <header class="library-page-header stats-header">
+    <div class="stats-header-copy">
+      <p class="library-eyebrow">Pebble Broth · Records{% if data['section'] != 'overview' %} · {{ data['section_label'] }}{% end %}</p>
+      <h1>{{ data['title'] }}</h1>
+      {% if data.get('intro') %}<p class="library-intro">{{ data['intro'] }}</p>{% end %}
+    </div>
+    <dl class="stats-header-meta" aria-label="Page facts">
+      <div><dt>Recorded games</dt><dd>{{ '{:,}'.format(data['counts']['all_games']) }}</dd></div>
+      <div><dt>Reference</dt><dd>{{ data['reference']['version'] or data['reference']['source'] }}</dd></div>
+      <div class="stats-build-label"><dt>Data</dt><dd><a href="#stats_data_sources">About the data</a></dd></div>
+    </dl>
+  </header>
+  {% if data.get('navigation') %}
+  <div class="stats-lookup">
+    <form action="/stats/search" method="get" role="search" class="stats-global-search">
+      <label for="stats_lookup">Search the archive</label>
+      <div class="stats-lookup-controls">
+        <input id="stats_lookup" type="search" name="q" value="{{ data.get('search', {}).get('query', '') }}" placeholder="Find a monster, spell, item, species, player…" autocomplete="off" maxlength="160" aria-controls="stats_lookup_results" aria-describedby="stats_lookup_hint">
+        <button type="submit" class="library-action library-action-primary">Search</button>
+      </div>
+      {% for field in ('account', 'mode', 'since', 'until', 'stage') %}{% if f[field] %}<input type="hidden" name="{{ field }}" value="{{ f[field] }}">{% end %}{% end %}
+      {% if f['include_wizmode'] %}<input type="hidden" name="include_wizmode" value="1">{% end %}
+      <p id="stats_lookup_hint">Look up game mechanics or a recorded adventurer. Your gameplay filters follow you.</p>
+    </form>
+    <div id="stats_lookup_results" class="stats-lookup-results" hidden>
+      <p class="stats-lookup-status" role="status" aria-live="polite"></p>
+      <ul aria-label="Matching entries"></ul>
+      <a class="stats-lookup-all" href="/stats/search{{ qs }}">View all matches →</a>
+    </div>
+  </div>
+  {% end %}
+  <div class="stats-workspace">
+  <aside class="stats-sidebar">
+  <label class="stats-mobile-section" for="stats_section_select">Explore stats &amp; reference
+    <select id="stats_section_select" data-stats-section-select>
+    {% for group in data.get('navigation', []) %}<optgroup label="{{ group['title'] }}">
+      {% for entry in group['entries'] %}<option value="{{ entry['href'] }}"{% if entry['key'] == data['section'] %} selected{% end %}>{{ entry['title'] }}</option>{% end %}
+    </optgroup>{% end %}
+    </select>
+  </label>
+  <nav class="stats-sections" aria-label="Stats sections">
+    {% for group in data.get('navigation', []) %}
+    <div class="stats-nav-group">
+      <p>{{ group['title'] }}</p>
+      <ul>
+      {% for entry in group['entries'] %}
+        <li><a href="{{ entry['href'] }}" {% if entry['key'] == data['section'] %}aria-current="{{ 'page' if not data['key'] else 'true' }}"{% end %}>{{ entry['title'] }}{% if entry['count'] is not None %}<span>{{ '{:,}'.format(entry['count']) }}</span>{% end %}</a></li>
+      {% end %}
+      </ul>
+    </div>
+    {% end %}
+    {% if not data.get('navigation') %}
+    <ul>{% for skey, stitle in sections.items() %}<li><a href="/stats{% if skey != 'overview' %}/{{ skey }}{% end %}{{ qs }}" {% if skey == data['section'] %}aria-current="page"{% end %}>{{ stitle }}</a></li>{% end %}</ul>
+    {% end %}
+  </nav>
+  </aside>
+  <div class="stats-panel">
+  {% include "stats-scope.html" %}
+  <div class="library-content stats-content" id="stats_content" tabindex="-1">
+    {% if data['section'] != 'overview' %}
+    <nav class="stats-breadcrumb" aria-label="Breadcrumb">
+      <a href="/stats{{ qs }}">Stats &amp; reference</a><span aria-hidden="true">/</span>
+      {% if data['key'] %}<a href="/stats/{{ data['section'] }}{{ qs }}">{{ data['section_label'] }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ data['title'] }}</span>
+      {% else %}<span aria-current="page">{{ data['section_label'] }}</span>{% end %}
+    </nav>
+    {% end %}
+    {% if data['links'] %}
+    <div class="library-breadcrumb">{% for link in data['links'] %}<a class="stats-related" href="{{ link['href'] }}">{{ link['text'] }}</a>{% end %}</div>
+    {% end %}
+    {% if data['section'] == 'overview' %}
+    <section class="stats-dashboard" aria-label="Server summary">
+      <div class="stats-metrics">{% for label, value in data['facts'] %}<div><span>{{ label }}</span><strong>{{ '{:,}'.format(value) if isinstance(value, int) else value }}</strong></div>{% end %}</div>
+      <div class="stats-highlights">{% for card in data.get('highlights', []) %}<a href="{{ card['href'] }}"><span>{{ card['label'] }}</span><strong>{{ card['value'] }}</strong><small>{{ card['detail'] }} <span aria-hidden="true">→</span></small></a>{% end %}</div>
+    </section>
+    {% end %}
+    {% if len(data['tables']) > 1 or data.get('grid') or data['ref_facts'] %}
+    <nav class="stats-toc" aria-label="On this page"><strong>On this page</strong><ul>
+      {% if data['ref_facts'] %}<li><a href="#facts_reference">Reference</a></li>{% end %}
+      {% if data['facts'] and data['section'] != 'overview' %}<li><a href="#facts_gameplay">Server record</a></li>{% end %}
+      {% for index, (label, values) in enumerate(data['lists']) %}<li><a href="#stats_list_{{ index }}">{{ label }}</a></li>{% end %}
+      {% if data.get('grid') %}<li><a href="#grid_title">Combo grid</a></li>{% end %}
+      {% for table in data['tables'] %}<li><a href="#{{ table['id'] }}">{{ table['title'] }} <span>{{ len(table['rows']) }}</span></a></li>{% end %}
+    </ul></nav>
+    {% end %}
+    {% if data['description'] %}<p class="library-description stats-description">{{ data['description'] }}</p>{% end %}
+    {% if (data['facts'] and data['section'] != 'overview') or data['ref_facts'] %}
+    <div class="stats-fact-columns">
+      {% if data['ref_facts'] %}
+      <section class="stats-facts" aria-labelledby="facts_reference">
+        <h2 id="facts_reference">Reference</h2>
+        <dl>{% for label, value in data['ref_facts'] %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% end %}</dl>
+      </section>
+      {% end %}
+      {% if data['facts'] and data['section'] != 'overview' %}
+      <section class="stats-facts" aria-labelledby="facts_gameplay">
+        <h2 id="facts_gameplay">On this server</h2>
+        {% if data['section'] == 'monsters' %}
+        <div class="stats-metrics">{% for label, value in data['facts'] %}<div><span>{{ label }}</span><strong>{{ '{:,}'.format(value) if isinstance(value, int) else value }}</strong></div>{% end %}</div>
+        {% else %}
+        <dl>{% for label, value in data['facts'] %}<dt>{{ label }}</dt><dd>{{ value }}</dd>{% end %}</dl>
+        {% end %}
+      </section>
+      {% end %}
+    </div>
+    {% end %}
+    {% if data.get('record_note') %}<p class="stats-record-note">{{ data['record_note'] }}</p>{% end %}
+    {% if data.get('impact') %}
+    {% set impact = data['impact'] %}
+    <section aria-label="Impact estimate summary" class="stats-metrics stats-impact-summary">
+      <div><span>{{ 'Win interaction' if impact['interaction'] else 'Win association' }} (percentage points)</span>
+        <strong>{{ '%+.2f' % impact['win_delta_pp'] if impact['win_delta_pp'] is not None else 'Unknown' }}</strong>
+        <span>Uncertainty: {{ '%+.2f to %+.2f pp' % tuple(impact['win_range_pp']) if impact['win_range_pp'] is not None else 'insufficient data' }}</span>
+      </div>
+      <div><span>Final score {{ 'interaction' if impact['interaction'] else 'association' }}</span>
+        <strong>{{ '%+.2f' % impact['score_delta'] if impact['score_delta'] is not None else 'Unknown' }}</strong>
+        <span>Uncertainty: {{ '%+.2f to %+.2f' % tuple(impact['score_range']) if impact['score_range'] is not None else 'insufficient data' }}</span>
+      </div>
+      <div class="stats-impact-evidence"><span>{{ 'Both / first only / second only / neither' if impact['interaction'] else 'Exposed / matched controls' }}</span>
+        <strong>{{ ' / '.join(str(n) for n in impact['counts']) }}</strong>
+        <span>Accounts: {{ ' / '.join(str(n) for n in impact['owners']) }} · {{ 'Estimated association' if impact['status'] == 'estimated' else 'Insufficient data' }}</span>
+        <span>Scored expeditions: {{ ' / '.join(str(n) for n in impact['score_counts']) }}</span>
+      </div>
+    </section>
+    {% end %}
+    {% if data.get('impact_methodology') %}
+    <p class="stats-hint">These are historical associations. They do not establish causes or predict a live game's win chance.</p>
+    <details class="stats-impact-method"><summary>How the estimates are calculated</summary><p>{{ data['impact_methodology'] }}</p></details>
+    {% end %}
+    {% if data.get('impact_search') %}
+    <section class="stats-section stats-impact-lookup" aria-labelledby="impact_compare_title">
+      <h2 id="impact_compare_title">{{ 'Compare interactions' if data['impact_search']['compare'] else 'Find impact estimates' }}</h2>
+      <form class="stats-lookup-form" method="get" action="/stats/impacts" data-impact-search>
+        {% for field in ('account', 'mode', 'since', 'until', 'stage') %}{% if f.get(field) %}<input type="hidden" name="{{ field }}" value="{{ f[field] }}">{% end %}{% end %}
+        {% if f['include_wizmode'] %}<input type="hidden" name="include_wizmode" value="1">{% end %}
+        <input type="hidden" name="compare" value="{{ data['impact_search']['compare'] }}">
+        <label for="impact_partner">{{ 'Search for another feature to compare' if data['impact_search']['compare'] else 'Search features and actions' }}</label>
+        <div class="stats-lookup-controls"><input id="impact_partner" name="q" type="search" maxlength="160" value="{{ data['impact_search']['query'] }}" autocomplete="off" aria-controls="impact_matches"><button class="library-action" type="submit">Search</button></div>
+      </form>
+      <div id="impact_matches" class="stats-lookup-results" aria-live="polite" hidden></div>
+    </section>
+    {% end %}
+    {% for index, (label, values) in enumerate(data['lists']) %}
+      <h2 id="stats_list_{{ index }}">{{ label }}</h2>
+      <ul class="stats-tags">{% for v in values %}<li>{{ v.get('name', v.get('key', '')) if isinstance(v, dict) else v }}</li>{% end %}</ul>
+    {% end %}
+    {% for table in data['tables'] %}
+    <section class="stats-section" id="{{ table['id'] }}" aria-labelledby="{{ table['id'] }}_title"{% if table.get('views') %} data-table-views{% end %}>
+      <div class="stats-section-head">
+        <h2 id="{{ table['id'] }}_title">{{ table['title'] }} <span class="stats-row-count" id="{{ table['id'] }}_count" role="status">{{ len(table['rows']) }} {{ 'entry' if len(table['rows']) == 1 else 'entries' }}</span></h2>
+        {% if len(table['rows']) > 5 %}
+        <div class="stats-search">
+          <label for="{{ table['id'] }}_search" class="stats-sr">Search {{ table['title'] }}</label>
+          <input id="{{ table['id'] }}_search" type="search" placeholder="Filter {{ len(table['rows']) }} entries…" data-stats-search="{{ table['id'] }}_table" aria-describedby="{{ table['id'] }}_count" autocomplete="off">
+        </div>
+        {% end %}
+      </div>
+      {% if table.get('views') %}
+      <div class="stats-table-tools" data-table-tools hidden>
+        <label>Compare <select data-table-view>{% for value, label in table['views'] %}<option value="{{ value }}">{{ label }}</option>{% end %}</select></label>
+        {% if table.get('record_filter') %}<label class="stats-record-toggle"><input type="checkbox" data-table-records> With server records only</label>{% end %}
+      </div>
+      {% end %}
+      {% if table.get('note') %}<p class="stats-hint">{{ table['note'] }}</p>{% end %}
+      {% if table['rows'] %}
+      <div class="stats-table-wrap" role="region" aria-labelledby="{{ table['id'] }}_title" tabindex="0">
+        <table class="stats-table" id="{{ table['id'] }}_table" data-stats-sortable>
+          <thead><tr>
+          {% for col in table['columns'] %}
+            <th scope="col" aria-sort="none" class="{{ 'is-num' if col['num'] else '' }}"{% if col.get('view') %} data-column-view="{{ col['view'] }}"{% end %}><button type="button" class="stats-sort" data-num="{{ '1' if col['num'] else '0' }}">{{ col['label'] }}</button></th>
+          {% end %}
+          </tr></thead>
+          <tbody>
+          {% for row in table['rows'] %}
+            <tr{% if table.get('record_filter') %} data-has-record="{{ 'true' if row.get('has_record') else 'false' }}"{% end %}>
+            {% for i, col in enumerate(table['columns']) %}
+              {% set v = row.get(col['key']) %}
+              {% set tag = 'th' if i == 0 else 'td' %}
+              <{{ tag }}{% if i == 0 %} scope="row"{% end %} class="{{ 'is-num' if col['num'] else '' }}" data-label="{{ col['label'] }}"{% if col.get('view') %} data-column-view="{{ col['view'] }}"{% end %}{% if col['num'] %} data-sort="{{ v.get('sort', '') if isinstance(v, dict) else '' if v is None else v }}"{% end %}{% if isinstance(v, dict) and v.get('title') %} title="{{ v['title'] }}"{% end %}>{% if isinstance(v, dict) %}{% if v.get('href') %}<a href="{{ v['href'] }}">{{ v.get('text', '') }}</a>{% else %}{{ v.get('text', '') }}{% end %}{% elif v is None or v == '' %}<span class="stats-nil" aria-label="not recorded">—</span>{% elif col['key'] == 'win_rate' %}{{ v }}%{% elif isinstance(v, int) %}{{ '{:,}'.format(v) }}{% else %}{{ v }}{% end %}</{{ tag }}>
+            {% end %}
+            </tr>
+          {% end %}
+          </tbody>
+        </table>
+      </div>
+      <p class="stats-noresults" hidden>No entries match this table filter. <button type="button" data-stats-clear="{{ table['id'] }}_search">Clear table filter</button></p>
+      {% else %}
+      <p class="library-empty stats-empty">{{ table['empty'] }}</p>
+      {% end %}
+      <a class="stats-back-top" href="#stats_content">Back to page index ↑</a>
+    </section>
+    {% end %}
+    {% if data.get('grid') %}
+    {% set grid = data['grid'] %}
+    <h2 id="grid_title">Species × background</h2>
+    {% if grid['rows'] and grid['jobs'] %}
+    <p class="stats-hint">Shading shows how often a combo is played; the figure is games played (wins in brackets). Dots mark combos the game does not offer.</p>
+    <div class="stats-table-wrap stats-grid-wrap" role="region" aria-labelledby="grid_title" tabindex="0">
+      <table class="stats-grid">
+        <thead><tr><td></td>
+        {% for job in grid['jobs'] %}<th scope="col"><a href="{{ job['href'] }}" title="{{ job['name'] }}">{{ job.get('abbrev') or job.get('abbr') or job['name'][:2] }}</a></th>{% end %}
+        </tr></thead>
+        <tbody>
+        {% for row in grid['rows'] %}
+          <tr><th scope="row"><a href="{{ row['href'] }}">{{ row['species']['name'] }}</a></th>
+          {% for job, cell in zip(grid['jobs'], row['cells']) %}
+            {% set label = row['species']['name'] + ' ' + job['name'] %}
+            {% if not cell['legal'] and not cell['games'] %}<td class="is-illegal" title="{{ label }}: not offered"><span aria-hidden="true">·</span><span class="stats-sr">{{ label }}: not offered</span></td>
+            {% else %}<td class="{{ 'is-played' if cell['games'] else 'is-empty' }}" style="--heat: {{ cell['heat'] }}"><a href="/stats/combos/{{ url_escape(row['species']['key'], plus=False) }}.{{ url_escape(job['key'], plus=False) }}{{ qs }}" title="{{ label }}: {{ cell['games'] }} games, {{ cell['wins'] }} wins" aria-label="{{ label }}: {{ cell['games'] }} games, {{ cell['wins'] }} wins">{% if cell['games'] %}{{ cell['games'] }}{% if cell['wins'] %}<small>({{ cell['wins'] }})</small>{% end %}{% end %}</a></td>{% end %}
+          {% end %}
+          </tr>
+        {% end %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="library-empty stats-empty"><strong>No species data yet</strong>The combo grid appears once reference data is available.</p>
+    {% end %}
+    {% end %}
+    {% if data['section'] == 'overview' and data.get('navigation') %}
+    <section class="stats-directory" aria-labelledby="stats_directory_title">
+      <div class="stats-directory-heading"><h2 id="stats_directory_title">Explore the archive</h2><p>Game mechanics and the stories behind the numbers.</p></div>
+      <div class="stats-directory-groups">
+      {% for group in data['navigation'][1:] + data['navigation'][:1] %}
+        <div class="stats-directory-group"><h3>{{ group['title'] }}</h3><ul>
+        {% for entry in group['entries'] %}{% if entry['key'] != 'overview' %}
+          <li><a href="{{ entry['href'] }}"><span class="stats-directory-label">{{ entry['title'] }} <span aria-hidden="true">↗</span></span><span class="stats-directory-description">{{ entry['description'] }}</span>{% if entry['count'] is not None %}<span class="stats-directory-count">{{ entry['count'] }} {{ 'names' if entry['key'] == 'players' else ('record' if entry['count'] == 1 else 'records') if entry['key'] == 'deaths' else ('entry' if entry['count'] == 1 else 'entries') }}</span>{% end %}</a></li>
+        {% end %}{% end %}
+        </ul>
+        {% if group['title'] == 'Server records' %}
+        <div class="stats-directory-guide">
+          <h4>About the archive</h4>
+          <p>{% if data['reference']['source'] == 'engine' %}Reference from this server’s game build{% if data['reference']['version'] %} ({{ data['reference']['version'] }}){% end %}.
+          {% elif data['reference']['source'] == 'fixture' %}Reference from a bundled snapshot.
+          {% elif data['reference']['source'] == 'partial' %}Partial reference; more entries appear when a full game dump is available.
+          {% else %}Reference data is not available yet.{% end %}</p>
+          <p>Server records follow your filters and refresh every few minutes. Open an entry to see its mechanics alongside recorded gameplay.</p>
+          <a href="#stats_data_sources">Data sources &amp; JSON export ↓</a>
+        </div>
+        {% end %}
+        </div>
+      {% end %}
+      </div>
+    </section>
+    {% end %}
+    <p class="library-note stats-source" id="stats_data_sources">
+      Reference data:
+      {% if data['reference']['source'] == 'engine' %}this server's crawl build ({{ data['reference']['version'] or 'unknown version' }}).
+      {% elif data['reference']['source'] == 'fixture' %}bundled snapshot{% if data['reference']['version'] %} ({{ data['reference']['version'] }}){% end %} — the engine dump will replace it once available.
+      {% elif data['reference']['source'] == 'partial' %}partial (species, backgrounds, combos and branches only) — monsters, items and spells appear once the crawl build supports <code>-stats-json</code>.
+      {% else %}not available yet.{% end %}
+      Gameplay statistics refresh automatically every few minutes. <a href="/api/stats/{{ data['section'] }}{% if data['key'] %}/{{ url_escape(data['key'], plus=False) }}{% end %}{{ qs }}{% if data.get('search') %}{{ '&' if qs else '?' }}q={{ url_escape(data['search']['query']) }}{% elif data.get('impact_search') and data['section'] == 'impacts' and not data['key'] %}{{ '&' if qs else '?' }}q={{ url_escape(data['impact_search']['query']) }}&amp;compare={{ url_escape(data['impact_search']['compare']) }}{% end %}">View as JSON</a>
+    </p>
+  </div>
+  </div>
+  </div>
+  </article>
+  {% include "site-resources.html" %}
+  <footer class="library-footer"><span>Dungeon Crawl Stone Soup</span><a href="/?view=play#lobby">Return to the tavern</a></footer>
+</main>
+</body>
+</html>

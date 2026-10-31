@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "source": "/opt/dcss/staging/autoexplore-01a1801a/source",
+  "backend": "/tmp/dcss-autoexplore-01a1801a/candidate-backend",
+  "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+  "existing_saves_used": false,
+  "steps": [
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 3,
+      "time": 968117.874922875
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 4,
+      "time": 968117.963262858
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 5,
+      "time": 968118.05467805
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 6,
+      "time": 968118.142469882
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 7,
+      "time": 968118.232639104
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 8,
+      "time": 968118.322881337
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 9,
+      "time": 968118.412457929
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 10,
+      "time": 968118.501153971
+    },
+    {
+      "slot": 0,
+      "cancel": true,
+      "request": 11,
+      "time": 968118.589075774
+    },
+    {
+      "slot": 0,
+      "cancel": false,
+      "request": 12,
+      "time": 968118.677844006
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 13,
+      "time": 968118.764067269
+    },
+    {
+      "slot": 1,
+      "cancel": false,
+      "request": 14,
+      "time": 968118.851470441
+    }
+  ],
+  "completions": [
+    {
+      "request": 1,
+      "time": 968117.789411323
+    },
+    {
+      "request": 2,
+      "time": 968117.874639216
+    },
+    {
+      "request": 3,
+      "time": 968117.963107138
+    },
+    {
+      "request": 4,
+      "time": 968118.05453665
+    },
+    {
+      "request": 5,
+      "time": 968118.142328942
+    },
+    {
+      "request": 6,
+      "time": 968118.232500885
+    },
+    {
+      "request": 7,
+      "time": 968118.320750957
+    },
+    {
+      "request": 8,
+      "time": 968118.412265369
+    },
+    {
+      "request": 9,
+      "time": 968118.500918492
+    },
+    {
+      "request": 10,
+      "time": 968118.588878554
+    },
+    {
+      "request": 11,
+      "time": 968118.677663646
+    },
+    {
+      "request": 12,
+      "time": 968118.763786789
+    },
+    {
+      "request": 13,
+      "time": 968118.851285971
+    },
+    {
+      "request": 14,
+      "time": 968118.942181193
+    }
+  ],
+  "stop_checks": [
+    {
+      "slot": 0,
+      "native_activity_cleared": true,
+      "no_turn_after_stop": true,
+      "dispatch_ms": 86.64314192719758
+    }
+  ],
+  "launch_defaults": [
+    "explore_delay=0"
+  ],
+  "elapsed_seconds": 1.067713448079303,
+  "completion_to_next_step_ms": [
+    0.2836589701473713,
+    0.15571992844343185,
+    0.14140002895146608,
+    0.14094007201492786,
+    0.1382189802825451,
+    2.1303800167515874,
+    0.19256002269685268,
+    0.23547897581011057,
+    0.18035992980003357,
+    0.2804800169542432,
+    0.1844699727371335
+  ],
+  "automatic_steps": 11,
+  "owned_native_exited": true
+}

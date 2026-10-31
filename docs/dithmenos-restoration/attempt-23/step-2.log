@@ -1,0 +1,23 @@
+ASSERT(index != -1) in 'spl-util.cc' at line 1018 failed.
+Filters: [dithmenos]
+Randomness seeded to: 1991474076
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+catch2-tests-executable is a Catch2 v3.2.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Classic shadow mimics deal damage and leave no lingering monster
+-------------------------------------------------------------------------------
+catch2-tests/test_dithmenos.cc:168
+...............................................................................
+
+catch2-tests/test_dithmenos.cc:168: FAILED:
+  {Unknown expression after the reported line}
+due to a fatal error condition:
+  SIGABRT - Abort (abnormal termination) signal
+
+===============================================================================
+test cases:    4 |    3 passed | 1 failed
+assertions: 1644 | 1643 passed | 1 failed
+

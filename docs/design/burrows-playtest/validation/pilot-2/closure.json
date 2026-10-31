@@ -1,0 +1,24 @@
+{
+  "reservationId": "2584b24a-af6a-42e1-aee8-694697555de2",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "2584b24a-af6a-42e1-aee8-694697555de2",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS native route gameplay harness pilot",
+      "requestedAt": 1793147571.739727,
+      "supervisorPid": 32588,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "e443f895893210412eab298c70c505ddfa1c55b182225d6eeab653820d779917",
+      "startedAt": 1793147571.740649,
+      "workerPid": 32603,
+      "processGroup": 32603,
+      "exitCode": 1,
+      "finishedAt": 1793147591.95551,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "e443f895893210412eab298c70c505ddfa1c55b182225d6eeab653820d779917"
+  }
+}

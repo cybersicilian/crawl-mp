@@ -1,0 +1,59 @@
+/* Training controls use the native model and the existing folio palette. */
+dialog#party_inspector_modal .party-insp-training-layout { grid-template-columns: minmax(0, 1fr); }
+.party-training-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.party-training-toolbar strong { margin-right: 8px; }
+dialog#party_inspector_modal .party-skill-training :is(button, input, select) {
+    box-sizing: border-box;
+    min-height: 30px;
+    border: 1px solid var(--sheet-rule, #b9a384);
+    border-radius: 4px;
+    padding: 4px 7px;
+    background: var(--sheet-raised, #fffaf0);
+    color: var(--sheet-ink, #5c4030);
+    font: inherit;
+    font-size: 12px;
+    text-shadow: none;
+    box-shadow: none;
+}
+dialog#party_inspector_modal .party-skill-training button[aria-pressed='true'] {
+    color: var(--sheet-action-text, #fffaf0);
+    background: var(--sheet-action, #792b24);
+    border-color: var(--sheet-action, #792b24);
+}
+dialog#party_inspector_modal .party-skill-training :is(button, input, select):focus-visible {
+    outline: 2px solid var(--sheet-chapter, #964134);
+    outline-offset: 2px;
+}
+dialog#party_inspector_modal .party-skill-training :is(button, input, select):disabled { opacity: .6; cursor: default; }
+dialog#party_inspector_modal .party-skill-training input[aria-invalid='true'] { border: 2px solid var(--sheet-danger, #a42b27); }
+.party-training-help { color: var(--sheet-quiet, #6b5844); font-size: 12px; margin: 8px 0 0; }
+.party-training-status { min-height: 1.5em; margin: 3px 0 8px; font-size: 12px; color: var(--sheet-good, #365d36); }
+.party-training-status.is-error { color: var(--sheet-danger, #a42b27); }
+.party-skills-table .party-skill-name { width: 26%; }
+.party-skill-level { font-weight: bold; font-variant-numeric: tabular-nums; }
+.party-skill-cross-training, .party-skill-base-level { display: block; margin-top: 3px; font-size: 11px; font-weight: normal; color: var(--sheet-quiet, #6b5844); }
+.party-skill-cross-training span { display: block; }
+.party-skill-cross-training .party-skill-cross-bonus { color: var(--sheet-good, #365d36); font-weight: bold; }
+.party-skill-base-level { white-space: nowrap; }
+.party-skill-apt-value { font-variant-numeric: tabular-nums; }
+.party-skill-apt-breakdown { display: block; margin-top: 3px; font-size: 11px; color: var(--sheet-quiet, #6b5844); }
+.party-skill-apt-breakdown span { display: block; white-space: nowrap; }
+.party-skill-manual-bonus { color: var(--sheet-good, #365d36); font-weight: bold; }
+.party-skill-priorities { display: flex; gap: 3px; }
+.party-skill-share { display: block; margin-top: 3px; color: var(--sheet-quiet, #6b5844); }
+.party-skill-target-line { display: flex; gap: 5px; }
+.party-skill-target input { width: 76px; }
+.party-skill-target select { margin-top: 4px; max-width: 100%; }
+@media (max-width: 680px) {
+    .party-skills-table :is(tbody, tr, td) { display: block; }
+    .party-skills-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .party-skills-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; border-bottom: 1px solid var(--sheet-rule, #c7b18c); }
+    dialog#party_inspector_modal .party-skills-table td { border: 0; padding: 7px; }
+    .party-skills-table .party-skill-name { width: auto; font-weight: bold; }
+    .party-skill-level::before { content: 'Lv '; font-weight: normal; }
+    .party-skill-apt::before { content: 'Apt '; }
+    .party-skills-table .party-skill-priority { grid-column: 1 / 2; }
+    .party-skills-table .party-skill-target { grid-column: 2 / 4; }
+    .party-skill-target::before { content: 'Stop at'; display: block; font-size: 11px; color: var(--sheet-quiet, #6b5844); }
+    .party-skill-priorities { flex-wrap: wrap; }
+}

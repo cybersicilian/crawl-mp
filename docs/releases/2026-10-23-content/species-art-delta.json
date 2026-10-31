@@ -1,0 +1,14 @@
+{
+  "rltiles/dc-gui.txt": "2875fe490c1f1a84fe6e50c2e0067fc8c772b9663685ffefcb8a9bb11c0b23e1",
+  "rltiles/dc-player.txt": "7c0099dae5c137a0f0751970a6e598bf4c3ebaa9085861c8071e97e694a4a11d",
+  "rltiles/gui/abilities/chain_lash.png": "011b5a5f480893897a05d946604aa8c0525cd16a72bcd5f0f500bd705512b476",
+  "rltiles/gui/abilities/elder_rite.png": "c4e4ca3a8e70581bf7d16b2c8a6648568122baeebb37269ba7ca5d2ffa13f098",
+  "rltiles/gui/abilities/pinning_chain.png": "5e9b3f89ae0bbb8cc22301b3df6f9c6cfa0028ec07ff4d4da3e09a36588d3ae5",
+  "rltiles/gui/abilities/profane_altar.png": "c02f03c76de9a2001ea302dc734e6ea990f00fbb1b4e57475e57bd44647dcd97",
+  "rltiles/gui/abilities/reel_in.png": "f6965cdd90237c93ba54cb26ac75c1cd0353a6e663e72e0ab3bc87a1d84f52b9",
+  "rltiles/gui/abilities/release_chain.png": "1f7fa5dca38ebcd0f36deadbf569547cf0f86bec984b0a5e6cabad57333e5460",
+  "rltiles/player/base/chain_devil.png": "549734d9dff6ea5e94ef8c5db9c8d6dc8b2f77841a63ea7b739bf6bb6396c2d8",
+  "rltiles/player/base/eldritch.png": "2be16138f9fae12b4c01743137a6371750d5136870ed12d81911c10c827669ba",
+  "tilepick-p.cc": "ed9ebfbf8b03fca18c58845093f103ab1d72a3e6e155c68122761afdb49b06b7",
+  "tilepick.cc": "dd75ee4ac72c45dd6feac7b1cf05aebe8eb771cfa909e098736bb8ecb7f889fe"
+}

@@ -1,0 +1,8 @@
+{
+  "source": "/private/tmp/dcss-input-freeze-01a17b3b/crawl-ref/source",
+  "native_sha256": "93b0b5f3fb7faeec85251fa1f025ca1de08907be3749866c63639e8cb2d887f5",
+  "existing_saves_used": false,
+  "checks": [],
+  "expect_missing": true,
+  "owned_process_exited": true
+}

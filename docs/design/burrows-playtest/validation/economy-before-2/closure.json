@@ -1,0 +1,24 @@
+{
+  "reservationId": "321ccc70-2ab1-4141-a747-402cf4072eb6",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "321ccc70-2ab1-4141-a747-402cf4072eb6",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS native branch economy baseline",
+      "requestedAt": 1793148325.185995,
+      "supervisorPid": 53805,
+      "status": "failed_held",
+      "reservation": true,
+      "requestId": "caf2a591806caca2c19e399c84338e49d8976bd238703a2dfe2ad43ffbcc31b1",
+      "startedAt": 1793148325.186732,
+      "workerPid": 53821,
+      "processGroup": 53821,
+      "exitCode": 1,
+      "finishedAt": 1793148505.4189062,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "caf2a591806caca2c19e399c84338e49d8976bd238703a2dfe2ad43ffbcc31b1"
+  }
+}

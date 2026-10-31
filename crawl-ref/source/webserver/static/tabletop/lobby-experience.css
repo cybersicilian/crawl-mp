@@ -1,0 +1,295 @@
+/* Logged-in expedition planning base. Keep native controls, ordering, and data intact.
+ * The live list, mode catalogue and chronicle are styled in lobby-workspace.css
+ * and lobby-dashboard.css; this file keeps the party panel and builder base. */
+#party_lobby_panel, #coop_chronicle_panel, #play_now, #lobby_body {
+    --hall-surface: #111b19;
+    --hall-raised: #1b2923;
+    --hall-field: #101916;
+    --hall-gold: #e3c58b;
+    --hall-text: #e8e3d4;
+    --hall-muted: #adbbac;
+    --hall-rule: #c7b88a30;
+    color: var(--hall-text);
+    font-family: var(--tt-font-ui);
+}
+#party_lobby_panel, #coop_chronicle_panel {
+    background: linear-gradient(135deg, #23312a55, transparent 60%), var(--hall-surface);
+    border: 1px solid var(--hall-rule);
+    border-image: none;
+    border-radius: 14px;
+    box-shadow: 0 14px 35px #00000028, inset 0 1px #ffffff05;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+#party_lobby_panel::before, #party_lobby_panel::after,
+#coop_chronicle_panel::before, #coop_chronicle_panel::after { content: none; }
+#party_lobby_panel > .party-hall-header {
+    background: linear-gradient(90deg, #111b19f2 0%, #111b19dc 40%, #111b1980 100%),
+        url("assets/dungeon-threshold.png") center 56% / cover;
+    border-radius: 13px 13px 0 0;
+    padding: 22px 24px;
+    margin: -24px -24px 22px;
+    min-height: 96px;
+    box-sizing: border-box;
+}
+#party_lobby_panel .party-hall-header, #coop_chronicle_panel .party-hall-header {
+    gap: 18px;
+    border-bottom: 1px solid var(--hall-rule);
+}
+#coop_chronicle_panel .party-hall-header { padding-bottom: 18px; margin-bottom: 18px; }
+#party_lobby_panel .party-hall-title, #coop_chronicle_panel .party-hall-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 0;
+    background: none;
+    color: var(--hall-text);
+    font: 600 28px/1.2 var(--tt-font-title);
+    letter-spacing: -.015em;
+    text-shadow: 0 2px 12px #00000060;
+}
+#party_lobby_panel .party-hall-title::before,
+#coop_chronicle_panel .party-hall-title::before {
+    content: "";
+    flex: 0 0 34px;
+    width: 34px;
+    height: 38px;
+    background: var(--hall-gold);
+    mask: url("assets/lobby-expedition-mark.svg") center / contain no-repeat;
+}
+#coop_chronicle_panel .party-hall-title::before {
+    mask-image: url("assets/lobby-chronicle-mark.svg");
+}
+#party_lobby_panel .party-hall-controls, #coop_chronicle_panel .party-hall-controls {
+    gap: 9px;
+    margin-left: auto;
+}
+#party_lobby_panel .dcss-btn, #coop_chronicle_panel .dcss-btn {
+    min-height: 36px;
+    padding: 8px 13px;
+    background: #26352b;
+    color: #e6dec7;
+    border: 1px solid #b8b39a4a;
+    border-radius: 7px;
+    font: 600 12px/1.4 var(--tt-font-ui);
+    text-shadow: none;
+    box-shadow: inset 0 1px #ffffff06;
+    transform: none;
+}
+#party_lobby_panel .dcss-btn-primary, #coop_chronicle_panel .dcss-btn-primary {
+    color: #263327;
+    background: linear-gradient(135deg, #e6cea0, #c9ad77);
+    border-color: #e7cea1;
+    box-shadow: 0 4px 12px #050a062b, inset 0 1px #fff4d340;
+}
+#party_lobby_panel .dcss-btn:hover, #coop_chronicle_panel .dcss-btn:hover {
+    border-color: #dcca9a;
+    background: #354635;
+    color: #f4ecd8;
+    box-shadow: inset 0 1px #ffffff09;
+    transform: none;
+}
+#party_lobby_panel .dcss-btn-primary:hover { background: #ecd5a4; color: #263327; }
+#party_lobby_panel .dcss-btn-danger {
+    background: transparent;
+    border-color: #b383724a;
+    color: #d3afa1;
+}
+#party_lobby_panel :is(.dcss-badge-pacing, .dcss-badge-pacing-inline) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    box-sizing: border-box;
+    border: 1px solid #95b4a241;
+    border-radius: 6px;
+    padding: 5px 9px;
+    background: #273c3280;
+    color: #b9d0bb !important;
+    font: 500 11px/1.4 var(--tt-font-ui);
+    text-shadow: none;
+    letter-spacing: .01em;
+}
+#party_room_view .party-room-banner {
+    padding: 0 0 17px;
+    margin-bottom: 18px;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--hall-rule);
+    border-radius: 0;
+    gap: 15px;
+}
+#party_room_view .party-room-banner > div:first-child { flex: 1 1 360px; min-width: 0; }
+#party_room_title_text {
+    display: block;
+    color: #e4d5b3 !important;
+    font: 600 17px/1.4 var(--tt-font-title);
+    letter-spacing: .015em;
+    overflow-wrap: anywhere;
+}
+#party_room_host_text {
+    display: block;
+    margin: 5px 0 0 !important;
+    color: #a6b4a5 !important;
+    font: 11px/1.5 var(--tt-font-ui);
+}
+#party_room_view .party-room-banner > div:last-child { gap: 9px !important; }
+#party_room_view .party-room-banner > div:last-child > span:last-child {
+    color: var(--hall-muted);
+    font-size: 11px;
+}
+#party_room_view .party-room-banner > div:last-child > span:last-child > span:first-child {
+    color: #b9bda7 !important;
+}
+#party_room_ff_badge { color: #d6b7a0 !important; font-weight: 500 !important; }
+#party_room_view #party_slots_grid { gap: 16px; margin-bottom: 20px; }
+#party_room_view .party-slot-box {
+    --slot-accent: #cbb584;
+    padding: 16px 16px 13px;
+    gap: 10px;
+    background: linear-gradient(150deg, #2a392b60, transparent 60%), #18241e;
+    border: 1px solid #b7b39330;
+    border-top: 2px solid var(--slot-accent);
+    border-radius: 10px;
+    box-shadow: inset 0 1px #ffffff04, 0 4px 12px #00000012;
+    transition: border-color 120ms ease, background-color 120ms ease;
+}
+#party_room_view .slot-p1 { --slot-accent: #92b3b4; }
+#party_room_view .slot-p2 { --slot-accent: #a5ba91; }
+#party_room_view .slot-p3 { --slot-accent: #b9a4bb; }
+#party_room_view .party-slot-box:hover {
+    background: linear-gradient(150deg, #34462f55, transparent 70%), #1c2921;
+    border-color: #b8bd9160;
+    border-top-color: var(--slot-accent);
+    box-shadow: inset 0 1px #ffffff07;
+    transform: none;
+}
+#party_room_view .party-slot-top {
+    min-height: 0;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 7px;
+    padding-bottom: 10px;
+    border-color: #aab59b26;
+}
+#party_room_view .party-slot-title { color: #ece4cc; font: 600 23px/1.15 var(--tt-font-title); }
+#party_room_view .party-slot-occupant {
+    max-width: 100%;
+    color: #acbdac !important;
+    font: 500 10px/1.4 var(--tt-font-ui);
+    overflow-wrap: anywhere;
+    letter-spacing: .025em;
+}
+#party_room_view .party-slot-modes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: 38px;
+    gap: 4px;
+    align-items: stretch;
+}
+#party_room_view .party-slot-modes > span {
+    grid-column: 1 / -1;
+    align-self: center;
+    color: #c3c6aa !important;
+    font: 11px/1.5 var(--tt-font-ui) !important;
+}
+#party_room_view .party-mode-btn {
+    min-width: 0;
+    padding: 5px 4px;
+    color: #afbcac;
+    background: #111b164d;
+    border: 1px solid #a7b29a24;
+    border-radius: 5px;
+    box-shadow: none;
+    font: 500 10px/1.35 var(--tt-font-ui);
+    white-space: normal;
+    text-shadow: none;
+}
+#party_room_view .party-mode-btn.active {
+    color: #e5dfc7;
+    border-color: #c7c29870;
+    background: #41513b;
+}
+#party_room_view .party-mode-btn:hover { border-color: #d2c398a0; color: #ece8d6; }
+#party_room_view .party-field-row { gap: 5px; }
+#party_room_view .party-field-label { color: #b5bba7; font-size: 11px; letter-spacing: .025em; }
+#party_room_view :is(.party-slot-input, .party-slot-select) {
+    min-height: 34px;
+    padding: 6px 10px;
+    background: var(--hall-field);
+    color: #e5e6d6;
+    border: 1px solid #a5b19542;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 3px #00000020;
+    font: 500 13px/1.45 var(--tt-font-ui);
+}
+#party_room_view :is(.party-slot-input, .party-slot-select):focus {
+    border-color: #d7c391;
+    outline: 2px solid #d7c39136;
+    outline-offset: 1px;
+}
+#party_room_view .party-archetype-row { gap: 4px; margin: 0; padding-top: 2px; }
+#party_room_view .party-archetype-btn {
+    min-height: 24px;
+    padding: 3px 6px;
+    color: #b6c1ac;
+    background: #26352a;
+    border: 1px solid #aab39126;
+    border-radius: 4px;
+    box-shadow: none;
+    text-shadow: none;
+    font: 500 10px/1.4 var(--tt-font-ui);
+    transform: none;
+}
+#party_room_view .party-archetype-btn:hover { background: #35452e; border-color: #c6bd85; }
+#party_room_view .party-slot-bottom {
+    margin-top: auto;
+    gap: 8px;
+    padding-top: 13px;
+    border-color: #aab59b26;
+}
+#party_room_view .party-slot-combo-summary { color: #b3beae !important; font: 11px/1.5 var(--tt-font-ui) !important; }
+#party_room_view .party-ready-badge {
+    padding: 4px 7px;
+    color: #c2d0af;
+    background: #3d51324a;
+    border: 1px solid #a1b48d56;
+    border-radius: 5px;
+    font: 600 9px/1.3 var(--tt-font-ui);
+    letter-spacing: .05em;
+    box-shadow: none;
+    text-shadow: none;
+}
+#party_room_view .party-ready-badge.waiting { color: #e2cda1; background: #836b2c20; border-color: #b49b6270; }
+#party_room_view .party-ready-badge.closed { color: #a1ad9f; background: transparent; border-color: #9da99845; }
+#party_room_view .slot-state-open { border-style: dashed; border-top-style: solid; background: #16211bc9; opacity: 1; }
+#party_room_view .slot-state-closed { background: #121c17; border-color: #90977c2e; opacity: .8; }
+#party_room_footer { padding-top: 18px; border-color: var(--hall-rule); gap: 14px; }
+#party_room_footer > div:first-child { flex: 1 1 500px; gap: 15px !important; }
+#party_room_footer #btn_launch_party_room { min-height: 43px; padding: 11px 18px; font-size: 13px; }
+#party_room_status_hint { color: #b0bea9 !important; font: 12px/1.6 var(--tt-font-ui) !important; max-width: 460px; }
+#party_lobby_panel .party-empty-notice { padding: 14px 0 3px; gap: 18px; color: #b8c2ae; line-height: 1.7; }
+#lobby_body { text-align: left; padding: 4px 0 15px; }
+@media (max-width: 1080px) {
+    #party_room_view #party_slots_grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #party_lobby_panel > .party-hall-header { background-position: center, 70% center; }
+    #party_lobby_panel .party-hall-controls { margin-left: 0; }
+}
+@media (max-width: 680px) {
+    #party_lobby_panel, #coop_chronicle_panel { padding: 17px; border-radius: 11px; margin-bottom: 16px; }
+    #party_lobby_panel > .party-hall-header { min-height: 150px; padding: 22px 17px; margin: -17px -17px 18px; border-radius: 10px 10px 0 0; }
+    #party_lobby_panel .party-hall-title, #coop_chronicle_panel .party-hall-title { font-size: 24px; gap: 10px; }
+    #party_lobby_panel .party-hall-controls, #coop_chronicle_panel .party-hall-controls { width: 100%; margin-left: 0; gap: 7px; }
+    #party_room_view #party_slots_grid { grid-template-columns: 1fr; gap: 13px; }
+    #party_room_view .party-slot-box { padding: 17px; }
+    #party_room_view .party-slot-top { min-height: auto; }
+    #party_room_view .party-slot-modes { min-height: 40px; }
+    #party_room_view .party-mode-btn { font-size: 11px; }
+    #party_room_view .party-room-banner > div { flex-basis: 100%; }
+    #party_room_footer > div, #party_room_footer > div:first-child { width: 100%; flex-basis: 100%; }
+    #party_room_footer #btn_launch_party_room { width: 100%; }
+    #party_room_status_hint { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+    #party_lobby_panel *, #coop_chronicle_panel * { transition: none; }
+}

@@ -28,10 +28,12 @@
 #include "macro.h"
 #include "message.h"
 #include "misc.h"
+#include "party.h"
 #include "prompt.h"
 #include "religion.h"
 #include "startup.h"
 #include "state.h"
+#include "stats-json.h"
 #include "stringutil.h"
 #include "tag-version.h"
 #include "tilepick.h"
@@ -87,6 +89,9 @@ void cio_cleanup()
 // Clear some globally defined variables.
 static void _clear_globals_on_exit()
 {
+    for (int i = 0; i < party::MAX_PARTY_PLAYERS; ++i)
+        if (&party::get_player(i) != &you)
+            party::get_player(i).save = nullptr;
     clear_rays_on_exit();
     clear_zap_info_on_exit();
     clear_form_info_on_exit();
@@ -200,7 +205,7 @@ NORETURN void end(int exit_code, bool print_error, const char *format, ...)
     delete real_crawl_state; real_crawl_state = 0;
     delete real_dlua;        real_dlua = 0;
     delete real_clua;        real_clua = 0;
-    delete real_you;         real_you = 0;
+    real_you = 0;
     delete real_Options;     real_Options = 0;
 #endif
 
@@ -212,9 +217,13 @@ NORETURN void end(int exit_code, bool print_error, const char *format, ...)
 void delete_files()
 {
     crawl_state.need_save = false;
-    you.save->unlink();
-    delete you.save;
-    you.save = 0;
+    if (you.save)
+    {
+        you.save->unlink();
+        delete you.save;
+        you.save = 0;
+    }
+    party::sync_shared_state_from_active();
 }
 
 NORETURN void screen_end_game(string text, game_exit exit)
@@ -297,6 +306,10 @@ NORETURN void end_game(scorefile_entry &se)
     else
         hiscores_read_to_memory();
 #endif
+
+    // Final per-hero stats snapshots (wizard/explore games are flagged in
+    // the snapshot rather than skipped).
+    stats_append_final_snapshots(se);
 
     // Never generate bones files of wizard or tutorial characters -- bwr
     if (!non_death && !crawl_state.game_is_tutorial() && !you.wizard)

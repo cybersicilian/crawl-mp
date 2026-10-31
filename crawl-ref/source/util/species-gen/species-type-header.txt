@@ -81,5 +81,24 @@ enum species_type
     SP_POLTERGEIST,
     SP_REVENANT,
     SP_GALE_CENTAUR,
+    SP_TORTLE,
+    SP_OOZLE,
+    SP_CHAIN_DEVIL,
+    SP_ELDRITCH,
+    SP_TWO_HEADED_OGRE,
+    SP_HYDRA,
+    SP_AUTOMATON,
+    SP_HERMIT_CRAB,
+    SP_PROTEAN,
+    SP_FAERIE_DRAGON,
+    SP_ENT,
+#if TAG_MAJOR_VERSION != 34
+    SP_HIGH_ELF,
+#endif
+    SP_IRIT,
+    SP_SPARKBORN,
+    SP_WIGHT,
+    SP_KITSUNE,
+    SP_MELIAI,
 
     // Auto-generated enums start here

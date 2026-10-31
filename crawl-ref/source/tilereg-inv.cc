@@ -372,7 +372,7 @@ bool InventoryRegion::update_tip_text(string& tip)
                 cmd.push_back(CMD_EVOKE);
                 break;
             case OBJ_ARMOUR:
-                if (!you.has_mutation(MUT_NO_ARMOUR))
+                if (player_can_use_armour())
                 {
                     tmp += "Wear (%)";
                     cmd.push_back(CMD_WEAR_ARMOUR);

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "source_manifest_sha256": "c6e6bde0454333953f52d5c32fa5fd3142c66fc3f21be10731b24196a32b697a",
+  "engines": [
+    "chromium",
+    "webkit"
+  ],
+  "checks": {
+    "chromium": [
+      "All six exact optimization assets loaded in the native game",
+      "Enhanced dungeon and cached fog edges render at Retina resolution",
+      "Help opens in one click, contains focus, and closes without spending a turn",
+      "A key after help closes executes exactly one action for its owner",
+      "Sidebar and relative navigation controls retain their layout and visibility"
+    ],
+    "webkit": [
+      "All six exact optimization assets loaded in the native game",
+      "Enhanced dungeon and cached fog edges render at Retina resolution",
+      "Help opens and closes by pointer without spending a turn",
+      "A native command after help closes executes exactly one action for its owner",
+      "Sidebar and relative navigation controls retain their layout and visibility"
+    ]
+  },
+  "all_test_games_saved": true,
+  "scope_note": "Chrome covers keyboard/focus behavior; WebKit covers pointer modal behavior, exact assets, rendering and native websocket commands because headless macOS multiwindow keyboard focus is unreliable."
+}

@@ -1,0 +1,152 @@
+Route_melee
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(1, 14, Bur:1)
+  a burrowing beast skeleton
+(8, 46, Bur:1)
+  a scroll of identify
+(9, 14, Bur:1)
+  a +0 chain mail
+(17, 43, Bur:1)
+  a komodo dragon corpse (skeletalised by now)
+(18, 43, Bur:1)
+  a deep troll corpse (skeletalised by now)
+(22, 42, Bur:1)
+  a +0 scale mail
+(26, 29, Bur:1)
+  a scroll of identify
+(28, 16, Bur:1)
+  a scroll of butterflies
+(35, 16, Bur:1)
+  a burrowing beast skeleton
+(35, 17, Bur:1)
+  a komodo dragon skeleton
+(36, -4, Bur:1)
+  a crag boar skeleton
+(46, -10, Bur:1)
+  a crag boar skeleton
+
+Level 2 of the Burrows
+(0, 0, Bur:2)
+  4 boomerangs
+(8, -8, Bur:2)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+(9, -7, Bur:2)
+  a shale drake corpse (skeletalised by now)
+  a crag boar corpse (skeletalised by now)
+(9, -4, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(9, -1, Bur:2)
+  a shale drake skeleton
+(10, -4, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(10, 20, Bur:2)
+  a +0 bardiche
+(11, -21, Bur:2)
+  a shale drake corpse (skeletalised by now)
+(33, -21, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(33, -3, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(37, 14, Bur:2)
+  a komodo dragon skeleton
+(37, 19, Bur:2)
+  a crag boar skeleton
+(41, -3, Bur:2)
+  a burrowing beast skeleton
+(42, -18, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(56, 16, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(58, -6, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(59, -3, Bur:2)
+  a +0 trident
+
+Level 1 of the Hive
+(0, 0, Hive:1)
+  a fortress talisman
+(10, -32, Hive:1)
+  a +0 quarterstaff
+(27, -25, Hive:1)
+  a +0 war axe
+  a +0 robe
+(28, -26, Hive:1)
+  a +0 war axe
+  a +0 robe
+(28, -25, Hive:1)
+  a +1 war axe of sundering
+  a +0 leather armour
+(29, 3, Hive:1)
+  a +0 war axe
+  a +0 robe
+(30, 2, Hive:1)
+  a +0 hand axe
+  a +0 robe
+(30, 4, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(30, 6, Hive:1)
+  a +0 partisan
+(32, -20, Hive:1)
+  a +0 war axe
+  a +0 robe
+(32, -12, Hive:1)
+  a +0 plate armour
+(33, -21, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(33, -20, Hive:1)
+  a +0 hand axe
+  a +0 robe
+(46, -19, Hive:1)
+  a scroll of identify
+(47, -28, Hive:1)
+  a +0 war axe
+  a +0 robe
+(48, -30, Hive:1)
+  a +0 hand axe
+  a +0 robe
+(48, -29, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(49, -33, Hive:1)
+  a +0 short sword
+
+Level 2 of the Hive
+(0, 0, Hive:2)
+  a +2 leather armour of willpower
+  a +0 hand axe
+(0, 3, Hive:2)
+  a +0 hand axe
+  a +0 robe
+(1, -1, Hive:2)
+  a +0 war axe
+  a +0 leather armour
+(12, -9, Hive:2)
+  a +0 robe
+(16, 12, Hive:2)
+  a +0 hand axe
+  a +0 robe
+  a meliai corpse
+(17, 14, Hive:2)
+  a +0 hand axe
+  a +0 robe
+  a meliai corpse
+(17, 35, Hive:2)
+  a +2 robe of cold resistance (still there?)
+  a +0 hand axe (still there?)
+  a +0 war axe of flaming (still there?)
+  a +0 robe (still there?)
+  a venom wasp corpse (still there?)
+  a meliai corpse (still there?)
+(18, 35, Hive:2)
+  a +0 war axe
+  a +0 leather armour
+  a venom wasp corpse
+(19, 32, Hive:2)
+  a wax beetle corpse
+

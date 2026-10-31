@@ -1,0 +1,25 @@
+=Route_melee the Shield-Bearer     *WIZARD*MinotaurHealth: 19/19     ========================Magic:  0/0AC:  6 (25%)Str: 20EV:  8Int: 5SH:  4Dex: 9XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)a) +0 war axeNothing quivered♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_melee the Minotaur Fighter.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.ECONOMY_PROGRESS seed 2026102701 floors 25
+ECONOMY_PROGRESS seed 2026102702 floors 50
+ECONOMY_PROGRESS seed 2026102703 floors 75
+ECONOMY_PROGRESS seed 2026102704 floors 100
+ECONOMY_PROGRESS seed 2026102705 floors 125
+ECONOMY_PROGRESS seed 2026102706 floors 150
+ECONOMY_PROGRESS seed 2026102707 floors 175
+ECONOMY_PROGRESS seed 2026102708 floors 200
+ECONOMY_PROGRESS seed 2026102709 floors 225
+ECONOMY_PROGRESS seed 2026102710 floors 250
+ECONOMY_PROGRESS seed 2026102711 floors 275
+ECONOMY_PROGRESS seed 2026102712 floors 300
+ECONOMY_PASS 300 native floors across twelve seeds
+ROUTE_EVENT survey-complete
+Gear: 3/52 gear slots    (Left/Right/Tab to switch category)
+Hand Weapons   (go to first with ))
+ a - a +0 war axe (weapon)
+Armour         (go to first with [)
+ b - a +0 scale mail (worn)
+ c - a +0 buckler (worn)
+ a - a +0 war axe (weapon)
+Goodbye, Route_melee.0 Route_melee the Shield-Bearer (level 1, 19/19 HPs) *WIZ*Began as a Minotaur Fighter on Oct 28, 2026.Quit the game on level 2 of the Depths.The game lasted 00:00:29 (0 turns).
+Best Crawlers - Seeded
+You can find your morgue file in the '/Users/iancaltabiano/Documents/Projects/dcss/docs/design/burrows-playtest/tuning-20261028/verify-2/survey/melee-2026102701
+>

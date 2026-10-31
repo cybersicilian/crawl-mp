@@ -1,0 +1,12 @@
+{
+  "reservationId": "31b65cf5-0364-4a3c-84aa-680671a5e322",
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/result.json",
+  "nativeClosureEvidence": [
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/native-result.json",
+    "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-multiplayer-performance/native-ownership/report.json"
+  ],
+  "supervisedProcessGroupGone": true,
+  "nativeProcessesRemaining": []
+}

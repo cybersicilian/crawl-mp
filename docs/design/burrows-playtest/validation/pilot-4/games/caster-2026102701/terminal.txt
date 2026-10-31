@@ -1,0 +1,124 @@
+=Route_caster the Digger           *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 11Int: 19SH:  0Dex: 15XL:  1 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)-) Nothing wieldedCast: Sandblast♣♣♣♣@♣♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.ROUTE_EVENT setup 1
+
+_Unknown command.Enter Wizard Command (? - help): Set all skills to what level? 0Sneak 3/30ROUTE_EVENT setup 2
+Route_caster the Sneak            *WIZARD*Deep ElfHealth: 10/10     ========================Magic:  3/3========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  1 Next: 46047Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 15/15     ========================Magic:  4/4========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  2 Next: 23018Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 19/19     ========================Magic:  5/5========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  3 Next: 11504Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 24/24     ========================Magic:  6/6========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  4 Next: 65018Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 28/28     ========================Magic:  7/7========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  5 Next: 34928Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 32/32     ========================Magic:  8/8========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  6 Next: 18103Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 36/36     ========================Magic:  9/9========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  7 Next: 9196%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 41/41     ========================Magic:  10/10     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  8 Next: 4594%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 45/45     ========================Magic:  11/11     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL:  9 Next: 2259%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 50/50     ========================Magic:  12/12     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 10 Next: 1082%Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 54/54     ========================Magic:  13/13     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 11 Next: 491% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 59/59     ========================Magic:  14/14     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 12 Next: 263% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: Route_caster the Sneak            *WIZARD*Deep ElfHealth: 63/63     ========================Magic:  15/15     ========================AC:  2 (19%)Str: 5EV: 10Int: 19SH:  0Dex: 15XL: 13 Next: 100% Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣Welcome, Route_caster the Deep Elf Earth Elementalist.Game seed: 2026102701 (custom seed);
+ Press ? for a list of commands and other information.
+_Found a staircase leading out of the dungeon.
+_Unknown command.Enter Wizard Command (? - help): 
+_Set all skills to what level? 0
+ Enter Wizard Command (? - help): Enter new experience level: 8/686/164 0% ROUTE_EVENT setup 3
+
+_Experience level set to 14.
+ Enter Wizard Command (? - help): Enter values for Str, Int, Dex (space separated): 8 28 148284ROUTE_EVENT setup 4
+
+
+_Setting attributes (Str, Int, Dex) to: 8, 28, 14
+ Enter Wizard Command (? - help): Which skill (by name)? Fighting
+ Fighting
+ To what level? (current = 0.0) 10Fighter88/8ROUTE_EVENT setup 5
+
+_Increased Fighting to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Evocations
+ Evocations
+ To what level? (current = 0.0) 6ROUTE_EVENT setup 6
+
+_Increased Evocations to skill level 6.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Shields
+ Shields
+ To what level? (current = 0.0) 4ROUTE_EVENT setup 7
+
+_Increased Shields to skill level 4.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Dodging
+ Dodging
+ To what level? (current = 0.0) 12Nimble 7ROUTE_EVENT setup 8
+
+_Increased Dodging to skill level 12.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Translocations
+ Translocations
+ To what level? (current = 0.0) 8ROUTE_EVENT setup 9
+
+_Increased Translocations to skill level 8.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Earth Magic
+ Earth Magic
+ To what level? (current = 0.0) 14GeomancerROUTE_EVENT setup 10
+
+_Increased Earth Magic to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Spellcasting
+ Spellcasting
+ To what level? (current = 0.0) 1416/34-------------ROUTE_EVENT setup 11
+
+_Increased Spellcasting to skill level 14.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Fire Magic
+ Fire Magic
+ To what level? (current = 0.0) 10ROUTE_EVENT setup 12
+Fire Magic
+ Fire Magic0Fire Magic to skill level 10.0.Conjurations
+ Conjurations4ROUTE_EVENT setup 13
+Route_caster the Geomancer        *WIZARD*Deep ElfHealth: 88/88     ========================Magic:  16/34     ===========-------------AC:  2 (19%)Str: 8EV: 17Int: 28SH:  0Dex: 14XL: 14 Next:  0%  Place: Dungeon:1Noise:  0 ------  Time: 0.0 (0.0)♣♣♣-) Nothing wielded♣@♣Cast: Sandblast♣..♣♣♣♣..♣♣.♣.♣♣
+_Increased Fire Magic to skill level 10.0.
+ Enter Wizard Command (? - help): Which skill (by name)? Conjurations
+ Conjurations
+ To what level? (current = 0.0) 14
+_Increased Conjurations to skill level 14.0.
+ Enter Wizard Command (? - help): Memorise which spell? Memorise Stone Arrow, consuming 3 spell levels and leaving 37? 

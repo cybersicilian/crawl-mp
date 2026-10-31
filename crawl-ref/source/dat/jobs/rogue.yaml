@@ -1,0 +1,26 @@
+enum: JOB_ROGUE
+name: Rogue
+short_name: Rg
+category: Adventurer
+category_priority: 80
+str: 3
+int: 3
+dex: 6
+equipment:
+  - "dagger plus:2"
+  - "robe"
+  - "cloak"
+  - "dart ego:poisoned q:9"
+  - "wand of flame charges:15"
+  - "wand of charming charges:15 no_exclude"
+recommended_species:
+  - human
+  - kobold
+  - spriggan
+  - vine stalker
+skills:
+  fighting: 2
+  stealth: 4
+  short blades: 2
+  evocations: 2
+create_enum: false

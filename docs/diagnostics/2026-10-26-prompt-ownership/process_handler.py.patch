@@ -1,0 +1,212 @@
+--- a/webserver/webtiles/process_handler.py
++++ b/webserver/webtiles/process_handler.py
+@@ -161,7 +161,9 @@
+         self.idle_checker.start()
+         self.activity_pump = ActivityPump(self.party_control, self.player_streams,
+             lambda: {self.party_control.selected(receiver) for receiver in self._receivers},
+-            self._step_native_activity)
++            self._step_native_activity, probe=self._probe_native_activity,
++            restore_prompt=self._restore_native_prompt,
++            diagnostic=self._report_input_lifecycle)
+         self.activity_timer = PeriodicCallback(self.activity_pump.tick, 150)
+         self.activity_timer.start()
+         self._was_idle = False
+@@ -279,14 +281,49 @@
+         self.conn.send_message(utf8(json_encode(packet)))
+         return True
+ 
++
++    def _probe_native_activity(self, request_id):
++        if self.conn and self.conn.open:
++            self.conn.send_message(utf8(json_encode(dict(msg="party_activity_probe", request_id=request_id))))
++
++
++    def _restore_native_prompt(self):
++        if self.conn and self.conn.open:
++            self.conn.send_message(utf8(json_encode(dict(msg="spectator_joined"))))
++
++
++    def _report_input_lifecycle(self, event):
++        log = self.logger.warning if event["event"] in {"native_unknown", "native_unresponsive"} else self.logger.info
++        log("Input lifecycle: %s", json_encode(event))
++
+     def handle_process_message(self, msg, send): # type: (str, bool) -> None
+         if re.search(r'"msg"\s*:\s*"party_packet"', msg[:80]):
+             envelope = json_decode(msg)
+             payload = envelope.get("payload", {})
++            if (envelope.get("view") is True
++                    and payload.get("msg") in {"party_activity_ready", "party_activity_status"}):
++                return
++            if payload.get("msg") == "party_activity_status" and getattr(self, "activity_pump", None):
++                pump = self.activity_pump
++                if (pump.inflight and type(payload.get("activity_id")) is int
++                        and payload["activity_id"] == pump.request_id and payload.get("state") == "complete"
++                        and type(payload.get("plan_id")) is int and type(payload.get("plan_turns")) is int):
++                    # A lost native boundary can also strand the browser's
++                    # tactical plan. Replay only this proven completion to its
++                    # original hero, before dispatching any queued command.
++                    owner = payload.get("owner")
++                    for receiver in self._receivers:
++                        if self.party_control.selected(receiver) == owner:
++                            self.player_streams.deliver(receiver, dict(msg="input_mode", mode=1,
++                                plan_id=payload["plan_id"], plan_turns=payload["plan_turns"]),
++                                pump._view(owner).get("floor"), send)
++                self.activity_pump.recover(payload)
++                self.activity_pump.tick()
++                return
+             if (envelope.get("view") is not True and getattr(self, "activity_pump", None)
+-                    and (payload.get("msg") in {"ui-push", "menu"}
++                    and (payload.get("msg") in {"ui-push", "menu", "init_input"}
+                          or payload.get("msg") == "input_mode" and payload.get("mode", 0) > 1)):
+-                self.activity_pump.prompt = True
++                self.activity_pump.prompt_boundary()
+             if payload.get("msg") == "party_activity_ready" and getattr(self, "activity_pump", None):
+                 self.activity_pump.command_boundary(payload.get("activity_id"))
+                 if self.activity_pump.queued_action:
+@@ -302,10 +339,6 @@
+                     self.activity_pump.command_boundary()
+                     if self.activity_pump.queued_action:
+                         self.activity_pump.tick()
+-                elif isinstance(mode, int) and mode > 1 and not self.activity_pump.manual:
+-                    # An automated native action can itself ask for input.
+-                    # Let its owner answer; queued peer commands wait for COMMAND.
+-                    self.activity_pump.inflight = False
+             return
+         if getattr(self, "player_streams", None) and any(
+                 '"%s"' % kind in msg[:60] for kind in PlayerStreams.shared | {"input_mode"}):
+@@ -1268,21 +1301,66 @@
+             self.player_streams.restore(watcher)
+             self.player_streams.request(watcher)
+ 
+-    def handle_input(self, msg, source=None): # type: (str, Any) -> None
++    def handle_input(self, msg, source=None, queued_floor=None):
+         obj = json_decode(msg)
+-        if obj.get("msg") in ("view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready"):
++        if obj.get("msg") in ("view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
+             return
+         obj.pop("activity_id", None)
++        obj.pop("prompt_activity_id", None)
++        obj.pop("input_floor", None)
+         pump = getattr(self, "activity_pump", None)
+         cancel_activity = obj.get("msg") == "party_activity" and obj.get("action") == "cancel"
+-        own_prompt = pump and pump.manual and pump.owner == self.party_control.selected(source)
++        selected = self.party_control.selected(source)
++        if self.party_control.multiplayer:
++            error = None
++            if obj.get("msg") == "key" and (type(obj.get("keycode")) is not int
++                    or not -2147483648 <= obj["keycode"] <= 2147483647):
++                error = "Choose a valid game key."
++            elif obj.get("msg") == "input":
++                data, text = obj.get("data", []), obj.get("text", "")
++                if (not isinstance(data, list) or not isinstance(text, str)
++                        or len(data) + len(text) > 32
++                        or any(type(value) is not int or not 0 <= value <= 1114111 for value in data)):
++                    error = "Send at most 32 valid game keys at a time."
++            if error:
++                if source:
++                    source.send_message("game_action_error", message=error)
++                return
++        own_prompt = pump and pump.prompt and pump.owner == selected
++        streams = getattr(self, "player_streams", None) or getattr(pump, "streams", None)
++        is_escape = (
++            (obj.get("msg") == "key" and obj.get("keycode") == 27)
++            or (obj.get("msg") == "input" and (obj.get("data") == [27] or obj.get("text") == "\x1b"))
++        )
++        if self.party_control.multiplayer and pump and is_escape and selected is not None:
++            removed = pump.clear_queued_action(selected)
++            removed = pump.clear_queued_input(selected) or removed
++            if removed:
++                for receiver in getattr(self, "_receivers", ()):
++                    if self.party_control.state or self.party_control.views:
++                        append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
++                if not own_prompt and (pump.inflight or streams and streams.native_ready):
++                    return
+         if (pump and pump.inflight and not own_prompt and not cancel_activity and obj.get("msg") not in
+                 {"party_hover", "party_ping", "ui_state_sync"}):
++            if selected is None:
++                if source:
++                    source.send_message("game_action_error", message="Claim a party hero before sending game input.")
++                return
+             if pump.prompt:
+                 if source:
+                     source.send_message("game_action_error", message="Another hero is finishing an action. Your view is unchanged.")
+                 return
+-            pump.queue_input(lambda: self.handle_input(msg, source))
++            queued_floor = pump._view(selected).get("floor")
++            accepted = pump.queue_input(
++                lambda: self.handle_input(msg, source, queued_floor=queued_floor)
++                if source in getattr(self, "_receivers", ())
++                and self.party_control.selected(source) == selected
++                and pump._view(selected).get("floor") == queued_floor else None,
++                selected,
++            )
++            if not accepted and source:
++                source.send_message("game_action_error", message="Input queue is full (32 commands). Escape clears it.")
+             return
+ 
+         if obj.get("msg") == "party_hover":
+@@ -1349,18 +1427,6 @@
+                 if self.party_control.state or self.party_control.views:
+                     append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+             return
+-        streams = getattr(self, "player_streams", None) or getattr(pump, "streams", None)
+-        is_escape = (
+-            (obj.get("msg") == "key" and obj.get("keycode") == 27)
+-            or (obj.get("msg") == "input" and (obj.get("data") == [27] or obj.get("text") == "\x1b"))
+-        )
+-        if self.party_control.multiplayer and pump and is_escape:
+-            if pump.clear_queued_action(player_id):
+-                for receiver in getattr(self, "_receivers", ()):
+-                    if self.party_control.state or self.party_control.views:
+-                        append_snapshot(receiver, self.party_control, self.party_control.snapshot(receiver), True)
+-                if streams and getattr(streams, "native_ready", False):
+-                    return
+         # Only this server can request an acknowledgement of owner selection.
+         obj.pop("control_owner", None)
+ 
+@@ -1406,10 +1472,11 @@
+             accepted = pump.queue_action(
+                 player_id,
+                 label,
+-                lambda: (self.handle_input(msg, source)
++                lambda: (self.handle_input(msg, source, queued_floor=queued_floor)
+                          if hasattr(self, "handle_input")
+-                         else CrawlProcessHandler.handle_input(self, msg, source))
++                         else CrawlProcessHandler.handle_input(self, msg, source, queued_floor=queued_floor))
+                          if source in getattr(self, "_receivers", ())
++                         and self.party_control.selected(source) == player_id
+                          and pump._view(player_id).get("floor") == queued_floor else None,
+             )
+             if not accepted and source:
+@@ -1439,15 +1506,16 @@
+                 if not self.conn or not self.conn.open:
+                     return
+                 for ch in data:
++                    if self.party_control.multiplayer and pump:
++                        # Use the same ownership/serialization path as a single
++                        # key. Raw strings must not create untracked suffixes.
++                        self.handle_input(json_encode(dict(msg="key", keycode=ord(ch))), source, queued_floor=queued_floor)
++                        continue
+                     packet = {
+                         "msg": "key",
+                         "keycode": ord(ch),
+                         "player_id": player_id
+                     }
+-                    if self.party_control.multiplayer and pump:
+-                        activity_id = pump.start_manual(player_id)
+-                        if activity_id:
+-                            packet["activity_id"] = activity_id
+                     self.conn.send_message(utf8(json_encode(packet)))
+             else:
+                 self.process.write_input(utf8(data))
+@@ -1470,6 +1538,10 @@
+                 activity_id = pump.start_manual(player_id)
+                 if activity_id:
+                     obj["activity_id"] = activity_id
++            if pump and pump.inflight and own_prompt:
++                obj["prompt_activity_id"] = pump.request_id
++            if queued_floor is not None:
++                obj["input_floor"] = queued_floor
+             self.conn.send_message(utf8(json_encode(obj)))
+ 
+     def handle_chat_message(self, username, text, tags=None):

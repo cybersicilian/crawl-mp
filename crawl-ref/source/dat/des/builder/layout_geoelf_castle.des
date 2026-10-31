@@ -6,6 +6,7 @@
 
 # Required file contains overview of geoelf room placement
 : crawl_require("dlua/layout/geoelf.lua")
+: crawl_require("dlua/layout/coordinates.lua")
 
 {{
   --
@@ -148,7 +149,9 @@ TAGS:   no_rotate no_vmirror no_hmirror
   --
 
   -- choose which sides of primary vault have castle and rooms
-  local p_x_min, p_x_max, p_y_min, p_y_max = primary_vault_dimensions()
+  local frame = layout_coordinates.builder_frame()
+  local p_x_min, p_x_max, p_y_min, p_y_max =
+    layout_coordinates.primary_vault_dimensions(_G, frame)
   if (p_x_min == nil) then
     crawl.mpr("layout_geoelf_castle didn't veto for no primary vault")
     return true  -- no primary vault
@@ -1080,7 +1083,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
   --     into this area
   for y = 1, gym - 2 do
     for x = 1, gxm - 2 do
-      if dgn.in_vault(x, y) then
+      if dgn.in_vault(frame.to_grid(x, y)) then
         mapgrd[x][y] = WALL_GLYPH
       end
     end
@@ -1123,7 +1126,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
   --  TODO: Why does it have to be "."s? Can this be fixed?
   for y = 1, gym - 2 do
     for x = 1, gxm - 2 do
-      if dgn.in_vault(x, y) then
+      if dgn.in_vault(frame.to_grid(x, y)) then
         for dy = -1, 1 do
           for dx = -1, 1 do
             if mapgrd[x + dx][y + dy] == INSIDE_GLYPH then
@@ -1140,7 +1143,7 @@ TAGS:   no_rotate no_vmirror no_hmirror
     for y = 0, gym - 1 do
       local line = ""
       for x = 0, gxm - 1 do
-        if dgn.in_vault(x, y) then
+        if dgn.in_vault(frame.to_grid(x, y)) then
           line = line .. " "
         else
           line = line .. mapgrd[x][y]
@@ -1157,13 +1160,19 @@ veto {{
   --  enough space around it for at least one line of rooms
 
   local gxm, gym = dgn.max_bounds()
-  local p_x_min, p_x_max, p_y_min, p_y_max = primary_vault_dimensions()
+  local frame = layout_coordinates.builder_frame()
+  local p_x_min, p_x_max, p_y_min, p_y_max =
+    layout_coordinates.primary_vault_dimensions(_G, frame)
 
   if (p_x_min == nil) then
     if (DEBUG_CASTLE_DESIGN) then
       crawl.mpr("layout_geoelf_castle vetoed because no primary vault")
     end
     return true  -- no primary vault
+  elseif not frame.contains(p_x_min, p_x_max, p_y_min, p_y_max) then
+    -- A primary vault docked outside the centered builder cannot be wrapped
+    -- safely by this layout. Let the builder choose another compatible layout.
+    return true
   elseif (p_x_max - p_x_min < PRIMARY_VAULT_MIN_SIZE or
           p_y_max - p_y_min < PRIMARY_VAULT_MIN_SIZE) then
     -- primary vault is too small

@@ -1,0 +1,36 @@
+enum: JOB_PALADIN
+name: "Paladin"
+short_name: Pa
+category: Zealot
+category_priority: 65
+str: 5
+int: 4
+dex: 3
+spells:
+  - SPELL_AURA_OF_PROTECTION
+  - SPELL_AURA_OF_ZEAL
+  - SPELL_AURA_OF_RIME
+  - SPELL_AURA_OF_VITALITY
+  - SPELL_AURA_OF_SANCTUARY
+equipment:
+  - "ring mail"
+  - "buckler"
+  - "potion of curing"
+weapon_choice: plain
+recommended_species:
+  - mountain dwarf
+  - gnoll
+  - minotaur
+  - gargoyle
+  - human
+  - draconian
+skills:
+  fighting: 2
+  armour: 1
+  shields: 1
+  invocations: 2
+  spellcasting: 2
+  auramancy: 2
+  earth magic: 1
+  weapon: 2
+create_enum: false

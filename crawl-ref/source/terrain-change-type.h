@@ -21,5 +21,7 @@ enum terrain_change_type
     TERRAIN_CHANGE_CRYSTAL_BURST,
     TERRAIN_CHANGE_DRAGON_VEINS,
     TERRAIN_CHANGE_ICE_THORNS,
+    // Appended so existing saved terrain-change values retain their meaning.
+    TERRAIN_CHANGE_AUTOMATON_BOG,
     NUM_TERRAIN_CHANGE_TYPES
 };

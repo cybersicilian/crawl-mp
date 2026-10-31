@@ -4,6 +4,9 @@
 **/
 
 #include "AppHdr.h"
+#include "god-vellum.h"
+#include "coop-content.h"
+#include "oozle-memory-effects.h"
 
 #include "item-use.h"
 
@@ -48,6 +51,7 @@
 #include "nearby-danger.h"
 #include "orb.h"
 #include "output.h"
+#include "party.h"
 #include "player-equip.h"
 #include "player-stats.h"
 #include "potion.h"
@@ -905,7 +909,7 @@ static bool _can_generically_use_armour(bool wear=true)
         return false;
     }
 
-    if (you.has_mutation(MUT_NO_ARMOUR))
+    if (!player_can_use_armour())
     {
         if (wear)
             mprf(MSGCH_PROMPT, "You can't wear anything.");
@@ -1340,7 +1344,7 @@ bool warn_about_changing_gear(const vector<item_def*>& to_remove, item_def* to_e
         int removed_flight = 0;
         for (item_def* item : to_remove)
         {
-            if (item_grants_flight(*item))
+            if (item_grants_flight(*item) || vellum::item_bonus(you, *item, ARTP_FLY))
             {
                 if (++removed_flight >= equipped_flight)
                 {
@@ -1705,7 +1709,7 @@ bool can_unequip_item(item_def& item, bool silent)
         return false;
     }
 
-    if (is_unrandom_artefact(item, UNRAND_DEMON_AXE) && you.beheld())
+    if (has_unrand_effect(item, UNRAND_DEMON_AXE) && you.beheld())
     {
         if (!silent)
         {
@@ -1715,7 +1719,7 @@ bool can_unequip_item(item_def& item, bool silent)
         return false;
     }
 
-    if (you.duration[DUR_VAINGLORY] && is_unrandom_artefact(item, UNRAND_VAINGLORY))
+    if (you.duration[DUR_VAINGLORY] && has_unrand_effect(item, UNRAND_VAINGLORY))
     {
         if (!silent)
         {
@@ -2011,9 +2015,9 @@ bool drink(item_def* potion)
     if (you.unrand_equipped(UNRAND_VICTORY, true)
         && !you.props.exists(VICTORY_CONDUCT_KEY))
     {
-        item_def *item = you.equipment.get_first_slot_item(SLOT_BODY_ARMOUR, true);
+        item_def *item = oozle::unrand_source(UNRAND_VICTORY, true);
         string unrand_prompt = make_stringf("Really quaff with monsters nearby "
-                                            "while wearing %s?",
+                                            "while benefiting from %s?",
                                             item->name(DESC_THE, false, true,
                                                        false).c_str());
 
@@ -2898,6 +2902,11 @@ bool scroll_hostile_check(scroll_type which_scroll)
         if (hitfunc->valid_aim(*ri) && hitfunc->is_affected(*ri) != AFF_NO)
             return true;
     }
+    if (party::is_enabled()
+        && party::any_teammate_sees_hostile_for_scroll(which_scroll))
+    {
+        return true;
+    }
     // nothing found: check fails
     return false;
 }
@@ -2929,6 +2938,13 @@ static spret _run_read_scroll_uncancel(uncancellable_type kind,
  */
 bool read(item_def* scroll, dist *target)
 {
+    if (scroll && !coop_content::enabled()
+        && coop_content::exclusive_item(scroll->base_type, scroll->sub_type))
+    {
+        mpr("This scroll requires a multiplayer game.");
+        return false;
+    }
+
     bool god_forbids = false;
     string failure_reason = cannot_read_item_reason(scroll, true, false,
                                                     &god_forbids);
@@ -2991,9 +3007,9 @@ bool read(item_def* scroll, dist *target)
     if (you.unrand_equipped(UNRAND_VICTORY, true)
         && !you.props.exists(VICTORY_CONDUCT_KEY))
     {
-        item_def *item = you.equipment.get_first_slot_item(SLOT_BODY_ARMOUR, true);
+        item_def *item = oozle::unrand_source(UNRAND_VICTORY, true);
         string unrand_prompt = make_stringf("Really read with monsters nearby "
-                                            "while wearing %s?",
+                                            "while benefiting from %s?",
                                             item->name(DESC_THE, false, true,
                                                        false).c_str());
 
@@ -3151,7 +3167,7 @@ bool read(item_def* scroll, dist *target)
         bool had_effect = false;
         for (monster_near_iterator mi(you.pos(), LOS_NO_TRANS); mi; ++mi)
         {
-            if (mons_invuln_will(**mi))
+            if (party::is_proxy_monster(**mi) || mons_invuln_will(**mi))
                 continue;
 
             // Jivya is a killjoy when it comes to slime bombing.
@@ -3280,6 +3296,32 @@ bool read(item_def* scroll, dist *target)
 
         break;
 
+    case SCR_SOUL_RECALL:
+        party::scroll_soul_recall();
+        break;
+
+    case SCR_RALLYING:
+        party::scroll_rallying();
+        break;
+
+    case SCR_PHASE_SWAP:
+    {
+        const string reason = you.no_tele_reason(true);
+        if (!reason.empty())
+        {
+            mpr(reason);
+            break;
+        }
+        const coord_def pref = target ? target->target : coord_def();
+        if (!party::scroll_phase_swap(pref) && alreadyknown)
+            result = spret::abort;
+        break;
+    }
+
+    case SCR_SHARED_VIGOUR:
+        party::scroll_shared_vigour();
+        break;
+
     default:
         mpr("Read a buggy scroll, please report this.");
         break;
@@ -3304,6 +3346,11 @@ void handle_post_scroll_effects(item_def* scroll, spret read_result,
     if (read_result == spret::seen_hups)
         return;
 
+    const scroll_type which_scroll = static_cast<scroll_type>(scroll->sub_type);
+
+    if (read_result == spret::success && party::is_enabled())
+        party::apply_coop_scroll_chorus(which_scroll, original_pos);
+
     if (read_result != spret::abort)
         you.turn_is_over = true;
 
@@ -3327,8 +3374,6 @@ void handle_post_scroll_effects(item_def* scroll, spret read_result,
         if (is_loud)
             noisy(40, original_pos, MID_PLAYER);
     }
-
-    const scroll_type which_scroll = static_cast<scroll_type>(scroll->sub_type);
 
     if (!alreadyknown
         && which_scroll != SCR_BRAND_WEAPON

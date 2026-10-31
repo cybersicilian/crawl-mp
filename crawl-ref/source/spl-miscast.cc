@@ -160,6 +160,16 @@ static const map<spschool, miscast_datum> miscast_effects = {
         },
     },
     {
+        spschool::auramancy,
+        {
+            BEAM_NONE,
+            [] (actor& target, actor* source, miscast_source_info /*mc_info*/,
+                int dam, string /*cause*/) {
+                target.weaken(source, max(1, dam));
+            }
+        },
+    },
+    {
         spschool::summoning,
         {
             BEAM_NONE,

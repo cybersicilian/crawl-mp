@@ -40,6 +40,7 @@
 #include "notes.h"
 #include "output.h"
 #include "options.h"
+#include "party.h"
 #include "player-equip.h"
 #include "prompt.h"
 #include "randbook.h"
@@ -569,6 +570,13 @@ static const vector<pair<misc_item_type, int> > _misc_base_weights()
         {MISC_CONDENSER_VANE,      20},
         {MISC_GRAVITAMBOURINE,     20},
     };
+    if (party::is_enabled())
+    {
+        choices.push_back({MISC_AEGIS_STANDARD,     20});
+        choices.push_back({MISC_ASTRAL_BEACON,      20});
+        choices.push_back({MISC_TWIN_SPARK_CONDUIT, 20});
+        choices.push_back({MISC_SKALD_HORN,         20});
+    }
     // The player never needs more than one of any of these.
     for (auto &p : choices)
         if (you.seen_misc[p.first])
@@ -1669,7 +1677,7 @@ vector<object_class_type> shuffled_acquirement_classes(bool scroll)
 {
     vector<object_class_type> rand_classes;
 
-    if (!you.has_mutation(MUT_NO_ARMOUR))
+    if (player_can_use_armour())
         rand_classes.emplace_back(OBJ_ARMOUR);
 
     if (!you.has_mutation(MUT_NO_GRASPING))

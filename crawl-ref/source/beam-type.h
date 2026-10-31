@@ -111,11 +111,27 @@ enum beam_type                  // bolt::flavour
     BEAM_LAST_ENCHANTMENT = BEAM_DIMINISH_SPELLS,
 
     BEAM_MEPHITIC,
+    BEAM_POTION_POISON,
+    BEAM_POTION_MIASMA,
+    BEAM_POTION_STEAM,
+    BEAM_POTION_FIRE,
+    BEAM_POTION_COLD,
+    BEAM_POTION_BLACK_SMOKE,
+    BEAM_POTION_GREY_SMOKE,
+    BEAM_POTION_MUTAGENIC,
+    BEAM_POTION_BLUE_SMOKE,
+    BEAM_POTION_PURPLE_SMOKE,
+    BEAM_POTION_RAIN,
+    BEAM_POTION_RANDOM,
     BEAM_AIR,
     BEAM_PETRIFYING_CLOUD,
     BEAM_ENSNARE,
     BEAM_DEATH_RATTLE,
     BEAM_LAST_REAL = BEAM_DEATH_RATTLE,
+
+    // Spell effects appended here to preserve existing real beam values.
+    BEAM_MANA_RUPTURE,
+    BEAM_BLIGHT,
 
     // For getting the visual effect of a beam.
     BEAM_VISUAL,

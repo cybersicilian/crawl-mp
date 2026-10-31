@@ -1,8 +1,11 @@
-
 #pragma once
 
 #include "spl-cast.h"
 #include "transformation.h"
+
+#ifndef SPELL_SONG_OF_SLAYING
+#define SPELL_SONG_OF_SLAYING SPELL_SONG_OF_SHIELDING
+#endif
 
 // Maximum amount of slaying you can stack with fugue
 const int FUGUE_MAX_STACKS = 7;
@@ -22,6 +25,16 @@ spret corpse_armour(int pow, bool fail);
 spret cast_revivification(int pow, bool fail);
 
 spret cast_swiftness(int power, bool fail);
+
+spret cast_regeneration(int pow, bool fail);
+spret cast_deflect_missiles(int pow, bool fail);
+spret cast_shroud_of_golubria(int pow, bool fail);
+spret cast_song_of_slaying(int pow, bool fail);
+spret cast_phase_shift(int pow, bool fail);
+spret cast_aegis_link(int pow, bool fail);
+spret cast_ballad_of_the_vanguard(int pow, bool fail);
+spret cast_sanctuary_chorus(int pow, bool fail);
+spret cast_aura_spell(spell_type spell, int pow, bool fail);
 
 int cast_selective_amnesia(const string &pre_msg = "");
 

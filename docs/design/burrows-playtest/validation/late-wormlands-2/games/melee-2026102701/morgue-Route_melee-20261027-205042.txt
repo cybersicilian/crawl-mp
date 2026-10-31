@@ -1,0 +1,478 @@
+ Seeded DCSS version 0.33-a0 (console) character file.
+
+Game seed: 2026102701 (custom seed)
+
+278194 Route_melee the Severer (level 20, -10/189 HPs) *WIZ*
+             Began as a Minotaur Fighter on Oct 27, 2026.
+             Was a Priest of Okawaru.
+             Drained of all life by a deathcap
+             ... on level 3 of the Wormlands.
+             The game lasted 00:00:10 (2212 turns).
+
+Route_melee the Severer (Minotaur Fighter)          Turns: 2212, Time: 00:00:10
+
+Health: -10/189    AC: 28    Str: 24    XL:     20   Next: 30%
+Magic:  25/25      EV: 14    Int:  8    God:    Okawaru 80 (0)
+Gold:   154        SH: 16    Dex: 16    Spells: 19/19 levels left
+
+rFire   . . .  (100%)   k - +3 broad axe
+rCold   . . .  (100%)   i - +1 kite shield
+rNeg    . . .  (100%)   j - +2 plate armour
+rPois   +      (33%)    (no helmet)
+rElec   .      (100%)   g - +0 cloak {Stlth+}
+rCorr   .      (100%)   f - +0 pair of gloves
+SInv    .               e - +0 pair of boots
+Will    +....           (no amulet)
+Stlth                   d - ring of poison resistance
+HPRegen 0.51/turn       (no ring)
+MPRegen 0.19/turn
+
+%: no passive effects
+@: mighty, heroic
+A: horns 2, retaliatory headbutt
+a: Renounce Religion (0%), Build terrain (0%), Set terrain to build (0%), Clear
+terrain to floor (0%), Heroism (0%)
+
+
+You were on level 3 of the Wormlands.
+You worshipped Okawaru.
+Okawaru was most pleased with you.
+You visited 2 branches of the dungeon, and saw 4 of its levels.
+
+You collected 154 gold pieces.
+
+Inventory:
+
+Hand Weapons
+ a - a +0 war axe
+ k - a +3 broad axe (weapon)
+Armour
+ b - a +0 scale mail
+ c - a +0 buckler
+ e - a +0 pair of boots (worn)
+ f - a +0 pair of gloves (worn)
+ g - a +0 cloak of stealth (worn)
+ h - a +0 helmet
+ i - a +1 kite shield (worn)
+ j - a +2 plate armour (worn)
+Jewellery
+ d - a ring of poison resistance (worn)
+ l - a ring of resist corrosion
+Wands
+ c - a wand of iceblast (5)
+Scrolls
+ g - 3 scrolls of fog
+ t - 2 scrolls of teleportation
+ T - a scroll of torment
+Potions
+ m - a potion of might
+ g - 2 potions of magic
+ e - 2 potions of enlightenment
+ c - 6 potions of curing
+ C - 3 potions of cancellation
+ M - a potion of mutation
+ i - a potion of invisibility
+
+
+   Skills:
+ + Level 18.4(23.4) Fighting
+ + Level 20.3(25.3) Axes
+ + Level 17.4(22.4) Armour
+ - Level 10.0(15.0) Dodging
+ + Level 14.5(19.5) Shields
+ + Level 8.7 Invocations
+ - Level 10.0 Evocations
+
+
+You had 19 spell levels left.
+You didn't know any spells.
+Your spell library contained the following spells:
+
+ Spells                   Type           Power      Damage    Failure   Level
+ Anguish                  Hex/Necr       0 (200)    N/A       100%        4
+ Permafrost Eruption      Ice/Erth       0 (200)    2x4d1     100%        6
+
+
+Dungeon Overview and Level Annotations
+
+Branches:
+Dungeon (1/15)            
+
+Altars:
+
+
+Innate Abilities, Weirdness & Mutations
+
+You have a pair of horns on your head.
+You reflexively headbutt those who attack you in melee.
+
+Message History
+
+The coil worm bites you but does no damage.
+The coil worm constricts you. You block the gallery worm's attack. You block
+the caustic worm's attack. You block the gallery worm's attack.
+You completely miss the coil worm. You headbutt the coil worm!
+The coil worm is moderately wounded.
+You slice the caustic worm!! You hit the gallery worm. You slice the gallery
+worm!!
+The coil worm bites you. The coil worm constricts you.
+The deathcap draws from the surrounding life force!
+The gallery worm bites you!!
+You feel much better. You block the caustic worm's attack.
+The gallery worm bites you but does no damage.
+The deathcap draws from the surrounding life force!
+The coil worm bites you. The coil worm constricts you! The gallery worm bites
+you.
+You feel much better. You block the caustic worm's attack. You block the
+gallery worm's attack. The coil worm bites you. The coil worm constricts you!
+You block the gallery worm's attack.
+The deathcap draws from the surrounding life force!
+You feel much better. The gallery worm bites you. The coil worm bites you! The
+coil worm constricts you!
+* * * LOW HITPOINT WARNING * * *
+The gallery worm bites you.
+* * * LOW HITPOINT WARNING * * *
+You block the coil worm's attack.
+The deathcap draws from the surrounding life force!
+* * * LOW HITPOINT WARNING * * *
+Blink to where?
+Press: ? - help, Dir - move target
+You blink free of the coil worm! Found a potion of enlightenment.
+As you read the scroll of blinking, it crumbles to dust.
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+You start resting.
+A gallery worm comes into view.
+The deathcap draws from the surrounding life force!
+* * * LOW HITPOINT WARNING * * *
+You slice the gallery worm!!
+The gallery worm is almost dead.
+You slash the gallery worm!
+You kill the gallery worm!
+Okawaru accepts your kill.
+The deathcap draws from the surrounding life force!
+You die...
+
+         ##
+        ##...
+       ##...
+      ##....
+      #.....
+      #....##
+      #.....#
+       #..!.#
+       ##...#
+ ###### #...#
+##.....##.@.#
+........:.w.#
+........ww..#
+......f.....#
+........w...##
+.....f.......##
+..............##
+.......<.......##
+................#
+........§<##....
+.................
+
+
+You could see a gallery worm, 2 coil worms, a caustic worm and 2 deathcaps.
+
+Vanquished Creatures
+  A stone giant (Worm:1)
+  9 gallery worms
+  12 coil worms
+  A great orb of eyes (Worm:1)
+  3 caustic worms (Worm:2)
+  A deep troll earth mage (Worm:2)
+  4 deep trolls (Worm:2)
+  4 lindwurms
+  9 wandering mushrooms
+  An earth elemental (Worm:2)
+  A deathcap (Worm:2)
+46 creatures vanquished.
+
+Notes
+Turn   | Place    | Note
+-------+----------+-------------------------------------------
+     0 | D:1      | Route_melee the Minotaur Fighter began the quest for the
+                  | Orb.
+     0 | D:1      | You started the game in wizard mode.
+     0 | D:1      | Reached XP level 1. HP: 19/19 MP: 0/0
+     0 | D:1      | Reached XP level 2. HP: 20/20 MP: 1/1
+     0 | D:1      | Reached XP level 3. HP: 26/26 MP: 2/2
+     0 | D:1      | Reached XP level 4. HP: 33/33 MP: 3/3
+     0 | D:1      | Reached XP level 5. HP: 38/38 MP: 4/4
+     0 | D:1      | Reached XP level 6. HP: 45/45 MP: 5/5
+     0 | D:1      | Reached XP level 7. HP: 50/50 MP: 6/6
+     0 | D:1      | Reached XP level 8. HP: 57/57 MP: 7/7
+     0 | D:1      | Reached XP level 9. HP: 62/62 MP: 8/8
+     0 | D:1      | Reached XP level 10. HP: 69/69 MP: 9/9
+     0 | D:1      | Reached XP level 11. HP: 74/74 MP: 10/10
+     0 | D:1      | Reached XP level 12. HP: 81/81 MP: 11/11
+     0 | D:1      | Reached XP level 13. HP: 86/86 MP: 12/12
+     0 | D:1      | Reached XP level 14. HP: 93/93 MP: 13/13
+     0 | D:1      | Reached XP level 15. HP: 99/99 MP: 14/14
+     0 | D:1      | Reached XP level 16. HP: 105/105 MP: 15/15
+     0 | D:1      | Reached XP level 17. HP: 111/111 MP: 16/16
+     0 | D:1      | Reached XP level 18. HP: 117/117 MP: 17/17
+     0 | D:1      | Reached XP level 19. HP: 123/123 MP: 18/18
+     0 | D:1      | Reached XP level 20. HP: 129/129 MP: 19/19
+     0 | D:1      | Became a worshipper of Warmaster Okawaru
+    59 | D:1      | Reached * piety under Okawaru
+    59 | D:1      | Reached ** piety under Okawaru
+    59 | D:1      | Reached *** piety under Okawaru
+    59 | D:1      | Reached **** piety under Okawaru
+    59 | Worm:1   | Entered Level 1 of the Wormlands
+  2209 | Worm:3   | HP: 8/189 [drained]
+  2212 | Worm:3   | Drained of all life by a deathcap
+
+Illustrated notes
+
+Levels and vault maps discovered:
+[+gen,+vis] D:1:      erik_arrival_cave_to_civilisation
+                      [erik_arrival_cave_to_hall], layout_basic
+[+gen,-vis] D:2
+[+gen,-vis] D:3
+[+gen,-vis] D:4
+[+gen,-vis] D:5
+[+gen,-vis] D:6
+[+gen,-vis] D:7
+[+gen,-vis] D:8
+[+gen,-vis] D:9
+[+gen,-vis] D:10
+[+gen,-vis] D:11
+[+gen,-vis] D:12
+[+gen,-vis] D:13
+[+gen,-vis] D:14
+[+gen,-vis] D:15
+[+gen,-vis] Temple
+[+gen,-vis] Lair:1
+[+gen,-vis] Lair:2
+[+gen,-vis] Lair:3
+[+gen,-vis] Lair:4
+[+gen,-vis] Lair:5
+[+gen,-vis] Swamp:1
+[+gen,-vis] Swamp:2
+[+gen,-vis] Swamp:3
+[+gen,-vis] Swamp:4
+[+gen,-vis] Shoals:1
+[+gen,-vis] Shoals:2
+[+gen,-vis] Shoals:3
+[+gen,-vis] Shoals:4
+[+gen,-vis] Snake:1
+[+gen,-vis] Snake:2
+[+gen,-vis] Snake:3
+[+gen,-vis] Snake:4
+[+gen,-vis] Spider:1
+[+gen,-vis] Spider:2
+[+gen,-vis] Spider:3
+[+gen,-vis] Spider:4
+[+gen,-vis] Slime:1
+[+gen,-vis] Slime:2
+[+gen,-vis] Slime:3
+[+gen,-vis] Slime:4
+[+gen,-vis] Slime:5
+[+gen,-vis] Orc:1
+[+gen,-vis] Orc:2
+[+gen,-vis] Elf:1
+[+gen,-vis] Elf:2
+[+gen,-vis] Elf:3
+[+gen,-vis] Vaults:1
+[+gen,-vis] Vaults:2
+[+gen,-vis] Vaults:3
+[+gen,-vis] Vaults:4
+[+gen,-vis] Vaults:5
+[+gen,-vis] Blade
+[+gen,-vis] Forest:1
+[+gen,-vis] Forest:2
+[+gen,-vis] Forest:3
+[+gen,-vis] Forest:4
+[+gen,-vis] Crypt:1
+[+gen,-vis] Crypt:2
+[+gen,-vis] Crypt:3
+[+gen,-vis] Tomb:1
+[+gen,-vis] Tomb:2
+[+gen,-vis] Tomb:3
+[+gen,-vis] Depths:1
+[+gen,-vis] Depths:2
+[+gen,-vis] Depths:3
+[+gen,-vis] Depths:4
+[+gen,-vis] Hell
+[+gen,-vis] Dis:1
+[+gen,-vis] Dis:2
+[+gen,-vis] Dis:3
+[+gen,-vis] Dis:4
+[+gen,-vis] Dis:5
+[+gen,-vis] Dis:6
+[+gen,-vis] Dis:7
+[+gen,-vis] Geh:1
+[+gen,-vis] Geh:2
+[+gen,-vis] Geh:3
+[+gen,-vis] Geh:4
+[+gen,-vis] Geh:5
+[+gen,-vis] Geh:6
+[+gen,-vis] Geh:7
+[+gen,-vis] Coc:1
+[+gen,-vis] Coc:2
+[+gen,-vis] Coc:3
+[+gen,-vis] Coc:4
+[+gen,-vis] Coc:5
+[+gen,-vis] Coc:6
+[+gen,-vis] Coc:7
+[+gen,-vis] Tar:1
+[+gen,-vis] Tar:2
+[+gen,-vis] Tar:3
+[+gen,-vis] Tar:4
+[+gen,-vis] Tar:5
+[+gen,-vis] Tar:6
+[+gen,-vis] Tar:7
+[+gen,-vis] Zot:1
+[+gen,-vis] Zot:2
+[+gen,-vis] Zot:3
+[+gen,-vis] Zot:4
+[+gen,-vis] Zot:5
+[+gen,-vis] Abyss:1
+[+gen,-vis] Abyss:2
+[+gen,-vis] Abyss:3
+[+gen,-vis] Abyss:4
+[+gen,-vis] Abyss:5
+[+gen,-vis] Abyss:6
+[+gen,-vis] Abyss:7
+[+gen,-vis] Pan
+[+gen,-vis] Zig:1
+[+gen,-vis] Zig:2
+[+gen,-vis] Zig:3
+[+gen,-vis] Zig:4
+[+gen,-vis] Zig:5
+[+gen,-vis] Zig:6
+[+gen,-vis] Zig:7
+[+gen,-vis] Zig:8
+[+gen,-vis] Zig:9
+[+gen,-vis] Zig:10
+[+gen,-vis] Zig:11
+[+gen,-vis] Zig:12
+[+gen,-vis] Zig:13
+[+gen,-vis] Zig:14
+[+gen,-vis] Zig:15
+[+gen,-vis] Zig:16
+[+gen,-vis] Zig:17
+[+gen,-vis] Zig:18
+[+gen,-vis] Zig:19
+[+gen,-vis] Zig:20
+[+gen,-vis] Zig:21
+[+gen,-vis] Zig:22
+[+gen,-vis] Zig:23
+[+gen,-vis] Zig:24
+[+gen,-vis] Zig:25
+[+gen,-vis] Zig:26
+[+gen,-vis] Zig:27
+[+gen,-vis] Bazaar
+[+gen,-vis] Trove
+[+gen,-vis] Sewer
+[+gen,-vis] Ossuary
+[+gen,-vis] Bailey
+[+gen,-vis] IceCv
+[+gen,-vis] Volcano
+[+gen,-vis] WizLab
+[+gen,-vis] Desolation
+[+gen,-vis] Gauntlet
+[+gen,-vis] Arena
+[+gen,-vis] Crucible
+[+gen,-vis] Necropolis
+[+gen,-vis] Gulch
+[+gen,-vis] Bur:1
+[+gen,-vis] Bur:2
+[+gen,-vis] Bur:3
+[+gen,-vis] Bur:4
+[+gen,+vis] Worm:1:   layout_wormlands, worm_mushroom_grove
+[+gen,+vis] Worm:2:   layout_wormlands, worm_corroded_gallery, worm_shale_shelf
+[+gen,+vis] Worm:3:   layout_wormlands, worm_cross_gallery
+[+gen,-vis] Worm:4
+[+gen,-vis] Hive:1
+[+gen,-vis] Hive:2
+
+Percentage of experience gained in each form (* = 100%):
+
+Form     XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 | XLs as
+-------------+-------------------------------------------------------------+---------
+None         |                                                           * |  1
+
+Action                     |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 | 19-21 || total
+---------------------------+-------+-------+-------+-------+-------+-------+-------++-------
+ Attack: Normal            |       |       |       |       |       |       |   244 ||   244
+  Melee: Broad axe         |       |       |       |       |       |       |   313 ||   313
+         Headbutt          |       |       |       |       |       |       |   124 ||   124
+ Invoke: Heroism           |       |       |       |       |       |       |    14 ||    14
+  Drink: Heal wounds       |       |       |       |       |       |       |     6 ||     6
+         Might             |       |       |       |       |       |       |     4 ||     4
+         Haste             |       |       |       |       |       |       |     2 ||     2
+         Curing            |       |       |       |       |       |       |     1 ||     1
+   Read: Fear              |       |       |       |       |       |       |     4 ||     4
+         Blinking          |       |       |       |       |       |       |     2 ||     2
+ Armour: Plate armour      |       |       |       |       |       |       |   169 ||   169
+  Dodge: Dodged            |       |       |       |       |       |       |    63 ||    63
+  Block: Kite shield       |       |       |       |       |       |       |   140 ||   140
+
+Table legend: (Time is in decaauts)
+ A = Elapsed time spent in this place.
+ B = Non-inter-level travel time spent in this place.
+ C = Inter-level travel time spent in this place.
+ D = Time resting spent in this place.
+ E = Time spent auto-exploring this place.
+ F = Levels seen in this place.
+ G = Mean time per level.
+                   A        B        C        D        E      F       G
+               +--------+--------+--------+--------+--------+-----+--------+
+         Total |   2120 |   2120 |      0 |    898 |    797 |   4 |  530.0 |
+       Dungeon |     53 |     53 |      0 |      0 |      0 |   1 |   53.0 |
+     Wormlands |   2066 |   2066 |      0 |    898 |    797 |   3 |  688.7 |
+               +--------+--------+--------+--------+--------+-----+--------+
+
+Top non-repeatable levels by time:
+  Worm:1: 1025 daAuts
+  Worm:2: 1003 daAuts
+     D:1: 53 daAuts
+  Worm:3: 38 daAuts
+
+DLua errors:
+
+Table legend:
+ A = God
+ B = Rank
+ C = Start time
+ D = Start piety
+ E = Piety gained
+ F = Piety on gifts
+ G = Piety on penance
+ H = Piety on stepdowns
+ I = Piety wasted at max piety
+ J = Piety decays
+ K = Piety lost (inc. decay)
+         A          B      C       D     E     F     G     H     I     J     K   
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+ Okawaru          | 0 |       0 |  15 |  15 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |     535 |  30 |  20 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |     535 |  50 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 3 |     535 |  75 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 4 |     535 | 100 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 3 |     584 |  98 |  36 |   0 |   0 |   0 |   0 |   0 |  54 
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+
+Conducts for god: Okawaru
+Piety from conduct
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 | 19-21 || total
+----------------------+-------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |     0 |    36 ||    36
+         Kill Undead  |     0 |     0 |     0 |     0 |     0 |     0 |     0 ||     0
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     0 |     0 ||     0
+----------------------+-------+-------+-------+-------+-------+-------+-------++-------
+Conduct count
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 | 19-21 || total
+----------------------+-------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |     0 |    44 ||    44
+         Kill Undead  |     0 |     0 |     0 |     0 |     0 |     0 |     1 ||     1
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     0 |     1 ||     1
+----------------------+-------+-------+-------+-------+-------+-------+-------++-------
+

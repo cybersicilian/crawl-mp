@@ -1,0 +1,14 @@
+#inspection_dialog {
+    box-sizing: border-box; width: min(580px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px); overflow: auto; padding: 20px;
+    color: var(--tt-text, #e9e3d2); background: var(--tt-panel, #18251f);
+    border: 1px solid #a9b68a80; border-radius: 10px; box-shadow: 0 16px 50px #0009;
+    font: 14px/1.6 var(--tt-font-ui, sans-serif);
+}
+#inspection_dialog::backdrop { background: #0008; }
+#inspection_dialog header { display: flex; align-items: start; gap: 16px; justify-content: space-between; }
+#inspection_heading { margin: 0 0 14px; font: 600 22px/1.3 var(--tt-font-title, Georgia, serif); overflow-wrap: anywhere; }
+#inspection_dialog button { flex-shrink: 0; min-height: 36px; color: inherit; background: #a9b68a18; border: 1px solid #a9b68a60; border-radius: 5px; cursor: pointer; }
+#inspection_body { overflow-wrap: anywhere; }
+#inspection_context { margin-bottom: 0; color: #b4bca9; font-size: 12px; }
+.inspection-map { display: block; width: 100%; height: auto; image-rendering: pixelated; background: #000; }

@@ -25,6 +25,7 @@
 #include "english.h"
 #include "enum.h"
 #include "env.h"
+#include "game-modifiers.h"
 #include "god-menu.h"
 #include "item-prop.h"
 #include "item-name.h"
@@ -38,6 +39,7 @@
 #include "mon-tentacle.h"
 #include "mutation.h"
 #include "output.h"
+#include "player.h"
 #include "prompt.h"
 #include "religion.h"
 #include "rltiles/tiledef-main.h"
@@ -411,10 +413,6 @@ static vector<string> _get_god_keys()
     for (int i = GOD_NO_GOD + 1; i < NUM_GODS; i++)
     {
         god_type which_god = static_cast<god_type>(i);
-#if TAG_MAJOR_VERSION == 34
-        // XXX: currently disabled.
-        if (which_god != GOD_PAKELLAS)
-#endif
         names.push_back(god_name(which_god));
     }
 
@@ -1266,6 +1264,9 @@ static string _branch_transit_runes(branch_type br)
     if (br != BRANCH_VAULTS && br != BRANCH_ZOT)
         return "";
 
+    if (game_modifiers::rune_locks_disabled(you))
+        return "\n\nRune locks are disabled for this expedition.";
+
     string desc;
     const bool exit = br == BRANCH_VAULTS;
     const int num_runes = br == BRANCH_ZOT ? ZOT_ENTRY_RUNES : 1;
@@ -1704,6 +1705,7 @@ public:
                 | MF_ARROWS_SELECT | MF_WRAP),
           back_cmd(where_from)
     {
+        set_tag("lookup");
         action_cycle = Menu::CYCLE_NONE;
         menu_action  = Menu::ACT_EXECUTE;
         set_title(new MenuEntry("Lookup information about:", MEL_TITLE));
@@ -1746,6 +1748,51 @@ public:
 private:
     command_type back_cmd;
 };
+
+void search_descriptions(const string& query)
+{
+    rng::generator rng(rng::UI);
+    const string needle = lowercase_string(trimmed_string(query)).substr(0, 100);
+    if (needle.empty())
+        return;
+    struct Result : public MenuEntry
+    {
+        Result(int type, const string& key, int letter)
+            : MenuEntry(uppercase_first(key) + " · " + lookup_types[type].type,
+                        MEL_ITEM, 1, letter), type(type), key(key)
+        {
+            tag = lookup_types[type].type;
+        }
+        int type;
+        string key;
+    };
+    Menu menu(MF_SINGLESELECT | MF_ALLOW_FORMATTING | MF_ARROWS_SELECT | MF_WRAP);
+    menu.set_tag("lookup_search");
+    menu.set_title(new MenuEntry("Encyclopedia search results", MEL_TITLE));
+    int count = 0;
+    for (size_t type = 0; type < lookup_types.size(); ++type)
+    {
+        for (const string& key : lookup_types[type].matching_keys(".*"))
+        {
+            if (lowercase_string(key).find(needle) == string::npos)
+                continue;
+            if (count >= 250)
+                break;
+            menu.add_entry(new Result(type, key, index_to_letter(count++ % 52)));
+        }
+    }
+    if (!count)
+        menu.add_entry(new MenuEntry("No entries match. Go back and try another name.", MEL_SUBTITLE));
+    if (count >= 250)
+        menu.add_entry(new MenuEntry("Showing 250 results. Refine your search for more specific matches.", MEL_SUBTITLE));
+    menu.on_single_selection = [](const MenuEntry& entry)
+    {
+        const auto& result = static_cast<const Result&>(entry);
+        lookup_types[result.type].describe(result.key);
+        return true;
+    };
+    menu.show();
+}
 
 void keyhelp_query_descriptions(command_type where_from)
 {

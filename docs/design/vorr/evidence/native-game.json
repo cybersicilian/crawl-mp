@@ -1,0 +1,74 @@
+{
+  "url": "http://127.0.0.1:8942",
+  "checks": [
+    "Native worship exposes rites only at one, three and five stars",
+    "Live hero portrait uses the Vorr plinth and native altar pixels",
+    "Native combat and deferred death effects create finite visible blood",
+    "Red Passage targets once, consumes both endpoints and completes native movement"
+  ],
+  "errors": [],
+  "binary_sha256": "59ce590c5342d601d452953824164081618f3e108a183a30f0e932313f7cdbbd",
+  "ranks": [
+    {
+      "piety": 30,
+      "rank": 1,
+      "abilities": [
+        "Rupture"
+      ]
+    },
+    {
+      "piety": 50,
+      "rank": 2,
+      "abilities": [
+        "Rupture"
+      ]
+    },
+    {
+      "piety": 75,
+      "rank": 3,
+      "abilities": [
+        "Rupture",
+        "Red Passage"
+      ]
+    },
+    {
+      "piety": 100,
+      "rank": 4,
+      "abilities": [
+        "Rupture",
+        "Red Passage"
+      ]
+    },
+    {
+      "piety": 120,
+      "rank": 5,
+      "abilities": [
+        "Rupture",
+        "Red Passage",
+        "The Great Letting"
+      ]
+    },
+    {
+      "piety": 160,
+      "rank": 6,
+      "abilities": [
+        "Rupture",
+        "Red Passage",
+        "The Great Letting"
+      ]
+    }
+  ],
+  "passage": {
+    "before": {
+      "x": 6,
+      "y": -31,
+      "blood": 4
+    },
+    "after": {
+      "x": 7,
+      "y": -31,
+      "blood": 2
+    }
+  },
+  "passed": true
+}

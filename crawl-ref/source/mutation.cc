@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "protean.h"
 
 #include "mutation.h"
 
@@ -19,6 +20,7 @@
 #include "ability.h"
 #include "areas.h"
 #include "cio.h"
+#include "character-trait.h"
 #include "coordit.h"
 #include "dactions.h"
 #include "database.h" // getLongDescription
@@ -752,6 +754,14 @@ static vector<pair<string, string>> _get_fakemuts()
 {
     vector<pair<string, string>> result;
 
+    const auto trait = get_character_trait(you);
+    if (trait != character_trait::none)
+    {
+        const string title = uppercase_first(character_trait_name(trait));
+        result.push_back({_innatemut(title + " trait", true),
+                          _innatemut(getLongDescription(title + " trait"), false)});
+    }
+
     // non-permanent and form-based stuff
     if (you.form != transformation::none)
     {
@@ -785,6 +795,14 @@ static vector<pair<string, string>> _get_fakemuts()
     }
 
     // Innate abilities which haven't been implemented as mutations yet.
+    if (you.species == SP_HYDRA)
+    {
+        const int heads = you.heads();
+        result.push_back({_innatemut(make_stringf("%d %s", heads,
+                                                 heads == 1 ? "head" : "heads"), true),
+                          _innatemut(make_stringf("You currently have %d %s.", heads,
+                                                 heads == 1 ? "head" : "heads"), false)});
+    }
     vector<string> short_fakemut = species::fake_mutations(you.species, true);
     vector<string> long_fakemut = species::fake_mutations(you.species, false);
     for (size_t i = 0; i < long_fakemut.size(); ++i)
@@ -1713,7 +1731,8 @@ bool mut_is_compatible(mutation_type mut, bool base_only)
 
         // Only Draconians (and gargoyles) can get wings.
         if (mut == MUT_BIG_WINGS
-                && !species::is_draconian(you.species) && you.species != SP_GARGOYLE)
+                && !species::is_draconian(you.species) && you.species != SP_GARGOYLE
+                && you.species != SP_FAERIE_DRAGON)
         {
             return false;
         }
@@ -1898,6 +1917,16 @@ bool mutate(mutation_type which_mutation, const string &reason, bool failMsg,
             simple_god_message(" protects your body from mutation!");
             return false;
         }
+    }
+
+    // Constructs corrode under mutagenic exposure instead of changing shape.
+    // Innate species mutations are still applied normally.
+    if (you.species == SP_AUTOMATON && mutclass != MUTCLASS_INNATE)
+    {
+        if (mutclass == MUTCLASS_TEMPORARY && coinflip())
+            return false;
+        you.corrode(nullptr, "Mutation", 1);
+        return true;
     }
 
     // Undead bodies don't mutate, they fall apart. -- bwr
@@ -2146,6 +2175,12 @@ bool mutate(mutation_type which_mutation, const string &reason, bool failMsg,
         }
     }
 
+    if (you.species == SP_PROTEAN)
+    {
+        calc_hp(true);
+        you.redraw_status_lights = true;
+    }
+
 #ifdef USE_TILE_LOCAL
     if (your_talents().size() != old_talents)
     {
@@ -2300,6 +2335,12 @@ bool _delete_single_mutation_level(mutation_type mutat,
     }
     else
         take_note(Note(NOTE_LOSE_MUTATION, mutat, you.mutation[mutat], reason));
+
+    if (you.species == SP_PROTEAN)
+    {
+        calc_hp(true);
+        you.redraw_status_lights = true;
+    }
 
     if (you.hp <= 0)
     {
@@ -2773,6 +2814,9 @@ string mutation_desc(mutation_type mut, int level, bool colour,
         ostr << mdef.have[0] << num << " EV, Slay +" << num << ")";
         result = ostr.str();
     }
+    else if (mut == MUT_ARMOURED_SHELL)
+        result = make_stringf("%s (AC +%d)", mdef.have[0],
+                              armoured_shell_bonus() / 100);
     else if (mut == MUT_MP_WANDS && you.has_mutation(MUT_HP_CASTING))
         result = "You expend health (3 HP) to strengthen your wands.";
     else if (!ignore_player && mut == MUT_TENTACLE_ARMS)
@@ -3265,7 +3309,8 @@ int player::how_mutated(bool normal, bool silver, bool all_innate, bool temp, bo
 
 bool player::has_any_mutations() const
 {
-    return how_mutated(true, true, true, true, true) > 0;
+    return get_character_trait(*this) != character_trait::none
+           || how_mutated(true, true, true, true, true) > 0;
 }
 
 // Primary function to handle demonic guardians.
@@ -3548,7 +3593,7 @@ static void _init_bane_dilettante()
     wp_skills.push_back({SK_UNARMED_COMBAT, you.skill(SK_UNARMED_COMBAT, 100, true, false)});
 
     vector<pair<skill_type, int>> mag_skills;
-    for (skill_type skill = SK_FIRST_MAGIC_SCHOOL; skill <= SK_LAST_MAGIC; ++skill)
+    for (skill_type skill : magic_school_skills())
     {
         if (is_removed_skill(skill))
             continue;

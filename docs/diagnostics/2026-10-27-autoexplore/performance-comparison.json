@@ -1,0 +1,81 @@
+{
+  "original": {
+    "native_sha256": "8adcfbcb080e95ee7c3859dd91fd570b26b8bebb6cedbc05c1c004df0fb00a37",
+    "steps": {
+      "count": 31,
+      "median_ms": 81.0610520420596,
+      "p95_ms": 86.21349197346717,
+      "total_ms": 2485.760309966281
+    },
+    "waits": {
+      "count": 26,
+      "median_ms": 35.398466512560844,
+      "p95_ms": 38.11486600898206,
+      "total_ms": 918.6838587047532
+    },
+    "native_delay_messages": 30
+  },
+  "optimized": {
+    "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    "steps": {
+      "count": 31,
+      "median_ms": 47.500835033133626,
+      "p95_ms": 62.89717392064631,
+      "total_ms": 1529.908557771705
+    },
+    "waits": {
+      "count": 26,
+      "median_ms": 15.495703439228237,
+      "p95_ms": 23.298668093048036,
+      "total_ms": 431.30844074767083
+    },
+    "native_delay_messages": 30
+  },
+  "fast_default": {
+    "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    "steps": {
+      "count": 31,
+      "median_ms": 21.35123696643859,
+      "p95_ms": 24.82680801767856,
+      "total_ms": 596.9757249113172
+    },
+    "waits": {
+      "count": 26,
+      "median_ms": 11.704079050105065,
+      "p95_ms": 19.216917920857668,
+      "total_ms": 324.92252194788307
+    },
+    "native_delay_messages": 0
+  },
+  "explicit_rc": {
+    "native_sha256": "9cee132748e0c8465414fe3b2fd7c27edd91c1e569027cdc4af3742250314660",
+    "steps": {
+      "count": 31,
+      "median_ms": 84.20047303661704,
+      "p95_ms": 93.01776206120849,
+      "total_ms": 2564.5127698080614
+    },
+    "waits": {
+      "count": 26,
+      "median_ms": 11.234024015720934,
+      "p95_ms": 20.77041903976351,
+      "total_ms": 354.04498933348805
+    },
+    "native_delay_messages": 30
+  },
+  "integrated": {
+    "passed": true,
+    "completion_to_step_median_ms": 0.1844699727371335,
+    "stop": [
+      {
+        "slot": 0,
+        "native_activity_cleared": true,
+        "no_turn_after_stop": true,
+        "dispatch_ms": 86.64314192719758
+      }
+    ],
+    "launch_defaults": [
+      "explore_delay=0"
+    ]
+  }
+}

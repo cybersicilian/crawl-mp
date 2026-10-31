@@ -281,6 +281,17 @@ enum monster_info_flags
     NUM_MB_FLAGS
 };
 
+// Effects are classified from the affected creature's perspective. Neutral
+// conditions retain their native description without claiming a buff/debuff.
+enum class monster_condition_kind { neutral, beneficial, harmful };
+struct monster_condition
+{
+    int id;
+    string name;
+    string description;
+    monster_condition_kind kind;
+};
+
 struct monster_info_base
 {
     coord_def pos;
@@ -420,6 +431,7 @@ struct monster_info : public monster_info_base
     string full_name(description_level_type desc = DESC_PLAIN) const;
 
     vector<string> attributes() const;
+    vector<monster_condition> conditions() const;
 
     const char *pronoun(pronoun_type variant) const;
     bool pronoun_plurality() const;

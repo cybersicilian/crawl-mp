@@ -1,0 +1,205 @@
+/* Hero sheet: tabbed character folio. Loaded once by #party_inspector_styles;
+   page tokens come from the host theme and fall back to the ivory folio. */
+@import url("inspector-sourcebook.css");
+@import url("skill-training.css");
+@import url("party-rpg-stats.css");
+@import url("folio-controls.css");
+html dialog#party_inspector_modal {
+    --sheet-paper: var(--ui-page, var(--tt-folio-paper, #f8f2e4));
+    --sheet-raised: var(--ui-page-raised, var(--tt-folio-raised, #fffdf7));
+    --sheet-inset: var(--ui-page-inset, #e9dfca);
+    --sheet-ink: var(--ui-ink, var(--tt-folio-ink, #29251e));
+    --sheet-quiet: var(--ui-quiet, var(--tt-folio-muted, #665c49));
+    --sheet-rule: var(--ui-rule, var(--tt-folio-rule, #cfc0a1));
+    --sheet-edge: var(--ui-edge, #987650);
+    --sheet-chapter: var(--ui-chapter, var(--tt-folio-crimson, #943824));
+    --sheet-action: var(--ui-action, #70442c);
+    --sheet-action-text: var(--ui-action-text, #fff5df);
+    --sheet-good: var(--ui-good, #2d633a);
+    --sheet-warn: var(--ui-warn, #805019);
+    --sheet-danger: var(--ui-danger, #a12d27);
+    --sheet-cold: var(--ui-cold, #2b568c);
+    --sheet-arcane: var(--ui-arcane, #654277);
+    --sheet-title-font: var(--ui-title, var(--tt-font-title, Georgia, serif));
+    --sheet-copy-font: var(--ui-copy, var(--tt-font-ui, sans-serif));
+    width: min(900px, calc(100vw - 32px));
+    max-height: min(90dvh, 860px);
+    padding: 0;
+    border: 1px solid var(--sheet-edge);
+    border-top: 5px solid var(--sheet-chapter);
+    border-image: none;
+    border-radius: 5px;
+    background: var(--ui-paper, var(--sheet-paper));
+    color: var(--sheet-ink);
+    font: 13px/1.5 var(--sheet-copy-font);
+    box-shadow: 0 24px 80px #130e0bd9, 0 0 0 1px #fff5;
+    overflow: hidden;
+    box-sizing: border-box;
+    color-scheme: var(--ui-page-scheme, light);
+}
+dialog#party_inspector_modal[open] { display: flex; flex-direction: column; }
+dialog#party_inspector_modal::backdrop { background: #100a06cc; backdrop-filter: blur(3px); }
+dialog#party_inspector_modal .party-insp-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 24px 10px; background: var(--sheet-raised); border-bottom: 1px solid var(--sheet-rule);
+}
+dialog#party_inspector_modal .party-insp-title-wrap { display: flex; flex-direction: column-reverse; gap: 2px; min-width: 0; }
+dialog#party_inspector_modal .party-insp-title-wrap h1 {
+    margin: 0; color: var(--sheet-chapter); font: 600 24px/1.15 var(--sheet-title-font); letter-spacing: 0; text-shadow: none;
+}
+dialog#party_inspector_modal .party-insp-subtitle {
+    color: var(--sheet-quiet); font: 600 10px/1.5 var(--sheet-copy-font); letter-spacing: .09em; text-transform: uppercase;
+}
+dialog#party_inspector_modal .party-insp-close-form { margin: 0; flex-shrink: 0; }
+dialog#party_inspector_modal .party-insp-close-btn {
+    min-height: 30px; padding: 4px 10px; border: 1px solid var(--sheet-rule); border-radius: 4px;
+    background: transparent; color: var(--sheet-quiet); font: 600 11px/1.4 var(--sheet-copy-font); text-shadow: none; box-shadow: none; cursor: pointer;
+}
+dialog#party_inspector_modal .party-insp-close-btn:hover { background: var(--ui-hover, #e4d2ad); color: var(--sheet-ink); }
+
+/* Hero tabs across the top. */
+dialog#party_inspector_modal .party-insp-hero-bar {
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 24px; background: var(--sheet-inset); border-bottom: 1px solid var(--sheet-rule);
+}
+dialog#party_inspector_modal .party-insp-hero-btn {
+    min-height: 34px; padding: 5px 10px; border: 1px solid var(--sheet-rule); border-left: 4px solid var(--hero-accent, var(--sheet-rule));
+    border-radius: 4px; background: var(--sheet-raised); color: var(--sheet-quiet);
+    font: 600 11px/1.35 var(--sheet-copy-font); text-shadow: none; box-shadow: none; cursor: pointer;
+}
+dialog#party_inspector_modal .party-insp-hero-btn:hover { color: var(--sheet-ink); border-color: var(--sheet-edge); }
+dialog#party_inspector_modal .party-insp-hero-btn[aria-pressed="true"] {
+    background: var(--sheet-action); color: var(--sheet-action-text); border-color: var(--sheet-action);
+    border-left-color: var(--hero-accent, var(--sheet-action)); box-shadow: inset 0 1px 0 #ffffff22;
+}
+
+/* Section tabs. */
+dialog#party_inspector_modal .party-insp-tab-bar {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; padding: 0 24px;
+    background: var(--sheet-paper); border-bottom: 1px solid var(--sheet-rule);
+}
+dialog#party_inspector_modal .party-insp-tab-btn {
+    position: relative; min-height: 44px; margin: 0; padding: 10px 8px; border: 0; border-radius: 0;
+    background: transparent; color: var(--sheet-quiet); font: 600 12px/1.4 var(--sheet-copy-font); text-shadow: none; box-shadow: none; cursor: pointer;
+}
+dialog#party_inspector_modal .party-insp-tab-btn:hover { color: var(--sheet-ink); background: var(--sheet-raised); }
+dialog#party_inspector_modal .party-insp-tab-btn[aria-selected="true"] { color: var(--sheet-chapter); background: var(--sheet-raised); font-weight: 700; }
+dialog#party_inspector_modal .party-insp-tab-btn[aria-selected="true"]::after {
+    content: ""; position: absolute; inset: auto 10px -1px; height: 3px; background: var(--sheet-chapter);
+}
+dialog#party_inspector_modal #party_insp_key_help { margin: 0; padding: 6px 24px; background: var(--sheet-inset); color: var(--sheet-quiet); font-size: 11px; }
+dialog#party_inspector_modal :is(button, a, input, select, [role="tabpanel"], [tabindex]):focus-visible { outline: 2px solid var(--sheet-chapter); outline-offset: -3px; }
+
+/* Body */
+dialog#party_inspector_modal .party-insp-body {
+    flex: 1 1 auto; min-height: 0; padding: 18px 24px 24px; overflow-y: auto;
+    background: var(--ui-paper, var(--sheet-paper)); color: var(--sheet-ink); box-shadow: none;
+    scrollbar-color: var(--sheet-edge) var(--sheet-inset); font: 13px/1.55 var(--sheet-copy-font);
+}
+.party-insp-panel[hidden] { display: none !important; }
+dialog#party_inspector_modal .party-insp-section-title {
+    display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 0;
+    background: linear-gradient(90deg, var(--sheet-chapter), var(--sheet-rule) 40%, transparent) left bottom / 100% 1px no-repeat;
+    color: var(--sheet-chapter); font: 600 16px/1.3 var(--sheet-title-font); font-variant-caps: normal; letter-spacing: 0;
+}
+dialog#party_inspector_modal .party-insp-section-title::before { content: "\2756"; font-size: 11px; color: var(--ui-gilt, #9c7a3b); }
+dialog#party_inspector_modal .workflow-hero-context { margin-bottom: 12px; color: var(--sheet-quiet); }
+
+/* Overview banner: portrait · identity · attributes. */
+dialog#party_inspector_modal .party-insp-banner {
+    display: grid; grid-template-columns: auto minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start;
+    padding: 14px 16px; border: 1px solid var(--ui-gilt-deep, var(--sheet-rule)); border-left: 4px solid var(--hero-accent, var(--sheet-edge));
+    border-radius: 4px; background: var(--sheet-raised);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-gilt, #9c7a3b) 35%, transparent);
+}
+/* Portrait medallion: hero colour ring inside a gilt ring. */
+.party-insp-portrait {
+    display: flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 50%;
+    border: 2px solid var(--hero-accent, var(--sheet-rule)); background: radial-gradient(ellipse, color-mix(in srgb, var(--hero-accent, #c39a5a) 25%, transparent), transparent 70%), var(--sheet-inset);
+    box-shadow: 0 0 0 2px var(--sheet-raised), 0 0 0 3px var(--ui-gilt, #9c7a3b), 0 0 0 4px color-mix(in srgb, var(--ui-gilt-deep, #6f5424) 60%, transparent), 0 4px 10px #0003;
+}
+.party-insp-portrait-art { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; }
+.party-insp-portrait-art canvas { width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 4px 2px #0006); }
+.party-insp-portrait-art[data-art="unavailable"] .party-insp-portrait-initial { display: block; }
+.party-insp-portrait-art:not([data-art="unavailable"]) .party-insp-portrait-initial { display: none; }
+.party-insp-portrait-initial { color: var(--hero-accent, var(--sheet-chapter)); font: 700 34px/1 var(--sheet-title-font); }
+.party-insp-identity { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+dialog#party_inspector_modal .party-insp-hero-headline { margin: 0; color: var(--sheet-ink); font: 600 21px/1.2 var(--sheet-title-font); overflow-wrap: anywhere; }
+.party-insp-hero-badges { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+dialog#party_inspector_modal .party-insp-hero-meta { color: var(--sheet-quiet); font: 12px/1.5 var(--sheet-copy-font); }
+.party-insp-level-badge {
+    display: inline-flex; align-items: center; padding: 1px 8px; border: 1px solid var(--sheet-rule); border-radius: 999px;
+    background: var(--sheet-inset); color: var(--sheet-ink); font: 700 10px/1.7 var(--sheet-copy-font); letter-spacing: .05em; text-transform: uppercase;
+}
+/* Role colours come from the shared .tr-badge[data-role] component; this only sets the type. */
+.party-insp-role-badge { font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+.party-insp-meters { display: grid; gap: 4px; }
+.party-insp-meter { display: grid; grid-template-columns: 4.5em minmax(0, 1fr) auto; align-items: center; gap: 8px; font: 600 11px/1.4 var(--sheet-copy-font); }
+.party-insp-meter-label { color: var(--sheet-quiet); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; }
+/* Page variant of the shared .tr-meter: light track, colour from --tr-meter-color. */
+.party-insp-meter-bar { position: relative; display: block; height: 8px; border-radius: 4px; background: var(--sheet-inset); border: 1px solid var(--sheet-rule); box-shadow: none; overflow: hidden; }
+.party-insp-meter-fill { position: absolute; inset: 0 auto 0 0; display: block; height: 100%; border-radius: inherit; background: var(--tr-meter-color, var(--sheet-good)); transition: width 120ms ease; }
+.party-insp-meter[data-meter="hp"] { --tr-meter-color: var(--ui-res-hp, #c3434e); }
+.party-insp-meter[data-meter="resource"] { --tr-meter-color: var(--ui-res-mp, #3e7cbb); }
+.party-insp-meter[data-threshold="low"] { --tr-meter-color: var(--ui-threat-high, #c2561f); }
+.party-insp-meter.is-low .party-insp-meter-value { color: var(--sheet-danger); }
+.party-insp-meter-value { font-variant-numeric: tabular-nums; color: var(--sheet-ink); }
+/* Twelve tracks: four attributes, three defenses, then the weapon on a full-width row so its
+   name never breaks mid-word. */
+dialog#party_inspector_modal .party-insp-stat-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 5px; align-content: start; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(-n+4) { grid-column: span 3; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(n+5):nth-child(-n+7) { grid-column: span 4; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) { grid-column: span 12; }
+dialog#party_inspector_modal .party-insp-stat-box { padding: 6px 8px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-paper); }
+dialog#party_inspector_modal .party-insp-stat-box .lbl { display: block; color: var(--sheet-quiet); font: 600 9px/1.5 var(--sheet-copy-font); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+dialog#party_inspector_modal .party-insp-stat-box .val { display: block; min-width: 0; color: var(--sheet-ink); font: 700 15px/1.3 var(--sheet-title-font); font-variant-numeric: tabular-nums; overflow-wrap: break-word; }
+dialog#party_inspector_modal .party-insp-stat-box:nth-child(8) .val { font-size: 13px; line-height: 1.3; }
+dialog#party_inspector_modal .party-insp-aut-strip {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin-top: 10px;
+    padding: 8px 16px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-inset); color: var(--sheet-ink); font-size: 11px;
+}
+
+/* Resistances, faith, tables. */
+dialog#party_inspector_modal .party-insp-res-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 4px 14px;
+    padding: 8px 12px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-raised);
+}
+dialog#party_inspector_modal .party-insp-res-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px dotted var(--sheet-rule); font-size: 11px; }
+dialog#party_inspector_modal .party-insp-res-lbl { color: var(--sheet-quiet); font-weight: 600; }
+.party-insp-faith { padding: 10px 12px; border: 1px solid var(--sheet-rule); border-radius: 3px; background: var(--sheet-raised); }
+.party-insp-faith-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.party-insp-faith-head strong { color: var(--sheet-chapter); font: 600 15px/1.3 var(--sheet-title-font); }
+.party-insp-faith-rank { color: var(--sheet-warn); letter-spacing: 2px; font-size: 13px; }
+.party-insp-faith-summary { margin: 4px 0 0; color: var(--sheet-ink); font-size: 12px; }
+.party-insp-faith-desc { margin-top: 6px; color: var(--sheet-quiet); font-size: 12px; line-height: 1.5; }
+.party-insp-faith-desc > :last-child { margin-bottom: 0; }
+dialog#party_inspector_modal .party-insp-table { background: var(--sheet-raised); border-color: var(--sheet-rule); font: 12px/1.45 var(--sheet-copy-font); }
+dialog#party_inspector_modal .party-insp-table th {
+    padding: 7px 10px; background: var(--sheet-inset); color: var(--sheet-quiet); border-bottom-color: var(--sheet-rule);
+    font: 600 10px/1.5 var(--sheet-copy-font); letter-spacing: .06em; text-transform: uppercase;
+}
+dialog#party_inspector_modal .party-insp-table td { color: var(--sheet-ink); border-bottom-color: var(--sheet-rule); }
+dialog#party_inspector_modal .party-insp-table tr:hover td { background: var(--ui-hover, #e4d2ad); }
+dialog#party_inspector_modal .party-insp-table .workflow-button { min-height: 30px; padding: 4px 9px; font-size: 11px; }
+dialog#party_inspector_modal .party-insp-badge { border-color: var(--sheet-rule); background: var(--sheet-inset); color: var(--sheet-quiet); }
+dialog#party_inspector_modal .party-insp-badge.god { color: var(--sheet-warn); }
+dialog#party_inspector_modal .party-insp-badge.innate { color: var(--sheet-cold); }
+dialog#party_inspector_modal .party-insp-badge.mut { color: var(--sheet-arcane); }
+dialog#party_inspector_modal .party-insp-badge.temp { color: var(--sheet-danger); }
+
+@media (max-width: 680px) {
+    dialog#party_inspector_modal { width: calc(100vw - 12px); max-height: calc(100dvh - 12px); }
+    dialog#party_inspector_modal .party-insp-banner { grid-template-columns: auto minmax(0, 1fr); }
+    dialog#party_inspector_modal .party-insp-stat-grid { grid-column: 1 / -1; }
+    dialog#party_inspector_modal .party-insp-header { align-items: flex-start; padding: 10px 12px; }
+    dialog#party_inspector_modal .party-insp-title-wrap h1 { font-size: 18px; }
+    dialog#party_inspector_modal .party-insp-subtitle { display: none; }
+    dialog#party_inspector_modal .party-insp-hero-bar { padding: 8px 12px; }
+    dialog#party_inspector_modal .party-insp-tab-bar { padding: 0 6px; }
+    dialog#party_inspector_modal .party-insp-tab-btn { font-size: 11px; padding: 8px 4px; }
+    dialog#party_inspector_modal #party_insp_key_help { padding: 5px 12px; font-size: 10px; }
+    dialog#party_inspector_modal .party-insp-body { padding: 12px; }
+    .party-insp-portrait { width: 64px; height: 64px; }
+    .party-insp-portrait-art, .party-insp-portrait-art canvas { width: 48px; height: 48px; }
+    .party-insp-split-grid, .party-insp-res-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .party-insp-meter-fill { transition: none; } }

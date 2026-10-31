@@ -1,0 +1,25 @@
+/* Off-turn reading dialog: same header / body / footer shell as native popups. */
+#inspection_dialog {
+    box-sizing: border-box; width: min(600px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px); overflow: auto; padding: 18px 20px;
+    color: var(--ui-ink, var(--tt-text, #e9e3d2)); background: var(--ui-paper, var(--tt-panel, #18251f));
+    border: 1px solid var(--ui-edge, #a9b68a80); border-radius: 6px; box-shadow: 0 16px 50px #0009;
+    font: 14px/1.6 var(--ui-copy, var(--tt-font-ui, sans-serif)); color-scheme: var(--ui-page-scheme, dark);
+}
+#inspection_dialog::backdrop { background: #0008; }
+#inspection_dialog header {
+    display: flex; align-items: start; gap: 16px; justify-content: space-between;
+    margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--ui-rule, #a9b68a60);
+}
+#inspection_heading { margin: 0; color: var(--ui-chapter, inherit); font: 600 22px/1.3 var(--ui-title, var(--tt-font-title, Georgia, serif)); overflow-wrap: anywhere; }
+#inspection_dialog button {
+    flex-shrink: 0; min-height: 34px; padding: 4px 10px; color: inherit; background: var(--ui-page-raised, #a9b68a18);
+    border: 1px solid var(--ui-rule, #a9b68a60); border-radius: 4px; font: 600 12px/1.4 var(--ui-copy, sans-serif); cursor: pointer;
+}
+#inspection_dialog button:hover { background: var(--ui-hover, #a9b68a30); }
+#inspection_dialog button:focus-visible { outline: 2px solid var(--ui-chapter, #d8c38a); outline-offset: 2px; }
+#inspection_body { overflow-wrap: anywhere; }
+#inspection_context { margin: 12px 0 0; padding-top: 8px; border-top: 1px solid var(--ui-rule, #a9b68a40); color: var(--ui-quiet, #b4bca9); font-size: 12px; }
+#inspection_context:empty { display: none; }
+.inspection-map { display: block; width: 100%; height: auto; image-rendering: pixelated; background: #000; }
+@media (max-width: 700px) { #inspection_dialog { width: calc(100vw - 16px); padding: 14px; } }

@@ -1,0 +1,31 @@
+{
+  "baseline": "/opt/dcss/releases/20261023T190229Z-stats-website",
+  "checkpoint_packages": 43,
+  "content_atlases": {
+    "feat": "4c33bf0875d451d2d5c29a6eccc58f9f7a4e559a2ac308b515457eb0f64c3531",
+    "gui": "721ef67138c006a38c0921f7a62e5c67ba549f7613f625a2454d0407a33c1fe3",
+    "player": "fca50c005f28f6f086fa3c875b7a80c09ea3494ba9ace45ffd4cf06162baab5f"
+  },
+  "native_sha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+  "overlay_sha256": "7684ebea328e7a6523b1688f207b48c16780c102eb04a51f224a2e72edaa4df4",
+  "passed": true,
+  "prepared_at": 1792796935.0755978,
+  "production_mutated": false,
+  "release": "/opt/dcss/releases/20261023T220119Z-content",
+  "render_fix": {
+    "checkpoint_packages": 43,
+    "completed_at": 1792796935.0752559,
+    "native_sha256": "5699adf0b40eb16892f311b1b403b098558743424bdbb011d472a7319809461d",
+    "only_source_change": "tileweb.cc",
+    "overlay_sha256": "7684ebea328e7a6523b1688f207b48c16780c102eb04a51f224a2e72edaa4df4",
+    "passed": true,
+    "production_mutated": false,
+    "reason": "Co-op active-view sprites use the existing per-hero equipment doll builder instead of the shared leader base."
+  },
+  "unchanged_vendor_libraries": [
+    "webserver/game_data/static/simplebar.js",
+    "webserver/static/scripts/contrib/inflate.js"
+  ],
+  "web_files_within_600": 503,
+  "wizard_disabled": true
+}

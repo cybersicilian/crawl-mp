@@ -92,6 +92,7 @@ struct game_state
     bool use_des_cache;
     vector<string> tests_selected; // Tests to be run.
     vector<string> script_args;    // Arguments to scripts.
+    string character_preview;     // Read-only native character creation export.
 
     bool throttle;
 

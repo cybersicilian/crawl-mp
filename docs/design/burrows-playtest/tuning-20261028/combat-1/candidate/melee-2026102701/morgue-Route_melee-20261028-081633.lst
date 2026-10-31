@@ -1,0 +1,355 @@
+Route_melee
+
+Level 1 of the Dungeon
+
+Level 1 of the Burrows
+(0, 0, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(1, 1, Bur:1)
+  a komodo dragon corpse (skeletalised by now)
+(8, -13, Bur:1)
+  a crag boar skeleton
+(9, -28, Bur:1)
+  a shale drake corpse (skeletalised by now)
+(10, -13, Bur:1)
+  a +0 plate armour
+  a scroll of identify
+(15, -43, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(15, -24, Bur:1)
+  a +0 quarterstaff
+(15, -16, Bur:1)
+  a crag boar skeleton
+(17, -26, Bur:1)
+  a crag boar skeleton
+(18, -27, Bur:1)
+  a crag boar skeleton
+(30, -46, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(32, -14, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(32, 1, Bur:1)
+  a burrowing beast corpse (skeletalised by now)
+(44, -19, Bur:1)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+(45, -36, Bur:1)
+  a crag boar corpse (skeletalised by now)
+(48, -29, Bur:1)
+  a +0 robe
+
+Level 2 of the Burrows
+(8, 24, Bur:2)
+  a deep troll corpse (skeletalised by now)
+(9, 24, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+  a shale drake corpse (skeletalised by now)
+(9, 26, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(12, 13, Bur:2)
+  a deep troll corpse (skeletalised by now)
+(14, 36, Bur:2)
+  a +0 long sword
+(15, 38, Bur:2)
+  a +1 barding of cold resistance
+(18, 39, Bur:2)
+  a +0 chain mail
+(19, 30, Bur:2)
+  a burrowing beast skeleton
+(20, 10, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(21, 20, Bur:2)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+(23, 11, Bur:2)
+  a crag boar corpse (skeletalised by now)
+(24, -1, Bur:2)
+  a shale drake skeleton
+(30, 10, Bur:2)
+  a parchment of Eringya's Surprising Crocodile
+(33, 7, Bur:2)
+  a burrowing beast skeleton
+(34, 13, Bur:2)
+  a +3 hammer
+(34, 40, Bur:2)
+  a burrowing beast skeleton
+(35, 41, Bur:2)
+  a crag boar skeleton
+(36, 36, Bur:2)
+  a burrowing beast skeleton
+(36, 40, Bur:2)
+  a crag boar skeleton
+(36, 44, Bur:2)
+  a +0 scale mail
+(38, 0, Bur:2)
+  a +0 troll leather armour
+  a deep troll skeleton
+(39, 10, Bur:2)
+  a shale drake skeleton
+(40, -2, Bur:2)
+  a shale drake skeleton
+(40, -1, Bur:2)
+  a burrowing beast skeleton
+(41, 20, Bur:2)
+  a +0 chain mail
+(49, 8, Bur:2)
+  a +0 short sword
+(51, 5, Bur:2)
+  a burrowing beast corpse (skeletalised by now)
+(52, 29, Bur:2)
+  a blade talisman
+(53, 24, Bur:2)
+  the +3 pair of gloves "Ysautz" {Parrying, rPois Will++}
+    rPois:     It protects you from poison.
+    Will++:    It greatly increases your willpower.
+    
+    It cannot be enchanted further.
+(56, 18, Bur:2)
+  a shale drake skeleton
+
+Level 3 of the Burrows
+(3, -5, Bur:3)
+  a +0 troll leather armour
+  a deep troll skeleton
+(3, -1, Bur:3)
+  a crag boar skeleton
+(4, -6, Bur:3)
+  a crag boar skeleton
+(8, -53, Bur:3)
+  a crag boar corpse (skeletalised by now)
+(12, -2, Bur:3)
+  a burrowing beast skeleton
+(17, -10, Bur:3)
+  a burrowing beast skeleton
+  a burrowing beast skeleton
+(18, -10, Bur:3)
+  a crag boar skeleton
+(18, -9, Bur:3)
+  a deep troll skeleton
+(24, -36, Bur:3)
+  a crag boar skeleton
+(24, -35, Bur:3)
+  a burrowing beast skeleton
+(24, -34, Bur:3)
+  a shale drake skeleton
+(25, -36, Bur:3)
+  a burrowing beast skeleton
+(25, -34, Bur:3)
+  a burrowing beast skeleton
+(27, 0, Bur:3)
+  a crag boar corpse (skeletalised by now)
+(27, 1, Bur:3)
+  a shale drake corpse (skeletalised by now)
+(32, -38, Bur:3)
+  a shale drake skeleton
+(32, -18, Bur:3)
+  a +0 troll leather armour
+  a deep troll skeleton
+(35, -14, Bur:3)
+  a +0 leather armour
+(38, -49, Bur:3)
+  a crag boar skeleton
+  a shale drake skeleton
+  a burrowing beast skeleton
+(38, -48, Bur:3)
+  a shale drake skeleton
+(39, -49, Bur:3)
+  a shale drake skeleton
+(40, 0, Bur:3)
+  a +0 buckler
+(44, -18, Bur:3)
+  a shale drake corpse (skeletalised by now)
+
+Level 4 of the Burrows
+(0, 0, Bur:4)
+  a crag boar skeleton
+(1, -10, Bur:4)
+  a +0 scale mail
+(4, -29, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+(5, -29, Bur:4)
+  a shale drake corpse (skeletalised by now)
+(8, -6, Bur:4)
+  a +0 war axe
+(10, -12, Bur:4)
+  a deep troll skeleton
+(12, -14, Bur:4)
+  a crag boar skeleton
+(12, 4, Bur:4)
+  a shale drake skeleton
+(16, 8, Bur:4)
+  a burrowing beast skeleton
+(17, -11, Bur:4)
+  a wand of charming (3)
+(18, -7, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+(18, -6, Bur:4)
+  a crag boar corpse (skeletalised by now)
+(19, -24, Bur:4)
+  a deep troll corpse (skeletalised by now)
+(20, -10, Bur:4)
+  a +0 chain mail
+(24, 4, Bur:4)
+  a crag boar skeleton
+  a burrowing beast skeleton
+(25, 4, Bur:4)
+  a shale drake skeleton
+(29, 19, Bur:4)
+  a crag boar skeleton
+(30, 6, Bur:4)
+  a +0 troll leather armour
+  a deep troll skeleton
+(30, 11, Bur:4)
+  a +0 ring mail
+(31, -5, Bur:4)
+  a crag boar skeleton
+(31, 8, Bur:4)
+  a shale drake skeleton
+(33, 7, Bur:4)
+  a crag boar skeleton
+(37, 10, Bur:4)
+  a shale drake skeleton
+(37, 11, Bur:4)
+  a shale drake skeleton
+(39, 5, Bur:4)
+  a +0 chain mail
+(44, 4, Bur:4)
+  a +0 troll leather armour
+  a deep troll corpse (skeletalised by now)
+(52, 12, Bur:4)
+  a burrowing beast corpse (skeletalised by now)
+
+Level 1 of the Wormlands
+(0, 0, Worm:1)
+  a coil worm corpse
+(1, 38, Worm:1)
+  a lindwurm skeleton
+(2, 38, Worm:1)
+  4 large rocks
+  a stone giant skeleton
+(4, 32, Worm:1)
+  a scroll of identify
+(27, 1, Worm:1)
+  a +0 leather armour
+(47, 4, Worm:1)
+  a +0 giant spiked club
+(50, 9, Worm:1)
+  a +0 leather armour
+(57, 35, Worm:1)
+  a lindwurm skeleton
+(61, 39, Worm:1)
+  a +0 robe
+(62, 42, Worm:1)
+  a potion of moonshine
+
+Level 2 of the Wormlands
+(0, 0, Worm:2)
+  a scroll of fear
+(5, 4, Worm:2)
+  a potion of curing
+(8, -4, Worm:2)
+  a lindwurm corpse
+  a coil worm corpse
+  a caustic worm corpse
+  a coil worm corpse
+(9, -4, Worm:2)
+  a gallery worm corpse
+(9, 0, Worm:2)
+  a gallery worm corpse
+(9, 2, Worm:2)
+  a +0 chain mail
+(15, -9, Worm:2)
+  a potion of invisibility
+(24, -7, Worm:2)
+  2 scrolls of identify
+(26, -2, Worm:2)
+  19 gold pieces
+
+Level 1 of the Hive
+(18, 15, Hive:1)
+  a +2 vampiric dagger
+(19, 8, Hive:1)
+  a +0 broad axe
+(22, 6, Hive:1)
+  a +0 pair of gloves
+(24, 44, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(24, 45, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(25, 44, Hive:1)
+  a +0 war axe
+  a +0 leather armour
+(25, 45, Hive:1)
+  a +0 leather armour of cold resistance
+  a +0 war axe
+(28, 45, Hive:1)
+  a +0 hand axe
+  3 poisoned darts
+  a +0 robe
+(31, 27, Hive:1)
+  a +0 leather armour
+(31, 46, Hive:1)
+  a +0 hand axe
+  a +0 leather armour
+(32, 13, Hive:1)
+  a +0 leather armour
+  a +0 robe
+  a +0 war axe
+  a +0 leather armour
+  a +0 hand axe
+  a +0 hand axe
+(37, 20, Hive:1)
+  a +0 robe
+(50, 21, Hive:1)
+  the mist talisman of Kyvopren {rPois Int-3 Dex+2}
+    [mist talisman]
+    rPois:     It protects you from poison.
+    Int-3:     It affects your intelligence (-3).
+    Dex+2:     It affects your dexterity (+2).
+(52, 14, Hive:1)
+  a +1 cutlass of holy wrath
+
+Level 2 of the Hive
+(1, -7, Hive:2)
+  a +0 fustibalus
+(6, -9, Hive:2)
+  a +0 war axe
+  a +0 leather armour
+(11, -20, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+(13, -20, Hive:2)
+  a +2 war axe of flaming
+  a +0 leather armour
+(18, -21, Hive:2)
+  a +1 war axe of draining
+  a +0 hand axe
+  a +0 leather armour
+  a +0 leather armour
+(18, -20, Hive:2)
+  a +0 hand axe
+  a +0 leather armour
+(21, -10, Hive:2)
+  a +0 war axe
+  a +0 robe
+(42, -9, Hive:2)
+  a +0 lajatang
+(46, -20, Hive:2)
+  the eel talisman of the Lemon {Rampage Str+4}
+    [eel talisman]
+    Rampage:   It causes one to take an extra step when moving towards enemies,
+               briefly stunning them if this results in an attack.
+    Str+4:     It affects your strength (+4).
+(47, 10, Hive:2)
+  a +1 antimagic orcbow
+(52, -16, Hive:2)
+  a +0 chain mail
+(60, -7, Hive:2)
+  a +0 mace
+(64, -6, Hive:2)
+  a scroll of identify
+(64, -4, Hive:2)
+  a +0 ring mail
+

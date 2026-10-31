@@ -38,14 +38,14 @@ templates:
     socket_path: ./rcs
     # # Optional: `dir_path` is where save games + logfile/milestones are written.
     # # if not set, it uses local crawl system settings.
-    # dir_path: .
+    dir_path: ./rcs
     inprogress_path: ./rcs/running
     ttyrec_path: ./rcs/ttyrecs/%n
     client_path: ./webserver/game_data/
 
     # # Optional: a (public) URL that will point to morgue files. Example: on
     # # CAO, this is set to: "http://crawl.akrasiac.org/rawdata/%n/"
-    morgue_url: None
+    morgue_url: null
     # # By default, `milestone_path` is inferred based on `dir_path`.
     # milestone_path: ./rcs/milestones
     # # Optional: an array of extra options to add to the start of the DCSS
@@ -79,9 +79,27 @@ templates:
 # be preserved, and the files will be loaded in sorted order.
 games:
   # id must be unique for each game
+  - id: coop-2p-web-trunk
+    template: trunk
+    name: "⚔️ Co-op Party (2 Players)"
+    options:
+      - -party
+      - "2"
+  - id: coop-3p-web-trunk
+    template: trunk
+    name: "🛡️ Co-op Party (3 Players)"
+    options:
+      - -party
+      - "3"
+  - id: coop-4p-web-trunk
+    template: trunk
+    name: "👑 Co-op Party (4 Players)"
+    options:
+      - -party
+      - "4"
   - id: dcss-web-trunk
     template: trunk
-    name: Play %v # `name` is what is shown in the webtiles lobby
+    name: "Solo / Custom Party (%v)" # `name` is what is shown in the webtiles lobby
   - id: seeded-web-trunk
     template: trunk
     name: Seeded

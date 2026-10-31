@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "binding_sha256": "6656499091f22ad0f299a926a43ffa4d769583dd82692f79983eed92193a83a4",
+  "existing_saves_used": false,
+  "production_mutation": false,
+  "checks": [
+    "12 backend lifecycle/transport/save modules"
+  ],
+  "elapsed_seconds": 0.7276234580003802
+}

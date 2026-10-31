@@ -102,14 +102,17 @@ function ($, comm, client, enums, util, options, ui) {
         else // "generic"
         {
             var input_div = $("<div>");
-            input_div.addClass("input_" + input_data.tag);
-            $("#input_dialog").html(input_div);
+            input_div.addClass("input_" + input_data.tag + " workflow-prompt");
+            $("#input_dialog").addClass("workflow-prompt").html(input_div);
 
             input_div.attr("id", "input_text");
             if (!prompt)
                 prompt = "Input here (ESC to cancel): ";
-            input_div.append($("<span>").append(prompt));
+            input.attr("id", "input_text_field");
+            input_div.append($("<label class='workflow-prompt-label' for='input_text_field'>").append(prompt));
             input_div.append($("<span class='input_dialog_box'>").append(input));
+            input_div.append($("<span class='workflow-prompt-keys' aria-hidden='true'>")
+                .append("<kbd>Enter</kbd> confirm", " · ", "<kbd>Esc</kbd> cancel"));
             ui.show_popup("#input_dialog");
         }
 

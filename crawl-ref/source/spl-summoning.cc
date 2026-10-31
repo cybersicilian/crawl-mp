@@ -4,6 +4,7 @@
 **/
 
 #include "AppHdr.h"
+#include "oozle-memory-effects.h"
 
 #include "spl-summoning.h"
 
@@ -13,6 +14,7 @@
 #include "act-iter.h"
 #include "areas.h"
 #include "artefact.h"
+#include "automaton.h"
 #include "cloud.h"
 #include "colour.h"
 #include "coordit.h"
@@ -49,6 +51,7 @@
 #include "mon-book.h" // MON_SPELL_WIZARD
 #include "mon-cast.h"
 #include "mon-death.h"
+#include "mon-explode.h"
 #include "mon-gear.h"
 #include "mon-movetarget.h"
 #include "mon-pathfind.h"
@@ -1010,6 +1013,9 @@ spret cast_forge_blazeheart_golem(int pow, bool fail)
     if (mons)
     {
         mpr("You bind the heart of a blast furnace in slag iron.");
+
+        if (automaton::casting_automatically())
+            mons->props[automaton_blazeheart::MARKER_KEY] = true;
 
         // Give an extra turn of grace period on the turn it is summoned.
         mons->blazeheart_heat = 4;
@@ -2154,6 +2160,8 @@ static item_def* _find_spectral_weapon_item(const monster& mons)
     if (owner->is_player())
     {
         vector<item_def*> weapons = you.equipment.get_slot_items(SLOT_WEAPON);
+        const auto absorbed = oozle::effect_sources();
+        weapons.insert(weapons.end(), absorbed.begin(), absorbed.end());
         for (item_def* weapon : weapons)
         {
             if (_is_item_for_spectral_weapon(weapon, mons.mid))
@@ -2206,6 +2214,8 @@ void check_spectral_weapon(actor &agent)
     if (agent.is_player())
     {
         vector<item_def*> weapons = you.equipment.get_slot_items(SLOT_WEAPON);
+        const auto absorbed = oozle::effect_sources();
+        weapons.insert(weapons.end(), absorbed.begin(), absorbed.end());
         for (item_def* weapon : weapons)
         {
             monster* sw = find_spectral_weapon(*weapon);
@@ -2278,7 +2288,7 @@ static void _setup_infestation(bolt &beam, int pow)
     beam.flavour      = BEAM_INFESTATION;
     beam.glyph        = dchar_glyph(DCHAR_FIRED_BURST);
     beam.colour       = GREEN;
-    beam.source_id    = MID_PLAYER;
+    beam.source_id    = you.mid;
     beam.thrower      = KILL_YOU;
     beam.is_explosion = true;
     beam.ex_size      = 2;
@@ -3522,6 +3532,9 @@ spret cast_clockwork_bee(coord_def target, bool fail)
 {
     fail_check();
 
+    if (automaton::casting_automatically())
+        return automaton::start_bee_engraving(target) ? spret::success : spret::abort;
+
     monster* targ = monster_at(target);
 
     you.props[CLOCKWORK_BEE_TARGET].get_int() = targ->mid;
@@ -4147,6 +4160,8 @@ spret cast_walking_alembic(const actor& agent, int pow, bool fail)
         if (you.can_see(*mon))
             mpr("A lumbering aparatus takes shape within a cloud of fumes.");
 
+        if (agent.is_player() && automaton::casting_automatically())
+            mon->props[AUTOMATON_ALEMBIC_KEY].get_bool() = true;
         mon->number = random_range(4, 6);
     }
     else

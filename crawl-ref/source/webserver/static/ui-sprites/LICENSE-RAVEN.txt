@@ -1,0 +1,76 @@
+Clockwork Raven
+User Asset License Agreement
+1. Introduction
+This document are a detailed explanation about the currently license of all products/assets the 
+Clockwork Raven holds at itch.io(https://clockworkraven.itch.io/) and 
+Patreon(https://www.patreon.com/clockworkravenstudios) to helps answering most questions 
+regarding the assets. This will not change how it originally works in any way (Except as noted on 
+“5.”, will be changed to provide better understanding through this rules).
+This license does not cover any distribution from stores/platforms that are not tied to this license. If 
+you witness any possible misuse please enter in contact on the email bellow.
+If you got any other question regard the assets or license you can always send an e-mail to 
+caioterci@gmail.com. I always will answer your questions as soon as possible.
+1.2. FAQ
+a) May I use and distribute screenshots and videos on social media and game stores if I buy 
+this assets?
+A: Yes, as long this called screenshots and videos and tied to a project or with illustration purpose 
+and are not intended to the selling and distribution of the assets.
+b) May I use this asset on an App, Movie, Online Stream, or other project that are not a 
+game?
+A: Yes, as long this project are not a Game Engine or similar project/software that will sub-
+distribute and give access this assets along with the called project. In this case, please contact me 
+for further licensing.
+c) May I used this asset for printed media, like my own physical tabletop game or to illustrate 
+a magazine, including product boxes or manual I’m working on?
+A: Yes, no problem.
+d) May I use this assets in objects like crowdfunding rewards, T-shirts, Cups etc..?
+A: Yes! As long as it is tied to your own project and its not simply selling the art itself.
+e)How should I credit you in my project or game?
+A: There no specific way, but you can give Credit to “Caio Carlos of the Clockwork Raven – 
+Additional Art Assets”, “Clockwork Raven – Additional Art Assets” or as you seen fit. 
+f) May I use this asset on NFT(Non-fungible token) or similar platforms and method of 
+distribution?
+A: No, as the owner of a NFT can distribute the NFT as they see fit and use it as their own property, 
+this counts as a selling/distribution which is not included in the license.
+g) Can I use the assets to train any kind of machine or AI related software to produce new or 
+similar work.
+A: No, the asset license only allows it use into projects, the intellectual property belongs to me still, 
+so I kindly ask you to not.
+h) Can I use the assets I acquired on Mods for games?
+A: As long as you specify that the assets cannot be used or redistributed to your users, and as long 
+as the mod is free, you can use it.
+2. Purchase
+If you download, purchase, or have obtained it via Patreon or the Itch.io store you are subject to all 
+terms and conditions in this License. Please read this Agreement carefully.
+3.Terms
+Under this license the user Agrees to:
+a) Acknowledges that this asset(s) can be used as part of any personal or commercial digital 
+and physical/print Product, this include: Video Games, Tabletop Games, Streams, Youtube 
+videos, Magazine Art, Social Media, T-Shirts, Mugs. As long as they are tied to a content 
+and are not being distributed as assets as they are.
+b) Not sell or distribute this assets(s) as a separate product as you are the sole owner of this 
+license, this include using this asset as a part of a standard asset of a game engine that may 
+be distributed along with the such engine or similar project. Exceptions: This asset can be 
+distributed and used to a “team” while working on a project with you but can be used only in 
+projects while you are included in the team.
+c) Modify the assets to suit your needs if necessary. The Modified asset still are part of this 
+license and are subjected to all terms and conditions.
+d) Know that giving credit is not needed but is appreciated and the you may give it as seen fit. 
+But do not claim ownership to the asset creation which belongs to Clockwork Raven.
+e) Know that you cannot use the Clockwork Raven name associated with any product, 
+marketing campaign, social media except for giving credits or ownership of the asset in a 
+project in question. Further, the owner of this license can use the Clockwork Raven name 
+with explicit authorization (contact me first).
+f) Do not train the assets into a machine, AI or any software that may produce derivative or 
+visually similar work.
+g) To use the assets in any way that this license does not cover, contact Clockwork Raven 
+through my email caioterci@gmail.com and/or acquire a new license when available.
+4.Warranty
+Clockwork raven warrants that:
+a) Any and all intellectual property rights of the assets are and shall be owned by Clockwork 
+Raven or specific artists contracted by Clockwork Raven.
+b) The owner of this license can use this asset on an unlimited number of products while the 
+product in question remains in this license parameters.
+5.Amendment
+This license may be modified in order to prevent misunderstanding or misinterpretations not 
+originally intended by Clockwork Raven.

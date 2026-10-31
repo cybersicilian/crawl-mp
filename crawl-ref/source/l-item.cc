@@ -554,7 +554,7 @@ IDEF(weap_skill)
     if (skill == SK_FIGHTING)
         return 0;
 
-    if (is_unrandom_artefact(*item, UNRAND_LOCHABER_AXE))
+    if (has_unrand_effect(*item, UNRAND_LOCHABER_AXE))
     {
         lua_pushstring(ls, make_stringf("%s,%s",
                                         skill_name(SK_POLEARMS),

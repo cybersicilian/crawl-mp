@@ -1,4 +1,5 @@
 #include "AppHdr.h"
+#include "level-time.h"
 
 #include "map-knowledge.h"
 
@@ -11,6 +12,7 @@
 #include "losglobal.h"
 #include "message.h"
 #include "notes.h"
+#include "party.h"
 #include "player-notices.h"
 #include "religion.h"
 #include "stringutil.h"
@@ -706,6 +708,8 @@ coord_def invis_monster_knowledge::last_known_pos(const monster& mon)
  */
 void invis_monster_knowledge::update(const monster& mon, bool reveal_pos, coord_def forced_pos)
 {
+    if (party::multiplayer_enabled())
+        observe(mon, reveal_pos, forced_pos);
     // If we already have an entry in the list for this monster, update it.
     // Otherwise, add a new one.
     const bool delete_only = !mon.alive() || you.can_see(mon);
@@ -732,14 +736,14 @@ void invis_monster_knowledge::update(const monster& mon, bool reveal_pos, coord_
                     entry.last_known_pos = forced_pos;
 
                 entry.last_player_pos = you.pos();
-                entry.last_seen_time = you.elapsed_time;
+                entry.last_seen_time = level_elapsed_time(mon);
             }
             return;
         }
     }
 
     if (!delete_only)
-        data.push_back({mon.mid, you.elapsed_time, reveal_pos ? mon.pos() : coord_def(), you.pos()});
+        data.push_back({mon.mid, level_elapsed_time(mon), reveal_pos ? mon.pos() : coord_def(), you.pos()});
 }
 
 void invis_monster_knowledge::handle_time()
@@ -748,7 +752,9 @@ void invis_monster_knowledge::handle_time()
     // indicator to be useful.
     for (int i = data.size() - 1; i >= 0; --i)
     {
-        if (data[i].last_seen_time + 150 < you.elapsed_time)
+        const monster* known = monster_by_mid(data[i].mid);
+        const int now = known ? level_elapsed_time(*known) : level_elapsed_time();
+        if (data[i].last_seen_time + 150 < now)
         {
             _clear_remembered_invis_mon(data[i].last_known_pos);
             data.erase(data.begin() + i);
@@ -788,8 +794,79 @@ void invis_monster_knowledge::clear()
         _clear_remembered_invis_mon(data[i].last_known_pos);
 
     data.clear();
+    personal_observations.clear();
 
     you.gave_invis_clear_prompt = false;
+}
+
+void invis_monster_knowledge::observe(const monster& mon, bool reveal_pos,
+                                     coord_def forced_pos)
+{
+    auto& records = personal_observations[party::active_slot()];
+    records.erase(std::remove_if(records.begin(), records.end(),
+        [](const invis_mon_data& entry) {
+            const auto* known = monster_by_mid(entry.mid);
+            return entry.last_seen_time + 150 < (known
+                ? level_elapsed_time(*known) : level_elapsed_time());
+        }), records.end());
+    auto found = std::find_if(records.begin(), records.end(),
+        [&](const invis_mon_data& entry) { return entry.mid == mon.mid; });
+    if (!mon.alive() || you.can_see(mon))
+    {
+        if (found != records.end())
+            records.erase(found);
+        return;
+    }
+    if (found == records.end())
+    {
+        records.push_back({mon.mid, level_elapsed_time(mon),
+                          reveal_pos ? mon.pos() : coord_def(), you.pos()});
+        return;
+    }
+    if (reveal_pos)
+        found->last_known_pos = mon.pos();
+    if (!forced_pos.origin()
+        && (found->last_known_pos == forced_pos || you.see_cell(forced_pos)))
+    {
+        found->last_known_pos = forced_pos;
+    }
+    found->last_seen_time = level_elapsed_time(mon);
+    found->last_player_pos = you.pos();
+}
+
+invis_monster_knowledge invis_monster_knowledge::personal_view(int slot) const
+{
+    invis_monster_knowledge result;
+    auto found = personal_observations.find(slot);
+    if (found != personal_observations.end())
+        for (const auto& entry : found->second)
+        {
+            const auto* known = monster_by_mid(entry.mid);
+            if (entry.last_seen_time + 150 >= (known
+                ? level_elapsed_time(*known) : level_elapsed_time()))
+                result.data.push_back(entry);
+        }
+    return result;
+}
+
+vector<monster_info> invis_monster_knowledge::known_positions() const
+{
+    vector<monster_info> result;
+    for (const auto& entry : data)
+        if (in_bounds(entry.last_known_pos))
+            if (monster* mon = monster_by_mid(entry.mid))
+                if (mon->alive() && !mon->wont_attack() && !you.can_see(*mon)
+                    && entry.last_seen_time + 150 >= level_elapsed_time(*mon))
+                {
+                    // Match native remembered-invisible information: no live
+                    // location, damage, speed, enchantments or energy reading.
+                    monster_info info(mon->type, mon->base_monster);
+                    info.mb.set(MB_REMEMBERED_INVIS);
+                    info.mid = entry.mid;
+                    info.pos = entry.last_known_pos;
+                    result.push_back(info);
+                }
+    return result;
 }
 
 void invis_monster_knowledge::suppress_invis_warning()

@@ -1,0 +1,21 @@
+{
+  "source": {
+    "docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs": "54c524964490374aee30d3b4083e267cf2e6521f51b4b2cf12f4f85b702aaca8",
+    "crawl-ref/source/webserver/tests/multiplayer-native-client.cjs": "fe3b9baa4853908d6fdcbb304d28470e726457aa99de107bfe8262287e114ff1"
+  },
+  "resources": {
+    "browser_engines": [
+      "chromium",
+      "webkit"
+    ],
+    "sequential": true,
+    "pages_per_engine": 2,
+    "test_campaign_id": "e813e777-feac-4221-9b97-4c875be376a9",
+    "new_accounts": 0,
+    "new_campaigns": 0,
+    "autoexplore_engines": [
+      "chromium"
+    ],
+    "maximum_seconds_per_engine": 300
+  }
+}

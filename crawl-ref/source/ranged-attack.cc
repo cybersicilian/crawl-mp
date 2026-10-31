@@ -4,6 +4,8 @@
  */
 
 #include "AppHdr.h"
+#include "oozle-memory-effects.h"
+#include "bloodcraft.h"
 
 #include "ranged-attack.h"
 
@@ -39,7 +41,7 @@ ranged_attack::ranged_attack(actor *attk, actor *defn,
     ASSERT(wpn && (wpn->base_type == OBJ_MISSILES || is_range_weapon(*wpn)));
 
     weapon = wpn;
-    damage_brand = get_weapon_brand(*weapon);
+    damage_brand = oozle::effective_brand(*attacker, weapon);
 
     init_attack(0);
     kill_type = KILLED_BY_BEAM;
@@ -275,6 +277,8 @@ static bool _jelly_eat_missile(const string& proj_name, int damage_done)
 
 bool ranged_attack::handle_phase_hit()
 {
+    if (!simu && defender && !throwing())
+        bloodcraft::record_hit(*attacker, *defender);
     perceived_attack = true;
 
     if (mulch_bonus()

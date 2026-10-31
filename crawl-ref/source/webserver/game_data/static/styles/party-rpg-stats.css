@@ -1,0 +1,247 @@
+/* Companion RPG Stats, Combat Ledger, Equipped Loadout Slots & Inline Codex */
+.companion-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    margin-right: 6px;
+}
+
+.companion-codex-toggle-btn.active {
+    background: var(--sheet-inset, #e5d2ab);
+    color: var(--sheet-ink, #23170d);
+    border-color: var(--sheet-edge, #d3a858);
+}
+
+.companion-stats-link {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+}
+
+.companion-codex-drawer {
+    background: var(--sheet-inset, #e9dfca);
+    border-bottom: 1px solid var(--sheet-rule, #cfc0a1);
+    padding: 10px 24px;
+    color: var(--sheet-ink, #29251e);
+}
+
+.companion-codex-drawer[hidden] {
+    display: none !important;
+}
+
+.companion-codex-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.companion-codex-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.companion-codex-sec-btn {
+    padding: 4px 8px;
+    font: 11px/1.2 var(--tt-font-ui, sans-serif);
+    border-radius: 3px;
+}
+
+.companion-codex-sec-btn.active {
+    background: var(--sheet-action, #70442c);
+    color: var(--sheet-action-text, #fff5df);
+    border-color: var(--sheet-action, #70442c);
+}
+
+.companion-codex-search {
+    min-width: 240px;
+    flex: 1 1 220px;
+    max-width: 340px;
+    padding: 5px 8px;
+    font: 12px/1.3 var(--tt-font-ui, sans-serif);
+    border: 1px solid var(--sheet-rule, #cfc0a1);
+    border-radius: 3px;
+    background: var(--sheet-raised, #fffdf7);
+    color: var(--sheet-ink, #29251e);
+}
+
+.companion-codex-split {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 10px;
+    max-height: 220px;
+}
+
+.companion-codex-results {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: 4px;
+    border-right: 1px solid var(--sheet-rule, #8c652844);
+}
+
+.companion-codex-item-btn {
+    text-align: left;
+    padding: 4px 7px;
+    font: 11px/1.3 var(--tt-font-ui, sans-serif);
+    border-radius: 2px;
+}
+
+.companion-codex-item-btn.active {
+    background: var(--sheet-action, #70442c);
+    border-color: var(--sheet-action, #70442c);
+    color: var(--sheet-action-text, #fff5df);
+}
+
+.companion-codex-detail {
+    overflow-y: auto;
+    background: var(--sheet-raised, #efe1c1);
+    color: var(--sheet-ink, #23170d);
+    border: 1px solid var(--sheet-rule, #8c652866);
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+
+.companion-codex-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--sheet-rule, #8c652840);
+    padding-bottom: 4px;
+}
+
+.companion-codex-card-title {
+    margin: 0;
+    font: bold 14px/1.2 var(--tt-font-title, serif);
+    color: var(--sheet-ink, #23170d);
+}
+
+.companion-codex-kv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 4px 8px;
+    margin-bottom: 6px;
+}
+
+.companion-codex-kv {
+    background: var(--sheet-paper, #fff9e955);
+    border: 1px solid var(--sheet-rule, #8c652833);
+    border-radius: 2px;
+    padding: 3px 6px;
+}
+
+.companion-codex-kv .lbl {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--sheet-quiet, #5a4633);
+}
+
+.companion-codex-kv .val {
+    font-weight: bold;
+    font-size: 11px;
+    color: var(--sheet-ink, #23170d);
+}
+
+.companion-codex-sub {
+    font-size: 11px;
+    margin: 3px 0;
+    color: var(--sheet-ink, #23170d);
+}
+
+.companion-codex-desc {
+    margin: 6px 0 0;
+    font: 11px/1.4 var(--tt-font-copy, serif);
+    color: var(--sheet-quiet, #4b3928);
+    white-space: pre-line;
+}
+
+.companion-rpg-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.companion-metric-pill {
+    background: var(--sheet-paper, #fff9e940);
+    border: 1px solid var(--sheet-rule, #8c65284d);
+    border-radius: 2px;
+    padding: 4px 7px;
+}
+
+.companion-metric-pill .lbl {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    color: var(--sheet-quiet, #5a4633);
+}
+
+.companion-metric-pill .val {
+    font-weight: bold;
+    font-size: 11px;
+    color: var(--sheet-ink, #23170d);
+    font-variant-numeric: tabular-nums;
+}
+
+.companion-sub-header {
+    font: bold 11px/1.3 var(--tt-font-ui, sans-serif);
+    color: var(--sheet-quiet, #5a4633);
+    margin-bottom: 4px;
+}
+
+.companion-party-compare tr.is-selected-hero td {
+    background: var(--ui-selection, #d9c59f);
+}
+
+.companion-equip-slots-wrap {
+    margin-top: 12px;
+}
+
+.companion-equip-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 6px;
+}
+
+.companion-equip-slot-card {
+    background: var(--sheet-paper, #fff9e938);
+    border: 1px solid var(--sheet-rule, #8c65284d);
+    border-radius: 2px;
+    padding: 5px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.companion-equip-slot-card.is-empty {
+    opacity: 0.72;
+}
+
+.companion-equip-slot-card .slot-lbl {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sheet-quiet, #5a4633);
+}
+
+.companion-equip-slot-card .slot-val {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sheet-ink, #23170d);
+}
+
+@media (max-width: 680px) {
+    .companion-codex-split {
+        grid-template-columns: 1fr;
+        max-height: 300px;
+    }
+}

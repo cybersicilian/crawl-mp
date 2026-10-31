@@ -17,16 +17,18 @@ struct cloud_struct
     killer_type   killer;
     mid_t         source;
     int           excl_rad;
+    bool          protected_nonhostiles;
 
     cloud_struct() : pos(), type(CLOUD_NONE), decay(0), spread_rate(0),
                      whose(KC_OTHER), killer(KILL_NONE), source(MID_NOBODY),
-                     excl_rad(-1)
+                     excl_rad(-1), protected_nonhostiles(false)
     {
     }
     cloud_struct(coord_def p, cloud_type c, int d, int spread, kill_category kc,
-                 killer_type kt, mid_t src, int excl);
+                 killer_type kt, mid_t src, int excl, bool protected_nonhostiles = false);
 
     bool defined() const { return type != CLOUD_NONE; }
+    bool protects_nonhostiles() const { return protected_nonhostiles; }
     bool temporary() const { return excl_rad == -1; }
     int exclusion_radius() const { return excl_rad; }
 
@@ -83,12 +85,13 @@ bool cloud_is_stronger(cloud_type ct, const cloud_struct& cloud);
 bool place_cloud(cloud_type cl_type, const coord_def& ctarget,
                  int cl_range, const actor *agent,
                  int spread_rate = -1, int excl_rad = -1,
-                 bool do_conducts = true);
+                 bool do_conducts = true, bool protected_nonhostiles = false);
 
 void manage_clouds();
 string desc_cloud_damage(cloud_type cl_type, bool vs_player);
 void actor_apply_cloud(actor *act);
 bool actor_cloud_immune(const actor &act, const cloud_struct &cloud);
+bool cloud_dissipates_for(const cloud_struct& cloud, const actor& act);
 bool actor_cloud_immune(const actor &act, cloud_type type);
 bool mons_avoids_cloud(const monster* mons, coord_def pos,
                        bool placement = false);
@@ -102,6 +105,7 @@ bool is_harmless_cloud(cloud_type type);
 bool is_opaque_cloud(cloud_type ctype);
 string cloud_type_name(cloud_type type, bool terse = true);
 cloud_type random_smoke_type();
+cloud_type beam2cloud(beam_type flavour);
 cloud_type cloud_name_to_type(const string &name);
 const cloud_tile_info& cloud_type_tile_info(cloud_type type);
 bool cloud_is_removed(cloud_type type);

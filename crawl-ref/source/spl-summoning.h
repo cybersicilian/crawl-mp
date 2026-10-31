@@ -22,6 +22,7 @@ constexpr int MAX_HOARFROST_SHOTS = 4;
 #define SERVITOR_SPELL_KEY "servitor_spell"
 
 #define CLOCKWORK_BEE_TARGET "clockwork_bee_target"
+#define AUTOMATON_ALEMBIC_KEY "automaton_safe_alembic"
 
 #define PARAGON_WEAPON_KEY "paragon_weapon"
 #define PARAGON_MID_KEY "paragon_mid"

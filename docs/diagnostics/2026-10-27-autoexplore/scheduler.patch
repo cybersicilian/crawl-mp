@@ -1,0 +1,56 @@
+--- a/webserver/webtiles/activity_pump.py
++++ b/webserver/webtiles/activity_pump.py
+@@ -235,10 +235,12 @@
+         self.inputs.append(callback)
+ 
+     def command_boundary(self, request_id=None):
++        if request_id is not None and (type(request_id) is not int or not self.inflight):
++            return False
+         if self.inflight and request_id != self.request_id:
+-            return
++            return False
+         if request_id is not None and request_id != self.request_id:
+-            return
++            return False
+         self.inflight = False
+         self.manual = False
+         self.owner = None
+@@ -251,6 +253,7 @@
+         while self.inputs and not self.inflight and self.streams.native_ready:
+             callback = self.inputs.pop(0)
+             callback()
++        return True
+ 
+     def cancel(self, slot):
+         self.cancellations.add(slot)
+--- a/webserver/webtiles/process_handler.py
++++ b/webserver/webtiles/process_handler.py
+@@ -287,10 +287,14 @@
+                     and (payload.get("msg") in {"ui-push", "menu"}
+                          or payload.get("msg") == "input_mode" and payload.get("mode", 0) > 1)):
+                 self.activity_pump.prompt = True
+-            if payload.get("msg") == "party_activity_ready" and getattr(self, "activity_pump", None):
+-                self.activity_pump.command_boundary(payload.get("activity_id"))
+-                if self.activity_pump.queued_action:
+-                    self.activity_pump.tick()
++            if (envelope.get("view") is not True and payload.get("msg") == "party_activity_ready"
++                    and getattr(self, "activity_pump", None)):
++                request = payload.get("activity_id")
++                if type(request) is int and self.activity_pump.command_boundary(request):
++                    # Resume automation at its real completion, after the rest
++                    # of this socket batch refreshes personal eligibility. Yield
++                    # to the loop so queued stop/input events can run as well.
++                    IOLoop.current().add_callback(self.activity_pump.tick)
+                 return
+             if payload.get("msg") == "party_state" and getattr(self, "activity_pump", None):
+                 self.activity_pump.note_party_state(payload)
+@@ -891,6 +895,9 @@
+     def _base_call(self):
+         game = self.game_params
+         call = game.get_call_base()
++        # Web exploration already yields at every native command boundary.
++        # Apply before the RC file so a player's explicit pacing still wins.
++        call += ["-extra-opt-first", "explore_delay=0"]
+ 
+         call += ["-name",   getattr(self, "character_name", self.username),
+                  "-rc",     os.path.join(self.config_path("rcfile_path"),

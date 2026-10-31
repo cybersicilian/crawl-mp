@@ -4,6 +4,9 @@
  */
 
 #include "AppHdr.h"
+#include "character-trait.h"
+#include "coop-content.h"
+#include "spl-util.h"
 
 #include <algorithm>
 #include <vector>
@@ -15,6 +18,9 @@
 #include "playable.h"
 #include "jobs.h"
 #include "ng-restr.h"
+#include "newgame.h"
+#include "newgame-def.h"
+#include "item-prop.h"
 #include "species.h"
 #include "skills.h"
 #include "state.h"
@@ -176,6 +182,54 @@ static JsonNode *_combo_array()
     return array;
 }
 
+static const char *_starting_weapon_name(weapon_type weapon)
+{
+    return weapon == WPN_UNARMED ? "unarmed" : weapon_base_name(weapon);
+}
+
+static JsonNode *_starting_weapons_metadata()
+{
+    JsonNode *species_json(json_mkobject());
+    for (const auto sp : playable_species())
+    {
+        JsonNode *jobs_json(json_mkobject());
+        for (const auto job : playable_jobs())
+        {
+            if (job_allowed(sp, job) == CC_BANNED)
+                continue;
+            newgame_def ng;
+            ng.species = sp;
+            ng.job = job;
+            JsonNode *entry(json_mkobject());
+            JsonNode *trait_restrictions(json_mkobject());
+            for (const auto trait : {character_trait::mummy, character_trait::zombie,
+                                     character_trait::ghost})
+            {
+                const auto reason = check_trait(trait, sp, job);
+                json_append_member(trait_restrictions, character_trait_name(trait),
+                                   json_mkstring(trait_restriction_reason(reason)));
+            }
+            json_append_member(entry, "trait_restrictions", trait_restrictions);
+            JsonNode *choices(json_mkarray());
+            JsonNode *recommended(json_mkarray());
+            for (const auto& choice : starting_weapon_choices(ng))
+            {
+                json_append_element(choices, json_mkstring(_starting_weapon_name(choice.first)));
+                if (choice.second == CC_UNRESTRICTED)
+                    json_append_element(recommended, json_mkstring(_starting_weapon_name(choice.first)));
+            }
+            json_append_member(entry, "choices", choices);
+            json_append_member(entry, "recommended", recommended);
+            const auto weapon = default_starting_weapon(ng);
+            json_append_member(entry, "default", json_mkstring(
+                weapon == WPN_UNKNOWN ? "" : _starting_weapon_name(weapon)));
+            json_append_member(jobs_json, get_job_name(job), entry);
+        }
+        json_append_member(species_json, species::name(sp).c_str(), jobs_json);
+    }
+    return species_json;
+}
+
 /*! @brief Returns a JSON object (encoded as a string) of the form
  *         @code
  *           { "species": [...], "jobs": [...], "combos": [...] }
@@ -206,9 +260,19 @@ static JsonNode *_combo_array()
  */
 string playable_metadata_json()
 {
+    init_spell_descs();
     JsonWrapper json(json_mkobject());
     json_append_member(json.node, "species", _species_metadata_array());
     json_append_member(json.node, "jobs", _job_metadata_array());
     json_append_member(json.node, "combos", _combo_array());
+    json_append_member(json.node, "starting_weapons", _starting_weapons_metadata());
+    JsonNode *multiplayer_spells = json_mkarray();
+    for (int id = 0; id < NUM_SPELLS; ++id)
+    {
+        const auto spell = static_cast<spell_type>(id);
+        if (coop_content::exclusive_spell(spell))
+            json_append_element(multiplayer_spells, json_mkstring(spell_title(spell)));
+    }
+    json_append_member(json.node, "multiplayer_only_spells", multiplayer_spells);
     return json.to_string();
 }

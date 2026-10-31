@@ -1,0 +1,65 @@
+enum: SP_MELIAI
+monster: MONS_MELIAI
+name: Meliai
+short_name: Ml
+genus: Bee
+difficulty: Advanced
+species_flags:
+  - no_feet
+aptitudes:
+  xp: 0
+  hp: -2
+  mp_mod: 0
+  wl: 3
+  fighting: 1
+  polearms: -3
+  ranged weapons: -3
+  throwing: -3
+  armour: -1
+  dodging: 3
+  stealth: 1
+  conjurations: -3
+  hexes: 1
+  necromancy: -1
+  translocations: -3
+  fire_magic: -3
+  ice_magic: -1
+  air_magic: -1
+  earth_magic: -3
+  alchemy: 1
+  evocations: -2
+  invocations: 3
+size: small
+str: 6
+int: 9
+dex: 9
+levelup_stat_frequency: 5
+levelup_stats:
+  - int
+  - dex
+mutations:
+  1:
+    MUT_FAITH: 1
+    MUT_FAST: 2
+    MUT_STINGER: 3
+    MUT_DEFORMED: 1
+    MUT_BIG_WINGS: 1
+fake_mutations:
+  - long: You are vulnerable to poison and have no feet for boots.
+    short: poison vulnerability; no boots
+  - long: You can smite enemies at the cost of temporary maximum health.
+    short: innate smiting
+walking_verb: Flap
+recommended_jobs:
+  - gladiator
+  - monk
+  - berserker
+  - enchanter
+  - summoner
+recommended_weapons:
+  - short blades
+  - long blades
+  - axes
+  - maces and flails
+  - staves
+  - unarmed combat

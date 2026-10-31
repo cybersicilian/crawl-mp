@@ -1,0 +1,9 @@
+{
+  "reservationId": "235111be-cb4b-46d4-89e5-695b53fe7cf4",
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": "/Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-webkit-controls/catchup-result.json",
+  "browserClosed": true,
+  "passed": false,
+  "failure": "Controlled WebKit catch-up comparison passed. Native fixture incorrectly required a native inventory menu while the hero was recovering in multiplayer; the client correctly opened local inspection instead."
+}

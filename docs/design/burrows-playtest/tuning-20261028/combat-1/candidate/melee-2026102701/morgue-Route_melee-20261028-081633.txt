@@ -1,0 +1,558 @@
+ Seeded DCSS version 0.33-a0 (console) character file.
+
+Game seed: 2026102701 (custom seed)
+
+203096 Route_melee the Severer (level 18, -6/173 HPs) *WIZ*
+             Began as a Minotaur Fighter on Oct 28, 2026.
+             Was a Follower of Okawaru.
+             Killed from afar by a caustic worm (25 damage)
+             ... with a splash of acid
+             ... on level 2 of the Wormlands.
+             The game lasted 00:00:34 (9054 turns).
+
+Route_melee the Severer (Minotaur Fighter)          Turns: 9054, Time: 00:00:34
+
+Health: -6/173     AC: 20    Str: 24    XL:     18   Next: 35%
+Magic:  25/25      EV: 13    Int:  8    God:    Okawaru 35 (0)
+Gold:   689        SH: 16    Dex: 16    Spells: 17/17 levels left
+
+rFire   . . .  (100%)   k - +3 broad axe
+rCold   . . .  (100%)   i - +1 kite shield
+rNeg    . . .  (100%)   j - +2 plate armour
+rPois   +      (33%)    (no helmet)
+rElec   .      (100%)   g - +0 cloak {Stlth+}
+rCorr   .      (100%)   f - +0 pair of gloves
+SInv    .               e - +0 pair of boots
+Will    +....           (no amulet)
+Stlth                   d - ring of poison resistance
+HPRegen 0.48/turn       (no ring)
+MPRegen 0.19/turn
+
+%: no passive effects
+@: heroic, corroded (-8)
+A: horns 2, retaliatory headbutt
+a: Renounce Religion (0%), Build terrain (0%), Set terrain to build (0%), Clear
+terrain to floor (0%), Heroism (0%)
+
+
+You were on level 2 of the Wormlands.
+You worshipped Okawaru.
+Okawaru was aware of your devotion.
+You visited 4 branches of the dungeon, and saw 9 of its levels.
+
+You collected 689 gold pieces.
+
+Inventory:
+
+Hand Weapons
+ a - a +0 war axe
+ k - a +3 broad axe (weapon)
+Missiles
+ l - a throwing net (quivered)
+Armour
+ b - a +0 scale mail
+ c - a +0 buckler
+ e - a +0 pair of boots (worn)
+ f - a +0 pair of gloves (worn)
+ g - a +0 cloak of stealth (worn)
+ h - a +0 helmet
+ i - a +1 kite shield (worn)
+ j - a +2 plate armour (worn)
+Jewellery
+ d - a ring of poison resistance (worn)
+ m - a +5 ring of evasion
+ n - a +6 ring of strength
+ o - a +4 ring of slaying
+ p - a ring of resist corrosion
+Wands
+ b - a wand of light (5)
+ c - a wand of iceblast (23)
+ f - a wand of mindburst (8)
+Scrolls
+ r - a scroll of revelation
+ a - 2 scrolls of enchant armour
+ p - 2 scrolls of poison
+ I - a scroll of immolation
+ w - a scroll of enchant weapon
+ T - a scroll of torment
+Potions
+ C - 4 potions of cancellation
+ r - 2 potions of resistance
+ g - 3 potions of magic
+ M - 2 potions of mutation
+ c - 8 potions of curing
+ A - 3 potions of attraction
+ L - 2 potions of lignification
+
+
+   Skills:
+ + Level 18.5(23.5) Fighting
+ + Level 20.1(25.1) Axes
+ + Level 17.7(22.7) Armour
+ - Level 8.0(13.0) Dodging
+ + Level 15.3(20.3) Shields
+ + Level 11.6 Invocations
+ - Level 8.0 Evocations
+
+
+You had 17 spell levels left.
+You didn't know any spells.
+Your spell library contained the following spells:
+
+ Spells                   Type           Power      Damage    Failure   Level
+ Foxfire                  Conj/Fire      0 (25)     2x1d4     94%         1
+ Confusing Touch          Hex            0 (100)    N/A       100%        3
+ Stolen Sight             Hex            0 (200)    N/A       100%        3
+ Bolt of Draining         Conj/Necr      0 (200)    4d3       100%        5
+ Haste                    Hex            0 (200)    N/A       100%        6
+ Mass Confusion           Hex            0 (200)    N/A       100%        6
+ Magnavolt                Erth/Air       0 (200)    4d9       100%        7
+ Orb of Destruction       Conj           0 (200)    9d5       100%        7
+
+
+Dungeon Overview and Level Annotations
+
+Branches:
+Dungeon (1/15)               Worm (2/4) Bur:4          Hive (2/2) Bur:2       
+
+Altars:
+
+
+Innate Abilities, Weirdness & Mutations
+
+You have a pair of horns on your head.
+You reflexively headbutt those who attack you in melee.
+
+Message History
+
+You slash the coil worm!
+The coil worm is almost dead.
+You barely miss the caustic worm.
+The caustic worm spits acid at you.
+The splash of acid hits you. The acid corrodes you! The coil worm bites you!
+* * * LOW HITPOINT WARNING * * *
+The coil worm constricts you!
+* * * LOW HITPOINT WARNING * * *
+Blink to where?
+Press: ? - help, Dir - move target
+You blink free of the coil worm!
+As you read the scroll of blinking, it crumbles to dust.
+As you read the scroll of fog, it dissolves into smoke.
+Blink to where?
+Press: ? - help, Dir - move target
+Found 19 gold pieces, 2 scrolls of identify and a potion of invisibility.
+Found a stone staircase leading up.
+As you read the scroll of blinking, it crumbles to dust.
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+You feel a little less mighty now.
+You start resting.
+A coil worm comes into view.
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+You start resting.
+A coil worm comes into view.
+Blink to where?
+Press: ? - help, Dir - move target
+As you read the scroll of blinking, it crumbles to dust.
+The caustic worm spits acid at you.
+The splash of acid hits you!!
+* * * LOW HITPOINT WARNING * * *
+You barely miss the caustic worm.
+You headbutt the caustic worm but do no damage.
+The caustic worm spits acid at you.
+The splash of acid hits you!!
+You die...
+
+            ######
+           ##....##
+          ##......##
+         ##........#
+        ##.........##
+        #...........##
+        #.<.!........##
+        #.............#
+        #.....w.@....?#
+     ####......w......#
+    ##§.##......f.....#
+   ##††.###§§§....#....#
+..##....§§##§...........#
+........§§§ff§.....#...$.
+........§§§f§§.....##....
+......†.§§§§§§.##### ...
+..........§§..##
+#.....[...§§..#
+#.............#
+
+
+You could see a coil worm, a caustic worm and 3 wandering mushrooms.
+
+Vanquished Creatures
+  the Worldworm (Bur:4)
+  A stone giant (Worm:1)
+  6 gallery worms
+  10 spark wasps (Hive:2)
+  8 coil worms
+  6 boulder beetles
+  2 caustic worms (Worm:2)
+  A deep troll (Bur:4)
+  41 crag boars
+  47 burrowing beasts
+  18 deep troll delvers
+  6 lindwurms
+  19 wax beetles
+  31 shale drakes
+  19 venom wasps
+  16 meliai
+  2 komodo dragons (Bur:1)
+  9 wandering mushrooms
+  5 queen bees
+  6 hornets
+  6 earth elementals
+  24 killer bees
+284 creatures vanquished.
+
+Notes
+Turn   | Place    | Note
+-------+----------+-------------------------------------------
+     0 | D:1      | Route_melee the Minotaur Fighter began the quest for the
+                  | Orb.
+     0 | D:1      | You started the game in wizard mode.
+     0 | D:1      | Reached XP level 1. HP: 19/19 MP: 0/0
+     0 | D:1      | Reached XP level 2. HP: 20/20 MP: 1/1
+     0 | D:1      | Reached XP level 3. HP: 26/26 MP: 2/2
+     0 | D:1      | Reached XP level 4. HP: 33/33 MP: 3/3
+     0 | D:1      | Reached XP level 5. HP: 38/38 MP: 4/4
+     0 | D:1      | Reached XP level 6. HP: 45/45 MP: 5/5
+     0 | D:1      | Reached XP level 7. HP: 50/50 MP: 6/6
+     0 | D:1      | Reached XP level 8. HP: 57/57 MP: 7/7
+     0 | D:1      | Reached XP level 9. HP: 62/62 MP: 8/8
+     0 | D:1      | Reached XP level 10. HP: 69/69 MP: 9/9
+     0 | D:1      | Reached XP level 11. HP: 74/74 MP: 10/10
+     0 | D:1      | Reached XP level 12. HP: 81/81 MP: 11/11
+     0 | D:1      | Reached XP level 13. HP: 86/86 MP: 12/12
+     0 | D:1      | Reached XP level 14. HP: 93/93 MP: 13/13
+     0 | D:1      | Reached XP level 15. HP: 99/99 MP: 14/14
+     0 | D:1      | Reached XP level 16. HP: 105/105 MP: 15/15
+     0 | D:1      | Became a worshipper of Warmaster Okawaru
+    59 | D:1      | Reached * piety under Okawaru
+    59 | D:1      | Reached ** piety under Okawaru
+    59 | D:1      | Reached *** piety under Okawaru
+    59 | D:1      | Reached **** piety under Okawaru
+    59 | Bur:1    | Entered Level 1 of the Burrows
+  1307 | Bur:2    | Identified the +3 pair of gloves "Ysautz" {Parrying, rPois
+                  | Will++}
+  1872 | Bur:2    | Found an opening to the Hive.
+  2311 | Hive:1   | Entered Level 1 of the Hive
+  3231 | Hive:1   | Identified the mist talisman of Kyvopren {rPois Int-3
+                  | Dex+2}
+  3422 | Hive:1   | Reached XP level 17. HP: 128/161 MP: 21/23
+  3687 | Hive:2   | Entered Level 2 of the Hive
+  3725 | Hive:2   | Reached skill level 19 in Axes
+  4150 | Hive:2   | Identified the eel talisman of the Lemon {Rampage Str+4}
+  4403 | Hive:2   | Reached skill level 10 in Invocations
+  6461 | Bur:4    | Entered Level 4 of the Burrows
+  7258 | Bur:4    | Found a tunnel to the Wormlands.
+  7258 | Bur:4    | Encountered the Worldworm
+  7271 | Bur:4    | Killed the Worldworm
+  7272 | Bur:4    | Reached XP level 18. HP: 142/172 MP: 25/25
+  7924 | Worm:1   | Entered Level 1 of the Wormlands
+  7933 | Worm:1   | Reached skill level 15 in Shields
+  8121 | Worm:1   | Reached skill level 20 in Axes
+  9054 | Worm:2   | Killed from afar by a caustic worm
+
+Illustrated notes
+
+Levels and vault maps discovered:
+[+gen,+vis] D:1:      erik_arrival_cave_to_civilisation
+                      [erik_arrival_cave_to_hall], layout_basic
+[+gen,-vis] D:2
+[+gen,-vis] D:3
+[+gen,-vis] D:4
+[+gen,-vis] D:5
+[+gen,-vis] D:6
+[+gen,-vis] D:7
+[+gen,-vis] D:8
+[+gen,-vis] D:9
+[+gen,-vis] D:10
+[+gen,-vis] D:11
+[+gen,-vis] D:12
+[+gen,-vis] D:13
+[+gen,-vis] D:14
+[+gen,-vis] D:15
+[+gen,-vis] Temple
+[+gen,-vis] Lair:1
+[+gen,-vis] Lair:2
+[+gen,-vis] Lair:3
+[+gen,-vis] Lair:4
+[+gen,-vis] Lair:5
+[+gen,-vis] Swamp:1
+[+gen,-vis] Swamp:2
+[+gen,-vis] Swamp:3
+[+gen,-vis] Swamp:4
+[+gen,-vis] Shoals:1
+[+gen,-vis] Shoals:2
+[+gen,-vis] Shoals:3
+[+gen,-vis] Shoals:4
+[+gen,-vis] Snake:1
+[+gen,-vis] Snake:2
+[+gen,-vis] Snake:3
+[+gen,-vis] Snake:4
+[+gen,-vis] Spider:1
+[+gen,-vis] Spider:2
+[+gen,-vis] Spider:3
+[+gen,-vis] Spider:4
+[+gen,-vis] Slime:1
+[+gen,-vis] Slime:2
+[+gen,-vis] Slime:3
+[+gen,-vis] Slime:4
+[+gen,-vis] Slime:5
+[+gen,-vis] Orc:1
+[+gen,-vis] Orc:2
+[+gen,-vis] Elf:1
+[+gen,-vis] Elf:2
+[+gen,-vis] Elf:3
+[+gen,-vis] Vaults:1
+[+gen,-vis] Vaults:2
+[+gen,-vis] Vaults:3
+[+gen,-vis] Vaults:4
+[+gen,-vis] Vaults:5
+[+gen,-vis] Blade
+[+gen,-vis] Forest:1
+[+gen,-vis] Forest:2
+[+gen,-vis] Forest:3
+[+gen,-vis] Forest:4
+[+gen,-vis] Crypt:1
+[+gen,-vis] Crypt:2
+[+gen,-vis] Crypt:3
+[+gen,-vis] Tomb:1
+[+gen,-vis] Tomb:2
+[+gen,-vis] Tomb:3
+[+gen,-vis] Depths:1
+[+gen,-vis] Depths:2
+[+gen,-vis] Depths:3
+[+gen,-vis] Depths:4
+[+gen,-vis] Hell
+[+gen,-vis] Dis:1
+[+gen,-vis] Dis:2
+[+gen,-vis] Dis:3
+[+gen,-vis] Dis:4
+[+gen,-vis] Dis:5
+[+gen,-vis] Dis:6
+[+gen,-vis] Dis:7
+[+gen,-vis] Geh:1
+[+gen,-vis] Geh:2
+[+gen,-vis] Geh:3
+[+gen,-vis] Geh:4
+[+gen,-vis] Geh:5
+[+gen,-vis] Geh:6
+[+gen,-vis] Geh:7
+[+gen,-vis] Coc:1
+[+gen,-vis] Coc:2
+[+gen,-vis] Coc:3
+[+gen,-vis] Coc:4
+[+gen,-vis] Coc:5
+[+gen,-vis] Coc:6
+[+gen,-vis] Coc:7
+[+gen,-vis] Tar:1
+[+gen,-vis] Tar:2
+[+gen,-vis] Tar:3
+[+gen,-vis] Tar:4
+[+gen,-vis] Tar:5
+[+gen,-vis] Tar:6
+[+gen,-vis] Tar:7
+[+gen,-vis] Zot:1
+[+gen,-vis] Zot:2
+[+gen,-vis] Zot:3
+[+gen,-vis] Zot:4
+[+gen,-vis] Zot:5
+[+gen,-vis] Abyss:1
+[+gen,-vis] Abyss:2
+[+gen,-vis] Abyss:3
+[+gen,-vis] Abyss:4
+[+gen,-vis] Abyss:5
+[+gen,-vis] Abyss:6
+[+gen,-vis] Abyss:7
+[+gen,-vis] Pan
+[+gen,-vis] Zig:1
+[+gen,-vis] Zig:2
+[+gen,-vis] Zig:3
+[+gen,-vis] Zig:4
+[+gen,-vis] Zig:5
+[+gen,-vis] Zig:6
+[+gen,-vis] Zig:7
+[+gen,-vis] Zig:8
+[+gen,-vis] Zig:9
+[+gen,-vis] Zig:10
+[+gen,-vis] Zig:11
+[+gen,-vis] Zig:12
+[+gen,-vis] Zig:13
+[+gen,-vis] Zig:14
+[+gen,-vis] Zig:15
+[+gen,-vis] Zig:16
+[+gen,-vis] Zig:17
+[+gen,-vis] Zig:18
+[+gen,-vis] Zig:19
+[+gen,-vis] Zig:20
+[+gen,-vis] Zig:21
+[+gen,-vis] Zig:22
+[+gen,-vis] Zig:23
+[+gen,-vis] Zig:24
+[+gen,-vis] Zig:25
+[+gen,-vis] Zig:26
+[+gen,-vis] Zig:27
+[+gen,-vis] Bazaar
+[+gen,-vis] Trove
+[+gen,-vis] Sewer
+[+gen,-vis] Ossuary
+[+gen,-vis] Bailey
+[+gen,-vis] IceCv
+[+gen,-vis] Volcano
+[+gen,-vis] WizLab
+[+gen,-vis] Desolation
+[+gen,-vis] Gauntlet
+[+gen,-vis] Arena
+[+gen,-vis] Crucible
+[+gen,-vis] Necropolis
+[+gen,-vis] Gulch
+[+gen,+vis] Bur:1:    layout_burrows, bur_flooded_roots, bur_side_den,
+                      bur_root_pocket
+[+gen,+vis] Bur:2:    layout_burrows, hive_entry_comb, bur_troll_store,
+                      bur_bent_gallery, bur_shale_cut, bur_paired_dens,
+                      bur_split_passage
+[+gen,+vis] Bur:3:    layout_burrows, bur_beetle_burrow
+[+gen,+vis] Bur:4:    bur_end_worldworm, bur_old_crossing, bur_troll_shelter
+[+gen,+vis] Worm:1:   layout_wormlands, worm_mushroom_grove
+[+gen,+vis] Worm:2:   layout_wormlands, worm_corroded_gallery, worm_shale_shelf
+[+gen,-vis] Worm:3
+[+gen,-vis] Worm:4
+[+gen,+vis] Hive:1:   layout_hive, hive_pollen_pockets, hive_lost_apothecary
+[+gen,+vis] Hive:2:   hive_end_inner_combs
+
+Skill      XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 |
+---------------+-------------------------------------------------------+-----
+Invocations    |                                               9 11    | 11.6
+Shields        |                                              13 14 15 | 15.3
+Armour         |                                              16 17    | 17.7
+Fighting       |                                              17 18    | 18.5
+Axes           |                                                 19 20 | 20.1
+Dodging        |                                                       |  8.0
+Evocations     |                                                       |  8.0
+
+Percentage of experience gained in each form (* = 100%):
+
+Form     XL: |  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 | XLs as
+-------------+-------------------------------------------------------+---------
+None         |                                               *  *  * |  3
+
+Action                     |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+---------------------------+-------+-------+-------+-------+-------+-------++-------
+ Attack: Normal            |       |       |       |       |       |  1202 ||  1202
+  Melee: Broad axe         |       |       |       |       |       |  1534 ||  1534
+         Headbutt          |       |       |       |       |       |   486 ||   486
+ Invoke: Heroism           |       |       |       |       |       |    88 ||    88
+  Drink: Might             |       |       |       |       |       |     6 ||     6
+         Haste             |       |       |       |       |       |     2 ||     2
+         Heal wounds       |       |       |       |       |       |     7 ||     7
+   Read: Fear              |       |       |       |       |       |     4 ||     4
+         Fog               |       |       |       |       |       |     5 ||     5
+         Teleportation     |       |       |       |       |       |     3 ||     3
+         Blinking          |       |       |       |       |       |     5 ||     5
+ Armour: Plate armour      |       |       |       |       |       |   473 ||   473
+  Dodge: Dodged            |       |       |       |       |       |   276 ||   276
+  Block: Kite shield       |       |       |       |       |       |   660 ||   660
+
+Table legend: (Time is in decaauts)
+ A = Elapsed time spent in this place.
+ B = Non-inter-level travel time spent in this place.
+ C = Inter-level travel time spent in this place.
+ D = Time resting spent in this place.
+ E = Time spent auto-exploring this place.
+ F = Levels seen in this place.
+ G = Mean time per level.
+                   A        B        C        D        E      F       G
+               +--------+--------+--------+--------+--------+-----+--------+
+         Total |   8720 |   8720 |      0 |   3252 |   3330 |   9 |  968.9 |
+       Dungeon |     53 |     53 |      0 |      0 |      0 |   1 |   53.0 |
+       Burrows |   4750 |   4750 |      0 |   1522 |   1991 |   4 | 1187.5 |
+     Wormlands |   1093 |   1093 |      0 |    418 |    439 |   2 |  546.5 |
+          Hive |   2822 |   2822 |      0 |   1312 |    900 |   2 | 1411.0 |
+               +--------+--------+--------+--------+--------+-----+--------+
+
+Top non-repeatable levels by time:
+  Hive:2: 1487 daAuts
+   Bur:4: 1412 daAuts
+  Hive:1: 1335 daAuts
+   Bur:2: 1254 daAuts
+   Bur:3: 1113 daAuts
+  Worm:1: 990 daAuts
+   Bur:1: 970 daAuts
+  Worm:2: 102 daAuts
+     D:1: 53 daAuts
+
+DLua errors:
+
+Table legend:
+ A = God
+ B = Rank
+ C = Start time
+ D = Start piety
+ E = Piety gained
+ F = Piety on gifts
+ G = Piety on penance
+ H = Piety on stepdowns
+ I = Piety wasted at max piety
+ J = Piety decays
+ K = Piety lost (inc. decay)
+         A          B      C       D     E     F     G     H     I     J     K   
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+ Okawaru          | 0 |       0 |  15 |  15 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |     535 |  30 |  20 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |     535 |  50 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 3 |     535 |  75 |  25 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 4 |     535 | 100 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 3 |     576 |  97 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 4 |     661 | 100 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 3 |    1032 |  98 |  18 |   0 |   0 |   0 |   0 |   0 |  43 
+ Okawaru          | 2 |    7287 |  73 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 3 |    7340 |  75 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 2 |    8442 |  73 | 106 |   0 |   0 |   0 |   0 |   0 | 130 
+ Okawaru          | 1 |   40797 |  49 |   1 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |   40835 |  50 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 1 |   42173 |  48 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |   42431 |  50 |   2 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 1 |   43012 |  48 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 2 |   43035 |  50 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 1 |   43674 |  48 |  74 |   0 |   0 |   0 |   0 |   0 |  72 
+ Okawaru          | 2 |   64269 |  50 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 1 |   64595 |  48 |  32 |   0 |   0 |   0 |   0 |   0 |  52 
+ Okawaru          | 0 |   78981 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   79762 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   80166 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   80223 |  30 |   2 |   0 |   0 |   0 |   0 |   0 |   5 
+ Okawaru          | 0 |   81624 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   82380 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   83784 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   84486 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   4 
+ Okawaru          | 0 |   85338 |  27 |   3 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   86903 |  30 |   1 |   0 |   0 |   0 |   0 |   0 |   3 
+ Okawaru          | 0 |   86948 |  28 |   2 |   0 |   0 |   0 |   0 |   0 |   0 
+ Okawaru          | 1 |   87005 |  30 |   5 |   0 |   0 |   0 |   0 |   0 |   0 
++-----------------+---+---------+-----+-----+-----+-----+-----+-----+-----+-----+
+
+Conducts for god: Okawaru
+Piety from conduct
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+----------------------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |   270 ||   270
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     1 ||     1
+----------------------+-------+-------+-------+-------+-------+-------++-------
+Conduct count
+              Conduct |  1- 3 |  4- 6 |  7- 9 | 10-12 | 13-15 | 16-18 || total
+----------------------+-------+-------+-------+-------+-------+-------++-------
+         Kill Living  |     0 |     0 |     0 |     0 |     0 |   278 ||   278
+      Kill Nonliving  |     0 |     0 |     0 |     0 |     0 |     6 ||     6
+----------------------+-------+-------+-------+-------+-------+-------++-------
+

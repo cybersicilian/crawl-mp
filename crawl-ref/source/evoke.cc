@@ -4,8 +4,10 @@
 **/
 
 #include "AppHdr.h"
+#include "coop-content.h"
 
 #include "evoke.h"
+#include "god-pakellas.h"
 
 #include <algorithm>
 #include <cmath>
@@ -38,7 +40,9 @@
 #include "item-use.h"
 #include "level-state-type.h"
 #include "libutil.h"
+#include "los.h"
 #include "losglobal.h"
+#include "losparam.h"
 #include "message.h"
 #include "mgen-data.h"
 #include "misc.h"
@@ -48,6 +52,7 @@
 #include "mon-place.h"
 #include "mutant-beast.h"
 #include "nearby-danger.h" // i_feel_safe
+#include "party.h"
 #include "place.h"
 #include "player.h"
 #include "player-stats.h"
@@ -79,11 +84,13 @@
 
 #define PHIAL_RANGE 5
 
-static bool _evoke_horn_of_geryon()
+static bool _evoke_horn_of_geryon(const evocation& activation)
 {
     if (!player_summon_check(MONS_SIN_BEAST))
         return false;
 
+    if (!activation.commit())
+        return false;
     bool created = false;
 
     mprf(MSGCH_SOUND, "You produce a hideous howling noise!");
@@ -104,7 +111,7 @@ static bool _evoke_horn_of_geryon()
         if (random2(adjusted_power) > 7)
             beh = BEH_FRIENDLY;
         mgen_data mg(MONS_SIN_BEAST, beh, you.pos(), MHITYOU, MG_AUTOFOE);
-        mg.set_summoned(&you, SPELL_NO_SPELL, summ_dur(3));
+        mg.set_summoned(&you, SPELL_NO_SPELL, activation.duration(summ_dur(3)));
         mg.set_prox(PROX_CLOSE_TO_PLAYER);
         mon = create_monster(mg);
         if (mon)
@@ -126,10 +133,10 @@ static int _lightning_rod_power()
  *
  * @return  Whether anything happened.
  */
-static bool _lightning_rod(dist *preselect)
+static bool _lightning_rod(dist *preselect, const evocation& activation)
 {
     const spret ret = your_spells(SPELL_THUNDERBOLT, _lightning_rod_power(),
-            false, nullptr, preselect);
+            false, nullptr, preselect, false, activation);
 
     if (ret == spret::abort)
         return false;
@@ -150,102 +157,73 @@ int wand_mp_cost()
     return min(you.magic_points, cost);
 }
 
-int wand_power(spell_type wand_spell)
+int wand_power(spell_type wand_spell, int skill_bonus)
 {
     const int cap = spell_power_cap(wand_spell);
     if (cap == 0)
         return -1;
     const int mp_cost = wand_mp_cost();
-    int pow = (15 + you.skill(SK_EVOCATIONS, 7) / 2) * (mp_cost + 9) / 9;
+    const int skill = min(27 * 7, you.skill(SK_EVOCATIONS, 7) + skill_bonus * 7);
+    int pow = (15 + skill / 2) * (mp_cost + 9) / 9;
     if (you.unrand_equipped(UNRAND_GADGETEER))
         pow = pow * 130 / 100;
     return min(pow, cap);
 }
 
-void zap_wand(int slot, dist *_target)
+static spret _evoke_wand(item_def& wand, dist* target, const evocation& activation)
 {
-    if (!item_currently_evokable(slot == -1 ? nullptr : &you.inv[slot]))
-        return;
-
-    int item_slot;
-    if (slot != -1)
-        item_slot = slot;
-    else
-    {
-        // TODO: move to UseItemMenu? This code path is currently unbound and
-        // it's unclear to me if anyone ever uses it
-        item_slot = prompt_invent_item("Zap which item?",
-                                       menu_type::invlist,
-                                       OBJ_WANDS,
-                                       OPER_ZAP);
-    }
-
-    if (prompt_failed(item_slot))
-        return;
-
-    item_def& wand = you.inv[item_slot];
-    if (wand.base_type != OBJ_WANDS)
-    {
-        mpr("You can't zap that!");
-        return;
-    }
-
-    if (!item_currently_evokable(&wand))
-        return;
-
     const int mp_cost = wand_mp_cost();
-    const spell_type spell =
-        spell_in_wand(static_cast<wand_type>(wand.sub_type));
-    const int power = wand_power(spell);
+    const spell_type spell = spell_in_wand(static_cast<wand_type>(wand.sub_type));
+    int power = wand_power(spell, activation.skill_bonus);
+    if (activation.application_percent != 100 && (wand.sub_type == WAND_PARALYSIS
+        || wand.sub_type == WAND_CHARMING || wand.sub_type == WAND_POLYMORPH))
+    {
+        power = min(spell_power_cap(spell), power * activation.application_percent / 100);
+    }
     pay_mp(mp_cost);
-
     if (spell == SPELL_FASTROOT)
-        you.props[FASTROOT_POWER_KEY] = power; // we may cancel, but that's fine
-
-    spret ret = your_spells(spell, power, false, &wand, _target);
-
-    if (ret == spret::abort)
+        you.props[FASTROOT_POWER_KEY] = power;
+    const spret result = your_spells(spell, power, false, &wand, target, false, activation);
+    if (result != spret::success)
     {
         refund_mp(mp_cost);
-        return;
+        if (result != spret::abort)
+        {
+            canned_msg(MSG_NOTHING_HAPPENS);
+            you.turn_is_over = true;
+        }
+        return result;
     }
-    else if (ret == spret::fail)
-    {
-        refund_mp(mp_cost);
-        canned_msg(MSG_NOTHING_HAPPENS);
-        you.turn_is_over = true;
-        return;
-    }
-
-    // Spend MP.
     if (mp_cost)
     {
         stardust_orb_trigger(mp_cost);
         finalize_mp_cost();
     }
-
-    // Take off a charge (unless gadgeteer procs)
-    if ((you.wearing_ego(OBJ_GIZMOS, SPGIZMO_GADGETEER)
-        || you.unrand_equipped(UNRAND_GADGETEER))
-        && x_chance_in_y(3, 10))
+    if (!activation.externally_funded)
     {
-        mpr("You conserve a charge of your wand.");
+        if ((you.wearing_ego(OBJ_GIZMOS, SPGIZMO_GADGETEER)
+             || you.unrand_equipped(UNRAND_GADGETEER)) && x_chance_in_y(3, 10))
+            mpr("You conserve a charge of your wand.");
+        else
+            --wand.charges;
     }
-    else
-        wand.charges--;
+    return result;
+}
 
-    if (wand.charges == 0)
+void zap_wand(int slot, dist* target)
+{
+    if (!item_currently_evokable(slot == -1 ? nullptr : &you.inv[slot]))
+        return;
+    if (slot == -1)
+        slot = prompt_invent_item("Zap which item?", menu_type::invlist, OBJ_WANDS, OPER_ZAP);
+    if (prompt_failed(slot))
+        return;
+    if (you.inv[slot].base_type != OBJ_WANDS)
     {
-        ASSERT(in_inventory(wand));
-
-        mpr("The now-empty wand crumbles to dust.");
-        dec_inv_item_quantity(wand.link, 1);
+        mpr("You can't zap that!");
+        return;
     }
-
-    practise_evoking(1);
-    count_action(CACT_EVOKE, wand.sub_type, OBJ_WANDS);
-
-    you.turn_is_over = true;
+    evoke_device(you.inv[slot], target);
 }
 
 string manual_skill_names(bool short_text)
@@ -261,13 +239,15 @@ string manual_skill_names(bool short_text)
         return skill_names(skills);
 }
 
-static bool _box_of_beasts()
+static bool _box_of_beasts(const evocation& activation)
 {
     // While some mutant beasts can fly, the game still refuses to place them
     // on top of water (since they can't fly until facets are fully generated).
     if (!player_summon_check(MONS_MUTANT_BEAST))
         return false;
 
+    if (!activation.commit())
+        return false;
     mpr("You open the lid...");
 
     // two rolls to reduce std deviation - +-6 so can get < max even at 27 sk
@@ -279,7 +259,7 @@ static bool _box_of_beasts()
 
     mgen_data mg(MONS_MUTANT_BEAST, BEH_FRIENDLY, you.pos(), MHITYOU,
                  MG_AUTOFOE);
-    mg.set_summoned(&you, 0, summ_dur(3 + random2(3)));
+    mg.set_summoned(&you, 0, activation.duration(summ_dur(3 + random2(3))));
 
     mg.hd = beast_tiers[tier];
     dprf("hd %d (min %d, tier %d)", mg.hd, hd_min, tier);
@@ -353,7 +333,7 @@ static bool _sack_of_spiders_veto_mon(monster_type mon)
     return god_hates_monster(mon);
 }
 
-static bool _spill_out_spiders()
+static bool _spill_out_spiders(const evocation& activation)
 {
     const int evo_skill = you.skill_rdiv(SK_EVOCATIONS);
     // 2 at min skill, 3-4 at mid, 4-6 at max
@@ -367,21 +347,23 @@ static bool _spill_out_spiders()
         monster_type mon = pick_monster_from(pop_spiders, evo_skill,
                                              _sack_of_spiders_veto_mon);
         mgen_data mg(mon, BEH_FRIENDLY, you.pos(), MHITYOU, MG_AUTOFOE);
-        mg.set_summoned(&you, 0, summ_dur(3 + random2(4)));
+        mg.set_summoned(&you, 0, activation.duration(summ_dur(3 + random2(4))));
         if (create_monster(mg))
             made_mons = true;
     }
     return made_mons;
 }
 
-static bool _sack_of_spiders()
+static bool _sack_of_spiders(const evocation& activation)
 {
     if (!player_summon_check(MONS_REDBACK))
         return false;
 
+    if (!activation.commit())
+        return false;
     mpr("You reach into the sack...");
 
-    const bool made_mons = _spill_out_spiders();
+    const bool made_mons = _spill_out_spiders(activation);
     if (made_mons)
         mpr("...and things crawl out!");
 
@@ -568,7 +550,7 @@ static int _phial_power()
     return 10 + you.skill(SK_EVOCATIONS, 4);
 }
 
-static bool _phial_of_floods(dist *target)
+static bool _phial_of_floods(dist *target, const evocation& activation)
 {
     dist target_local;
     if (!target)
@@ -576,6 +558,7 @@ static bool _phial_of_floods(dist *target)
     bolt beam;
 
     const int power = _phial_power();
+    beam.damage_percent = activation.damage_percent;
     zappy(ZAP_PRIMAL_WAVE, power, false, beam);
     beam.range = PHIAL_RANGE;
     beam.aimed_at_spot = true;
@@ -597,7 +580,10 @@ static bool _phial_of_floods(dist *target)
     if (spell_direction(*target, beam, &args)
         && player_tracer(ZAP_PRIMAL_WAVE, power, beam))
     {
+        if (!activation.commit())
+            return false;
         zappy(ZAP_PRIMAL_WAVE, power, false, beam);
+        beam.damage_percent = activation.damage_percent;
         beam.fire();
         return true;
     }
@@ -613,7 +599,7 @@ bool mirror_can_effect(monster *victim)
         || victim->has_ench(ENCH_PHANTOM_MIRROR);
 }
 
-static spret _phantom_mirror(dist *target)
+static spret _phantom_mirror(dist *target, const evocation& activation)
 {
     bolt beam;
     monster* victim = nullptr;
@@ -650,6 +636,8 @@ static spret _phantom_mirror(dist *target)
     if (stop_summoning_prompt(mi.mresists, mf))
         return spret::abort;
 
+    if (!activation.commit())
+        return spret::abort;
     monster* mon = clone_mons(victim, true, nullptr, ATT_FRIENDLY);
     if (!mon)
     {
@@ -660,9 +648,9 @@ static spret _phantom_mirror(dist *target)
     int dur = min(6, max(1, (you.skill(SK_EVOCATIONS, 1) / 4 + 1)
                          * (100 - victim->check_willpower(&you, power)) / 100));
 
-    mon->mark_summoned(SPELL_PHANTOM_MIRROR, summ_dur(dur), true, true);
+    mon->mark_summoned(SPELL_PHANTOM_MIRROR, activation.duration(summ_dur(dur)), true, true);
 
-    mon->summoner = MID_PLAYER;
+    mon->summoner = you.mid;
     mons_add_blame(mon, "mirrored by the player character");
     mon->add_ench(ENCH_PHANTOM_MIRROR);
     mon->add_ench(mon_enchant(ENCH_DRAINED, &you, INFINITE_DURATION,
@@ -802,7 +790,7 @@ int tremorstone_count(int pow)
  * @return          spret::abort if the player cancels, spret::fail if they
  *                  try to evoke but fail, and spret::success otherwise.
  */
-static spret _tremorstone()
+static spret _tremorstone(const evocation& activation)
 {
     bool see_target;
     const coord_def center = _find_tremorstone_target(see_target);
@@ -820,10 +808,13 @@ static spret _tremorstone()
         return spret::abort;
     }
 
+    if (!activation.commit())
+        return spret::abort;
     const int power = _tremorstone_power();
 
     bolt beam;
-    beam.source_id  = MID_PLAYER;
+    beam.damage_percent = activation.damage_percent;
+    beam.source_id  = you.mid;
     beam.thrower    = KILL_YOU;
     zappy(ZAP_TREMORSTONE, power, false, beam);
     beam.ex_size = 2;
@@ -853,7 +844,7 @@ static const vector<random_pick_entry<cloud_type>> condenser_clouds =
   { 0,  110, 50, RISE, CLOUD_ACID },
 };
 
-static spret _condenser()
+static spret _condenser(const evocation& activation)
 {
     const int pow = 15 + you.skill(SK_EVOCATIONS, 7) / 2;
 
@@ -896,6 +887,8 @@ static spret _condenser()
         return spret::fail;
     }
 
+    if (!activation.commit())
+        return spret::abort;
     vector<coord_def> target_list;
     for (coord_def t : target_cells)
         target_list.push_back(t);
@@ -916,7 +909,7 @@ static spret _condenser()
 
         const int cloud_power = 5
             + random2avg(12 + div_rand_round(pow * 3, 4), 3);
-        place_cloud(cloud, p, cloud_power, &you);
+        place_cloud(cloud, p, activation.duration(cloud_power), &you);
         did_something = true;
     }
 
@@ -931,10 +924,10 @@ static int _gravitambourine_power()
     return 15 + you.skill(SK_EVOCATIONS, 7) / 2;
 }
 
-static bool _gravitambourine(dist *target)
+static bool _gravitambourine(dist *target, const evocation& activation)
 {
     const spret ret = your_spells(SPELL_GRAVITAS, _gravitambourine_power(),
-            false, nullptr, target);
+            false, nullptr, target, false, activation);
 
     if (ret == spret::abort)
         return false;
@@ -998,7 +991,7 @@ static bool _centipede_bauble(item_def& item)
 }
 
 string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
-                                bool *god_forbids)
+                                bool *god_forbids, bool allow_empty)
 {
     if (god_forbids)
         *god_forbids = false;
@@ -1012,6 +1005,11 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
     // all generic checks passed
     if (!item)
         return "";
+
+    if (item->is_type(OBJ_MISCELLANY, MISC_ANCIENT_CRATE))
+        return "The crate opens after its owner's tome has been studied.";
+    if (item->is_type(OBJ_MISCELLANY, MISC_DUSTY_TOME))
+        return "Its owner can decipher the tome at experience level 3.";
 
     // historically allowed under confusion/berserk, but why?
     if (item->is_type(OBJ_MISCELLANY, MISC_ZIGGURAT))
@@ -1066,13 +1064,19 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
         return "You cannot evoke magical items.";
 
     // is this really necessary?
+    if (!coop_content::enabled()
+        && coop_content::exclusive_item(item->base_type, item->sub_type))
+    {
+        return "This device requires a multiplayer game.";
+    }
+
     if (item_type_removed(item->base_type, item->sub_type))
         return "Sorry, this item was removed!";
     if (item->base_type != OBJ_WANDS && item->base_type != OBJ_MISCELLANY)
         return "You can't evoke that!";
 
 #if TAG_MAJOR_VERSION == 34
-    if (is_known_empty_wand(*item))
+    if (!allow_empty && is_known_empty_wand(*item))
         return "This wand has no charges.";
 #endif
 
@@ -1089,13 +1093,53 @@ string cannot_evoke_item_reason(const item_def *item, bool temp, bool ident,
 
     if (temp
         && item->base_type == OBJ_MISCELLANY
-        && item->sub_type == MISC_HORN_OF_GERYON
+        && (item->sub_type == MISC_HORN_OF_GERYON
+            || item->sub_type == MISC_SKALD_HORN)
         && you.is_silenced())
     {
         return "You can't produce a sound!";
     }
 
-    if (temp && is_xp_evoker(*item) && evoker_charges(item->sub_type) <= 0)
+    if (temp
+        && item->base_type == OBJ_MISCELLANY
+        && (item->sub_type == MISC_AEGIS_STANDARD
+            || item->sub_type == MISC_ASTRAL_BEACON
+            || item->sub_type == MISC_TWIN_SPARK_CONDUIT))
+    {
+        if (!party::is_enabled())
+            return "You have no party members to attune with.";
+
+        bool has_ally_in_los = false;
+        bool has_ghost_in_los = false;
+        for (int slot = 0; slot < party::player_count(); ++slot)
+        {
+            if (slot == party::active_slot())
+                continue;
+            const player &ally = party::get_player(slot);
+            if (ally.depth != you.depth || ally.where_are_you != you.where_are_you)
+                continue;
+            if (party::is_player_downed(slot))
+            {
+                const monster *ghost = party::get_proxy_monster(slot);
+                if (ghost && ghost->alive() && you.see_cell_no_trans(ghost->pos()))
+                    has_ghost_in_los = true;
+            }
+            else if (you.see_cell_no_trans(ally.pos()))
+                has_ally_in_los = true;
+        }
+
+        if (item->sub_type == MISC_ASTRAL_BEACON)
+        {
+            if (!has_ally_in_los && !has_ghost_in_los)
+                return "There are no companions or fallen souls in sight.";
+        }
+        else if (!has_ally_in_los)
+        {
+            return "There are no living companions in sight.";
+        }
+    }
+
+    if (temp && !allow_empty && is_xp_evoker(*item) && evoker_charges(item->sub_type) <= 0)
     {
         // DESC_THE prints "The tin of tremorstones (inert) is presently inert."
         return make_stringf("The %s is presently inert.",
@@ -1119,8 +1163,408 @@ bool item_ever_evokable(const item_def &item)
     return cannot_evoke_item_reason(&item, false).empty();
 }
 
+static spret _evoke_aegis_standard(int plus, const evocation& activation)
+{
+    if (!activation.commit())
+        return spret::abort;
+    const int pow = 15 + you.skill(SK_EVOCATIONS, 4) + plus * 6;
+    const int dur_turns = 8 + random2avg(pow / 6, 2);
+    const int ac_bonus = 4 + you.skill_rdiv(SK_EVOCATIONS, 1, 4) + plus + activation.ward_bonus;
+    const int sh_bonus = 4 + you.skill_rdiv(SK_EVOCATIONS, 1, 4) + plus + activation.ward_bonus;
+    const int caster_slot = party::active_slot();
+
+    mprf("You plant the aegis standard! A golden phalanx ward washes over your party!");
+    noisy(10, you.pos());
+    draw_ring_animation(you.pos(), LOS_DEFAULT_RANGE, YELLOW, LIGHTCYAN, true, 25);
+
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (party::is_player_downed(slot))
+            continue;
+
+        player &p = party::get_player(slot);
+        if (p.depth != you.depth || p.where_are_you != you.where_are_you)
+            continue;
+        if (slot != caster_slot && !you.see_cell_no_trans(p.pos()))
+            continue;
+
+        {
+            party::scoped_player_context ctx(slot);
+            you.increase_duration(DUR_PHALANX_BARRIER, dur_turns, 50);
+            you.increase_duration(DUR_ENLIGHTENED, dur_turns, 50);
+            you.props[PHALANX_BARRIER_POWER_KEY] = ac_bonus * 100;
+            you.props[AEGIS_SH_BONUS_KEY] = sh_bonus;
+            if (slot != caster_slot)
+                you.props[AEGIS_ANCHOR_SLOT_KEY] = caster_slot;
+            else
+                you.props.erase(AEGIS_ANCHOR_SLOT_KEY);
+
+            you.redraw_armour_class = true;
+            you.redraw_evasion = true;
+        }
+
+        if (slot != caster_slot)
+        {
+            if (monster *proxy = party::get_proxy_monster(slot))
+            {
+                proxy->add_ench(mon_enchant(ENCH_RESISTANCE, &you,
+                                            dur_turns * BASELINE_DELAY, 1));
+            }
+            mprf(MSGCH_FRIEND_ACTION,
+                 "%s is shielded by your aegis (+%d AC, +%d SH, Will+)!",
+                 p.your_name.c_str(), ac_bonus, sh_bonus);
+        }
+    }
+
+    return spret::success;
+}
+
+static spret _evoke_astral_beacon(int plus, const evocation& activation)
+{
+    const int caster_slot = party::active_slot();
+    const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + plus * 8;
+
+    // 1. Check for a downed teammate's ghost in LOS first (highest priority).
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (slot == caster_slot || !party::is_player_downed(slot))
+            continue;
+
+        monster *ghost = party::get_proxy_monster(slot);
+        coord_def ghost_pos = ghost && ghost->alive() ? ghost->pos()
+                                                      : party::get_player(slot).pos();
+        if (!you.see_cell_no_trans(ghost_pos))
+            continue;
+
+        if (!activation.commit())
+            return spret::abort;
+        mprf(MSGCH_FRIEND_ACTION,
+             "You hold aloft the astral beacon! Starlight anchors %s's soul!",
+             party::get_player(slot).your_name.c_str());
+        noisy(12, you.pos());
+        flash_tile(ghost_pos, LIGHTCYAN, 60);
+
+        party::set_player_downed(slot, false);
+
+        coord_def revive_pos = ghost_pos;
+        for (adjacent_iterator ai(you.pos()); ai; ++ai)
+        {
+            if (in_bounds(*ai) && !actor_at(*ai)
+                && monster_habitable_grid(MONS_HUMAN, *ai))
+            {
+                revive_pos = *ai;
+                break;
+            }
+        }
+
+        const int hp_pct = min(activation.revival_hp_cap, 25 + you.skill_rdiv(SK_EVOCATIONS, 25, 27) + plus * 3 + activation.revival_hp_bonus);
+        {
+            party::scoped_player_context ctx(slot);
+            you.set_position(revive_pos);
+            you.hp_max_adj_temp = max(you.hp_max_adj_temp - max(1, you.hp_max / 5),
+                                      -(you.hp_max * 2 / 5));
+            calc_hp();
+            you.hp = max(1, you.hp_max * hp_pct / 100);
+            you.magic_points = max(you.magic_points, you.max_magic_points / 2);
+            you.duration[DUR_CONF] = 0;
+            you.duration[DUR_SLOW] = 0;
+            you.duration[DUR_POISONING] = 0;
+            you.increase_duration(DUR_DIVINE_SHIELD, 5 + plus, 10);
+            you.redraw_hit_points = true;
+            you.redraw_magic_points = true;
+        }
+
+        mprf(MSGCH_RECOVERY,
+             "%s returns to life beside you (%d/%d HP)!",
+             party::get_player(slot).your_name.c_str(),
+             party::get_player(slot).hp,
+             party::get_player(slot).hp_max);
+        return spret::success;
+    }
+
+    // 2. Otherwise, heal, restore MP, cleanse, and tether endangered living allies in LOS.
+    if (!activation.commit())
+        return spret::abort;
+    mprf("You raise the astral beacon! Soothing starlight washes over your companions!");
+    noisy(8, you.pos());
+
+    const int heal_base = activation.damage(12 + roll_dice(2, pow / 5));
+    const int mp_restore = 4 + you.skill_rdiv(SK_EVOCATIONS, 1, 3) + plus;
+
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (slot == caster_slot || party::is_player_downed(slot))
+            continue;
+
+        player &ally = party::get_player(slot);
+        if (ally.depth != you.depth || ally.where_are_you != you.where_are_you)
+            continue;
+        if (!you.see_cell_no_trans(ally.pos()))
+            continue;
+
+        const bool endangered = (ally.hp <= ally.hp_max * 30 / 100)
+                                && grid_distance(you.pos(), ally.pos()) > 1
+                                && !ally.no_tele(true, true);
+
+        party::heal_or_buff_party_member(slot, heal_base, DUR_REGENERATION,
+                                         5 + plus * 2, true);
+
+        {
+            party::scoped_player_context ctx(slot);
+            inc_mp(mp_restore, true);
+            you.redraw_magic_points = true;
+
+            if (endangered)
+            {
+                for (adjacent_iterator ai(party::get_player(caster_slot).pos()); ai; ++ai)
+                {
+                    if (in_bounds(*ai) && !actor_at(*ai)
+                        && monster_habitable_grid(MONS_HUMAN, *ai))
+                    {
+                        you.set_position(*ai);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (endangered)
+        {
+            mprf(MSGCH_FRIEND_ACTION,
+                 "The astral beacon pulls %s to safety beside you!",
+                 ally.your_name.c_str());
+        }
+    }
+
+    inc_hp(max(1, heal_base / 2));
+    return spret::success;
+}
+
+static spret _evoke_twin_spark_conduit(int plus, const evocation& activation)
+{
+    const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + plus * 7;
+    const dice_def dmg_dice(3, 7 + pow / 6);
+
+    vector<coord_def> nodes;
+    nodes.push_back(you.pos());
+
+    for (int slot = 0; slot < party::player_count(); ++slot)
+    {
+        if (slot == party::active_slot() || party::is_player_downed(slot))
+            continue;
+        const player &ally = party::get_player(slot);
+        if (ally.depth == you.depth
+            && ally.where_are_you == you.where_are_you
+            && you.see_cell_no_trans(ally.pos()))
+        {
+            nodes.push_back(ally.pos());
+        }
+    }
+
+    if (nodes.size() < 2)
+    {
+        mpr("The conduit hums, but finds no companion in sight to complete the circuit.");
+        return spret::abort;
+    }
+
+    if (!activation.commit())
+        return spret::abort;
+    mprf("Resonant lightning arcs between you and your %s!",
+         nodes.size() > 2 ? "companions" : "companion");
+    noisy(15, you.pos());
+
+    set<coord_def> arc_cells;
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+        for (adjacent_iterator ai(nodes[i]); ai; ++ai)
+            if (in_bounds(*ai) && !cell_is_solid(*ai))
+                arc_cells.insert(*ai);
+
+        for (size_t j = i + 1; j < nodes.size(); ++j)
+        {
+            ray_def ray;
+            if (!find_ray(nodes[i], nodes[j], ray, opc_solid_see))
+                continue;
+            while (ray.advance())
+            {
+                const coord_def p = ray.pos();
+                if (!in_bounds(p) || cell_is_solid(p))
+                    break;
+                arc_cells.insert(p);
+                if (p == nodes[j])
+                    break;
+            }
+        }
+    }
+
+    for (const coord_def &np : nodes)
+        arc_cells.erase(np);
+
+    for (const coord_def &p : arc_cells)
+    {
+        if (you.see_cell(p))
+            flash_tile(p, LIGHTBLUE, 15);
+
+        monster *mon = monster_at(p);
+        if (!mon || !mon->alive() || mon->wont_attack() || party::is_proxy_monster(*mon))
+            continue;
+
+        const int raw_dmg = activation.damage(dmg_dice.roll());
+        const int hurt_dmg = resist_adjust_damage(mon, BEAM_ELECTRICITY, raw_dmg);
+        mprf("%s is caught in the twin-spark arc%s",
+              mon->name(DESC_THE).c_str(),
+              attack_strength_punctuation(hurt_dmg).c_str());
+
+        if (hurt_dmg > 0)
+        {
+            mon->hurt(&you, hurt_dmg, BEAM_ELECTRICITY);
+            if (mon->alive())
+            {
+                you.expose_to_element(BEAM_ELECTRICITY, 2);
+                if (x_chance_in_y(pow, 100))
+                    mon->corrode(&you);
+                if (x_chance_in_y(pow + 20, 100))
+                {
+                    mon->add_ench(mon_enchant(ENCH_BLIND, &you,
+                                              random_range(4, 8) * BASELINE_DELAY, 1));
+                }
+            }
+        }
+    }
+
+    return spret::success;
+}
+
+static spret _evoke_skald_horn(int plus, const evocation& activation)
+{
+    if (you.is_silenced())
+    {
+        mpr("You can't produce a sound!");
+        return spret::abort;
+    }
+
+    const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + plus * 7;
+    const int dur = activation.duration(6 + plus * 2 + you.skill_rdiv(SK_EVOCATIONS, 1, 3));
+    const dice_def dmg_dice(2, 6 + pow / 6);
+
+    if (!activation.commit())
+        return spret::abort;
+    mpr("You sound the horn of the Vanguard! A brassy shockwave rings across the battlefield!");
+    noisy(18, you.pos());
+
+    for (adjacent_iterator ai(you.pos()); ai; ++ai)
+    {
+        if (!in_bounds(*ai) || cell_is_solid(*ai))
+            continue;
+        flash_tile(*ai, YELLOW, 20);
+        monster *mon = monster_at(*ai);
+        if (!mon || !mon->alive() || mon->wont_attack() || party::is_proxy_monster(*mon))
+            continue;
+
+        const int dmg = resist_adjust_damage(mon, BEAM_THUNDER, activation.damage(dmg_dice.roll()));
+        if (dmg > 0)
+        {
+            mprf("The horn's blast batters %s%s",
+                 mon->name(DESC_THE).c_str(),
+                 attack_strength_punctuation(dmg).c_str());
+            mon->hurt(&you, dmg, BEAM_THUNDER);
+        }
+        if (mon->alive() && x_chance_in_y(pow + 25, 100))
+        {
+            mon->add_ench(mon_enchant(ENCH_DAZED, &you,
+                                      random_range(3, 6) * BASELINE_DELAY, 1));
+        }
+    }
+
+    you.increase_duration(DUR_BALLAD_VANGUARD, dur, 35);
+    if (!you.stasis())
+    {
+        you.increase_duration(DUR_SWIFTNESS, dur, 35);
+        you.attribute[ATTR_SWIFTNESS] = you.duration[DUR_SWIFTNESS];
+    }
+
+    if (party::is_enabled())
+    {
+        party::apply_party_aura_buff(DUR_BALLAD_VANGUARD, dur, LOS_RADIUS, false);
+        party::apply_party_aura_buff(DUR_SWIFTNESS, dur, LOS_RADIUS, false);
+        mprf(MSGCH_FRIEND_ACTION,
+             "Your companions take up the horn's call (Slay, EV, Swift)!");
+    }
+
+    return spret::success;
+}
+
+spret evoke_device(item_def& item, dist* target, const evocation& activation)
+{
+    if (!coop_content::enabled()
+        && coop_content::exclusive_item(item.base_type, item.sub_type))
+    {
+        mpr("This device requires a multiplayer game.");
+        return spret::abort;
+    }
+
+    const string blocked = cannot_evoke_item_reason(&item, true, true, nullptr,
+                                                   activation.externally_funded);
+    if (!blocked.empty())
+    {
+        mpr(blocked);
+        return spret::abort;
+    }
+    spret result = spret::abort;
+    const int subtype = item.sub_type;
+    if (item.base_type == OBJ_WANDS)
+        result = _evoke_wand(item, target, activation);
+    else if (is_xp_evoker(item))
+    {
+        switch (subtype)
+        {
+        case MISC_PHIAL_OF_FLOODS:
+            result = _phial_of_floods(target, activation) ? spret::success : spret::abort; break;
+        case MISC_GRAVITAMBOURINE:
+            result = _gravitambourine(target, activation) ? spret::success : spret::abort; break;
+        case MISC_LIGHTNING_ROD:
+            result = _lightning_rod(target, activation) ? spret::success : spret::abort; break;
+        case MISC_BOX_OF_BEASTS:
+            result = _box_of_beasts(activation) ? spret::success : spret::abort; break;
+        case MISC_SACK_OF_SPIDERS:
+            result = _sack_of_spiders(activation) ? spret::success : spret::abort; break;
+        case MISC_HORN_OF_GERYON:
+            result = _evoke_horn_of_geryon(activation) ? spret::success : spret::abort; break;
+        case MISC_PHANTOM_MIRROR: result = _phantom_mirror(target, activation); break;
+        case MISC_TIN_OF_TREMORSTONES: result = _tremorstone(activation); break;
+        case MISC_CONDENSER_VANE: result = _condenser(activation); break;
+        case MISC_AEGIS_STANDARD: result = _evoke_aegis_standard(evoker_plus(subtype), activation); break;
+        case MISC_ASTRAL_BEACON: result = _evoke_astral_beacon(evoker_plus(subtype), activation); break;
+        case MISC_TWIN_SPARK_CONDUIT: result = _evoke_twin_spark_conduit(evoker_plus(subtype), activation); break;
+        case MISC_SKALD_HORN: result = _evoke_skald_horn(evoker_plus(subtype), activation); break;
+        default: return spret::abort;
+        }
+        if (result == spret::success && !activation.externally_funded)
+            expend_xp_evoker(subtype);
+    }
+    if (result == spret::abort || !activation.commit())
+        return spret::abort;
+    if (result == spret::fail && item.base_type == OBJ_WANDS && !activation.externally_funded)
+        return result;
+    const bool minor = item.base_type == OBJ_WANDS || subtype == MISC_BOX_OF_BEASTS
+        || subtype == MISC_SACK_OF_SPIDERS || subtype == MISC_LIGHTNING_ROD
+        || subtype == MISC_PHANTOM_MIRROR || subtype == MISC_TIN_OF_TREMORSTONES
+        || subtype == MISC_CONDENSER_VANE;
+    practise_evoking(minor ? 1 : 3);
+    count_action(CACT_EVOKE, subtype, item.base_type);
+    if (item.base_type == OBJ_WANDS && item.charges <= 0 && !pakellas::preserve_wand(item))
+    {
+        mpr("The now-empty wand crumbles to dust.");
+        dec_inv_item_quantity(item.link, 1);
+    }
+    you.turn_is_over = true;
+    return result;
+}
+
 bool evoke_item(item_def& item, dist *preselect)
 {
+    if (item.base_type == OBJ_WANDS || is_xp_evoker(item))
+        return evoke_device(item, preselect) != spret::abort;
     if (!item_currently_evokable(&item))
         return false;
 
@@ -1129,11 +1573,6 @@ bool evoke_item(item_def& item, dist *preselect)
 
     switch (item.base_type)
     {
-    case OBJ_WANDS:
-        ASSERT(in_inventory(item));
-        zap_wand(item.link, preselect);
-        return true;
-
     case OBJ_BAUBLES:
         switch (item.sub_type)
         {
@@ -1169,63 +1608,6 @@ bool evoke_item(item_def& item, dist *preselect)
             return false;
 #endif
 
-        case MISC_PHIAL_OF_FLOODS:
-            if (_phial_of_floods(preselect))
-            {
-                expend_xp_evoker(item.sub_type);
-                practise_evoking(3);
-            }
-            else
-                return false;
-            break;
-
-        case MISC_GRAVITAMBOURINE:
-            if (_gravitambourine(preselect))
-            {
-                expend_xp_evoker(item.sub_type);
-                practise_evoking(3);
-            }
-            else
-                return false;
-            break;
-
-        case MISC_HORN_OF_GERYON:
-            if (!_evoke_horn_of_geryon())
-                return false;
-            expend_xp_evoker(item.sub_type);
-            practise_evoking(3);
-            break;
-
-        case MISC_BOX_OF_BEASTS:
-            if (!_box_of_beasts())
-                return false;
-            expend_xp_evoker(item.sub_type);
-            if (!evoker_charges(item.sub_type))
-                mpr("The box is emptied!");
-            practise_evoking(1);
-            break;
-
-        case MISC_SACK_OF_SPIDERS:
-            if (!_sack_of_spiders())
-                return false;
-            expend_xp_evoker(item.sub_type);
-            if (!evoker_charges(item.sub_type))
-                mpr("The sack is emptied!");
-            practise_evoking(1);
-            break;
-
-        case MISC_LIGHTNING_ROD:
-            if (_lightning_rod(preselect))
-            {
-                practise_evoking(1);
-                expend_xp_evoker(item.sub_type);
-                if (!evoker_charges(item.sub_type))
-                    mpr("The lightning rod overheats!");
-            }
-            else
-                return false;
-            break;
-
         case MISC_QUAD_DAMAGE:
             mpr("QUAD DAMAGE!");
             you.duration[DUR_QUAD_DAMAGE] = 30 * BASELINE_DELAY;
@@ -1234,61 +1616,9 @@ bool evoke_item(item_def& item, dist *preselect)
             invalidate_agrid();
             break;
 
-        case MISC_PHANTOM_MIRROR:
-            switch (_phantom_mirror(preselect))
-            {
-                default:
-                case spret::abort:
-                    return false;
-
-                case spret::success:
-                    expend_xp_evoker(item.sub_type);
-                    if (!evoker_charges(item.sub_type))
-                        mpr("The mirror clouds!");
-                    // deliberate fall-through
-                case spret::fail:
-                    practise_evoking(1);
-                    break;
-            }
-            break;
-
         case MISC_ZIGGURAT:
             // Don't set did_work to false, _make_zig handles the message.
             unevokable = !_make_zig(item);
-            break;
-
-        case MISC_TIN_OF_TREMORSTONES:
-            switch (_tremorstone())
-            {
-                default:
-                case spret::abort:
-                    return false;
-
-                case spret::success:
-                    expend_xp_evoker(item.sub_type);
-                    if (!evoker_charges(item.sub_type))
-                        mpr("The tin is emptied!");
-                case spret::fail:
-                    practise_evoking(1);
-                    break;
-            }
-            break;
-
-        case MISC_CONDENSER_VANE:
-            switch (_condenser())
-            {
-                default:
-                case spret::abort:
-                    return false;
-
-                case spret::success:
-                    expend_xp_evoker(item.sub_type);
-                    if (!evoker_charges(item.sub_type))
-                        mpr("The condenser dries out!");
-                case spret::fail:
-                    practise_evoking(1);
-                    break;
-            }
             break;
 
         default:
@@ -1387,6 +1717,16 @@ string evoke_damage_string(const item_def& item)
             return spell_damage_string(SPELL_GRAVITAS, true,
                 _gravitambourine_power());
         }
+        else if (item.sub_type == MISC_TWIN_SPARK_CONDUIT)
+        {
+            const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + evoker_plus(item.sub_type) * 7;
+            return make_stringf("3d%d", 7 + pow / 6);
+        }
+        else if (item.sub_type == MISC_SKALD_HORN)
+        {
+            const int pow = 20 + you.skill(SK_EVOCATIONS, 4) + evoker_plus(item.sub_type) * 7;
+            return make_stringf("2d%d", 6 + pow / 6);
+        }
         else
             return "";
     }
@@ -1411,6 +1751,12 @@ string evoke_noise_string(const item_def& item)
             return spell_noise_string(SPELL_TREMORSTONE);
         else if (item.sub_type == MISC_GRAVITAMBOURINE)
             return spell_noise_string(SPELL_GRAVITAS);
+        else if (item.sub_type == MISC_TWIN_SPARK_CONDUIT
+                 || item.sub_type == MISC_SKALD_HORN)
+            return "loud";
+        else if (item.sub_type == MISC_AEGIS_STANDARD
+                 || item.sub_type == MISC_ASTRAL_BEACON)
+            return "moderate";
         else
             return "";
     }

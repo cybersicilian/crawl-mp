@@ -1,0 +1,2354 @@
+{
+  "owner": "codex/01a15523-0d2a-7a92-b63a-f7e2469fd2fe",
+  "preparedAt": "2026-10-19T19:24:11.509098+00:00",
+  "status": "DEPLOYED_OOZLE_AND_SOFT_INITIATIVE_UPDATE",
+  "requestPath": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/acceptance-10/request.json",
+  "requestSha256": "ba9247e76fba941f78ab0bb4d3d8f83637c78dd32dcc6d851a77451d6cd38f97",
+  "prerequisiteRequestId": "fb6b63f0f3d2b7780bf762017b212e3bcbe793ec2190f74cca1b64200fc76c6e",
+  "nativeSourceCompatible": true,
+  "sourceCompatibility": "All 47 scoped current Oozle native inputs match the completed native5 producer and passing acceptance5 binary.",
+  "firstPhase": "One native browser with two authenticated owners: cancel/5-turn whole-bundle assimilation, armor AC, weapon wear/dissolution/FIFO/unarmed, save/resume and independent peer movement during work",
+  "noNativeResultsClaimed": false,
+  "producerFailure": {
+    "requestId": "7a0eb5a789df636aba705ee9926d900b2a7760a09b6ebbf531ca3171aed12f67",
+    "reason": "Isolated source snapshot lacks util/release_ver. gen_ver.pl does not consume the Makefile SRC_VERSION override. Native4 compiled the corrected Oozle UI and species tests successfully, then failed its build.h prerequisite before linking.",
+    "repair": "The producing owner needs a fresh bound build phase with util/release_ver in its owned snapshot, using the bound canonical version. Preserve native4 artifacts.",
+    "successorPolicy": "A later successful compatible build may replace native4 after verifying the Oozle inputs and binding its binary and matching assets.",
+    "status": "historical: repaired by successful native5 successor"
+  },
+  "coordination": {
+    "authorizedByUser": true,
+    "sentAt": "2026-10-19T19:38:06.931575+00:00",
+    "coordinator": "01a150ab-c099-7e41-8f34-fb0a960738c3",
+    "buildOwner": "01a15527-2a04-7e82-9cd9-f35b5fc79bd7",
+    "native5RequestId": "fb6b63f0f3d2b7780bf762017b212e3bcbe793ec2190f74cca1b64200fc76c6e",
+    "noFurtherChatMessagingApprovalNeeded": true
+  },
+  "bindingPreparer": "/Users/iancaltabiano/Documents/Projects/dcss/docs/design/oozle/prepare_native_acceptance.py",
+  "lastCheck": {
+    "at": "2026-10-19T21:42:24.003401+00:00",
+    "policyRevision": 43,
+    "gateOwner": "codex/01a14007-66f5-7f90-914f-6a822fefa907",
+    "gateStatus": "reserved",
+    "gateRunId": "f594675d-5990-4252-a28b-d48b4bc741b8",
+    "ownOozleWorkComplete": true,
+    "remaining": "Owner-supplied executable Pakellas/Paladin gameplay and authentic migration fixtures; no ready remote consumer/fixture at this check",
+    "noHeavyWorkStarted": true,
+    "authRestored": true
+  },
+  "coordinatorAcknowledgment": {
+    "at": "2026-10-19T19:47:30.429741+00:00",
+    "sourceThread": "01a150ab-c099-7e41-8f34-fb0a960738c3",
+    "status": "preparation_only_not_admitted",
+    "order": [
+      "held MCEco d28d",
+      "Multibox native614 ae5653",
+      "Pakellas native5 fb6b63",
+      "later Oozle final binding and explicit fair admission"
+    ],
+    "finalBindingRequirements": [
+      "linked binaries and matching assets",
+      "all 47 scoped native input hashes and live/source equivalence",
+      "runner and frozen test input hashes",
+      "one browser, two isolated authenticated hero owners",
+      "serial work and full process/session closure"
+    ]
+  },
+  "deployment": {
+    "authorizedByUser": true,
+    "requestedAt": "2026-10-19T20:02:02.288236+00:00",
+    "target": "https://dcss.iancaltabiano.com",
+    "existingDeploymentOwner": "01a151b6-39d6-7513-a017-a4aea0280485",
+    "remoteBaseline": "/opt/dcss/releases/20261019T184637Z-vorr-speed",
+    "previous": "/opt/dcss/releases/20261019T183400Z-vorr-rites",
+    "baselineEvidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/baseline.json",
+    "bootFreeBytes": 1457143808,
+    "candidateSourceBytes": 212486812,
+    "combinedDependencies": [
+      "Oozle",
+      "Pakellas",
+      "Paladin/Auramancy"
+    ],
+    "requirements": [
+      "respect local dispatch; no duplicate local compile or deployment chain",
+      "preserve current production content and reconcile combined source readiness",
+      "native and two-client gameplay acceptance before activation",
+      "copy-only checkpoint compatibility and runtime-user preview checks",
+      "READY state snapshot and exact frozen-candidate guarded activation",
+      "public HTTPS assets, playable Oozle start, co-op and health verification"
+    ],
+    "status": "DEPLOYED_public_Oozle_PASS_offturn_preserved_Paladin_deferred_by_human",
+    "activated": true,
+    "authError": null,
+    "authRecovery": "Fresh cloud describe and IAP SSH succeeded; full13215-file baseline verified.",
+    "operator": "codex/01a15523-0d2a-7a92-b63a-f7e2469fd2fe",
+    "operatorAssignment": "Host coordinator confirmed this Oozle chat as sole deployment operator after native5 closure.",
+    "acceptedUiReconciliation": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/accepted-ui-reconciliation.json",
+    "acceptedUiReconciliationSha256": "15cd0840318b7f48e5b8ae489991bf180229e8309f7a4c6806bd581d33ef8350",
+    "candidate": "/opt/dcss/releases/20261019T203350Z-oozle",
+    "candidateWork": "/tmp/dcss-20261019T203350Z-oozle",
+    "staged": true,
+    "sourceBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/candidate-source-binding.json",
+    "cloudAuthRestored": true,
+    "linuxBuild1": {
+      "passed": false,
+      "reason": "aptitude docs templates omit Auramancy abbreviation",
+      "allOwnedProcessesGone": true,
+      "preserved": true
+    },
+    "linuxBuild2": {
+      "pid": 123870,
+      "pgid": 123870,
+      "work": "/tmp/dcss-20261019T203350Z-oozle/linux-2",
+      "driverSha256": "c86fe64f0ba8681f46fa78378bf8793f55708783fc8fb939f3518ea874f73d68",
+      "status": "failed_build_deadline_fully_closed",
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-2-binding.json",
+      "passed": false,
+      "allOwnedProcessesGone": true,
+      "compiledObjects": 328,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-2-status.json"
+    },
+    "progress": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/release-progress.json",
+    "pendingPostBuildCss": {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/game_data/static/styles/assimilation.css",
+      "sha256": "26c64edd2816cf1a7c4908d11ae6277d2996cd3fbdc286e7cafceb533b648a12",
+      "status": "installed_and_verified_by_passed_Linux_gameplay2"
+    },
+    "linuxBuild3": {
+      "pid": 133024,
+      "pgid": 133024,
+      "startedAt": 1792444402.3436127,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261019T203350Z-oozle/linux-3/validate-linux.py"
+      ],
+      "scriptPins": {
+        "validate-linux.py": "c86fe64f0ba8681f46fa78378bf8793f55708783fc8fb939f3518ea874f73d68",
+        "phase_processes.py": "b37fd0ea46be015a38ec81ca72337175575c4c738bb4e65e2d4d8c38d24b628c"
+      },
+      "work": "/tmp/dcss-20261019T203350Z-oozle/linux-3",
+      "source": "/opt/dcss/releases/20261019T203350Z-oozle/crawl-ref/source",
+      "activated": false,
+      "status": "linked_passed_native71of72_failed_Priest_staging_input",
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-3-binding.json",
+      "allOwnedProcessesGone": true,
+      "binarySha256": "e6da2fa20806b068bfda0dae5a6e9d3214303adcf518fd1dfa45112781423522",
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-3-diagnose.json"
+    },
+    "linuxBuild4": {
+      "pid": 135038,
+      "pgid": 135038,
+      "startedAt": 1792444987.855309,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261019T203350Z-oozle/linux-4/validate-linux.py"
+      ],
+      "scriptPins": {
+        "validate-linux.py": "77d6244f3b6e9875f23f2e399bf9a2b8852a7d2a0d72558ddaa933193cfe5f45",
+        "phase_processes.py": "b37fd0ea46be015a38ec81ca72337175575c4c738bb4e65e2d4d8c38d24b628c"
+      },
+      "work": "/tmp/dcss-20261019T203350Z-oozle/linux-4",
+      "source": "/opt/dcss/releases/20261019T203350Z-oozle/crawl-ref/source",
+      "activated": false,
+      "status": "all_productive_checks_passed_native_generated_product_attestation_passed",
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-4-binding.json",
+      "correction": "Bound obsolete Priest YAML moved into evidence; canonical36job inputs regenerated;113feature source guards"
+    },
+    "linuxNativeAcceptance": {
+      "passed": true,
+      "cases": 72,
+      "assertions": 3839,
+      "legalStarts": 35,
+      "binarySha256": "5184d43b67535615dc97577039bc12824d75388ec319fe532e5e1e103cb902fd",
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-4-acceptance.json",
+      "sha256": "61c2fbea9b3230f172b89a7b9dfa946230516e605316b3ffb7acf890a9576e03",
+      "noProductiveChecksRerun": true
+    },
+    "linuxGameplay": {
+      "pid": 137510,
+      "pgid": 137510,
+      "startedAt": 1792445405.312534,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261019T203350Z-oozle/linux-gameplay-2/linux-gameplay.py"
+      ],
+      "bindingSha256": "84df189349bcd39702b07246b80dc120607bb5a00ced9e050d1723c9caf171b6",
+      "scriptPins": {
+        "linux-gameplay.py": "97a930ed0a41f08452b0c01a6756214aa27ab903b4e0806b249465b46ba21cde",
+        "phase_processes.py": "b37fd0ea46be015a38ec81ca72337175575c4c738bb4e65e2d4d8c38d24b628c",
+        "oozle-release-smoke.cjs": "bc9694090007bc9909ebea3e05cac3d7eff159c6ec0f5d5f9bab6c514dc921c8",
+        "multiplayer-native-client.cjs": "259183f34d6ef33b327689254dcdd618d823bf32b90e317fdf8fb69faff000eb"
+      },
+      "boundRuntimeFiles": 10972,
+      "source": "/opt/dcss/releases/20261019T203350Z-oozle/crawl-ref/source",
+      "runtime": "/tmp/dcss-oz2",
+      "work": "/tmp/dcss-20261019T203350Z-oozle/linux-gameplay-2",
+      "activationAllowed": false,
+      "status": "passed_fully_closed",
+      "request": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-gameplay-2-request.json",
+      "passed": true,
+      "allOwnedProcessesGone": true,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-gameplay-2-status.json",
+      "evidenceSha256": "a9d1db499913dbb984dbd33dd949412be9a56174d8c0da12fedd191d11a81018"
+    },
+    "retainedCheckpointMetadata": {
+      "passed": true,
+      "count": 14,
+      "originalsUnchanged": true,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/checkpoints.json",
+      "sha256": "b4886fb1e56e49df62bbc4695a36f4068428f7aafc7d0e4871f056a0a6429001"
+    },
+    "pakellasLinuxIntegration": {
+      "status": "consumer2_withdrawn_fixture4_and_fresh_consumer_pending",
+      "ready": false,
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-2-integration.json",
+      "sha256": "5b1c4138311bbaacca392ed125e243e26b0b9c8bff300afd8a2e5a5b0b23c967",
+      "consumerContractSha256": "4bf2c02e4c94571fb2bbe85796574e0771ea7c3b6d3fea40b57564e224b25f33",
+      "allFourConsumerFilesVerified": true,
+      "sixOriginalChecksRetained": true,
+      "runtimeStarted": false,
+      "candidateModified": false,
+      "importAs": "dcss",
+      "fixtureGenerationRequestId": "49ba5f257484a396dbff0afe85c5eef501dd8d39b3c757ae35bac004da745322",
+      "xpTarget": "Natural hostile1HP paralysed goblin, nativeXP2..8",
+      "previousUnlaunchedIntegrationWithdrawal": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-1-withdrawal.json",
+      "preflight": {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-2-preflight.json",
+        "sha256": "81d56d5e6461a8f0f35eceabc60731da825fa11bc84b073b8d9c1108ff1ddde3",
+        "nativeMatches": true,
+        "sourceFilesVerified": 111,
+        "runtimeFilesVerified": 10972,
+        "priorOwnedProcessesClosed": true,
+        "productionUnchangedAndActive": true
+      },
+      "fixture2Negative": {
+        "status": "no_fixture_exported",
+        "phaseResult": "native-state wait20s expired during first map/database regeneration before Pakellas setup",
+        "abortObservedDuringTeardown": true,
+        "existingProof": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15527-2a04-7e82-9cd9-f35b5fc79bd7/pakellas/fixture-2/evidence.json",
+        "noLinuxExecution": true
+      },
+      "baseBinding": {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-2-base-binding.json",
+        "sha256": "cffe5155e6299b1501ee51045f027ca26ddf4a6360161f7d3c6b3cb0db0c7304",
+        "ready": false,
+        "sourceAndToolPins": 126,
+        "exactRuntimeFiles": 10972
+      },
+      "nextFixtureProducer": {
+        "requestId": "1083dd04891c7b316fa8ae7141a74a81ced405f1544db3d33f3900192bde528c",
+        "requestSha256": "507a350a0ce3b6ce3847acdde49bd6410d58d162700752b4377f0885d8ebc081",
+        "expectedExport": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15527-2a04-7e82-9cd9-f35b5fc79bd7/pakellas/fixture-3/payload",
+        "status": "source_prepared_actual_generation_and_fullrelease_pending",
+        "change": "Explicit60s initial native-state readiness; identical condition and300s overall test budget"
+      },
+      "withdrawal": {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-2-withdrawal.json",
+        "sha256": "591b5e2a2842e7e9a0dc96f07b4e88d132b1c32ecc5f6207aa9865b7b9fbe9e8",
+        "unlaunched": true
+      }
+    },
+    "paladinLinuxAcceptance": {
+      "status": "frozen_v6_actual_old6_running",
+      "originalBundleManifestSha256": "dbd0c7ae55f91736eb24b5e8611ce0fa81ddeec9f09f9ea5835ff60686535a12",
+      "oldCreate1": {
+        "status": "failed_frontend_vendor_omission_fully_closed",
+        "passed": false,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 15,
+        "remoteFlockReleased": true,
+        "closureSha256": "163e3d10173ad712a9df0b575d02fc9bf4838b1f1480710f1deac54984f3e6e3",
+        "sourceOriginalsUnchanged": true,
+        "retainedIntegrityNegative": "Only22disposable saves/db discoverycache products added; no existing stagedinput changed/missing",
+        "browserChecks": 0,
+        "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-1-status.json",
+        "sha256": "c2a97ffa831e2a35a7d812fc608192fa7a02d52ddf99f5751bce925f2a0db1e7"
+      },
+      "correctedRequest": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-2-request-prepared.json",
+      "correctedRequestSha256": "61f73a54f1c2caa13cba5d9b527ef7dbc472430d8c3e32b4844fcfeda4ea771d",
+      "activationAllowed": false,
+      "oldCreate2": {
+        "pid": 138939,
+        "pgid": 138939,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261019T203350Z-oozle/paladin-linux-2-inputs/paladin-phase.py",
+          "/tmp/dcss-20261019T203350Z-oozle/paladin-old-2/binding.json"
+        ],
+        "startedAt": 1792448028.32147,
+        "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-old-2",
+        "bindingSha256": "7e6b376a7b7a7d64c71d2acf3ae096aed0ad3c9a1c526bab7145fdef7e8c7b7b",
+        "localReservationRequired": false,
+        "remoteFlock": "/opt/dcss/release-build.lock",
+        "activated": false,
+        "status": "failed_unknown_map_option_fully_closed",
+        "requestSha256": "61f73a54f1c2caa13cba5d9b527ef7dbc472430d8c3e32b4844fcfeda4ea771d",
+        "passed": false,
+        "rootGone": true,
+        "remoteFlockReleased": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 24,
+        "closureSha256": "bb5b90f11993fcc3872c16090df1280ce776e10f60ca1fe5df1d6a6bab5b0528",
+        "postTeardownIntegrityPassed": true,
+        "boundSourceFiles": 12027,
+        "inputPins": 137,
+        "stagedExistingFilesUnchanged": true,
+        "browserClosed": true,
+        "failureSaveExited": true,
+        "nativeSaveExported": false,
+        "gameplayChecks": 0,
+        "actualFailure": "NOWIZARD old1face rejects -map before character creation; original120s party-state wait expires",
+        "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-2-status.json",
+        "sha256": "ced4c848da75a146cfaec5907165013a5d23d4dfba66dbd2937b902fecd632a4",
+        "next": "No third runtime until source/API-verified ordinary dungeon fixture selection and native option admissibility checks are frozen."
+      },
+      "oldCreate3": {
+        "status": "negative_native_help_exit_semantics_fullclosed",
+        "manifestSha256": "4d0a3d4aa97c78cb6e2322155746813ddc6ebf6753fd25a39dbf96b8bf85fdf2",
+        "bindingSha256": "a4cc9425cd5c75b0274d105424265999c6c6011c7a09072c0e27518c7986eec2",
+        "requestSha256": "63b12387d51ed31b59aea1f9af621982d944161500b01eb0d78ae3d2c86716f7",
+        "launch": {
+          "pid": 140031,
+          "pgid": 140031,
+          "command": [
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/inputs/paladin-phase.py",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/old-create-3/binding.json"
+          ],
+          "startedAt": 1792449180.5107048,
+          "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/old-create-3",
+          "bindingSha256": "a4cc9425cd5c75b0274d105424265999c6c6011c7a09072c0e27518c7986eec2",
+          "localReservationRequired": false,
+          "remoteFlock": "/opt/dcss/release-build.lock",
+          "activated": false
+        },
+        "freshPrivateToken": true,
+        "activationAllowed": false,
+        "allOwnedProcessesGone": true,
+        "rootGone": true,
+        "remoteFlockReleased": true,
+        "postTeardownIntegrityPassed": true,
+        "closureSha256": "fb9d0a4780efc1ff61ea79e1ba48fd0ba43376da6c1fe12a56b9b0244dcdbf70",
+        "gameplayChecks": 0,
+        "serverStarted": false,
+        "browserStarted": false
+      },
+      "closedQaArchives": {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/closed-paladin-archives.json",
+        "sha256": "d6697c0c5f26887d27ff2576da18b1c58885d1607f9221770c4b1b0702b497d9",
+        "allNegativesPreservedByteVerified": true
+      },
+      "oldCreate4": {
+        "status": "actual_ordinary_D1_fixture_connectivity_negative_fully_closed",
+        "launch": {
+          "pid": 140308,
+          "pgid": 140308,
+          "command": [
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/inputs4/paladin-phase.py",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/old-create-4/binding.json"
+          ],
+          "startedAt": 1792449415.1001709,
+          "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v3/old-create-4",
+          "bindingSha256": "da50b795cca19175c7488a2d007c7f8a127c81860f192f201c7f725ab12fe747",
+          "localReservationRequired": false,
+          "remoteFlock": "/opt/dcss/release-build.lock",
+          "activated": false
+        },
+        "bindingSha256": "da50b795cca19175c7488a2d007c7f8a127c81860f192f201c7f725ab12fe747",
+        "requestSha256": "0d8758ead865ea34c9986caba4098244e5510338f272e1ece2ca0b31d1aec998",
+        "inputPins": 150,
+        "reusesVerifiedClosedOld3Stage": true,
+        "nativePreflightSha256": "e5916ca331141379b7a64878d5fccdc18253a81c267ccde6662a2060766b9fea",
+        "minimumFreeBytes": 400000000,
+        "actualPrelaunchFreeBytes": 646729728,
+        "token": "Unexposed VM-generated v3 token, no legacy exposed token reused",
+        "activationAllowed": false,
+        "passed": false,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 26,
+        "remoteFlockReleased": true,
+        "closureSha256": "ff3bacb44878536e13e22ead5a277ce9cb732f1c8e3254f7685779dad3fabbab",
+        "postTeardownIntegrityPassed": true,
+        "boundPins": 150,
+        "originalSourceFiles": 12027,
+        "nativePreflightPassed": true,
+        "wizardModeUsed": false,
+        "browserClosed": true,
+        "failureSaveExited": true,
+        "gameplayChecks": 0,
+        "authenticCheckpointExported": false,
+        "actualFailure": "QA PLACE map uses escape-hatch glyphs instead of required stone-stair subtypes; old1face D1 generation fails native interlevel-connectivity validation.",
+        "sourceDiagnosis": "dungeon.cc5816-5823 glyph mapping; _fixup_interlevel_connectivity7316 requires upI onD1/all3up onD2 and connected real down stairs; preserve native guard.",
+        "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-4-status.json",
+        "sha256": "923fd70d39ced8b0f2bfcda028262cb65300a50ded69f2a49f3d73292850f7a1",
+        "next": "Owner-frozen ordinary fixture-data/generator correction before any fifth runtime."
+      },
+      "oldCreate5": {
+        "status": "actual_prepare_control_channel_negative_fully_closed",
+        "manifestSha256": "5c34a09798d814d8514887b715980075a5072bb40952e6e3e0ad6ed8be7737fc",
+        "requestSha256": "ee5c88d567fdcc4ff966d80a3112a0ee83893187d97d93cd0171cc97ee534803",
+        "bindingSha256": "48d5d0b614fdcfa49b15dfe5abff13765d2cf0708214d03528a2f5c4d76ee2d7",
+        "inputPins": 148,
+        "launch": {
+          "pid": 141950,
+          "pgid": 141950,
+          "command": [
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v5/inputs/paladin-phase.py",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v5/old-create-5/binding.json"
+          ],
+          "startedAt": 1792450486.7568035,
+          "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v5/old-create-5",
+          "bindingSha256": "48d5d0b614fdcfa49b15dfe5abff13765d2cf0708214d03528a2f5c4d76ee2d7",
+          "localReservationRequired": false,
+          "remoteFlock": "/opt/dcss/release-build.lock",
+          "activated": false
+        },
+        "freshPrivateToken": true,
+        "activationAllowed": false,
+        "passed": false,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 26,
+        "remoteFlockReleased": true,
+        "closureSha256": "2b28733bb736ac72775bb39d008496be6e15fa1c34336ff74d8b518785b7e28b",
+        "gameplayChecks": 0,
+        "authenticCheckpointExported": false,
+        "ordinaryCharacterCreationPassed": true,
+        "nativePreflightPassed": true,
+        "actualFailure": "Trusted DLua loadfile absolute path is resolved through datafile_path with test_base_path=false; valid private command was silently unobserved. No matching prepare reply after original bounded polling.",
+        "next": "Owner-frozen source/API-verified QA data-relative control-channel correction with activation/load-error diagnostics before any sixth runtime. No unrestricted libraries or weakened predicates.",
+        "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-5-status.json",
+        "readonlyDiagnosis": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-5-readonly-diagnose.json",
+        "recoverableArchive": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/closed-paladin5-archive.json"
+      },
+      "closedOld3StageAndOld4RuntimeArchive": {
+        "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/closed-paladin4-archive.json",
+        "sha256": "4e49b442508fb19012aa82819f26cdaded6fd671b9a53eb71289f81087d4bfd6",
+        "archiveSha256": "7b5cbdb509da51e738e19c9ed47eb5cbf32315ac91c15e0db5e5b8661dced263",
+        "allNegativesPreservedAndByteVerified": true
+      },
+      "oldCreate6": {
+        "status": "passed_fully_closed_authentic_checkpoint_exported",
+        "manifestSha256": "c5d826fe40bf4893feadc0e65f4c99095b5128c5e3e70042102ffdeb490a5705",
+        "files": 30,
+        "originalOperationsAndTacticalFaithMigrationBytesIdentical": true,
+        "nativeSelfReadRequiredBeforeBrowser": true,
+        "sourceOnly": false,
+        "runtimeStarted": true,
+        "baseBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-6-base-binding.json",
+        "baseBindingSha256": "c0fc883eda83328279d1f12afa78611529969de141fa12305956a226e6d505a9",
+        "request": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-6-request-prepared.json",
+        "requestSha256": "3e5ab227e929de176a8e740c3682ab87fd67fdda8f7ddec0d933aa688573e159",
+        "operation": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-old-6-prepare-remote.py",
+        "operationSha256": "090f33660145f98b99d59148217bc86f2face073a1ed3a44a55bda11d541ff52",
+        "capacityRelocationPrepared": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/relocate-closed-qa-archives.py",
+        "capacityRelocationPreparedSha256": "2a28e4ba650c75c68ddc8b35abe7ae0f25fecfe02aafcc27bbe09e2f5ac8172d",
+        "ready": true,
+        "launch": {
+          "pid": 153006,
+          "pgid": 153006,
+          "command": [
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs/paladin-phase.py",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/old-create-6/binding.json"
+          ],
+          "startedAt": 1792453199.0676172,
+          "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/old-create-6",
+          "bindingSha256": "c9f4542eecdca18e6b268c5eaa771e337d3f47266cd435546bdaf5ae6e426038",
+          "localReservationRequired": false,
+          "remoteFlock": "/opt/dcss/release-build.lock",
+          "activated": false
+        },
+        "bindingSha256": "c9f4542eecdca18e6b268c5eaa771e337d3f47266cd435546bdaf5ae6e426038",
+        "inputPins": 175,
+        "candidateSourceGuards": 113,
+        "passed": true,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 26,
+        "closureSha256": "0e326bb220f97351162f4f6d97882accfd7687ee0b09721d993bea0a0dad7c11",
+        "postTeardownIntegrityPassed": true,
+        "browserProofSha256": "7cdc49c955722785c68cb12456295ff43f5282f0c882414300393c70230e925e",
+        "nativeSelfReadActualPassed": true,
+        "nativeSelfReadSha256": "064fe081a89f6b57c81245a2efcfd23b572a1cbcb1b1f4bef93203e952cd3d80",
+        "export": {
+          "passed": true,
+          "startedAt": 1792453326.4840121,
+          "command": [
+            "runuser",
+            "-u",
+            "dcss",
+            "--",
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs/checkpoint.py",
+            "--runtime",
+            "/tmp/dcss-pa6",
+            "--output",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/checkpoint",
+            "--proof",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/old-create-6/qa/old",
+            "--closure",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/old-create-6/completion.json",
+            "--run-id",
+            "790672d0-e054-4816-a762-5ad3bf4b104f"
+          ],
+          "oldRuntimeClosedBeforeExport": true,
+          "activationAllowed": false,
+          "checkpoint": "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/checkpoint",
+          "manifestSha256": "9623d564d8695a8b25627e2de40e6d288dfc5b1f5796c5d319d5bcaa13b37691",
+          "gameId": "9c91d78c-848e-4d97-9cfb-4ae60ca845f1",
+          "originalFiles": 598,
+          "saveVersion": "34.344",
+          "oldBinarySha256": "1face95bac197f143fead41d44b5a4e25dfbfaf6ea42570d2f04dd2230e7a400",
+          "originalSourceAndStageUnchanged": true,
+          "finishedAt": 1792453331.3219717,
+          "allOwnedProcessesGone": true,
+          "closureSha256": "6df5adcbd7bb0685c869190b7dcf40ec3e137fa7683e6c1cbe99c32aa18de415"
+        },
+        "exportEvidenceSha256": "9e5d22bab53887df4845eb556b112f9e4e0a8d51d11724975ac3890c7e7d042b"
+      },
+      "newFinal2": {
+        "status": "authentic_migration_PASS_tactical_randartbook_native_assert_fully_closed",
+        "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-final2-binding.json",
+        "bindingSha256": "bef403768b2f023d468e8fbbae3c715e5a811d0e1da17efc55ab9cdf2cbca57c",
+        "runtime": "/tmp/dcss-pa6n",
+        "stagedSource": "/tmp/dcss-pa6new",
+        "inputPins": 752,
+        "originalSourceFiles": 12072,
+        "originalCheckpointFiles": 598,
+        "candidateSourceGuards": 113,
+        "remoteNativeAcceptanceSha256": "c2d4908a2c4eece17d3b72804490ea56f7dd7b85aa0c3b44a9b8fe6c94ff8092",
+        "localReturnedNativeEvidenceSha256": "3c6a6ea2d98578f20e4145a8556c8ae26aa59ef4f548db4512ed029c246cea84",
+        "allGameplayScriptsUnchanged": true,
+        "stageSelfReadThenBrowserSteps": [
+          "migration",
+          "tactical"
+        ],
+        "operatorFinalPacket2ManifestSha256": "3d574728ab056af47eb1471d44c9ad77635546d431c3034c7d074c1c6bc1668e",
+        "priorPacket1HashGuardNegativeUnexecutedRetained": true,
+        "passed": false,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 45,
+        "remoteFlockReleased": true,
+        "closureSha256": "e25b8a2a61bdbe519dca306587486a73fd35980b0c34d234674e03e447209e47",
+        "postTeardownIntegrityPassed": true,
+        "nativeBinarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+        "migrationPassed": true,
+        "migrationProofSha256": "393976e687835aaa56b0921e1c6636cd12b8e7787b3bcce01551c0b32b74f8cb",
+        "migrationRawXp": {
+          "oldTotal": 672,
+          "newTotal": 663,
+          "newSchools": 13,
+          "eachSchool": 51,
+          "roundingLoss": 9,
+          "reloadIdempotent": true
+        },
+        "tacticalPassed": false,
+        "tacticalChecksPassed": [
+          "Distinct authenticated owners move independently",
+          "Ordinary spell cast: Aura of Protection"
+        ],
+        "actualFailure": "ASSERT(item.base_type != OBJ_BOOKS) artefact.cc1490; artefact_property->gives_ability->item_skills->_write_item_training->_send_party_state after valid identified randartbook creation",
+        "crashFile": "/tmp/dcss-pa6n/rcs/PalQaH460b7575/crash-PalQaH460b7575-20261019-235029.txt",
+        "crashEvidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical1-crash-inspect.json",
+        "crashEvidenceSha256": "6f9140ed714a8469f7109f474df32fd06dc9e247f609322cb1f43d269e8b931b",
+        "browserErrorMayBeSecondary": "Cannot read properties of undefined (reading 'childNodes')",
+        "browserClosed": true,
+        "failureSaveExited": true,
+        "retryAllowed": false,
+        "next": "Owner-frozen item-prop.cc/test regression correction; fresh bound incremental remote Linux successor, then tactical-only; preserve completed migration."
+      },
+      "tactical2": {
+        "status": "book_crash_fixed_live_resource_potion_identification_fixture_negative_closed",
+        "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical2-binding.json",
+        "bindingSha256": "59eef7fdd40ed150d0c2a2e69773bc225500ad246b681ae5b3447c1080da3a97",
+        "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+        "inputPins": 753,
+        "originalCheckpointFiles": 598,
+        "sourceGuards": 114,
+        "runtime": "/tmp/dcss-pa8",
+        "stage": "/tmp/dcss-pa8new",
+        "migrationNotReplayed": true,
+        "originalRandbooksAnd16TacticalGroupsUnchanged": true,
+        "pageErrorStackOnlyDiagnosticChange": true,
+        "passed": false,
+        "rootGone": true,
+        "allOwnedProcessesGone": true,
+        "observedProcesses": 25,
+        "closureSha256": "3ab20ece8627872112a142e961e0d92cfc7550a2178bbae52e19c52d67392016",
+        "postTeardownIntegrityPassed": true,
+        "originalSourceFiles": 12072,
+        "bookTriggerExecutedWithoutCrash": true,
+        "browserErrors": [],
+        "browserClosed": true,
+        "failureSaveExited": true,
+        "failure": {
+          "message": "Native pickup did not supply: heal wounds",
+          "stack": "AssertionError [ERR_ASSERTION]: Native pickup did not supply: heal wounds\n    at Fixture.item (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-2/client.cjs:178:9)\n    at async Object.setup (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-2/tactical.cjs:37:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-2/run.cjs:58:13)"
+        },
+        "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical2-status.json",
+        "evidenceSha256": "45049c474ac052021747e30a4168875c3d69f267725c211aa4d3a739a6c12668",
+        "next": "Owner-frozen pre_id only resource-potion setup correction; new tactical-only binding; no native compile or migration replay"
+      },
+      "tactical3": {
+        "status": "running",
+        "launch": {
+          "pid": 159071,
+          "pgid": 159071,
+          "command": [
+            "python3",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-3/paladin-phase.py",
+            "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/tactical-3/binding.json"
+          ],
+          "startedAt": 1792455442.5153465,
+          "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/tactical-3",
+          "bindingSha256": "9752b256ef64927a8eb4fd7137a1bdeeda16e121866ef1fa32bbfde8b69377c3",
+          "localReservationRequired": false,
+          "remoteFlock": "/opt/dcss/release-build.lock",
+          "activated": false
+        },
+        "bindingSha256": "9752b256ef64927a8eb4fd7137a1bdeeda16e121866ef1fa32bbfde8b69377c3",
+        "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+        "inputPins": 753,
+        "originalCheckpointFiles": 598,
+        "sourceGuards": 114,
+        "runtime": "/tmp/dcss-pa9",
+        "stage": "/tmp/dcss-pa9new",
+        "ownerResourceFixtureManifestSha256": "3bd03457047779e8ee0cecc85b4c75bfbdad078c99cc6440c86da8e4a0102c28",
+        "onlyTwoResourceLiteralsChanged": true,
+        "original16GroupsAssertionsAndBudgetsUnchanged": true,
+        "migrationNotReplayed": true
+      }
+    },
+    "pakellasLinuxIntegration3": {
+      "status": "superseded_unlaunched_final_consumer4",
+      "ready": false,
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-3-integration.json",
+      "sha256": "df2340e1e6cd222e097e774e169867cf83eb5a7b20e4dea515fab160ac1ce019",
+      "baseBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-3-base-binding.json",
+      "baseBindingSha256": "1a3dd88cb39fb3d0a0fe7f38fe83010ed0586e7667d33c165fe85c172caf1ffa",
+      "consumerContractSha256": "67d240d191c421e6c3e42f3dd3b93891225b579f1cb44bfc6c5fa8e2ad9c491b",
+      "exactRuntimeFiles": 10972,
+      "knownPins": 126,
+      "sixOriginalChecksUnchanged": true,
+      "runtimeStarted": false,
+      "candidateModified": false,
+      "fixtureProducerPending": true
+    },
+    "pakellasLinuxIntegration4": {
+      "status": "superseded_unlaunched_Status_tab_consumer5",
+      "ready": false,
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-4-integration.json",
+      "sha256": "27226233f5ca04310c3571fe141b7d765bc993b0df5661212b3e6133c2f69e0a",
+      "baseBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-4-base-binding.json",
+      "baseBindingSha256": "253070463b31bf98dc13ad1361347bb4e21adfad0c4dab2690b9ae03015280fa",
+      "consumerContractSha256": "cf4bccac585851115f784de996e41eeaa8ed7b784f8e39375d08811dda7d7cc2",
+      "knownPins": 126,
+      "exactRuntimeFiles": 10972,
+      "sixOriginalChecksUnchanged": true,
+      "runtimeStarted": false,
+      "candidateModified": false,
+      "fixtureProducerPending": true,
+      "fixtureRequestId": "696056b2efcace3ae5edff5c6495614bfce73d3aa91a796387d82710ae42e092"
+    },
+    "pakellasLinuxIntegration5": {
+      "status": "actual_NOWIZARD_saved_wizard_ability_range_negative_fully_closed",
+      "ready": false,
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-5-integration.json",
+      "sha256": "9844f66d93ff840d44104d7c80e4428f32b7ead8727b10d66e004f9166c942da",
+      "baseBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-5-base-binding.json",
+      "baseBindingSha256": "4a4231936875d7b0134ebc450396ed6a50ff97dc37a1ab9349390c4279569a06",
+      "consumerContractSha256": "66d68afb9341cf8d13ed37547da49ae3db3d34c61f51e7c2d81a67c5f8ea7103",
+      "knownPins": 126,
+      "exactRuntimeFiles": 10972,
+      "sixOriginalChecksUnchanged": true,
+      "runtimeStarted": false,
+      "candidateModified": false,
+      "fixtureProducerPending": true,
+      "fixtureRequestId": "48704a43cd644bb423eac8a44c54b41131b6f99dbe0ad0df7c7e17956ac9fece",
+      "passed": false,
+      "nativeCandidateSha256": "5184d43b67535615dc97577039bc12824d75388ec319fe532e5e1e103cb902fd",
+      "importSucceeded": true,
+      "featureChecks": 0,
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 15,
+      "remoteFlockReleased": true,
+      "closureSha256": "0eef51d0b8c15baaed6877320ef1045b16966f22455bc14dbee080ecabdb0cf6",
+      "postTeardownIntegrityPassed": true,
+      "boundPins": 135,
+      "exactFiles": 10988,
+      "candidateRuntimeFiles": 10972,
+      "sourceGuards": 111,
+      "sourceFixtureOriginalUnchanged": true,
+      "browserProofSha256": "bc4d5d91406d417c74460d0d24158844aaeadfc7a31d4c966cb0c7450ec87896",
+      "importManifestSha256": "0031be75389a9e1f1fbefc2b2d733aa562f43fdbce4797204bed5669f950d5aa",
+      "failure": "tags.cc3501 ASSERT saved ability10000 exceeds NOWIZARD NUM_ABILITIES1516. Valid readonly -save-json header was insufficient to prove actual main-player restoration.",
+      "sourceDiagnosis": "ability-type.h390 #ifdefWIZARD defines3serialized abilities10000..10002 beforeNUM_ABILITIES; source adjust menu onlyswaps, get_talents autoassigns them.",
+      "next": "Producer/coordinator preparing supported export or real bound loader compatibility correction; never flagclear/byteedit/substitutebinary/replay old consumer.",
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-5-status.json",
+      "evidenceSha256": "673c2dea1e29ced8ba98b4ef64ba9aecb15651022677ea3e1c9e0099a929a738"
+    },
+    "linuxBuild6": {
+      "pid": 142536,
+      "pgid": 142536,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261019T203350Z-oozle/linux-6/validate-linux.py"
+      ],
+      "startedAt": 1792451022.0697374,
+      "work": "/tmp/dcss-20261019T203350Z-oozle/linux-6",
+      "bindingSha256": "fa65981105f2005833ad5d11ed6dff8491c5884b036cf0dac505c61213c1ebc3",
+      "localReservationRequired": false,
+      "remoteCoordinationLock": "/opt/dcss/release-build.lock",
+      "activationAllowed": false,
+      "status": "passed_fully_closed_independently_accepted_metadata_published",
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-6-binding.json",
+      "binarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+      "nativeExpectedCases": 73,
+      "nativeExpectedAssertions": 3855,
+      "legalStarts": 35,
+      "sourceGuardCount": 113,
+      "jobInputCount": 36,
+      "latestCompiledObjects": 82,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-6-status.json",
+      "allOriginalNativeChecksRetained": true,
+      "prior5184BinaryHistoricalPreserved": true,
+      "passed": true,
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "remoteFlockReleased": true,
+      "nativeCases": 73,
+      "nativeAssertions": 3855,
+      "acceptance": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-6-acceptance.json",
+      "acceptanceSha256": "3c6a6ea2d98578f20e4145a8556c8ae26aa59ef4f548db4512ed029c246cea84",
+      "publishedCandidateMetadataSha256": "c453d16666dd81773cdcfe6a9088e9a3f7d05aaa23fc6b6672a7961ed81716eb"
+    },
+    "stillRequired": [],
+    "pakellasLinuxIntegration6": {
+      "status": "actual_full_save_restore_succeeded_record_identity_capture_timeout_fully_closed",
+      "ready": true,
+      "runtime": "/tmp/dcss-pk6",
+      "candidateModified": false,
+      "runtimeStarted": false,
+      "consumerContractSha256": "0b465f8b4455afdc1ff3b3a56296d89b95f7bfaf934c35d666aa90a60a4a7cd3",
+      "inputFiles": 7,
+      "baseBinding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-6-base-binding.json",
+      "baseBindingSha256": "c1979cc7a3976940d48684c5647d5f3ff27c12162eea9614023e52f3d759c20c",
+      "preparedOperation": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-6-prepare-remote.py",
+      "preparedOperationSha256": "a01340a7a4d24c1039050571fc1a361da097a96cf83bc7af2cce03a0eb99fb0b",
+      "nativePublicationAdapter": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/accept-linux-6.py",
+      "nativePublicationAdapterSha256": "b70c7bdf9cef2cd842b4c3521355b6a2e359dbea538c294c2037c15e63713d55",
+      "newFreezePrepared": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/freeze-linux6.py",
+      "newFreezePreparedSha256": "780d400af2a6edd5437b1524fa60e83608ecf185887bcc874c901c0c5b53df5d",
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-6-binding.json",
+      "bindingSha256": "73b83755207c2fa5a34392722fb38856b294a58c1fe9a34595caaed1427997cc",
+      "binarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+      "inputPins": 135,
+      "exactFiles": 10990,
+      "passed": false,
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 15,
+      "remoteFlockReleased": true,
+      "closureSha256": "3d680dafab2208cef9debc72a28db3b323d0c0b576e0b72902cb2a8447eb6956",
+      "postTeardownIntegrityPassed": true,
+      "boundInputPins": 135,
+      "nativeBinarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+      "fullSaveRestoreReachedGameplay": true,
+      "wizardHistoryVisibleRetained": true,
+      "originalSixFeatureChecks": 0,
+      "nativeCrash": false,
+      "failure": "Browser line60 waited20s for record_identity/imported recordId; welcome-back/Pakellas/*WIZARD*/orc already visible",
+      "browserProofSha256": "666d678778b77e7c6123a65be0a9e076ef8a94f74462b2087bda8fc6922f8550",
+      "importManifestSha256": "abdffd48e41456d33b980b9f8828619c3cfa799bdf4170c78fec0a49c53f944e",
+      "sourceOriginalFixtureUnchanged": true,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-6-status.json",
+      "evidenceSha256": "19575e500949f7f640084dd958d762403b3ffccee97156b747e69d22a666c887",
+      "retryAllowed": false,
+      "next": "Owner-frozen source/client identity-capture correction and distinct later bound consumer."
+    },
+    "closedQaArchiveRelocation": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/closed-archive-relocation.json",
+      "sha256": "9186a62e1923e5ba100a44645b582b7cbde25e0ec89e6242d92aecb9e7a45128",
+      "passed": true,
+      "freeBytesAfter": 917807104,
+      "exactArchiveHashesPreserved": true
+    },
+    "pakellasLinuxIntegration7": {
+      "status": "passed_all6_original_checks_fully_closed",
+      "ready": true,
+      "binding": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/pakellas-linux-7-binding.json",
+      "bindingSha256": "5aa7e0ee4602b35dc5745a25b3af9d6b7d8815678fe4bb9a14a9cbf5ed52db40",
+      "runtime": "/tmp/dcss-pk7",
+      "contractSha256": "94d9019a1bcc6c1cb6a1d11093184b8ab3635b482789863e0e2d53c451eaac22",
+      "binarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+      "inputPins": 135,
+      "exactFiles": 10990,
+      "passed": true,
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 20,
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "closureSha256": "466b2d65506c024d1b79720c55bebfc5e617d92ebc0726766a42d2409c13e2d4",
+      "browserProofSha256": "02c3563deccc127a12f5ae5ec315b77527d4491f1a4ada960e4915982acd2c2e",
+      "checks": [
+        "The chosen six-charge Field Kit is present and cannot be claimed again",
+        "A real pinned Overclock opens targeting directly; cancelling spends no turn, piety, reserve or finite charge",
+        "Two real Overclocks apply rounded reserve debt and preserve all finite charges",
+        "Breakthrough creates one personal loan; explicitly chosen finite Overclock remains separate",
+        "Native item identity validation rejects stale browser actions without payment",
+        "XP pays the loan first; save and reload preserve identity, charge debt and gift history"
+      ],
+      "loadedIdentity": {
+        "library": {
+          "game_id": "coop-2p-web-trunk",
+          "expedition_id": "73e83f16-02fc-4569-a383-e0cb2001675b",
+          "msg": "game_started"
+        },
+        "native": {
+          "msg": "record_identity",
+          "game_id": "d1df541d-1f96-41ae-8a8f-7f9d7ee5908a",
+          "player_id": "7a4838da-817d-41a8-87a2-b639a84377aa",
+          "owner_id": "825fbf74-a7c2-4afc-a23b-4a740066d78c"
+        }
+      },
+      "sourceOriginalFixtureUnchanged": true,
+      "controlledWizardFixture": true,
+      "evidenceSha256": "e1cf861d3910accfe2e834f491290a2a93cecfe01ec520435be1aabfada6eafc"
+    },
+    "linuxBuild7": {
+      "passed": false,
+      "status": "compiler_negative_undeclared_testflag_beforelink_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "binaryUnchanged": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7",
+      "CXX": 2,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-7-status.json"
+    },
+    "linuxBuild8": {
+      "passed": true,
+      "allOwnedProcessesGone": true,
+      "rootGone": true,
+      "nativeCases": 74,
+      "nativeAssertions": 3871,
+      "bookRegressionCases": 1,
+      "bookRegressionAssertions": 16,
+      "sourceGuards": 114,
+      "jobInputs": 36,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "remoteAcceptanceSha256": "f9226b5736304f20d657452845e8051be6af1f626870aa088fd7c0aa3976396c",
+      "localReturnedAcceptanceSha256": "06e8a95338224e7d2b36f86cfb08add7bad8ba298713028cdc8cdd466fea8edd",
+      "publishedCandidateMetadataSha256": "4c74f588ec40bd6b8d68102a01b63c6fddb4ac345947305be9db716bef37d902",
+      "CXX": 2,
+      "elapsedSeconds": 15.810776233673096,
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/linux-8-acceptance.json",
+      "ownerSourceV2ManifestSha256": "033e43c28aff4eb36e653127e667bb7c080a9817027893f2789d5668c0545bc8"
+    },
+    "preparedFinalFreeze8": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/freeze-linux8.py",
+      "sha256": "a2717cd6fa00789eff4164c20630427a46acee5a9b37efc1943f4a527be3dc5d",
+      "executed": false
+    },
+    "closedTactical2Archive": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/closed-paladin-tactical2-archive.json",
+      "sha256": "9b8a6fd8eb1d168f66976398cf9c94ac3b3b5d5eccda9579cc864fea816fd10b",
+      "archiveSha256": "64fd6f7a9725af39667184b5bd1ce014a2300c3449d3a4a71628c65e53204a06",
+      "allBytesSymlinksPreserved": true
+    },
+    "immutablePriorProductDeduplication": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/prior-product-deduplication.json",
+      "sha256": "34da05afe4dd0ecb86122dc4120c6b76ae230e4802f041c69723ace6ef22070c",
+      "passed": true,
+      "bothRegularPathsAndByteHashesPreserved": true,
+      "freeBytesAfter": 695242752
+    },
+    "paladinTactical3": {
+      "passed": false,
+      "status": "identified_potion_native_pickup_succeeded_browser_inventory_observation_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 26,
+      "closureSha256": "3170f9884a132df6d0d97399e10ca3d162eb30b7b02a0a6fb9915c87ffc9aa21",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "browserErrors": [],
+      "browserClosed": true,
+      "failureSaveExited": true,
+      "failure": {
+        "message": "Native pickup did not supply: heal wounds",
+        "stack": "AssertionError [ERR_ASSERTION]: Native pickup did not supply: heal wounds\n    at Fixture.item (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-3/client.cjs:178:9)\n    at async Object.setup (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-3/tactical.cjs:37:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-3/run.cjs:58:13)"
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical3-status.json",
+      "evidenceSha256": "5d4dc6569d61cf9f425bccc1eb3f73f03ff34d91f0cb7f4744d8fd6a6239fb7e",
+      "nativePickupEvidence": "Controlseq30 item_created potion of heal wounds q:60 pre_id; retained screenshot native log w - 60 potions of heal wounds",
+      "next": "Verify explicit inventory state synchronization; new source-frozen tactical-only binding before any next runtime; no native compile or migration replay"
+    },
+    "paladinTactical4": {
+      "passed": false,
+      "status": "real_training_reached_all_targets_then_mandatory_empty_skill_selection_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 26,
+      "closureSha256": "c90c117078c635369fb2c627f0f801bcc250d68a2bbf2477e5d3512be3e8aa6c",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "browserClosed": true,
+      "failureSaveExited": false,
+      "cleanupErrors": [
+        "Save exit: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#lobby_navigation') to be visible\n    64 \u00d7 locator resolved to hidden <nav id=\"lobby_navigation\" class=\"lobby-workspace-nav\" aria-label=\"Main navigation\">\u2026</nav>\n"
+      ],
+      "failure": {
+        "message": "Native input did not settle",
+        "stack": "Error: Native input did not settle\n    at settle (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-4/client.cjs:43:11)\n    at async wait (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-4/client.cjs:99:5)\n    at async Fixture.command (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-4/client.cjs:143:13)\n    at async Object.setup (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-4/tactical.cjs:44:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-4/run.cjs:58:13)"
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical4-status.json",
+      "evidenceSha256": "30f7183c07336d6f53f502c2bf43a6f135e759bbf3ce154c80173ed10361f5d3",
+      "actualPrompt": "You need to enable at least one skill. Native requested all configured training targets were reached, and no other skill enabled.",
+      "positiveObservations": [
+        "Identified healing/magic potion pickup synchronized successfully",
+        "Real training reached Auramancy24, Spellcasting16, Fighting12, elemental schools12 and Invocations20"
+      ],
+      "next": "Owner source-verified minimal ordinary skill-selection handling/configuration; no runtime until fresh frozen packet; preserve all original assertions and real training."
+    },
+    "paladinTactical5": {
+      "passed": false,
+      "status": "training_wait_input_synchronization_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 28,
+      "closureSha256": "b1381afbf8f86c4c4a8f6fe4f2ca93b8d80af657092ac2e2d2b9ead2a8113104",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "browserClosed": true,
+      "failureSaveExited": true,
+      "browserErrors": [],
+      "failure": {
+        "message": "page.waitForFunction: Timeout 30000ms exceeded.",
+        "stack": "page.waitForFunction: Timeout 30000ms exceeded.\n    at wait (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-5/client.cjs:97:23)\n    at async Fixture.command (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-5/client.cjs:143:13)\n    at async Fixture.train (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-5/client.cjs:233:13)\n    at async Object.setup (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-5/tactical.cjs:44:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-5/run.cjs:58:13)"
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical5-status.json",
+      "evidenceSha256": "6c454409288bdd7b0ed640aaa6d92a097aa6d335df349453634f5d26c1c5c300",
+      "actualScreenshot": "XL13; prior stat prompt/You feel clever x2/levels10..13 then three Unknown command messages, no active modal",
+      "sourceFacts": [
+        "wait waits for owner turn before invoking settle",
+        "settle matches whole body including prior stat message without native PROMPT input-mode gate"
+      ],
+      "next": "Owner supported native-mode/fresh-input synchronization correction; fresh frozen packet before any sixth runtime; all original assertions/timeouts/real training retained."
+    },
+    "paladinTactical6": {
+      "passed": false,
+      "status": "both_native_training_setups_passed_posttraining_AC_baseline_fixture_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 27,
+      "closureSha256": "18644c82b3adc7c4c97523de2604973ceca1c2d93b590513832f91b40bb972a7",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "browserClosed": true,
+      "failureSaveExited": true,
+      "browserErrors": [],
+      "failure": {
+        "message": "Expected values to be strictly equal:\n\n9 !== 5\n",
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n9 !== 5\n\n    at Object.setup (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-6/tactical.cjs:59:47)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-6/run.cjs:58:13)"
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical6-status.json",
+      "evidenceSha256": "e3d9a14452bd14264bc08725c9a777b016e7f664e4d25b26d2fd945411afa0e9",
+      "actualFailure": "Post-training host outside7tile aura hasAC9; test compares pre-training baseline5 despite Armour continuing training.",
+      "positiveObservations": [
+        "Both owners all requested real training targets completed,1.6mXP each",
+        "Native input/prompt handling completed without previous failures",
+        "Real book pickup/memorisation/potions and trained Protection cast succeeded"
+      ],
+      "next": "Owner freezes post-training no-projection native AC control for6/7tile checks; initial2tile controls remain unchanged. No native/XP/resource/budget edit."
+    },
+    "paladinTactical7": {
+      "passed": false,
+      "status": "corrected_range_and_later_scenarios_advanced_but_browser300s_deadline_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 28,
+      "closureSha256": "1e8a3b340d90e2df50961614015c4d13810dc45c1604d325144e1cf7d0e66f66",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "browserEvidenceWritten": false,
+      "browserAndNativeForcedClosed": true,
+      "actualFailure": "AssertionError('tactical timed out')",
+      "latestNativeCommand": {
+        "seq": 257,
+        "name": "PalQaHff3aeeed",
+        "op": "monster",
+        "ok": true
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical7-status.json",
+      "evidenceSha256": "42439728c3ef8e1e73b32214f1caf05d05d61b277ac9a1b71a04f7f28ae89967",
+      "next": "Owner frozen split lifecycle with real save/resume and hash-linked complete original16 checks; retain per-browser300s and phase660s, no native/migration/Pk replay or partial T7 fixture consumption."
+    },
+    "paladinTactical8": {
+      "passed": false,
+      "status": "first_serial_browser_original300s_deadline_during_formation_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 29,
+      "closureSha256": "e2ba8ebcd0d6de1d1c888f147904e08e4053ad4fc746e78aa6a44f7a0fd048e2",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "bindingSha256": "5fe6aa64ad5d7360c291189c43bece3ba684ebb394cfdac92384e51a9e47cac4",
+      "coreBrowserForcedClosedAtDeadline": true,
+      "corePassed": false,
+      "savedCoreSessionProduced": false,
+      "finishBrowserStarted": false,
+      "failure": "AssertionError('tactical-core timed out')",
+      "latestNativeCommand": {
+        "seq": 364,
+        "name": "PalQaH2f059bdb",
+        "op": "terrain",
+        "ok": true
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical8-status.json",
+      "evidenceSha256": "521bd0a8c27823e606a217e457e8bc87d25c729b1c9767e062fa4c656b5f79ad",
+      "next": "Owner freezes supported performance correction within original300/660; no replay until fresh exact packet/binding; preserve original16 assertions and real native training."
+    },
+    "paladinTactical9": {
+      "passed": false,
+      "status": "core4_and_same_native_save_resume_PASS_then_combat_fixture_owner_eligibility_wait_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 40,
+      "closureSha256": "dbdccd5efb86379d361affd5148d2ae76d7ca1b680ec1faab7f2b6dbf12a5d06",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "bindingSha256": "2db893fa0b92e2d5893d1c7f5fd39fb3bfe095e1bc8ddc0def4a461e5a1192b0",
+      "core4Passed": true,
+      "coreProofSha256": "de8210137309bc0236730c9323ac970443ef0640b55ef048673d15b725d28605",
+      "coreSeconds": 184.902,
+      "sameSavedNativeBytesStateIdsSequenceMatched": true,
+      "finishPassed": false,
+      "finishProofSha256": "c7074e7632329bd201fc4315d2c99971e6d6fa92922f594de8fa55301ec01ff1",
+      "browserClosed": true,
+      "failureSaveExited": true,
+      "browserErrors": [],
+      "actualFailure": {
+        "message": "Native input did not settle: {\"afterTurn\":76,\"last\":{\"ready\":true,\"complete\":false,\"mode\":1,\"question\":\"The ogre closely misses you.\",\"key\":null,\"turns\":76,\"afterTurn\":76},\"slot\":0,\"turns\":76,\"inventory\":[{\"slot\":0,\"name\":\"+0 hand axe\",\"qty\":1},{\"slot\":1,\"name\":\"+0 ring mail\",\"qty\":1},{\"slot\":2,\"name\":\"+0 buckler\",\"qty\":1},{\"slot\":52,\"name\":\"potion of curing\",\"qty\":1},{\"slot\":53,\"name\":\"60 potions of heal wounds\",\"qty\":60},{\"slot\":54,\"name\":\"51 potions of magic\",\"qty\":51}],\"floor\":[],\"promptReplies\":[],\"packets\":[{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"ui_state\"},{\"msg\":\"map\"},{\"msg\":\"input_mode\",\"mode\":0},{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"msgs\",\"messages\":[\"<lightgrey>You hit the ogre.\",\"<lightgrey>The ogre is lightly wounded.\",\"<darkgrey>The ogre closely misses you.<lightgrey>\"]},{\"msg\":\"player\"},{\"msg\":\"state_frame\"},{\"msg\":\"party_state\",\"turns\":76},{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"ui_state\"},{\"msg\":\"map\"}]}",
+        "stack": "Error: Native input did not settle: {\"afterTurn\":76,\"last\":{\"ready\":true,\"complete\":false,\"mode\":1,\"question\":\"The ogre closely misses you.\",\"key\":null,\"turns\":76,\"afterTurn\":76},\"slot\":0,\"turns\":76,\"inventory\":[{\"slot\":0,\"name\":\"+0 hand axe\",\"qty\":1},{\"slot\":1,\"name\":\"+0 ring mail\",\"qty\":1},{\"slot\":2,\"name\":\"+0 buckler\",\"qty\":1},{\"slot\":52,\"name\":\"potion of curing\",\"qty\":1},{\"slot\":53,\"name\":\"60 potions of heal wounds\",\"qty\":60},{\"slot\":54,\"name\":\"51 potions of magic\",\"qty\":51}],\"floor\":[],\"promptReplies\":[],\"packets\":[{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"ui_state\"},{\"msg\":\"map\"},{\"msg\":\"input_mode\",\"mode\":0},{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"msgs\",\"messages\":[\"<lightgrey>You hit the ogre.\",\"<lightgrey>The ogre is lightly wounded.\",\"<darkgrey>The ogre closely misses you.<lightgrey>\"]},{\"msg\":\"player\"},{\"msg\":\"state_frame\"},{\"msg\":\"party_state\",\"turns\":76},{\"msg\":\"input_mode\",\"mode\":1},{\"msg\":\"ui_state\"},{\"msg\":\"map\"}]}\n    at settle (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-9/client.cjs:71:11)\n    at async wait (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-9/client.cjs:127:5)\n    at async Fixture.command (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-9/client.cjs:173:13)\n    at async Object.combat (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-9/tactical.cjs:140:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-9/run.cjs:212:17)"
+      },
+      "latestNativeCommand": {
+        "seq": 427,
+        "name": "PalQaH040cf99a",
+        "op": "monster",
+        "ok": true
+      },
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical9-status.json",
+      "evidenceSha256": "c009b8f81ce72ce30b1b66621b8b4be76f4f9a0fe7b1d6a512e36dbf9f9c895c",
+      "sourceDiagnosis": "Observed: first combat control follow-up wait stalled with input COMMAND/ready true, host turns76, latest monster427 only. Candidate source generic workflow.ready excludes native member_can_act; actual failing can_act/clock fields were not captured, so eligibility is a possibility, not proven. Raw combat attack lacks owner-turn acknowledgement; process-local monster-action disable flags require source review after resume. Screenshot C7/D0 labels MONSTER credit/debt, not hero recovery. No native product failure established.",
+      "next": "Owner freezes source/API-verified reusable eligibility-aware action wait and acknowledgements preserving all original assertions/budgets; no automatic retry."
+    },
+    "paladinTactical10": {
+      "passed": false,
+      "status": "core4_resume_and_Zeal_PASS_then_global_turn_marker_combat501_unacknowledged_negative_fully_closed",
+      "rootGone": true,
+      "allOwnedProcessesGone": true,
+      "observedProcesses": 42,
+      "closureSha256": "77c807b6fb8b9543921216966d297ec72a45d5ffa8096afa53731bcc2e156760",
+      "remoteFlockReleased": true,
+      "postTeardownIntegrityPassed": true,
+      "inputPins": 753,
+      "originalSourceFiles": 12072,
+      "originalCheckpointFiles": 598,
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "bindingSha256": "1aabc6ab7e869b18db08c95c7a6a0995cf626c6dee2087a3d80418742bbee0db",
+      "core4Passed": true,
+      "coreProofSha256": "59d4c02cdf2b2d23473faae4ae5cf5e57cfc531d02f2c6dc371dc38b7872ff49",
+      "coreSeconds": 213.792,
+      "sameSavedNativeBytesStateIdsSequenceMatched": true,
+      "nativeEligibilityPeerProgressExercised": true,
+      "finishPassed": false,
+      "finishOriginalChecks": [
+        "Zeal gives native slaying and actual holy strikes only for focused or undead foes"
+      ],
+      "finishProofSha256": "3ffb7b399f7301db8ddefde0ee0ee6ed24f970559c7e5ee4d55becd5c8eee62b",
+      "browserClosed": true,
+      "failureSaveExited": true,
+      "browserErrors": [],
+      "actualFailure": {
+        "message": "NOWIZARD native fixture marker did not execute combat for PalQaH52b1d3d9: {\"activation\":{\"last\":486,\"name\":\"PalQaH52b1d3d9\",\"path\":\"dlua/paladin-qa-control/command.lua\",\"phase\":\"activated\",\"place\":\"D:1\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\"},\"latest\":{\"error\":\"\",\"name\":\"PalQaH52b1d3d9\",\"op\":\"monster\",\"path\":\"dlua/paladin-qa-control/command.lua\",\"phase\":\"completed\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\",\"seq\":500},\"startupRead\":{\"error\":\"\",\"ok\":true,\"path\":\"dlua/paladin-qa-control/command.lua\",\"root\":\"/tmp/dcss-pa6ctl\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\",\"seq\":486}}",
+        "stack": "Error: NOWIZARD native fixture marker did not execute combat for PalQaH52b1d3d9: {\"activation\":{\"last\":486,\"name\":\"PalQaH52b1d3d9\",\"path\":\"dlua/paladin-qa-control/command.lua\",\"phase\":\"activated\",\"place\":\"D:1\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\"},\"latest\":{\"error\":\"\",\"name\":\"PalQaH52b1d3d9\",\"op\":\"monster\",\"path\":\"dlua/paladin-qa-control/command.lua\",\"phase\":\"completed\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\",\"seq\":500},\"startupRead\":{\"error\":\"\",\"ok\":true,\"path\":\"dlua/paladin-qa-control/command.lua\",\"root\":\"/tmp/dcss-pa6ctl\",\"runId\":\"790672d0-e054-4816-a762-5ad3bf4b104f\",\"seq\":486}}\n    at Fixture.command (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-10/client.cjs:244:15)\n    at async Object.combat (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-10/tactical.cjs:148:9)\n    at async main (/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-10/run.cjs:216:17)"
+      },
+      "latestNativeCommand": {
+        "seq": 500,
+        "name": "PalQaH52b1d3d9",
+        "op": "monster",
+        "ok": true
+      },
+      "pendingCommandFields": [
+        [
+          "seq",
+          "501"
+        ],
+        [
+          "name",
+          "\"PalQaH52b1d3d9\""
+        ],
+        [
+          "op",
+          "\"combat\""
+        ]
+      ],
+      "evidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/paladin-tactical10-status.json",
+      "evidenceSha256": "aedf784ef279f66e102aaa2038a6869fec3811f924838b288018ed2755314f82",
+      "sourceDiagnosis": "Native global turn event requires positive world/floor delta; fixture filters by requested owner name. Missing event-seen diagnostics prevents distinguishing no event vs other-actor event. Source-supported global combat operation routing or scheduling fix needed; no native product bug established.",
+      "canonicalSourceDrift": {
+        "file": "party-session.cc",
+        "localSha256": "e240717b21fb23e4b9297b137f451e2d795c1a188db323aea0e9a7cb5eda5f59",
+        "boundCandidateSha256": "8804011a7f88684f1632f1fbdb8e6fcc40850e09da982cc946ff3f797ee631d8",
+        "candidateUnchanged": true,
+        "coordinatorScopeClassificationPending": true
+      },
+      "next": "Owner freezes source/API-supported marker event routing and truthful diagnostics preserving original6pairs/all16assertions/300+660; coordinator classifies concurrent local native patch. No automatic retry/rebuild."
+    },
+    "concurrentNativeChange": {
+      "status": "independent_successor_scope_not_current8f_dependency",
+      "decisionPath": "/Users/iancaltabiano/Documents/Codex/2026-10-18/er/work/conductor-readonly-discovery/dcss-party-session-concurrent-source-scope-decision.json",
+      "decisionSha256": "5c32b0698d97a4de29f4ea94669c0f36bf70ccf10518380c173e8e086b4e6de6",
+      "producingThreadId": "01a1570f-c513-7b23-8800-2552ec565161",
+      "localSha256": "e240717b21fb23e4b9297b137f451e2d795c1a188db323aea0e9a7cb5eda5f59",
+      "stagedSha256": "8804011a7f88684f1632f1fbdb8e6fcc40850e09da982cc946ff3f797ee631d8",
+      "correction": "Both versions already contain env.h and env.elapsed_time=you.elapsed_time. Actual delta is nearest-region ownership/tie-break and monster/cloud ownership, not that clock assignment.",
+      "candidateRemainsUnchanged": true,
+      "noCurrentReleaseRebuildRequiredByThisDelta": true,
+      "noHumanPaladinGateWaiver": true
+    },
+    "paladinTactical11": {
+      "status": "closed_incomplete_human_deferred_original_negative_preserved",
+      "launch": {
+        "pid": 171657,
+        "pgid": 171657,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/inputs-tactical-11/paladin-phase.py",
+          "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/tactical-11/binding.json"
+        ],
+        "startedAt": 1792463490.9444156,
+        "work": "/tmp/dcss-20261019T203350Z-oozle/paladin-v6/tactical-11",
+        "bindingSha256": "4a1b639258cdfdee6da44ac8927a030b6f544dca470e44b58ea2df0e439f4ea6",
+        "localReservationRequired": false,
+        "remoteFlock": "/opt/dcss/release-build.lock",
+        "activated": false
+      },
+      "bindingSha256": "4a1b639258cdfdee6da44ac8927a030b6f544dca470e44b58ea2df0e439f4ea6",
+      "packetManifestSha256": "f297c421d35978f1d7f39bb9b810a0b80d4c414bcfc3608bf2ef08856f57ab75",
+      "changedFiles": [
+        "client.cjs",
+        "fixture.lua",
+        "qa_http.py"
+      ],
+      "candidateBinarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "originalAssertionsAndBudgetsPreserved": true,
+      "noHumanGateWaiverReceived": true
+    },
+    "humanPaladinDeferral": {
+      "authorizationSha256": "528e64053b03ec3db920216f9d54a88b1e4da8e9f83b77f65fb32f7f51f022ff",
+      "directHumanMessageId": "01a1572e-a20f-7532-9e24-30ee560066e2",
+      "answer": "Deploy the staged build; defer the remaining Paladin checks",
+      "exactBinarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61"
+    },
+    "deploymentAcceptanceException": {
+      "acceptedForDeployment": true,
+      "allGameplayTestsPassed": false,
+      "humanAuthorizationSha256": "528e64053b03ec3db920216f9d54a88b1e4da8e9f83b77f65fb32f7f51f022ff",
+      "deferredGameplayScopes": [
+        "auramancyGameplay"
+      ],
+      "path": "/tmp/dcss-20261019T203350Z-oozle/accepted-combined.json",
+      "sha256": "aab45d1d1fc2be19bb58b6c69c9c57a348f1195c23c00e4c38535bb692924e77",
+      "proofs": {
+        "oozleGameplay": {
+          "sha256": "b03a6955bbba448fc14a07d720a57efacf61ebf8eac93622283e3e2ae3c3a33e",
+          "observedBinarySha256": "5184d43b67535615dc97577039bc12824d75388ec319fe532e5e1e103cb902fd"
+        },
+        "pakellasGameplay": {
+          "sha256": "02c3563deccc127a12f5ae5ec315b77527d4491f1a4ada960e4915982acd2c2e",
+          "observedBinarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7"
+        },
+        "oldDjinniMigration": {
+          "sha256": "393976e687835aaa56b0921e1c6636cd12b8e7787b3bcce01551c0b32b74f8cb",
+          "observedBinarySha256": "86a4bd2357e4e7ea74ee2a88518256c4e977eba6c15148e8b646ddd83a9528e7"
+        }
+      },
+      "activationAllowed": false
+    },
+    "finalFreezeHumanException": {
+      "passed": true,
+      "frozenAt": 1792464403.775329,
+      "release": "/opt/dcss/releases/20261019T203350Z-oozle",
+      "expected": "/opt/dcss/releases/20261019T184637Z-vorr-speed",
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "manifestSha256": "475dbade20c1394f1fb52b44fb88feced62f7cbb6adc9f4d9a70948105f06425",
+      "evidence": {
+        "linux-8-acceptance/validation.json": "f9226b5736304f20d657452845e8051be6af1f626870aa088fd7c0aa3976396c",
+        "linux-gameplay-2/completion.json": "8baab0bc5691b60a871647ff160d8b84820c068db2fd902622e59fadb1d97aac",
+        "retained-checkpoints.json": "de8fc8ab7fe027aca45cc22e78c6e0ede60e25651d445b06f3337e75beec5337",
+        "accepted-combined.json": "aab45d1d1fc2be19bb58b6c69c9c57a348f1195c23c00e4c38535bb692924e77"
+      },
+      "acceptedForDeployment": true,
+      "allGameplayTestsPassed": false,
+      "humanAuthorizationSha256": "528e64053b03ec3db920216f9d54a88b1e4da8e9f83b77f65fb32f7f51f022ff",
+      "deferredGameplayScopes": [
+        "auramancyGameplay"
+      ],
+      "regularFiles": 13290,
+      "symlinks": 3,
+      "stateAndConfigLinksVerified": true
+    },
+    "freshSnapshotRequest": {
+      "name": "dcss-oozle-20261020t024702z",
+      "project": "chuk-437319",
+      "disk": "dcss-coop-server-data",
+      "zone": "us-central1-a",
+      "afterFrozenAt": 1792464403.775329
+    },
+    "productionCurrent": "/opt/dcss/releases/20261019T203350Z-oozle",
+    "cutoverCurrentCasNegative": "current-CAS-negative-before-cutover.json",
+    "offturnMergeInputs": {
+      "path": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/offturn-merge-source-inputs/manifest.json",
+      "sha256": "a710bddd2b62b6f06eaa708ce4dff2d603924fa3bb25f8dbd96b7a73fec5fcbf"
+    },
+    "productionPrevious": "/opt/dcss/releases/20261020T024110Z-offturn-views",
+    "publicUrl": "https://dcss.iancaltabiano.com",
+    "finalDeployment": {
+      "passed": true,
+      "at": 1792466193.9964159,
+      "url": "https://dcss.iancaltabiano.com",
+      "release": "/opt/dcss/releases/20261019T203350Z-oozle",
+      "rollbackRelease": "/opt/dcss/releases/20261020T024110Z-offturn-views",
+      "binarySha256": "8f584a3994464968e2228d5c7ec240fd159697bdbe4a0fed568f98eba3c85c61",
+      "productionServicesActive": true,
+      "trustedPublicHttps": true,
+      "publicOozleOriginalFiveChecksPassed": [
+        "Memory panel has readable native card and slot widths",
+        "Native Oozle selection, memory display and independent two-owner movement",
+        "Memory display preserves expanded digestion and keyboard focus across peer updates",
+        "Ordinary five-turn assimilation consumes the starting rapier and strengthens unarmed attacks",
+        "Native save and resume preserve full memory bundles and independent hero ownership"
+      ],
+      "publicProofSha256": "8d8090844e168de8430bb563df3856f9a8067e8eaf0c5defe8c46df1dd3a275e",
+      "activationOutcomeSha256": "35310a07428264165cb208f4552f8315cef4ebfe806f99aa7a0ca680d7236525",
+      "snapshot": "dcss-oozle-ui-20261020t030743z",
+      "publicAssetsVerified": 14,
+      "offturnShortcutRecheck": {
+        "passed": true,
+        "controlledClientSnapshotOnly": true,
+        "nativeRecoveryClaimed": false,
+        "explicitCloseBetweenViews": true,
+        "tabs": [
+          "skills",
+          "mutations",
+          "overview"
+        ],
+        "nativeTurnsAndPositionsPreserved": true
+      },
+      "allOwnedProcessesGone": true,
+      "activationRootAndGroupGone": true,
+      "all18ObservedIdentitiesGone": true,
+      "allFourOwnedNativeQaAccountNamesGoneRegardlessOfExecutableAlias": true,
+      "deferredGameplayScopes": [
+        "auramancyGameplay"
+      ],
+      "allGameplayTestsPassed": false,
+      "humanDeferralAuthorizationSha256": "528e64053b03ec3db920216f9d54a88b1e4da8e9f83b77f65fb32f7f51f022ff",
+      "finalProductManifestSha256": "ea22a15e6038a33743a2912c54bdad23926107ce1ad15b567b49f6a8bad43bf3",
+      "earlierRollbackAndAllNegativesRetained": true,
+      "remoteFlockAcquiredAfterAllClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "closeoutSha256": "d560e2496067d720f5e3cd61f9dd17f9bf6bf45c8fd297aa03e2d6c8f642c83d"
+    },
+    "deferredGameplayScopes": [
+      "auramancyGameplay"
+    ],
+    "allGameplayTestsPassed": false,
+    "publicGameplayPassed": true,
+    "heartbeatDisabled": {
+      "automationId": "finish-oozle-native-gameplay-acceptance",
+      "status": "PAUSED",
+      "disabledAfterActualPublicDeployment": true,
+      "pausedConfirmedByTool": true,
+      "at": 1792466333.999735
+    }
+  },
+  "requestId": "e55c4af9b6e430ddb87fa7cd080840483787c007bf804cfb1fd1a61150195b47",
+  "nativeAcceptance": {
+    "passed": true,
+    "cases": 30,
+    "assertions": 466,
+    "legalStarts": 35,
+    "proof": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/acceptance-5/native-passed.json"
+  },
+  "browserAcceptance6": {
+    "passed": false,
+    "independentMovement": true,
+    "peerMovesDuringAssimilation": true,
+    "cancellationPreservesItemAndMemory": true,
+    "fiveOwnerTurnArmourConsumption": true,
+    "rawArmourAC": 14,
+    "appliedAC": 3,
+    "failure": "Weapon equip helper read previous native snapshot; now awaits equipped flag in prepared7. Full decay/dissolution/save-resume still pending.",
+    "released": true
+  },
+  "currentReservation": {
+    "runId": "d1544077-2d80-43bf-b6b7-424b53484388",
+    "requestId": "e55c4af9b6e430ddb87fa7cd080840483787c007bf804cfb1fd1a61150195b47",
+    "status": "released",
+    "releaseEvidenceSha256": "5502a446edcbe0f8a0958586001753bbdf9689eb141c65da627bc96f409a3cf5"
+  },
+  "browserAcceptance9": {
+    "passed": false,
+    "sixCheckpointsPassed": true,
+    "failure": "Process monitor ps5s timeout after save/resume; dissolution/FIFO still pending",
+    "allOwnedProcessesGone": true,
+    "releaseEvidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/acceptance-9/release-evidence.json",
+    "releaseEvidenceSha256": "9530cdf52b57100db7b04352d3b494bc984f8e8c083cf926493a860e0236d1cc"
+  },
+  "browserAcceptance10": {
+    "passed": true,
+    "allOriginalCheckpoints": true,
+    "allOwnedProcessesGone": true,
+    "inputHashesVerified": 11097,
+    "originalAndRuntimeFilesEach": 10979,
+    "completion": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/acceptance-10/result/completion.json",
+    "completionSha256": "1c215912d37a4eeb6d176ecd13d10cb22f903c7cb61bb988bcb01e1cfb7ec130",
+    "released": true
+  },
+  "recordedAt": 1792466291.303637,
+  "liveSuccessor": {
+    "release": "/opt/dcss/releases/20261020T032750Z-tactical-sidebar",
+    "nativeSha256": "0f145db9a26bfb95569ee474803aa01cadf2b208e8e92ebf8e60ace623cc1df8",
+    "verifiedAt": 1792501883.7335098,
+    "publicOozleProof": {
+      "path": "/tmp/dcss-20261020T032750Z-tactical-sidebar/deployment-2/public-proofs/oozle/evidence.json",
+      "sha256": "eb0109e2a22508a237df04a17c930493ad38af3a772ba081c8f9614920d2f1f1",
+      "owners": [
+        "MultiHmvgp7ipw",
+        "MultiGmvgp7ipw"
+      ],
+      "nativeOwnersGone": true
+    },
+    "finalCloseoutSha256": "0028ee8277ffcab3480aa106705df7b31e45c7642ce7d312bfa418e29dcf5f43",
+    "originalOozleEvidencePhysicalIdentitiesPreserved": true,
+    "newEquipmentTargetingWorkNotIncluded": true,
+    "webOnlyBooleanFollowup": {
+      "currentRelease": "/opt/dcss/releases/20261020T133036Z-sidebar-booleans",
+      "nativeBinaryUnchanged": true,
+      "originalPublicOozleProofNotRelabelled": true,
+      "receiptSha256": "06ff9c8982fff3f2c9275564d67a6a21e5d8b8f1ae783135f639c1121488ec77"
+    }
+  },
+  "itemContextAssimilation": {
+    "at": 1792522386.709461,
+    "scope": "Direct human bundles Assimilate item context/confirmation with referenced Add enemy initiative and queued path deployment, including its directly verified buff/debuff icon request. Existing body/clock/Dith source groups retained.",
+    "referencedThreadRead": "01a1570f-c513-7b23-8800-2552ec565161",
+    "status": "QA9_NATIVE_UI_INPUT_WIRE_INTERLEAVING_FABRIC_OVERLAY_RUNNING",
+    "candidate": "/opt/dcss/releases/20261020T151507Z-combined-oozle",
+    "remoteWork": "/tmp/dcss-20261020T151507Z-combined-oozle",
+    "currentProduction": "/opt/dcss/releases/20261020T133036Z-sidebar-booleans",
+    "currentBinary": "0f145db9a26bfb95569ee474803aa01cadf2b208e8e92ebf8e60ace623cc1df8",
+    "nativeLaunch": {
+      "pid": 197244,
+      "pgid": 197244,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/validate.py"
+      ],
+      "startedAt": 1792510271.428007,
+      "processIdentity": "Tue Oct 20 15:31:10 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/validate.py",
+      "bindingSha256": "809a307855b76ebc4e0001e899cd08c9b9ced151a90b11c3455c0d0ec6dab2ce",
+      "work": "/tmp/dcss-20261020T151507Z-combined-oozle",
+      "capacity": {
+        "rootFreeBytes": 19828150272,
+        "availableMemoryBytes": 3376013312
+      },
+      "productionUnchanged": true,
+      "activationAllowed": false
+    },
+    "sourceReview": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/composite-preview-9/review.json",
+    "sourceReviewSha256": "2d8a86a19c6e27300e4dfc228c5520dec3c29d965cb375b72b1d40c03542bbda",
+    "bindingSha256": "809a307855b76ebc4e0001e899cd08c9b9ced151a90b11c3455c0d0ec6dab2ce",
+    "sourceFiles": 140,
+    "inputPins": 320,
+    "fifthFeatureFreeze": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/item-assimilation-2/freeze.json",
+    "fifthFeatureFreezeSha256": "eb8ccfa70512506e6345ecb845f22aaeded72ed952b932d6ef5ff2b4451e3100",
+    "bannerFreezeSha256": "350e99f750a37a2c9202f70ad5673d1d66cfc2bcda7a940bca312a10735313fe",
+    "oldUncompiledBindingRetained": true,
+    "sourcePreparationMergeNegativeRetained": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/composite-preview-8-merge-negative",
+    "nativeBudgets": {
+      "productionBuild": 1800,
+      "privateO0WizardBuild": 1800,
+      "nativeContracts": 180
+    },
+    "qaPlan": {
+      "runtime": "/tmp/ozw1",
+      "port": 18997,
+      "worldBrowserSeconds": 600,
+      "oozleBrowserSeconds": 300,
+      "clockBrowserSeconds": 300,
+      "pixelsBrowserSeconds": 180,
+      "qaWorkerPrepared": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/qa-worker.py",
+      "requiresActualNativeHashesAndAllClosure": true
+    },
+    "publicProbe": {
+      "directory": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/public-consumer-2",
+      "scriptSha256": "58bb9470b11d3757d13be82c9811a4d3a67511b8fb7292479eb50ad6bfe2d0ad",
+      "helperSha256": "259183f34d6ef33b327689254dcdd618d823bf32b90e317fdf8fb69faff000eb",
+      "checks": 6,
+      "preparedOnly": true
+    },
+    "next": [
+      "Observe sole QA9, all eight predecessors actually closed; no replay/native recompile.",
+      "Actual world8/Oozle8/repaint12 plus retainedclock5/fullclosure, then exact web-only fabric application/freeze/READY backup/CAS activation/publicOozle6."
+    ],
+    "messaging": "Only coordinator01a150ab-c099-7e41-8f34-fb0a960738c3 and Pakellas01a15527-2a04-7e82-9cd9-f35b5fc79bd7 explicitly authorized; no direct reply to world owner assumed. Read-only referenced thread inspection allowed/required.",
+    "localHeavyWork": false,
+    "remoteOnlyParallelAuthorizationSha256": "f0d0aca80c4e3d043a648ce2f3920d67461bf0a625c5185ea233221fe9cedc68",
+    "heartbeat": "Existing finish-oozle-native-gameplay-acceptance is PAUSED; do not create/resume automation.",
+    "nativeContinuation": {
+      "phase": "native-4",
+      "pid": 205904,
+      "pgid": 205904,
+      "bindingSha256": "605b1e89dcfb2944aad278fe38e68d47a3b179ac4e4a7d15654604bdb32417da",
+      "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+      "nativeCases": 122,
+      "nativeAssertions": 6576,
+      "backendTests": 162,
+      "runtimePreviewsPassed": true,
+      "productionSourceUnchanged": true,
+      "failedRunnersRetained": [
+        "native-1 backend absolute library override",
+        "native-2 compact receipt hash preflight",
+        "native-3 runtime preview native environment overrides"
+      ],
+      "noProductFixForRunnerFailures": true
+    },
+    "qaGenerator": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/prepare-qa-v2.py",
+    "screenshotConsumer": {
+      "handoffSha256": "c374237088521bdaf233e7df738a174e433be732801abadd274c08e9a80a6d78",
+      "scriptSha256": "ba336bc6a8a37570897090a77b58a5c720f3e3153a45ee544be90518123c0693",
+      "nativeGameplayPending": true
+    },
+    "nativeAcceptance": {
+      "phase": "native-4",
+      "passed": true,
+      "validationSha256": "9d76d7712f2b767c6fc50f84bbd581cea6bbd76f3bd477d43bfaf643c8d2b638",
+      "closureSha256": "941fceb9f87ddf1b356e6e641881d9dd85f7cdbbba53542a1aac3ba0aef14f3c",
+      "closeoutSha256": "92c851417421a4f5b32d26dd53bf6da5f8a444be9107aef4849627d37f8ef92a",
+      "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+      "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+      "cases": 122,
+      "assertions": 6576,
+      "backendTests": 162,
+      "legalOozleStarts": 35,
+      "sourceFilesVerified": 140,
+      "inputPinsVerified": 320,
+      "allOwnedProcessesGone": true,
+      "remoteFlockExplicitlyReleased": true,
+      "reusedNative1AndBackend3LeavesHaveTheirActualIdentities": true
+    },
+    "privateQA": {
+      "launch": {
+        "pid": 211008,
+        "pgid": 211008,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 16:38:17 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-1/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-1/binding.json",
+        "startedAt": 1792514298.3408911,
+        "bindingSha256": "4bb1e91d35a3457110607a1a9f6ed282f91c5048afea5b54bf6776caf9a6b2df",
+        "capacity": {
+          "rootFreeBytes": 19419144192,
+          "availableMemoryBytes": 3087712256
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "bindingSha256": "4bb1e91d35a3457110607a1a9f6ed282f91c5048afea5b54bf6776caf9a6b2df",
+      "inputPins": 4259,
+      "expectedChecks": {
+        "worldAndBanners": 8,
+        "oozle": 8,
+        "encounter": 5,
+        "repaintSamples": 12
+      },
+      "screenshotConsumerSha256": "ba336bc6a8a37570897090a77b58a5c720f3e3153a45ee544be90518123c0693",
+      "runtime": "/tmp/ozw1",
+      "port": 18997,
+      "activationAllowed": false
+    },
+    "deploymentPreparedOnly": {
+      "freeze": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/freeze-combined.py",
+      "activate": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/activate-combined.py",
+      "payloadPins": {
+        "activate.py": "4e9177169c6412ef56991d67f98a6f4f1ed82bf46b4e8d0e8549c2868d49e3eb",
+        "phase_processes.py": "b37fd0ea46be015a38ec81ca72337175575c4c738bb4e65e2d4d8c38d24b628c",
+        "freeze-combined.py": "29d7f9da9bcb806ccfb8d5b8a66bad2de7ef33e4a63cf8203d9b0f8f6348298b",
+        "public/oozle-release-smoke.cjs": "58bb9470b11d3757d13be82c9811a4d3a67511b8fb7292479eb50ad6bfe2d0ad",
+        "public/multiplayer-native-client.cjs": "259183f34d6ef33b327689254dcdd618d823bf32b90e317fdf8fb69faff000eb"
+      },
+      "allGameplayTestsPassed": false,
+      "priorPaladinDeferralPreserved": true
+    },
+    "qa1Negative": {
+      "closeout": {
+        "passedCloseout": true,
+        "phasePassed": false,
+        "phase": "qa-1",
+        "rootPid": 211008,
+        "rootPgid": 211008,
+        "rootAndGroupGone": true,
+        "observedProcesses": 27,
+        "allObservedIdentitiesGone": true,
+        "validationSha256": "64fd99c1cf8183cc651a845ed29f5354afcbb52aec031e59f0c11496a28a6c79",
+        "closureSha256": "916bb293874c27f8342ec934c3dd0b2357f6944ee109e23af8b372949d5cf59f",
+        "sourceFilesVerified": 140,
+        "inputPinsVerified": 320,
+        "currentUnchanged": true,
+        "remoteFlockAcquiredAfterClosure": true,
+        "remoteFlockExplicitlyReleased": true,
+        "at": 1792514491.965199,
+        "savedCloseoutSha256": "3230e90d52d81d5f46e51bd78f926c16a1eb6ae438680931d09d9783d54a59f8"
+      },
+      "passedWorldStreamingCheck": true,
+      "failure": "Native interpreter command send awaiting QA_DONE; command absent from character history, no Lua error/crash. No world aggregate or gameplay pass claimed.",
+      "unstarted": [
+        "oozle",
+        "encounter",
+        "pixels"
+      ],
+      "nativeAndProductionUnchanged": true,
+      "coordinatorNotified": true
+    },
+    "privateQA4": {
+      "launch": {
+        "pid": 213597,
+        "pgid": 213597,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 16:50:54 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-4/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-4/binding.json",
+        "startedAt": 1792515055.5707192,
+        "bindingSha256": "9210d0b2cf0c903ba7760a331b99aa3f6314e7a0157d8d11063794879a00abf0",
+        "capacity": {
+          "rootFreeBytes": 19290845184,
+          "availableMemoryBytes": 3104399360
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "9210d0b2cf0c903ba7760a331b99aa3f6314e7a0157d8d11063794879a00abf0",
+        "inputPins": 4270,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 19291770880,
+          "availableMemoryBytes": 3166019584
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "dbf5e3741deec3c089b11188e4f3f9c9d86e61f46d7bb8a1dbd05536beaafea3",
+          "oozle-gameplay-native.cjs": "fcc1be3320a8ed9ab2aacc4e67eda588483d9ea495532d44eb1d315b7b8c5bd1",
+          "oozle-cancel-native.cjs": "c80d74c30d0403d0d5cf3b4c0bf8111ff73aa1f3766a16bd760edffed06ba92b"
+        }
+      },
+      "nativeAndProductSourceUnchanged": true,
+      "negative1Retained": "native actor fixture command completion timeout",
+      "negative2Retained": "Oozle cancellation request timing race, item consumed; selected context menu native guards passed",
+      "negative3Retained": "Operator generator failed exact text insertion; interrupted exact owned root, zero completed steps, fully closed",
+      "fixes": "Owner local monster handle+protected Lua errors; native-update-triggered Oozle cancel with exact state receipt; launcher checks all four corrected file hashes before run",
+      "originalAssertionsAndDeadlinesPreserved": true
+    },
+    "privateQA5": {
+      "launch": {
+        "pid": 214772,
+        "pgid": 214772,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 16:57:35 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-5/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-5/binding.json",
+        "startedAt": 1792515456.5842974,
+        "bindingSha256": "abcfface75aa1ce5604801fd203b44251eb4e437d495f3bc4c3342c46de18b94",
+        "capacity": {
+          "rootFreeBytes": 19249209344,
+          "availableMemoryBytes": 3122003968
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "abcfface75aa1ce5604801fd203b44251eb4e437d495f3bc4c3342c46de18b94",
+        "inputPins": 4273,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 19250143232,
+          "availableMemoryBytes": 3232833536
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "9612f85a230402ee60b36f1474af4dcc7e114eeb60cfa2f5b388aa7948d004ff",
+          "oozle-gameplay-native.cjs": "fcc1be3320a8ed9ab2aacc4e67eda588483d9ea495532d44eb1d315b7b8c5bd1",
+          "oozle-cancel-native.cjs": "c80d74c30d0403d0d5cf3b4c0bf8111ff73aa1f3766a16bd760edffed06ba92b"
+        }
+      },
+      "nativeAndProductSourceUnchanged": true,
+      "prior4ClosedNegativesRetained": true,
+      "sourceEvidence": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/qa-4-input-source.json",
+      "inputGuard": "New Lua init_input maxlen16383/messages + nativePROMPT mode + owned slot within original20s; preserves protected error markers and all original assertions",
+      "sequence": [
+        "encounter5",
+        "oozle8",
+        "world8",
+        "pixels12"
+      ],
+      "firstThreeSourcePacketsNotReplayedUnchanged": true
+    },
+    "privateQA6": {
+      "launch": {
+        "pid": 215346,
+        "pgid": 215346,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 17:01:40 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-6/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-6/binding.json",
+        "startedAt": 1792515701.550359,
+        "bindingSha256": "f48b7b45daa0ab7deadf4bb82d07aa66e98a2ca4ac53e52f35c1be99774d0adb",
+        "capacity": {
+          "rootFreeBytes": 19206426624,
+          "availableMemoryBytes": 3150221312
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "f48b7b45daa0ab7deadf4bb82d07aa66e98a2ca4ac53e52f35c1be99774d0adb",
+        "inputPins": 4276,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 19207376896,
+          "availableMemoryBytes": 3226497024
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "9612f85a230402ee60b36f1474af4dcc7e114eeb60cfa2f5b388aa7948d004ff",
+          "oozle-gameplay-native.cjs": "fcc1be3320a8ed9ab2aacc4e67eda588483d9ea495532d44eb1d315b7b8c5bd1",
+          "oozle-cancel-native.cjs": "c80d74c30d0403d0d5cf3b4c0bf8111ff73aa1f3766a16bd760edffed06ba92b"
+        },
+        "clockConsumerSha256": "1378478ab566a988a528533d2b57742045a2555a529348a6616b5f818b7ec936"
+      },
+      "clockReview": {
+        "clockBefore": "5fee2784be8b1201f43321e74a68223321563fcb17bf1813e996cf5801a560cd",
+        "clockAfter": "1378478ab566a988a528533d2b57742045a2555a529348a6616b5f818b7ec936",
+        "scope": "Clock integration consumer only: strict comparison keeps every field except newly added statuses/statuses_known; original five checks, all time/energy/identity/position/health and cloud/turn assertions unchanged. Actual metadata difference retained in successful proof.",
+        "actualNegative": "QA5 only difference was wandering status on new status field; native hostturn/hostclock fixed, guest+6, all other enemy fields equal.",
+        "noApplicationOrNativeChange": true,
+        "bannerStatusAssertionsPreserved": true
+      },
+      "nativeAndProductSourceUnchanged": true,
+      "sequence": [
+        "encounter5",
+        "oozle8",
+        "world8",
+        "pixels12"
+      ],
+      "allFivePriorNegativesRetainedAndClosed": true
+    },
+    "privateQA7": {
+      "launch": {
+        "pid": 216284,
+        "pgid": 216284,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 17:07:22 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-7/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-7/binding.json",
+        "startedAt": 1792516042.7521977,
+        "bindingSha256": "220a565be04576f711e75340da6413617f3aa15ddb96971f78d75c6c9d68d248",
+        "capacity": {
+          "rootFreeBytes": 19149918208,
+          "availableMemoryBytes": 3116343296
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "220a565be04576f711e75340da6413617f3aa15ddb96971f78d75c6c9d68d248",
+        "inputPins": 4282,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 19150872576,
+          "availableMemoryBytes": 3250884608
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "9612f85a230402ee60b36f1474af4dcc7e114eeb60cfa2f5b388aa7948d004ff",
+          "oozle-gameplay-native.cjs": "fcc1be3320a8ed9ab2aacc4e67eda588483d9ea495532d44eb1d315b7b8c5bd1",
+          "oozle-cancel-native.cjs": "a2467e6a205ec594b47e8f466ae6136d71d96583bbeb220c504166208152a353"
+        },
+        "clockConsumerSha256": "1378478ab566a988a528533d2b57742045a2555a529348a6616b5f818b7ec936",
+        "reusedClockProof": {
+          "physicalProof": "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/proofs/encounter/evidence.json",
+          "sha256": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543",
+          "actualPriorPhaseOverallPassed": false,
+          "priorPhaseClosed": true,
+          "nativeBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+          "scope": "All five clock checks passed before later Oozle observer failure; newly added metadata difference only perception wandering, no timed effects omitted in this actual fixture."
+        }
+      },
+      "worldFirst": true,
+      "clockNotReplayed": true,
+      "nativeAndProductSourceUnchanged": true
+    },
+    "clockAcceptance": {
+      "passed": true,
+      "cases": 5,
+      "actualPhysicalProof": {
+        "physicalProof": "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/proofs/encounter/evidence.json",
+        "sha256": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543",
+        "actualPriorPhaseOverallPassed": false,
+        "priorPhaseClosed": true,
+        "nativeBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "scope": "All five clock checks passed before later Oozle observer failure; newly added metadata difference only perception wandering, no timed effects omitted in this actual fixture."
+      },
+      "parentQA6OverallPassed": false
+    },
+    "freezePreparedOnly": "/Users/iancaltabiano/.codex/visualizations/2026/10/19/01a15523-0d2a-7a92-b63a-f7e2469fd2fe/web-release/world-chunks/combined-1/prepare-freeze-qa9.py",
+    "privateQA8": {
+      "launch": {
+        "pid": 217335,
+        "pgid": 217335,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 17:15:16 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-8/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-8/binding.json",
+        "startedAt": 1792516517.3385856,
+        "bindingSha256": "367eca53cae5317481a096ce4fa42ae3dff59c548358db5ae2ea3bb799a568ba",
+        "capacity": {
+          "rootFreeBytes": 19108290560,
+          "availableMemoryBytes": 3109175296
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "367eca53cae5317481a096ce4fa42ae3dff59c548358db5ae2ea3bb799a568ba",
+        "inputPins": 4286,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 19109244928,
+          "availableMemoryBytes": 3253981184
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "0a228b6161f999a3bf203f946a3e66222ef4c2c415251965b70ec1e9b2eab061",
+          "oozle-gameplay-native.cjs": "fcc1be3320a8ed9ab2aacc4e67eda588483d9ea495532d44eb1d315b7b8c5bd1",
+          "oozle-cancel-native.cjs": "a2467e6a205ec594b47e8f466ae6136d71d96583bbeb220c504166208152a353",
+          "native-lua-markers.cjs": "cfb4249c067472109731ffe4a6b2d4cdc7c05f0ff4478908fd73eb10eb291913"
+        },
+        "clockConsumerSha256": "1378478ab566a988a528533d2b57742045a2555a529348a6616b5f818b7ec936",
+        "reusedClockProof": {
+          "physicalProof": "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/proofs/encounter/evidence.json",
+          "sha256": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543",
+          "actualPriorPhaseOverallPassed": false,
+          "priorPhaseClosed": true,
+          "nativeBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+          "scope": "All five clock checks passed before later Oozle observer failure; newly added metadata difference only perception wandering, no timed effects omitted in this actual fixture."
+        },
+        "workerSha256": "251fdac1a3870eeefa0e8bb24e1c7522ef038b77b83859c1a9b9a1f74dcd71be",
+        "independentScopes": true
+      },
+      "nativeAndProductSourceUnchanged": true,
+      "clockNotReplayed": true,
+      "sourceGuardedOwnedRuntimes": [
+        "/tmp/ozw8w",
+        "/tmp/ozw8o",
+        "/tmp/ozw8p"
+      ],
+      "scopeIsolation": "Each browser/server/native tree fully closed before next; source/integrity failure prevents starting next; independent assertion failures retained without blocking other scenarios",
+      "allOriginalCaseAssertionsAndDeadlinesPreserved": true,
+      "safeMarkerBoundaryCasesPassed": 8,
+      "failureDiagnosticPersistedToFileAndStack": true
+    },
+    "privateQA9": {
+      "launch": {
+        "pid": 219884,
+        "pgid": 219884,
+        "command": [
+          "python3",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/qa-worker.py",
+          "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/binding.json"
+        ],
+        "processIdentity": "Tue Oct 20 18:51:15 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-9/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-9/binding.json",
+        "startedAt": 1792522276.1793978,
+        "bindingSha256": "977f0dee7ed1f6b14413151197e3b949b2b35a91abc9deaa0b487dbd6b6d13de",
+        "capacity": {
+          "rootFreeBytes": 18985897984,
+          "availableMemoryBytes": 3097702400
+        },
+        "productionUnchanged": true,
+        "activationAllowed": false
+      },
+      "prepared": {
+        "prepared": true,
+        "bindingSha256": "977f0dee7ed1f6b14413151197e3b949b2b35a91abc9deaa0b487dbd6b6d13de",
+        "inputPins": 4293,
+        "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+        "productionBinarySha256": "edf07a8353fc89767699b81006e51975a4c077894dddbbda461e60d65ef41819",
+        "wizardBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+        "capacity": {
+          "rootFreeBytes": 18986889216,
+          "availableMemoryBytes": 3272761344
+        },
+        "gameplayStarted": false,
+        "nativeAllClosureVerified": true,
+        "consumerHashes": {
+          "enemy-banners-native.cjs": "06a000d9806d302aeb4b235612f680e2f0a030ab57262d738833a655edbd30d2",
+          "multiplayer-native-client.cjs": "35a62da0b9b891dac96df1a4eb0761cc9893472418160a11abe7ad4cf9c63b1a",
+          "oozle-gameplay-native.cjs": "a6bce849659c4303d6e5b19c10a5167c25a2ba00ba972f227cda2bae102a5d07",
+          "oozle-cancel-native.cjs": "ed21727928dae95c7a3cf73e0553f69b958fcdb7d5f83270adb66104663f6740",
+          "native-lua-markers.cjs": "cfb4249c067472109731ffe4a6b2d4cdc7c05f0ff4478908fd73eb10eb291913",
+          "display-frames-native.cjs": "4bd0375af2e7fd3c282106090cb8a124c9fbf3ab22e27e0b6e1871f1db295027"
+        },
+        "clockConsumerSha256": "1378478ab566a988a528533d2b57742045a2555a529348a6616b5f818b7ec936",
+        "reusedClockProof": {
+          "physicalProof": "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/proofs/encounter/evidence.json",
+          "sha256": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543",
+          "actualPriorPhaseOverallPassed": false,
+          "priorPhaseClosed": true,
+          "nativeBinarySha256": "dae26e3efabf3d1dcf5f43f9f3b7761597ea623c44f107229e1668210ce94a24",
+          "scope": "All five clock checks passed before later Oozle observer failure; newly added metadata difference only perception wandering, no timed effects omitted in this actual fixture."
+        },
+        "workerSha256": "57b8822e1f3c616575ff4eb388d3954cb8d5c16a35bdd174da3b0633bfa33219",
+        "independentScopes": true
+      },
+      "nativeAndProductSourceUnchanged": true,
+      "observedServerTrace": true,
+      "eachScopeIndependentAndFullyClosed": true,
+      "pixelsUsesOptimizedProductBinary": true,
+      "clockPassedLeafNotReplayed": true
+    },
+    "fabricBannerSteering": {
+      "directHumanMessageId": "01a15aa0-774b-7f33-bae7-7af1c53911f3",
+      "referencedThreadReadVerified": true,
+      "text": "The banners should look more fabricy and stitchwork; and have the notch pointing the other direction",
+      "CSSAfter": "ad6bbdd5dbd94f972f0ca09038a2fc71d913cff7a3a21dde04bf0a73f1c1d562",
+      "SVGAfter": "dd623170afbf3e75c96047fb2022c673687cced975dda29914a47728f7a32823",
+      "runtimeOverlayOnlyUntilAcceptedFreeze": true,
+      "doNotCutOverOldStyle": true
+    }
+  },
+  "combinedDeploymentCurrent": {
+    "at": 1792531476.889353,
+    "status": "COMBINED_DEPLOYED_PUBLIC_SIX_CHECKS_PASS",
+    "productionActivated": true,
+    "candidate": "/opt/dcss/releases/20261020T151507Z-combined-oozle",
+    "productionStill": "/opt/dcss/releases/20261020T151507Z-combined-oozle",
+    "qa16Launch": {
+      "pid": 238569,
+      "pgid": 238569,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/qa-worker.py",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/binding.json"
+      ],
+      "processIdentity": "Tue Oct 20 20:37:44 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-16/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-16/binding.json",
+      "startedAt": 1792528665.0500393,
+      "bindingSha256": "28f368015d5c4d92a7ea1e6bd90fdbd08509882b1c7298a86d1282f1df843075",
+      "capacity": {
+        "rootFreeBytes": 18118639616,
+        "availableMemoryBytes": 3107115008
+      },
+      "productionUnchanged": true,
+      "activationAllowed": false
+    },
+    "scopedCloudAccount": "iancaltabiano@gmail.com; verified existing account/project/IAP; CLI defaults unchanged",
+    "passedLeaves": {
+      "oozle": {
+        "phase": 14,
+        "checks": 8,
+        "sha256": "2b2ab9b45bc51b9605e92646128d6e42ec6d5c40e16300942232d5120e698d70"
+      },
+      "pixels": {
+        "phase": 12,
+        "samples": 12,
+        "sha256": "af4fa2dd1f795acb55a078fff2f6821dced95e643a40801458a12f89685ccc4a"
+      },
+      "clock": {
+        "phase": 6,
+        "checks": 5,
+        "sha256": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543"
+      }
+    },
+    "allPriorNegativeParentsPreserved": true,
+    "paladinExplicitlyDeferredByHuman": true,
+    "routineCrossChatUpdatesStoppedAtHumanRequest": true,
+    "freezeBackupActivation": "PREPARED_ONLY_NOT_EXECUTED",
+    "next": "Complete. Existing heartbeat stays paused. Remaining Paladin checks explicitly deferred by human.",
+    "qa18Closeout": {
+      "passedCloseout": true,
+      "phasePassed": false,
+      "phase": "qa-18",
+      "rootPid": 241117,
+      "rootPgid": 241117,
+      "rootAndGroupGone": true,
+      "observedProcesses": 28,
+      "allObservedIdentitiesGone": true,
+      "validationSha256": "d217467c231f7c85edbe2f3d0cd58730e63d326b0071f712b0a90d5ceaf5d112",
+      "closureSha256": "231bf059d58091d41e9288ebeb24d9ac0b52f57ccfbebb4132973eb53a8747f8",
+      "sourceFilesVerified": 140,
+      "inputPinsVerified": 320,
+      "currentUnchanged": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "at": 1792529824.892853,
+      "savedCloseoutSha256": "9914c181ffdade4e66456c040008dfdbaafe0942a2579e1aa7c8f008377f2d41"
+    },
+    "qa18Failure": "Reconnect equality of 2989 complete cells passed; a peer received clear baseline because legacy spectator_joined forces all personal views.",
+    "backend3Closeout": {
+      "passedCloseout": true,
+      "phasePassed": true,
+      "phase": "backend-3",
+      "rootPid": 242153,
+      "rootPgid": 242153,
+      "rootAndGroupGone": true,
+      "observedProcesses": 2,
+      "allObservedIdentitiesGone": true,
+      "validationSha256": "df719d430004866cce7fcda632db0f03cd14aa7f3839e1bffc0ba642c7d9b6e1",
+      "closureSha256": "a8ff2ccb78636ca4fb19e8553cadd74cf52f89b26f0dab5b985718264900b050",
+      "sourceFilesVerified": 142,
+      "inputPinsVerified": 320,
+      "currentUnchanged": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "at": 1792530317.386369,
+      "savedCloseoutSha256": "194b92116bd0cce7bcd94ff240e3b1497715167fc0b86126fad5a341e44a81ba"
+    },
+    "qa19Launch": {
+      "pid": 242475,
+      "pgid": 242475,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/qa-worker.py",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/binding.json"
+      ],
+      "processIdentity": "Tue Oct 20 21:05:46 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-19/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-19/binding.json",
+      "startedAt": 1792530347.727627,
+      "bindingSha256": "b04673edcd28a21264690f73fb83014f7742ab9f227a838a2bce5fd6dd762ee4",
+      "capacity": {
+        "rootFreeBytes": 17967874048,
+        "availableMemoryBytes": 3144892416
+      },
+      "productionUnchanged": true,
+      "activationAllowed": false
+    },
+    "qa19Closeout": {
+      "passedCloseout": true,
+      "phasePassed": false,
+      "phase": "qa-19",
+      "rootPid": 242475,
+      "rootPgid": 242475,
+      "rootAndGroupGone": true,
+      "observedProcesses": 30,
+      "allObservedIdentitiesGone": true,
+      "validationSha256": "4627254fc0195e5b36efe254b5addd6c055eb300734726d5b615204db6084b58",
+      "closureSha256": "ac8910b1535fb46cc17b2b044819446dff00e8a25b0346603f10fe201e5ae3f8",
+      "sourceFilesVerified": 140,
+      "inputPinsVerified": 320,
+      "currentUnchanged": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "at": 1792530612.3712544,
+      "savedCloseoutSha256": "992200e4e909f835017b5c932aec338692ad52b6782725a21bf9a6329ea66316"
+    },
+    "qa20Launch": {
+      "pid": 244200,
+      "pgid": 244200,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/qa-worker.py",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/binding.json"
+      ],
+      "processIdentity": "Tue Oct 20 21:10:39 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-20/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-20/binding.json",
+      "startedAt": 1792530640.7295983,
+      "bindingSha256": "235184682b21b2b6ca93a6e1148972ddbd0568259f1d7dd120e32ecd824016ab",
+      "capacity": {
+        "rootFreeBytes": 17918410752,
+        "availableMemoryBytes": 3041751040
+      },
+      "productionUnchanged": true,
+      "activationAllowed": false
+    },
+    "qa20Closeout": {
+      "passedCloseout": true,
+      "phasePassed": false,
+      "phase": "qa-20",
+      "rootPid": 244200,
+      "rootPgid": 244200,
+      "rootAndGroupGone": true,
+      "observedProcesses": 33,
+      "allObservedIdentitiesGone": true,
+      "validationSha256": "2e986b6de44b3e9d35fca7c4b5b7de130ecbd2f4a60f31588713f47b0aa16928",
+      "closureSha256": "690303ce7e23adb5d1a7028713ffe3dd4a15944cdd7edee05b9ef961a562bbb1",
+      "sourceFilesVerified": 140,
+      "inputPinsVerified": 320,
+      "currentUnchanged": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "at": 1792530968.673646,
+      "savedCloseoutSha256": "d7750b5eb4287bfd9f3ca98006270f7227427387d0309ee57d32602599686f94"
+    },
+    "qa21Launch": {
+      "pid": 246265,
+      "pgid": 246265,
+      "command": [
+        "python3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/qa-worker.py",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/binding.json"
+      ],
+      "processIdentity": "Tue Oct 20 21:16:44 2026 python3 /tmp/dcss-20261020T151507Z-combined-oozle/qa-21/qa-worker.py /tmp/dcss-20261020T151507Z-combined-oozle/qa-21/binding.json",
+      "startedAt": 1792531005.6505072,
+      "bindingSha256": "a61f7a6ce93dc4bbf4f8b9562476221ef4818c2cc99c067e2b80d8f84d527e07",
+      "capacity": {
+        "rootFreeBytes": 17868939264,
+        "availableMemoryBytes": 3119001600
+      },
+      "productionUnchanged": true,
+      "activationAllowed": false
+    },
+    "qa21Closeout": {
+      "passedCloseout": true,
+      "phasePassed": true,
+      "phase": "qa-21",
+      "rootPid": 246265,
+      "rootPgid": 246265,
+      "rootAndGroupGone": true,
+      "observedProcesses": 31,
+      "allObservedIdentitiesGone": true,
+      "validationSha256": "b42ef03ff8b0037dc66251500d2303fd763a6618eb6bca22ca8503af61630bc5",
+      "closureSha256": "18712fbce956a15c28d67c9e0a97a6a7fb0b820eed43140fc3be5a1269d8b47d",
+      "sourceFilesVerified": 140,
+      "inputPinsVerified": 320,
+      "currentUnchanged": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "at": 1792531324.756908,
+      "savedCloseoutSha256": "d43f7fdcba37a8cd641731b05ae4f4c25f736e5bafe09d1607e5c88d17e09c51"
+    },
+    "finalFreeze": {
+      "passed": true,
+      "frozenAt": 1792531357.0284503,
+      "release": "/opt/dcss/releases/20261020T151507Z-combined-oozle",
+      "source": "/opt/dcss/releases/20261020T151507Z-combined-oozle/crawl-ref/source",
+      "expected": "/opt/dcss/releases/20261020T133036Z-sidebar-booleans",
+      "binarySha256": "04c021e80c865df3e84382ea7a1d2be48bd22767c41ba7eeb27a05304d124fb9",
+      "manifestSha256": "efb216dd9d467399778f57f42478fb60930e9feb9e1d6b5695ebf887bf0245f8",
+      "previousManifestSha256": "2845bfcc9cb9931c4349a359601012119ed229ff4d1e15e06baac8f3dec2876a",
+      "evidence": {
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-3/backend.log": "6139adc89489966f890141c7376a09e81f102351fbc7dcc8f867076141a710bb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/proofs/world/evidence.json": "a6946e949dd7ac074c2952391ca25e449a5313b49a846845dd8236e22dee22ee",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-14/proofs/oozle/evidence.json": "2b2ab9b45bc51b9605e92646128d6e42ec6d5c40e16300942232d5120e698d70",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/proofs/encounter/evidence.json": "9b5cbc79138e6a74613587cb7311f6f92fa682bc5a0ffabca3547851607a1543",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-12/proofs/pixels/evidence.json": "af4fa2dd1f795acb55a078fff2f6821dced95e643a40801458a12f89685ccc4a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/presentation/enemy-banner-stitches.svg": "dd623170afbf3e75c96047fb2022c673687cced975dda29914a47728f7a32823",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/presentation/enemy-initiative.css": "ad6bbdd5dbd94f972f0ca09038a2fc71d913cff7a3a21dde04bf0a73f1c1d562",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/binding.json": "809a307855b76ebc4e0001e899cd08c9b9ced151a90b11c3455c0d0ec6dab2ce",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/previous-release-manifest.json": "2845bfcc9cb9931c4349a359601012119ed229ff4d1e15e06baac8f3dec2876a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-validation.json": "056a1255651e9ee8ec2fee11fc371addb8e54a4e31c89f04185d57e4e1ce3b7d",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-process-closure.json": "c9f83ad01129df87d9ae57aae929f097766ffce4da545a92bb0e4e20afd1ec5e",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-1-closeout.json": "102d2e2d295ec1cb918212793b89aa1cd7901ff8047e21f8645bc0ce811f9737",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-2/native-validation.json": "aec50f14eed5cd965a7f34bbf12d23568891f6a34ae4c9e174140694d763c9f6",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-2/closeout.json": "ba96e80616c91a4fe622104448e9c5739fb09f1713cf6f0d3ba575aa6b47c5bb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-3/native-validation.json": "8d8e2ac4f33d5be1da4eaa178f8403348e8b41073329c4a2a69c95b8621fd7bd",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-3/closeout.json": "2f7def8f827db98b8d71425a76e1630da799d58fd961e360ad5c8360d66ce206",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-4/request.json": "605b1e89dcfb2944aad278fe38e68d47a3b179ac4e4a7d15654604bdb32417da",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-4/native-validation.json": "9d76d7712f2b767c6fc50f84bbd581cea6bbd76f3bd477d43bfaf643c8d2b638",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-4/native-process-closure.json": "941fceb9f87ddf1b356e6e641881d9dd85f7cdbbba53542a1aac3ba0aef14f3c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-4/root-process.json": "c2206a1b852a004f2e9b78f0929d940cb96498ba0f39180ccc3e346823a35ac5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-4/closeout.json": "92c851417421a4f5b32d26dd53bf6da5f8a444be9107aef4849627d37f8ef92a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/binding.json": "a61f7a6ce93dc4bbf4f8b9562476221ef4818c2cc99c067e2b80d8f84d527e07",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/completion.json": "b42ef03ff8b0037dc66251500d2303fd763a6618eb6bca22ca8503af61630bc5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/process-closure.json": "18712fbce956a15c28d67c9e0a97a6a7fb0b820eed43140fc3be5a1269d8b47d",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/closeout.json": "d43f7fdcba37a8cd641731b05ae4f4c25f736e5bafe09d1607e5c88d17e09c51",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/root-process.json": "291376952171a8b53f6e5b21642fa4d56d7fb1c9b519cb0a5d6feff876eecd65",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/completion.json": "64fd99c1cf8183cc651a845ed29f5354afcbb52aec031e59f0c11496a28a6c79",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/process-closure.json": "916bb293874c27f8342ec934c3dd0b2357f6944ee109e23af8b372949d5cf59f",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/closeout.json": "3230e90d52d81d5f46e51bd78f926c16a1eb6ae438680931d09d9783d54a59f8",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-1/root-process.json": "daf4962b83d3fd46ae1e8f1cc254290d8638aa9f2b28a13758fe09d420258f03",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-2/completion.json": "87fdd0414ebf59bfa739c1834520065593823b3aa970750d3e09041befda9d8d",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-2/process-closure.json": "cdbf36d6ab6b139696818f0dddbe81672b603582319f3ffeb739af921c4eeb31",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-2/closeout.json": "173bcfa0e1e3bf8b691aaf063efcd826468d764e4b8c5579c0e6995c6f24c3c3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-2/root-process.json": "f4f3b4fcc8efdcb9b7ba84f67ba08a6f97c41414ecf0c0b4d836f22844f864d9",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-3/completion.json": "0a34320e479d17ca74bbbf5151af258e776defb64dc599baac07a3072f5ab937",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-3/process-closure.json": "1586cc7984bfbefcc4ed79b878710e0544734501501cec99f15792bd71fbd475",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-3/closeout.json": "cf3ea263ea60d4aa83b618f54176288e89d6fb68fa456efcad10e595a03d9230",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-3/root-process.json": "299625613853e5d189dd8648a153b2d5f48e03e0ce0af1e8c7d91d2df55c5736",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/completion.json": "04798f435ae2342df8742c9df7c94e0c54124f8d8a8288156a20628fcf9e7a4b",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/process-closure.json": "231b79b7c13e2493da14f3052ad57b8d554c1b06f613757837e18cf42d90dbe5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/closeout.json": "9db6651204a10aa83af9f9787d8f82ea1fc695ed234a7e4093cccf1738ae226e",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-4/root-process.json": "b00b88eb459330909a5279e913de7583b8e766d251a43493f41433c0212b54b5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/completion.json": "48570229b49d820909363e7d375ed2c1789a9779774b7bfdb3cfc1dea27d03f6",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/process-closure.json": "288b81755cbb8e913d224efea3e56efe63c36474b563c381d741f10f37ce106c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/closeout.json": "6754380dd178691d06aa3cf606496ba00d31f1c39430c8bb12bd2fd24bd615de",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-5/root-process.json": "11f4281fbac1debc556744ee6cf5edcbc7ac4e60b6724f127bb023214f73d999",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/completion.json": "e82056c10f3b5cbd5a5895dada7d295bf9c25ba17e604d9bc41a52e4d7bd2886",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/process-closure.json": "ddfbcb2368bb028eece02c4c244f8a50bf772ed7768ea2246f1c7c0c88c552ec",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/closeout.json": "c43acc60304965cebb40cbb96f521276ac8062f89027df7e54a0388460005866",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/root-process.json": "36846a4c40a9f62a3704ed7444742f214f71c54b3c6fcaef61653584d71b2e90",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/completion.json": "fcaac6e074edf9b3eb1a334d5e8f7177be175e28a7d1b448ebf13eed4abe74ac",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/process-closure.json": "8d8b6fd825c64da114b082fcce4f20304cf30e06f125971e78843548c676807d",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/closeout.json": "ddb1ca650187d078239bc6d24b4bd38361c6c0bc7307f60128d75a42dcee35e4",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-7/root-process.json": "f797c3a4113970650607d37ed71bddadac76e88c9017d77f0a987847a32f622a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/completion.json": "7738cddbcaa890e4490ecdec508e70f03fdaccd13306f289461c67ac279f73d9",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/process-closure.json": "3e39dcf16ed6bde1e6b6923e8f4f5e2c307a469da1ee2f4c4140f2f5e72a22c1",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/closeout.json": "89b094b11d42d5908606d7b80194fe029a4d49e7b28ff724a38762c90787ceca",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-8/root-process.json": "f282ae652ca2028254a86dd69b06e46bfb922811305af1797ac82a2ed7eb5bed",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/completion.json": "990d84674d732e7a7cc8ad26aabb9b661b74fe5f2be90d87ca28f0b36c05bd93",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/process-closure.json": "3c074fa85981b0dd721f513ad3848f87857fd56090153293a08662783626c4f4",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/closeout.json": "6ed38b1a1429f6adf19afcbea80fd80f0c3ca5074b2835a4038f3fcc1bdf63fa",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-9/root-process.json": "7b2fd0997801795713ac84e3e51fb981e07a871d53cd45f0302416b9de7b29e7",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-10/completion.json": "8ee7b830d9f8859b2502517ef681cf0211519c9430d28a610a196fe2001b688b",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-10/process-closure.json": "b84c3fb6cf4181f09f6114f051e0161d590ae8f72019ca53869ac2f646d15339",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-10/closeout.json": "813d5ff0ae4b37b9d3fc94b480cebadae32472ecd5e77ed30271dc5ccc939a14",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-10/root-process.json": "5717bd8c2d4206f3557fd20a519ff4d08faf9d3538e3e50f35850d8e2a5d4145",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-11/completion.json": "741aef8613e97988a48710eff24b8013a62c0ac3c3b1e1a628db53830cfbcc15",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-11/process-closure.json": "6a83faa18c551c5d3809ec19942872940b315522bd15bd5fa5f6c835d05ba856",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-11/closeout.json": "c487be6a2152d120c9128e6976699aa1d9a09c3b0f8d2c181ee01e7fa0d68ecf",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-11/root-process.json": "cd99c7939260584a8f6ab2e1ce315ce5ccba745cadde751c1fc811842ba5cae7",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-12/completion.json": "1875d4d1d8aef435d1c1c620c020a940701ad87561bca26a542a7ae9b2e071d2",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-12/process-closure.json": "22c9eca0afe3398cab932d960cfa647ad19394c92ee69247c3794d7692fb9ac4",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-12/closeout.json": "0193843e5392fd9b336689bf68a7384f6f22463925552ac4a306c43f612a962e",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-12/root-process.json": "d33ebfe2b09129e1d979de31570e62b19e192664ab8eb65e479a84de9db1e449",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-13/completion.json": "7cdc72c7513aad6fa1d38e158da76bc7fc3e3ac6d6a900b260588b8b3e5de55d",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-13/process-closure.json": "d559dee1baaadf09c4fe858178c80ec32980c36374ba9f729d179582fe816253",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-13/closeout.json": "4eada068d363d726a3ab03c3b499468e590d682222f05a9f8c6112489215e446",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-13/root-process.json": "dc0d6da7fa6c232c40422d6428333b90b93acfd36e179fc3b17886ee4eaaf87f",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-14/completion.json": "e9b553f777082312baf261fbf0b660da74dd18196013a5bff89cf37a6f1fbae1",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-14/process-closure.json": "8b1bed7d22d751b23889b637c48b6e115ef2b8b1b4483537fd7dbce6fd0543ab",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-14/closeout.json": "e1654342509332fe8eaa98c2cf7c52598e4d87a1324d787a378a2fb089f37317",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-14/root-process.json": "8aa47434fbd69ce4d9b5a0385e227af64e58c98d31ebd3b07aa888a8377b8762",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-15/completion.json": "a8430a4b1ffe8d64a9dafd9e55353a70ef36c13e5deec4e5a02702d4bf0f10b3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-15/process-closure.json": "ab3c5243cb2f5507ae388833a3bbf74ddb6e9d2d679bde0c8459fc91f4f6a00a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-15/closeout.json": "86c5e389f976392ecf98736f49316083e5ea878b30e521b47b1734b06426af80",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-15/root-process.json": "dfdc91ddaadde479a44bd5f3ecc73a1d7a5b282bc8348a2a7666883cfebd28e3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/completion.json": "8b7530f9c3f22dd9cc6a75d7ef0b7ee30870aa9fb47aaabeaa939749145c83f3",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/process-closure.json": "8c3b7580ef56b66d8f35693cfe9c965f5ae363ff3a300a8decac4a42f38139f9",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/closeout.json": "687075ba0725698e6bdd76d9aba0a58d57bc5a5fed9b17f4ca56ffadbdf6d274",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-16/root-process.json": "d76c3e1b3f27660c9baebdf46440a9fe5bd0788532f84c826f3f97a5af94c823",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-17/completion.json": "5c1390cfed4b22c40e420c8ac2264e99688a3011de377720582358e94729f5d1",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-17/process-closure.json": "9c7d1bc5d60b97de42ae6159a4b56ad0f0e764a61feed543425e70a6f52e5bfc",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-17/closeout.json": "14c0bb46a0890ca4d455ea3524afb926d4476e151271fa44f05b6e728d7e6f4a",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-17/root-process.json": "d9d8b843a741bb1de896d25a3960571c1985f33a80219d321ce4506d187e9225",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-18/completion.json": "d217467c231f7c85edbe2f3d0cd58730e63d326b0071f712b0a90d5ceaf5d112",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-18/process-closure.json": "231bf059d58091d41e9288ebeb24d9ac0b52f57ccfbebb4132973eb53a8747f8",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-18/closeout.json": "9914c181ffdade4e66456c040008dfdbaafe0942a2579e1aa7c8f008377f2d41",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-18/root-process.json": "f313133e909bf4c6f277bc5c837e18c0635c3f0550071a5abe7baa3418a743b2",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/completion.json": "4627254fc0195e5b36efe254b5addd6c055eb300734726d5b615204db6084b58",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/process-closure.json": "ac8910b1535fb46cc17b2b044819446dff00e8a25b0346603f10fe201e5ae3f8",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/closeout.json": "992200e4e909f835017b5c932aec338692ad52b6782725a21bf9a6329ea66316",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-19/root-process.json": "73e50df57058314e1494d085ed179126f987aacf19edd287fcfc70d5a0d7b8e5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/completion.json": "2e986b6de44b3e9d35fca7c4b5b7de130ecbd2f4a60f31588713f47b0aa16928",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/process-closure.json": "690303ce7e23adb5d1a7028713ffe3dd4a15944cdd7edee05b9ef961a562bbb1",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/closeout.json": "d7750b5eb4287bfd9f3ca98006270f7227427387d0309ee57d32602599686f94",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-20/root-process.json": "83b61d84eb2914cc02971c87e40e3fef3bacf35dbabbce201c33045fc36eaa4e",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/map-caches-1/completion.json": "6745b2cd8a723b0d8e952568e0e8e7b5b69d85c4c3493250cd643011fbcd1996",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/map-caches-1/process-closure.json": "41237ddb0a821865fb08dec483ff424b3a5a4bc4328a671e26026e55e7274062",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/map-caches-1/closeout.json": "61dacfaaaa3280ecb7605beff48b732fed5c80281534de5591511f2178c22327",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-5/request.json": "aeaa4e84edcdb3981ae9cb01c810c5f3dc6b553c3ea69f296cc1906da2eb4205",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-5/native-validation.json": "60c984c766bada57b64cd883b6aa9f456be6e65de78a4d4b8ff216c0496ee3fe",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-5/native-process-closure.json": "ef4e105b7f395bd5f733be8d8daa4374a40489d749e0a4006dc42370d12cd8c9",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-5/root-process.json": "e181820d1fb609b82c2cb05e8aa0fce7413e7f6f5270b630042ddd0a8d6165f2",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-5/closeout.json": "f4a6cd7398af55bd243f60cc6d5977e6b8eb211bbcbfa9673fa9ac13e9d3fa21",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/request.json": "d4a0834f8c0b6ca730d1ade0bca5351becc8d8f94e1f525514274f26fa8148d8",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/native-validation.json": "7a5c10ef587894c694fd21806ebb54214f813c3349d3779551adeefa50ed6a98",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/native-process-closure.json": "cc585cd66869e6e684b67847434f10dfda0e3137d952d30ef4c908a4e574c519",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/root-process.json": "7e81a34bd1534dbf458a3da7dd26d1107ac2a943c8beb32335380195626fcd11",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/closeout.json": "7896c7640a45dce55de08e2f94402027de33fe362ff1c5d90d45223a9961e7fb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/source-guards.json": "f6d42a9d4ad4f06cfa1d4ddd48a543529f61976eb3cb7250e7955de19d7061f7",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/native-6/serializer-regression.log": "af9b631a39102250c5ed575f207f7013cd32f9b682cb3dd1abbbba3054c6ed59",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/cache-selection.json": "29b2ce53b19d0a691ea23c7ab49cc43dcd00d4d53bcb606977fa6aa3eb933db4",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/request.json": "9850de8687ca80b691cd81730eb12754a2abded01fbd72c62b3f00ccd0ab1b15",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/validation.json": "f280b9934c61873f62ba3d2865adfc07f657c202bdd6e93f16e96121653107a6",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/process-closure.json": "87d34c039ad00477b22cd288f22253e51bce385c3172855ecf942f86bd743bbc",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/root-process.json": "5e4d126fbae3643b33923da0086da43814e3b7ea190b427ebbe4dd2b8868b72f",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/closeout.json": "6cae63ab42d78066918ad6af1ed36a9c776a16a1eaade18cbf86d6562d360884",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/request.json": "1bf35bb8f4bcafbe355e99f6fcf68416972c35223ce913891803e6f545861518",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/validation.json": "c435d1bf57a3150078429622703cd831780aeec9145e8b9a6635264763cf91a4",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/process-closure.json": "bedb29dd1d63ce3e63e5d93954d5b9b3e8a704341f07624ed892694e8d89fb4b",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/root-process.json": "4e1da64fba0781d4325c8aa045c80b2165e39afe8fc9e9b65e6528c56e4a9bd6",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/closeout.json": "9f5bee81e31fa6c5825bf0dd59df35d1da51b2f540292c06b26eea8b5c3cf4a5",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/request.json": "2c75d256e571ab9ab6aeaec0e0090876f3f55d8fbf02e7ca0af00645f4d058ac",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/validation.json": "df719d430004866cce7fcda632db0f03cd14aa7f3839e1bffc0ba642c7d9b6e1",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/process-closure.json": "a8ff2ccb78636ca4fb19e8553cadd74cf52f89b26f0dab5b985718264900b050",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/root-process.json": "df0fedf6d75360ec87cb4fafc570b13f04ab3db9e40c1592de7de38b322ee0c8",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/closeout.json": "194b92116bd0cce7bcd94ff240e3b1497715167fc0b86126fad5a341e44a81ba",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-1/pacing-regression.log": "83166b089fbcb82fac63f22522fa6ae99bb5e46368cd35d756277fd463dd6346",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/full-backend.log": "c2a021d3809687e13d29a9ad6dbffbd15b2d58646c6d8183981fac1b9908e644",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/test-runner.py": "fb3fd995f6bf698588ff1c27e3e73bcf1ee7276de7f9dc7bc3432279600df734",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-2/source-guards.json": "bed440f80b29b505aabc7cef5ff7c59e3778ecdf767b569c17328cd250d8eafe",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/source-guards.json": "932f4fae0dfe72bc403b85f811e7719c8c661c0aefd1ee3c3ccc8c2185d86aff",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/test-runner.py": "fb3fd995f6bf698588ff1c27e3e73bcf1ee7276de7f9dc7bc3432279600df734",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/full-backend.log": "79ca884e33edc813ab2c020a3a9837a75e3b922b21c0583e4e81481fb831088f",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/reconnect-regression.log": "8f9bf881cef61e9de0a544bd245100874fbaf7aa4d18902faa2dc379abcfbd1c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/backend-3/manifest.json": "cbac7c04779a21bfdb12237cecb967992b63cad0c1899c17a386514ddda44b2c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-3/operator-abort.json": "f9adff12b1f7ecf628a0d6ef5165806120665c94fa1e0b18acb2b7c954e4f217",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/consumer-updates.json": "17fdd5f5f47adb38b60ab3b2db8b64939a461cb7f0146a4502e4e9227478a6ae",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-6/binding.json": "f48b7b45daa0ab7deadf4bb82d07aa66e98a2ca4ac53e52f35c1be99774d0adb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/reused-clock-scope.json": "a91e93776322322461b6f402dfe153280ff7d8360a4e8e34ea551c72f8dad5c9",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/qa-21/presentation.json": "abb243b7fd9be2372384ce6321ccd1ef960af3bbd606b6df9bd5fbac4e7b732e",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/activate.py": "4e9177169c6412ef56991d67f98a6f4f1ed82bf46b4e8d0e8549c2868d49e3eb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/phase_processes.py": "b37fd0ea46be015a38ec81ca72337175575c4c738bb4e65e2d4d8c38d24b628c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/freeze-combined.py": "272c4984bae566d9aeab44fb36cb9c6ddebf0c2e67132b0d57d59fc6961363c2",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/acceptance/consumer-reviews.json": "5cbf2375f176a3dff8efa12893fd4aad91fcae016326d73cf4515cdcf6badb1c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/public/oozle-release-smoke.cjs": "58bb9470b11d3757d13be82c9811a4d3a67511b8fb7292479eb50ad6bfe2d0ad",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/public/multiplayer-native-client.cjs": "259183f34d6ef33b327689254dcdd618d823bf32b90e317fdf8fb69faff000eb",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/accepted-for-deployment.json": "53549657d0311363e6f59e815cf28fbea4ef734843af14f8bd624597f0a6dd38",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/public-assets.json": "2b44f8c8d02e6555846842869f8e3f738787849d77ddcf7f5510d61dded3ad98",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/source-guards.json": "878c3f6bc2dcf61851984463520540d56ec051e261fbeaf75f259bc094eb345c",
+        "/tmp/dcss-20261020T151507Z-combined-oozle/deployment-1/presentation-compatibility.json": "ff966b741808d7422f5d701bb5938c50d660ecd99ec5d807e2a08a30e9b2b956"
+      },
+      "acceptedForDeployment": true,
+      "allGameplayTestsPassed": false,
+      "newCombinedAcceptancePassed": true,
+      "productionWizardEnabled": false,
+      "stateAndConfigLinksVerified": true,
+      "frozenSha256": "b20284548ed38a9c736fb55e4e920f4bfe5e788297ec9004d0f8a5f891184337"
+    },
+    "verifiedPublicUrl": "https://dcss.iancaltabiano.com",
+    "deploymentCloseout": {
+      "passed": true,
+      "deployed": true,
+      "url": "https://dcss.iancaltabiano.com",
+      "release": "/opt/dcss/releases/20261020T151507Z-combined-oozle",
+      "binarySha256": "04c021e80c865df3e84382ea7a1d2be48bd22767c41ba7eeb27a05304d124fb9",
+      "publicChecks": 6,
+      "publicProofSha256": "31382e917011763db2c2ab3328138a5c6b7e17a70637f5987384390001385f42",
+      "assetHashesVerified": 29,
+      "frozenManifestStillExact": true,
+      "observedProcesses": 18,
+      "allObservedIdentitiesGone": true,
+      "rootAndGroupGone": true,
+      "systemdOwnedQaNativeAccountsGone": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "outcomeSha256": "e456fe09b96496b85f06d9f6ef121f4ac669bae44726f4c44fecd709e7d9fec6",
+      "closureSha256": "9f5718e3dd79272726c8c5cc5c754191e97638709e28f0cb2c177bb45283467a",
+      "allGameplayTestsPassed": false,
+      "deferred": "Paladin combat/support/faith aggregate by direct human authorization",
+      "at": 1792531473.2994967,
+      "savedCloseoutSha256": "168e828d25abb28e1dc1b5c7e5bac59c9ad083602eb3aee332e3c822ac12cb18"
+    }
+  },
+  "priorCompletedDeploymentStatus": "DEPLOYED_public_Oozle_PASS_offturn_preserved_Paladin_deferred_by_human",
+  "latestWebUpdate": {
+    "status": "DEPLOYED_SOFT_VISUAL_INITIATIVE_AND_RENDERING_OPTIMIZATION",
+    "at": 1792532801.6687648,
+    "closeout": {
+      "passed": true,
+      "deployed": true,
+      "url": "https://dcss.iancaltabiano.com",
+      "release": "/opt/dcss/releases/20261020T213309Z-soft-initiative",
+      "binarySha256": "04c021e80c865df3e84382ea7a1d2be48bd22767c41ba7eeb27a05304d124fb9",
+      "publicChecks": 6,
+      "publicProofSha256": "99db89124c65ff2ee04a52e3fa9ad88b726a011f7e49651adaa23dd0627d76b1",
+      "assetHashesVerified": 6,
+      "frozenManifestStillExact": true,
+      "observedProcesses": 18,
+      "allObservedIdentitiesGone": true,
+      "rootAndGroupGone": true,
+      "systemdOwnedQaNativeAccountsGone": true,
+      "remoteFlockAcquiredAfterClosure": true,
+      "remoteFlockExplicitlyReleased": true,
+      "outcomeSha256": "b9818bbb32d05c27f702b7a5dc9f9d92d025202cecb58f30b915a0c3903e534c",
+      "closureSha256": "2b7da46dc1064302e80ea785f6f0c39a9bff2de5971c3edab908712018e1cac6",
+      "allGameplayTestsPassed": false,
+      "deferred": "Paladin combat/support/faith aggregate by direct human authorization",
+      "at": 1792532800.4101086,
+      "savedCloseoutSha256": "5502ca03cdf95c85e09d3764f08e0d403c733a177eec5fe09558676c7031944f"
+    },
+    "performance": {
+      "rosterSize": 500,
+      "initialVisiblePortraits": 9,
+      "unchangedUpdatePaints": 0,
+      "unchangedUpdateMutations": 0,
+      "unchangedListScans": 0
+    },
+    "nativeUnchanged": true,
+    "pendingEnvironmentArt": "separate unverified handoff; not included",
+    "heartbeatRemainsPaused": true
+  },
+  "currentProductionRelease": "/opt/dcss/releases/20261020T213309Z-soft-initiative"
+}

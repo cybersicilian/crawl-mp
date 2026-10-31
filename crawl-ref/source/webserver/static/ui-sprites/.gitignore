@@ -1,0 +1,4 @@
+# Licensed Raven output is local project art, not an open-source asset pack.
+/hud-sprites.*.png
+!/hud-sprites.f4c7e20144b6.png
+!/hud-sprites.bbe7b693ead5.png

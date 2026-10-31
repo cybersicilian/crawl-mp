@@ -269,7 +269,7 @@ geoelf.rooms.GLASS_PLANTLIKE = 6
 geoelf.rooms.GLASS_FEATURE   = 7
 
 function geoelf.rooms.draw (e, room_data, corridor_data, index,
-                            fancy, force_open_room_edge)
+                            fancy, force_open_room_edge, in_slime, stone)
   if (room_data == nil) then
     crawl.mpr("Error: No room data array")
   end
@@ -288,6 +288,9 @@ function geoelf.rooms.draw (e, room_data, corridor_data, index,
   local center_x = room_data[index].center_x
   local center_y = room_data[index].center_y
   local radius = room_data[index].radius
+  if in_slime and not stone then
+    fancy = false
+  end
   if (geoelf.debug) then
     if (fancy) then
       print("  Drawing room " .. index .. " at " .. center_x .. ", " ..
@@ -304,18 +307,18 @@ function geoelf.rooms.draw (e, room_data, corridor_data, index,
   if (shape == geoelf.rooms.shape.SQUARE) then
     room_glyphs = geoelf.rooms.square(radius, fancy)
   elseif (shape == geoelf.rooms.shape.DIAMOND) then
-    room_glyphs = geoelf.rooms.diamond(radius, fancy)
+    room_glyphs = geoelf.rooms.diamond(radius, fancy, in_slime)
   elseif (shape == geoelf.rooms.shape.CROSS) then
     local indent = math.min(crawl.random2(radius - 2) + 2, radius - 1)
-    room_glyphs = geoelf.rooms.cross(radius, indent, fancy)
+    room_glyphs = geoelf.rooms.cross(radius, indent, fancy, in_slime)
   elseif (shape == geoelf.rooms.shape.TRIANGLE_S or
           shape == geoelf.rooms.shape.TRIANGLE_N or
           shape == geoelf.rooms.shape.TRIANGLE_E or
           shape == geoelf.rooms.shape.TRIANGLE_W) then
-    room_glyphs = geoelf.rooms.triangle(radius, fancy)
+    room_glyphs = geoelf.rooms.triangle(radius, fancy, in_slime)
   elseif (shape == geoelf.rooms.shape.HEXAGON_NS or
           shape == geoelf.rooms.shape.HEXAGON_EW) then
-    room_glyphs = geoelf.rooms.hexagon(radius, fancy)
+    room_glyphs = geoelf.rooms.hexagon(radius, fancy, in_slime)
   elseif (shape == geoelf.rooms.shape.OCTAGON) then
     local diagonal_cutoff = math.floor(radius * 1.4 + crawl.random_real())
     room_glyphs = geoelf.rooms.octagon(radius, diagonal_cutoff, fancy)
@@ -328,6 +331,10 @@ function geoelf.rooms.draw (e, room_data, corridor_data, index,
                               geoelf.rooms.shape.MIRRORINGS[shape])
   local feature   = util.random_choose_weighted(geoelf.glyphs.FEATURE_OPTIONS)
   local plantlike = util.random_choose_weighted(geoelf.glyphs.PLANTLIKE_OPTIONS)
+  if in_slime then
+    feature = geoelf.glyphs.STATUE
+    plantlike = geoelf.glyphs.FUNGUS
+  end
   if (geoelf.debug and fancy) then
     print("  Feature " .. feature .. " plantlike " .. plantlike)
   end
@@ -379,12 +386,24 @@ function geoelf.rooms.draw (e, room_data, corridor_data, index,
         if (room_value == geoelf.rooms.UNCHANGED) then
           new_glyph = old_glyph
         elseif (room_value == geoelf.rooms.ROOM_OPEN) then
-          new_glyph = geoelf.glyphs.OPEN_SUBSTITUTIONS[old_glyph]
+          new_glyph = old_glyph == 'c' and geoelf.glyphs.FLOOR
+                      or geoelf.glyphs.OPEN_SUBSTITUTIONS[old_glyph]
         elseif (room_value == geoelf.rooms.ROOM_BORDER) then
-          new_glyph = geoelf.glyphs.BORDER_SUBSTITUTIONS[old_glyph]
+          if in_slime and stone then
+            new_glyph = (old_glyph == geoelf.glyphs.DOOR
+                         or old_glyph == geoelf.glyphs.CORRIDOR)
+                        and geoelf.glyphs.FLOOR or 'c'
+          elseif in_slime and old_glyph == geoelf.glyphs.FLOOR then
+            new_glyph = geoelf.glyphs.WALL
+          elseif in_slime and old_glyph == 'c' then
+            new_glyph = 'c'
+          else
+            new_glyph = geoelf.glyphs.BORDER_SUBSTITUTIONS[old_glyph]
+          end
         elseif (room_value == geoelf.rooms.ROOM_OUTLINE) then
           if (force_open_room_edge) then
-            new_glyph = geoelf.glyphs.OUTLINE_SUBSTITUTIONS[old_glyph]
+            new_glyph = old_glyph == 'c' and (stone and 'c' or geoelf.glyphs.FLOOR)
+                        or geoelf.glyphs.OUTLINE_SUBSTITUTIONS[old_glyph]
           else
             new_glyph = old_glyph
           end
@@ -665,7 +684,7 @@ end
 -- Diamond rooms
 --
 
-function geoelf.rooms.diamond (radius, fancy)
+function geoelf.rooms.diamond (radius, fancy, in_slime)
   local room = {}
   room.size = radius + 2
   if (geoelf.debug) then
@@ -694,7 +713,7 @@ function geoelf.rooms.diamond (radius, fancy)
 
   -- apply fancy stuff if requested
   if (fancy and radius > 2) then
-    local style = crawl.random2(16)
+    local style = crawl.random2(in_slime and 14 or 16)
     if (style < 3) then
       room[0][0] = geoelf.rooms.PLANTLIKE
     elseif (style < 6) then
@@ -802,7 +821,7 @@ end
 -- Cross rooms
 --
 
-function geoelf.rooms.cross (radius, indent, fancy)
+function geoelf.rooms.cross (radius, indent, fancy, in_slime)
   local room = {}
   room.size = radius + 2
   local center_radius = radius - indent
@@ -832,7 +851,7 @@ function geoelf.rooms.cross (radius, indent, fancy)
 
   -- apply fancy stuff if requested
   if (fancy and radius > 2) then
-    local style = crawl.random2(18)
+    local style = crawl.random2(in_slime and 12 or 18)
 
     if (style < 3) then
       room[0][0] = geoelf.rooms.PLANTLIKE
@@ -978,7 +997,7 @@ end
 --     overlap other rooms, and this cuts down on collisions
 --
 
-function geoelf.rooms.triangle (radius, fancy)
+function geoelf.rooms.triangle (radius, fancy, in_slime)
   local room = {}
   room.size = radius + 2
   if (geoelf.debug) then
@@ -1011,7 +1030,7 @@ function geoelf.rooms.triangle (radius, fancy)
 
   -- apply fancy stuff if requested
   if (fancy and radius > 2) then
-    local style = crawl.random2(15)
+    local style = crawl.random2(in_slime and 13 or 15)
     local twice_border = crawl.random_range(3, radius)
     if (style < 4) then
       geoelf.rooms.triangle_singles(room, radius, twice_border,
@@ -1125,7 +1144,7 @@ end
 -- The flat sides of the hexagon face east and west (X+, X-)
 --
 
-function geoelf.rooms.hexagon (radius, fancy)
+function geoelf.rooms.hexagon (radius, fancy, in_slime)
   local room = {}
   room.size = radius + 2
   local x_addend = radius % 2
@@ -1155,7 +1174,7 @@ function geoelf.rooms.hexagon (radius, fancy)
 
   -- apply fancy stuff if requested
   if (fancy and radius > 2) then
-    local style = crawl.random2(17)
+    local style = crawl.random2(in_slime and 14 or 17)
     if (radius <= 3) then
       style = crawl.random2(6)
     end

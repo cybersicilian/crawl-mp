@@ -1,0 +1,11 @@
+#tactical_planner { margin-top: 6px; padding: 5px; border: 1px solid #9e98604f; border-radius: 3px; color: #d5d4bf; background: #10191e; font: 10px/1.3 var(--tt-font-ui); }
+#tactical_planner[hidden] { display: none; }
+#tactical_planner button { min-height: 25px; border: 1px solid #91886672; border-radius: 3px; padding: 3px 6px; background: #263039; color: #e6d3a6; font: inherit; cursor: pointer; }
+#tactical_planner button[aria-pressed='true'] { background: #284646; border-color: #74bebe; color: #d6ffff; }
+#tactical_planner button:disabled { opacity: .45; cursor: default; }
+#tactical_planner button:focus-visible { outline: 2px solid #d6c48f; outline-offset: 1px; }
+.plan-tools, .plan-actions { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.plan-actions:not(:empty) { margin-top: 5px; max-height: 90px; overflow-y: auto; }
+.plan-status { display: block; margin-top: 4px; color: #adb8b6; }
+.planned-route { position: fixed; pointer-events: none; z-index: 22; }
+@media (pointer: coarse) { #tactical_planner button { min-height: 32px; } }

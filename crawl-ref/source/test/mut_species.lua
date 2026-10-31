@@ -110,7 +110,7 @@ end
 species = {"mountain dwarf", "minotaur", "merfolk", "gargoyle", "draconian", "troll", "deep elf",
            "gale centaur", "gnoll", "human", "kobold", "revenant", "djinni", "spriggan", "tengu", "oni",
            "barachi", "coglin", "vine stalker", "poltergeist", "demigod", "formicid", "naga",
-           "octopode", "felid", "mummy"}
+           "octopode", "felid", "mummy", "tortle", "oozle"}
 
 local old_species = you.species()
 local you_x, you_y = you.pos() -- probably out of bounds

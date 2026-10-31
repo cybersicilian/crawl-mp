@@ -3,7 +3,7 @@ enum: SP_ARMATAUR
 monster: MONS_ARMATAUR
 name: Armataur
 short_name: At
-difficulty: False
+difficulty: Simple
 difficulty_priority: 20
 species_flags:
   - small_torso
@@ -55,6 +55,16 @@ mutations:
     MUT_DEFORMED: 1
   7:
     MUT_STAMPEDE: 1
+recommended_jobs:
+  - fighter
+  - berserker
+  - warper
+  - hedge wizard
+recommended_weapons:
+  - maces and flails
+  - axes
+  - staves
+  - long blades
 
 altar_action: curl up in front of
 child_name: Pup

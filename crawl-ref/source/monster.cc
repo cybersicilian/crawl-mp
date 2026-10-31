@@ -4,6 +4,12 @@
 **/
 
 #include "AppHdr.h"
+#include "chain-devil.h"
+#include "eldritch.h"
+#include "god-vorr.h"
+#include "bloodcraft.h"
+#include "level-time.h"
+#include "mon-energy.h"
 
 #include <cmath>
 #include <algorithm>
@@ -79,6 +85,7 @@
 #include "tilepick.h"
 #include "tileview.h"
 #endif
+#include "party.h"
 #include "traps.h"
 #include "view.h"
 #include "xom.h"
@@ -1246,7 +1253,7 @@ static bool _is_signature_weapon(const monster* mons, const item_def &weapon)
         if (mons->type == MONS_ARACHNE)
         {
             return weapon.is_type(OBJ_STAVES, STAFF_ALCHEMY)
-                   || is_unrandom_artefact(weapon, UNRAND_OLGREB);
+                   || has_unrand_effect(weapon, UNRAND_OLGREB);
         }
 
         if (mons->type == MONS_FANNAR)
@@ -1565,7 +1572,7 @@ bool monster::wants_armour(const item_def &item) const
     }
 
     // Dispater only wants his orb.
-    if (type == MONS_DISPATER && !is_unrandom_artefact(item, UNRAND_DISPATER))
+    if (type == MONS_DISPATER && !has_unrand_effect(item, UNRAND_DISPATER))
         return false;
 
     // Maggie's dragon scales are equivalent to a 'signature weapon'.
@@ -2014,7 +2021,7 @@ bool monster::unrand_equipped(int unrand_index, bool /*include_melded*/) const
     const mon_inv_type mslot = equip_slot_to_mslot(get_item_slot(entry->base_type, entry->sub_type));
     const item_def *item = mslot_item(mslot);
 
-    return item && is_unrandom_artefact(*item, unrand_index);
+    return item && has_unrand_effect(*item, unrand_index);
 }
 
 item_def *monster::shield() const
@@ -2704,7 +2711,7 @@ bool monster::go_berserk(bool intentional, bool /* potion */)
 
     if (const item_def* w = weapon())
     {
-        if (is_unrandom_artefact(*w, UNRAND_ZEALOT_SWORD))
+        if (has_unrand_effect(*w, UNRAND_ZEALOT_SWORD))
             for (actor_near_iterator mi(pos(), LOS_NO_TRANS); mi; ++mi)
                 if (mons_aligned(this, *mi))
                     mi->go_berserk(false);
@@ -3787,7 +3794,7 @@ int monster::res_poison(bool include_temp) const
 
     if (const item_def* w = primary_weapon())
     {
-        if (is_unrandom_artefact(*w, UNRAND_OLGREB))
+        if (has_unrand_effect(*w, UNRAND_OLGREB))
             return 3;
     }
 
@@ -3847,7 +3854,7 @@ bool monster::res_miasma(bool /*include_temp*/) const
     }
 
     const item_def *armour = mslot_item(MSLOT_ARMOUR);
-    if (armour && is_unrandom_artefact(*armour, UNRAND_EMBRACE))
+    if (armour && has_unrand_effect(*armour, UNRAND_EMBRACE))
         return true;
 
     return false;
@@ -3938,6 +3945,11 @@ bool monster::res_constrict() const
     return is_insubstantial() || is_spiny() || is_amorphous();
 }
 
+bool monster::blinded() const
+{
+    return has_ench(ENCH_BLIND) || bloodcraft::blinded(*this);
+}
+
 int monster::res_blind() const
 {
     return mons_res_blind(type);
@@ -3979,7 +3991,7 @@ int monster::willpower() const
         return 0;
 
     const item_def *arm = mslot_item(MSLOT_ARMOUR);
-    if (arm && is_unrandom_artefact(*arm, UNRAND_FOLLY))
+    if (arm && has_unrand_effect(*arm, UNRAND_FOLLY))
         return 0;
 
     const int type_wl = (get_monster_data(type))->willpower;
@@ -4063,7 +4075,7 @@ bool monster::no_tele(bool /*blinking*/, bool /*include_temp*/) const
     if (has_notele_item())
         return true;
 
-    if (has_ench(ENCH_DIMENSION_ANCHOR))
+    if (has_ench(ENCH_DIMENSION_ANCHOR) || bloodcraft::anchored(*this))
         return true;
 
     return false;
@@ -4128,6 +4140,7 @@ int monster::skill(skill_type sk, int scale, bool /*real*/, bool /*include_temp*
 
     case SK_CONJURATIONS:
     case SK_ALCHEMY:
+    case SK_AURAMANCY:
     case SK_FIRE_MAGIC:
     case SK_ICE_MAGIC:
     case SK_EARTH_MAGIC:
@@ -4263,10 +4276,19 @@ void monster::splash_with_acid(actor* evildoer)
 }
 
 int monster::hurt(const actor *agent, int amount, beam_type flavour,
-                   kill_method_type kill_type, string /*source*/,
-                   string /*aux*/, bool cleanup_dead, bool attacker_effects,
+                   kill_method_type kill_type, string source,
+                   string aux, bool cleanup_dead, bool attacker_effects,
                    bool is_attack_damage)
 {
+    if (party::is_proxy_monster(*this))
+    {
+        if (props.exists("party_downed_ghost"))
+            return 0;
+        party::scoped_player_context ctx(party::proxy_slot(*this));
+        return you.hurt(agent, amount, flavour, kill_type, source, aux,
+                        cleanup_dead, attacker_effects);
+    }
+
     // Nothing can be injured while simulating monster movements.
     if (you.doing_monster_catchup)
         return 0;
@@ -4347,8 +4369,12 @@ int monster::hurt(const actor *agent, int amount, beam_type flavour,
                             / 100;
         }
 
+        const int vorr_force = amount;
+        const int vorr_hp_before = hit_points;
         amount = min(amount, hit_points);
         hit_points -= amount;
+        vorr::on_damage(*this, agent, vorr_hp_before, amount, vorr_force);
+        eldritch::on_damage(*this, agent, amount);
 
         if (flavour == BEAM_DESTRUCTION || flavour == BEAM_MINDBURST)
         {
@@ -5080,6 +5106,13 @@ bool monster::can_see_invisible() const
 
 bool monster::invisible() const
 {
+    if (party::is_proxy_monster(*this) && !props.exists("party_downed_ghost"))
+    {
+        const int slot = party::proxy_slot(*this);
+        if (slot >= 0 && slot < party::player_count())
+            return party::get_player(slot).invisible();
+    }
+
     return has_ench(ENCH_INVIS) && !backlit() && !has_ench(ENCH_FIRE_CHAMPION)
             // For now, monsters on walls can never be invisible... or to avoid
             // an info leak we'd have to allow targetting walls at all times
@@ -5092,8 +5125,17 @@ bool monster::invisible() const
 
 bool monster::visible_to(const actor *looker) const
 {
+    if (party::is_proxy_monster(*this) && !props.exists("party_downed_ghost"))
+    {
+        if (looker && looker->is_player())
+            return true;
+        const int slot = party::proxy_slot(*this);
+        if (slot >= 0 && slot < party::player_count())
+            return party::get_player(slot).visible_to(looker);
+    }
+
     const bool blind = looker->is_monster()
-                       && looker->as_monster()->has_ench(ENCH_BLIND);
+                       && looker->as_monster()->blinded();
     const bool physically_vis = !blind && (!invisible()
                                            || looker->can_see_invisible());
     const bool seen_by_att = looker->is_player() && (friendly() || pacified());
@@ -5193,7 +5235,8 @@ bool monster::is_stationary() const
 
 bool monster::cannot_move() const
 {
-    return is_stationary() || has_ench(ENCH_BOUND);
+    return is_stationary() || has_ench(ENCH_BOUND) || has_ench(ENCH_SHACKLE)
+           || bloodcraft::bound(*this);
 }
 
 // Whether the monster has lost the focus and ability to continue channelling
@@ -5418,18 +5461,16 @@ bool monster::is_spiny() const
                            M_SPINY);
 }
 
-static const int ENERGY_THRESHOLD = 80; // why?
-
 bool monster::has_action_energy() const
 {
-    return speed_increment >= ENERGY_THRESHOLD;
+    return monster_energy_deficit(speed_increment) == 0;
 }
 
 /// If a monster had enough energy to act this turn, change it so it doesn't.
 void monster::drain_action_energy()
 {
     if (has_action_energy())
-        speed_increment = ENERGY_THRESHOLD - roll_dice(1, 10);
+        speed_increment = MONSTER_ACTION_ENERGY_THRESHOLD - roll_dice(1, 10);
 }
 
 void monster::check_redraw(const coord_def &old) const
@@ -5477,6 +5518,8 @@ void monster::self_destruct()
  */
 bool monster::move_to(const coord_def& newpos, movement_type mvflags, bool defer_finalisation)
 {
+    if ((mvflags & MV_DELIBERATE) && !chains::may_step(*this, newpos))
+        return false;
     actor* a = actor_at(newpos);
     if (a
         // When doing manual mgrid updating, assume ovelaps with other monsters are expected.
@@ -5901,13 +5944,13 @@ void monster::daze(int duration)
     {
         mon_enchant ench = get_ench(ENCH_DAZED);
         ench.duration += (duration * BASELINE_DELAY);
-        ench.degree = you.elapsed_time_at_last_input;
+        ench.degree = (party::multiplayer_enabled() ? level_elapsed_time(*this) : you.elapsed_time_at_last_input);
         update_ench(ench);
     }
     else
     {
         add_ench(mon_enchant(ENCH_DAZED, nullptr, duration * BASELINE_DELAY,
-                             you.elapsed_time_at_last_input));
+                             (party::multiplayer_enabled() ? level_elapsed_time(*this) : you.elapsed_time_at_last_input)));
     }
 }
 
@@ -6032,6 +6075,9 @@ int monster::action_energy(energy_use_type et) const
     // penalty when leaving it.
     if (floundering() || has_ench(ENCH_LIQUEFYING))
         move_cost += 6;
+
+    if (!airborne())
+        move_cost += feat_grounded_movement_penalty(env.grid(pos()));
 
     // To avoid UI annoyance, make long-term allies match the player's speed
     // if there are no enemies around.
@@ -6767,6 +6813,8 @@ bool monster::sunder_is_ready() const
 
 bool monster::is_illusion() const
 {
+    if (party::is_proxy_monster(*this))
+        return false;
     return type == MONS_PLAYER_ILLUSION
            || has_ench(ENCH_PHANTOM_MIRROR)
            || props.exists(CLONE_REPLICA_KEY);

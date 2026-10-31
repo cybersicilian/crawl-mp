@@ -1,0 +1,49 @@
+{
+  "method": "Built-in imagegen sources; deterministic alpha framing and nearest-neighbor native tile export",
+  "assets": [
+    {
+      "id": "altar",
+      "file": "crawl-ref/source/rltiles/dngn/altars/vorr.png",
+      "source": "docs/design/vorr/assets/vorr-altar-concept-v2.png",
+      "dimensions": [
+        32,
+        32
+      ],
+      "status": "provisional native-size PNG; optical polish pending",
+      "sha256": "58a523d48e1ba7aa56adab7a55c87edb24b52b57185157565f3742cc09413ca7"
+    },
+    {
+      "id": "rupture",
+      "file": "crawl-ref/source/rltiles/gui/invocations/vorr_rupture.png",
+      "source": "docs/design/vorr/assets/vorr-rupture-source-v1.png",
+      "dimensions": [
+        32,
+        32
+      ],
+      "status": "provisional native-size PNG; optical polish pending",
+      "sha256": "a3f20cb351ba8f4b24517e961c239d0ef2c9af53f7612cbecea4c959cea19b23"
+    },
+    {
+      "id": "red-passage",
+      "file": "crawl-ref/source/rltiles/gui/invocations/vorr_red_passage.png",
+      "source": "docs/design/vorr/assets/vorr-red-passage-source-v1.png",
+      "dimensions": [
+        32,
+        32
+      ],
+      "status": "provisional native-size PNG; optical polish pending",
+      "sha256": "74e266486f03f1b8268c6bd0b54c6096c0a62813f7182fd7640b83fdd71c1c3f"
+    },
+    {
+      "id": "great-letting",
+      "file": "crawl-ref/source/rltiles/gui/invocations/vorr_great_letting.png",
+      "source": "docs/design/vorr/assets/vorr-great-letting-source-v1.png",
+      "dimensions": [
+        32,
+        32
+      ],
+      "status": "provisional native-size PNG; optical polish pending",
+      "sha256": "d0f4e3e93746026ac889123cd551f2f1f8ce9cbce27f8b2f258df59e5c8c6d2c"
+    }
+  ]
+}

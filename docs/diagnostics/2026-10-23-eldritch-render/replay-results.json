@@ -1,0 +1,142 @@
+[
+  {
+    "engine": "chromium",
+    "species": "Eldritch",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4617,
+    "paintedPixels": 471771,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "species": "Eldritch",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4617,
+    "paintedPixels": 471771,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "species": "Chain Devil",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4941,
+    "paintedPixels": 467937,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "species": "Chain Devil",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4941,
+    "paintedPixels": 467937,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "species": "Human",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4626,
+    "paintedPixels": 474471,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "species": "Human",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4626,
+    "paintedPixels": 474471,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "chromium",
+    "pageErrors": []
+  },
+  {
+    "engine": "webkit",
+    "species": "Eldritch",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4617,
+    "paintedPixels": 471771,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "species": "Eldritch",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4617,
+    "paintedPixels": 471771,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "species": "Chain Devil",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4941,
+    "paintedPixels": 467937,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "species": "Chain Devil",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4941,
+    "paintedPixels": 467937,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "species": "Human",
+    "projected": false,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4626,
+    "paintedPixels": 474471,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "species": "Human",
+    "projected": true,
+    "cells": 57,
+    "failures": [],
+    "actorPixels": 4626,
+    "paintedPixels": 474471,
+    "width": 1440,
+    "height": 672
+  },
+  {
+    "engine": "webkit",
+    "pageErrors": []
+  }
+]

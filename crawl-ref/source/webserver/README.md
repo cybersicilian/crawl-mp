@@ -19,6 +19,75 @@ The entry point for running the server is `server.py` in this directory; see
 [webtiles/README.md](webtiles/README.md) for a brief overview of the python
 app's code.
 
+Playing and spectating require a personal account. Sign-in only authenticates
+existing credentials; new players use Create an account with an explicit password.
+The local and deployed configurations disable the former shared Host and
+Player2–4 identities, including their remembered sessions, without deleting
+their records. The reusable `disabled_accounts` configuration applies to
+passwords, registration, and session tokens; anonymous spectating defaults off.
+Browser fixtures create disposable accounts through
+`tests/helpers/test-account.cjs` instead of relying on automatic registration.
+
+Active games use `/#expedition-<id>` URLs. Bookmark or share that URL to return
+to the same expedition: its host resumes the exact save, while other visitors
+can spectate it when it is live under the existing access rules. Saved-game
+Resume links and live lobby links use these URLs. Older `#play-<mode>`,
+`#watch-<host>` and `?load=<id>` links remain supported; successful connections
+update the address to the expedition URL. Opening another expedition while
+hosting a game requires saving and returning to the lobby first.
+
+## Out-of-game workspace
+
+Play offers party creation, the daily seeded expedition, direct recent-game
+resume, and every native game mode. Saved expeditions contains the complete
+searchable library; Join friends brings gathering parties and live games
+together. Chronicle keeps recorded builds and discoveries. Saving and returning
+from an owned game opens Saved expeditions, with the current party still
+available from the header. Archive pages use the same navigation vocabulary.
+
+`workspace-views.js` is the reusable visibility, focus, scroll, and optional
+session-storage mechanism. `lobby-navigation.js` supplies this game's sections
+and actions. `lobby-overview.js` reads authoritative library entries and reuses
+their exact resume URLs; `lobby-discovery.js` filters existing room and live-game
+rows. Neither presentation module owns game state. `mode-catalogue.js` shares
+mode labels between launch choices and live rows. The standalone archive uses
+the declarative `collection-filter.js` for immediate local search and retained
+queries. Browsing and filtering never start an expedition or change its state.
+
+For local acceptance, run `util/qa_server.py` with an explicit native build and
+a new disposable runtime. Browser checks are in `tests/lobby-navigation.cjs`,
+`tests/lobby-ui.cjs`, `tests/party-setup.cjs`, `tests/outgame-archive.cjs`,
+`tests/library-management.cjs`, `tests/logout-browser.cjs`, and
+`tests/expedition-navigation-native.cjs`. Supply the isolated URL through
+`WEBTILES_URL` and make Playwright available on the Node module path. These
+checks use disposable accounts or controlled rendering fixtures; no existing
+human save is needed.
+
+Character quick builds use native catalog recommendations. Changing a species
+constrains suggestions to that species; changing a background first constrains
+them to that background. Explicitly changing both preserves the exact legal
+pairing, including nonrecommended combinations. Applying a suggestion keeps
+the unchosen field available for alternatives. This intent is local to each
+hero and room and survives authoritative room updates and lobby navigation.
+
+In-game right-click menus share `context-menu.js` for positioning, keyboard input,
+focus return and dismissal. Shift+F10 or the Menu key opens the same choices on a
+focused item or dungeon canvas. Escape and Tab close the menu; clicking outside
+dismisses it without activating the game beneath it. Item and dungeon adapters
+supply relevant actions and validate the selected hero, item or tile again before
+activation. Actions reuse existing native messages, so native costs, equipment
+delays, warnings, ownership and visibility rules still apply. Keep new surface
+adapters separate from the presentation primitive, and supply a `valid` callback
+when an action depends on mutable state. Focused acceptance is in
+`tests/context-menu.cjs` and `tests/context-menu-native.cjs`.
+
+Left-clicking explored terrain on the minimap uses the dungeon's existing click
+handler, including native pathfinding, danger checks, pings and tile exclusion
+selection. Right-drag previews terrain and releasing the mouse restores the
+camera, including when released outside the minimap. Minimap travel is available
+in normal command mode; spectators and targeting or menu states cannot move a
+hero through it. Keyboard movement and native map controls remain available.
+
 ## Contents
 
 * [Prerequisites](#prerequisites)

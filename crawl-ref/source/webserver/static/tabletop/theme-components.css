@@ -1,0 +1,197 @@
+/* DCSS adapters: materials and states only. No geometry or canvas filters. */
+html[data-ui-theme] body { background: var(--ui-canvas); color: var(--ui-text); }
+html[data-ui-theme] #normal {
+    --hud-button: var(--ui-binding);
+    --hud-panel: var(--ui-binding);
+}
+html[data-ui-theme] #normal :is(#message_pane, #hud_bottom_row) { background: var(--ui-recess); }
+html[data-ui-theme] #normal :is(#dcss_quick_dock, .party-member-card, #quickbar_more_content) {
+    background: var(--ui-binding); border-color: var(--ui-edge);
+}
+html[data-ui-theme] #normal .party-member-card.is-controlled-card {
+    background: var(--ui-raised); border-color: var(--ui-accent);
+}
+html[data-ui-theme] #normal :is(.hud-item-slot, .party-member-state) {
+    background: var(--ui-recess); border-color: var(--ui-edge);
+}
+/* The portrait column is shaped by its arch and shrine frame; a recess box behind it reads as black corners. */
+html[data-ui-theme] #normal .party-portrait { background: transparent; border-color: transparent; }
+html[data-ui-theme] #normal :is(.dcss-dock-btn, .hud-quick-slot, .quickbar-catalog-action,
+    .hud-icon-button, .party-mini-btn, .hud-power-button, #quickbar_more > summary) {
+    background: var(--ui-panel); color: var(--ui-text); border-color: var(--ui-edge);
+}
+html[data-ui-theme] #normal :is(.dcss-dock-btn, .hud-quick-slot, .quickbar-catalog-action,
+    .hud-icon-button, .party-mini-btn, .hud-power-button):hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--ui-raised); color: var(--ui-accent-bright); border-color: var(--ui-accent);
+}
+html[data-ui-theme] #normal .hud-quick-slot.is-selected { outline-color: var(--ui-accent-bright); }
+html[data-ui-theme] #normal .quickbar-key { background: var(--ui-recess); color: var(--ui-text); }
+html[data-ui-theme] #normal #quickbar_help {
+    --tt-ink: var(--ui-text); --tt-ink-soft: var(--ui-muted); color: var(--ui-text);
+}
+html[data-ui-theme] #normal #quickbar_help :is(.dcss-tip-title, .dcss-tip-body) { color: var(--ui-text); }
+html[data-ui-theme] #normal #quickbar_help :is(.dcss-tip-badge, .dcss-tip-meta) { color: var(--ui-muted); }
+
+/* Native reading surfaces share a single page, ink and interaction vocabulary. */
+html[data-ui-theme] #ui-stack {
+    --workflow-paper: var(--ui-page); --workflow-ink: var(--ui-ink);
+    --workflow-rule: var(--ui-rule); --menu-quiet: var(--ui-quiet);
+}
+html[data-ui-theme] #ui-stack .ui-popup-outer:has(.workflow-surface),
+html[data-ui-theme] #session_menu {
+    background: var(--ui-paper); color: var(--ui-ink); border-color: var(--ui-edge);
+    box-shadow: inset 0 0 0 3px var(--ui-page-inset), 0 18px 60px #0009;
+    color-scheme: var(--ui-page-scheme);
+}
+html[data-ui-theme] #game #ui-stack .workflow-surface > :is(.header, .menu_title) {
+    color: var(--ui-chapter); border-color: var(--ui-rule); font-family: var(--ui-title);
+}
+html[data-ui-theme] #game #ui-stack .workflow-surface :is(button, input, select, .actions [data-hotkey], .grid .button),
+html[data-ui-theme] .workflow-selection-mark {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule); box-shadow: none;
+}
+html[data-ui-theme] #game #ui-stack .workflow-surface :is(button:hover:not(:disabled),
+    .grid .button.selected, .menu_contents li.selectable:is(:hover, :focus-visible, .hovered)) {
+    background: var(--ui-hover); color: var(--ui-ink); border-color: var(--ui-chapter);
+}
+html[data-ui-theme] #game #ui-stack .workflow-surface :is(.workflow-primary,
+    .workflow-categories [aria-selected="true"], .workflow-pane-tabs [aria-selected="true"]),
+html[data-ui-theme] #session_menu #session_menu_resume,
+html[data-ui-theme] #game #ui-stack .workflow-selected .workflow-selection-mark {
+    background: var(--ui-action); color: var(--ui-action-text); border-color: var(--ui-action);
+}
+html[data-ui-theme] #game #ui-stack .workflow-surface .menu_contents li.selectable.workflow-selected {
+    background: var(--ui-selection); color: var(--ui-ink); border-color: var(--ui-chapter);
+    box-shadow: inset 3px 0 0 var(--ui-chapter);
+}
+html[data-ui-theme] #ui-stack .workflow-table-head {
+    background: var(--ui-page-inset); color: var(--ui-chapter); border-color: var(--ui-rule);
+}
+html[data-ui-theme] #ui-stack :is(.workflow-key-help, .workflow-selection-summary,
+    .workflow-surface .quote, .codex-chapter small) { color: var(--ui-quiet); }
+html[data-ui-theme] #ui-stack .workflow-surface :is(.workflow-key, kbd) {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule);
+}
+html[data-ui-theme] #ui-stack .workflow-surface .scroller-shade { background: transparent; }
+html[data-ui-theme] #ui-stack .workflow-surface .simplebar-track { background: var(--ui-page-inset); }
+html[data-ui-theme] #ui-stack .workflow-surface .simplebar-scrollbar {
+    background: var(--ui-quiet); border-color: var(--ui-page-inset);
+}
+/* Native foreground classes retain meaning on either light or dark pages. */
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg0, .fg7, .fg15) { color: var(--ui-ink); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg1, .fg9) { color: var(--ui-cold); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg2, .fg10) { color: var(--ui-good); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg3, .fg11) { color: var(--ui-magic); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg4, .fg12) { color: var(--ui-danger); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg5, .fg13) { color: var(--ui-arcane); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface :is(.fg6, .fg14) { color: var(--ui-warn); }
+html[data-ui-theme] #game #ui-stack .ui-popup-inner .workflow-surface .fg8 { color: var(--ui-quiet); }
+html[data-ui-theme] #game #ui-stack .workflow-surface :is(.bg7, .bg8, .bg15) { background: var(--ui-page-inset); }
+
+/* Character folios and equipment retain their layouts, anatomy and native art. */
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet) {
+    color-scheme: var(--ui-page-scheme); border-color: var(--ui-edge); border-top-color: var(--ui-chapter);
+}
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-header, .party-insp-body) { background: var(--ui-paper); }
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-hero-bar, .party-insp-tab-bar, .party-insp-aut-strip, #party_insp_key_help) {
+    background: var(--ui-page-inset); color: var(--ui-ink); border-color: var(--ui-rule);
+}
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-close-btn, .party-insp-hero-btn, .party-insp-tab-btn, .party-insp-stat-box,
+        .party-insp-banner, .party-insp-res-grid, .party-insp-table th, .pi-table th) {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule);
+}
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-subtitle, .party-insp-hero-meta, .party-insp-stat-box .lbl, .workflow-key-help) { color: var(--ui-quiet); }
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-tab-btn[aria-selected="true"], .party-insp-hero-btn[aria-pressed="true"]) {
+    background: var(--ui-selection); color: var(--ui-chapter);
+}
+html[data-ui-theme] .folio-equipment.is-crpg-layout {
+    --equip-ink: var(--ui-text); --equip-muted: var(--ui-muted);
+    --equip-gold: var(--ui-accent-bright); --equip-rule: var(--ui-edge);
+    background: var(--ui-panel);
+}
+html[data-ui-theme] :is(.folio-equipment, #power_picker_dialog) {
+    --folio-control-ink: var(--ui-ink); --folio-control-muted: var(--ui-quiet);
+    --folio-control-rule: var(--ui-rule); --folio-control-paper: var(--ui-page-raised);
+    --folio-control-accent: var(--ui-chapter);
+}
+html[data-ui-theme] .folio-equipment.is-crpg-layout {
+    --folio-control-ink: var(--ui-text); --folio-control-muted: var(--ui-muted);
+    --folio-control-paper: var(--ui-raised); --folio-control-accent: var(--ui-accent-bright);
+}
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(input, select, .folio-slot) { background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule); }
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    :is(.party-insp-res-pips.pos, .party-insp-res-pips.max) { color: var(--ui-good); }
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    .party-insp-res-pips.neg { color: var(--ui-danger); }
+html[data-ui-theme] :is(dialog#party_inspector_modal, dialog.character-starting-sheet)
+    .party-insp-res-pips.zero { color: var(--ui-quiet); }
+html[data-ui-theme] dialog#party_inspector_modal :is(button, a) {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule); text-shadow: none;
+}
+html[data-ui-theme] dialog#party_inspector_modal :is(button, a):hover:not(:disabled) {
+    background: var(--ui-hover); color: var(--ui-ink);
+}
+html[data-ui-theme] dialog#party_inspector_modal :is(.companion-metric-pill,
+    .companion-equip-slot-card, .companion-codex-detail) {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule);
+}
+html[data-ui-theme] dialog#party_inspector_modal :is(.workflow-hero-context, .party-insp-section-title) {
+    color: var(--ui-chapter); border-color: var(--ui-rule);
+}
+html[data-ui-theme] dialog#party_inspector_modal :is(.party-training-help, .party-skill-cross-training,
+    .party-skill-base-level, .party-skill-apt-breakdown, .party-skill-share) { color: var(--ui-quiet); }
+html[data-ui-theme] dialog#party_inspector_modal .party-training-status { color: var(--ui-good); }
+html[data-ui-theme] dialog#party_inspector_modal .party-training-status.is-error { color: var(--ui-danger); }
+html[data-ui-theme] dialog#party_inspector_modal .companion-codex-drawer { background: var(--ui-page-inset); color: var(--ui-ink); }
+html[data-ui-theme] dialog#party_inspector_modal .folio-equipment.is-crpg-layout :is(button, input, select) {
+    background: var(--ui-raised); color: var(--ui-text); border-color: var(--ui-edge);
+}
+html[data-ui-theme] dialog#party_inspector_modal .paperdoll-slot {
+    background: var(--ui-raised); color: var(--ui-text); border-color: var(--ui-edge);
+}
+html[data-ui-theme] dialog#party_inspector_modal .paperdoll-slot[aria-pressed="true"] {
+    background: var(--ui-raised); border-color: var(--ui-accent-bright);
+    box-shadow: inset 0 0 0 1px var(--ui-accent-bright);
+}
+
+html[data-ui-theme] :is(#dcss_rich_tooltip, #lobby_rich_tooltip, #tooltip,
+    .dcss-nested-tip, .dcss-tooltip-card, .lobby-tooltip) {
+    background: var(--ui-paper); color: var(--ui-ink); border-color: var(--ui-edge);
+    color-scheme: var(--ui-page-scheme);
+}
+html[data-ui-theme] :is(.workflow-context-menu, #quickbar_more_content) {
+    background: var(--ui-panel); color: var(--ui-text); border-color: var(--ui-edge);
+}
+html[data-ui-theme] :is(#session_menu, #workflow_help_dialog, #power_picker_dialog) {
+    --workflow-paper: var(--ui-page); --workflow-ink: var(--ui-ink);
+    background: var(--ui-paper); color: var(--ui-ink); border-color: var(--ui-edge);
+    color-scheme: var(--ui-page-scheme);
+}
+html[data-ui-theme] :is(#session_menu, #workflow_help_dialog, #power_picker_dialog)
+    :is(button, a, input, select, .power-picker-card) {
+    background: var(--ui-page-raised); color: var(--ui-ink); border-color: var(--ui-rule);
+}
+html[data-ui-theme] #power_picker_dialog #power_picker_heading { color: var(--ui-chapter); }
+html[data-ui-theme] #power_picker_dialog .power-picker-cast-button {
+    background: var(--ui-action); color: var(--ui-action-text); border-color: var(--ui-action);
+}
+/* One focus ring everywhere: --ui-focus is gold on chrome and chapter ink on parchment
+   (ui-themes.css re-declares it on paper surfaces), so no per-surface overrides. */
+html[data-ui-theme] :is(button, a, input, select, summary, textarea, [tabindex], [role="button"]):focus-visible {
+    outline: var(--tt-focus-ring); outline-offset: var(--tt-focus-offset);
+}
+html[data-ui-theme] :is(#ui-stack .workflow-surface, dialog#party_inspector_modal,
+    dialog.character-starting-sheet) :is(button, a, input, select, [tabindex]):focus-visible {
+    outline: var(--tt-focus-ring); outline-offset: var(--tt-focus-offset);
+}
+html[data-ui-theme="contrast"] :is(.party-member-card, .ui-popup-outer,
+    .graphics-dialog, #dcss_quick_dock, #party_inspector_modal) { box-shadow: none; border-image: none; }
+@media (forced-colors: active) {
+    html[data-ui-theme] :is([aria-selected="true"], [aria-pressed="true"], .workflow-selected) { outline: 2px solid Highlight; }
+}

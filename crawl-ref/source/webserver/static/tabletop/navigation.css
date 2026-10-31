@@ -1,0 +1,314 @@
+/* One out-of-game top bar. The lobby bar (#lobby_navigation) is built by
+ * lobby-navigation.js; the records/stats bar (.outgame-nav) comes from
+ * templates/outgame-navigation.html. Both share the same language here:
+ * brand, primary sections, account menu, connection chip. */
+#lobby [hidden], #lobby .workspace-view-hidden { display: none !important; }
+#lobby.has-chapter-index {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 44px;
+    box-sizing: border-box;
+    --workspace-ink: #29251e;
+    --workspace-muted: #665c49;
+    --workspace-paper: #f8f2e4;
+    --workspace-rule: #d5c7a9;
+}
+#lobby.has-chapter-index > .welcome-entry { display: none; }
+#lobby_navigation, .outgame-nav {
+    --nav-bg: #111615f5;
+    --nav-rule: var(--tt-rule, #d89b483d);
+    --nav-ink: var(--ui-text, #f3ead6);
+    --nav-muted: #c9d1c2;
+    --nav-gold: var(--ui-accent-bright, var(--tt-brass-light, #f4cb78));
+    --nav-brass: var(--ui-accent, var(--tt-brass, #d89b48));
+    --nav-teal: var(--tt-verdigris, #9fc29b);
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 16px;
+    min-height: 68px;
+    margin: 0 0 24px;
+    padding: 10px 0;
+    box-sizing: border-box;
+    background: var(--nav-bg);
+    border: 0;
+    border-bottom: 1px solid var(--nav-rule);
+    box-shadow: 0 8px 20px #0002;
+    font-family: var(--tt-font-ui);
+    color: var(--nav-ink);
+}
+
+/* Brand. */
+#lobby_navigation .lobby-book-brand, .library-page .outgame-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto 0 0;
+    flex-shrink: 0;
+    color: #f8efe0;
+    font: inherit;
+    text-decoration: none;
+}
+.library-page .outgame-brand::before { content: none; }
+.lobby-book-emblem, .outgame-emblem {
+    width: 28px;
+    height: 32px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--nav-gold), var(--nav-brass));
+    mask: url('assets/lobby-expedition-mark.svg') center / contain no-repeat;
+    -webkit-mask: url('assets/lobby-expedition-mark.svg') center / contain no-repeat;
+}
+.lobby-book-title, .outgame-brand-title { display: grid; gap: 1px; min-width: 0; }
+.lobby-book-kicker, .outgame-brand-kicker { font: 700 9px/1.4 var(--tt-font-ui); text-transform: uppercase; letter-spacing: .16em; color: var(--nav-teal); }
+.lobby-book-title strong, .outgame-brand-title strong { font: 600 23px/1.15 var(--tt-font-title); color: #f6e7c8; white-space: nowrap; }
+
+/* Primary sections. */
+#lobby_navigation .lobby-chapters, .library-page .outgame-sections { display: flex; align-items: center; gap: 4px; margin: 0; padding: 0; min-width: 0; }
+#lobby_navigation .lobby-chapter-link, .library-page .outgame-sections a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 8px 13px;
+    box-sizing: border-box;
+    color: var(--nav-muted);
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font: 600 13px/1.4 var(--tt-font-ui);
+    white-space: nowrap;
+}
+#lobby_navigation .lobby-chapter-link:hover, .library-page .outgame-sections a:hover { color: #fff6df; background: #ffffff0c; border-color: transparent; }
+#lobby_navigation .lobby-chapter-link[aria-current], .library-page .outgame-sections a[aria-current] {
+    color: var(--nav-gold);
+    background: #b9a17312;
+    border-color: #b9a17340;
+    box-shadow: inset 0 -2px 0 var(--nav-brass);
+}
+#lobby_navigation .lobby-nav-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--nav-brass);
+    color: #1b1510;
+    font: 700 10px/1 var(--tt-font-ui);
+}
+#lobby_navigation .lobby-chapter-external { color: #a9b5a5; }
+.outgame-label-short { display: none; }
+
+/* Primary action (lobby only). */
+#lobby .lobby-primary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 20px;
+    box-sizing: border-box;
+    color: #fff9f0;
+    background: #943824;
+    border: 1px solid #943824;
+    border-radius: 6px;
+    font: 600 13px/1.4 var(--tt-font-ui);
+    cursor: pointer;
+    box-shadow: 0 3px 6px #00000014;
+}
+#lobby .lobby-primary-action:hover:not(:disabled) { background: #ad432c; }
+#lobby_navigation .lobby-primary-action { min-height: 40px; padding: 9px 14px; color: #241d15; background: #e8b86b; border-color: #e8b86b; border-radius: 4px; }
+#lobby_navigation .lobby-primary-action:hover:not(:disabled) { background: #f4cb78; }
+#lobby .lobby-primary-action:disabled { opacity: .5; cursor: default; }
+
+/* Keyboard focus is always visible on the bar. */
+#lobby.has-chapter-index :is(a, button, input, select, summary):focus-visible { outline: 2px solid #b5652d; outline-offset: 3px; }
+#lobby_navigation :is(a, button, summary):focus-visible, .outgame-nav :is(a, button, summary):focus-visible { outline: 2px solid var(--nav-gold); outline-offset: 2px; border-radius: 4px; }
+
+/* Account menu. */
+.lobby-account, .library-page .outgame-account { position: relative; max-width: 210px; flex-shrink: 0; font-size: 12px; }
+.lobby-account summary, .library-page .outgame-account summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #b9a17340;
+    border-radius: 4px;
+    font: 600 12px/1.4 var(--tt-font-ui);
+    color: #dce0d2;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+    list-style: none;
+}
+.lobby-account summary::-webkit-details-marker, .library-page .outgame-account summary::-webkit-details-marker { display: none; }
+.lobby-account summary::before, .library-page .outgame-account summary::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--nav-teal);
+    box-shadow: 0 0 0 2px #9fc29b2e;
+}
+.lobby-account summary::after, .library-page .outgame-account summary::after { content: "▾"; color: var(--nav-muted); font-size: 10px; }
+.lobby-account[open] summary, .library-page .outgame-account[open] summary { border-color: var(--nav-brass); color: #fff6df; }
+.lobby-account-menu, .library-page .outgame-account-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+    min-width: 200px;
+    padding: 8px;
+    background: #f8f2e4;
+    border: 1px solid #d5c7a9;
+    border-radius: 7px;
+    box-shadow: 0 15px 35px #0005;
+}
+#lobby .lobby-account-menu a, .library-page .outgame-account-menu a { display: block; padding: 11px 13px; color: #3c3226; font: 12px/1.4 var(--tt-font-ui); text-decoration: none; }
+#lobby .lobby-account-menu a:hover, .library-page .outgame-account-menu a:hover { background: #eadec5; border-radius: 4px; }
+.library-page .outgame-account-menu .site-logout { border-top: 1px solid #d5c7a9; margin-top: 5px; padding-top: 5px; }
+.library-page .outgame-account-menu .site-logout button { width: 100%; justify-content: flex-start; border: 0; color: #943824; font-weight: 600; }
+.library-page .outgame-account-menu .site-logout button:hover { background: #eadec5; }
+.library-page .outgame-sign-in {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    border: 1px solid #e8b86b;
+    border-radius: 4px;
+    background: #e8b86b;
+    color: #241d15 !important;
+    font: 700 12px/1.4 var(--tt-font-ui);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.library-page .outgame-sign-in:hover { background: #f4cb78; }
+
+/* Connection quality chip rides on the bar's right edge. */
+#lobby_navigation > .connection-quality, .outgame-nav > .connection-quality { position: static; order: 10; margin: 0; flex-shrink: 0; }
+
+/* Records/stats pages: beat library.css / outgame-archive.css / layout-rhythm.css. */
+.library-page .library-navigation.outgame-nav { min-height: 68px; gap: 16px; padding: 10px 0; margin-bottom: 20px; }
+.library-page .outgame-brand { flex-basis: auto; font-size: inherit; }
+.library-page .outgame-sections a { min-height: 40px; padding: 8px 13px; font-weight: 600; }
+.library-page .outgame-sections [aria-current] { box-shadow: inset 0 -2px 0 var(--nav-brass); }
+.library-page .outgame-account summary { padding: 8px 12px; }
+.library-page .outgame-account-menu { top: calc(100% + 8px); }
+
+/* Play home (lobby landing card). */
+.lobby-home {
+    display: grid;
+    grid-template-columns: 1.18fr 1fr;
+    overflow: hidden;
+    min-height: 300px;
+    margin-bottom: 24px;
+    color: #f5ecda;
+    background: linear-gradient(135deg, #212e24 0%, #1c261f 100%);
+    border: 1px solid #d89b4845;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px #00000028;
+}
+.lobby-home-copy { padding: 32px 36px; display: flex; flex-direction: column; justify-content: center; }
+.lobby-eyebrow { margin: 0 0 10px; text-transform: uppercase; letter-spacing: .15em; font: 700 10px/1.4 var(--tt-font-ui); color: #b5652d; }
+.lobby-home .lobby-eyebrow { color: #e8b86b; }
+#lobby_home h1 { max-width: 510px; margin: 0 0 12px; font: 600 clamp(2rem, 1.4rem + 1.8vw, 2.65rem)/1.08 var(--tt-font-title); color: #fbf3e3; letter-spacing: -.02em; }
+.lobby-home-intro { max-width: 430px; color: #cbdac5; font: 13px/1.62 var(--tt-font-ui); margin: 0 0 18px; }
+.lobby-home-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; }
+#lobby_home .lobby-primary-action { color: #241b12; background: #e8b86b; border-color: #e8b86b; font-weight: 700; }
+#lobby_home .lobby-primary-action:hover:not(:disabled) { background: #f4cb78; }
+#lobby_home .lobby-home-link { color: #f0e4c8; font: 600 12px/1.4 var(--tt-font-ui); text-decoration: none; border-bottom: 1px dashed #f0e4c870; padding: 9px 0; }
+.lobby-daily-broth {
+    margin-top: 18px;
+    padding: 11px 14px;
+    border: 1px dashed #e8b86b66;
+    border-radius: 8px;
+    background: #141c16b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+}
+.lobby-daily-broth-copy { display: grid; gap: 2px; min-width: 0; }
+.lobby-daily-broth-kicker { font: 700 9px/1.3 var(--tt-font-ui); text-transform: uppercase; letter-spacing: 0.14em; color: #e09f3e; }
+.lobby-daily-broth-title { font: 600 15px/1.25 var(--tt-font-title); color: #fbf2df; }
+.lobby-daily-broth-meta { font: 11px/1.4 var(--tt-font-mono); color: #a9c2a5; }
+.lobby-daily-broth-btn {
+    padding: 7px 12px;
+    min-height: 34px;
+    border: 1px solid #d89b4880;
+    border-radius: 5px;
+    background: #c86d3b33;
+    color: #f9e8c4;
+    font: 600 11px/1.3 var(--tt-font-ui);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.lobby-daily-broth-btn:hover:not(:disabled) { background: #c86d3b59; border-color: #f4cb78; }
+.lobby-home-footnote { margin: 16px 0 0; color: #abc0a6; font: 10px/1.6 var(--tt-font-ui); }
+.lobby-home-art {
+    position: relative;
+    background: linear-gradient(90deg, #202d23, #202d2300 42%), linear-gradient(0deg, #121b15d4, transparent 55%), url('assets/dungeon-threshold.png') 58% 54% / cover;
+}
+.lobby-home-art span { position: absolute; bottom: 26px; right: 28px; color: #f5e8c7; font: italic 17px/1.4 var(--tt-font-title); text-shadow: 0 2px 8px #000a; }
+#lobby.has-saved-expeditions .lobby-home { min-height: 245px; }
+#lobby.has-saved-expeditions .lobby-home-copy { padding-top: 25px; padding-bottom: 24px; }
+#lobby.has-saved-expeditions #lobby_home h1 { font-size: 34px; }
+#lobby.has-saved-expeditions .lobby-home-footnote { display: none; }
+#lobby.has-chapter-index [data-workspace-view] { scroll-margin-top: calc(var(--lobby-navigation-height, 88px) + 20px); }
+#lobby.has-chapter-index > br { display: none; }
+#lobby.has-chapter-index #footer { padding: 28px 0 0; color: #b5c4b0; }
+
+/* Tablet: sections drop to their own row. */
+@media (max-width: 1000px) {
+    #lobby_navigation, .library-page .library-navigation.outgame-nav { flex-wrap: wrap; gap: 10px 14px; }
+    #lobby_navigation .lobby-chapters, .library-page .outgame-sections { order: 4; flex-basis: 100%; }
+    #lobby_navigation .lobby-chapter-link, .library-page .outgame-sections a { flex: 1; }
+    .lobby-home { grid-template-columns: 1.3fr 1fr; }
+    .lobby-home-copy { padding: 26px; }
+    #lobby_home h1 { font-size: 35px; }
+}
+/* Phone: compact brand, short labels, one scrollable section row, nothing wider than the viewport. */
+@media (max-width: 600px) {
+    #lobby.has-chapter-index { padding: 0 14px 30px; }
+    #lobby_navigation, .library-page .library-navigation.outgame-nav { min-height: 0; padding: 10px 0 8px; margin-bottom: 18px; gap: 8px 10px; }
+    .lobby-book-title strong, .outgame-brand-title strong { font-size: 20px; }
+    .lobby-book-kicker, .outgame-brand-kicker { display: none; }
+    .lobby-book-emblem, .outgame-emblem { width: 22px; height: 26px; }
+    #lobby_navigation .lobby-book-brand, .library-page .outgame-brand { gap: 8px; min-width: 0; }
+    .lobby-account, .library-page .outgame-account { max-width: 120px; min-width: 0; }
+    .lobby-account summary, .library-page .outgame-account summary { max-width: 100%; padding: 8px 10px; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lobby-account summary::after, .library-page .outgame-account summary::after { content: none; }
+    #lobby_navigation .lobby-primary-action { order: 0; padding: 8px; width: 40px; min-height: 40px; font-size: 0; }
+    #lobby_navigation .lobby-primary-action::after { content: "+"; font: 22px/1 var(--tt-font-ui); }
+    #lobby_navigation .lobby-primary-action[data-has-room="true"]::after { content: "Party"; font: 600 10px/1.4 var(--tt-font-ui); }
+    #lobby_navigation .lobby-chapters, .library-page .outgame-sections {
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+    }
+    #lobby_navigation .lobby-chapter-link, .library-page .outgame-sections a { flex: 1 0 auto; padding: 9px 11px; font-size: 12px; scroll-snap-align: start; }
+    #lobby_navigation .outgame-label-full, .library-page .outgame-label-full { display: none; }
+    #lobby_navigation .outgame-label-short, .library-page .outgame-label-short { display: inline; }
+    .library-page .outgame-sign-in { padding: 8px 10px; font-size: 11px; }
+    #lobby_navigation > .connection-quality, .outgame-nav > .connection-quality { font-size: 10px; padding: 4px 6px; }
+    .lobby-home { grid-template-columns: 1fr; }
+    .lobby-home-copy { padding: 25px 22px; }
+    .lobby-home-art { display: none; }
+    #lobby_home h1 { font-size: 34px; }
+    .lobby-home-footnote { font-size: 11px; }
+}
+@media (forced-colors: active) {
+    #lobby_navigation .lobby-chapter-link[aria-current], .library-page .outgame-sections a[aria-current] { outline: 2px solid Highlight; }
+}

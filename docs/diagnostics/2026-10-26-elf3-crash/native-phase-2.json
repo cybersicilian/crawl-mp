@@ -1,0 +1,16 @@
+{
+  "runId": "1f469305-b568-4f95-a28d-41566e9e74a7",
+  "owner": "codex/01a17a3a-4a0c-79c3-ab41-79bd3aa07976",
+  "label": "DCSS Elf3 native verification with complete startup maps",
+  "requestedAt": 1793053068.311042,
+  "supervisorPid": 53438,
+  "status": "failed_held",
+  "reservation": true,
+  "requestId": "7a0a2a6d1faff9110d425d7d2e6f221d7a8af0c43dcac88521da2a64af28a82d",
+  "startedAt": 1793053068.364704,
+  "workerPid": 53457,
+  "processGroup": 53457,
+  "exitCode": 1,
+  "finishedAt": 1793053085.916086,
+  "supervisedProcessGroupGone": true
+}

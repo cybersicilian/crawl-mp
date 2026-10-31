@@ -1,0 +1,24 @@
+{
+  "reservationId": "bec82422-d77e-4bb1-b6f7-973df81a05e9",
+  "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "gate": {
+      "runId": "bec82422-d77e-4bb1-b6f7-973df81a05e9",
+      "owner": "codex/01a16ade-77cb-7c81-b7a3-ddfd402494d7",
+      "label": "DCSS final native route and bottom-floor combat coverage",
+      "requestedAt": 1793156874.4652102,
+      "supervisorPid": 3063,
+      "status": "completed_held",
+      "reservation": true,
+      "requestId": "7147287efc7ccf9f338395a1ac84b72a7c3ac2024d51026f1a9396d5a9d99cb5",
+      "startedAt": 1793156874.465527,
+      "workerPid": 3064,
+      "processGroup": 3064,
+      "exitCode": 0,
+      "finishedAt": 1793156965.578568,
+      "supervisedProcessGroupGone": true
+    },
+    "requestSha256": "7147287efc7ccf9f338395a1ac84b72a7c3ac2024d51026f1a9396d5a9d99cb5"
+  }
+}

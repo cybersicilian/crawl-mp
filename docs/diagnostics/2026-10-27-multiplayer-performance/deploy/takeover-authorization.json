@@ -1,0 +1,7 @@
+{
+  "owner": "codex/01a17ea4-b1f9-7413-8364-3a69e5a4af1f",
+  "scope": "This performance release only",
+  "release": "/opt/dcss/releases/multiplayer-performance-01a17ea4",
+  "direct_human_authorization": "Yes, take over production deployment for this release and deploy it, including the service restart.",
+  "supersedes_previous_sole_operator_for_this_release": true
+}

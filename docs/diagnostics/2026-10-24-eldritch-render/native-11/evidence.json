@@ -1,0 +1,689 @@
+{
+  "url": "http://127.0.0.1:18888",
+  "engine": "webkit",
+  "atlasFault": true,
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "Options not set, wanted option: tile_realtime_anim"
+  ],
+  "requestFailures": [],
+  "scenes": [
+    {
+      "label": "0-Eldritch-start",
+      "species": "Eldritch",
+      "turns": 0,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7364,
+      "blankFloors": 0,
+      "floors": 29,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "0-Eldritch-south",
+      "species": "Eldritch",
+      "turns": 1,
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 28,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "0-Eldritch-east",
+      "species": "Eldritch",
+      "turns": 2,
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "0-Eldritch-resumed",
+      "species": "Eldritch",
+      "turns": 2,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "1-Human-start",
+      "species": "Human",
+      "turns": 0,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7211,
+      "blankFloors": 0,
+      "floors": 29,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "1-Human-south",
+      "species": "Human",
+      "turns": 1,
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "actorPixels": 7452,
+      "blankFloors": 0,
+      "floors": 28,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "1-Human-east",
+      "species": "Human",
+      "turns": 2,
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "actorPixels": 7443,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "1-Human-resumed",
+      "species": "Human",
+      "turns": 2,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7443,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "2-Eldritch-start",
+      "species": "Eldritch",
+      "turns": 0,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7364,
+      "blankFloors": 0,
+      "floors": 29,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "2-Eldritch-south",
+      "species": "Eldritch",
+      "turns": 1,
+      "position": {
+        "x": 0,
+        "y": 1
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 28,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "2-Eldritch-east",
+      "species": "Eldritch",
+      "turns": 2,
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    },
+    {
+      "label": "2-Eldritch-resumed",
+      "species": "Eldritch",
+      "turns": 2,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "actorPixels": 7596,
+      "blankFloors": 0,
+      "floors": 25,
+      "atlases": [
+        {
+          "id": "floor",
+          "width": 1024
+        },
+        {
+          "id": "wall",
+          "width": 1024
+        },
+        {
+          "id": "feat",
+          "width": 1024
+        },
+        {
+          "id": "main",
+          "width": 1024
+        },
+        {
+          "id": "player",
+          "width": 1024
+        },
+        {
+          "id": "gui",
+          "width": 1024
+        },
+        {
+          "id": "icons",
+          "width": 1024
+        }
+      ],
+      "zoom": "Dungeon zoom 150%"
+    }
+  ],
+  "assetRequests": [
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png?asset_retry=1",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+      "status": 503
+    },
+    {
+      "url": "http://127.0.0.1:18888/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+      "status": 503
+    }
+  ],
+  "loadedCode": [
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/loading-ui.js?v=9e1e3a85b2bc8ecd6ebf",
+      "sha256": "fda898fa0f8ababbba3bd84fd9aab4494b404ae3b6affea4adaff3ca51b93d9d"
+    },
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/game-loading.js?v=9e1e3a85b2bc8ecd6ebf",
+      "sha256": "00cdf7315167cbdd9e3ba72f3713b86e98c6d096fce8c96621dbc11a07ab2804"
+    },
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/client-transport.js?v=9e1e3a85b2bc8ecd6ebf",
+      "sha256": "7d47030378847f35ce2b81ae7fdea501a1bcea051d16123eb72eadc9d18df1da"
+    },
+    {
+      "url": "http://127.0.0.1:18888/static/scripts/asset-readiness.js?v=9e1e3a85b2bc8ecd6ebf",
+      "sha256": "c7b33d53787a837ea262b0b99e1445fa6d16e758e09368cc72ee50b26d3087bd"
+    }
+  ],
+  "injectedFaults": [
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/floor.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/main.png",
+    "/gamedata/8e3347a713cb915a06e00038672441586b4704c9/player.png"
+  ],
+  "unexpectedErrors": [],
+  "passed": true
+}

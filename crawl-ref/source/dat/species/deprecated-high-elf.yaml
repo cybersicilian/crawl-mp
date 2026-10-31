@@ -1,11 +1,11 @@
-TAG_MAJOR_VERSION: 34
 enum: SP_HIGH_ELF
 monster: MONS_ELF
 name: High Elf
 short_name: HE
 adjective: Elven
 genus: Elf
-difficulty: False
+difficulty: Intermediate
+difficulty_priority: 35
 aptitudes:
   xp: -1
   hp: -1
@@ -39,5 +39,21 @@ levelup_stat_frequency: 3
 levelup_stats:
   - dex
   - int
+fake_mutations:
+  - long: Skills below one third of your experience level cannot be trained, except Fighting, Spellcasting and Invocations.
+    short: low skills cannot be trained
 
 orc_name: High Orc
+recommended_jobs:
+  - hunter
+  - skald
+  - gladiator
+  - enchanter
+  - hexslinger
+  - conjurer
+  - air elementalist
+  - hedge wizard
+recommended_weapons:
+  - long blades
+  - short blades
+  - staves

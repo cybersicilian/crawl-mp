@@ -1,0 +1,12 @@
+{
+  "owner": "codex/01a15b5a-8a11-7d93-85f8-fc4a093e3a65",
+  "reservationId": "20675572-d47b-45cb-915a-8d63c801f01e",
+  "allOwnedProcessesGone": true,
+  "phaseClosureEvidence": {
+    "processGroup": 23720,
+    "processGroupGone": true,
+    "nativeBuildAndAllNativeTestsPassed": true,
+    "powerArtSourceParityFailed": "Aura of Passage missing fallback",
+    "result": "docs/coop-content/attempt-7/validation-result.json"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "processes": [
+    {
+      "pid": 379066,
+      "start_ticks": "96287847",
+      "name": "Rogue",
+      "record_id": "904f3790-0541-4d28-ab9a-325506030311",
+      "owner": "Rogue"
+    }
+  ],
+  "current": "/opt/dcss/releases/session-handoff-01a18019"
+}

@@ -204,8 +204,12 @@ void write_level_connectivity(writer &th);
 
 bool builder(bool enable_random_maps = true);
 
+int dgn_default_builder_x();
+int dgn_default_builder_y();
 int dgn_builder_x();
 int dgn_builder_y();
+coord_def dgn_builder_tl();
+coord_def dgn_builder_br();
 
 void dgn_clear_vault_placements();
 void dgn_erase_unused_vault_placements();
