@@ -22,6 +22,9 @@ const root = path.resolve(__dirname, '..');
                 window.modules[window.moduleName] = factory(...dependencies.map(name => window.modules[name]));
             };
         });
+        await page.evaluate(() => { window.moduleName = 'dom-update'; });
+        await page.addScriptTag({ path: path.join(root, 'static/scripts/dom-update.js') });
+        await page.evaluate(() => { window.moduleName = 'item-properties'; });
         await page.addScriptTag({ path: path.join(root, 'static/scripts/item-properties.js') });
         for (const name of ['effect-icon-catalog', 'effect-icon-art']) {
             await page.evaluate(name => { window.moduleName = './' + name; }, name);

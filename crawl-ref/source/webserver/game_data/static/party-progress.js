@@ -1,5 +1,5 @@
-define(["jquery", "./party-progress-model", "./status-icons", "./tileinfo-main", "./native-tile-art", "./party-initiative", "./enemy-initiative"],
-function ($, model, icons, tiles, art, initiative, enemies) {
+define(["jquery", "./party-progress-model", "./status-icons", "./tileinfo-main", "./native-tile-art", "./party-initiative", "./enemy-initiative", "dom-update"],
+function ($, model, icons, tiles, art, initiative, enemies, dom) {
     "use strict";
     var runeSignature = "";
     function runeIcon(rune) {
@@ -17,18 +17,20 @@ function ($, model, icons, tiles, art, initiative, enemies) {
         var progress = model.project(state);
         initiative.updateMonster($("#party_progress_monsters"), state);
         var goldLabel = progress.gold === null ? "Party gold unavailable" : progress.gold + " shared party gold";
-        $("#party_progress_gold").attr({ "aria-label": goldLabel, "data-tip-title": goldLabel,
+        dom.attributes(document.getElementById("party_progress_gold"), { "aria-label": goldLabel, "data-tip-title": goldLabel,
             "data-tip-body": "Gold is shared by the expedition." });
-        $("#party_hud_gold").text(progress.gold === null ? "?" : progress.gold)
-            .attr("data-tip-title", goldLabel);
-        $("#party_progress_floor").attr({ "aria-label": "Current floor: " + (progress.place || "unavailable"),
-            "data-tip-title": "Current floor", "data-tip-body": progress.place || "Floor information unavailable." })
-            .find(".party-context-value").text(progress.place || "?");
+        dom.text(document.getElementById("party_hud_gold"), progress.gold === null ? "?" : progress.gold);
+        dom.attribute(document.getElementById("party_hud_gold"), "data-tip-title", goldLabel);
+        var floor = document.getElementById("party_progress_floor");
+        dom.attributes(floor, { "aria-label": "Current floor: " + (progress.place || "unavailable"),
+            "data-tip-title": "Current floor", "data-tip-body": progress.place || "Floor information unavailable." });
+        dom.text(floor && floor.querySelector(".party-context-value"), progress.place || "?");
         var bribeLabel = progress.bribeFund === null ? "No active branch bribe" : "Bribe fund: " + progress.bribeFund + " gold";
-        $("#party_progress_bribe").prop("hidden", progress.bribeFund === null)
-            .attr({ "aria-label": bribeLabel, "data-tip-title": bribeLabel,
-                "data-tip-body": "Gold remaining to bribe the denizens of this branch. Hell branches share one fund." })
-            .find(".party-context-value").text(progress.bribeFund === null ? "" : "Bribe: " + progress.bribeFund.toLocaleString("en-US"));
+        var bribe = document.getElementById("party_progress_bribe");
+        if (bribe && bribe.hidden !== (progress.bribeFund === null)) bribe.hidden = progress.bribeFund === null;
+        dom.attributes(bribe, { "aria-label": bribeLabel, "data-tip-title": bribeLabel,
+            "data-tip-body": "Gold remaining to bribe the denizens of this branch. Hell branches share one fund." });
+        dom.text(bribe && bribe.querySelector(".party-context-value"), progress.bribeFund === null ? "" : "Bribe: " + progress.bribeFund.toLocaleString("en-US"));
         var next = JSON.stringify([progress.runes, progress.runesKnown]);
         if (runeSignature === next) return;
         runeSignature = next;

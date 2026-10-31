@@ -1,4 +1,4 @@
-define(["jquery", "./game-context", "./status-icons", "./enums"], function ($, game, icons, enums) {
+define(["jquery", "./game-context", "./status-icons", "./enums", "dom-update"], function ($, game, icons, enums, dom) {
     "use strict";
     // factor === null means "fit": the game sizes tiles so the full line of
     // sight fills the column. Numbers are explicit zoom levels the user chose.
@@ -16,9 +16,9 @@ define(["jquery", "./game-context", "./status-icons", "./enums"], function ($, g
         $("#hud_zoom_in").prop("disabled", !available || current >= levels[levels.length - 1]);
         $("#hud_zoom_reset").prop("disabled", !available || factor === null)
             .attr("aria-pressed", String(factor === null));
-        $("#hud_zoom_status").text(factor === null ? "Dungeon zoom: fit to view, " + percent : "Dungeon zoom " + percent);
-        $("#hud_zoom_value").text(factor === null ? "Fit" : percent)
-            .attr("title", factor === null ? "Fit to view · " + percent : "Dungeon zoom " + percent);
+        dom.text(document.getElementById("hud_zoom_status"), factor === null ? "Dungeon zoom: fit to view, " + percent : "Dungeon zoom " + percent);
+        dom.text(document.getElementById("hud_zoom_value"), factor === null ? "Fit" : percent);
+        dom.attribute(document.getElementById("hud_zoom_value"), "title", factor === null ? "Fit to view · " + percent : "Dungeon zoom " + percent);
     }
     function set(value) {
         if (value !== null && !levels.includes(value)) return;

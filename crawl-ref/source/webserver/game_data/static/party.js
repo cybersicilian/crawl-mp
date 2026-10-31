@@ -1,5 +1,5 @@
-define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade", "hero-roles", "./turn-order-rail", "heat-help"],
-function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade, roles, turnOrder, heatHelp) {
+define(["jquery", "comm", "client", "./dungeon_renderer", "./display", "./minimap", "./party-model", "./party-inspector", "./party-controls", "./status-icons", "./chat-context", "item-properties", "./party-initiative", "./party-navigation", "./party-card-status", "./player-card-details", "./party-doom", "./party-trade", "hero-roles", "./turn-order-rail", "heat-help", "dom-update"],
+function ($, comm, client, dungeon_renderer, display, minimap, model, inspector, controls, icons, chatContext, properties, initiative, navigation, cardStatus, details, doom, trade, roles, turnOrder, heatHelp, dom) {
     "use strict";
 
     var party_slot_colours = model.colours;
@@ -111,34 +111,36 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
         data.gold = shared_gold;
         for (var gi = 0; gi < data.members.length; ++gi)
             data.members[gi].gold = shared_gold;
-        $("#party_hud_gold")
-            .text(shared_gold === undefined ? "Gold unavailable" : shared_gold + " gold")
-            .attr("data-tip-title", "Shared Party Gold: " + model.display(shared_gold));
+        // Once mounted, party-progress owns this value and its tooltip. Avoid
+        // writing the legacy suffix before it writes the compact number again.
+        if (!document.getElementById("party_progress_gold")) {
+            dom.text(document.getElementById("party_hud_gold"), shared_gold === undefined ? "Gold unavailable" : shared_gold + " gold");
+            dom.attribute(document.getElementById("party_hud_gold"), "data-tip-title", "Shared Party Gold: " + model.display(shared_gold));
+        }
 
         var active_col = party_slot_colours[controlled_slot % party_slot_colours.length];
         $("#party_banner_dot").css({
             "background": active_col,
             "color": active_col
         });
-        $("#party_banner_who")
-            .css("color", active_col)
-            .text("P" + (controlled_slot + 1) + " · " + (active_member ? active_member.name : "Hero"));
+        $("#party_banner_who").css("color", active_col);
+        dom.text(document.getElementById("party_banner_who"), "P" + (controlled_slot + 1) + " · " + (active_member ? active_member.name : "Hero"));
 
         var region_combat = model.inCombat(data, active_member);
         var region_tag = active_member && Number.isInteger(active_member.region_id)
             ? " · R" + (active_member.region_id + 1) : "";
+        var mode_text;
         if (region_combat)
         {
             var status_word = active_member && active_member.queued_action ? "Queued"
                 : active_member && active_member.can_act === false ? "Recovering" : "Ready";
-            $("#party_banner_mode").removeClass("explore").addClass("combat")
-                .text(data.multiplayer ? (data.floor || (active_member && active_member.place) || "") + region_tag + " · " + status_word
-                    : "Combat Queue (P" + ((data.active_slot || 0) + 1) + ")");
+            var waiting = !data.simultaneous_turns && controlled_slot !== data.active_slot;
+            mode_text = data.multiplayer ? (data.floor || (active_member && active_member.place) || "") + region_tag + " · " + status_word
+                : "Tactical Combat" + (waiting ? " · Waiting for P" + ((data.active_slot || 0) + 1) : "");
         }
         else
         {
-            $("#party_banner_mode").removeClass("combat").addClass("explore")
-                .text("Free Explore" + (data.multiplayer ? region_tag + (active_member && active_member.queued_action ? " · Queued" : "") : ""));
+            mode_text = "Free Explore" + (data.multiplayer ? region_tag + (active_member && active_member.queued_action ? " · Queued" : "") : "");
         }
         var activity = active_member && active_member.activity;
         var queued = active_member && active_member.queued_action;
@@ -151,9 +153,11 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 : queued ? "Clear this hero's queued actions. An action already executing keeps its native completion."
                 : "Automatically wait in place until you stop yielding or become threatened. Your floor advances with these waits.")
             .text(activity ? "Stop " + activity_label : queued ? "Clear queue" : "Yield");
-        if (activity) $("#party_banner_mode").append(" · " + ({ yield: "Yielding", rest: "Resting", explore: "Exploring", travel: "Travelling" }[activity] || activity));
+        if (activity) mode_text += " · " + ({ yield: "Yielding", rest: "Resting", explore: "Exploring", travel: "Travelling" }[activity] || activity);
         if (data.multiplayer && data.shared_fate)
-            $("#party_banner_mode").append(" · Shared Fate");
+            mode_text += " · Shared Fate";
+        $("#party_banner_mode").toggleClass("combat", region_combat).toggleClass("explore", !region_combat);
+        dom.text(document.getElementById("party_banner_mode"), mode_text);
 
         if (client.is_party_member && client.is_party_member())
         {
