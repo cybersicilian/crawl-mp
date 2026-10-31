@@ -77,6 +77,7 @@
 #include "nearby-danger.h"
 #include "notes.h"
 #include "party.h"
+#include "party-tally.h"
 #include "place.h"
 #include "prompt.h"
 #include "religion.h"
@@ -2730,6 +2731,7 @@ static void _save_game_base()
     {
         party::sync_shared_state_from_active();
         party::save_friendly_fire();
+        party::save_tallies();
         {
             party::scoped_player_context ctx0(0);
             _write_tagged_chunk("you", TAG_YOU);
@@ -3465,6 +3467,7 @@ static bool _restore_game(const string& filename)
     }
 
     party::restore_friendly_fire();
+    party::restore_tallies();
     party::restore_downed_state();
     _convert_obsolete_species();
 
