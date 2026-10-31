@@ -53,5 +53,8 @@ TEST_CASE_METHOD(vellum_fixture, "Xom respects the active Chaos Knight's departu
     }
     CHECK_FALSE(god_hates_your_god(GOD_XOM, GOD_TROG));
     party::set_multiplayer(false);
+    // The second seat copied the fixture's save handle; drop it so the static
+    // player destructor does not see an open save at process exit.
+    party::get_player(1).save = nullptr;
     party::set_player_count(1);
 }
