@@ -70,13 +70,57 @@ function ($, comm, client, textinput, util, options, nested, references, scrollb
         }
     }
 
+    // The engine folds repeats within one command into a trailing " xN"; the
+    // log stacks repeats across commands of the same turn into one entry with
+    // a count. Each entry keeps the count of every sent line for rollback.
+    var repeat_suffix = / x(\d+)$/;
+
+    function show_repeats(msg_elem)
+    {
+        var total = msg_elem.data("lines").reduce(function (sum, count) { return sum + count; }, 0);
+        var badge = msg_elem.children(".msg-repeats");
+        if (total < 2)
+        {
+            badge.remove();
+            return;
+        }
+        if (!badge.length)
+        {
+            // The leading space keeps copied history text readable.
+            badge = $("<span class='msg-repeats'> <span class='msg-repeat-count'></span></span>");
+            var cursor = msg_elem.children("#text_cursor");
+            if (cursor.length) badge.insertBefore(cursor);
+            else msg_elem.append(badge);
+        }
+        badge.children(".msg-repeat-count").text("×" + total)
+            .attr("aria-label", "repeated " + total + " times");
+    }
+
     function add_message(data)
     {
+        var text = typeof data.text === "string" ? data.text : "";
+        var channel = Number.isInteger(data.channel) ? data.channel : null;
+        var count = 1;
+        var suffix = repeat_suffix.exec(text);
+        if (suffix)
+        {
+            count = Number(suffix[1]);
+            text = text.slice(0, suffix.index);
+        }
+        // Prompts own their line (text input attaches to it), so they never stack.
+        var key = channel === 2 ? null : [data.turn, channel, data.recipient, text].join("\u0000");
+        var last = $("#messages .game_message").last();
+        if (key !== null && last.length && last.data("stack-key") === key && !last.find("input").length)
+        {
+            last.data("lines").push(count);
+            show_repeats(last);
+            return;
+        }
+
         var msg_elem = $("<div>");
         $("#messages").append(msg_elem);
         msg_elem.addClass("game_message");
-        var text = typeof data.text === "string" ? data.text : "";
-        var channel = Number.isInteger(data.channel) ? data.channel : null;
+        msg_elem.data({ "stack-key": key, lines: [count] });
         if (channel !== null)
         {
             msg_elem.attr("data-channel", channel);
@@ -106,11 +150,27 @@ function ($, comm, client, textinput, util, options, nested, references, scrollb
         msg_elem.append(util.formatted_string_to_html(text));
         // Glossary terms in the log open (nestable) tooltips on hover.
         nested.linkify(msg_elem[0]);
+        show_repeats(msg_elem);
     }
 
+    // The engine counts rollback in sent lines; a stacked entry gives back
+    // one line at a time before the entry itself goes.
     function rollback(count)
     {
-        $("#messages .game_message").slice(-count).remove();
+        for (var i = 0; i < count; ++i)
+        {
+            var last = $("#messages .game_message").last();
+            if (!last.length)
+                return;
+            var lines = last.data("lines");
+            if (lines && lines.length > 1)
+            {
+                lines.pop();
+                show_repeats(last);
+            }
+            else
+                last.remove();
+        }
     }
 
     function handle_messages(msg)
