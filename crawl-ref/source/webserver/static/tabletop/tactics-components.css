@@ -256,8 +256,10 @@
     color: inherit; font: var(--tt-type-body, 13px)/1.45 var(--tt-font-ui, sans-serif);
 }
 .tr-callout > .tt-icon { width: 16px; height: 16px; margin-top: 2px; color: var(--tr-callout-color); }
-.tr-callout > :not(.tt-icon) { min-width: 0; grid-column: 2; }
-.tr-callout:not(:has(> .tt-icon)) > :not(.tt-icon) { grid-column: 1 / -1; }
+/* Icons lead their callout, so a sibling combinator finds the text column. A
+   :not(:has()) form made every in-game DOM change restyle the whole page. */
+.tr-callout > :not(.tt-icon) { min-width: 0; grid-column: 1 / -1; }
+.tr-callout > .tt-icon ~ :not(.tt-icon) { grid-column: 2; }
 .tr-callout-title { display: block; margin-bottom: 2px; font-weight: 700; color: var(--tr-callout-color); }
 .tr-callout-warn { --tr-callout-color: var(--ui-warn, #805019); }
 .tr-callout-danger { --tr-callout-color: var(--ui-danger, #a12d27); }
