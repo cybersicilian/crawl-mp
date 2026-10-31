@@ -1,6 +1,8 @@
 # Content port and UI overhaul deployment — 31 October 2026
 
 Status: LIVE as release `20261031T123110Z` since 13:28 UTC on 31 October 2026 (commit 25ced510ff).
+`master` now carries this release: `claude/ui-deploy-2026-10-31` (tip 3e117c7d58) was merged
+into master on 31 October 2026, so hotfixes cut from master keep the live lobby and HUD.
 
 ## What ships
 
