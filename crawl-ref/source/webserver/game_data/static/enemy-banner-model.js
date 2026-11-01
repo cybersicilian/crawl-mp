@@ -11,7 +11,9 @@ define(["./party-status-model"], function (statuses) {
         var health = !remembered && Number.isInteger(enemy.damage_level) ? levels[enemy.damage_level] : undefined;
         var subject = { name: enemy.name, statuses_known: !remembered && enemy.statuses_known === true,
             statuses: remembered ? [] : enemy.statuses };
-        return { remembered: remembered, timed: timed, reading: reading,
+        // The bars show health and recovery; the caption adds what they cannot.
+        var caption = remembered || !enemy.health || reading === "Paused" ? reading : enemy.health;
+        return { remembered: remembered, timed: timed, reading: reading, caption: caption,
             statusSubject: subject, effects: remembered ? [] : statuses.effects(subject),
             initiative: timed ? Math.max(0, Math.min(100, 100 - enemy.energy_deficit * 10)) : null,
             health: health === undefined ? null : health,

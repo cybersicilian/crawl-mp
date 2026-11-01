@@ -1,77 +1,105 @@
 /* A separate lane outside Zot; on narrow screens use the padded roster flow. */
-#enemy_initiative_rail { position: fixed; z-index: 30; box-sizing: border-box; width: 158px; max-height: calc(100dvh - 16px); padding: 0 0 7px; color: #e3d1b1; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; font: 10px/1.3 var(--tt-font-ui); }
+#enemy_initiative_rail { position: fixed; z-index: 30; box-sizing: border-box; width: 158px; max-height: calc(100dvh - 16px); padding: 0 0 7px; color: var(--ui-text, #f0e5cd); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; font: 10px/1.3 var(--tt-font-ui); }
 #enemy_initiative_rail[hidden] { display: none; }
-.creature-category > summary { position: sticky; top: 0; z-index: 2; padding: 7px; color: #e8bc8b; background: #20251ff2; cursor: pointer; font: 11px/1.4 var(--tt-font-title); }
-.creature-category > summary:focus-visible, .creature-stack-toggle:focus-visible { outline: 2px solid #fff0b6; outline-offset: -2px; }
-.creature-count { float: right; font-family: var(--tt-font-mono); }
-.creature-category[data-category='allies'] > summary { color: #bfdbb9; }
-.creature-category[data-category='neutrals'] > summary { color: #d3c6af; }
-.enemy-timing-list { display: grid; gap: 6px; }
-.creature-stack { position: relative; display: grid; gap: 4px; min-width: 0; }
-.creature-stack.is-stacked { margin-bottom: 5px; border-bottom: 4px double #ae96737a; }
-#enemy_initiative_rail .creature-stack-toggle { position: absolute; top: 3px; right: 3px; z-index: 1; min-width: 28px; min-height: 24px; padding: 2px 4px; border: 1px solid #a89067; border-radius: 3px; background: #20251f; color: #eeddb9; cursor: pointer; font: 10px/1.2 var(--tt-font-mono); }
-.creature-stack:has(.creature-stack-toggle) > .enemy-timing:first-child .enemy-timing-name { padding-right: 30px; }
+#enemy_initiative_rail.is-compact { position: static; width: 100%; max-height: 240px; margin-bottom: 7px; }
+.enemy-timing-empty { padding: 4px 7px; color: var(--ui-muted, #c0b296); }
+
+/* Group headings share the turn tracker's caption voice. */
+.creature-category + .creature-category { margin-top: 6px; }
+.creature-category > summary { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 5px; margin-bottom: 3px; padding: 3px 6px; border: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent); border-radius: 3px; color: var(--ui-gilt, #d9b56a); background: var(--ui-panel, #241e18); list-style: none; cursor: pointer; font: 600 9.5px/1.3 var(--tt-font-ui); letter-spacing: .08em; text-transform: uppercase; }
+.creature-category > summary::-webkit-details-marker { display: none; }
+.creature-category > summary::before { content: ""; flex: 0 0 auto; width: 0; height: 0; border-block: 3px solid transparent; border-inline-start: 4px solid currentColor; opacity: .75; transition: transform 120ms ease; }
+.creature-category[open] > summary::before { transform: rotate(90deg); }
+.creature-category > summary:hover { border-color: var(--ui-gilt, #d9b56a); }
+.creature-category > summary:focus-visible, .creature-stack-toggle:focus-visible { outline: 2px solid var(--ui-focus, #f0d29a); outline-offset: -2px; }
+.creature-category[data-category='allies'] > summary { color: var(--ui-ally, #86cfa5); }
+.creature-category[data-category='neutrals'] > summary { color: var(--ui-neutral, #bfb5a2); }
+.creature-count { margin-left: auto; color: var(--ui-text, #f0e5cd); font: 600 10px/1.3 var(--tt-font-mono); letter-spacing: 0; }
+
+/* Bounded tracks, so a long unbroken name clips instead of widening the card. */
+.enemy-timing-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; }
+.creature-stack { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; min-width: 0; }
+/* A closed stack shows the next card's edge peeking out beneath the first. */
+.creature-stack.is-stacked::after { content: ""; height: 3px; margin: -3px 6px 1px 13px; border: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 80%, transparent); border-top: 0; border-radius: 0 0 2px 2px; background: var(--ui-panel, #241e18); }
+#enemy_initiative_rail .creature-stack-toggle { position: absolute; top: 3px; right: 3px; z-index: 1; min-width: 22px; min-height: 16px; padding: 0 3px; border: 1px solid transparent; border-radius: 2px; background: var(--ui-recess, #100d0b); color: var(--ui-text, #f0e5cd); cursor: pointer; font: 600 9.5px/1.2 var(--tt-font-mono); }
+#enemy_initiative_rail .creature-stack-toggle:hover { border-color: var(--ui-gilt, #d9b56a); }
+.creature-stack.has-toggle > .enemy-timing:first-child .enemy-timing-name { padding-right: 24px; }
+
+/* A swallowtail pennant: the accent names the threat, attitude or memory it reports. */
+.enemy-timing { --banner-accent: var(--ui-enemy, #ff8f80); }
 #enemy_initiative_rail .enemy-timing {
-    display: flex; align-items: center; gap: 5px; width: 100%; min-height: 62px; padding: 9px 10px 11px 20px;
-    box-sizing: border-box; position: relative; border: 0; border-radius: 0;
-    background-color: #443039;
-    background-image:
-        repeating-linear-gradient(0deg, #160c1410 0 1px, #d6aa8308 1px 2px, transparent 2px 4px),
-        repeating-linear-gradient(90deg, #e4bd8f08 0 1px, #150e160a 1px 2px, transparent 2px 3px),
-        linear-gradient(100deg, #140d1a28, transparent 24%, #d3a67c09 48%, #100c1624 77%, #d8ae7b0c 91%, #100c1622);
-    color: #f0dec0; text-align: left; font: inherit; cursor: pointer;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 8% 50%);
-    box-shadow: inset 0 2px 4px #c8a57712, inset 0 -3px 5px #120b1640, inset -3px 0 5px #100a1630;
+    --banner-edge: color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 75%, transparent);
+    --banner-notch: 7px;
+    position: relative; display: flex; align-items: center; gap: 7px; box-sizing: border-box; width: 100%;
+    min-height: 44px; padding: 5px 7px 5px 13px; border: 0; border-radius: 0;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--banner-accent) 15%, transparent), transparent 52%),
+        linear-gradient(180deg, var(--ui-raised, #33291f), var(--ui-panel, #241e18));
+    color: var(--ui-text, #f0e5cd); text-align: left; font: inherit; cursor: pointer;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, var(--banner-notch) 50%);
 }
+/* The hairline follows the notch, which a border on a clipped box cannot. */
 #enemy_initiative_rail .enemy-timing::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .7;
-    background: url("enemy-banner-stitches.svg") center / 100% 100% no-repeat;
+    content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--banner-edge);
+    clip-path: polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, var(--banner-notch) 50%, 0 0,
+        1.5px 1px, calc(var(--banner-notch) + 1px) 50%, 1.5px calc(100% - 1px),
+        calc(100% - 1px) calc(100% - 1px), calc(100% - 1px) 1px, 1.5px 1px);
 }
-#enemy_initiative_rail .enemy-timing:hover { background-color: #584048; }
-.enemy-timing-icon { width: 32px; height: 32px; flex: 0 0 32px; image-rendering: pixelated; border: 1px solid #b59a6266; border-radius: 50%; background: #151916; }
-.enemy-timing-details { display: block; min-width: 0; flex: 1; }
-.enemy-timing-name { display: block; overflow-wrap: anywhere; font: 11px/1.15 var(--tt-font-title); margin-bottom: 4px; }
-.enemy-health-track, .enemy-timing-track { display: block; height: 5px; margin: 3px 0; border: 1px solid #b38d595c; border-radius: 2px; background: #090e13; overflow: hidden; }
+#enemy_initiative_rail .enemy-timing:hover { --banner-edge: var(--banner-accent); filter: brightness(1.12); }
+#enemy_initiative_rail .enemy-timing:focus-visible { --banner-edge: var(--ui-focus, #f0d29a); outline: none; box-shadow: inset 0 0 0 2px var(--ui-focus, #f0d29a); }
+#enemy_initiative_rail .enemy-timing[data-ready='true'] { --banner-edge: var(--ui-gilt, #d9b56a); }
+
+.enemy-timing[data-threat='trivial'] { --banner-accent: var(--ui-threat-trivial, #9bd48e); }
+.enemy-timing[data-threat='easy'] { --banner-accent: var(--ui-threat-easy, #9bd48e); }
+.enemy-timing[data-threat='tough'] { --banner-accent: var(--ui-threat-tough, #f2c75c); }
+.enemy-timing[data-threat='nasty'] { --banner-accent: var(--ui-threat-nasty, #ff9d5c); }
+.enemy-timing[data-threat='invisible'], .enemy-timing[data-perception='last_known'] { --banner-accent: var(--ui-threat-invisible, #bfb5a2); }
+.enemy-timing[data-attitude='allies'] { --banner-accent: var(--ui-ally, #86cfa5); }
+.enemy-timing[data-attitude='neutrals'] { --banner-accent: var(--ui-neutral, #bfb5a2); }
+#enemy_initiative_rail .enemy-timing[data-perception='last_known'] { opacity: .78; }
+
+/* 32px keeps the native tile on its own pixel grid. */
+.enemy-timing-icon { flex: 0 0 32px; box-sizing: content-box; width: 32px; height: 32px; border-radius: 3px; background: var(--ui-recess, #100d0b); box-shadow: 0 0 0 1px color-mix(in srgb, var(--banner-accent) 45%, #0000), 0 1px 2px #0008; image-rendering: pixelated; }
+.enemy-timing[data-ready='true'] .enemy-timing-icon { box-shadow: 0 0 0 1px var(--ui-gilt, #d9b56a), 0 0 6px var(--ui-gilt-glow, #f2d58a66); }
+/* Effects sit beside the caption, and take their own line only when they must. */
+.enemy-timing-details { display: flex; flex: 1; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 4px; min-width: 0; }
+.enemy-timing-details > :is(.enemy-timing-name, .enemy-health-track, .enemy-timing-track) { flex: 0 0 100%; }
+.enemy-timing-name { display: block; box-sizing: border-box; overflow: hidden; margin-bottom: 3px; color: var(--banner-accent); font: 600 11px/1.2 var(--tt-font-title); text-overflow: ellipsis; white-space: nowrap; }
+
+.enemy-health-track, .enemy-timing-track { display: block; overflow: hidden; background: var(--ui-meter-track, #0b0806); }
+.enemy-health-track { height: 4px; border-radius: 1px 1px 0 0; }
+.enemy-timing-track { height: 2px; margin-top: 1px; border-radius: 0 0 1px 1px; }
 .enemy-health-track i, .enemy-timing-track i { display: block; height: 100%; }
-.enemy-health-track i { background: linear-gradient(#bd6c61, #8b3e41); }
-.enemy-timing-track { height: 3px; }
-.enemy-timing-track i { background: #c59658; }
-.enemy-timing[data-ready='true'] .enemy-timing-track i { background: #f1d68d; box-shadow: 0 0 4px #eabc70; }
-.enemy-timing small { color: #d0bd9c; font: 9px/1.2 var(--tt-font-mono); }
-#enemy_initiative_rail .enemy-timing:focus-visible { outline: none; box-shadow: inset 0 0 0 2px #fff0b6; }
-#enemy_initiative_rail .enemy-timing[data-perception='last_known'] { background-color: #363344; }
-#enemy_initiative_rail .enemy-timing[data-perception='last_known']::after { opacity: .5; }
+.enemy-health-track i { background: var(--ui-res-hp, #e46a6c); }
+.enemy-timing[data-injury='0'] .enemy-health-track i { background: linear-gradient(#a6cf94, #6c9a61); }
+.enemy-timing:is([data-injury='1'], [data-injury='2']) .enemy-health-track i { background: linear-gradient(#ddc875, #a18c40); }
+.enemy-timing:is([data-injury='3'], [data-injury='4']) .enemy-health-track i { background: linear-gradient(#e69a66, #ae6233); }
+.enemy-timing:is([data-injury='5'], [data-injury='6']) .enemy-health-track i { background: linear-gradient(#e87370, #93464a); }
+.enemy-timing-track i { background: color-mix(in srgb, var(--ui-gilt, #d9b56a) 72%, #0000); }
+.enemy-timing[data-ready='true'] .enemy-timing-track i { background: var(--ui-gilt, #d9b56a); box-shadow: 0 0 4px var(--ui-gilt, #d9b56a); }
 .enemy-timing [data-known='false'] i { opacity: .35; background: repeating-linear-gradient(120deg, #a7a1ba 0 2px, transparent 2px 5px); }
+
+.enemy-timing small { display: block; flex: 1 1 auto; overflow: hidden; min-width: 0; margin-top: 3px; color: var(--ui-muted, #c0b296); font: 9.5px/1.2 var(--tt-font-ui); text-overflow: ellipsis; white-space: nowrap; }
+.enemy-timing small::first-letter { text-transform: uppercase; }
+
+/* Native 16px icons in a slim well; durations stay in the tooltip. */
+.enemy-timing-effects { display: flex; flex: 0 1 auto; flex-wrap: wrap; gap: 2px; margin-top: 3px; }
+.enemy-timing-effects:empty { display: none; }
+.enemy-timing-effects .status-icon-frame { --status-size: 18px; padding: 0; border-width: 1px; box-shadow: none; }
+.enemy-timing-effects .status-icon-frame.has-duration { margin-bottom: 0; }
+.enemy-timing-effects .status-icon-frame::before, .enemy-timing-effects .status-icon-duration { display: none; }
+.enemy-timing-effects .status-icon-frame > .tt-icon { flex: 0 0 16px; width: 16px; height: 16px; }
+
 /* All visible contacts are represented in the rail; retain positionless warnings. */
 #normal:has(#enemy_initiative_rail[data-creature-groups='true']) #monster_list .group:not(.is-unseen-warning) { display: none; }
-#enemy_initiative_rail #party_progress_monsters { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 5px; padding: 4px; border: 1px solid #987d4d66; background: #171c21f5; border-radius: 3px; }
+#enemy_initiative_rail #party_progress_monsters { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 5px; margin-top: 6px; padding: 4px 6px; border: 1px solid color-mix(in srgb, var(--ui-gilt-deep, #8a6a33) 70%, transparent); border-radius: 3px; background: var(--ui-panel, #241e18); }
 #enemy_initiative_rail #party_progress_monsters[hidden] { display: none; }
 #enemy_initiative_rail .tt-icon { width: 14px; height: 14px; }
-#enemy_initiative_rail .monster-timing-values { font-size: 9px; }
-#enemy_initiative_rail.is-compact { position: static; width: 100%; max-height: 240px; margin-bottom: 7px; }
-.enemy-timing-empty { padding: 4px 7px; }
-.enemy-timing-effects { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
-.enemy-timing-effects:empty { display: none; }
+#enemy_initiative_rail .monster-timing-values { font-size: 9.5px; }
 
-/* ---- Compact rows with threat tier, injury band and readiness ---- */
-#enemy_initiative_rail .enemy-timing { min-height: 46px; padding: 6px 8px 7px 16px; gap: 6px; }
-#enemy_initiative_rail .enemy-timing-icon { width: 28px; height: 28px; flex-basis: 28px; }
-.enemy-timing-name { margin-bottom: 2px; }
-.enemy-timing[data-threat='trivial'] .enemy-timing-name { color: var(--ui-threat-trivial, #b9c2b4); }
-.enemy-timing[data-threat='easy'] .enemy-timing-name { color: var(--ui-threat-easy, #e6e0c2); }
-.enemy-timing[data-threat='tough'] .enemy-timing-name { color: var(--ui-threat-tough, #f2c784); }
-.enemy-timing[data-threat='nasty'] .enemy-timing-name { color: var(--ui-threat-nasty, #f49b86); font-weight: 700; }
-.enemy-timing[data-threat='invisible'] .enemy-timing-name { color: var(--ui-threat-invisible, #cdb2e6); }
-.enemy-timing[data-threat='unknown'] .enemy-timing-name { color: #f0dec0; }
-#enemy_initiative_rail .enemy-timing[data-attitude='allies'] { background-color: #2f4338; }
-#enemy_initiative_rail .enemy-timing[data-attitude='neutrals'] { background-color: #3f3d33; }
-.enemy-timing[data-injury='0'] .enemy-health-track i { background: linear-gradient(#9bc48a, #5f8a56); }
-.enemy-timing:is([data-injury='1'], [data-injury='2']) .enemy-health-track i { background: linear-gradient(#d6c06d, #9a8438); }
-.enemy-timing:is([data-injury='3'], [data-injury='4']) .enemy-health-track i { background: linear-gradient(#e0905c, #a85a2d); }
-.enemy-timing:is([data-injury='5'], [data-injury='6']) .enemy-health-track i { background: linear-gradient(#e36a66, #8b3e41); }
-.enemy-timing small { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; white-space: normal; overflow-wrap: anywhere; line-height: 1.25; }
-.enemy-timing[data-ready='true'] small { color: #f1d68d; }
-.creature-category > summary { padding: 5px 7px; font-size: 10.5px; }
-.creature-category > summary .creature-count { padding: 0 5px; border: 1px solid #a8906766; border-radius: 8px; font-size: 9.5px; line-height: 1.4; }
-.creature-category[data-category='enemies'] > summary .creature-count { color: #f0a594; border-color: #a65c52; }
-.enemy-timing-list { gap: 4px; }
+@media (pointer: coarse) {
+    #enemy_initiative_rail .creature-stack-toggle { min-width: 32px; min-height: 28px; }
+    .creature-stack.has-toggle > .enemy-timing:first-child .enemy-timing-name { padding-right: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .creature-category > summary::before { transition: none; }
+}
