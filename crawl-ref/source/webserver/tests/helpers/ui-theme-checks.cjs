@@ -19,9 +19,19 @@ module.exports = async function checkThemes(page, probe, output, saved) {
         assert.equal(await page.locator('.graphics-current').textContent(), 'Classic');
         const colors = await probe.evaluate(() => {
             const style = selector => getComputedStyle(document.querySelector(selector));
+            // Popup content is transparent over its shared outer material.
+            const background = selector => {
+                for (let node = document.querySelector(selector); node; node = node.parentElement) {
+                    const color = getComputedStyle(node).backgroundColor;
+                    const channels = color.match(/[\d.]+/g).map(Number);
+                    if (channels.length === 3 || channels[3] === 1) return color;
+                    if (channels[3] !== 0) throw new Error('Contrast sample needs alpha compositing: ' + color);
+                }
+                throw new Error('Contrast sample has no opaque backing: ' + selector);
+            };
             const surface = style('.workflow-surface'), selected = style('.workflow-selected');
             const field = style('.workflow-surface input'), folio = style('.party-insp-body');
-            return { page: surface.backgroundColor, text: surface.color,
+            return { page: background('.workflow-surface'), text: surface.color,
                 selected: selected.backgroundColor, selectedText: style('.workflow-selected .fg7').color,
                 field: field.backgroundColor, fieldText: field.color,
                 folioText: folio.color, folioPage: getComputedStyle(document.documentElement).getPropertyValue('--ui-page').trim() };
