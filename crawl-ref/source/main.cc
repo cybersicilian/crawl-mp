@@ -2910,7 +2910,12 @@ static command_type _get_next_cmd()
 #endif
 
 #ifdef DEBUG_ITEM_SCAN
-    debug_item_scan();
+    // This builds the name of every item on the floor. Outside debug builds,
+    // sampling still reports corruption without paying for it on every command.
+#ifndef DEBUG
+    if (you.num_turns % 32 == 0)
+#endif
+        debug_item_scan();
 #endif
 #ifdef DEBUG_MONS_SCAN
     debug_mons_scan();

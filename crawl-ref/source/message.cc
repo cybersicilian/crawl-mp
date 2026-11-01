@@ -10,6 +10,7 @@
 #include "message.h"
 
 #include <sstream>
+#include <unordered_map>
 
 #include "areas.h"
 #include "colour.h"
@@ -1371,15 +1372,43 @@ void dprf(diag_type param, const char *format, ...)
 }
 #endif
 
+// Each option list holds dozens of regexes, and most messages repeat, so
+// keep the outcome for each message until its list changes.
+template<class Option, class Result>
+static unordered_map<string, Result> &_option_results(const vector<Option> &option)
+{
+    static map<const vector<Option> *,
+               pair<size_t, unordered_map<string, Result>>> seen;
+    auto &cached = seen[&option];
+    if (cached.first != option.size() || cached.second.size() > 4096)
+    {
+        cached.first = option.size();
+        cached.second.clear();
+    }
+    return cached.second;
+}
+
+static string _option_key(msg_channel_type channel, const string &line)
+{
+    return to_string(static_cast<int>(channel)) + ":" + line;
+}
+
 static bool _check_option(const string& line, msg_channel_type channel,
                           const vector<message_filter>& option)
 {
     if (crawl_state.generating_level)
         return false;
-    return any_of(begin(option),
-                  end(option),
-                  bind(mem_fn(&message_filter::is_filtered),
-                       placeholders::_1, channel, line));
+
+    auto &results = _option_results<message_filter, bool>(option);
+    const string key = _option_key(channel, line);
+    const auto found = results.find(key);
+    if (found != results.end())
+        return found->second;
+
+    return results[key] = any_of(begin(option),
+                                 end(option),
+                                 bind(mem_fn(&message_filter::is_filtered),
+                                      placeholders::_1, channel, line));
 }
 
 static bool _check_more(const string& line, msg_channel_type channel)
@@ -1834,14 +1863,25 @@ static msg_colour_type prepare_message(const string& imsg,
 
     if (!crawl_state.generating_level)
     {
-        for (const message_colour_mapping &mcm : Options.message_colour_mappings)
+        auto &results = _option_results<message_colour_mapping, int>(
+            Options.message_colour_mappings);
+        const string key = _option_key(channel, imsg);
+        auto found = results.find(key);
+        if (found == results.end())
         {
-            if (mcm.valid() && mcm.message.is_filtered(channel, imsg))
+            int mapped = -1;
+            for (const message_colour_mapping &mcm : Options.message_colour_mappings)
             {
-                colour = mcm.colour;
-                break;
+                if (mcm.valid() && mcm.message.is_filtered(channel, imsg))
+                {
+                    mapped = mcm.colour;
+                    break;
+                }
             }
+            found = results.emplace(key, mapped).first;
         }
+        if (found->second != -1)
+            colour = static_cast<msg_colour_type>(found->second);
     }
 
     return colour;

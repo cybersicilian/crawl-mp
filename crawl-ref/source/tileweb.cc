@@ -1637,6 +1637,9 @@ wint_t TilesFramework::await_input(bool(*has_console_input)())
     if (c != 0)
         return c;
 
+    if (m_party_state_deferred)
+        _send_party_state();
+
     int result;
     fd_set fds;
     int maxfd = m_sock;
@@ -1997,6 +2000,11 @@ void TilesFramework::update_input_mode(mouse_mode mode, bool force)
     if (prev_mode == mode && !force)
         return;
 
+    // The client recentres its camera on the hero as soon as it sees this
+    // mode, which is before the redraw that would otherwise catch it up.
+    if (m_party_state_deferred)
+        _send_party_state();
+
     // we skip redrawing in this case because it happens on every key input,
     // and is very heavy on held down keys
     if (force
@@ -2150,10 +2158,17 @@ void TilesFramework::_send_player(bool force_full)
     if (crawl_state.game_started && you.save)
     {
         if (!m_projecting_view)
-            game_record::publish();
+            game_record::publish_periodically();
         const char *owner = getenv("CRAWL_OWNER_ID");
-        send_message("{\"msg\":\"record_identity\",\"game_id\":\"%s\",\"player_id\":\"%s\",\"owner_id\":\"%s\"}",
-                     game_record::game_id().c_str(), game_record::player_id(you).c_str(), owner ? owner : "");
+        string identity = make_stringf("{\"msg\":\"record_identity\",\"game_id\":\"%s\",\"player_id\":\"%s\",\"owner_id\":\"%s\"}",
+                                       game_record::game_id().c_str(), game_record::player_id(you).c_str(), owner ? owner : "");
+        // Personal views alternate heroes, so only the shared stream can skip.
+        if (force_full || m_projecting_view || identity != m_last_record_identity)
+        {
+            send_message("%s", identity.c_str());
+            if (!m_projecting_view)
+                m_last_record_identity = std::move(identity);
+        }
     }
     player_info& c = m_current_player_info;
     const bool spectator = force_full;
@@ -2936,26 +2951,27 @@ void TilesFramework::_send_cursor(cursor_type type)
     }
 }
 
+void TilesFramework::_mcache_ref(const coord_def& gc, bool inc)
+{
+    int fg_idx = m_current_view(gc).tile.fg.tile();
+    if (fg_idx >= TILEP_MCACHE_START)
+    {
+        mcache_entry *entry = mcache.get(fg_idx);
+        if (entry)
+        {
+            if (inc)
+                entry->inc_ref();
+            else
+                entry->dec_ref();
+        }
+    }
+}
+
 void TilesFramework::_mcache_ref(bool inc)
 {
     for (int y = 0; y < GYM; y++)
         for (int x = 0; x < GXM; x++)
-        {
-            coord_def gc(x, y);
-
-            int fg_idx = m_current_view(gc).tile.fg.tile();
-            if (fg_idx >= TILEP_MCACHE_START)
-            {
-                mcache_entry *entry = mcache.get(fg_idx);
-                if (entry)
-                {
-                    if (inc)
-                        entry->inc_ref();
-                    else
-                        entry->dec_ref();
-                }
-            }
-        }
+            _mcache_ref(coord_def(x, y), inc);
 }
 
 void TilesFramework::_send_map(bool spectator_only)
@@ -3026,6 +3042,11 @@ void TilesFramework::_send_map(bool spectator_only)
     if (flash_colour == BLACK)
         flash_colour = viewmap_flash_colour();
 
+    if (force_full)
+        _recache_knowledge(0, 0, GXM - 1, GYM - 1);
+
+    vector<coord_def> sent;
+
     json_open_array("cells");
     for (int y = 0; y < GYM; y++)
         for (int x = 0; x < GXM; x++)
@@ -3044,10 +3065,12 @@ void TilesFramework::_send_map(bool spectator_only)
                 else
                     draw_cell(cell, gc, false, flash_colour, you.flash_alpha);
 
+                _recache_knowledge(x - 1, y - 1, x + 1, y + 1);
                 pack_cell_overlays(gc, m_next_view);
             }
 
             mark_clean(gc);
+            sent.push_back(gc);
 
             if (m_origin.equals(-1, -1))
                 m_origin = gc;
@@ -3092,13 +3115,21 @@ void TilesFramework::_send_map(bool spectator_only)
     if (spectator_only)
         return;
 
-    if (m_mcache_ref_done)
-        _mcache_ref(false);
+    // The client's copy of a cell only changes when this pass sends it, so the
+    // baseline for the next diff, and the references it holds, only have to
+    // follow those cells.
+    for (const coord_def& gc : sent)
+    {
+        if (m_mcache_ref_done)
+            _mcache_ref(gc, false);
+        m_current_map_knowledge(gc) = env.map_knowledge(gc);
+        m_current_view(gc) = m_next_view(gc);
+        if (m_mcache_ref_done)
+            _mcache_ref(gc, true);
+    }
 
-    m_current_map_knowledge = env.map_knowledge;
-    m_current_view = m_next_view;
-
-    _mcache_ref(true);
+    if (!m_mcache_ref_done)
+        _mcache_ref(true);
     m_mcache_ref_done = true;
 
     m_monster_locs = new_monster_locs;
@@ -3175,6 +3206,17 @@ void TilesFramework::_send_monster(const coord_def &gc, const monster_info* m,
     json_close_object(true);
 }
 
+void TilesFramework::_recache_knowledge(int x1, int y1, int x2, int y2)
+{
+    for (int y = max(y1, 0); y <= min(y2, GYM - 1); y++)
+        for (int x = max(x1, 0); x <= min(x2, GXM - 1); x++)
+        {
+            const coord_def gc(x, y);
+            m_next_view(gc).tile.map_knowledge
+                = map_bounds(gc) ? env.map_knowledge(gc) : map_cell();
+        }
+}
+
 void TilesFramework::load_dungeon(const crawl_view_buffer &vbuf,
                                   const coord_def &gc)
 {
@@ -3203,18 +3245,20 @@ void TilesFramework::load_dungeon(const crawl_view_buffer &vbuf,
                 mark_for_redraw(coord_def(x, y));
         }
 
-    // re-cache the map knowledge for the whole map, not just the updated portion
-    // fixes render bugs for out-of-LOS when transitioning levels in shoals/slime
-    for (int y = 0; y < GYM; y++)
-        for (int x = 0; x < GXM; x++)
-        {
-            const coord_def cache_gc(x, y);
-            screen_cell_t *cell = &m_next_view(cache_gc);
-            cell->tile.map_knowledge = map_bounds(cache_gc) ? env.map_knowledge(cache_gc) : map_cell();
-        }
-
     m_next_view_tl = view2grid(coord_def(1, 1));
     m_next_view_br = view2grid(crawl_view.viewsz);
+
+    // Overlays read adjacent knowledge, so packing the viewport below needs
+    // current copies of it and its rim. A new map replaces everything, which
+    // fixes render bugs for out-of-LOS cells in shoals/slime; other cells are
+    // recached by _send_map when they need redrawing.
+    if (m_need_full_map)
+        _recache_knowledge(0, 0, GXM - 1, GYM - 1);
+    else
+    {
+        _recache_knowledge(m_next_view_tl.x - 1, m_next_view_tl.y - 1,
+                           m_next_view_br.x + 1, m_next_view_br.y + 1);
+    }
 
     // Copy vbuf into m_next_view
     for (int y = 0; y < vbuf.size().y; y++)
@@ -3232,7 +3276,8 @@ void TilesFramework::load_dungeon(const crawl_view_buffer &vbuf,
             pack_cell_overlays(grid, m_next_view);
 
             mark_clean(grid); // Remove redraw flag
-            mark_dirty(grid);
+            // Multiplayer returned above, so this needs no per-cell party check.
+            m_dirty_cells[grid.y * GXM + grid.x] = true;
         }
 
     m_next_gc = gc;
@@ -3293,8 +3338,47 @@ void TilesFramework::_write_item_training(const item_def &item)
     json_close_array(false);
 }
 
+// The profile describes every carried item's art and fit, which made it a third
+// of each snapshot's cost, and walking leaves it unchanged. It also reads things
+// like mutations that don't touch the pack, so it refreshes every few turns too.
+void TilesFramework::_write_equipment_profile(int slot, const player &p)
+{
+    size_t signature = p.num_turns / 16 + static_cast<int>(p.form);
+    for (const item_def &item : p.inv)
+        signature = item_state_hash(signature, item);
+    for (const player_equip_entry &entry : p.equipment.items)
+        signature = signature * 31 + entry.item + entry.slot * 64 + entry.melded;
+
+    pair<size_t, string> &cached = m_equipment_profiles[slot];
+    if (cached.second.empty() || cached.first != signature)
+    {
+        party::scoped_player_context profile_context(slot, false);
+        JsonWrapper profile(equipment_profile_json());
+        cached = { signature, profile.to_string() };
+    }
+    json_write_name("equipment_profile");
+    // Serialized profiles exceed the small printf scratch buffer.
+    // finish_message() already fragments the complete JSON buffer.
+    m_msg_buf.append(cached.second);
+}
+
+// A walking hero changes little but clocks and position between steps, and the
+// camera follows the map stream until the run stops. A 16 KB snapshot for every
+// step costs far more than it shows, so runs refresh it a few times a second and
+// a deferred one goes out before the game next waits for input. Parties keep
+// every snapshot, since partners, hero markers and the turn scheduler read them.
+bool TilesFramework::_can_defer_party_state()
+{
+    const unsigned int run_interval_ms = 200;
+    return you.running && !party::is_enabled() && !party::multiplayer_enabled()
+           && get_milliseconds() - m_last_party_state_tick < run_interval_ms;
+}
+
 void TilesFramework::_send_party_state()
 {
+    m_party_state_deferred = false;
+    m_last_party_state_tick = get_milliseconds();
+
     rng::generator snapshot_rng(rng::UI);
     if (!in_bounds(you.pos()) && !party::is_enabled())
         return;
@@ -3914,14 +3998,7 @@ void TilesFramework::_send_party_state()
         }
         json_close_array(false);
 
-        {
-            party::scoped_player_context profile_context(slot, false);
-            JsonWrapper profile(equipment_profile_json());
-            json_write_name("equipment_profile");
-            // Serialized profiles exceed the small printf scratch buffer.
-            // finish_message() already fragments the complete JSON buffer.
-            m_msg_buf.append(profile.to_string());
-        }
+        _write_equipment_profile(slot, p);
         json_open_array("equipment_slots");
         // Dual wielders use the flexible weapon/offhand slot in place of the
         // standard offhand. Include it in the party equipment list as well.
@@ -4209,7 +4286,9 @@ void TilesFramework::redraw()
     _send_player();
     // Every personal view carries this snapshot, and the server keeps only
     // those. A party of four would otherwise build it a fifth time each turn.
-    if (!project || !_projects_personal_views())
+    if (_can_defer_party_state())
+        m_party_state_deferred = true;
+    else if (!project || !_projects_personal_views())
         _send_party_state();
     _send_messages();
 

@@ -1,5 +1,5 @@
 /* The tavern and roster share the expedition journal's cover and paper. */
-body:has(#lobby:not([style*="display: none"])) {
+body[data-layer="lobby"]:has(#lobby) {
     background: radial-gradient(ellipse at 65% 0, #35443b44, transparent 65%), var(--art-night);
     color: var(--art-ivory);
 }

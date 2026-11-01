@@ -9,6 +9,7 @@
 
 #include <cstdlib>
 #include <fcntl.h>
+#include <unordered_map>
 #include <sys/stat.h>
 #include <sys/types.h>
 #if defined(UNIX) || defined(TARGET_COMPILER_MINGW)
@@ -66,6 +67,12 @@ static void _store_text_db(const string &in, DBM *db);
 
 static string _query_database(TextDB &db, string key, bool canonicalise_key,
                               bool run_lua, bool untranslated = false);
+
+// A fetch is a SQLite transaction with file locks, and redraws and monster
+// speech ask for the same keys over and over. An open database doesn't change,
+// so keep the raw entries; embedded Lua still runs on every query.
+static map<DBM *, unordered_map<string, string>> _fetched_entries;
+
 static void _add_entry(DBM *db, const string &k, string &v);
 
 static TextDB AllDBs[] =
@@ -234,6 +241,7 @@ void TextDB::shutdown(bool recursive)
 {
     if (_db)
     {
+        _fetched_entries.erase(_db);
         dbm_close(_db);
         _db = nullptr;
     }
@@ -361,15 +369,26 @@ static datum _database_fetch(DBM *database, const string &key)
     datum result;
     result.dptr = nullptr;
     result.dsize = 0;
-    datum dbKey;
-
-    dbKey.dptr = (DPTR_COERCE) key.c_str();
-    dbKey.dsize = key.length();
 
     // Don't use the database if called from "monster".
-    if (database)
-        result = dbm_fetch(database, dbKey);
+    if (!database)
+        return result;
 
+    auto &entries = _fetched_entries[database];
+    auto entry = entries.find(key);
+    if (entry == entries.end())
+    {
+        datum dbKey;
+        dbKey.dptr = (DPTR_COERCE) key.c_str();
+        dbKey.dsize = key.length();
+
+        const datum fetched = dbm_fetch(database, dbKey);
+        entry = entries.emplace(key, fetched.dsize
+            ? string((const char *)fetched.dptr, fetched.dsize) : string()).first;
+    }
+
+    result.dptr = (DPTR_COERCE) entry->second.data();
+    result.dsize = entry->second.size();
     return result;
 }
 

@@ -41,7 +41,7 @@ const directions = [
         });
         for (const [name, file] of [
             ['comm', 'static/scripts/comm.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
-            ['./frame-update', 'game_data/static/frame-update.js'],
+            ['./frame-update', 'game_data/static/frame-update.js'], ['dom-update', 'static/scripts/dom-update.js'],
             ['key_conversion', 'static/scripts/key_conversion.js'], ['client-input', 'static/scripts/client-input.js'],
             ['./enums', 'game_data/static/enums.js'], ['./party-model', 'game_data/static/party-model.js'],
             ['./workflow-actions', 'game_data/static/workflow-actions.js'], ['./route-plan', 'game_data/static/route-plan.js'],

@@ -42,6 +42,7 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
             });
             var layer_changed = current_layer !== layer;
             current_layer = layer;
+            document.body.setAttribute("data-layer", layer);
             loading.setLayer(layer);
             if (layer_changed) $(document).trigger("game_layer_changed", [layer]);
 
@@ -121,7 +122,7 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
             if (elem.is("[role='dialog']"))
                 elem.on("keydown.dialogshell", trap_keys);
             center_element(elem);
-            $("#overlay").show();
+            $("#overlay").toggleClass("account-scrim", elem.hasClass("account-dialog")).show();
         }
 
         function center_element(elem)

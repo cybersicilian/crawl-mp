@@ -1,4 +1,4 @@
-define(["jquery", "./options", "./util", "./player-stat-tips", "./status-icons"],
+define(["jquery", "./options", "./util", "./player-stat-tips", "./status-icons", "./quiet-jquery"],
 function ($, options, util, stat_tips, icons) {
     "use strict";
 

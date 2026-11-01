@@ -247,6 +247,18 @@ static int _get_mons_colour(const monster_info& mi)
     return col;
 }
 
+// A tile display without a terminal never draws a map cell's glyph, and an
+// override costs a Lua call and an item name for every visible item on every
+// view. Menus and panels go through get_item_glyph and keep their overrides.
+static bool _map_shows_glyphs()
+{
+#ifdef USE_TILE_WEB
+    return !in_headless_mode() || Options.tile_display_mode != "tiles";
+#else
+    return true;
+#endif
+}
+
 static cglyph_t _get_item_override(const item_def &item)
 {
     cglyph_t g;
@@ -432,7 +444,8 @@ static cglyph_t _get_cell_glyph_with_class(const map_cell& cell,
         if (crawl_state.viewport_weapons && weapon)
         {
             show = *weapon;
-            g = _get_item_override(*weapon);
+            if (_map_shows_glyphs())
+                g = _get_item_override(*weapon);
             if (!g.col)
                 g.col = weapon->get_colour();
         }
@@ -498,7 +511,8 @@ static cglyph_t _get_cell_glyph_with_class(const map_cell& cell,
         ASSERT(eitem);
         show = *eitem;
 
-        g = _get_item_override(*eitem);
+        if (_map_shows_glyphs())
+            g = _get_item_override(*eitem);
 
         if (!feat_has_dry_floor(cell.feat()))
             g.col = _cell_feat_show_colour(cell, loc, coloured);

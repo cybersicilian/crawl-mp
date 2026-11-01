@@ -25,7 +25,9 @@ function ($, comm, actions, inventory, icons, frameUpdate, menus, training) {
         var view = context(), hero = view.hero, blocked = reason(view);
         var items = hero && hero.floor_items_known && Array.isArray(hero.floor_items) ? hero.floor_items : [];
         var image = document.getElementById("main");
-        var next = JSON.stringify([hero && [hero.slot, hero.name, hero.place, hero.pos, hero.floor_items_known],
+        // An empty tile reads the same wherever the hero stands, so walking
+        // only rebuilds this list where the items' stale checks need the position.
+        var next = JSON.stringify([hero && [hero.slot, hero.name, hero.place, items.length ? hero.pos : null, hero.floor_items_known],
             items, blocked, hero && training.signature(hero), Boolean(image && image.complete && image.naturalWidth)]);
         if (signature === next) return;
         signature = next;

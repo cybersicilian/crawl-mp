@@ -723,7 +723,7 @@ void viewwindow(bool show_updates, bool tiles_only, animation *a, view_renderer 
 
             you.last_view_update = you.num_turns;
 #ifndef USE_TILE_LOCAL
-            if (!tiles_only)
+            if (!tiles_only && !in_headless_mode())
             {
                 puttext(crawl_view.viewp.x, crawl_view.viewp.y, vbuf);
                 update_monster_pane();

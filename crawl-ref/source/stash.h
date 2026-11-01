@@ -73,6 +73,7 @@ private:
 
 private:
     bool visited;      // Is this correct to the best of our knowledge?
+    size_t pile_signature = 0; // What update last read; not saved.
     coord_def pos;
     dungeon_feature_type feat;
     string feat_desc; // Only for interesting features.

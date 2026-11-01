@@ -12,4 +12,5 @@ namespace game_record
     string known_item_id(const item_def &item);
     void observe_item(item_def &item);
     void publish(bool saved = false);
+    void publish_periodically();
 }
