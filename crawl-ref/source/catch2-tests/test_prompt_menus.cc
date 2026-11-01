@@ -62,14 +62,24 @@ TEST_CASE("Menu modes cycle in the order they are named", "[prompt][menu]")
 TEST_CASE("Toggled menus track their mode and action together", "[prompt][menu]")
 {
     ToggleMenu menu;
+    ToggleableMenuEntry* entry = nullptr;
+    if (GENERATE(false, true))
+    {
+        entry = new ToggleableMenuEntry("Select", "Examine");
+        menu.add_entry(entry);
+    }
     menu.menu_action = Menu::ACT_EXECUTE;
     CHECK(menu.mode() == 0);
     CHECK(menu.cycle_mode(true));
     CHECK(menu.mode() == 1);
     CHECK(menu.menu_action == Menu::ACT_EXAMINE);
+    if (entry)
+        CHECK(entry->text == "Examine");
     CHECK(menu.cycle_mode(true));
     CHECK(menu.mode() == 0);
     CHECK(menu.menu_action == Menu::ACT_EXECUTE);
+    if (entry)
+        CHECK(entry->text == "Select");
 }
 
 #ifdef USE_TILE_WEB

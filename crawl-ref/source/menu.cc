@@ -3766,12 +3766,6 @@ bool ToggleableMenu::cycle_mode(bool)
     if (auto pt = dynamic_cast<ToggleableMenuEntry*>(title))
         pt->toggle();
 
-    update_menu();
-
-#ifdef USE_TILE_WEB
-    webtiles_update_items(0, items.size() - 1);
-#endif
-
     if (flags & MF_TOGGLE_ACTION)
     {
         if (menu_action == ACT_EXECUTE)
@@ -3780,6 +3774,9 @@ bool ToggleableMenu::cycle_mode(bool)
             menu_action = ACT_EXECUTE;
     }
     toggled = !toggled;
+    // Publish the completed mode change through the shared path, which skips
+    // unseen menus and empty item ranges.
+    update_menu(true);
     return true;
 }
 
