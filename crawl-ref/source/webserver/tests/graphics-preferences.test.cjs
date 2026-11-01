@@ -130,3 +130,19 @@ test('socket updates follow revision order and reduced motion is independent of 
     f.comm.handlers.profile_graphics(f.state('Aster')); assert.equal(f.presentation.current(), 'premium');
     assert.equal(f.model.matching(newer.settings), 'premium');
 });
+
+test('switches added after a saved choice follow the switch they grew from', () => {
+    const model = load('graphics-settings-model', {}); assert(model.configure(schema));
+    const premium = model.preset('premium'), balanced = model.preset('balanced');
+    for (const key of ['figures', 'lantern', 'atmosphere']) { assert.equal(premium[key], true); assert.equal(balanced[key], true); }
+    assert.equal(model.preset('classic').figures, false);
+    const saved = plain(premium); for (const key of ['figures', 'lantern', 'atmosphere']) delete saved[key];
+    const restored = model.normalize(saved);
+    assert.equal(restored.figures, true); assert.equal(restored.lantern, true); assert.equal(restored.atmosphere, true);
+    assert.equal(model.matching(restored), 'premium', 'an existing Premium account remains on the Premium preset');
+    assert.equal(model.normalize({ mode: 'premium', lighting: false, particles: true }).figures, false);
+    assert.equal(model.normalize({ mode: 'premium', lighting: false, particles: true }).atmosphere, true);
+    assert.equal(model.normalize({ ...saved, figures: false }).figures, false, 'an explicit later choice wins');
+    assert.equal(model.normalize(undefined).lantern, false, 'new accounts stay Classic');
+    assert.equal(model.normalize({}).lantern, false);
+});

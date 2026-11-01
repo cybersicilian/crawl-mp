@@ -1,6 +1,6 @@
 define(["jquery", "./cell-renderer-layers", "./map_knowledge", "./options", "./game-context", "./enums",
-        "./premium-terrain-model", "visual-presentation", "terrain-topology", "terrain-finish", "./premium-light-field", "surface-lighting", "liquid-field", "depth-shading", "terrain-blend", "wall-surface", "transparent-surface", "idle-work", "./environment-ground", "sampled-lighting", "weighted-cache"],
-function ($, layers, map, options, game, enums, model, presentation, topology, finishes, field, shading, liquids, depth, blend, walls, optics, idle, ground, sampled, weighted) {
+        "./premium-terrain-model", "visual-presentation", "terrain-topology", "terrain-finish", "./premium-light-field", "surface-lighting", "liquid-field", "depth-shading", "terrain-blend", "wall-surface", "transparent-surface", "idle-work", "./environment-ground", "sampled-lighting", "weighted-cache", "shore-field"],
+function ($, layers, map, options, game, enums, model, presentation, topology, finishes, field, shading, liquids, depth, blend, walls, optics, idle, ground, sampled, weighted, shores) {
     "use strict";
     var painter = finishes.create(), known = new Map(), prepared = new Map(), originals = new Map();
     var shaded = weighted.create(16 * 1024 * 1024, 4096, function (result) {
@@ -15,7 +15,7 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         if (cache.size > (limit || 192)) cache.delete(cache.keys().next().value);
         return value;
     }
-    function clear() { known.clear(); painter.clear(); prepared.clear(); shaded.clear(); originals.clear(); described.clear(); cells.clear(); paint = null; queue.clear(); }
+    function clear() { known.clear(); painter.clear(); shores.clear(); prepared.clear(); shaded.clear(); originals.clear(); described.clear(); cells.clear(); paint = null; queue.clear(); }
     function forget(x, y) {
         for (var oy = -1; oy <= 1; oy++) for (var ox = -1; ox <= 1; ox++) {
             var id = (x + ox) + ":" + (y + oy);
@@ -56,6 +56,16 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         var data = sampleData(renderer, function (sample) { sample.draw_dngn(index, 0, 0); });
         return data ? bounded(originals, index, data, 1024) : null;
     }
+    // Banks continue the neighbouring ground into the liquid tile, using the
+    // same pixels (and pack) that the neighbour itself displays.
+    function bankSources(renderer, neighbours, cx, cy) {
+        return neighbours.map(function (entry, index) {
+            if (!entry || !entry.ground) return null;
+            var offset = blend.offsets[index], painted = ground.tile && ground.tile(entry.index, cx + offset.x, cy + offset.y, 32);
+            var data = painted ? painted.getContext("2d").getImageData(0, 0, 32, 32).data : nativeSource(renderer, entry.index);
+            return data ? { data: data } : null;
+        });
+    }
     function albedo(renderer, terrain, neighbours, cx, cy, time, key, cell) {
         if (prepared.has(key)) return prepared.get(key);
         var painted = terrain.own.ground && ground.tile && ground.tile(terrain.own.index, cx, cy, 32);
@@ -77,6 +87,13 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
             { borders: presentation.enabled("borders"), liquids: presentation.enabled("liquids") });
         var phase = Math.floor(time / 200) % 256;
         var normals = terrain.own.surface === "water" && presentation.enabled("liquids") ? liquids.normals(cx * 32, cy * 32, phase, 32, 32) : detail && detail.normals;
+        if (terrain.own.surface && terrain.coast && presentation.enabled("borders")) {
+            var surface = ctx.getImageData(0, 0, 32, 32);
+            var matte = shores.compose(surface.data, terrain.own.surface, terrain.coast, cx, cy, time, bankSources(renderer, neighbours, cx, cy));
+            ctx.putImageData(surface, 0, 0);
+            if (normals) for (var n = 0; n < matte.length; n++) { normals[n * 2] *= matte[n]; normals[n * 2 + 1] *= matte[n]; }
+            detail = Object.assign({}, detail, { specular: matte });
+        }
         var source = shading.prepare(ctx.getImageData(0, 0, 32, 32).data, 32, 32, normals, detail);
         source.painted = Boolean(painted);
         if (terrain.own.solid && terrain.own.transmission && presentation.enabled("materials")) source.underlay = sampleData(renderer, function (sample) {
@@ -137,13 +154,14 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         queued = queue.size > 0;
         return queued;
     }
-    function frame(renderer, cx, cy, cell, metadataOnly) {
+    function frame(renderer, cx, cy, cell, metadataOnly, submerged) {
         if (!Number.isInteger(cx) || !Number.isInteger(cy)) return;
         var settings = paintSettings(renderer);
         if (!settings.active) return;
         var entry = map.get(cx, cy), own = describeAt(cx, cy);
         cell = cell || entry && entry.t;
-        if (!own || cell.mangrove_water || !own.relightable
+        if (own && submerged) own = model.flooded(own);
+        if (!own || cell.mangrove_water && !submerged || !own.relightable
             || !own.visible && (!own.surface || !settings.liquids)) return;
         var step = clock(settings, own, 0), phase = step.phase, materialPhase = step.materialPhase;
         var lights = own.visible && settings.lighting ? settings.scene.at(cx, cy) : none;
@@ -170,7 +188,7 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         var reaching = lightKeyNow === null ? lightsKey(lights, cx, cy) : lightKeyNow;
         var result = render(renderer, settings, cx, cy, cell, own, step, lights, reaching);
         if (!result) return;
-        var descriptor = { key: result.key, width: result.image.width, height: result.image.height, solid: result.solid };
+        var descriptor = { key: result.key, width: result.image.width, height: result.image.height, solid: result.solid, coast: result.coast };
         cells.set(id, { cell: cell, phase: phase, materialPhase: materialPhase, resolution: settings.resolution,
             lights: lights, lightsKey: reaching, resultKey: result.key, descriptor: descriptor });
         return metadataOnly ? descriptor : result;
@@ -179,9 +197,9 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         var phase = step.phase, materialPhase = step.materialPhase;
         var neighbours = topology.sides.map(function (side) { return describeAt(cx + side.x, cy + side.y); });
         var surrounding = blend.offsets.map(function (offset) { return describeAt(cx + offset.x, cy + offset.y); });
-        var terrain = topology.describe(own, neighbours);
+        var terrain = topology.describe(own, neighbours, [surrounding[2], surrounding[8], surrounding[6], surrounding[0]]);
         var coordinates = own.solid ? [cx, cy] : [(cx % 8 + 8) % 8, (cy % 8 + 8) % 8];
-        var key = [own.surface || own.index, settings.liquids ? "" : own.index, own.depth, own.murky, terrain.wall, terrain.wet, terrain.hot, terrain.shore, terrain.depth,
+        var key = [own.surface || own.index, settings.liquids ? "" : own.index, own.depth, own.murky, terrain.wall, terrain.damp, terrain.scorch, terrain.coast, terrain.ledge,
             coordinates[0], coordinates[1], phase, own.transmission ? cell.flv && cell.flv.f : "",
             own.transmission ? (cell.ov || []).filter(function (id) { return id <= model.floorMax; }).join(",") : ""].concat(surrounding.map(function (entry) {
                 return entry && entry.ground ? entry.index : "";
@@ -211,7 +229,7 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
                 neighbours[0] && neighbours[0].solid && 1 - neighbours[0].transmission,
                 neighbours[3] && neighbours[3].solid && 1 - neighbours[3].transmission,
                 diagonal && diagonal.solid && 1 - diagonal.transmission, terrain.wall);
-            result = { key: lightKey, image: image, pixels: context.getImageData(0, 0, 32, 32).data, solid: own.solid };
+            result = { key: lightKey, image: image, pixels: context.getImageData(0, 0, 32, 32).data, solid: own.solid, coast: terrain.coast };
             if (detailed) {
                 var size = detailed.width, high = document.createElement("canvas"); high.width = high.height = size;
                 var ctx = high.getContext("2d", { willReadFrequently: true });
@@ -246,6 +264,14 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         return true;
     }
     layers.addTerrainPainter(draw);
+    layers.addFloodPainter(function (renderer, cx, cy, x, y, cell) {
+        var result = presentation.premium() && presentation.enabled("liquids") ? frame(renderer, cx, cy, cell, false, true) : null;
+        if (!result) return false;
+        var size = renderer.scaled_size();
+        renderer.ctx.save(); renderer.ctx.imageSmoothingEnabled = false;
+        renderer.ctx.drawImage(result.image, x, y, size.width, size.height); renderer.ctx.restore();
+        return true;
+    });
     layers.addSurfacePainter(function (renderer, cx, cy, x, y, cell) { return draw(renderer, cx, cy, x, y, cell, true); });
     $(document).on("map_knowledge_changed.premiumTerrain", function (event, changed) {
         if (!presentation.premium()) return;

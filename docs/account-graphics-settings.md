@@ -17,14 +17,16 @@ explicit personal choice; party members retain their own graphics settings.
 
 ## Controls
 
-Classic restores native presentation. Balanced enables lighting, borders,
-liquids, clouds, spells, soft areas, movement, particles and interface polish;
-material shaders, reflections, bloom and aura distortion remain off. Premium
-enables all enhancements. Individual edits produce a Custom configuration.
+Classic restores native presentation. Balanced enables lighting, creature light
+and shadow, the hero lantern, borders, liquids, clouds, spells, soft areas,
+regional atmosphere, movement, particles and interface polish; material shaders,
+reflections, bloom and aura distortion remain off. Premium enables all
+enhancements. Individual edits produce a Custom configuration.
 
-All 13 enhancement switches reach their renderer: tile lighting, borders and
-blending, wall materials, liquid shaders, reflections, clouds, spells/fire,
-bloom, magical areas, aura distortion, movement, particles and interface polish.
+All 16 enhancement switches reach their renderer: tile lighting, creature light
+and shadow, hero lantern, borders and blending, wall materials, liquid shaders,
+reflections, clouds, spells/fire, bloom, magical areas, aura distortion, regional
+atmosphere, movement, particles and interface polish.
 Disabling a treatment preserves its underlying native drawing. Reduced motion
 freezes supplementary animation and disables glides; the operating system's
 reduced-motion preference and native animation options remain authoritative.
@@ -34,6 +36,9 @@ Exact native targeting, visibility and game rules are unchanged.
 
 `static/graphics-settings.json` is the canonical schema, presets and control
 metadata. Python validation/persistence and the browser model consume it.
+A switch added later can name `inherits`: a saved choice that predates it follows
+the named switch, so existing Premium accounts stay on the Premium preset. Any
+explicit later choice wins, and accounts that never chose stay Classic.
 `graphics-controls.js` builds one accessible control surface for the account
 page, profile and in-game dialog. General pixel, lighting and emission modules
 accept optional settings; the DCSS adapters select those settings per viewer.

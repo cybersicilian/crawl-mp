@@ -2,12 +2,13 @@ define(["jquery", "./tileinfo-main", "./tileinfo-icons", "./tileinfo-dngn",
         "./enums", "./options", "./terrain-edges", "./environment-ground"],
 function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround) {
     "use strict";
-    var terrainPainters = [], surfacePainters = [], actorPainters = [], effectPainters = [], regionPainters = [];
+    var terrainPainters = [], surfacePainters = [], actorPainters = [], actorShaders = [], effectPainters = [], regionPainters = [], floodPainters = [];
     function paintRegion(renderer, index, cx, cy, x, y) {
         if (!regionPainters.some(function (draw) { return draw(renderer, index, cx, cy, x, y); })) renderer.draw_dngn(index, x, y);
     }
-    function paintActor(renderer, cx, cy, x, y, cell, paint) {
-        if (!actorPainters.some(function (draw) { return draw(renderer, cx, cy, x, y, cell, paint); })) paint();
+    function paintActor(renderer, cx, cy, x, y, cell, paint, present) {
+        var dressed = actorShaders.reduce(function (draw, shader) { return shader(renderer, cx, cy, x, y, cell, draw, present); }, paint);
+        if (!actorPainters.some(function (draw) { return draw(renderer, cx, cy, x, y, cell, dressed); })) dressed();
     }
     function paintUnderlay(renderer, x, y, cell, cx, cy) {
         if (!cell.flv) return false;
@@ -39,6 +40,11 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
             if (!effectPainters.includes(paint)) effectPainters.push(paint);
             return function () { effectPainters = effectPainters.filter(function (entry) { return entry !== paint; }); };
         },
+        // Shaders wrap an actor's paint; capture painters then receive the result.
+        addActorShader: function (shader) {
+            if (!actorShaders.includes(shader)) actorShaders.push(shader);
+            return function () { actorShaders = actorShaders.filter(function (entry) { return entry !== shader; }); };
+        },
         addActorPainter: function (paint) {
             if (!actorPainters.includes(paint)) actorPainters.push(paint);
             return function () { actorPainters = actorPainters.filter(function (entry) { return entry !== paint; }); };
@@ -48,6 +54,11 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
         addTerrainPainter: function (paint) {
             if (!terrainPainters.includes(paint)) terrainPainters.push(paint);
             return function () { terrainPainters = terrainPainters.filter(function (entry) { return entry !== paint; }); };
+        },
+        // The water beneath a flooded feature. Returning false keeps native water.
+        addFloodPainter: function (paint) {
+            if (!floodPainters.includes(paint)) floodPainters.push(paint);
+            return function () { floodPainters = floodPainters.filter(function (entry) { return entry !== paint; }); };
         },
         // A replacement surface is drawn exactly once over native floor layers.
         // Returning false preserves the native atlas path, including transparency.
@@ -120,7 +131,10 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
                 var renderer = this;
 
                 if (cell.mangrove_water && bg_idx > dngn.DNGN_UNSEEN)
-                    this.draw_dngn(dngn.DNGN_SHALLOW_WATER, x, y);
+                {
+                    if (!floodPainters.some(function (paint) { return paint(renderer, cx, cy, x, y, cell); }))
+                        this.draw_dngn(dngn.DNGN_SHALLOW_WATER, x, y);
+                }
                 else if (bg_idx >= dngn.DNGN_FIRST_TRANSPARENT)
                     paintUnderlay(this, x, y, cell, cx, cy);
 
@@ -395,7 +409,7 @@ function ($, main, icons, dngn, enums, options, terrainEdges, environmentGround)
                     this.render_glyph(x, y, map_cell, true, true);
                     img_scale = undefined; // TODO: make this work?
                 }
-                }.bind(this));
+                }.bind(this), Boolean(fg_idx && fg_idx <= main.MAIN_MAX));
 
                 if (fg.NET)
                     this.draw_icon(icons.TRAP_NET, x, y, undefined, undefined, img_scale);

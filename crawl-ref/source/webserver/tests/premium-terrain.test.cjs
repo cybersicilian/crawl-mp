@@ -45,39 +45,110 @@ test('wall contours, wet shore and dry-material feathers have distinct topology'
     assert.equal(banks.hot, 1); assert.equal(banks.wet, 2, 'lava uses a scorched edge rather than a wet bank');
 });
 
-test('all lava shore combinations stay inset, retain connected interiors and omit unknown banks', () => {
-    const f = modules(); f.load('tile-edges', true); const banks = f.load('shoreline-paint', true);
-    const lava = Object.freeze({ ...water, surface: 'lava' });
-    const point = { x: 10, y: 20, width: 64, height: 64 };
-    const calls = [], ctx = { save() {}, restore() {}, beginPath() {}, rect() {}, clip() {},
-        fillRect(...rect) { calls.push({ rect, colour: this.fillStyle }); } };
-    for (let mask = 0; mask < 16; mask++) {
-        calls.length = 0;
-        const terrain = topology.describe(lava, edges.sides.map(side => mask & side.bit ? floor : lava));
-        banks.paint(ctx, terrain, point, -1, 4);
-        assert.equal(Boolean(calls.length), Boolean(mask));
-        for (const { rect: [x, y, width, height] } of calls) {
-            assert(x >= 10 && y >= 20 && x + width <= 74 && y + height <= 84);
-            assert([x, y, width, height].every(Number.isInteger), 'banks retain crisp native pixel geometry');
-        }
-    }
-    calls.length = 0;
-    banks.paint(ctx, topology.describe(lava, [null, undefined, { visible: false }, lava]), point, 0, 0);
-    assert.equal(calls.length, 0);
+function shoreFixture() {
+    const f = modules(), stains = [];
+    const document = { createElement() {
+        const canvas = { width: 0, height: 0 };
+        canvas.getContext = () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
+            putImageData(image) { canvas.pixels = image.data; stains.push(canvas); } });
+        return canvas;
+    } };
+    f.load('liquid-field', true); f.load('tile-edges', true);
+    const shores = f.load('shore-field', true, { document });
+    return { f, shores, banks: f.load('shoreline-paint', true), stains };
+}
+const cardinal = [[0, -1, 1], [1, 0, 2], [0, 1, 4], [-1, 0, 8]], diagonal = [[1, -1, 16], [1, 1, 32], [-1, 1, 64], [-1, -1, 128]];
+function coastOf(pool, x, y) {
+    const liquid = (ox, oy) => pool.includes((x + ox) + ',' + (y + oy));
+    return [...cardinal, ...diagonal].reduce((mask, [ox, oy, bit]) => liquid(ox, oy) ? mask : mask | bit, 0);
+}
+
+test('diagonal neighbours extend coast masks without letting unknown terrain create shape', () => {
+    const result = topology.describe(water, [water, water, water, water], [floor, null, { visible: false }, floor]);
+    assert.equal(result.shore, 0); assert.equal(result.coast, 16 | 128);
+    const ground = topology.describe(floor, [water, floor, floor, floor], [floor, { ...water, surface: 'lava' }, water, null]);
+    assert.equal(ground.damp, 1 | 64); assert.equal(ground.scorch, 32);
+    const deep = topology.describe(water, [water, water, water, water], [{ ...water, depth: 'shallow' }, water, water, water]);
+    assert.equal(deep.ledge, 16); assert.equal(topology.describe(water, [floor, water, water, water]).coast, 1);
 });
 
-test('bank profiles differ by material and remain anchored across camera and cache wrapping', () => {
-    const f = modules(); f.load('tile-edges', true); const banks = f.load('shoreline-paint', true);
-    function paint(terrain, x, y) {
-        const calls = [], ctx = { save() {}, restore() {}, beginPath() {}, rect() {}, clip() {},
-            fillRect(...rect) { calls.push([this.fillStyle, ...rect]); } };
-        banks.paint(ctx, terrain, { x: 0, y: 0, width: 32, height: 32 }, x, y); return calls;
+test('adjacent liquid tiles agree on one meandering waterline, including corners and bays', () => {
+    const { shores } = shoreFixture();
+    const pool = ['2,1', '3,1', '4,1', '1,2', '2,2', '3,2', '4,2', '5,2', '1,3', '2,3', '4,3', '5,3', '2,4', '3,4', '4,4', '6,6'];
+    const shape = name => { const [x, y] = name.split(',').map(Number); return shores.shape(coastOf(pool, x, y), x, y, true); };
+    let compared = 0;
+    for (const name of pool) {
+        const [x, y] = name.split(',').map(Number), own = shape(name);
+        if (pool.includes((x + 1) + ',' + y)) for (let row = 0; row < 32; row++, compared++)
+            assert(Math.abs(own.distance[row * 32 + 31] - shape((x + 1) + ',' + y).distance[row * 32]) < 1.6, name + ' east seam ' + row);
+        if (pool.includes(x + ',' + (y + 1))) for (let col = 0; col < 32; col++, compared++)
+            assert(Math.abs(own.distance[31 * 32 + col] - shape(x + ',' + (y + 1)).distance[col]) < 1.6, name + ' south seam ' + col);
     }
-    const lava = { ...water, surface: 'lava' }, edge = topology.describe(lava, [floor, lava, lava, lava]);
-    assert.deepEqual(paint(edge, -1, 4), paint(edge, 7, -4));
-    assert.notDeepEqual(paint(edge, -1, 4), paint(topology.describe(water, [floor, water, water, water]), -1, 4));
-    assert.notDeepEqual(paint(topology.describe(floor, [lava, floor, floor, floor]), -1, 4),
-        paint(topology.describe(floor, [water, floor, floor, floor]), -1, 4));
+    assert(compared > 500);
+});
+
+test('every coast keeps a readable liquid heart, a bank at its edge and an eight-tile period', () => {
+    const { shores } = shoreFixture();
+    for (let mask = 1; mask < 256; mask++) {
+        const shape = shores.shape(mask, 3, 5, true);
+        assert(shape.distance[16 * 32 + 16] > 0, 'tile centre stays liquid for mask ' + mask);
+        if (mask & 1) assert(shape.distance[16] < 0, 'exposed north edge carries bank');
+        if (mask & 8) assert(shape.distance[16 * 32] < 0, 'exposed west edge carries bank');
+        for (let n = 0; n < 1024; n++) if (shape.distance[n] < 0) {
+            const x = n % 32 + .5, y = Math.floor(n / 32) + .5;
+            assert(Math.min(mask & 1 ? y : 99, mask & 2 ? 32 - x : 99, mask & 4 ? 32 - y : 99, mask & 8 ? x : 99,
+                Math.hypot(x, y), Math.hypot(32 - x, y), Math.hypot(x, 32 - y), Math.hypot(32 - x, 32 - y)) < 13, 'bank hugs an exposed edge');
+        }
+    }
+    assert.deepEqual(shores.shape(5, -1, 4, true).distance, shores.shape(5, 7, -4, true).distance);
+    assert.notDeepEqual(shores.shape(5, 0, 0, true).distance, shores.shape(5, 1, 0, true).distance);
+});
+
+test('banks continue neighbouring ground pixels, stay opaque and leave deep interiors alone', () => {
+    const { shores } = shoreFixture(), make = (r, g, b) => {
+        const data = new Uint8ClampedArray(4096);
+        for (let i = 0; i < 4096; i += 4) data.set([r, g, b, 255], i);
+        return data;
+    };
+    const sand = { data: make(200, 170, 120) }, sources = [null, sand, null, null, null, null, null, null, null];
+    const water = make(20, 60, 90), bare = make(20, 60, 90);
+    const matte = shores.compose(water, 'water', 1, 3, 3, 0, sources);
+    const north = 16 * 4;
+    assert(water[north] > water[north + 2], 'the northern bank carries warm sand pigment');
+    assert(water[north] < 200, 'the bank is wet, not dry sand');
+    assert(matte[16] < .3, 'bank pixels keep only a faint wet sheen');
+    assert.deepEqual(Array.from(water.slice((31 * 32 + 16) * 4, (31 * 32 + 16) * 4 + 4)), [20, 60, 90, 255], 'deep interior is untouched');
+    for (let i = 3; i < 4096; i += 4) assert.equal(water[i], 255);
+    shores.compose(bare, 'water', 1, 3, 3, 0, [null, null, null, null, null, null, null, null, null]);
+    assert.notDeepEqual(bare, water, 'a wall or feature neighbour falls back to neutral rock');
+    const lava = make(190, 90, 30), scorched = make(190, 90, 30);
+    shores.compose(lava, 'lava', 1, 3, 3, 0, sources); shores.compose(scorched, 'lava', 4, 3, 3, 0, sources);
+    assert(lava[north + 1] < sand.data[1], 'scorched ground burns darker than dry ground');
+    assert.notDeepEqual(lava, scorched);
+});
+
+test('deep and shallow water share a soft boundary and keep their interiors', () => {
+    const { shores } = shoreFixture();
+    const deep = shores.shallows(2, 3, 3, 'deep'), shallow = shores.shallows(8, 4, 3, 'shallow');
+    for (let row = 0; row < 32; row++) assert(Math.abs(deep[row * 32 + 31] - shallow[row * 32]) < .12, 'tile seam is invisible at row ' + row);
+    assert.equal(deep[16 * 32], 0, 'deep interior stays deep');
+    assert.equal(shallow[16 * 32 + 31], 1, 'shallow interior stays shallow');
+});
+
+test('ground beside a liquid gets one stain per material, omitted away from liquids', () => {
+    const { shores, banks, stains } = shoreFixture(), drawn = [];
+    const ctx = { save() {}, restore() {}, beginPath() {}, rect() {}, clip() {}, drawImage(image, ...rect) { drawn.push({ image, rect }); } };
+    const lava = { ...water, surface: 'lava' }, point = { x: 10, y: 20, width: 64, height: 64 };
+    const paint = (terrain, x = 3, y = 3) => { drawn.length = 0; banks.paint(ctx, terrain, point, x, y); return drawn.map(entry => entry.image); };
+    assert.deepEqual(paint(topology.describe(floor, [floor, floor, floor, floor])), []);
+    assert.deepEqual(paint(topology.describe(lava, [floor, lava, lava, lava])), [], 'the liquid composes its own bank');
+    const wet = paint(topology.describe(floor, [water, floor, floor, floor]));
+    const hot = paint(topology.describe(floor, [lava, floor, floor, floor]));
+    assert.equal(wet.length, 1); assert.equal(hot.length, 1); assert.notEqual(wet[0], hot[0]);
+    assert.deepEqual(drawn[0].rect, [10, 20, 64, 64], 'stains fill exactly the native tile');
+    assert.equal(paint(topology.describe(floor, [water, floor, floor, floor]), 11, -5)[0], wet[0], 'stains repeat with the terrain period');
+    assert(stains.length >= 2);
+    assert(shores.stain('wet', 1, 3, 3).pixels[(31 * 32 + 16) * 4 + 3] === 0, 'stains fade before the far side of the tile');
 });
 
 function nativeFixture() {
@@ -112,6 +183,37 @@ test('native model covers fluid variants and protects occupants, decals, and fog
     for (const flag of [0x40000, 0x20000]) assert.equal(model.describe(cell(tiles.DNGN_DEEP_WATER + flag)), null);
     assert.equal(model.describe(cell(tiles.DNGN_SHALLOW_WATER, { mangrove_water: true })).surface, null);
     assert.equal(model.describe(cell(tiles.DNGN_UNSEEN)), null);
+});
+
+test('altars, gateways, fungus and fiery creatures light their surroundings only while visible', () => {
+    const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], model = f.result['./premium-terrain-model'];
+    const cell = (id, extra = {}, entry = {}) => ({ ...entry, t: { bg: id, ...extra } });
+    const zin = model.describe(cell(tiles.DNGN_ALTAR_ZIN)).light, trog = model.describe(cell(tiles.DNGN_ALTAR_TROG)).light;
+    assert(zin && trog); assert.notDeepEqual(zin.colour, trog.colour, 'each god keeps its own colour');
+    assert(model.describe(cell(tiles.DNGN_ALTAR_ECUMENICAL)).light, 'unlisted altars still glow');
+    assert(model.describe(cell(tiles.DNGN_ENTER_ABYSS)).light); assert(model.describe(cell(tiles.DNGN_PORTAL_BAZAAR)).light);
+    assert.equal(model.describe(cell(tiles.DNGN_PORTAL_BAZAAR_GONE)).light, null, 'a closed portal goes dark');
+    assert.equal(model.describe(cell(tiles.DNGN_STONE_STAIRS_DOWN)).light, null, 'ordinary features stay unlit');
+    assert(model.describe(cell(tiles.FLOOR_MOSS, { glowing_mold: true })).light);
+    const creature = name => model.describe(cell(tiles.FLOOR_MOSS, { fg: 1 }, { mon: { id: 1, name } })).light;
+    for (const name of ['fire elemental', 'hell hound', 'ball lightning', 'storm dragon', 'angel', 'will-o-the-wisp']) assert(creature(name), name);
+    for (const name of ['goblin', 'rat', 'orc warrior', 'spiny frog']) assert.equal(creature(name), null, name);
+    assert.equal(model.describe({ t: { bg: tiles.FLOOR_MOSS, fg: 1 }, mon: { id: 2 } }).light, null, 'nameless creatures stay unlit');
+    assert.equal(model.describe(cell(tiles.DNGN_ALTAR_ZIN + 0x40000)), null);
+    assert.equal(model.describe({ t: { bg: tiles.DNGN_ALTAR_ZIN + 0x40000 } }, { remembered: true }).light, null, 'a remembered altar emits nothing');
+});
+
+test('flooded features join their water and shade as shallow water beneath the feature', () => {
+    const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], model = f.result['./premium-terrain-model'];
+    const mangrove = model.describe({ t: { bg: tiles.DNGN_SHALLOW_WATER, mangrove_water: true } });
+    assert.equal(mangrove.surface, null); assert.equal(mangrove.waterlogged, true);
+    const flooded = model.flooded(mangrove);
+    assert.equal(flooded.surface, 'water'); assert.equal(flooded.depth, 'shallow'); assert.equal(flooded.index, tiles.DNGN_SHALLOW_WATER);
+    assert.equal(mangrove.surface, null, 'the original description is untouched');
+    const shallow = { ...water, depth: 'shallow' }, others = [shallow, shallow, shallow, shallow];
+    assert.equal(topology.describe(shallow, [mangrove, ...others.slice(1)]).shore, 0, 'no bank between a pool and the mangroves standing in it');
+    assert.equal(topology.describe(water, [mangrove, ...[water, water, water]]).depth, 1, 'deep water still meets their shallows');
+    assert.equal(topology.describe(floor, [mangrove, floor, floor, floor]).wet, 1, 'ground beside them is still damp');
 });
 
 test('remembered liquid materials remain known without becoming light or effect sources', () => {
@@ -152,7 +254,7 @@ function fluidFixture() {
             putImageData(image) { canvas.pixels = image.data; } });
         return canvas;
     } };
-    f.load('liquid-field', true);
+    f.load('liquid-field', true); f.load('shore-field', true, { document });
     f.result['liquid-shader'] = { pixels: () => null };
     return f.load('fluid-surface', true, { document }).create(8);
 }
@@ -190,7 +292,7 @@ test('premium liquids keep their raster under fog, stop moving in memory, and re
         'liquid-shader': { pixels: () => null }, 'idle-work': { add: (...args) => jobs.push(args) }
     });
     const layers = f.load('cell-renderer-layers');
-    for (const name of ['tile-edges', 'terrain-topology', 'liquid-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish',
+    for (const name of ['tile-edges', 'terrain-topology', 'liquid-field', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish',
         'light-field-sampling', 'material-response', 'light-emission', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'terrain-blend', 'depth-shading'])
         f.load(name, true, { document });
     const terrain = f.load('premium-terrain', false, { document, window });

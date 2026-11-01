@@ -9,7 +9,7 @@ function ($, map, model, options, lighting, presentation) {
     function clear() { base = scene = signature = null; }
     function read(x, y) {
         var cell = model.describe(map.get(x, y));
-        if (cell && !["lighting", "reflections", "bloom", "spells"].some(presentation.enabled)) cell.light = null;
+        if (cell && !["lighting", "reflections", "bloom", "spells", "figures"].some(presentation.enabled)) cell.light = null;
         if (cell && cell.effect && !((cell.effect === "water" || cell.effect === "lava") ? options.get("tile_water_anim") : options.get("tile_misc_anim")))
             cell.effect = null;
         if (cell && cell.light) cell.light = Object.assign({}, cell.light, { animated: Boolean(cell.effect) });

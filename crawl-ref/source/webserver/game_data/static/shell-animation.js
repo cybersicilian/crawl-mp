@@ -92,5 +92,6 @@ define(["jquery", "require", "./map_knowledge"], function ($, require, map) {
         .on("visibilitychange.shellAnimation", tick);
     motion.addEventListener("change", tick);
     return { attach: function (view) { renderer = view; }, draw: draw, paint: paint,
+        posed: function (cx, cy) { return Array.from(poses.values()).some(function (entry) { return entry.pos.x === cx && entry.pos.y === cy; }); },
         roll: function (slot, until) { if (Number.isInteger(slot)) { rolls.set(slot, until); tick(); } } };
 });

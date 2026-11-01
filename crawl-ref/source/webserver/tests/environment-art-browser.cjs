@@ -270,7 +270,7 @@ assert(output); fs.mkdirSync(output, { recursive: true });
                 m['idle-work'] = { add() {} };
             });
             for (const name of ['terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader',
-                'fluid-surface', 'shoreline-paint', 'terrain-finish', 'light-field-sampling', 'light-emission', 'material-response',
+                'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'light-field-sampling', 'light-emission', 'material-response',
                 'surface-lighting', 'sampled-lighting', 'pixel-sampling', 'transparent-surface', 'depth-shading',
                 'premium-effect-model', 'premium-terrain-model', 'premium-terrain']) {
                 const shared = !name.startsWith('premium-');
@@ -279,7 +279,7 @@ assert(output); fs.mkdirSync(output, { recursive: true });
             }
             await page.evaluate(() => {
                 const m = window.artModules; window.detailLayers = m['./cell-renderer-layers'];
-                m['./cell-renderer-layers'] = { ...window.detailLayers, addTerrainPainter() {}, addSurfacePainter() {} };
+                m['./cell-renderer-layers'] = { ...window.detailLayers, addTerrainPainter() {}, addSurfacePainter() {}, addFloodPainter() {} };
                 window.artName = './premium-terrain-before';
             });
             await page.addScriptTag({ path: process.env.PREMIUM_DETAIL_BASELINE });

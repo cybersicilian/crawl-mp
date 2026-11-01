@@ -25,6 +25,19 @@ class GraphicsTests(AsyncHTTPTestCase):
         self.peer = auth.log_in_as_user(Mock(), 'Rowan')
         super().setUp()
 
+    def test_new_switches_follow_the_switch_they_grew_from(self):
+        saved = {'mode': 'premium', 'lighting': True, 'particles': False}
+        with self.database as db:
+            profile_graphics._schema(db)
+            db.execute('INSERT INTO profile_graphics (username, settings) VALUES (?, ?)', ('Aster', json.dumps(saved)))
+        settings = profile_graphics.state('Aster')['settings']
+        self.assertTrue(settings['figures'])
+        self.assertTrue(settings['lantern'])
+        self.assertFalse(settings['atmosphere'])
+        profile_graphics.update('Aster', {'figures': False})
+        self.assertFalse(profile_graphics.state('Aster')['settings']['figures'])
+        self.assertFalse(profile_graphics.state('Rowan')['settings']['lantern'])
+
     def get_app(self):
         return tornado.web.Application([(r'/profile', ProfilePageHandler),
             (r'/settings/graphics', GraphicsPageHandler),

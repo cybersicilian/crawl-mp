@@ -69,11 +69,11 @@ function fixtureHtml() {
     };
     const modules = [];
     const scripts = ['idle-work', 'tooltip-policy', 'game-loading', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas',
-        'liquid-shader', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation',
+        'liquid-shader', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation',
         'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface',
         'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint',
         'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion',
-        'sprite-motion-layer', 'footstep-paint', 'image-grade', 'atlas-materials', 'weighted-cache', 'atlas-sprites', 'deferred-images', 'texture-pack', 'terrain-surface'];
+        'sprite-motion-layer', 'footstep-paint', 'weighted-cache', 'figure-shading', 'lantern-pool', 'ambient-motes', 'image-grade', 'atlas-materials', 'atlas-sprites', 'deferred-images', 'texture-pack', 'terrain-surface'];
     const game = ['enums', 'util', 'tileinfo-floor', 'tileinfo-wall', 'tileinfo-feat', 'tileinfo-dngn', 'tileinfo-main', 'tileinfo-player',
         'tileinfo-gui', 'tileinfo-icons', 'tileinfos', 'map_knowledge', 'view_data', 'environment-art', 'environment-materials', 'environment-sprites',
         'terrain-materials', 'native-tile-art', 'tile-art-direction', 'terrain-edges', 'environment-ground', 'status-icon-sizes', 'cell-renderer-glyphs',
@@ -81,7 +81,7 @@ function fixtureHtml() {
         'party-model', 'encounter-banner', 'party-hover', 'traversal-effects', 'frame-update', 'chain-painter', 'chain-view', 'party-status-model', 'hero-feedback-model',
         'map-effect-layer', 'hero-feedback', 'encounter-feedback-model', 'encounter-feedback-paint', 'encounter-feedback', 'premium-effect-model',
         'premium-terrain-model', 'premium-region-model', 'premium-light-field', 'premium-terrain', 'premium-effects', 'premium-regions',
-        'premium-movement', 'dungeon_renderer', 'premium-dungeon', 'display'];
+        'premium-movement', 'premium-figures', 'dungeon_renderer', 'premium-view-layer', 'premium-lantern', 'premium-atmosphere', 'premium-dungeon', 'display'];
     const graphicsFixture = require(path.join(root, 'tests/helpers/graphics-fixture.cjs'));
     let html = '<!doctype html><html><meta charset="utf-8"><title>bench</title><style>body{margin:0;background:#000}'
         + '#dungeon_viewport{position:relative;overflow:hidden}#right_column{position:fixed;right:0;top:0;width:300px}</style>'
@@ -194,7 +194,7 @@ const profileSetup = () => {
         ['effect-shading', 'shade'], ['effect-shading', 'prepare'], ['sampled-lighting', 'create'], ['sampled-lighting', 'apply'], ['surface-lighting', 'shade'], ['surface-lighting', 'prepare'], ['liquid-field', 'normals'],
         ['wall-surface', 'prepare'], ['terrain-blend', 'pixels'], ['depth-shading', 'paint'], ['transparent-surface', 'compose'], ['terrain-topology', 'describe'],
         ['tile-lighting', 'create'], ['emissive-paint', 'paint'], ['tile-atmosphere', 'paint'], ['light-map-paint', 'paint'], ['visibility-feather', 'paint'],
-        ['tile-lighting-paint', 'paint'], ['tile-lighting-paint', 'paintRadiance'], ['emissive-surface', 'bloom'], ['flame-field', 'sample'], ['liquid-shader', 'pixels'], ['shoreline-paint', 'paint'], ['tile-edges', 'paint'], ['terrain-finish', 'create'], ['fluid-surface', 'create'], ['vapour-field', 'sample'], ['material-response', 'respond'], ['liquid-field', 'sample'], ['surface-reflections', 'sample'], ['texture-pack', 'illustrated'], ['visual-presentation', 'enabled']]
+        ['tile-lighting-paint', 'paint'], ['tile-lighting-paint', 'paintRadiance'], ['lantern-pool', 'paint'], ['ambient-motes', 'paint'], ['ambient-motes', 'scatter'], ['figure-shading', 'gather'], ['figure-shading', 'shadow'], ['shore-field', 'compose'], ['shore-field', 'shape'], ['shore-field', 'shallows'], ['emissive-surface', 'bloom'], ['flame-field', 'sample'], ['liquid-shader', 'pixels'], ['shoreline-paint', 'paint'], ['tile-edges', 'paint'], ['terrain-finish', 'create'], ['fluid-surface', 'create'], ['vapour-field', 'sample'], ['material-response', 'respond'], ['liquid-field', 'sample'], ['surface-reflections', 'sample'], ['texture-pack', 'illustrated'], ['visual-presentation', 'enabled']]
         .forEach(([mod, fn]) => wrap(m[mod], fn, mod + '.' + fn));
     const atlas = m['shader-atlas'], originalCreate = atlas.create;
     atlas.create = function () {

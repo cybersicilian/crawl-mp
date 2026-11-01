@@ -2,6 +2,13 @@
 #normal #dungeon_viewport { position: relative; z-index: 0; flex: 0 0 auto; min-height: 0; overflow: hidden; }
 #normal #dungeon_viewport > #dungeon { position: absolute; display: block; outline: none; }
 .premium-dungeon-radiance { mix-blend-mode: screen; }
+.premium-dungeon-mood { mix-blend-mode: screen; }
+.premium-dungeon-lantern, .premium-dungeon-motes, .premium-dungeon-mood {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    image-rendering: auto;
+}
 .premium-dungeon-light, .premium-dungeon-radiance {
     position: absolute;
     pointer-events: none;
@@ -64,5 +71,5 @@ html[data-graphics-motion="reduced"] :is(.workflow-context-menu, #party_inspecto
     }
 }
 @media (forced-colors: active) {
-    .premium-dungeon-light, .premium-dungeon-radiance { display: none; }
+    .premium-dungeon-light, .premium-dungeon-radiance, .premium-dungeon-lantern, .premium-dungeon-motes, .premium-dungeon-mood { display: none; }
 }

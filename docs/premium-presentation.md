@@ -256,13 +256,16 @@ and lava surfaces; its cache is bounded to 192 tiles and anchored in world space
 so panning never restarts the pattern. `tile-atmosphere.js` clips a maximum of 32
 small emitters away from occupied or semantically marked cells.
 
-`shoreline-paint.js` adds world-anchored pixel banks from declarative material
-profiles. Lava gets an irregular cooled-rock rim, a broken inner ember seam and
-scorched adjacent ground. Water gets a wet stone/silt lip and broken pale rim.
-Both sides sample the same boundary coordinates, with an eight-tile cache
-period. Borders appear only against a known different material, remain inside
-their native tile, and do not split connected pools. Hot ground edges and wet
-banks have separate topology masks; dry material blends retain their world seed.
+`shore-field.js` shapes liquid edges from a world-anchored distance field with
+rounded corners and meandering margins, sharing an eight-tile period with every
+terrain cache. Adjacent tiles agree on each boundary pixel, using eight-way masks
+from `terrain-topology.js`. The neighbouring ground continues into the liquid tile
+as a darkened bank, with a lapping foam line on water and a cooled crust and ember
+seam on lava. The bank stays inside the native tile and the tile centre always
+stays liquid. Deep and shallow water meet on one soft line. `shoreline-paint.js`
+stains the ground beyond the tile edge, continuing the same falloff. Unknown
+neighbours supply no shape. Mangroves count as connected water and stand on
+Premium shallow water through the `addFloodPainter` hook.
 
 The native `cell-renderer-layers` offers a removable terrain-painter hook after
 background art and before native blood, decals, actors, clouds and targeting.
@@ -282,6 +285,32 @@ motion is limited to ten frames per second. Hidden tabs stop all overlay work.
 Reduced motion and disabled native realtime animation preserve static light and
 stop the ambient timer. Forced-colour mode hides the overlay.
 
+`figure-shading.js` gives visible creatures and floor items a soft ground shadow
+and gives creatures a coloured rim on the edge facing nearby light, gathered from
+the same occlusion field as terrain. Every pass follows native alpha through a
+scratch layer, so position, silhouette, clips, transparency and overlap bookkeeping
+are preserved. Results are retained by sprite identity and quantized light, with a
+16 MiB bound. Glides need no special case: the actor shader wraps the paint the
+motion layer captures. Fliers get a smaller, fainter shadow, and waders and lava
+crossers none. With Reflections on, still water mirrors the figure directly above
+it, masked to the liquid so a bank shows nothing.
+
+`lantern-pool.js` and `premium-lantern.js` give each hero on the floor a warm pool,
+needed because ordinary floors have almost no emitters. Distant terrain shades
+gently, monsters stay legible through small clear points, and a visible-cell mask
+feathers the glow so unknown space stays unlit. Nearby creatures take a rim from the
+same light. `premium-terrain-model.js` also gives altars their god's colour, gives
+open portals and magical fixtures their own light, and lights glowing mould and
+creatures of flame, storm or holy radiance. All of these emit only while visible.
+
+`ambient-motes.js` draws world-anchored drifting motes as a pure function of home
+cell and clock, so nothing is simulated and panning never restarts them.
+`premium-atmosphere.js` maps each branch to a mote kind and a screen-blended haze.
+Reduced motion keeps the haze and drops the motes. `premium-view-layer.js` is the
+shared lifecycle for these canvases: none capture input, and they stop when hidden,
+in Classic, outside the dungeon view, and on cleanup. See
+`graphics-2026-10-31/premium-presence/README.md` for evidence and limits.
+
 Focused checks: `node --test crawl-ref/source/webserver/tests/tile-lighting.test.cjs`.
 Terrain checks: `node --test crawl-ref/source/webserver/tests/premium-terrain.test.cjs`.
 Surface checks: `node --test crawl-ref/source/webserver/tests/surface-lighting.test.cjs`.
@@ -295,3 +324,4 @@ Motion checks: `node --test crawl-ref/source/webserver/tests/sprite-motion.test.
 Graphics checks: `node --test crawl-ref/source/webserver/tests/premium-graphics.test.cjs`.
 Material checks: `node --test crawl-ref/source/webserver/tests/premium-materials.test.cjs`.
 Radiance and region checks: `node --test crawl-ref/source/webserver/tests/premium-radiance.test.cjs`.
+Figure, lantern and atmosphere checks: `node --test crawl-ref/source/webserver/tests/premium-figures.test.cjs`.
