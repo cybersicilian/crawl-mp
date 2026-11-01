@@ -39,7 +39,8 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../game_data/static/mon
     define(deps, factory) {
         list = factory(jquery, { get: (x, y) => cells[x + ',' + y], visible: () => true },
             { DungeonCellRenderer: Renderer }, dungeon_renderer,
-            { get: () => 'tiles', add_listener() {} }, { init_canvas() {}, formatted_string_to_html: t => t }, {}, { UNSEEN_INVISIBLE: 1 });
+            { get: () => 'tiles', add_listener() {} }, { init_canvas() {}, formatted_string_to_html: t => t }, {}, { UNSEEN_INVISIBLE: 1 },
+            { harmless: monster => Boolean(monster.typedata && monster.typedata.no_exp) });
     }
 });
 bound.game_init();
