@@ -18,6 +18,7 @@ python3 webserver/util/prepare-assets.py --check webserver/static webserver/game
 PYTHONPATH=webserver python3 -m unittest webtiles.chat_tags_test webtiles.game_library_test webtiles.character_preview_test webtiles.asset_revision_test webtiles.starting_weapons_test webtiles.gameplay_protocol_test webtiles.party_control_test webtiles.skill_training_test
 python3 webserver/tests/native-character-preview.py --binary "$SOURCE/crawl"
 sudo -u dcss python3 "$RELEASE/deploy/verify_preview_runtime.py" "$SOURCE"
+sudo -u dcss python3 "$RELEASE/deploy/verify_headless_runtime.py" "$SOURCE"
 
 for state_path in rcs saves; do
     # Native validation may create an empty default directory. Never nest the

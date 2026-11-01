@@ -23,6 +23,55 @@ def module(name):
     return loaded
 
 
+FAKE_ENGINE = """#!{python}
+import json, os, signal, socket, sys
+arguments = sys.argv
+assert arguments[-1] == "-headless"
+directory = arguments[arguments.index("-dir") + 1]
+server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+server.bind(arguments[arguments.index("-webtiles-socket") + 1])
+_, client = server.recvfrom(4096)
+def hangup(*_):
+    {on_hangup}
+    os._exit(0)
+signal.signal(signal.SIGHUP, hangup)
+for kind in ("player", "map", "input_mode"):
+    server.sendto(json.dumps({{"msg": kind}}).encode() + b"\\n", client)
+signal.pause()
+"""
+
+
+class HeadlessRuntimeTests(unittest.TestCase):
+    def check(self, engine):
+        with tempfile.TemporaryDirectory() as location:
+            crawl = pathlib.Path(location, "crawl")
+            crawl.write_text(engine)
+            crawl.chmod(0o755)
+            return subprocess.run(
+                [sys.executable, str(pathlib.Path(__file__).with_name("verify_headless_runtime.py")), location],
+                capture_output=True, text=True, timeout=60)
+
+    def test_game_that_saves_on_hangup_passes(self):
+        result = self.check(FAKE_ENGINE.format(
+            python=sys.executable, on_hangup='open(os.path.join(directory, "Check.cs"), "w").close()'))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(json.loads(result.stdout)["passed"])
+
+    def test_hangup_that_writes_no_save_fails(self):
+        result = self.check(FAKE_ENGINE.format(python=sys.executable, on_hangup="pass"))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("hangup wrote no save", result.stderr)
+
+    def test_engine_that_dies_at_launch_fails_with_its_output(self):
+        result = self.check("#!/bin/sh\necho broken terminal\nexit 3\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("engine exited during startup", result.stderr)
+
+    def test_install_checks_the_launch_before_stopping_the_service(self):
+        script = pathlib.Path(__file__).with_name("install_release.sh").read_text()
+        self.assertLess(script.index("verify_headless_runtime.py"), script.index("systemctl stop dcss-coop"))
+
+
 class DeploymentTests(unittest.TestCase):
     def test_existing_save_alias_is_normalized_without_moving_packages(self):
         migrate = module("migrate_library_paths").migrate

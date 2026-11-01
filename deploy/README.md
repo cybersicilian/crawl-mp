@@ -57,6 +57,8 @@ returns to `e2-medium`. Normal updates compile with two workers and 4 GiB swap.
 Before activation, native creation contracts run alongside backend tests.
 `verify_preview_runtime.py` also exercises real previews as the `dcss` service
 user, so root-only build success cannot hide read-only release permission errors.
+`verify_headless_runtime.py` plays one throwaway game the way the server starts
+it, because the health check after activation never starts a game.
 
 Set the DNS record to the reserved IP printed by the deployment, initially in
 DNS-only mode. A successful local service health check is not proof that public
