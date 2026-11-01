@@ -15,8 +15,11 @@ fs.mkdirSync(out, { recursive: true });
     try {
         await page.route('http://hotkeys.test/**', route => {
             const name = path.basename(new URL(route.request().url()).pathname);
-            if (name.endsWith('.css')) return route.fulfill({ contentType: 'text/css',
-                body: fs.readFileSync(path.join(root, 'game_data/static/styles', name)) });
+            if (name.endsWith('.css')) {
+                const file = ['game_data/static/styles', 'static/tabletop'].map(dir => path.join(root, dir, name))
+                    .find(candidate => fs.existsSync(candidate));
+                return route.fulfill({ contentType: 'text/css', body: file ? fs.readFileSync(file) : '' });
+            }
             return route.fulfill({ contentType: 'text/html', body: '<!doctype html><body>'
                 + '<main id="normal"><div id="dcss_quick_dock"></div></main>'
                 + '<button id="outside">Dungeon focus</button><div id="ui-stack"></div></body>' });
@@ -55,6 +58,14 @@ fs.mkdirSync(out, { recursive: true });
         });
         const button = page.locator('#dock_common_hotkeys');
         const dialog = page.locator('#inspection_dialog');
+        /* close is queued after native dismissal and releases the focus trap, which eats outside input until then. */
+        const dismiss = async () => {
+            await dialog.evaluate(node => {
+                window.qaClosed = new Promise(resolve => node.addEventListener('close', resolve, { once: true }));
+            });
+            await page.keyboard.press('Escape');
+            await page.evaluate(() => window.qaClosed.then(() => true));
+        };
         assert.equal(await button.count(), 1);
         await button.click();
         await dialog.waitFor({ state: 'visible' });
@@ -67,12 +78,12 @@ fs.mkdirSync(out, { recursive: true });
             await page.keyboard.press(key);
         assert(await dialog.evaluate(node => node.contains(document.activeElement)), 'Modal focus stays inside the reference');
         assert.deepEqual(await page.evaluate(() => window.qaPackets), [], 'Reading and navigating help sends no game input');
-        await page.keyboard.press('Escape');
+        await dismiss();
         assert.equal(await dialog.isVisible(), false);
         assert(await button.evaluate(node => node === document.activeElement), 'Closing restores the opener');
         await button.focus(); await page.keyboard.press('Enter');
         assert(await dialog.isVisible(), 'Keyboard activation opens the same reference');
-        await page.keyboard.press('Escape');
+        await dismiss();
         assert.deepEqual(await page.evaluate(() => window.qaPackets), []);
 
         for (const width of [1280, 768, 390, 320]) {
@@ -86,16 +97,63 @@ fs.mkdirSync(out, { recursive: true });
             assert(geometry.left >= 0 && geometry.right <= width && !geometry.overflow);
             if (width === 1280 || width === 390)
                 await page.screenshot({ path: path.join(out, 'common-hotkeys-' + width + '.png') });
-            await page.keyboard.press('Escape');
+            await dismiss();
         }
         await page.locator('#outside').focus(); await page.keyboard.press('j');
         assert.deepEqual(await page.evaluate(() => window.qaPackets), [{ msg: 'input', text: 'j' }],
             'Normal gameplay still receives one native command after help closes');
+
+        /* Paper is a light surface in folio and a dark one elsewhere, so measure every theme. */
+        await page.setViewportSize({ width: 1280, height: 900 });
+        await page.addStyleTag({ url: 'http://hotkeys.test/ui-themes.css' });
+        for (const theme of ['folio', 'dungeon', 'contrast']) {
+            await page.evaluate(name => { document.documentElement.dataset.uiTheme = name; }, theme);
+            await button.click();
+            await dialog.waitFor({ state: 'visible' });
+            const failures = await dialog.evaluate(node => {
+                const probe = node.appendChild(document.createElement('i'));
+                const rgb = value => {
+                    probe.style.color = value;
+                    return getComputedStyle(probe).color.match(/[\d.]+/g).slice(0, 3).map(Number);
+                };
+                const luminance = color => {
+                    const [r, g, b] = color.map(value => {
+                        const channel = value / 255;
+                        return channel <= .03928 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+                    });
+                    return .2126 * r + .7152 * g + .0722 * b;
+                };
+                const ratio = (a, b) => {
+                    const [high, low] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+                    return (high + .05) / (low + .05);
+                };
+                const token = name => rgb(getComputedStyle(node).getPropertyValue(name).trim());
+                const paper = [token('--ui-page'), token('--ui-page-raised')];
+                const tile = [token('--ui-page-inset')];
+                const lowest = (color, backgrounds) => Math.min(...backgrounds.map(background => ratio(color, background)));
+                const failed = [
+                    ['#inspection_heading', paper], ['.common-hotkeys h2', paper], ['.common-hotkey-row kbd', paper],
+                    ['.common-hotkeys dd', paper], ['.common-hotkey-movement p', paper], ['#inspection_context', paper],
+                    ['.common-hotkey-compass kbd', tile], ['.common-hotkey-compass small', tile]
+                ].flatMap(([selector, backgrounds]) => {
+                    const measured = lowest(rgb(getComputedStyle(node.querySelector(selector)).color), backgrounds);
+                    return measured < 4.5 ? [selector + ' ' + measured.toFixed(2)] : [];
+                });
+                const ring = lowest(token('--ui-focus'), paper);
+                if (ring < 3) failed.push('focus ring ' + ring.toFixed(2));
+                probe.remove();
+                return failed;
+            });
+            assert.deepEqual(failures, [], theme + ' keeps the reference readable on its paper');
+            await page.screenshot({ path: path.join(out, 'common-hotkeys-' + theme + '.png') });
+            await dismiss();
+        }
+
         await button.click();
         await page.evaluate(() => window.jQuery(document).trigger('game_cleanup'));
         assert.equal(await button.count(), 0);
         assert.equal(await dialog.isVisible(), false);
         assert.deepEqual(errors, []);
-        console.log('Common hotkeys: eight canonical directions, keyboard isolation, focus return, four viewport widths and cleanup passed');
+        console.log('Common hotkeys: eight canonical directions, keyboard isolation, focus return, four viewport widths, three theme contrasts and cleanup passed');
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
