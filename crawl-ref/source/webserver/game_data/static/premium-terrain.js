@@ -66,21 +66,13 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
             return data ? { data: data } : null;
         });
     }
-    // Exploring reveals tiles in bursts. Allocating a canvas for each one costs
-    // far more than the pixel work, so albedo passes share this scratch surface.
-    var scratch = null;
-    function scratchContext() {
-        if (scratch) return scratch;
-        var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
-        scratch = canvas.getContext("2d", { willReadFrequently: true });
-        return scratch;
-    }
     function albedo(renderer, terrain, neighbours, cx, cy, time, key, cell) {
         if (prepared.has(key)) return prepared.get(key);
         var painted = terrain.own.ground && ground.tile && ground.tile(terrain.own.index, cx, cy, 32);
         var raw = painted ? painted.getContext("2d").getImageData(0, 0, 32, 32).data : nativeSource(renderer, terrain.own.index);
         if (!raw) return null;
-        var ctx = scratchContext();
+        var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
+        var ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return null;
         var detail;
         if (!painted && terrain.own.ground && presentation.enabled("borders")) {

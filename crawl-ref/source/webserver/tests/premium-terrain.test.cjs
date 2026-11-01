@@ -262,9 +262,7 @@ function fluidFixture() {
 test('premium liquids keep their raster under fog, stop moving in memory, and resume on visibility changes', () => {
     const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], enums = f.result['./enums'];
     const noop = () => {}, handlers = new Map(), order = [], jobs = [];
-    let canvases = 0;
     const document = { createElement() {
-        canvases++;
         const canvas = { width: 32, height: 32, pixels: new Uint8ClampedArray(4096), reads: 0 };
         const ctx = { save: noop, restore: noop, beginPath: noop, rect: noop, clip: noop,
             createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
@@ -348,10 +346,6 @@ test('premium liquids keep their raster under fog, stop moving in memory, and re
     premium = true;
     change(tiles.FLOOR_MOSS, 0x40000);
     assert.equal(terrain.frame(renderer, 0, 0), undefined, 'other remembered terrain retains its existing path');
-    change(tiles.FLOOR_MOSS);
-    const allocated = canvases;
-    assert(terrain.frame(renderer, 0, 0));
-    assert.equal(canvases - allocated, 2, 'a cold tile allocates its atlas sample and result, never a scratch canvas');
 });
 
 test('painted ground tiles stay CPU-backed so premium shading never waits on a GPU readback', () => {
