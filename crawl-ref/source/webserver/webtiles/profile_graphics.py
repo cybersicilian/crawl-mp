@@ -44,6 +44,10 @@ def _read(db, username):
         for key, value in saved.items():
             if key in FIELDS:
                 result.update(validate({key: value}))
+        # A switch newer than the saved choice follows the switch it grew from.
+        for key, field in FIELDS.items():
+            if key not in saved and field.get('inherits') in saved:
+                result[key] = result[field['inherits']]
     return result, row[1] if row else 0
 
 

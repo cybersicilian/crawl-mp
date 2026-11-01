@@ -22,7 +22,7 @@ define(["light-field-sampling", "material-response", "light-emission"], function
         }
         if (normalMap && normalMap.length === normals.length) normals.set(normalMap);
         return { data: new Uint8ClampedArray(data), normals: normals, width: width, height: height,
-            roughness: detail && detail.roughness, cavity: detail && detail.cavity };
+            roughness: detail && detail.roughness, cavity: detail && detail.cavity, specular: detail && detail.specular };
     }
     function shade(surface, material, cx, cy, lights, phase, settings, coefficients) {
         if (material === "lava") {
@@ -52,7 +52,8 @@ define(["light-field-sampling", "material-response", "light-emission"], function
                     var aligned = Math.max(0, (nx * hx + ny * hy + hz) / (length * Math.hypot(hx, hy, hz)));
                     var grazing = Math.max(0, 1 - (1 - ny * .22) / (length * Math.hypot(.22, 1)));
                     var fresnel = optical ? .5 + .5 * Math.pow(grazing, 5) : 1;
-                    specular = Math.pow(aligned, 8 + (1 - roughness) * 38) * response.reflectance * fresnel;
+                    specular = Math.pow(aligned, 8 + (1 - roughness) * 38) * response.reflectance * fresnel
+                        * (surface.specular ? surface.specular[n] : 1);
                 }
                 r += diffuse * energy * light.colour[0] / 255;
                 g += diffuse * energy * light.colour[1] / 255;

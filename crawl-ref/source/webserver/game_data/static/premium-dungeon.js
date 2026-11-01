@@ -1,6 +1,6 @@
 define(["jquery", "./dungeon_renderer", "./options", "./enums",
-        "visual-presentation", "tile-lighting-paint", "./premium-terrain", "./premium-light-field", "./premium-effects", "graphics-dialog"],
-function ($, renderer, options, enums, presentation, painting, terrain, field, effects, graphicsDialog) {
+        "visual-presentation", "tile-lighting-paint", "./premium-terrain", "./premium-light-field", "./premium-effects", "graphics-dialog", "./premium-lantern", "./premium-atmosphere"],
+function ($, renderer, options, enums, presentation, painting, terrain, field, effects, graphicsDialog, lantern, atmosphere) {
     "use strict";
     var running = false, canvas, context, radianceCanvas, radianceContext, frame = null, timer = null, scene, signature;
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");

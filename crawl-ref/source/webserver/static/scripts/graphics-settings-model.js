@@ -29,7 +29,12 @@ define([], function () {
     }
     function normalize(value) {
         var result = defaults();
-        Object.keys(fields).forEach(function (key) { if (value && valid(fields[key], value[key])) result[key] = value[key]; });
+        Object.keys(fields).forEach(function (key) {
+            // A switch newer than a saved choice follows the switch it grew from.
+            var parent = fields[fields[key].inherits];
+            if (value && valid(fields[key], value[key])) result[key] = value[key];
+            else if (value && parent && valid(parent, value[parent.id])) result[key] = value[parent.id];
+        });
         return result;
     }
     function preset(id, current) {

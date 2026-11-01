@@ -31,6 +31,8 @@ function fixture() {
         window.fixtureSettings = settings;
         window.fixtureModules['./options'] = { ready: () => true, get: name => settings[name], add_listener() {} };
         window.fixtureModules['./game-context'] = { get_ui_state: () => 0 };
+        window.fixtureModules['./player'] = { pos: { x: 9, y: 3 }, place: 'Dungeon' };
+        window.fixtureModules['./shell-animation'] = { posed: () => false };
         window.fixtureModules['./view_data'] = { cursor_locs: {} };
         window.fixtureModules['./tileinfo-icons'] = {};
         window.fixtureModules['./terrain-edges'] = { draw() {} };
@@ -272,7 +274,7 @@ function fixture() {
         + script(source('static/scripts/contrib/jquery.js')) + script('(' + setup.toString() + ')();');
     for (const name of modules) html += script(`window.fixtureName='./${name}';`)
         + script(source(`game_data/static/${name}.js`));
-    for (const name of ['idle-work', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation', 'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface', 'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint', 'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion', 'sprite-motion-layer', 'footstep-paint', 'item-properties']) {
+    for (const name of ['idle-work', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation', 'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface', 'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint', 'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion', 'sprite-motion-layer', 'footstep-paint', 'figure-shading', 'lantern-pool', 'ambient-motes', 'item-properties']) {
         if (name === 'visual-presentation') html += script(graphicsFixture(JSON.parse(source('static/graphics-settings.json'))));
         html += script(`window.fixtureName='${name}';`) + script(source(`static/scripts/${name}.js`));
     }
@@ -280,8 +282,12 @@ function fixture() {
     html += script("window.fixtureName='./power-art';") + script(source('game_data/static/power-art.js'));
     html += script("window.fixtureName='./premium-light-field';") + script(source('game_data/static/premium-light-field.js'));
     html += script("window.fixtureName='./premium-terrain';") + script(source('game_data/static/premium-terrain.js'));
+    html += script("window.fixtureName='./premium-figures';") + script(source('game_data/static/premium-figures.js'));
     html += script("window.fixtureName='./premium-effects';") + script(source('game_data/static/premium-effects.js'));
     html += script("window.fixtureName='./premium-regions';") + script(source('game_data/static/premium-regions.js'));
+    html += script("window.fixtureName='./premium-view-layer';") + script(source('game_data/static/premium-view-layer.js'));
+    html += script("window.fixtureName='./premium-lantern';") + script(source('game_data/static/premium-lantern.js'));
+    html += script("window.fixtureName='./premium-atmosphere';") + script(source('game_data/static/premium-atmosphere.js'));
     html += script("window.fixtureName='./premium-dungeon';") + script(source('game_data/static/premium-dungeon.js'));
     html += script("window.fixtureName='./map-effect-layer';") + script(source('game_data/static/map-effect-layer.js'));
     html += script("window.fixtureName='./premium-movement';") + script(source('game_data/static/premium-movement.js'));
@@ -466,10 +472,34 @@ if (process.argv.includes('--prepare-only')) {
             await page.evaluate(() => { delete window.fixtureModules['./view_data'].cursor_locs.target; });
             await page.locator('#dungeon').click({ position: { x: 100, y: 100 } });
             assert.equal(await page.evaluate(() => window.fixtureClicks), 1);
+            const presence = await page.evaluate(async () => {
+                const m = window.fixtureModules, renderer = window.fixtureRenderer, ctx = renderer.element.getContext('2d');
+                const cell = (x, y) => Array.from(ctx.getImageData(x * 64, y * 64, 64, 64).data);
+                const differs = (a, b) => a.some((value, index) => value !== b[index]);
+                const lantern = document.querySelector('.premium-dungeon-lantern').getContext('2d');
+                const shade = (x, y) => lantern.getImageData(x * 8 + 4, y * 8 + 4, 1, 1).data[3];
+                window.fixturePauseAmbient = true; window.fixtureRepaint();
+                const lit = { actor: cell(9, 3), empty: cell(6, 7) };
+                m['graphics-preferences'].change({ figures: false });
+                await new Promise(resolve => setTimeout(resolve, 80)); window.fixtureRepaint();
+                const plain = { actor: cell(9, 3), empty: cell(6, 7) };
+                m['graphics-preferences'].change({ figures: true });
+                await new Promise(resolve => setTimeout(resolve, 80)); window.fixtureRepaint();
+                window.fixturePauseAmbient = false;
+                return { actorChanged: differs(lit.actor, plain.actor), emptyChanged: differs(lit.empty, plain.empty),
+                    sprites: m['figure-shading'] && document.querySelector('.premium-dungeon-lantern').dataset.pools,
+                    nearShade: shade(9, 3), farShade: shade(1, 11), kind: document.querySelector('.premium-dungeon-motes').dataset.kind,
+                    mood: document.querySelectorAll('.premium-dungeon-mood').length };
+            });
+            assert(presence.actorChanged, 'Creatures respond to light and cast a shadow');
+            assert(!presence.emptyChanged, 'Creature shading leaves empty terrain untouched');
+            assert.equal(presence.sprites, '1'); assert.equal(presence.kind, 'dust'); assert.equal(presence.mood, 1);
+            assert(presence.nearShade < presence.farShade, 'The lantern clears shade around its bearer');
             await page.locator('#graphics_settings_btn').click();
             await page.locator('[data-graphics-preset="classic"]').click();
             await page.locator('.graphics-dialog-actions button').click();
             assert.equal(await page.locator('.premium-dungeon-light').count(), 0);
+            assert.equal(await page.locator('.premium-dungeon-lantern, .premium-dungeon-motes, .premium-dungeon-mood').count(), 0, 'Classic removes every new layer');
             assert.equal(await page.locator('.premium-dungeon-radiance').count(), 0);
             assert.equal(await page.locator('.premium-actor-motion, .premium-footsteps').count(), 0);
             assert((await page.locator('#graphics_settings_btn').getAttribute('aria-label')).includes('Classic'));
@@ -490,6 +520,10 @@ if (process.argv.includes('--prepare-only')) {
             await page.evaluate(() => window.fixtureMove(0, 9, 3));
             await page.waitForTimeout(140);
             assert.equal(await page.locator('.premium-actor-motion, .premium-footsteps').count(), 0);
+            await page.waitForFunction(() => {
+                const motes = document.querySelector('.premium-dungeon-motes');
+                return motes && !motes.getContext('2d').getImageData(0, 0, motes.width, motes.height).data.some((value, index) => index % 4 === 3 && value);
+            }, null, { timeout: 2000 });
             const staticPixels = await page.locator('.premium-dungeon-light').evaluate(node => node.toDataURL());
             const staticWater = await page.locator('#dungeon').evaluate(node => Array.from(node.getContext('2d').getImageData(128, 320, 64, 64).data));
             const staticFloor = await page.locator('#dungeon').evaluate(node => node.getContext('2d').getImageData(128, 64, 64, 64).data.join(','));

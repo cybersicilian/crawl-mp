@@ -1,7 +1,7 @@
 define(["jquery", "comm", "./cell_renderer", "./map_knowledge", "./options",
-    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./chain-view", "./encounter-banner"],
+    "./tileinfo-dngn", "./util", "./view_data", "./enums", "./mouse_control", "./game-context", "tooltip-policy", "./party-hover", "./traversal-effects", "./shell-animation", "./planned-route", "./chunked-view", "./sprite-reach", "./hero-feedback", "./encounter-feedback", "./premium-movement", "./premium-effects", "./premium-regions", "./premium-figures", "./chain-view", "./encounter-banner"],
 function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
-    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, chains, encounterBanner) {
+    mouse_control, game, tip_policy, presence, traversal, shells, plannedRoute, chunks, spriteReach, feedback, encounters, movement, effects, regions, figures, chains, encounterBanner) {
     "use strict";
     var global_anim_counter = 0;
     var last_background_tick = -1;

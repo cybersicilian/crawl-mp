@@ -1,4 +1,4 @@
-/* Pixel borders and feathered native-material transitions, below all actors. */
+/* Pixel borders, liquid surfaces and ground stains, below all actors. */
 define(["tile-edges", "fluid-surface", "shoreline-paint"], function (edges, fluids, banks) {
     "use strict";
     function create() {
@@ -10,7 +10,7 @@ define(["tile-edges", "fluid-surface", "shoreline-paint"], function (edges, flui
             // All terrain decoration is contained by its native tile rectangle.
             ctx.beginPath(); ctx.rect(point.x, point.y, point.width, point.height); ctx.clip();
             if (own.surface && settings.liquids !== false) {
-                var fluid = surfaces.tile(settings.borders === false ? Object.assign({}, terrain, { shore: 0 }) : terrain, cx, cy, time);
+                var fluid = surfaces.tile(settings.borders === false ? Object.assign({}, terrain, { ledge: 0 }) : terrain, cx, cy, time);
                 if (fluid) ctx.drawImage(fluid, point.x, point.y, point.width, point.height);
             } else if (own.solid && settings.borders !== false) {
                 edges.paint(ctx, point, terrain.wall, { width: 1, shadow: "#080b12aa", light: "#dfc8a137" });

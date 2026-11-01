@@ -280,7 +280,7 @@ function ($, view_data, main, tileinfo_player, icons, dngn, enums, map_knowledge
                 }
             }
 
-            }.bind(this));
+            }.bind(this), Boolean(fg_idx >= main.MAIN_MAX && (cell.doll || cell.mcache)));
             this.draw_foreground(x, y, map_cell);
 
             // draw clouds over stuff

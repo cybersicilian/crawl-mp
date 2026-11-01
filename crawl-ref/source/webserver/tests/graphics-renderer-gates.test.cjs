@@ -64,13 +64,14 @@ test('disabled clouds and spells fall back before atlas reads; reduced motion st
 });
 test('terrain CPU shading is bypassed when no terrain enhancement or distortion is enabled', () => {
     const terrain = load('game_data/static/premium-terrain.js', {
-        jquery: () => ({ on() { return this; } }), './cell-renderer-layers': { addTerrainPainter: noop, addSurfacePainter: noop },
+        jquery: () => ({ on() { return this; } }), './cell-renderer-layers': { addTerrainPainter: noop, addSurfacePainter: noop, addFloodPainter: noop },
         './options': { ready: () => true, get: () => 'tiles', add_listener: noop },
         './game-context': { get_ui_state: () => 0 }, './enums': { ui: { NORMAL: 0 } },
         'visual-presentation': { premium: () => true, enabled: () => false },
-        'terrain-finish': { create: () => ({}) }, './map_knowledge': { get() { throw Error('Disabled shading queried terrain'); } }
+        'terrain-finish': { create: () => ({}) }, 'weighted-cache': { create: () => ({}) },
+        './map_knowledge': { get() { throw Error('Disabled shading queried terrain'); } }
     }, { document: {}, window: { matchMedia: () => ({ matches: false, addEventListener: noop }) } });
-    assert.equal(terrain.frame({ view: {} }, 0, 0), undefined);
+    assert.equal(terrain.frame({ view: {}, scaled_size: () => ({ width: 32, height: 32 }) }, 0, 0), undefined);
 });
 test('reflection toggle removes material specular light while retaining diffuse illumination and alpha', () => {
     const sampling = load('static/scripts/light-field-sampling.js', {});
