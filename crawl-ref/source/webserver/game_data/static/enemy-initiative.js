@@ -41,7 +41,7 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         $(document).trigger("creature_rail_positioned");
     }
     var refresh = frameUpdate(position);
-    var portraits = indexedPaint(function (node) {
+    function drawPortrait(node) {
         var enemy = node.enemy;
         if (!node.renderer) {
             node.renderer = new cells.DungeonCellRenderer();
@@ -50,7 +50,18 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         node.renderer.clear();
         if (enemy.perception === "last_known") node.renderer.draw_main(main.UNSEEN_INVISIBLE, 0, 0, 1);
         else if (map.get(enemy.x, enemy.y).t) node.renderer.render_cell(enemy.x, enemy.y, 0, 0);
-    });
+    }
+    // Every creature canvas repaints from the same map and texture events.
+    var painters = [];
+    function createPainter() {
+        var painter = indexedPaint(drawPortrait);
+        painters.push(painter);
+        return painter;
+    }
+    function repaint(changed) {
+        painters.forEach(function (painter) { painter.changed(changed); });
+    }
+    var portraits = createPainter();
     function effectIcon(effect, enemy) {
         // Use the player badge primitive when present; retain compatible badges
         // for existing bundles that export only the shared glyphs and resolver.
@@ -121,8 +132,9 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         var statusSignature = JSON.stringify([enemy.name, data.remembered, data.statusSubject]);
         var aura = !data.remembered && Number.isInteger(enemy.aura_radius) && enemy.aura_radius > 0
             ? "Aura · " + enemy.aura_radius + " tiles" : "";
+        // A map contact can bring threat and attitude after the native reading.
         signature = JSON.stringify([enemy.name, Boolean(enemy.ready) && data.timed, data.remembered,
-            data.reading, data.healthText, statusSignature, aura]);
+            data.reading, data.caption, data.healthText, statusSignature, aura, enemy.threat, roster.category(enemy), enemy.damage_level]);
         if (node.signature === signature) return node;
         node.signature = signature;
         var ready = String(Boolean(enemy.ready) && data.timed), perception = data.remembered ? "last_known" : "visible";
@@ -136,13 +148,16 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         var injury = data.remembered || !Number.isInteger(enemy.damage_level) ? "unknown" : String(enemy.damage_level);
         if (node.dataset.injury !== injury) node.dataset.injury = injury;
         if (node.parts.name.textContent !== enemy.name) node.parts.name.textContent = enemy.name;
-        var reading = [data.reading, !data.remembered && enemy.health ? enemy.health : "", aura]
-            .filter(Boolean).join(" · ");
+        // Aura leads because the caption clips to one line and the bar repeats health.
+        var reading = [aura, data.caption].filter(Boolean).join(" · ");
         if (node.parts.reading.textContent !== reading) node.parts.reading.textContent = reading;
         if (node.statusSignature !== statusSignature) {
             node.statusSignature = statusSignature;
             var $effects = $(node.parts.effects).empty();
-            data.effects.forEach(function (effect) { $effects.append(effectIcon(effect, enemy)); });
+            // Unreported statuses stay in the label and tooltip, not as a row of question marks.
+            data.effects.forEach(function (effect) {
+                if (effect.key !== "unknown") $effects.append(effectIcon(effect, enemy));
+            });
         }
         var effectNames = data.effects.map(function (effect) { return effect.name; }).join(", ");
         var attributes = { "aria-label": enemy.name + ": " + data.healthText + "; initiative: " + data.reading
@@ -232,8 +247,8 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         initiative.updateMonster($("#party_progress_monsters"), next);
     })
         .on("nearby_creatures_changed.enemyInitiative", renderFrame)
-        .on("map_knowledge_changed.enemyInitiative dungeon_tiles_changed.enemyInitiative", function (event, changed) { portraits.changed(changed); })
-        .on("texture_pack_changed.enemyInitiative", function () { portraits.changed(); })
+        .on("map_knowledge_changed.enemyInitiative dungeon_tiles_changed.enemyInitiative", function (event, changed) { repaint(changed); })
+        .on("texture_pack_changed.enemyInitiative", function () { repaint(); })
         .on("hud_workspace_changed.enemyInitiative", refresh)
         .on("game_cleanup.enemyInitiative", function () {
             clearTarget(); renderFrame.cancel(); refresh.cancel(); portraits.clear(); nodes.clear(); if (observer) observer.disconnect(); observer = null;
@@ -241,5 +256,5 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         });
     $(window).on("resize.enemyInitiative scroll.enemyInitiative", refresh)
         .on("blur.enemyInitiative", clearTarget);
-    return { init: init, update: update, locate: locate };
+    return { init: init, update: update, locate: locate, createPainter: createPainter };
 });

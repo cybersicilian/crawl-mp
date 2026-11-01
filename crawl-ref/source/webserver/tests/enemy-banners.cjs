@@ -16,6 +16,12 @@ assert.equal(model.project(visible).reading, 'Recovering');
 assert.equal(model.project({ ...visible, ready: true }).reading, 'Ready');
 assert.equal(model.project({ ...visible, speed: 0 }).reading, 'Paused');
 assert.equal(model.project({ ...visible, speed: undefined }).reading, 'Unknown');
+assert.equal(model.project(visible).caption, 'moderately wounded', 'The caption names the injury the bar only implies');
+assert.equal(model.project({ ...visible, ready: true }).caption, 'moderately wounded');
+assert.equal(model.project({ ...visible, speed: 0 }).caption, 'Paused', 'A paused creature says so, because its bar cannot');
+assert.equal(model.project({ ...visible, health: undefined }).caption, 'Recovering');
+assert.equal(model.project({ ...visible, perception: 'last_known' }).caption, 'Last known',
+    'Invisible contacts never show a stale injury band');
 for (const energy_deficit of [0, 1, 4, 99]) {
     assert(!/\d/.test(model.project({ ...visible, energy_deficit }).reading),
         'Readiness uses words while the bar preserves native energy');

@@ -128,7 +128,6 @@
     #normal .party-card-sections :is(.hud-item-slot, .hud-power-button) { height: 34px; min-height: 34px; }
     #normal .party-card-sections .hud-item-grid { grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 3px; }
     #normal #party_turn_order { padding: 4px 6px 5px; }
-    #normal .turn-order-entry { min-height: 24px; font-size: 10px; }
     #normal #hud_sidebar_scroll { overscroll-behavior: contain; }
 }
 @media (max-height: 800px) {

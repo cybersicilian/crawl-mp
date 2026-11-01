@@ -3,10 +3,13 @@
  * native enemy readings (energy deficit, speed). Nothing is simulated: entries
  * without native timing are listed last in an explicit "unknown" state. */
 define(["jquery", "./party-model", "./enemy-banner-model", "./creature-roster-model", "./monster_list",
-        "./enemy-initiative", "./status-icons", "./frame-update"],
-function ($, model, banner, roster, nearby, enemies, icons, frameUpdate) {
+        "./enemy-initiative", "./frame-update", "./turn-order-model"],
+function ($, model, banner, roster, nearby, enemies, frameUpdate, turns) {
     "use strict";
-    var state = null, signature = "", nodes = new Map();
+    // About two rows of tokens; the creature roster lists anyone past them.
+    var TOKEN_LIMIT = 14;
+    var state = null, signature = "", nodes = new Map(), beatNodes = new Map(), more = null;
+    var portraits = enemies.createPainter();
     var threatNames = ["trivial", "easy", "tough", "nasty", "invisible"];
 
     function heroEntries(data) {
@@ -32,32 +35,21 @@ function ($, model, banner, roster, nearby, enemies, icons, frameUpdate) {
                 var wait = view.remembered || !view.timed ? null
                     : contact.ready ? 0 : Math.round(contact.energy_deficit * 10 / Math.max(1, contact.speed));
                 return { kind: "enemy", id: "enemy:" + key, key: key, name: contact.name, wait: wait, banked: 0,
+                    x: contact.x, y: contact.y, perception: contact.perception,
                     state: view.remembered ? "remembered" : !view.timed ? "unknown" : contact.ready ? "ready" : "recovering",
                     threat: Number.isInteger(contact.threat) ? threatNames[contact.threat] || "unknown" : "unknown",
                     health: view.health };
             });
     }
-    function order(entries) {
-        return entries.slice().sort(function (a, b) {
-            var ka = a.wait === null, kb = b.wait === null;
-            if (ka !== kb) return ka ? 1 : -1;
-            if (!ka && a.wait !== b.wait) return a.wait - b.wait;
-            if (a.banked !== b.banked) return b.banked - a.banked;
-            if (a.kind !== b.kind) return a.kind === "hero" ? -1 : 1;
-            return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-        });
-    }
-    function readingText(entry) {
-        if (entry.wait === null) return entry.state === "remembered" ? "Last known" : "Unknown";
-        if (entry.wait === 0) return entry.banked > 0 ? "Now · +" + entry.banked : "Now";
-        return "+" + entry.wait;
+    function title(entry) {
+        return entry.count > 1 ? entry.name + " ×" + entry.count : entry.name;
     }
     function describe(entry) {
         var timing = entry.wait === null ? "timing unknown" : entry.wait === 0 ? "ready to act"
             : "about " + entry.wait + " aut until ready";
         if (entry.kind === "hero" && entry.banked > 0) timing += ", " + entry.banked + " aut banked";
         if (entry.queued) timing += ", action queued";
-        return entry.name + ": " + timing + (entry.kind === "enemy" ? ". Threat " + entry.threat : "")
+        return title(entry) + ": " + timing + (entry.kind === "enemy" ? ". Threat " + entry.threat : "")
             + (entry.kind === "hero" ? ". Center camera" : ". Mark on map");
     }
     function activate(entry) {
@@ -69,13 +61,12 @@ function ($, model, banner, roster, nearby, enemies, icons, frameUpdate) {
         var node = document.createElement("button");
         node.type = "button"; node.className = "turn-order-entry"; node.dataset.turnId = entry.id;
         node.innerHTML = "<span class='turn-order-marker' aria-hidden='true'></span>"
-            + "<span class='turn-order-name'></span><span class='turn-order-reading' aria-hidden='true'></span>";
-        node.parts = { marker: node.querySelector(".turn-order-marker"),
-            name: node.querySelector(".turn-order-name"), reading: node.querySelector(".turn-order-reading") };
+            + "<span class='turn-order-count' aria-hidden='true' hidden></span>";
+        node.parts = { marker: node.querySelector(".turn-order-marker"), count: node.querySelector(".turn-order-count") };
         if (entry.kind === "hero") {
             node.parts.marker.textContent = "P" + (entry.slot + 1);
             node.style.setProperty("--slot-accent", model.colours[entry.slot % model.colours.length]);
-        } else node.parts.marker.appendChild(icons.icon("bestiary"));
+        } else node.parts.canvas = node.parts.marker.appendChild(document.createElement("canvas"));
         $(node).on("click", function (event) { event.stopPropagation(); activate(entry); })
             .on("keydown keypress keyup mousedown mouseup", function (event) { event.stopPropagation(); });
         return node;
@@ -85,44 +76,80 @@ function ($, model, banner, roster, nearby, enemies, icons, frameUpdate) {
         if (value === null || value === undefined) { if (element.hasAttribute(name)) element.removeAttribute(name); }
         else if (element.getAttribute(name) !== String(value)) element.setAttribute(name, value);
     }
+    function reconcile(parent, children) {
+        var current = parent.firstChild;
+        children.forEach(function (child) {
+            if (child === current) current = current.nextSibling;
+            else parent.insertBefore(child, current);
+        });
+        while (current) { var removed = current; current = current.nextSibling; removed.remove(); }
+    }
+    function token(entry, position) {
+        var node = nodes.get(entry.id);
+        if (!node) { node = create(entry); nodes.set(entry.id, node); }
+        if (entry.kind === "enemy") {
+            var moved = !banner.sameContact(node.enemy, entry);
+            node.enemy = entry;
+            portraits.track(node, entry.x, entry.y);
+            if (moved) portraits.invalidate(node);
+        }
+        node.parts.count.hidden = entry.count < 2;
+        text(node.parts.count, "×" + entry.count);
+        attribute(node, "data-kind", entry.kind);
+        attribute(node, "data-timing-state", entry.state);
+        attribute(node, "data-threat", entry.kind === "enemy" ? entry.threat : null);
+        attribute(node, "data-active", entry.kind === "hero" && entry.active ? "true" : null);
+        attribute(node, "data-acting", entry.kind === "hero" && entry.acting ? "true" : null);
+        attribute(node, "data-queued", entry.queued ? "true" : null);
+        attribute(node, "aria-label", position + ". " + describe(entry));
+        attribute(node, "data-tip-title", title(entry));
+        attribute(node, "data-tip-body", describe(entry));
+        attribute(node, "data-tip-meta", entry.kind === "hero" ? "Projected from banked time and recovery debt"
+            : "Projected from native speed and action energy");
+        return node;
+    }
+    function beatNode(beat) {
+        var node = beatNodes.get(beat.key);
+        if (!node) {
+            node = document.createElement("div"); node.className = "turn-order-beat";
+            node.innerHTML = "<div class='turn-order-tokens'></div><span class='turn-order-reading' aria-hidden='true'></span>";
+            beatNodes.set(beat.key, node);
+        }
+        text(node.lastChild, beat.reading);
+        attribute(node, "data-beat", beat.wait === null ? "unknown" : beat.wait === 0 ? "now" : "later");
+        return node;
+    }
+    function moreNode(count) {
+        if (!more) { more = document.createElement("span"); more.className = "turn-order-more"; }
+        var label = count + " more in the creature list";
+        text(more, "+" + count);
+        attribute(more, "aria-label", label);
+        attribute(more, "data-tip-title", label);
+        return more;
+    }
     function render() {
         var root = document.getElementById("party_turn_order"), track = document.getElementById("party_turn_order_track");
         if (!root || !track) return;
         var members = state && Array.isArray(state.members) ? state.members : [];
         if (!members.length) { root.hidden = true; signature = ""; return; }
-        var entries = order(heroEntries(state).concat(enemyEntries(state)));
+        var entries = heroEntries(state).concat(enemyEntries(state));
         var next = JSON.stringify(entries);
         if (next === signature) return;
         signature = next;
         root.hidden = entries.length === 0;
         var focused = document.activeElement && document.activeElement.dataset.turnId;
-        var children = entries.map(function (entry, index) {
-            var node = nodes.get(entry.id);
-            if (!node) { node = create(entry); nodes.set(entry.id, node); }
-            node.entry = entry;
-            text(node.parts.name, entry.name);
-            text(node.parts.reading, readingText(entry));
-            attribute(node, "data-kind", entry.kind);
-            attribute(node, "data-timing-state", entry.state);
-            attribute(node, "data-threat", entry.kind === "enemy" ? entry.threat : null);
-            attribute(node, "data-active", entry.kind === "hero" && entry.active ? "true" : null);
-            attribute(node, "data-acting", entry.kind === "hero" && entry.acting ? "true" : null);
-            attribute(node, "data-queued", entry.queued ? "true" : null);
-            attribute(node, "data-position", index + 1);
-            attribute(node, "aria-label", (index + 1) + ". " + describe(entry));
-            attribute(node, "data-tip-title", entry.name);
-            attribute(node, "data-tip-body", describe(entry));
-            attribute(node, "data-tip-meta", entry.kind === "hero" ? "Projected from banked time and recovery debt"
-                : "Projected from native speed and action energy");
+        var view = turns.beats(entries, TOKEN_LIMIT), position = 0;
+        var children = view.beats.map(function (beat) {
+            var node = beatNode(beat);
+            reconcile(node.firstChild, beat.tokens.map(function (entry) { return token(entry, ++position); }));
             return node;
         });
-        var current = track.firstChild;
-        children.forEach(function (child) {
-            if (child === current) current = current.nextSibling;
-            else track.insertBefore(child, current);
+        if (view.hidden) children.push(moreNode(view.hidden));
+        reconcile(track, children);
+        nodes.forEach(function (node, id) {
+            if (!node.isConnected) { portraits.remove(node); nodes.delete(id); }
         });
-        while (current) { var removed = current; current = current.nextSibling; removed.remove(); }
-        nodes.forEach(function (node, id) { if (!node.isConnected) nodes.delete(id); });
+        beatNodes.forEach(function (node, key) { if (!node.isConnected) beatNodes.delete(key); });
         attribute(root, "data-entry-count", entries.length);
         attribute(root, "data-timing-known", entries.some(function (entry) { return entry.wait !== null; }) ? "true" : "false");
         if (focused) {
@@ -135,9 +162,9 @@ function ($, model, banner, roster, nearby, enemies, icons, frameUpdate) {
     $(document).off(".turnOrder")
         .on("nearby_creatures_changed.turnOrder", refresh)
         .on("game_cleanup.turnOrder", function () {
-            refresh.cancel(); state = null; signature = ""; nodes.clear();
+            refresh.cancel(); portraits.clear(); state = null; signature = ""; nodes.clear(); beatNodes.clear();
             var track = document.getElementById("party_turn_order_track");
             if (track) track.replaceChildren();
         });
-    return { update: update, order: order, readingText: readingText, heroEntries: heroEntries, enemyEntries: enemyEntries };
+    return { update: update, heroEntries: heroEntries, enemyEntries: enemyEntries };
 });

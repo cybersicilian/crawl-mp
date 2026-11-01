@@ -16,8 +16,6 @@ fs.mkdirSync(output, { recursive: true });
     const settle = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     try {
         await page.route('http://banner.test/**', route => {
-            if (new URL(route.request().url()).pathname.endsWith('enemy-banner-stitches.svg'))
-                return route.fulfill({ contentType: 'image/svg+xml', body: fs.readFileSync(path.join(root, 'styles/enemy-banner-stitches.svg')) });
             return route.fulfill({ contentType: 'text/html', body: '<main id="normal"><aside id="party_hud" style="position:fixed;right:0;top:60px;width:260px">'
                 + '<div class="is-controlled-card" style="height:150px">Player</div></aside>'
                 + '<div id="party_doom_meter" style="position:fixed;right:270px;top:60px;width:30px;height:500px">Zot</div></main>' });
@@ -65,7 +63,7 @@ fs.mkdirSync(output, { recursive: true });
             };
             window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(name => window.modules[name])); };
         });
-        for (const name of ['frame-update', 'indexed-paint', 'party-status-model', 'enemy-banner-model', 'creature-roster-model', 'collapsible-roster', 'status-icons', 'enemy-initiative']) {
+        for (const name of ['frame-update', 'indexed-paint', 'party-status-model', 'enemy-banner-model', 'creature-roster-model', 'collapsible-roster', 'effect-icon-catalog', 'effect-icon-art', 'status-icons', 'enemy-initiative']) {
             await page.evaluate(name => { window.moduleName = './' + name; }, name);
             await page.addScriptTag({ path: path.join(root, name + '.js') });
         }
@@ -82,7 +80,7 @@ fs.mkdirSync(output, { recursive: true });
         evidence.initial = await page.evaluate(() => ({ paints: window.qaPaints.length, allocations: window.qaAllocations, queries: window.qaQueries }));
         assert(evidence.initial.allocations < 24, 'Renderer allocation follows the visible rail, not all500 enemies');
         const banners = page.locator('.enemy-timing');assert.equal(await banners.count(), 500);
-        assert.equal(await banners.first().locator('small').textContent(), 'Recovering');
+        assert.equal(await banners.first().locator('small').textContent(), 'moderately wounded');
         await page.evaluate(() => {
             new MutationObserver(records => window.qaMutations.push(...records)).observe(document.querySelector('.enemy-timing-list'),
                 { attributes: true, childList: true, characterData: true, subtree: true });

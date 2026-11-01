@@ -44,6 +44,7 @@ define([], function () {
                     if (!current.stacks.has(key)) current.stacks.set(key, stack());
                     var entry = current.stacks.get(key), cards = [card(items[0])];
                     entry.node.classList.toggle("is-stacked", items.length > 1 && !entry.open);
+                    entry.node.classList.toggle("has-toggle", items.length > 1);
                     if (items.length > 1) {
                         text(entry.toggle, entry.open ? "− " + items.length : "×" + items.length);
                         var label = (entry.open ? "Collapse " : "Show all ") + items.length + " " + items[0].name;
