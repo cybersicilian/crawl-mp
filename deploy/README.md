@@ -47,7 +47,11 @@ Ubuntu native build, save compatibility checks, snapshot, and activation checks.
 
 The script packages tracked and new working source, preserving uncommitted game
 and UI changes. It excludes local credentials, accounts, saves, and host build
-artifacts. Each release builds in its own directory under `/opt/dcss/releases`.
+artifacts, plus the root `docs/`, `art-research/` and
+`.codex-right-sidebar-proof/` records, which nothing on the server builds or
+reads. `crawl-ref/docs` still ships; the game and `make docs` use it. Archives
+frozen before this exclusion remain valid and deployable.
+Each release builds in its own directory under `/opt/dcss/releases`.
 The initial full build can use `BUILD_JOBS` on a temporarily larger VM; runtime
 returns to `e2-medium`. Normal updates compile with two workers and 4 GiB swap.
 Before activation, native creation contracts run alongside backend tests.
