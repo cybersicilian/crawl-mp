@@ -73,7 +73,8 @@ class GraphicsTests(AsyncHTTPTestCase):
         self.assertIn(b'/settings/graphics', page.body)
         for headers in ({'Cookie': 'login=' + self.cookie}, {}):
             graphics = self.fetch('/settings/graphics', follow_redirects=False, headers=headers)
-            self.assertEqual(graphics.headers['Location'], '/?settings=appearance#lobby')
+        # A redirect without a fragment preserves legacy #profile_tips links.
+        self.assertEqual(graphics.headers['Location'], '/?settings=appearance')
 
     def test_account_ownership_case_insensitivity_and_persistence_after_reopen(self):
         self.assertEqual(self.request({'mode': 'premium', 'lighting': True}).code, 200)
