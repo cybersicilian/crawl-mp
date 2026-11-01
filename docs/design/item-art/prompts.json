@@ -1,0 +1,154 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": {
+    "wish": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a bright five-pointed golden shooting star with a short sweeping cyan tail curving down to the lower left. The star dominates the shape; warm gold, pale yellow highlight, cyan tail.",
+    "collection": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: three separate treasures arranged in a tight triangle offered for choosing: a red cut gem at top, a gold ring at lower left, a blue cut gem at lower right. Each one is a chunky distinct shape with a clear gap between them.",
+    "soul-recall": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a thick golden ankh, the symbol of life, with a small pale-cyan soul flame burning inside its loop. Gold body, pale cyan core.",
+    "rallying": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a large crimson swallow-tailed war banner on a thick upright brass pole at the left edge. The flag fills the upper two thirds of the canvas and flies to the right with one deep V notch. The pole runs the full height of the canvas and is two logical pixels wide.",
+    "phase-swap": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: two thick horizontal block arrows stacked one above the other, filling the square: the upper one violet pointing right, the lower one cyan pointing left. Each shaft is three logical pixels thick with a large head five logical pixels tall. The universal swap symbol.",
+    "shared-vigour": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 scroll sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a large emerald-green heart with a bold white upward arrow standing inside it. Heart fills the canvas.",
+    "empathy": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 potion sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: two overlapping rose-pink hearts filling a square: a large rose heart at upper left and a smaller pale pink heart at lower right overlapping it, with a thick dark outline separating them.",
+    "soul-ambrosia": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 potion sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a thick golden plus-shaped healing cross with a small pale-cyan soul flame in its centre. Gold cross, pale cyan flame.",
+    "concord": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 potion sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: three large orbs packed tightly in a triangle, one on top and two below, each about six logical pixels wide, joined by short thick bars. Deep orange and amber with very strong dark outlines so it stands out on a gold background.",
+    "transfusion": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 potion sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a round yin-yang style swirl made of one crimson teardrop and one azure teardrop nested head to tail, filling a circle. Exactly half crimson, half azure.",
+    "camaraderie": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 ring sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: two thick interlocked finger rings seen flat, one silver and one pale gold electrum, overlapping at the centre like chain links.",
+    "vanguard": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item identification stamp. ONE single centered symbol designed on a 15 by 15 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. It will be reduced to exactly 15x15 and stamped over the corner of a 32x32 amulet sprite, so the silhouette must fill the whole canvas edge to edge and stay readable at 15x15. Very bold simple silhouette, one logical pixel near-black outline all the way around, at most 5 flat colours, one or two highlight pixels, no gradients, no anti-aliasing, no soft painted rendering, no detail finer than one logical pixel. No text, letters, border, frame, backdrop, floor or shadow. Subject: a dark iron heater shield with one bold ember-orange chevron pointing upward across its face. Iron grey with an ember accent.",
+    "aegis-standard": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a war banner on a thick dark iron pole held upright, one large square-cut steel-blue cloth hanging from a crossbar, a single bold gold ring emblem in the middle of the cloth, a gold spear finial on top. Heavy, heroic, simple.",
+    "astral-beacon": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a hexagonal crystal lantern with brass caps and a hanging ring, its clear facets holding one blazing white-blue star with a thin spiral thread of starlight around it. Clearly a lantern and not a bottle.",
+    "twin-spark-conduit": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a copper Y-shaped resonator held upright: a short dark wrapped grip at the bottom, two thick copper prongs spreading upward in a wide Y, and one large bright cyan-white four-pointed star spark floating between the prong tips. The prong tips do not touch and nothing joins them. Not a saw, not a frame.",
+    "skald-horn": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a curved war horn of pale mammoth ivory with three rune-etched brass bands and a brass mouthpiece, sweeping in a strong crescent. Ivory cream and warm brass, no red.",
+    "ancient-crate": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a plain square wooden crate seen slightly from above, made of flat tan-brown planks, two wide dark iron straps across the front, and one large square iron padlock in the middle. Only flat colour planes: no wood grain, no moss, no texture.",
+    "dusty-tome": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a thick closed book lying at a slight angle, with a plain flat dusty grey-brown cover, a wide band of pale cream page edges along the bottom, gold metal corners and one wide gold clasp. Only flat colour planes: no cracks, no cobweb, no texture, no lettering.",
+    "pouch": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a small round tan leather drawstring pouch cinched at the neck with a cord tie. Small and simple, filling about two thirds of the canvas.",
+    "satchel": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a squat rectangular brown leather satchel seen from the front, one flat rounded flap covering the top half, one big gold buckle in the centre, and a thick strap arching over the top. Only flat colour planes: no stitching, no folds, no texture. Clearly larger and more structured than a pouch.",
+    "mercenary-contract": "Use case: stylized-concept. Asset type: native Dungeon Crawl Stone Soup item sprite. ONE single centered object designed on a 32 by 32 logical pixel grid, enlarged cleanly for delivery with hard square pixels, on genuine transparent alpha. This must be true low resolution pixel art like the attached reference sprites, not an illustration: every logical pixel is one large flat square, and the whole image has only 32 pixels across. It will be reduced to exactly 32x32. The object must fill most of the canvas with a very bold simple silhouette made of large solid shapes. Every feature is at least two logical pixels wide; leave out small ornaments, tatters, stray flecks and thin lines. One logical pixel near-black outline all the way around, at most 8 flat colours, two or three small highlight clusters, no gradients, no dithering, no anti-aliasing, no soft painted rendering. No text, letters, border, frame, backdrop, floor, or cast shadow. Subject: a single unrolled parchment contract sheet with curled top and bottom edges, abstract dark ruled lines that are not letters, and a large red wax seal bearing a small sword mark at the lower edge. Cream parchment and wax red."
+  },
+  "targets": {
+    "wish": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_WISH",
+      "back": "scroll-cyan"
+    },
+    "collection": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_COLLECTION",
+      "back": "scroll-cyan"
+    },
+    "soul-recall": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_SOUL_RECALL",
+      "back": "scroll-yellow"
+    },
+    "rallying": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_RALLYING",
+      "back": "scroll-brown"
+    },
+    "phase-swap": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_PHASE_SWAP",
+      "back": "scroll-purple"
+    },
+    "shared-vigour": {
+      "kind": "stamp",
+      "host": "scroll",
+      "enum": "SCR_SHARED_VIGOUR",
+      "back": "scroll-green"
+    },
+    "empathy": {
+      "kind": "stamp",
+      "host": "potion",
+      "enum": "POT_EMPATHY",
+      "back": "i-label"
+    },
+    "soul-ambrosia": {
+      "kind": "stamp",
+      "host": "potion",
+      "enum": "POT_SOUL_AMBROSIA",
+      "back": "i-label"
+    },
+    "concord": {
+      "kind": "stamp",
+      "host": "potion",
+      "enum": "POT_CONCORD",
+      "back": "i-label"
+    },
+    "transfusion": {
+      "kind": "stamp",
+      "host": "potion",
+      "enum": "POT_TRANSFUSION",
+      "back": "i-label"
+    },
+    "camaraderie": {
+      "kind": "stamp",
+      "host": "ring",
+      "enum": "RING_CAMARADERIE",
+      "back": null
+    },
+    "vanguard": {
+      "kind": "stamp",
+      "host": "amulet",
+      "enum": "AMU_VANGUARD",
+      "back": null
+    },
+    "aegis-standard": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_AEGIS_STANDARD",
+      "back": null
+    },
+    "astral-beacon": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_ASTRAL_BEACON",
+      "back": null
+    },
+    "twin-spark-conduit": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_TWIN_SPARK_CONDUIT",
+      "back": null
+    },
+    "skald-horn": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_SKALD_HORN",
+      "back": null
+    },
+    "ancient-crate": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_ANCIENT_CRATE",
+      "back": null
+    },
+    "dusty-tome": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_DUSTY_TOME",
+      "back": null
+    },
+    "pouch": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_POUCH",
+      "back": null
+    },
+    "satchel": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_SATCHEL",
+      "back": null
+    },
+    "mercenary-contract": {
+      "kind": "tile",
+      "host": null,
+      "enum": "MISC_MERCENARY_CONTRACT",
+      "back": null
+    }
+  }
+}

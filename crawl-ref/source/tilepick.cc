@@ -3633,19 +3633,19 @@ static tileidx_t _tileidx_misc(const item_def &item)
                                              : TILE_MISC_TAMBOURINE_INERT;
 
     case MISC_AEGIS_STANDARD:
-        return evoker_charges(item.sub_type) ? TILE_MISC_CONDENSER_VANE
-                                             : TILE_MISC_CONDENSER_VANE_INERT;
+        return evoker_charges(item.sub_type) ? TILE_MISC_AEGIS_STANDARD
+                                             : TILE_MISC_AEGIS_STANDARD_INERT;
 
     case MISC_ASTRAL_BEACON:
-        return evoker_charges(item.sub_type) ? TILE_MISC_PHIAL_OF_FLOODS
-                                             : TILE_MISC_PHIAL_OF_FLOODS_INERT;
+        return evoker_charges(item.sub_type) ? TILE_MISC_ASTRAL_BEACON
+                                             : TILE_MISC_ASTRAL_BEACON_INERT;
 
     case MISC_TWIN_SPARK_CONDUIT:
-        return evoker_charges(item.sub_type) ? TILE_MISC_LIGHTNING_ROD
-                                             : TILE_MISC_LIGHTNING_ROD_INERT;
+        return evoker_charges(item.sub_type) ? TILE_MISC_TWIN_SPARK_CONDUIT
+                                             : TILE_MISC_TWIN_SPARK_CONDUIT_INERT;
 
     case MISC_SKALD_HORN:
-        return TILE_MISC_HORN_OF_GERYON;
+        return TILE_MISC_SKALD_HORN;
 
     case MISC_PIPE_OF_RECALL:
         return TILE_MISC_PIPE_OF_RECALL;
@@ -3656,7 +3656,9 @@ static tileidx_t _tileidx_misc(const item_def &item)
         return evoker_charges(item.sub_type) ? TILE_MISC_AIR_HORN
                                              : TILE_MISC_AIR_HORN_INERT;
     case MISC_POUCH:
+        return TILE_MISC_POUCH;
     case MISC_SATCHEL:
+        return TILE_MISC_SATCHEL;
     case MISC_BAG_OF_PLENTY:
         return TILE_MISC_CARRY_BAG;
 
@@ -3674,13 +3676,13 @@ static tileidx_t _tileidx_misc(const item_def &item)
     case MISC_SHOP_VOUCHER:
         return TILE_MISC_SHOP_VOUCHER;
     case MISC_MERCENARY_CONTRACT:
-        return TILE_MISC_SHOP_VOUCHER;
+        return TILE_MISC_MERCENARY_CONTRACT;
 
     case MISC_ANCIENT_CRATE:
-        return TILE_MISC_BOX_OF_BEASTS;
+        return TILE_MISC_ANCIENT_CRATE;
 
     case MISC_DUSTY_TOME:
-        return TILE_BOOK_MANUAL;
+        return TILE_MISC_DUSTY_TOME;
     }
 
     return TILE_ERROR;
@@ -3756,23 +3758,7 @@ tileidx_t tileidx_item(const item_def &item)
 
     case OBJ_SCROLLS:
         if (item.is_identified())
-        {
-            switch (type)
-            {
-            case SCR_COLLECTION:
-            case SCR_WISH:
-            case SCR_SOUL_RECALL:
-                return TILE_SCR_ID_FIRST + SCR_ACQUIREMENT;
-            case SCR_RALLYING:
-                return TILE_SCR_ID_FIRST + SCR_SUMMONING;
-            case SCR_PHASE_SWAP:
-                return TILE_SCR_ID_FIRST + SCR_BLINKING;
-            case SCR_SHARED_VIGOUR:
-                return TILE_SCR_ID_FIRST + SCR_REVELATION;
-            default:
-                return TILE_SCR_ID_FIRST + type;
-            }
-        }
+            return TILE_SCR_ID_FIRST + type;
         return _tileidx_item_appearance(item);
 
     case OBJ_GOLD:
@@ -3796,9 +3782,7 @@ tileidx_t tileidx_item(const item_def &item)
             {
                 if (type == RING_ELEC_RESISTANCE)
                     return TILE_RING_INSULATION;
-                const int ring_tile_type = (type == RING_CAMARADERIE)
-                                           ? RING_SLAYING : type;
-                return TILE_RING_ID_FIRST + ring_tile_type - RING_FIRST_RING
+                return TILE_RING_ID_FIRST + type - RING_FIRST_RING
 #if TAG_MAJOR_VERSION == 34
                        + 1 // we have a save-compat ring tile before FIRST_RING
 #endif
@@ -3817,11 +3801,7 @@ tileidx_t tileidx_item(const item_def &item)
         }
 
         if (item.is_identified())
-        {
-            const int amu_tile_type = (type == AMU_VANGUARD)
-                                      ? AMU_GUARDIAN_SPIRIT : type;
-            return TILE_AMU_ID_FIRST + amu_tile_type - AMU_FIRST_AMULET;
-        }
+            return TILE_AMU_ID_FIRST + type - AMU_FIRST_AMULET;
         return _tileidx_item_appearance(item);
 
     case OBJ_POTIONS:
@@ -3829,14 +3809,6 @@ tileidx_t tileidx_item(const item_def &item)
         {
             switch (type)
             {
-            case POT_EMPATHY:
-                return TILE_POT_ID_FIRST + POT_HEAL_WOUNDS;
-            case POT_SOUL_AMBROSIA:
-                return TILE_POT_ID_FIRST + POT_AMBROSIA;
-            case POT_CONCORD:
-                return TILE_POT_ID_FIRST + POT_BRILLIANCE;
-            case POT_TRANSFUSION:
-                return TILE_POT_ID_FIRST + POT_MAGIC;
             case POT_NIGREDO: return TILE_WYRM_NIGREDO;
             case POT_ALBEDO: return TILE_WYRM_ALBEDO;
             case POT_CITRINITAS: return TILE_WYRM_CITRINITAS;

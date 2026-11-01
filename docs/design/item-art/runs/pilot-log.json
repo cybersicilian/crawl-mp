@@ -1,0 +1,32 @@
+{
+  "wish": {
+    "source": "sources/wish.png",
+    "sha256": "f981ca444483cf33e8c4e4871562990335e5c765b423e98ad39023e3a884b1a5",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "transfusion": {
+    "source": "sources/transfusion.png",
+    "sha256": "65ccb4fe7cf3a8869ad10b40edb0fce6d4d2a270856579f5cffe52bd64713305",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "aegis-standard": {
+    "source": "sources/aegis-standard.png",
+    "sha256": "663f68ccfde80c29e5ec0ab302d775d98bcfa26487ec5a6513433c02214be50f",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 2,
+    "error": null
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "empathy": {
+    "source": "sources/empathy.png",
+    "sha256": "65ce52cf242d7fb40dc939de28add4fee642b821c17d2bd0d1c6d8fba87a3cf6",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "rallying": {
+    "source": "sources/rallying.png",
+    "sha256": "2231f7c914a6da488e9c90b95b90ed461b09ccac8a73202a5e75594b908e185d",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "phase-swap": {
+    "source": "sources/phase-swap.png",
+    "sha256": "692568660bbf353b6b492639e1c6f6abc2d5db4753af199522b6ae39565ca453",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "concord": {
+    "source": "sources/concord.png",
+    "sha256": "fac97823bc19f2c6db1e8c31f8a524d33a5e3945eb292ff496986b26c3e9bdfd",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "twin-spark-conduit": {
+    "source": "sources/twin-spark-conduit.png",
+    "sha256": "e14c27f0261796709762c5dd8ef885efe9633e74b1b81108974141b36a54d244",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "ancient-crate": {
+    "source": "sources/ancient-crate.png",
+    "sha256": "be7ae05180cf21123b8b48984f57cb1d32ad018a0db54ca7d2070e939d1b19c1",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "dusty-tome": {
+    "source": "sources/dusty-tome.png",
+    "sha256": "d744807b7386c3e5e635cf96f55925b99d08bb127dfb0e952b61a176e5b7a26c",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 2,
+    "error": null
+  },
+  "satchel": {
+    "source": "sources/satchel.png",
+    "sha256": "470f1ba03f4dc34d906463e6bee40925aa73f9579692d7240087444a2e1643cf",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  }
+}

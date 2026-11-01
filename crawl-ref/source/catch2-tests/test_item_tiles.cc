@@ -2,6 +2,8 @@
 #include "AppHdr.h"
 
 #ifdef USE_TILE
+#include <set>
+
 #include "ability-type.h"
 #include "artefact.h"
 #include "bag.h"
@@ -209,6 +211,115 @@ TEST_CASE_METHOD(MockPlayerYouTestsFixture,
           == TILE_RING_NORMAL_OFFSET
              + you.item_description[IDESC_RINGS][RING_ELEC_RESISTANCE]
                % NDSC_JEWEL_PRI);
+    CHECK(tileidx_known_base_item(TILE_RING_CAMARADERIE) == TILE_UNSEEN_RING);
+    CHECK(tileidx_known_base_item(TILE_AMU_VANGUARD) == TILE_UNSEEN_AMULET);
+    CHECK(tileidx_known_base_item(TILE_POT_EMPATHY) == TILE_UNSEEN_POTION);
+    you.type_ids[OBJ_POTIONS][POT_EMPATHY] = true;
+    CHECK(tileidx_known_base_item(TILE_POT_EMPATHY)
+          == TILE_POTION_OFFSET
+             + you.item_description[IDESC_POTIONS][POT_EMPATHY]
+               % NDSC_POT_PRI);
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Party consumables and jewellery use their own labels",
+                 "[item-tiles]")
+{
+    rng::generator inspection(rng::UI);
+    const struct
+    {
+        object_class_type base;
+        int subtype;
+        tileidx_t tile;
+    } labels[] = {
+        {OBJ_SCROLLS, SCR_SOUL_RECALL, TILE_SCR_SOUL_RECALL},
+        {OBJ_SCROLLS, SCR_RALLYING, TILE_SCR_RALLYING},
+        {OBJ_SCROLLS, SCR_PHASE_SWAP, TILE_SCR_PHASE_SWAP},
+        {OBJ_SCROLLS, SCR_SHARED_VIGOUR, TILE_SCR_SHARED_VIGOUR},
+        {OBJ_SCROLLS, SCR_COLLECTION, TILE_SCR_COLLECTION},
+        {OBJ_SCROLLS, SCR_WISH, TILE_SCR_WISH},
+        {OBJ_POTIONS, POT_EMPATHY, TILE_POT_EMPATHY},
+        {OBJ_POTIONS, POT_SOUL_AMBROSIA, TILE_POT_SOUL_AMBROSIA},
+        {OBJ_POTIONS, POT_CONCORD, TILE_POT_CONCORD},
+        {OBJ_POTIONS, POT_TRANSFUSION, TILE_POT_TRANSFUSION},
+        {OBJ_JEWELLERY, RING_CAMARADERIE, TILE_RING_CAMARADERIE},
+        {OBJ_JEWELLERY, AMU_VANGUARD, TILE_AMU_VANGUARD},
+    };
+    for (const auto &label : labels)
+    {
+        CAPTURE(static_cast<int>(label.base), label.subtype);
+        item_def item;
+        item.base_type = label.base;
+        item.sub_type = label.subtype;
+        item.quantity = 1;
+        item.flags |= ISFLAG_IDENTIFIED;
+        item_colour(item);
+        CHECK(tileidx_item(item) == label.tile);
+    }
+
+    for (const auto base : {OBJ_SCROLLS, OBJ_POTIONS})
+    {
+        set<tileidx_t> seen;
+        for (const int subtype : all_item_subtypes(base))
+        {
+            CAPTURE(static_cast<int>(base), subtype);
+            item_def item;
+            item.base_type = base;
+            item.sub_type = subtype;
+            item.quantity = 1;
+            item.flags |= ISFLAG_IDENTIFIED;
+            item_colour(item);
+            CHECK(seen.insert(tileidx_item(item)).second);
+        }
+    }
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture,
+                 "Party evokers, bags and contracts use their own sprites",
+                 "[item-tiles]")
+{
+    const pair<misc_item_type, tileidx_t> sprites[] = {
+        {MISC_SKALD_HORN, TILE_MISC_SKALD_HORN},
+        {MISC_ANCIENT_CRATE, TILE_MISC_ANCIENT_CRATE},
+        {MISC_DUSTY_TOME, TILE_MISC_DUSTY_TOME},
+        {MISC_POUCH, TILE_MISC_POUCH},
+        {MISC_SATCHEL, TILE_MISC_SATCHEL},
+        {MISC_BAG_OF_PLENTY, TILE_MISC_CARRY_BAG},
+        {MISC_MERCENARY_CONTRACT, TILE_MISC_MERCENARY_CONTRACT},
+    };
+    for (const auto &sprite : sprites)
+    {
+        CAPTURE(sprite.first);
+        item_def item;
+        item.base_type = OBJ_MISCELLANY;
+        item.sub_type = sprite.first;
+        item.quantity = 1;
+        CHECK(tileidx_item(item) == sprite.second);
+    }
+
+    const struct
+    {
+        misc_item_type subtype;
+        tileidx_t ready;
+        tileidx_t spent;
+    } evokers[] = {
+        {MISC_AEGIS_STANDARD, TILE_MISC_AEGIS_STANDARD,
+         TILE_MISC_AEGIS_STANDARD_INERT},
+        {MISC_ASTRAL_BEACON, TILE_MISC_ASTRAL_BEACON,
+         TILE_MISC_ASTRAL_BEACON_INERT},
+        {MISC_TWIN_SPARK_CONDUIT, TILE_MISC_TWIN_SPARK_CONDUIT,
+         TILE_MISC_TWIN_SPARK_CONDUIT_INERT},
+    };
+    for (const auto &evoker : evokers)
+    {
+        CAPTURE(evoker.subtype);
+        item_def item;
+        item.base_type = OBJ_MISCELLANY;
+        item.sub_type = evoker.subtype;
+        item.quantity = 1;
+        const tileidx_t tile = tileidx_item(item);
+        CHECK((tile == evoker.ready || tile == evoker.spent));
+    }
 }
 
 TEST_CASE_METHOD(MockPlayerYouTestsFixture,
