@@ -107,7 +107,8 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
     function init() {
         if (!document.getElementById("dcss_quick_dock")) return;
         if (!document.getElementById("dock_session_menu")) {
-            $("<button type='button' class='dcss-dock-btn' id='dock_session_menu' aria-haspopup='dialog' aria-keyshortcuts='Escape'>Menu <kbd>Esc</kbd></button>")
+            $("<button type='button' class='dcss-dock-btn' id='dock_session_menu' aria-label='Menu' aria-haspopup='dialog' aria-keyshortcuts='Escape'>"
+                + "<span class='workflow-action-label'>Menu</span><kbd class='dock-key'>Esc</kbd></button>")
                 .on("click", open).appendTo("#dcss_quick_dock");
         }
         bind(true);

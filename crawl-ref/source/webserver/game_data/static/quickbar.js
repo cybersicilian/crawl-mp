@@ -2,10 +2,13 @@ define(["jquery", "./party-model", "./quickbar-model", "./workflow-actions", "./
 function ($, party, model, actions, inventory, icons, powerCards, powerArt, spellCost, keyboard, client, frameUpdate, commands, menus, itemMenus, nativeArt) {
     "use strict";
     var slots = model.normalize(), heroKey = "", memory = {}, selected = null;
-    var kind = "command", query = "", signature = "", searchOnOpen = false;
+    var kind = "command", query = "", signature = "", searchOnOpen = false, assignCommands = false;
     var storagePrefix = "dcss.quickbar.v1.";
     var heldShortcuts = new Set();
     function releaseShortcuts() { heldShortcuts.clear(); }
+    function resolve(hero, binding) {
+        return binding && binding.kind === "command" ? commands.entry(binding.id) : model.resolve(hero, binding);
+    }
     function shortcutEvent(event) {
         var physicalKey = event.code || event.key;
         // Keep a held shortcut from becoming native input after its action
@@ -24,7 +27,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
             ? event.code.slice(-1) : event.key), hero = member();
         if (index < 0 || !hero) return;
         load(hero);
-        if (!slots[index] || event.shiftKey && !quickCast(slots[index], model.resolve(hero, slots[index]))) return;
+        if (!slots[index] || event.shiftKey && !quickCast(slots[index], resolve(hero, slots[index]))) return;
         heldShortcuts.add(physicalKey);
         keyboard.consume(event);
         if (!event.repeat) activate(slots[index], event.shiftKey);
@@ -69,29 +72,32 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         if (!entry) return binding.kind === "item" && binding.last_item
             ? hero.inventory_known === false ? "Inventory information unavailable." : "Out of stock. This slot will be ready when replenished."
             : "This inventory slot is empty or this power is no longer available.";
+        if (binding.kind === "command") return commands.reason(entry);
         return binding.kind === "item" ? actions.reason(hero) || (binding.action && entry.blocked_reason) : actions.powerReason(hero, entry, binding.kind);
     }
     function quickCast(binding, entry) {
         return binding && binding.kind === "spell" && binding.quick_cast === true && entry && entry.quick_cast === true;
     }
     function activate(binding, manualAim) {
-        var hero = member(), entry = model.resolve(hero, binding);
+        var hero = member(), entry = resolve(hero, binding);
         if (!entry || blocked(hero, binding, entry)) return;
         var focused = document.activeElement;
         if (focused && $(focused).closest("#dcss_quick_dock").length) focused.blur();
         document.getElementById("quickbar_more").open = false;
-        if (binding.kind === "item") actions.itemAction(hero, entry, false);
+        if (binding.kind === "command") commands.activate(binding.id);
+        else if (binding.kind === "item") actions.itemAction(hero, entry, false);
         else actions.usePower(hero, entry, binding.kind, Boolean(!manualAim && quickCast(binding, entry)));
     }
     function assign(index, value) {
         if (!member() || index < 0 || index >= model.count) return;
         var valid = model.binding(value);
-        if (value && (!valid || !model.resolve(member(), valid))) return;
+        if (value && (!valid || !resolve(member(), valid))) return;
         slots[index] = model.remember(member(), valid); save(); selected = null; update(true);
     }
     function edit(index) {
         selected = index;
-        if (kind === "command") {
+        // Assignment opens on Items until a player picks Commands, then stays there.
+        if (kind === "command" && !assignCommands) {
             kind = "item"; query = ""; document.getElementById("quickbar_search").value = "";
         }
         var more = document.getElementById("quickbar_more");
@@ -99,6 +105,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         document.getElementById("quickbar_search").focus({ preventScroll: true });
     }
     function symbol(hero, binding, entry, remembered) {
+        if (binding.kind === "command") return icons.icon(entry.icon);
         if (binding.kind !== "item") return powerArt.create(entry, binding.kind);
         var fallback = inventory.itemIcon(entry);
         if (binding.kind === "item") {
@@ -120,7 +127,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         var valid = spec.valid;
         spec.valid = function () {
             var latest = member();
-            return latest && expected === JSON.stringify([latest.slot, latest.place, latest.pos, binding, model.resolve(latest, binding)])
+            return latest && expected === JSON.stringify([latest.slot, latest.place, latest.pos, binding, resolve(latest, binding)])
                 && (!valid || valid());
         };
         spec.entries = spec.entries.concat(extras);
@@ -135,7 +142,9 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
             } }];
     }
     function decorate($button, hero, binding, entry, remembered) {
-        if (binding.kind !== "item") powerCards.attach($button, entry, binding.kind === "spell" ? "Spell" : "Ability");
+        if (binding.kind === "command") $button.attr({ "data-tip-title": entry.name, "data-tip-body": entry.description,
+            "data-tip-badge": "Command · " + entry.key });
+        else if (binding.kind !== "item") powerCards.attach($button, entry, binding.kind === "spell" ? "Spell" : "Ability");
         else $button.attr({ "data-tip-title": entry.name, "data-tip-body": [entry.cost, entry.description].filter(Boolean).join(" · ") || (entry.letter ? "Inventory slot " + entry.letter : "Remembered item"),
             "data-tip-badge": entry.kind_name || "Item" });
         return $button.append(symbol(hero, binding, entry, remembered));
@@ -150,7 +159,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         slots.forEach(function (binding, index) {
             // Empty capacity stays in storage, with one visible add/drop target.
             if (!binding && index !== firstEmpty && index !== selected) return;
-            var entry = model.resolve(hero, binding), unavailable = binding && blocked(hero, binding, entry);
+            var entry = resolve(hero, binding), unavailable = binding && blocked(hero, binding, entry);
             var displayEntry = entry || binding && binding.last_item;
             var depleted = binding && binding.kind === "item" && !entry && displayEntry && hero.inventory_known;
             var key = model.shortcut(index);
@@ -164,7 +173,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                         + (quick ? " · Quick cast · Shift+" + key + " to aim manually" : ""),
                     "aria-keyshortcuts": binding ? key + (quick ? " Shift+" + key : "") : "", "data-tip-key": binding ? key : "",
                     "aria-disabled": String(Boolean(unavailable)), "data-tip-title": label,
-                    "data-tip-meta": unavailable || "Click to use · Right-click for actions · Shift+click to reassign · Drag an item or power here" })
+                    "data-tip-meta": unavailable || "Click to use · Right-click for actions · Shift+click to reassign · Drag an item, power or command here" })
                 .toggleClass("is-empty", !binding).toggleClass("is-selected", selected === index)
                 .on("click", function (event) {
                     event.stopPropagation();
@@ -187,7 +196,11 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 if (binding.kind === "item" && (depleted || entry && entry.qty > 1))
                     $button.append($("<span class='quickbar-quantity quickbar-item-quantity'></span>").text(depleted ? 0 : entry.qty));
                 if (binding.kind === "spell") $button.append($("<span class='quickbar-quantity'></span>").text(spellCost.format(entry)));
-            } else $button.append(icons.icon(binding ? "slot-missing" : "slot-add"));
+                if (binding.kind === "command") $button.append($("<span class='quickbar-caption'></span>").text(entry.short || entry.name));
+            } else {
+                $button.append(icons.icon(binding ? "slot-missing" : "slot-add"));
+                if (!binding) $button.append($("<span class='quickbar-caption'>Add</span>"));
+            }
             if (binding) $button.append($("<kbd class='quickbar-key' aria-hidden='true'></kbd>").text(key));
             $bank.append($button);
         });
@@ -205,20 +218,20 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         var hero = member(); if (!hero || !document.getElementById("quickbar_catalog")) return;
         var $list = $("#quickbar_catalog"), scroll = $list.scrollTop(), focused = document.activeElement.id;
         var commandCount = commands.update(query, kind === "command", selected !== null);
-        $("#quickbar_picker_hint").text(selected === null ? kind === "command" ? "Choose a command · Search names or shortcuts" : "Use · Shift-click to pin · Drag to bar"
+        $("#quickbar_picker_hint").text(selected === null ? kind === "command" ? "Run a command · Shift-click to pin · Drag to bar" : "Use · Shift-click to pin · Drag to bar"
             : slots[selected] ? "Choose a replacement for slot " + (selected + 1) : "Choose an action for slot " + (selected + 1));
         $("#quickbar_more_content").toggleClass("is-assigning", selected !== null);
         $("#quickbar_clear").prop("hidden", selected === null);
         $("#quickbar_categories button").each(function () {
-            $(this).attr("aria-pressed", String(this.dataset.quickCategory === kind))
-                .prop("disabled", selected !== null && this.dataset.quickCategory === "command");
+            $(this).attr("aria-pressed", String(this.dataset.quickCategory === kind));
         });
-        $list.empty();
-        (kind === "command" ? [] : model.catalog(hero, kind, query)).forEach(function (entry) {
+        $list.empty().toggleClass("is-command-list", kind === "command");
+        (kind !== "command" ? model.catalog(hero, kind, query) : selected === null ? [] : commands.catalog(query)).forEach(function (entry) {
             var binding = { kind: kind, id: kind === "item" ? entry.slot : entry.id };
             if (kind === "item" && entry.action) { binding.action = entry.action; binding.uid = entry.uid; }
             var label = (kind === "item" ? (entry.letter || "?") + ") " : "") + entry.name;
             var $use = $("<button type='button' class='quickbar-catalog-action'></button>")
+                .toggleClass("is-command", kind === "command")
                 .attr({ id: "quickbar_entry_" + kind + "_" + binding.id + (binding.action ? "_" + binding.action : ""), draggable: "true",
                     "data-quick-kind": kind, "data-quick-id": binding.id,
                     "data-quick-action": binding.action || "", "data-quick-uid": binding.uid || "",
@@ -236,6 +249,8 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 return contextMenu(hero, binding, entry, [{ label: "Add to quickbar", run: function () { pin(binding); } }]);
             });
             decorate($use, hero, binding, entry);
+            if (kind === "command") $use.append($("<span class='quickbar-catalog-name'></span>").text(entry.name),
+                $("<kbd class='quickbar-catalog-key'></kbd>").text(entry.key));
             $use.attr("data-tip-meta", [$use.attr("data-tip-meta"), blocked(hero, binding, entry),
                 selected !== null ? "Click to assign" : "Click to use · Shift-click to pin · Drag to the bar"].filter(Boolean).join(" · "));
             if (kind === "item" && entry.qty > 1) $use.append($("<span class='quickbar-quantity quickbar-item-quantity'></span>").text(entry.qty));
@@ -255,7 +270,8 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         var remembered = slots.map(function (binding) { return model.remember(hero, binding); });
         if (JSON.stringify(remembered) !== JSON.stringify(slots)) { slots = remembered; save(); }
         var next = JSON.stringify([hero.player_id, hero.slot, hero.inventory, hero.spells, hero.abilities,
-            hero.xl, hero.hp, hero.mp, actions.reason(hero), slots, selected, kind, query, inventory.artState(hero)]);
+            hero.xl, hero.hp, hero.mp, actions.reason(hero), slots, selected, kind, query, inventory.artState(hero),
+            slots.map(function (binding) { return binding && binding.kind === "command" && blocked(hero, binding, resolve(hero, binding)); })]);
         if (!force && next === signature) return;
         signature = next; renderSlots(hero);
         if (document.getElementById("quickbar_more").open) renderCatalog();
@@ -276,7 +292,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 + "<div id='quickbar_catalog' role='group' aria-label='Available actions'></div>"
                 + "<div id='quickbar_commands' role='group' aria-label='Other game actions'></div></div>"
                 + "<div id='quickbar_help' tabindex='0' aria-label='Action help'></div></div></details>");
-            $more.find("summary").append(icons.icon("tray-expand")).on("click", function (event) {
+            $more.find("summary").append(icons.icon("tray-expand"), $("<span class='quickbar-more-label'>More</span>")).on("click", function (event) {
                 // Pointer browsing leaves gameplay keys available. Keyboard
                 // activation explicitly enters the searchable command palette.
                 searchOnOpen = !(event.originalEvent && event.originalEvent.detail);
@@ -285,7 +301,10 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 .attr({ "aria-label": "Clear quick action", "data-tip-title": "Clear quick action" });
             [["command", "Commands", "question"], ["item", "Items", "inventory"], ["ability", "Abilities", "abilities"], ["spell", "Spells", "spells"]].forEach(function (entry) {
                 $("<button type='button'></button>").append(icons.icon(entry[2]), document.createTextNode(entry[1])).attr("data-quick-category", entry[0])
-                    .on("click", function () { kind = entry[0]; renderCatalog(); }).appendTo($more.find("#quickbar_categories"));
+                    .on("click", function () {
+                        kind = entry[0]; if (selected !== null) assignCommands = kind === "command";
+                        renderCatalog();
+                    }).appendTo($more.find("#quickbar_categories"));
             });
             $more.on("toggle", function () {
                 if (!this.open) selected = null;
@@ -308,6 +327,18 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 if (!event.repeat) { if (event.key === "Enter") first.click(); else first.focus(); }
             });
             $more.find("#quickbar_clear").on("click", function () { if (selected !== null) assign(selected, null); });
+            // Pin instead of run. Capture keeps the row's own click handler from firing.
+            $more.find("#quickbar_commands")[0].addEventListener("click", function (event) {
+                var row = event.shiftKey && event.target.closest("[data-quick-kind='command']");
+                if (!row) return;
+                event.preventDefault(); event.stopPropagation();
+                pin({ kind: "command", id: row.dataset.quickId });
+            }, true);
+            $more.find("#quickbar_commands").on("keydown", "[data-quick-kind='command']", function (event) {
+                if (!event.shiftKey || event.key !== "Enter") return;
+                event.preventDefault(); event.stopPropagation();
+                pin({ kind: "command", id: this.dataset.quickId });
+            });
             $dock.append($more);
         }
         // Move existing controls, preserving their handlers and native shortcuts.
@@ -326,6 +357,13 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 .attr({ "data-label": groupLabels[group], "aria-label": groupLabels[group] });
         });
         commands.init();
+        commands.all().forEach(function (command) {
+            var button = commands.control(command), binding = { kind: "command", id: command.id };
+            if (button) menus.bind(button, function () {
+                var hero = member();
+                return hero && contextMenu(hero, binding, command, [{ label: "Add to quickbar", run: function () { pin(binding); } }]);
+            });
+        });
         $dock.off(".quickbarInput").on("keydown.quickbarInput keypress.quickbarInput keyup.quickbarInput", function (event) {
             event.stopPropagation();
             if (event.key === "Escape" && document.getElementById("quickbar_more").open) {
@@ -344,16 +382,17 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 } catch (_) { /* Ignore unrelated drag payloads. */ }
             });
         $(document).off(".quickbar").on("dragstart.quickbar", "[data-quick-kind]", function (event) {
-            var raw = { kind: this.dataset.quickKind, id: Number(this.dataset.quickId) };
+            var isCommand = this.dataset.quickKind === "command";
+            var raw = { kind: this.dataset.quickKind, id: isCommand ? this.dataset.quickId : Number(this.dataset.quickId) };
             if (this.dataset.quickAction) { raw.action = this.dataset.quickAction; raw.uid = Number(this.dataset.quickUid); }
             var binding = model.binding(raw);
-            if (!binding || !model.resolve(member(), binding)) { event.preventDefault(); return; }
+            if (!binding || !resolve(member(), binding)) { event.preventDefault(); return; }
             event.originalEvent.dataTransfer.setData("application/x-dcss-action", JSON.stringify({ hero: identity(member()), binding: binding }));
             event.originalEvent.dataTransfer.effectAllowed = "copy";
-        }).on("party_state_rendered.quickbar game_actions_changed.quickbar player_state_changed.quickbar inventory_art_ready.quickbar", refresh)
+        }).on("party_state_rendered.quickbar game_actions_changed.quickbar player_state_changed.quickbar inventory_art_ready.quickbar dock_controls_changed.quickbar", refresh)
             .on("game_cleanup.quickbar", function () {
                 refresh.cancel(); bindShortcuts(false); slots = model.normalize();
-                heroKey = ""; memory = {}; selected = null; signature = ""; searchOnOpen = false;
+                heroKey = ""; memory = {}; selected = null; signature = ""; searchOnOpen = false; assignCommands = false;
             });
         signature = ""; update(true);
         $(window).off("resize.quickbar").on("resize.quickbar", fitTray);

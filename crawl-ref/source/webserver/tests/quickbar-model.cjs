@@ -18,11 +18,19 @@ assert.equal(model.shortcut(10), '');
 const legacy = Array.from({ length: 8 }, (_, id) => ({ kind: 'item', id }));
 assert.deepEqual(json(model.normalize(legacy)), [...legacy, null, null], 'Existing assignments retain their positions');
 assert(json(model.normalize()).every(value => value === null));
-for (const invalid of [{ kind: 'command', id: 1 }, { kind: 'item', id: -1 },
+for (const invalid of [{ kind: 'command', id: 1 }, { kind: 'command', id: '' }, { kind: 'command', id: 'Find Items' },
+    { kind: 'command' }, { kind: 'item', id: -1 },
     { kind: 'item', id: 52.5 }, { kind: 'item', id: Number.MAX_SAFE_INTEGER + 1 },
     { kind: 'spell', id: '4' }, { kind: 'spell', id: Infinity }])
     assert.equal(model.binding(invalid), null);
 assert.deepEqual(json(model.binding({ kind: 'item', id: 0, unexpected: 'ignored' })), { kind: 'item', id: 0 });
+assert.deepEqual(json(model.binding({ kind: 'command', id: 'attack_info', quick_cast: true, last_item: { name: 'x' } })),
+    { kind: 'command', id: 'attack_info' }, 'Commands keep only their name');
+assert.deepEqual(json(model.normalize([null, { kind: 'command', id: 'find' }]))[1], { kind: 'command', id: 'find' },
+    'Command bindings survive storage normalization');
+assert.equal(model.resolve({ abilities: [{ id: 'find' }] }, { kind: 'command', id: 'find' }), null,
+    'Commands never resolve against a hero\'s powers');
+assert.deepEqual(json(model.remember({ inventory: [] }, { kind: 'command', id: 'find' })), { kind: 'command', id: 'find' });
 assert.deepEqual(json(model.normalize([{ kind: 'spell', id: 41, quick_cast: true }]))[0],
     { kind: 'spell', id: 41, quick_cast: true }, 'Quick cast survives saved binding normalization');
 for (const kind of ['item', 'ability'])

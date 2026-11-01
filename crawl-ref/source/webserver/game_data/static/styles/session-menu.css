@@ -62,7 +62,6 @@
     border: 1px solid var(--ui-edge, #8d7a4b); border-radius: 4px; background: var(--ui-panel, #22292f); color: var(--ui-text, #e6ddca);
     font: 600 11px/1.3 var(--menu-font);
 }
-#dock_session_menu kbd { margin-left: 5px; font-size: 10px; opacity: .75; }
 #normal #dock_session_menu:hover { border-color: var(--ui-accent, #ceb47b); background: var(--ui-raised, #3a3c32); }
 #dock_session_menu:focus-visible { outline: 2px solid var(--ui-accent-bright, #ceb47b); outline-offset: 2px; }
 @media (max-width: 480px) {
