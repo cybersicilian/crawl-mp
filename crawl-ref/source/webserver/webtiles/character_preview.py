@@ -108,7 +108,8 @@ class PreviewService:
                 "-extra-opt-last", "save_dir=" + scratch, "-character-preview-json", spec,
                 cwd=scratch, stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
-                env={**os.environ, "LC_ALL": "en_US.UTF-8"})
+                env={**os.environ, "LC_ALL": os.environ.get("LC_ALL")
+                     or os.environ.get("LANG") or "en_US.UTF-8"})
             try:
                 stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=20)
             except BaseException:
