@@ -110,6 +110,8 @@ define(["jquery", "chat", "comm", "game-loading"], function ($, chat, comm, load
             if (active && active !== document.body && !elem[0].contains(active))
                 dialog_opener = active;
             elem.stop(true, true).fadeIn(100, function () {
+                // Opening animation must not move focus after someone starts typing.
+                if (!elem.is(":visible") || elem[0].contains(document.activeElement)) return;
                 if (elem.is("[role='dialog']"))
                 {
                     var first = visible_focusables(elem).filter(".text, [autofocus]").first();

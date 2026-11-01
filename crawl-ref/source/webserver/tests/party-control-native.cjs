@@ -24,9 +24,28 @@ async function client(role) {
     const result = { page, context, username };
     clients.push(result);
     await page.goto(url);
+    if (role === 'H') await page.evaluate(() => {
+        const $ = require('jquery'), original = $.fn.fadeIn;
+        $.fn.fadeIn = function (duration, complete) {
+            if (!this.is('#register')) return original.apply(this, arguments);
+            $.fn.fadeIn = original;
+            return original.call(this, duration, function () {
+                window.qaFinishRegisterOpening = () => complete.call(this);
+            });
+        };
+    });
     await page.locator('#reg_link').click();
     await page.locator('#reg_username').fill(username);
     await page.locator('#reg_password').fill(password);
+    if (role === 'H') {
+        await page.waitForFunction(() => typeof window.qaFinishRegisterOpening === 'function');
+        await page.evaluate(() => window.qaFinishRegisterOpening());
+        assert.equal(await page.evaluate(() => document.activeElement.id), 'reg_password',
+            'Finishing the opening animation preserves the field being edited');
+        assert.equal(await page.locator('#reg_username').inputValue(), username);
+        assert.equal(await page.locator('#reg_password').inputValue(), password);
+        evidence.dialogFocusRetained = true;
+    }
     await page.locator('#reg_repeat_password').fill(password);
     await page.locator('#reg_submit').click();
     await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
