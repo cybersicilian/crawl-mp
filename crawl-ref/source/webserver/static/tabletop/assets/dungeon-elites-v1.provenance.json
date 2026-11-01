@@ -1,0 +1,146 @@
+{
+  "status": "LOCAL_SOURCE_SELECTED",
+  "tool": "built-in image_gen",
+  "prompt": "docs/graphics-2026-10-31/elite-humanoids/prompt-v1.txt",
+  "referenceImages": [
+    "crawl-ref/source/webserver/static/tabletop/assets/dungeon-humanoids-v1.png",
+    "crawl-ref/source/rltiles/mon/humanoids/orcs/orc_knight.png",
+    "crawl-ref/source/rltiles/mon/humanoids/orcs/orc_warlord.png",
+    "crawl-ref/source/rltiles/mon/humanoids/orcs/orc_sorcerer.png",
+    "crawl-ref/source/rltiles/mon/humanoids/gnoll_sergeant.png"
+  ],
+  "referenceRoles": [
+    "painted style only",
+    "native orc knight pose/color",
+    "native orc warlord pose/color",
+    "native orc sorcerer pose/color",
+    "native gnoll sergeant pose/color"
+  ],
+  "additionalInspectedNativeReferences": [
+    "crawl-ref/source/rltiles/mon/humanoids/orcs/orc_high_priest.png",
+    "crawl-ref/source/rltiles/mon/humanoids/gnoll_shaman.png"
+  ],
+  "original": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-3451b8ba-e0ae-4dbc-a2c2-9b7125b4c125.png",
+  "sha256": "c2c77a487317b3288c31d141f19a3fabb88840f222be99515f691ef91685c143",
+  "rgba_sha256": "6cb65ddb6aa96dd35211b391a2264d8a7aeeb584e99315c73f22e639a28ed7ea",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2669598,
+  "alpha": {
+    "zero": 843225,
+    "opaque": 0,
+    "partial": 729639
+  },
+  "generatedPixelsUnmodified": true,
+  "selectedCatalog": true,
+  "nativeEngine": false,
+  "productionMutation": false,
+  "controlledProof": "docs/graphics-2026-10-31/elite-humanoids/browser-3/eliteHumanoids/validation.json",
+  "visualReview": true,
+  "validationPending": [
+    "lossless output validation at selection time",
+    "actual native gameplay"
+  ],
+  "canonicalAsset": "crawl-ref/source/webserver/static/tabletop/assets/dungeon-elites-v1.png",
+  "sourceCrops": [
+    {
+      "name": "MONS_ORC_KNIGHT",
+      "sprite": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 508
+      },
+      "alphaBounds": [
+        100,
+        31,
+        469,
+        496
+      ],
+      "minimumGutter": 12
+    },
+    {
+      "name": "MONS_ORC_WARLORD",
+      "sprite": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 502
+      },
+      "alphaBounds": [
+        58,
+        10,
+        454,
+        496
+      ],
+      "minimumGutter": 6
+    },
+    {
+      "name": "MONS_ORC_HIGH_PRIEST",
+      "sprite": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 508
+      },
+      "alphaBounds": [
+        57,
+        56,
+        430,
+        495
+      ],
+      "minimumGutter": 13
+    },
+    {
+      "name": "MONS_ORC_SORCERER",
+      "sprite": {
+        "x": 0,
+        "y": 508,
+        "w": 512,
+        "h": 516
+      },
+      "alphaBounds": [
+        100,
+        13,
+        465,
+        479
+      ],
+      "minimumGutter": 13
+    },
+    {
+      "name": "MONS_GNOLL_SERGEANT",
+      "sprite": {
+        "x": 512,
+        "y": 502,
+        "w": 512,
+        "h": 522
+      },
+      "alphaBounds": [
+        76,
+        6,
+        437,
+        489
+      ],
+      "minimumGutter": 6
+    },
+    {
+      "name": "MONS_GNOLL_BOUDA",
+      "sprite": {
+        "x": 1024,
+        "y": 508,
+        "w": 512,
+        "h": 516
+      },
+      "alphaBounds": [
+        76,
+        13,
+        424,
+        481
+      ],
+      "minimumGutter": 13
+    }
+  ],
+  "regressionProof": "docs/graphics-2026-10-31/elite-humanoids/browser-3/humanoids/validation.json",
+  "nativeCatalogCompatibility": "docs/graphics-2026-10-31/elite-humanoids/native-compatibility-v1.json",
+  "outputIntegrityReceipt": "docs/graphics-2026-10-31/elite-humanoids/assets-1/verification.json"
+}

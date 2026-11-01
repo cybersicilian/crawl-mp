@@ -8,7 +8,7 @@ const { fixtureHtml } = require('./render-benchmark.cjs');
 const root = path.resolve(__dirname, '..'), output = process.env.CREATURE_ART_PROOF_DIR;
 const catalogKey = process.env.CREATURE_ART_CATALOG || 'creatures';
 const checks = { creatures: './helpers/creature-art-checks.cjs', denizens: './helpers/creature-art-checks.cjs', lair: './helpers/creature-art-checks.cjs', hydras: './helpers/creature-art-checks.cjs', humanoids: './helpers/humanoid-art-checks.cjs', eliteHumanoids: './helpers/humanoid-art-checks.cjs',
-    humanBases: './helpers/human-base-checks.cjs', hair: './helpers/hair-art-checks.cjs', armour: './helpers/armour-art-checks.cjs', equipment: './helpers/equipment-art-checks.cjs', shields: './helpers/equipment-art-checks.cjs',
+    humanBases: './helpers/human-base-checks.cjs', hair: './helpers/hair-art-checks.cjs', headwear: './helpers/hair-art-checks.cjs', armour: './helpers/armour-art-checks.cjs', equipment: './helpers/equipment-art-checks.cjs', shields: './helpers/equipment-art-checks.cjs',
     melee: './helpers/equipment-art-checks.cjs', weaponForms: './helpers/equipment-art-checks.cjs', ranged: './helpers/equipment-art-checks.cjs' };
 const scenario = process.env.CREATURE_ART_SCENARIO || 'catalog';
 assert(['catalog', 'large-detail'].includes(scenario));

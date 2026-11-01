@@ -92,7 +92,7 @@ module.exports = function humanBaseChecks() {
         {label:'Ordinary hat',helmet:'HELM_HAT_NORMAL'}, {label:'Blue cap',helmet:'HELM_CAP_BLUE'},
         {label:'Open iron helm',helmet:'HELM_HELM_IRON'}, {label:'Closed grey helm',helmet:'HELM_FHELM_GRAY'},
         {label:'Grey hood',helmet:'HELM_HOOD_GRAY'}, {label:'Crown',helmet:'HELM_CROWN'}];
-    const selectedHair=new Set((m['./environment-art'].hair?.entries||[]).flatMap(entry=>entry.names));
+    const selectedHair=new Set(['hair','headwear'].flatMap(key=>(m['./environment-art'][key]?.entries||[]).flatMap(entry=>entry.names)));
     const heading=document.createElement('h2');heading.textContent='Hair and headwear across all six identities';main.append(heading);
     const explanation=document.createElement('p');explanation.textContent='Each pair: Classic left, Illustrated right. Unselected headwear retains native art; native layer order is preserved.';main.append(explanation);
     const comparison=document.createElement('table'), head=document.createElement('tr');comparison.append(head);main.append(comparison);
