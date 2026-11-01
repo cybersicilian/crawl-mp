@@ -3740,6 +3740,7 @@ void level_change(bool skip_attribute_increase)
 
         if (you.char_class == JOB_ARCHAEOLOGIST)
             archaeologist::on_level_change();
+        collector_on_level_change();
 
         xom_is_stimulated(12);
         if (in_good_standing(GOD_HEPLIAKLQANA))

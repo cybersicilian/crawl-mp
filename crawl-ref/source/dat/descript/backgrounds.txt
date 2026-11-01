@@ -270,8 +270,9 @@ mist to help sustain their party.
 %%%%
 Collector
 
-Collectors begin with a weapon, light clothing and a scroll of Collector's
-Choice. When read, it offers a choice between a collection of artefacts and a
-wish for an available named or random artefact. The scroll is not spent when
-the reader cancels.
+Collectors begin with a weapon, light clothing and a sealed scroll of
+Collector's Choice. From experience level 7 it can be read for a choice
+between a collection of artefacts and a wish from a shortlist of three fixed
+artefacts. The scroll is not spent when the reader cancels, and cancelling
+does not change its offers.
 %%%%

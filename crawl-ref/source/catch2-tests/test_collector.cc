@@ -8,11 +8,14 @@
 #include "art-enum.h"
 #include "dungeon.h"
 #include "god-item.h"
+#include "invent.h"
 #include "item-name.h"
 #include "item-prop.h"
 #include "item-status-flag-type.h"
 #include "items.h"
 #include "mon-util.h"
+#include "newgame-def.h"
+#include "ng-setup.h"
 #include "party.h"
 #include "player.h"
 #include "test_vellum_fixture.h"
@@ -70,6 +73,68 @@ TEST_CASE_METHOD(vellum_fixture, "Collector choice is distinct from ordinary scr
     scroll.props.erase(COLLECTOR_CHOICE_KEY);
     CHECK(scroll.name(DESC_PLAIN).find("collection") != string::npos);
     CHECK(string(scroll_type_name(SCR_WISH)) == "wish");
+}
+
+TEST_CASE_METHOD(MockPlayerYouTestsFixture, "Collectors start knowing their scroll",
+                 "[collector]")
+{
+    newgame_def ng;
+    ng.species = you.species = SP_HUMAN;
+    ng.job = you.char_class = JOB_COLLECTOR;
+    ng.weapon = WPN_SHORT_SWORD;
+    init_item_name_cache();
+    give_items_skills(ng);
+    identify_inventory();
+    const item_def *scroll = nullptr;
+    for (const item_def& item : you.inv)
+        if (item.is_type(OBJ_SCROLLS, SCR_COLLECTION))
+            scroll = &item;
+    REQUIRE(scroll);
+    CHECK(scroll->props.exists(COLLECTOR_CHOICE_KEY));
+    CHECK(item_type_known(*scroll));
+    CHECK(scroll->name(DESC_PLAIN).find("Collector's Choice") != string::npos);
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Collector's Choice stays sealed until its level",
+                 "[collector]")
+{
+    item_def scroll;
+    scroll.base_type = OBJ_SCROLLS;
+    scroll.sub_type = SCR_COLLECTION;
+    scroll.quantity = 1;
+    scroll.flags |= ISFLAG_IDENTIFIED;
+    item_def ordinary = scroll;
+    scroll.props[COLLECTOR_CHOICE_KEY] = true;
+
+    you.experience_level = COLLECTOR_CHOICE_XL - 1;
+    CHECK_FALSE(cannot_read_item_reason(&scroll, true, true).empty());
+    CHECK(cannot_read_item_reason(&ordinary, true, true).empty());
+    // Character creation discards permanently useless items.
+    CHECK_FALSE(is_useless_item(scroll, false));
+
+    you.experience_level = COLLECTOR_CHOICE_XL;
+    CHECK(cannot_read_item_reason(&scroll, true, true).empty());
+}
+
+TEST_CASE_METHOD(vellum_fixture, "Collector shortlists are small and cannot be rerolled",
+                 "[collector]")
+{
+    you.species = SP_HUMAN;
+    you.unique_items.init(UNIQ_NOT_EXISTS);
+    const auto shortlist = collector_wish_shortlist();
+    REQUIRE(static_cast<int>(shortlist.size()) == COLLECTOR_SHORTLIST_SIZE);
+    for (int index : shortlist)
+        CHECK(collector_wish_eligible(index));
+    CHECK(collector_wish_shortlist() == shortlist);
+
+    // An artefact that stops being available is replaced; the others stay.
+    you.unique_items[shortlist[0] - UNRAND_START] = UNIQ_EXISTS;
+    const auto refilled = collector_wish_shortlist();
+    REQUIRE(refilled.size() == shortlist.size());
+    CHECK(find(refilled.begin(), refilled.end(), shortlist[0]) == refilled.end());
+    CHECK(find(refilled.begin(), refilled.end(), shortlist[1]) != refilled.end());
+    CHECK(find(refilled.begin(), refilled.end(), shortlist[2]) != refilled.end());
+    you.props.erase(COLLECTOR_SHORTLIST_KEY);
 }
 
 TEST_CASE("Collector wish pages keep every artefact reachable with unique keys",

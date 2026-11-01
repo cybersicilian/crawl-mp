@@ -19,7 +19,6 @@
 #include "invent.h"
 #include "item-name.h"
 #include "item-prop.h"
-#include "item-status-flag-type.h"
 #include "items.h"
 #include "item-use.h"
 #include "jobs.h"
@@ -466,11 +465,10 @@ void give_items_skills(const newgame_def& ng)
             party::sync_shared_gold(you.gold);
         break;
     case JOB_COLLECTOR:
+        // Leave identification to identify_inventory(): an item already
+        // flagged as identified would never teach the player its type.
         if (item_def *scroll = newgame_make_item(OBJ_SCROLLS, SCR_COLLECTION))
-        {
             scroll->props[COLLECTOR_CHOICE_KEY] = true;
-            scroll->flags |= ISFLAG_IDENTIFIED;
-        }
         break;
     case JOB_BILLIONAIRE:
     {
