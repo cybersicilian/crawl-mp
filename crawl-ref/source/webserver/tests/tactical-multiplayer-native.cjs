@@ -23,8 +23,10 @@ const finishPlan = page => page.waitForFunction(() => {
     guest = await client(browser, url, 'G', evidence.errors);
     await host.page.locator('#lobby_home [data-lobby-create]').click();
     await send(host.page, 'party_room_apply_comp', { seed: '9548842358735470601' });
-    for (const slot of [1, 2])
+    for (const slot of [1, 2]) {
+        await host.page.locator(`#party_seat_tab_${slot}`).click();
         await host.page.locator(`.party-slot-box[data-slot='${slot}'] .party-mode-btn[data-mode='companion']`).click();
+    }
     await send(guest.page, 'party_room_join', { room_id: host.username, slot: 3 });
     await host.page.waitForFunction(() => /2 heroes/.test(document.querySelector('#btn_launch_party_room').textContent));
     await host.page.locator('#btn_launch_party_room').click();

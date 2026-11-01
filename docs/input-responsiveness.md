@@ -174,9 +174,40 @@ Key auto-repeat stops while a multiplayer hero is waiting. A held key steps
 whenever the hero can act, and stops with the key instead of leaving up to 32
 queued moves. Fresh presses still queue, and menus keep auto-repeat.
 
-`tests/multiplayer-smoothness-native.cjs` drives two real browsers through a
-walking hero, both heroes walking, held keys, a partner's open prompt, shared
-combat and separate floors. Run it through the shared heavy gate.
+Party state is built once per hero and grows with party size, so per-turn cost
+is quadratic: 125 KB per command with two heroes and 385 KB with four. In
+multiplayer the engine now sends it only inside personal views, the only copies
+the server keeps, and skips each partner's trade targets and floor items, which
+the server blanks. JSON writers append directly, because `vsnprintf` was a
+quarter of a four-hero redraw. `state_transport.changes` skips unchanged hero
+sub-trees with `marshal`, which runs about twice as fast on real four-hero
+states. Unlike `==`, it still tells `true` from `1`.
+
+Heroes on separate floors swap native levels on every alternating action, and
+default deflate was 58% of each swap. Swaps now save with `package::fast_writes`;
+any compression level reads back the same, rewrites between commits reuse their
+blocks, and saving the game still uses full compression.
+
+`tests/multiplayer-smoothness-native.cjs` drives real browsers through a walking
+hero, both heroes walking, held keys, a partner's open prompt, shared combat and
+separate floors. Set `SMOOTHNESS_PLAYERS=4` for a full party. Run it through the
+shared heavy gate on an `-O2` build; debug builds are `-O0` and overstate the
+engine. Under host load, compare CPU time per command rather than wall-clock
+medians. Local runs on a quiet host against master:
+
+| Measure | Master | Now |
+| --- | --- | --- |
+| Partner prompt: keys rejected | 12 of 12 | 0 of 12 |
+| Moves left queued after releasing a held key in combat | 29 | 0 |
+| Combat, key to next frame, median | 51 ms | 34 ms |
+| Separate floors, key to next frame, median | 60 ms | 40 ms |
+| Separate floors, engine CPU per command | 28.2 ms | 13.5 ms |
+| Four heroes, key to next frame, median | 40 ms | 31 ms |
+| Four heroes, engine CPU per command | 13 ms | 8.7 ms |
+
+These are localhost figures from an Apple Silicon host and exclude network time.
+The four-hero rows are from one pair of runs. All were measured before the last
+two reductions to party-state sends and the server diff.
 
 ## Dungeon frame updates
 

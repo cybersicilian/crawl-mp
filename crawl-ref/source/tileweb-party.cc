@@ -119,14 +119,9 @@ string TilesFramework::_personal_cell_json(const coord_def& cell)
     return m_msg_buf;
 }
 
-bool TilesFramework::_projects_personal_views() const
-{
-    return party::multiplayer_enabled() && !m_projecting_view && in_bounds(you.pos());
-}
-
 void TilesFramework::_send_personal_views(bool force_full, int force_slot)
 {
-    if (!_projects_personal_views())
+    if (!party::multiplayer_enabled() || m_projecting_view || !in_bounds(you.pos()))
         return;
     unwind_bool projection(m_projecting_view, true);
     rng::generator ui_rng(rng::UI);

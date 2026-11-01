@@ -16,6 +16,22 @@ class StateTransportTest(unittest.TestCase):
         self.assertEqual(changes([1, 2], [1]), [[[], [1]]])
         self.assertEqual(changes([{"x": 1}], [{"x": 2}]), [[[0, "x"], 2]])
 
+    def test_unchanged_hero_trees_keep_strict_comparison(self):
+        hero = lambda equipped: dict(slot=0, inventory=[dict(name="sword", equipped=equipped, plus=1)], spells=[])
+        before = dict(members=[hero(True)])
+        self.assertEqual(changes(before, dict(members=[hero(True)])), [])
+        self.assertEqual(changes(before, dict(members=[hero(1)])),
+                         [[["members", 0, "inventory", 0, "equipped"], 1]])
+        self.assertEqual(changes(before, dict(members=[hero(False)])),
+                         [[["members", 0, "inventory", 0, "equipped"], False]])
+        whole = dict(members=[dict(slot=0, stats=dict(hp=1.0))])
+        self.assertEqual(changes(whole, dict(members=[dict(slot=0, stats=dict(hp=1))])),
+                         [[["members", 0, "stats", "hp"], 1]])
+
+    def test_key_order_alone_is_not_a_change(self):
+        before = dict(members=[dict(slot=0, stats=dict(hp=1, mp=2))])
+        self.assertEqual(changes(before, dict(members=[dict(slot=0, stats=dict(mp=2, hp=1))])), [])
+
     def test_large_changes_use_full_frames(self):
         encoder = StateEncoder("example")
         encoder.frame({"msg": "example", "values": list(range(1000))})

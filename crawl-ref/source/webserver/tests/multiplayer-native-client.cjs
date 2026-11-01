@@ -31,7 +31,7 @@ async function capture(page) {
 async function clientAs(browser, url, username, slot, errors, initializePage, observePage) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
-    page.setDefaultTimeout(20000);
+    page.setDefaultTimeout(Number(process.env.NATIVE_CLIENT_TIMEOUT_MS || 20000));
     page.on('pageerror', error => errors.push(error.message));
     if (observePage) await observePage(page);
     await page.goto(url);
