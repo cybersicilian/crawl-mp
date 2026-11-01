@@ -2,7 +2,7 @@
 define(["jquery", "./map_knowledge", "./workflow-actions", "./game-context", "./tactical-planner", "./route-plan", "./planned-route", "./pointer-intent-model", "./creature-roster-model"],
 function ($, map, actions, game, planner, routes, plannedRoute, model, roster) {
     "use strict";
-    var last = null, hint = "Point at a tile to see what a click does.";
+    var last = null, pointer = null, hint = "Point at a tile to see what a click does.";
     function context() {
         var state = window.crawl_party && window.crawl_party.state;
         return { state: state, hero: state && state.members.find(function (entry) { return entry.slot === actions.controlledSlot(); }) };
@@ -20,14 +20,16 @@ function ($, map, actions, game, planner, routes, plannedRoute, model, roster) {
         $("#dungeon").attr("data-pointer-intent", intent ? intent.kind : null);
     }
     function clear() {
-        last = null; plannedRoute.preview(null); paint(null);
+        last = pointer = null; plannedRoute.preview(null); paint(null);
     }
-    function hover(event, loc) {
-        var key = loc.x + "," + loc.y;
+    function hover(loc) {
+        var view = context(), hero = view.hero, cell = map.get(loc.x, loc.y);
+        pointer = loc;
+        if (!hero || !hero.pos || !cell) { last = null; plannedRoute.preview(null); paint(null); return; }
+        // The route starts at the hero, so a move refreshes it under a still pointer.
+        var key = [loc.x, loc.y, hero.pos.x, hero.pos.y].join();
         if (key === last) return;
         last = key;
-        var view = context(), hero = view.hero, cell = map.get(loc.x, loc.y);
-        if (!hero || !hero.pos || !cell) { clear(); return; }
         var visible = map.visible(cell), distance = Math.max(Math.abs(loc.x - hero.pos.x), Math.abs(loc.y - hero.pos.y));
         var ally = visible && view.state.members.find(function (entry) {
             return entry.slot !== hero.slot && entry.on_same_level !== false && routes.equal(entry.pos, loc);
@@ -44,16 +46,16 @@ function ($, map, actions, game, planner, routes, plannedRoute, model, roster) {
     }
     function init() {
         if (readout().length || !document.getElementById("hud_floor_items")) return;
-        $("<dl class='pointer-readout' data-intent='idle' role='status'>"
+        $("<dl class='pointer-readout' data-intent='idle'>"
             + "<dt class='pointer-heading'><span class='pointer-title'></span><span class='pointer-threat'></span></dt>"
             + "<dd class='pointer-left-row' hidden><kbd>Click</kbd><span class='pointer-left'></span></dd>"
             + "<dd class='pointer-right-row' hidden><kbd>Right-click</kbd><span class='pointer-right'></span></dd></dl>")
             .appendTo("#hud_floor_items");
         paint(null);
-        $("#dungeon").off(".pointerIntent").on("cell_hover.pointerIntent", function (event) { hover(event, event.cell); })
-            .on("mouseleave.pointerIntent", clear);
+        $("#dungeon").off(".pointerIntent").on("cell_hover.pointerIntent", function (event) { hover(event.cell); })
+            .on("cell_hover_end.pointerIntent", clear);
     }
-    $(document).on("party_state_rendered.pointerIntent game_camera_changed.pointerIntent", function () { last = null; })
-        .on("game_cleanup.pointerIntent", function () { last = null; plannedRoute.preview(null); });
+    $(document).on("party_state_rendered.pointerIntent", function () { if (pointer) hover(pointer); })
+        .on("game_cleanup.pointerIntent", function () { last = pointer = null; plannedRoute.preview(null); });
     return { init: init };
 });

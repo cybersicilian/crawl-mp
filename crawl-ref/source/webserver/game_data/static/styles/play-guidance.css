@@ -68,7 +68,7 @@ body.workflow-floor-in-rail #normal #hud_bottom_row:has(#hud_bottom_map.hud-floa
 #normal .is-controlled-card .hud-hazard-row:empty { display: none; }
 #normal .is-controlled-card .personal-stat-reading { box-sizing: border-box; min-width: 0; min-height: 26px; padding: 0 6px; }
 #normal .is-controlled-card .personal-stat-context:empty { display: none; }
-#normal .is-controlled-card.party-icon-first .party-icon-utility {
+body:not(.workflow-compact-roster) #normal .is-controlled-card.party-icon-first .party-icon-utility {
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; align-items: center; min-height: 0;
 }
 #normal .is-controlled-card .party-icon-utility > .party-icon-reading { order: 0; box-sizing: border-box; min-height: 26px; padding: 0 6px; gap: 4px; }

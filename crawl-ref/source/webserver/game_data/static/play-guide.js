@@ -88,6 +88,7 @@ function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
     }
     function init() {
         if (!document.getElementById("party_hud")) return;
+        $("#hud_floor_items").appendTo("#hud_bottom_row");
         $("#play_guide").remove();
         var root = $("<section id='play_guide' aria-label='Next step'><h2>Next step</h2>"
             + "<p class='play-guide-reason' role='status'></p><div class='play-guide-steps'></div>"

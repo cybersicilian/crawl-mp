@@ -106,7 +106,11 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
         handle_mouse: function (ev)
         {
-            if (ev.type === "mouseleave") presence.leave();
+            if (ev.type === "mouseleave")
+            {
+                presence.leave();
+                $(this.element).trigger("cell_hover_end");
+            }
             if (!options.get("tile_web_mouse_control"))
                 return;
             if (ev.type === "mouseleave")
