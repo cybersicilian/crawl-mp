@@ -3,6 +3,39 @@
 define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], function ($, chat, comm, texturePack, graphics) {
     return function create(api, state) {
         var send_message = comm.send_message;
+        var login_timeout;
+
+        function finish_login()
+        {
+            clearTimeout(login_timeout);
+            login_timeout = undefined;
+            state.logging_in = false;
+        }
+
+        function show_login(message)
+        {
+            $("#login_form").show();
+            $("#reg_link").show();
+            $("#forgot_link").show();
+            set_status(message, message ? "error" : null);
+        }
+
+        function wait_for_login()
+        {
+            finish_login();
+            state.logging_in = true;
+            $("#login_form").hide();
+            $("#reg_link").hide();
+            $("#forgot_link").hide();
+            set_status("Signing you in…", "busy");
+            login_timeout = setTimeout(function () {
+                finish_login();
+                // A slow reply can still succeed. Keep the saved session until
+                // the server explicitly rejects it, and let the player retry.
+                show_login("Sign-in is taking too long. Try again or reload to reconnect.");
+            }, 15000);
+        }
+
 
         // #login_message is a styled callout; the tone class is presentational only.
         function set_status(text, tone, as_html)
@@ -18,23 +51,27 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
 
         function start_login()
         {
+            finish_login();
             $(".welcome-entry").removeClass("signed-in");
             if (get_login_cookie())
             {
-                $("#login_form").hide();
-                $("#reg_link").hide();
-                $("#forgot_link").hide();
-                set_status("Signing you in…", "busy");
-                state.logging_in = send_message("token_login", {
+                if (send_message("token_login", {
                     cookie: get_login_cookie()
-                });
+                }))
+                    wait_for_login();
+                else
+                    show_login("Waiting for a connection…");
             }
             else
+            {
+                show_login("");
                 $("#username").focus();
+            }
         }
 
         function login()
         {
+            if (state.logging_in) return false;
             var username = ($("#username").val() || "").trim();
             var password = $("#password").val();
             if (!username || !password) {
@@ -50,11 +87,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
                 set_status("Waiting for a connection… try again in a moment.", "error");
                 return false;
             }
-            state.logging_in = true;
-            $("#login_form").hide();
-            $("#reg_link").hide();
-            $("#forgot_link").hide();
-            set_status("Signing you in…", "busy");
+            wait_for_login();
             return false;
         }
 
@@ -66,7 +99,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
 
         function login_failed(data)
         {
-            state.logging_in = false;
+            finish_login();
             set_login_cookie(null);
             auth_error(data);
             $("#login_form").show();
@@ -84,7 +117,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
 
         function logged_in(data)
         {
-            state.logging_in = false;
+            finish_login();
             var username = data.username;
             api.hide_prompt();
             set_status("Logged in as " + username, null, true);
@@ -148,6 +181,7 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
 
         function logout(force_reload=true)
         {
+            finish_login();
             if (get_login_cookie())
             {
                 send_message("forget_login_cookie", {
