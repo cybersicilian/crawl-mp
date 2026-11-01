@@ -1,0 +1,192 @@
+{
+  "collection": {
+    "source": "sources/collection.png",
+    "sha256": "8fb7cbdc795a821966e1be7fc9b91e6fa7adc900bdec339176d137220de7b7aa",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "soul-recall": {
+    "source": "sources/soul-recall.png",
+    "sha256": "f7e2e456ce820eedba7ad29bdd879c23a9c6dc8f858da55a0342b24b8f41f340",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "rallying": {
+    "source": "sources/rallying.png",
+    "sha256": "56726a8fa02a374b0d3d61daac02c59faf30570d48d6ce34079d12dc855ca30c",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "phase-swap": {
+    "source": "sources/phase-swap.png",
+    "sha256": "baef1a8c600c98c874780b3d562807263cf6da7b881d14b851b3cd6283d65a61",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "shared-vigour": {
+    "source": "sources/shared-vigour.png",
+    "sha256": "aad781481715470b58b7c3b97d858ce84d8bc8c529f2d51cba35e5836bb8aee1",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "empathy": {
+    "source": "sources/empathy.png",
+    "sha256": "0f7d27b1edb4e78940548f69f0f3c8debafb63310b77b3a66583a6d26cf61b79",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "soul-ambrosia": {
+    "source": "sources/soul-ambrosia.png",
+    "sha256": "cf906a8e056072018786f8b971c54d9d90bf9861a28ebeb3c8d3fafc43b62317",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "concord": {
+    "source": "sources/concord.png",
+    "sha256": "5cb2cc2b55dd9056326438cc6f30202912ae43a736e32e1a2417fddf0c44a123",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "camaraderie": {
+    "source": "sources/camaraderie.png",
+    "sha256": "49214aaf8719ac9edd693912d1bfc4f54e7eed7354654ac1c7920e258c07f7f7",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "vanguard": {
+    "source": "sources/vanguard.png",
+    "sha256": "8c76e0f2e210aac94cc704cd9d91617d75a62d0ecc51cd3040f1d08d175f07ea",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "aegis-standard": {
+    "source": "sources/aegis-standard.png",
+    "sha256": "443ddd74645941dffd56e5c7f876217579c4a1e99f43c48f46efc185a95c6efe",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "astral-beacon": {
+    "source": "sources/astral-beacon.png",
+    "sha256": "f40eb0d185b5b21b3ce1cd2014fc3954da8da1ce5682699bcfb47e7a129bb235",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "twin-spark-conduit": {
+    "source": "sources/twin-spark-conduit.png",
+    "sha256": "bc5bdd4bad01dc0f232d8d1e93bb2ac0271fce32f3cf29ca9c97d57dde7721a3",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "skald-horn": {
+    "source": "sources/skald-horn.png",
+    "sha256": "0d8285f863ee07b937b9a29e40dff53ce7459328b3fcf521f336782f38993c20",
+    "width": 1268,
+    "height": 1240,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 2,
+    "error": "Generation returned a non-square image after one retry; preserved unchanged."
+  },
+  "ancient-crate": {
+    "source": "sources/ancient-crate.png",
+    "sha256": "dab9937d37b09e80916276f1fede89575c33ea25858fcd74d687535158cfd03f",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "dusty-tome": {
+    "source": "sources/dusty-tome.png",
+    "sha256": "abc551675ce08e2a6b21768f479e3221737ee17c45441c1767c1cc4935862397",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "pouch": {
+    "source": "sources/pouch.png",
+    "sha256": "56879607772663e7989bb16e24207e30bc097c28f9e45db8c1881cb6d703516c",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  },
+  "satchel": {
+    "source": "sources/satchel.png",
+    "sha256": "d362efa934bd0718697cecd206f466b39964349c44cc63bdd3eca93f29e7c064",
+    "width": 1286,
+    "height": 1223,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 2,
+    "error": "Generation returned a non-square image after one retry; preserved unchanged."
+  },
+  "mercenary-contract": {
+    "source": "sources/mercenary-contract.png",
+    "sha256": "adea1c08b8f23d3939667292ba806abba743e431aefe8cdf5cc122490f8407b9",
+    "width": 1254,
+    "height": 1254,
+    "has_transparency": true,
+    "revised_prompt": null,
+    "attempts": 1,
+    "error": null
+  }
+}

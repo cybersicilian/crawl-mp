@@ -1,0 +1,155 @@
+{
+  "wish": {
+    "source": "sources/wish.png",
+    "sourceSha256": "f981ca444483cf33e8c4e4871562990335e5c765b423e98ad39023e3a884b1a5",
+    "tile": "item/scroll/i-wish.png",
+    "enum": "SCR_WISH",
+    "tileSha256": "b26013a3a205a3d25f188f646d131e15ab103c5bdc2be5b4647921b0a13ca33b"
+  },
+  "collection": {
+    "source": "sources/collection.png",
+    "sourceSha256": "8fb7cbdc795a821966e1be7fc9b91e6fa7adc900bdec339176d137220de7b7aa",
+    "tile": "item/scroll/i-collection.png",
+    "enum": "SCR_COLLECTION",
+    "tileSha256": "c3637584d2239783dff9b9dd85035a122c869af15baaedb0b526d95fd19e946a"
+  },
+  "soul-recall": {
+    "source": "sources/soul-recall.png",
+    "sourceSha256": "f7e2e456ce820eedba7ad29bdd879c23a9c6dc8f858da55a0342b24b8f41f340",
+    "tile": "item/scroll/i-soul-recall.png",
+    "enum": "SCR_SOUL_RECALL",
+    "tileSha256": "61f0036cb87063dc5e75516afa675b6c78af36bdd893f3db68373dac1877d959"
+  },
+  "rallying": {
+    "source": "sources/rallying.png",
+    "sourceSha256": "2231f7c914a6da488e9c90b95b90ed461b09ccac8a73202a5e75594b908e185d",
+    "tile": "item/scroll/i-rallying.png",
+    "enum": "SCR_RALLYING",
+    "tileSha256": "b6545c3cfbefd3e1e77bea41eab98578687a149452ec1e38813950847f8f1299"
+  },
+  "phase-swap": {
+    "source": "sources/phase-swap.png",
+    "sourceSha256": "692568660bbf353b6b492639e1c6f6abc2d5db4753af199522b6ae39565ca453",
+    "tile": "item/scroll/i-phase-swap.png",
+    "enum": "SCR_PHASE_SWAP",
+    "tileSha256": "a4bca03fba574d0ac67231218143ff28c0d1179dde8638f29b4aa46aa59a2007"
+  },
+  "shared-vigour": {
+    "source": "sources/shared-vigour.png",
+    "sourceSha256": "aad781481715470b58b7c3b97d858ce84d8bc8c529f2d51cba35e5836bb8aee1",
+    "tile": "item/scroll/i-shared-vigour.png",
+    "enum": "SCR_SHARED_VIGOUR",
+    "tileSha256": "11ecebb148ea5475058e087a6899da649e1be8ba276f7a4685fa57778704a138"
+  },
+  "empathy": {
+    "source": "sources/empathy.png",
+    "sourceSha256": "65ce52cf242d7fb40dc939de28add4fee642b821c17d2bd0d1c6d8fba87a3cf6",
+    "tile": "item/potion/i-empathy.png",
+    "enum": "POT_EMPATHY",
+    "tileSha256": "c646b2a9aaedcd925ee6bdd04078db9277f80662c5c97689bb2678277e5c523a"
+  },
+  "soul-ambrosia": {
+    "source": "sources/soul-ambrosia.png",
+    "sourceSha256": "cf906a8e056072018786f8b971c54d9d90bf9861a28ebeb3c8d3fafc43b62317",
+    "tile": "item/potion/i-soul-ambrosia.png",
+    "enum": "POT_SOUL_AMBROSIA",
+    "tileSha256": "884b70e177ce868ddb5de9f29f6ee8970f728d7e38740d728925e286800f172d"
+  },
+  "concord": {
+    "source": "sources/concord.png",
+    "sourceSha256": "fac97823bc19f2c6db1e8c31f8a524d33a5e3945eb292ff496986b26c3e9bdfd",
+    "tile": "item/potion/i-concord.png",
+    "enum": "POT_CONCORD",
+    "tileSha256": "61cb70a72a880714508cb8f60494d3c2ad167fa1f6cbd8c6fd60eca62e4f3a52"
+  },
+  "transfusion": {
+    "source": "sources/transfusion.png",
+    "sourceSha256": "65ccb4fe7cf3a8869ad10b40edb0fce6d4d2a270856579f5cffe52bd64713305",
+    "tile": "item/potion/i-transfusion.png",
+    "enum": "POT_TRANSFUSION",
+    "tileSha256": "a801e154e364188bd2ad8afe42ace5dc79fa6b6fcd19ce925f39ba79379e1e12"
+  },
+  "camaraderie": {
+    "source": "sources/camaraderie.png",
+    "sourceSha256": "49214aaf8719ac9edd693912d1bfc4f54e7eed7354654ac1c7920e258c07f7f7",
+    "tile": "item/ring/i-camaraderie.png",
+    "enum": "RING_CAMARADERIE",
+    "tileSha256": "161b047489fd87e5de214f252d467ab38c70ae6d863c9cf50ab39f7d961be89c"
+  },
+  "vanguard": {
+    "source": "sources/vanguard.png",
+    "sourceSha256": "8c76e0f2e210aac94cc704cd9d91617d75a62d0ecc51cd3040f1d08d175f07ea",
+    "tile": "item/amulet/i-vanguard.png",
+    "enum": "AMU_VANGUARD",
+    "tileSha256": "9b04c929b7cd0886f98c82c8f78f060a03d68054ca9f018d29fa9654d7cc585d"
+  },
+  "aegis-standard": {
+    "source": "sources/aegis-standard.png",
+    "sourceSha256": "443ddd74645941dffd56e5c7f876217579c4a1e99f43c48f46efc185a95c6efe",
+    "tile": "item/misc/misc_aegis_standard.png",
+    "enum": "MISC_AEGIS_STANDARD",
+    "inertTile": "item/misc/misc_aegis_standard_inert.png",
+    "tileSha256": "847b0944a48eede1738f088f7965a2425f724603061ff996486a5ce0f8a8668a",
+    "inertTileSha256": "5d1110e48c3a143a7398b77b0466622d251cd2b704194ef5d10b301b01e0ee66"
+  },
+  "astral-beacon": {
+    "source": "sources/astral-beacon.png",
+    "sourceSha256": "f40eb0d185b5b21b3ce1cd2014fc3954da8da1ce5682699bcfb47e7a129bb235",
+    "tile": "item/misc/misc_astral_beacon.png",
+    "enum": "MISC_ASTRAL_BEACON",
+    "inertTile": "item/misc/misc_astral_beacon_inert.png",
+    "tileSha256": "752724c49a3090eec1d1e4e6d58b12c4073afb4b526a22c9e113c9ad178d5a87",
+    "inertTileSha256": "66b6eecd971a9a75560ba42de16582e7edfb29cf1513bbe01a777f6567b90c2a"
+  },
+  "twin-spark-conduit": {
+    "source": "sources/twin-spark-conduit.png",
+    "sourceSha256": "e14c27f0261796709762c5dd8ef885efe9633e74b1b81108974141b36a54d244",
+    "tile": "item/misc/misc_twin_spark_conduit.png",
+    "enum": "MISC_TWIN_SPARK_CONDUIT",
+    "inertTile": "item/misc/misc_twin_spark_conduit_inert.png",
+    "tileSha256": "a1d0c915a91c5384f7692e742a33d67b691d0be9a3165bf9225d173e2132da9d",
+    "inertTileSha256": "9f02876e0084f487a42b27644b9566c7e0f627792daa74f0f6e8661cc6aaf5cc"
+  },
+  "skald-horn": {
+    "source": "sources/skald-horn.png",
+    "sourceSha256": "0d8285f863ee07b937b9a29e40dff53ce7459328b3fcf521f336782f38993c20",
+    "tile": "item/misc/misc_skald_horn.png",
+    "enum": "MISC_SKALD_HORN",
+    "tileSha256": "4150ac16139d2f7a04b423fa68a497cadac9fb515cb96047d8dc02ffe3bde496"
+  },
+  "ancient-crate": {
+    "source": "sources/ancient-crate.png",
+    "sourceSha256": "be7ae05180cf21123b8b48984f57cb1d32ad018a0db54ca7d2070e939d1b19c1",
+    "tile": "item/misc/misc_ancient_crate.png",
+    "enum": "MISC_ANCIENT_CRATE",
+    "tileSha256": "9005a61a3358071bb2a565498a913468f29000115aad30f5f484f045ed9ed31b"
+  },
+  "dusty-tome": {
+    "source": "sources/dusty-tome.png",
+    "sourceSha256": "d744807b7386c3e5e635cf96f55925b99d08bb127dfb0e952b61a176e5b7a26c",
+    "tile": "item/misc/misc_dusty_tome.png",
+    "enum": "MISC_DUSTY_TOME",
+    "tileSha256": "e31a70098d9d94ed6c28b2937595a3ce7f0bbc55f6170f6ab8bf154aa8346316"
+  },
+  "pouch": {
+    "source": "sources/pouch.png",
+    "sourceSha256": "56879607772663e7989bb16e24207e30bc097c28f9e45db8c1881cb6d703516c",
+    "tile": "item/misc/misc_pouch.png",
+    "enum": "MISC_POUCH",
+    "tileSha256": "e569fe240a893e54cbf1859c6a920d4fdad3440c16a192e9efb0e80f331f32a8"
+  },
+  "satchel": {
+    "source": "sources/satchel.png",
+    "sourceSha256": "470f1ba03f4dc34d906463e6bee40925aa73f9579692d7240087444a2e1643cf",
+    "tile": "item/misc/misc_satchel.png",
+    "enum": "MISC_SATCHEL",
+    "tileSha256": "33a47933633bbf8292ec0ea8d1ad8270ad678436a2e8b8bca65e15a183d8c98d"
+  },
+  "mercenary-contract": {
+    "source": "sources/mercenary-contract.png",
+    "sourceSha256": "adea1c08b8f23d3939667292ba806abba743e431aefe8cdf5cc122490f8407b9",
+    "tile": "item/misc/misc_mercenary_contract.png",
+    "enum": "MISC_MERCENARY_CONTRACT",
+    "tileSha256": "670f98c0f852b57ddcfa7739fee905751be915a5b924b1230d5df2a11ca08eba"
+  }
+}
