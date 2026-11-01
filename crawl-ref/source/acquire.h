@@ -12,6 +12,7 @@
 #define COLLECTION_ITEMS_KEY "collection_items"
 #define COLLECTOR_CHOICE_KEY "collector_choice"
 #define COLLECTOR_RANDOM_WISH_KEY "collector_random_wish"
+#define COLLECTOR_SHORTLIST_KEY "collector_shortlist"
 
 #define OKAWARU_WEAPONS_KEY "okawaru_weapons"
 #define OKAWARU_WEAPON_GIFTED_KEY "okawaru_weapon_gifted"
@@ -25,12 +26,18 @@
 const int COGLIN_GIZMO_NUM = 3;
 const int COGLIN_GIZMO_XL = 14;
 
+const int COLLECTOR_CHOICE_XL = 7;
+const int COLLECTOR_SHORTLIST_SIZE = 3;
+
 bool acquirement_menu();
 bool collection_menu();
 bool collector_claim_collection_item(int index);
-bool wish_menu();
+bool collector_choice_menu(bool &wish);
+bool wish_menu(bool shortlist = false);
 bool collector_wish_eligible(int index);
 vector<int> collector_wish_candidates();
+vector<int> collector_wish_shortlist();
+void collector_on_level_change();
 // Menu actions are negative so that they cannot collide with unrand IDs.
 enum collector_wish_action
 {

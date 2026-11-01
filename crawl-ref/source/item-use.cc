@@ -3163,21 +3163,19 @@ bool read(item_def* scroll, dist *target)
             break;
         }
         bool wish = which_scroll == SCR_WISH;
-        if (scroll->props.exists(COLLECTOR_CHOICE_KEY))
+        const bool collector = scroll->props.exists(COLLECTOR_CHOICE_KEY);
+        if (collector && !collector_choice_menu(wish))
         {
-            mprf(MSGCH_PROMPT, "Choose (c)ollection or (w)ish, or Esc to cancel: ");
-            const int choice = getchm();
-            if (choice != 'c' && choice != 'C' && choice != 'w' && choice != 'W')
-            {
-                result = spret::abort;
-                break;
-            }
-            wish = choice == 'w' || choice == 'W';
-        }
-        if (!(wish ? wish_menu() : collection_menu()))
             result = spret::abort;
-        else if (scroll->props.exists(COLLECTOR_CHOICE_KEY))
-            you.props.erase(wish ? COLLECTION_ITEMS_KEY : COLLECTOR_RANDOM_WISH_KEY);
+            break;
+        }
+        if (!(wish ? wish_menu(collector) : collection_menu()))
+            result = spret::abort;
+        else if (collector)
+        {
+            you.props.erase(COLLECTION_ITEMS_KEY);
+            you.props.erase(COLLECTOR_SHORTLIST_KEY);
+        }
         break;
     }
 

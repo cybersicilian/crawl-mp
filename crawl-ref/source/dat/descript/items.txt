@@ -1554,7 +1554,9 @@ scroll of collection
 
 A rare scroll offering a selection of artefacts suited to the reader. The
 selection is preserved if the reader cancels. A Collector's Choice scroll
-instead lets its reader choose either this collection or a wish when read.
+stays sealed until its reader reaches experience level 7, then lets them
+choose either this collection or a wish from a shortlist of three fixed
+artefacts.
 %%%%
 scroll of wish
 

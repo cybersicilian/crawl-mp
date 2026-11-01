@@ -3305,6 +3305,17 @@ string cannot_read_item_reason(const item_def *item, bool temp, bool ident,
                 return "You have no living companions on this floor to swap places with!";
             return "";
 
+        case SCR_COLLECTION:
+            // Below the temp check: a sealed scroll must survive character
+            // creation, which discards items that are permanently useless.
+            if (item->props.exists(COLLECTOR_CHOICE_KEY)
+                && you.experience_level < COLLECTOR_CHOICE_XL)
+            {
+                return make_stringf("This scroll stays sealed until you reach "
+                                    "experience level %d.", COLLECTOR_CHOICE_XL);
+            }
+            return "";
+
         default:
             return "";
     }

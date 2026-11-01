@@ -1941,11 +1941,76 @@ vector<int> collector_wish_page_entries(const vector<int>& candidates,
     return entries;
 }
 
+// A keypress in the message log cannot be answered by mouse or touch, and any
+// click would cancel the read, so this choice is a menu like the wish itself.
+bool collector_choice_menu(bool &wish)
+{
+    Menu menu(MF_SINGLESELECT | MF_ARROWS_SELECT | MF_INIT_HOVER,
+              "collector_choice");
+    menu.set_title("Choose what your scroll will grant:");
+    auto collection = make_unique<MenuEntry>("A collection of artefacts suited to you",
+                                             MEL_ITEM, 1, 'c');
+    collection->add_hotkey('C');
+    menu.add_entry(std::move(collection));
+    auto named = make_unique<MenuEntry>("A wish from a shortlist of fixed artefacts",
+                                        MEL_ITEM, 1, 'w');
+    named->add_hotkey('W');
+    menu.add_entry(std::move(named));
+    const vector<MenuEntry *> selection = menu.show();
+    if (selection.empty())
+        return false;
+    wish = selection.front()->hotkeys[0] == 'w';
+    return true;
+}
+
+// Collectors wish from a small saved shortlist rather than the whole catalogue.
+// Cancelling must not reroll it; only artefacts that have since become
+// unavailable are replaced.
+vector<int> collector_wish_shortlist()
+{
+    vector<int> shortlist;
+    CrawlVector &saved = you.props[COLLECTOR_SHORTLIST_KEY].get_vector();
+    for (auto &value : saved)
+        if (collector_wish_eligible(value.get_int()))
+            shortlist.push_back(value.get_int());
+    vector<int> candidates = collector_wish_candidates();
+    shuffle_array(candidates);
+    for (int candidate : candidates)
+    {
+        if (static_cast<int>(shortlist.size()) >= COLLECTOR_SHORTLIST_SIZE)
+            break;
+        if (find(shortlist.begin(), shortlist.end(), candidate) == shortlist.end())
+            shortlist.push_back(candidate);
+    }
+    saved.clear();
+    for (int index : shortlist)
+        saved.push_back(index);
+    return shortlist;
+}
+
+// The scroll stays sealed until this level, so tell its holder when it opens.
+void collector_on_level_change()
+{
+    if (you.experience_level != COLLECTOR_CHOICE_XL)
+        return;
+    for (const item_def &item : you.inv)
+    {
+        if (item.defined() && item.props.exists(COLLECTOR_CHOICE_KEY))
+        {
+            mprf(MSGCH_INTRINSIC_GAIN, "Your %s can now be read.",
+                 item.name(DESC_QUALNAME).c_str());
+            return;
+        }
+    }
+}
+
 // Named wishes are selected from the currently available fixed artefacts.
 // The menu also offers a random choice; cancellation does not spend the scroll.
-bool wish_menu()
+// With a shortlist, the saved shortlist is the whole menu.
+bool wish_menu(bool shortlist)
 {
-    vector<int> candidates = collector_wish_candidates();
+    vector<int> candidates = shortlist ? collector_wish_shortlist()
+                                       : collector_wish_candidates();
     if (candidates.empty())
     {
         mpr("No available, usable artefact matches that wish.");
@@ -1956,7 +2021,8 @@ bool wish_menu()
     int chosen = WISH_RANDOM;
     while (true)
     {
-        vector<int> entries = collector_wish_page_entries(visible, page);
+        vector<int> entries = shortlist
+            ? visible : collector_wish_page_entries(visible, page);
         Menu menu(MF_SINGLESELECT | MF_ARROWS_SELECT | MF_INIT_HOVER,
                   "collector_wish");
         menu.set_title("Choose an artefact to wish for:");
