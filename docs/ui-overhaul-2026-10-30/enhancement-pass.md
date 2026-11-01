@@ -32,6 +32,37 @@ keeps its arch radius and the gilt tokens.
 - Combat log: turn separators are a labelled engraved rule; damage lines carry a red gradient and a soft glow, still 12px on a dark panel.
 - Action acknowledgement chip (below) names the command and its key, so a keyboard player sees what the engine received.
 
+## Contrast: explanatory cards inside dark dialogs
+
+A follow-up from the user's screenshot of the starting character sheet: the rich tooltip
+(`#lobby_rich_tooltip`) showed cream text on parchment ("rFire (Fire Resistance): 0",
+"Reduces damage from fire, steam…", "Native starting value · Before temporary effects").
+`client-tooltips.js` appends the card to the open `dialog`, so the card inherits that
+dialog's custom properties. The sibling content-port / production lineage ships
+`rpg-character-builder.css`, which turns the sheet into dark chrome and remaps
+`--tt-ink`, `--tt-ink-soft` and `--tt-folio-muted` to light values on the dialog; the
+production lineage also has no `ui-themes.css`, so the card's colours fall back to those
+remapped `--tt-*` tokens. Parchment stays parchment (it is a page token), the ink follows
+the host: light on light.
+
+Fix, in the shared files so it carries into both lineages:
+
+- `static/tabletop/tooltip-content.css`: the card pins its own `--tt-ink`, `--tt-ink-soft`,
+  `--tt-folio-ink`, `--tt-folio-muted` and `--tt-folio-crimson` to the page tokens
+  (`--ui-ink`, `--ui-quiet`, `--ui-chapter`, with the `tokens.css` parchment values as
+  fallbacks when no `--ui-*` theme is loaded).
+- `static/tabletop/ui-themes.css`: in the folio theme the card also re-declares the page
+  tokens themselves (`--ui-page*`, `--ui-ink`, `--ui-quiet`, `--ui-rule`, `--ui-chapter`,
+  `--ui-paper`), so a parchment card over dark chrome never takes a host's `--ui-ink`.
+  Dungeon and contrast cards are dark paper with light ink and need no literal pin.
+
+Reproduced and verified on the isolated QA runtime by injecting the sibling's dialog rule
+and, for the production case, disabling `ui-themes.css`: body ink went from
+rgb(238, 229, 210) to rgb(43, 36, 28) on the same parchment; with the theme sheet present
+all three themes measure the same ink before and after (folio #30261e, dungeon #e7eef6,
+contrast #fff). Screenshots `shots/tip/before-prod-tip-none.png` /
+`shots/tip/after-prod-tip-none.png` (card crop) and `shots/tip/*-sheet-*.png` (full sheet).
+
 ## Baldur's Gate flourishes
 
 New tokens per theme in `static/tabletop/ui-themes.css`: `--ui-gilt`, `--ui-gilt-deep`,
@@ -84,6 +115,7 @@ style), `--tt-hud-row: 28px` (every mission-bar chip and tool), `--tt-hud-gutter
 - Browser-free suites: `tactical-planner`, `display-frames`, `quickbar-model`, `initiative-bars`, `party-status`, `enemy-banners`, `creature-roster`, `status-icons` pass; `node --test shell-animation hero-feedback encounter-feedback graphics-preferences` pass.
 - Render benchmark (`tests/render-benchmark.cjs`, 30 iterations, same headless Chrome, base export of be8ac92fb3 vs this tree). The fixture needed `encounter-banner` in its module list (the merge made `dungeon_renderer` depend on it; without the stub the benchmark fails on the base tree too); that one-line fix is included. Medians are unchanged within noise: classic full repaint 1.7/1.7ms, illustrated full repaint 2.6/2.6ms, premium full repaint 4.5/4.7ms, premium packet 14.5/13.9ms, premium camera step 6.1/5.7ms (base/after). None of the renderer modules were touched.
 - Single-browser Playwright visual pass on an isolated `util/qa_server.py` runtime (port 8911, runtime `/tmp/dcp-eh/rt`, existing native build `/private/tmp/dcss-builder-validation-01a18b22`), DPR 2, with an automated overflow audit (every text-bearing element whose `scrollWidth`/`scrollHeight` exceeds its box under `overflow`/`text-overflow` clipping; visually-hidden `.hud-icon-only-label` excluded). Before: 6 hits in the builder at 1440, 2 at 1024, 2 in-game at every size, 3 more once heroes were recovering. After: **clean** at builder 1440/1024/390, game 1440/1280/1024, contrast theme, hero sheet, and in combat after exploring. Page errors: none.
+- Tooltip contrast fix: `webtiles` Python suite, 434 tests: the two pre-existing import errors (`auth_test`, `util_test`, pytest absent) plus three `LibraryHTTPTests` / `RecordVisibilityHTTPTests` failures from `static_url` lacking a `static_path` setting in the test app (a template/server issue predating this pass; the change here is CSS only).
 - No native build, no multi-browser batch (shared-host gate in `AGENTS.md`).
 
 ## Screenshots (scratchpad, 2880×1800 PNGs at DPR 2)
@@ -103,6 +135,7 @@ Directory: `/private/tmp/claude-502/-Users-iancaltabiano-Documents-Projects-dcss
 | Pause menu | `before-game-pause-menu-1440.png` | `after-game-pause-menu-1440.png` |
 | 1280×800 / 1024×768 | `before-game-1280.png`, `before-game-1024.png` | `after-game-1280.png`, `after-game-1024.png`, `after-game-1280-with-log.png`, `after-game-1024-with-log.png` |
 | High contrast | `before-game-contrast-1440.png` | `after-game-contrast-1440.png` |
+| Starting-sheet tooltip (dark-sheet host simulated; `tip/` subfolder) | `tip/before-prod-tip-none.png`, `tip/before-prod-sheet-none.png` | `tip/after-prod-tip-none.png`, `tip/after-tip-folio.png`, `tip/after-tip-dungeon.png`, `tip/after-tip-contrast.png` |
 | Party builder 1440 / 1024 / 390 | `before-builder-4-heroes-1440.png`, `before-builder-1024.png`, `before-builder-390.png` | `after-builder-4-heroes-1440.png`, `after-builder-1024.png`, `after-builder-390.png`, `after-builder-roster-strip.png` |
 
 Audit logs: `before-log.txt`, `after-log.txt` in the same directory; benchmark output
