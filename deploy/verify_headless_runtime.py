@@ -55,12 +55,18 @@ def failure(reason, seen, tail):
         reason, sorted(seen), bytes(tail).decode("utf8", "replace").strip())
 
 
-def wait_for_exit(pid, seconds):
+def wait_for_exit(pid, seconds, client, drained):
     deadline = time.monotonic() + seconds
     while time.monotonic() < deadline:
         if os.waitpid(pid, os.WNOHANG)[0] == pid:
             return True
-        time.sleep(.05)
+        # Production keeps consuming WebTiles output during shutdown. A full
+        # datagram queue otherwise blocks the engine before it can exit.
+        try:
+            drained['bytes'] += len(client.recv(256 * 1024))
+            drained['packets'] += 1
+        except socket.timeout:
+            pass
     return False
 
 
@@ -107,24 +113,29 @@ def verify(source, directory):
                            "-webtiles-socket", str(engine_socket), "-await-connection",
                            "-headless"], directory, source)
     seen, tail = set(), bytearray()
+    drained = {'packets': 0, 'bytes': 0}
     threading.Thread(target=keep_tail, args=(terminal, tail), daemon=True).start()
     try:
         reached_game(pid, engine_socket, client, seen, tail)
         os.kill(pid, signal.SIGHUP)
-        if not wait_for_exit(pid, HANGUP_SECONDS):
-            raise SystemExit(failure("engine ignored hangup", seen, tail))
+        if not wait_for_exit(pid, HANGUP_SECONDS, client, drained):
+            raise SystemExit(failure("engine ignored hangup after draining %s" % drained, seen, tail))
         if not any(directory.glob("**/*.cs")):
             raise SystemExit(failure("hangup wrote no save", seen, tail))
+        return drained
     finally:
         client.close()
         try:
-            os.kill(pid, signal.SIGKILL)
-            os.waitpid(pid, 0)
+            # Only signal an unreaped child; a completed child's PID may be reused.
+            if os.waitpid(pid, os.WNOHANG)[0] == 0:
+                os.kill(pid, signal.SIGKILL)
+                os.waitpid(pid, 0)
         except (ProcessLookupError, ChildProcessError):
             pass
 
 
 source = Path(sys.argv[1]).resolve()
 with tempfile.TemporaryDirectory(prefix="dcss-", ignore_cleanup_errors=True) as location:
-    verify(source, Path(location))
-print(json.dumps({"headless_launch": "playable", "hangup_save": True, "passed": True}))
+    drained = verify(source, Path(location))
+print(json.dumps({"headless_launch": "playable", "hangup_save": True,
+                  "shutdown_output_drained": drained, "passed": True}))
