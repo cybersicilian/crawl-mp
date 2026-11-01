@@ -1,6 +1,11 @@
 define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", "./inspection-dialog"], function ($, comm, client, enums, model, spellCost, inspection) {
     "use strict";
-    var ready = false, returning = null;
+    // Every command and auto-explore step passes through NORMAL for a moment.
+    // `ready` stays exact; `settled` only shows the HUD as busy once that wait
+    // is long enough to see, so it does not blink. Native rejects actions
+    // outside COMMAND, so the hold cannot let one through.
+    var BUSY_DELAY_MS = 250;
+    var ready = false, settled = false, settling = null, returning = null;
     var planning = function () { return false; };
     function state() { return window.crawl_party && window.crawl_party.state; }
     function controlledSlot() {
@@ -22,8 +27,13 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
         if (!(queueable && planning()) && model.inCombat(state(), member) && (state().multiplayer ? member.can_act === false
             : !state().simultaneous_turns && member.slot !== state().active_slot))
             return "Wait for this hero's turn in the combat queue.";
-        if (!ready) return "Finish or cancel the current action first.";
+        if (!settled) return "Finish or cancel the current action first.";
         return "";
+    }
+    function settle() {
+        if (settling !== null) clearTimeout(settling);
+        settling = null; settled = ready;
+        $(document).trigger("game_actions_settled", [settled]);
     }
     function notice(text) {
         var area = document.getElementById("workflow_action_notice");
@@ -207,7 +217,14 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
         return row;
     }
     $(document).on("game_input_changed.workflow", function (event, mode) {
-        ready = mode === enums.mouse_mode.COMMAND; restore();
+        ready = mode === enums.mouse_mode.COMMAND;
+        // Only NORMAL is the gap between commands. Targeting and prompts are
+        // waiting on the player, so they block at once.
+        if (mode !== enums.mouse_mode.NORMAL) settle();
+        else if (settled && settling === null) settling = setTimeout(function () {
+            settle(); $(document).trigger("game_actions_changed");
+        }, BUSY_DELAY_MS);
+        restore();
         if (!ready) clearNotice();
         $(document).trigger("game_actions_changed");
     }).on("game_popup_changed.workflow", function (event, count) {
@@ -216,7 +233,7 @@ define(["jquery", "comm", "client", "./enums", "./party-model", "spell-cost", ".
     }).on("party_state_rendered.workflow", function () {
         if (returning && returning.waitForState) returning.seen = true;
         restore();
-    }).on("game_cleanup.workflow", function () { ready = false; returning = null; });
+    }).on("game_cleanup.workflow", function () { ready = false; settle(); returning = null; });
     comm.register_handlers({ game_action_error: function (data) {
         $(document).trigger("game_action_error", [data]);
         if (returning) returning.seen = true;

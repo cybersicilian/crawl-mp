@@ -2,7 +2,13 @@ define(["jquery", "./party-initiative", "./party-model", "./frame-update", "./en
         "./view_data", "./enums", "./map_knowledge", "./cell_renderer", "./tileinfo-main", "./util", "./dungeon-context-menu", "./status-icons", "./indexed-paint", "./monster_list", "./creature-roster-model", "./collapsible-roster"],
 function ($, initiative, party, frameUpdate, model, view, enums, map, cells, main, util, contextMenu, icons, indexedPaint, nearby, roster, createRoster) {
     "use strict";
-    var observer, state, hovered, cursor, disclosure, rosterSignature, nodes = new Map();
+    // A disagreement that outlasts this is real, not two feeds a frame apart.
+    var SKEW_LIMIT_MS = 150;
+    var observer, state, hovered, cursor, disclosure, rosterSignature, skewSince = null, skewTimer = null, nodes = new Map();
+    function clearSkew() {
+        clearTimeout(skewTimer);
+        skewSince = null; skewTimer = null;
+    }
     function clearTarget() {
         if (cursor && view.cursor_locs[enums.CURSOR_MOUSE] === cursor)
             view.remove_cursor(enums.CURSOR_MOUSE);
@@ -151,13 +157,26 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
 
         return node;
     }
+    // Keep the last coherent roster while the map and party state catch up, so
+    // a moving creature does not blink a duplicate card into the rail.
+    function awaitingFeeds(readings, mapped) {
+        if (!roster.skewed(readings, mapped)) { clearSkew(); return false; }
+        var now = performance.now();
+        if (skewSince === null) skewSince = now;
+        var remaining = SKEW_LIMIT_MS - (now - skewSince);
+        if (remaining <= 0) return false;
+        if (skewTimer === null) skewTimer = setTimeout(function () { skewTimer = null; render(); }, remaining);
+        return true;
+    }
     function render() {
         var rail = document.getElementById("enemy_initiative_rail");
         if (!rail || !disclosure) return;
         var hero = state && (state.members || []).find(function (entry) { return entry.slot === party.controlledSlot(state); });
         var label = "Nearby creatures beside " + (hero ? hero.name : "player");
         if (rail.getAttribute("aria-label") !== label) rail.setAttribute("aria-label", label);
-        var contacts = currentContacts(), signature = JSON.stringify(contacts);
+        var readings = state && state.enemy_initiative, mapped = nearby.contacts();
+        if (awaitingFeeds(readings, mapped)) return;
+        var contacts = roster.collect(readings, mapped), signature = JSON.stringify(contacts);
         rail.hidden = !contacts.length && !(state && state.multiplayer);
         if (signature === rosterSignature) return;
         rosterSignature = signature;
@@ -217,7 +236,7 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         .on("texture_pack_changed.enemyInitiative", function () { portraits.changed(); })
         .on("hud_workspace_changed.enemyInitiative", refresh)
         .on("game_cleanup.enemyInitiative", function () {
-            clearTarget(); renderFrame.cancel(); refresh.cancel(); portraits.clear(); nodes.clear(); if (observer) observer.disconnect(); observer = null;
+            clearTarget(); clearSkew(); renderFrame.cancel(); refresh.cancel(); portraits.clear(); nodes.clear(); if (observer) observer.disconnect(); observer = null;
             state = null; disclosure = null; rosterSignature = null; $("#enemy_initiative_rail").remove();
         });
     $(window).on("resize.enemyInitiative scroll.enemyInitiative", refresh)

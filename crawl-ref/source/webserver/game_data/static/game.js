@@ -298,7 +298,6 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         if (mode == input_mode) return;
         input_mode = mode;
         $(document).trigger("game_input_changed", [mode]);
-        library.set_ready(mode === enums.mouse_mode.COMMAND);
         dungeon_renderer.update_mouse_mode(input_mode);
         if (mode == enums.mouse_mode.COMMAND)
             messages.new_command();
@@ -514,6 +513,10 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         });
     });
 
+    // Save buttons follow the settled state so a passing step does not blink them.
+    $(document).on("game_actions_settled.library", function (event, ready) {
+        library.set_ready(ready);
+    });
     $(document).on("game_init.hudLayout", function () {
         hud.observe(function () {
             if (layout_parameters && ui_state === enums.ui.NORMAL)

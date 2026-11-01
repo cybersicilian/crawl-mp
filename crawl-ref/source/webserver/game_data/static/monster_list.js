@@ -161,8 +161,11 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
         var party = window.crawl_party && window.crawl_party.state;
         // Friendly map actors at reported party positions duplicate the cards.
         // Unknown floor/position facts must never hide an unrelated creature.
+        // The map can be a step ahead of those positions, so a proxy is also
+        // known by the "<hero> the ..." name it carries.
         return entry.mon.att === 4 && party && Array.isArray(party.members)
             && party.members.some(function (hero) {
+                if (hero.name && String(entry.mon.name).indexOf(hero.name + " the ") === 0) return true;
                 return hero.on_same_level === true && hero.alive === true && !hero.ghost_haunting && hero.pos
                     && hero.pos.x === entry.loc.x && hero.pos.y === entry.loc.y;
             });

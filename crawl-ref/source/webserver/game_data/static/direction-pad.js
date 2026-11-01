@@ -63,7 +63,12 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
             var label = "Move or attack " + direction.name.toLowerCase() + ": " + direction.key
                 + " or Numpad " + direction.numpad;
             $(this).attr("aria-label", label);
-            this.title = blocked || label;
+            // Tooltip setup strips title into data-tip-body, so compare against that.
+            var tip = blocked || label;
+            if (this.getAttribute("data-tip-body") !== tip) {
+                this.setAttribute("title", tip);
+                this.setAttribute("data-tip-body", tip);
+            }
         });
         position();
     }

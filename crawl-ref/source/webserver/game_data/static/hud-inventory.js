@@ -187,7 +187,7 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
             hero.abilities_known, hero.abilities,
             hero.spells_known, hero.spells, hero.spell_library,
             Boolean(state && state.inventory_use),
-            actions.reason(hero), actions.ready(),
+            actions.reason(hero), actions.reason(hero, true),
             artState(hero), filter, powerArt.ready()
         ]);
         if (!force && signature === next) return;

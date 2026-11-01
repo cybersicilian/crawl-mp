@@ -75,4 +75,10 @@ dungeon_renderer.cell_width = 48; list.update('Unseen movement');
 assert.equal(counters.rendered, 8, 'Cell size changes repaint');
 list.clear(); place(1, 'orc', 0); list.update();
 assert.equal(counters.rendered, 9, 'clear() resets the dirty state');
+list.clear(); party.state.members.length = 0;
+party.state.members.push({ name: 'Mara', alive: true, on_same_level: true, pos: { x: 8, y: 8 } });
+place(3, 'Mara the Barbarian', 4); place(4, 'Mara the Barbarian', 0); place(5, 'Marauder the orc', 4);
+for (const x of [3, 4, 5]) cells[x + ',0'].t = { bg: {} };
+assert.deepEqual(Array.from(list.contacts(), contact => contact.x), [4, 5],
+    'A friendly proxy is hidden while the map is ahead of its reported position; other creatures stay');
 console.log('Creature list repaints only on monster, message, party, size or clear changes.');

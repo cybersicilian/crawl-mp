@@ -23,6 +23,21 @@ define([], function () {
         contacts.forEach(function (contact) { if (!used.has(contact)) result.push(contact); });
         return result;
     }
+    // Readings arrive with party state and contacts with the map, so a moved
+    // actor briefly has two positions. Merging then shows a second card, or a
+    // reading with no attitude. Native sends no reading for wont_attack actors.
+    function skewed(readings, contacts) {
+        if (!Array.isArray(readings)) return false;
+        var byPosition = new Map(), used = new Set();
+        contacts.forEach(function (contact) { byPosition.set(contact.x + "," + contact.y, contact); });
+        var unmatched = readings.some(function (reading) {
+            if (reading.perception === "last_known") return false;
+            var contact = byPosition.get(reading.x + "," + reading.y);
+            if (contact && contact.name === reading.name) { used.add(contact); return false; }
+            return true;
+        });
+        return unmatched || contacts.some(function (contact) { return !used.has(contact) && contact.att < 2; });
+    }
     function groups(creatures) {
         var groups = [
             { id: "enemies", label: "Enemies", open: true, count: 0, stacks: new Map() },
@@ -42,5 +57,5 @@ define([], function () {
         });
         return groups;
     }
-    return { key: key, category: category, collect: collect, groups: groups };
+    return { key: key, category: category, collect: collect, skewed: skewed, groups: groups };
 });

@@ -25,6 +25,7 @@ function fixture() {
         sent.push({ msg, ...packet }); return true;
     } };
     const blocked = new Set();
+    let busy = false;
     const map = { get(x, y) { return x >= 0 && y >= 0 && x < 80 && y < 80
         ? { t: {}, route_safe: !blocked.has(x + ',' + y) } : {}; }, visible: () => true };
     Object.assign(modules, { jquery: $, comm, client: { is_watching: () => watching }, key_conversion: { codes: {} },
@@ -33,7 +34,7 @@ function fixture() {
         './party-model': { controlledSlot: data => data.controlled_slot,
             inCombat: (data, hero) => data.multiplayer && typeof hero.region_combat === 'boolean'
                 ? hero.region_combat : Boolean(data.combat_locked) }, './map_knowledge': map,
-        './workflow-actions': { reason: hero => hero.can_act ? '' : 'Recovery', setPlanning() {} } });
+        './workflow-actions': { reason: hero => hero.can_act ? '' : 'Recovery', ready: () => !busy, setPlanning() {} } });
     for (const name of ['route-plan', 'tactical-planner']) {
         vm.runInNewContext(fs.readFileSync(path.join(root, name + '.js'), 'utf8'), {
             window, document, console, setTimeout(fn) { timers.set(++sequence, fn); return sequence; },
@@ -48,7 +49,7 @@ function fixture() {
         click(x, y, shiftKey = true) { return planner.click({ which: 1, shiftKey, cell: { x, y }, preventDefault() {} }); },
         acknowledge(x, y) { const id = sent.at(-1).plan_id; member.turns++; member.pos = { x, y };
             emit('party_state_rendered'); emit('game_command_boundary', [id, member.turns]); },
-        set watching(value) { watching = value; }, set mode(value) { mode = value; } };
+        set watching(value) { watching = value; }, set mode(value) { mode = value; }, set busy(value) { busy = value; } };
 }
 {
     const f = fixture();
@@ -124,5 +125,12 @@ for (const interrupt of ['floor', 'control', 'damage', 'disconnect', 'error', 'n
     f.state.combat_locked = false;
     assert.equal(f.click(5, 1, false), true, 'Personal combat still enables the tactical click path');
     assert.equal(f.sent.length, 1);
+}
+{
+    const f = fixture();
+    f.click(2, 1); f.busy = true; f.tool('run');
+    assert.equal(f.sent.length, 0, 'A passing step holds the queue even while the HUD still reads as available');
+    f.busy = false; f.emit('game_actions_changed');
+    assert.equal(f.sent.length, 1, 'The exact command boundary releases it');
 }
 console.log('Planning, FIFO dispatch, native recovery/prompt boundaries, interruption, ownership, limits and cancellation passed.');
