@@ -249,6 +249,11 @@ class ActivityPump:
         elif "queued_action" in member or "queued_action_count" in member:
             member["queued_action"] = None
             member["queued_action_count"] = 0
+        # Peers wait on a person here, not on the network or their own hero.
+        if self.inflight and self.prompt and slot == self.owner:
+            member["prompt_open"] = True
+        elif "prompt_open" in member:
+            member["prompt_open"] = False
 
     def note_party_state(self, state):
         if not isinstance(state, dict):
@@ -360,6 +365,14 @@ class ActivityPump:
         self._sync_views()
         return True
 
+    def hold_for_prompt(self, callback, slot):
+        # An open prompt freezes the whole engine, so this action cannot go
+        # stale while it waits. Keep only the first: a key held through a long
+        # prompt must not arrive as a burst of steps when the prompt closes.
+        if any(entry.slot == slot for entry in self.inputs):
+            return True
+        return self.queue_input(callback, slot)
+
     def clear_queued_input(self, slot, requires_alive_only=False):
         previous = len(self.inputs)
         self.inputs = [entry for entry in self.inputs if entry.slot != slot
@@ -384,6 +397,7 @@ class ActivityPump:
 
     def prompt_boundary(self):
         self.prompt = True
+        self._sync_views()
         # A prompt belongs to the original command, including automated work.
         # Retain that token and deliver only its owner's buffered responses.
         while self.inflight:
@@ -403,6 +417,7 @@ class ActivityPump:
         if request_id is not None and request_id != self.request_id:
             return False
         completed_owner = self.owner
+        prompt_closed = self.prompt
         self.inflight = False
         self.manual = False
         self.owner = None
@@ -411,6 +426,8 @@ class ActivityPump:
         self.last_probe_at = None
         self.prompt_disconnected_at = None
         self.last_prompt_cancel_at = None
+        if prompt_closed:
+            self._sync_views()
         # The exact native completion token also proves COMMAND readiness.
         # Rejected actions can complete without a separate input_mode packet.
         self.streams.native_ready = True

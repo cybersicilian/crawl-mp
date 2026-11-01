@@ -18,6 +18,7 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
     var party_ping_timer = null;
     var prev_member_positions = [];
     var last_members_signature = "";
+    var last_live_signatures = {};
 
     function invalidate_locs(locs)
     {
@@ -50,6 +51,40 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 party_ping_timer = null;
             }
         }, 80);
+    }
+
+    function resource_bar(m, resource)
+    {
+        var $wrap = $("<div class='party-bar-wrap mp-track tr-meter' role='meter' tabindex='0'></div>")
+            .attr({ id: "party_mp_" + m.slot, "data-meter": resource.label === "Heat" ? "heat" : "mp",
+                "aria-label": m.name + " " + resource.label + ": " + (resource.value === null ? "unavailable" : resource.value + " of " + resource.max),
+                "data-resource-state": resource.value === null ? "unknown" : "known" })
+            .attr("data-tip-title", m.name + " " + (resource.label === "Heat" ? "Heat" : "Magic Points"))
+            .attr("data-tip-body", "Current " + resource.label + ": " + model.display(resource.value) + " / " + model.display(resource.max));
+        if (resource.value !== null) $wrap.attr({ "aria-valuemin": 0, "aria-valuemax": resource.max, "aria-valuenow": resource.value });
+        $wrap.append($("<div class='party-mp-fill' aria-hidden='true'></div>").css("width", resource.percent + "%"));
+        $wrap.append($("<div class='party-bar-label'></div>").text(resource.label + " " + model.display(resource.value) + "/" + model.display(resource.max)));
+        if (resource.label === "Heat") {
+            heatHelp.apply($wrap[0], resource);
+            $wrap.attr({ id: "party_heat_" + m.slot, "aria-description": "Hover, tap or press Enter for heat guidance." });
+        }
+        return $wrap;
+    }
+
+    function refresh_live_readings(data)
+    {
+        $.each(data.members, function (idx, m) {
+            var signature = model.liveSignature(data, m);
+            if (last_live_signatures[m.slot] === signature) return;
+            last_live_signatures[m.slot] = signature;
+            var resource = model.magicResource(m);
+            cardStatus.refresh(document.getElementById("party_hp_" + m.slot), cardStatus.health(m));
+            cardStatus.refresh(document.getElementById(resource.label === "Heat" ? "party_heat_" + m.slot : "party_mp_" + m.slot),
+                resource_bar(m, resource));
+            cardStatus.refresh(document.getElementById("party_xp_" + m.slot), cardStatus.activity(m, data));
+            if (resource.label === "Heat")
+                $(".party-member-card[data-party-slot='" + m.slot + "'] .party-heat-guidance").text(heatHelp.caption(resource));
+        });
     }
 
     function handle_party_state(data)
@@ -156,6 +191,10 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
         if (activity) mode_text += " · " + ({ yield: "Yielding", rest: "Resting", explore: "Exploring", travel: "Travelling" }[activity] || activity);
         if (data.multiplayer && data.shared_fate)
             mode_text += " · Shared Fate";
+        var deciding = data.multiplayer && data.members.find(function (member) {
+            return member.prompt_open && member.slot !== controlled_slot;
+        });
+        if (deciding) mode_text += " · Waiting for " + deciding.name;
         $("#party_banner_mode").toggleClass("combat", region_combat).toggleClass("explore", !region_combat);
         dom.text(document.getElementById("party_banner_mode"), mode_text);
 
@@ -285,23 +324,12 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 var $bars = $("<div class='party-bars'></div>");
                 var $hpWrap = cardStatus.health(m);
 
-                var $mpWrap = $("<div class='party-bar-wrap mp-track tr-meter' role='meter' tabindex='0'></div>")
-                    .attr({ id: "party_mp_" + m.slot, "data-meter": resource.label === "Heat" ? "heat" : "mp",
-                        "aria-label": m.name + " " + resource.label + ": " + (resource.value === null ? "unavailable" : resource.value + " of " + resource.max),
-                        "data-resource-state": resource.value === null ? "unknown" : "known" })
+                var $mpWrap = resource_bar(m, resource)
                     .on("click keydown keypress keyup", function (event) {
                         if (event.type.indexOf("key") === 0 && event.key === "Tab") return;
                         event.stopPropagation();
-                    })
-                    .attr("data-tip-title", m.name + " " + (resource.label === "Heat" ? "Heat" : "Magic Points"))
-                    .attr("data-tip-body", "Current " + resource.label + ": " + model.display(resource.value) + " / " + model.display(resource.max));
-                if (resource.value !== null) $mpWrap.attr({ "aria-valuemin": 0, "aria-valuemax": resource.max, "aria-valuenow": resource.value });
-                $mpWrap.append($("<div class='party-mp-fill' aria-hidden='true'></div>").css("width", resource.percent + "%"));
-                $mpWrap.append($("<div class='party-bar-label'></div>").text(resource.label + " " + model.display(resource.value) + "/" + model.display(resource.max)));
+                    });
                 if (resource.label === "Heat") {
-                    heatHelp.apply($mpWrap[0], resource);
-                    $mpWrap.attr({ id: "party_heat_" + m.slot,
-                        "aria-description": "Hover, tap or press Enter for heat guidance." });
                     $mpWrap.on("click keydown keypress keyup", function (event) {
                         if (event.key !== "Tab") event.stopPropagation();
                         if (event.type === "click" || event.type === "keydown" && ["Enter", " "].includes(event.key)) {
@@ -437,7 +465,13 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
             var restoredCardControl = document.getElementById(focusedCardControl);
             if (restoredCardControl) restoredCardControl.focus({ preventScroll: true });
             minimap.fit_to($("#hud_minimap").width());
+            last_live_signatures = {};
+            $.each(data.members, function (idx, m) {
+                last_live_signatures[m.slot] = model.liveSignature(data, m);
+            });
         }
+        else
+            refresh_live_readings(data);
         initiative.update($members, data);
         turnOrder.update(data);
         navigation.update();

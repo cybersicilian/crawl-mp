@@ -160,6 +160,24 @@ No production staging or activation was performed: automatic approval review
 rejected uploading the release and launching the privileged staging job without
 explicit production-deployment authorization.
 
+## Partner activity
+
+A partner's action reaches every player's HUD, so its cost repeats on every
+client. Hit points, magic, experience progress, recovery, queue state and the
+next-to-act slot change with nearly every action; they update in place instead
+of rebuilding the party cards. The live nodes keep focus, open tooltips and
+running hit animations. `model.cardSignature` covers facts that change a card's
+structure and `model.liveSignature` covers per-action readings. With two heroes
+in a real game page, total work per update fell from about 20 ms to 6 ms.
+
+Key auto-repeat stops while a multiplayer hero is waiting. A held key steps
+whenever the hero can act, and stops with the key instead of leaving up to 32
+queued moves. Fresh presses still queue, and menus keep auto-repeat.
+
+`tests/multiplayer-smoothness-native.cjs` drives two real browsers through a
+walking hero, both heroes walking, held keys, a partner's open prompt, shared
+combat and separate floors. Run it through the shared heavy gate.
+
 ## Dungeon frame updates
 
 Map state still merges immediately. Map, party, camera, local cursor and peer

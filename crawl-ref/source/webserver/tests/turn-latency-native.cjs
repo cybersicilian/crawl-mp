@@ -62,8 +62,10 @@ let browser, page, profiler;
         };
     });
     await page.locator('#lobby_home [data-lobby-create]').click();
-    for (let slot = 1; slot < 4; slot++)
+    for (let slot = 1; slot < 4; slot++) {
+        await page.locator(`#party_seat_tab_${slot}`).click();
         await page.locator(`.party-slot-box[data-slot='${slot}'] [data-mode='companion']`).click();
+    }
     await page.locator('#btn_launch_party_room').click();
     await page.waitForFunction(() => window.crawl_party?.state?.members?.length === 4, null, { timeout: 120000 });
     await page.waitForFunction(() => {

@@ -1,7 +1,7 @@
 define(["jquery", "exports", "comm", "client", "key_conversion", "./dungeon_renderer",
         "./display", "./minimap", "./enums", "./messages", "./options",
         "./mouse_control", "./party", "./party-inspector", "./party-rpg-stats", "library-ui", "./game-context", "./hud-layout", "./text", "./menu", "./action_panel",  "./player",
-        "./ui","./ui-layouts", "./adventure-ui", "./direction-pad"],
+        "./ui","./ui-layouts", "./adventure-ui", "./direction-pad", "./held-key-guard"],
 function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         minimap, enums, messages, options, mouse_control, party, inspector, rpgStats, library, context, hud) {
     "use strict";

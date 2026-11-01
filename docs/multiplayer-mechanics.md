@@ -141,9 +141,13 @@ execution, save packages and state-frame encoder remain shared implementations.
 Native modal interactions still execute on one engine call stack. Only the
 initiating hero can answer its prompt, including text responses and menu
 acknowledgements. Another player can keep their personal view and client-side
-inspection; an overlapping native action receives a waiting result until the
-current native interaction finishes. This is serialized native execution, not
-independent simultaneous native menu stacks.
+inspection. Their first overlapping action waits and runs as a new command when
+the interaction finishes; the engine is modal, so it cannot go stale while it
+waits. Further keys are dropped so a held key cannot arrive as a burst, and
+Escape clears the waiting action. The party banner names who everyone is
+waiting for. Other requests, such as saving, still receive a waiting result.
+This is serialized native execution, not independent simultaneous native menu
+stacks.
 
 A late join claims an available character or appends exactly one reserved human
 character. Anonymous watchers must log in before reserving a character so the
