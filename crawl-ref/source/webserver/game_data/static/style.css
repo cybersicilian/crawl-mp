@@ -51,6 +51,7 @@
 @import url("styles/art-direction-journal.css");
 @import url("/static/tabletop/status-icons.css");
 @import url("styles/premium-presentation.css");
+@import url("styles/play-guidance.css");
 /* Tactics-RPG shell: shared component vocabulary, then the gameplay shell that settles the HUD layers. */
 @import url("/static/tabletop/tactics-components.css");
 @import url("styles/combat-log.css");

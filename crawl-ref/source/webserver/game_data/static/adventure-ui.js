@@ -1,5 +1,5 @@
-define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys", "./mission-bar", "./action-feedback"],
-function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys, missionBar, feedback) {
+define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys", "./mission-bar", "./action-feedback", "./pointer-intent", "./play-guide"],
+function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys, missionBar, feedback, pointerIntent, playGuide) {
     "use strict";
     var statusObserver;
 
@@ -58,6 +58,8 @@ function ($, comm, chat, client, icons, polish, encyclopedia, library, controls,
         bottomStrip.init();
         premium.init();
         floorItems.init();
+        pointerIntent.init();
+        playGuide.init();
         workspace.init();
         iconography.init();
         hudPolish.init();

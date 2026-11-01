@@ -296,5 +296,10 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
             active = false; reset(); if (unsubscribe) unsubscribe(); unsubscribe = null;
             $("#tactical_planner").remove();
         });
-    return { click: click, view: view, clear: clear, init: init };
+    function preview(target) {
+        var member = hero();
+        return member && member.pos && canPlan() && !queue.length && !pending
+            ? routes.route(member.pos, target, passable) : null;
+    }
+    return { click: click, view: view, clear: clear, init: init, preview: preview };
 });

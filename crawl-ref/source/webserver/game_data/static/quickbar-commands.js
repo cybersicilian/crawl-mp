@@ -1,5 +1,5 @@
-define(["jquery", "comm", "./workflow-actions", "./party-model", "./status-icons", "./menu-keyboard"],
-function ($, comm, actions, party, icons, keyboard) {
+define(["jquery", "comm", "./workflow-actions", "./party-model", "./status-icons", "./menu-keyboard", "./attack-info"],
+function ($, comm, actions, party, icons, keyboard, attackInfo) {
     "use strict";
     // Native keycodes come from cmd-keys.h. Keep command metadata separate from
     // the palette presentation and route actions through the existing gates.
@@ -8,8 +8,12 @@ function ($, comm, actions, party, icons, keyboard) {
             words: "search stashes shops equipment", description: "Search discovered items and shops throughout the dungeon." },
         { id: "shopping", name: "Shopping List", code: 36, key: "$", icon: "coin",
             words: "gold money buy store wishlist", description: "Review planned purchases, or show your gold when the list is empty." },
-        { id: "travel", name: "Travel to Level", code: 71, key: "G", icon: "navigate",
-            words: "branch stairs go", description: "Choose a discovered destination using native dungeon travel." },
+        { id: "travel", name: "Go", code: 71, key: "G", icon: "navigate",
+            words: "go travel walk stairs level floor branch destination where",
+            description: "Walk to the nearest stairs, or choose any discovered floor or branch." },
+        { id: "attack_info", name: "Attack Info", key: "@", icon: "blade",
+            words: "attack damage weapon speed delay character status stats",
+            description: "See your damage, attack speed and how to attack. Takes no turn." },
         { id: "overview", name: "Dungeon Overview", code: 15, key: "Ctrl+O", icon: "overview",
             words: "branches altars portals shops", description: "Review discovered branches, altars, portals, and shops." },
         { id: "examine", name: "Examine Surroundings", code: 120, key: "x", icon: "eye",
@@ -50,6 +54,8 @@ function ($, comm, actions, party, icons, keyboard) {
         if (command.id === "exclude" && !window.crawl_party.state.tile_exclusions) return;
         close();
         if (command.id === "exclude") $(document).trigger("tile_exclusion_mode");
+        else if (command.id === "travel" && document.getElementById("workflow_go_btn")) $("#workflow_go_btn").trigger("click");
+        else if (command.id === "attack_info") attackInfo.open(hero());
         else comm.send_message("key", { keycode: command.code });
     }
     function findShortcut(event) {

@@ -29,7 +29,7 @@ const directions = [
         await page.evaluate(() => {
             window.qaPackets = []; window.qaSession = { watching: false, party_member_active: false };
             window.qaUiState = 0;
-            window.modules = { jquery: window.jQuery,
+            window.modules = { jquery: window.jQuery, './status-icons': { icon: () => document.createElement('span') },
                 client: { is_watching: () => window.qaSession.watching }, chat: { focus() {} },
                 './game-context': { get_ui_state: () => window.qaUiState } };
             window.define = (deps, factory) => {
@@ -81,8 +81,21 @@ const directions = [
             return viewport.right - pad.right === 10 && viewport.bottom - pad.bottom === 10;
         });
         assert.deepEqual(await alignment(), { right: 10, bottom: 10 }, 'Follow frame resizing without resizing canvas');
-        assert.equal(await page.locator('#direction_pad button').count(), 8);
-        assert.equal(await page.locator('.direction-pad-center').innerText(), '');
+        assert.equal(await page.locator('#direction_pad .direction-pad-button').count(), 8);
+        const toggle = page.locator('.direction-pad-toggle');
+        assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
+        await toggle.click();
+        assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+        assert.equal(await toggle.getAttribute('aria-label'), 'Show direction pad');
+        assert.equal(await page.locator('#direction_pad .direction-pad-button:visible').count(), 0);
+        await page.waitForFunction(() => {
+            const pad = document.getElementById('direction_pad').getBoundingClientRect();
+            const viewport = document.getElementById('dungeon_viewport').getBoundingClientRect();
+            return pad.width < 60 && viewport.right - pad.right === 10 && viewport.bottom - pad.bottom === 10;
+        });
+        assert.deepEqual(await packets(), [], 'Minimizing sends no game input');
+        await toggle.click();
+        assert.equal(await page.locator('#direction_pad .direction-pad-button:visible').count(), 8);
         assert.equal(await page.locator('.direction-pad-legend').count(), 0);
         for (const [name, letter, numpad, navigation] of directions) {
             const button = page.locator('[data-direction="' + name + '"]');

@@ -24,6 +24,9 @@ function ($, initiative, party, frameUpdate, model, view, enums, map, cells, mai
         var layout = model.layout(bounds, doom && doom.getBoundingClientRect(), { width: window.innerWidth, height: window.innerHeight });
         var viewport = document.getElementById("dungeon_viewport");
         var bottom = viewport ? viewport.getBoundingClientRect().bottom : window.innerHeight;
+        // The hero card can sit at the very top of the rail; stay under the mission bar.
+        if (!layout.compact && viewport)
+            layout.top = Math.max(layout.top, viewport.getBoundingClientRect().top + 8);
         if (!layout.compact) {
             layout.maxHeight = Math.max(0, Math.min(layout.maxHeight, bottom - layout.top - 8));
             if (layout.maxHeight < 100) layout.compact = true;

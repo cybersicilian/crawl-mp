@@ -1,7 +1,7 @@
 /* Screen overlay follows native map-space geometry, including zoom and Retina. */
 define(["jquery", "./tactical-planner", "./frame-update"], function ($, planner, frameUpdate) {
     "use strict";
-    var renderer, canvas;
+    var renderer, canvas, hovered = null;
     var slot_colours = ["#fce94f", "#34e2e2", "#8ae234", "#ad7fa8"];
     function clear() { if (canvas) canvas.remove(); canvas = null; }
     function controlled() {
@@ -19,6 +19,9 @@ define(["jquery", "./tactical-planner", "./frame-update"], function ($, planner,
         var plan = planner.view(), entries = (plan.pending ? [plan.pending] : []).concat(plan.entries);
         var points = plan.origin ? [plan.origin] : [];
         entries.forEach(function (entry) { if (entry.point) points.push(entry.point); });
+        // A hover preview never competes with a real queued plan.
+        var previewing = points.length < 2 && hovered && hovered.length > 1;
+        if (previewing) points = hovered;
         if (points.length < 2) { clear(); return; }
         if (!canvas) {
             canvas = document.createElement("canvas"); canvas.className = "planned-route";
@@ -30,6 +33,7 @@ define(["jquery", "./tactical-planner", "./frame-update"], function ($, planner,
             width: bounds.width + "px", height: bounds.height + "px" });
         var ctx = canvas.getContext("2d"), ratio = canvas.width / Math.max(1, bounds.width);
         var member = controlled(), colour = member ? slot_colours[member.slot % slot_colours.length] : "#89dce6";
+        canvas.classList.toggle("is-preview", Boolean(previewing));
         var unit = centre(points[0]).unit, width = Math.max(2 * ratio, unit * 0.07);
         // Dark halo under the dashed line keeps it readable over bright floors.
         [["rgba(0,0,0,0.7)", width + 2 * ratio], [plan.running ? colour : colour + "cc", width]].forEach(function (pass) {
@@ -42,6 +46,7 @@ define(["jquery", "./tactical-planner", "./frame-update"], function ($, planner,
             }); ctx.stroke();
         });
         ctx.setLineDash([]);
+        if (previewing) return;
         var pendingIndex = plan.pending ? 0 : -1, last = points.length - 2;
         points.slice(1).forEach(function (point, index) {
             if (!renderer.in_view(point.x, point.y)) return;
@@ -61,7 +66,8 @@ define(["jquery", "./tactical-planner", "./frame-update"], function ($, planner,
     }
     var refresh = frameUpdate(draw);
     $(document).on("action_plan_changed.plannedRoute game_camera_changed.plannedRoute hud_workspace_changed.plannedRoute game_ui_changed.plannedRoute", refresh)
-        .on("game_cleanup.plannedRoute game_connection_lost.plannedRoute", function () { refresh.cancel(); clear(); });
+        .on("game_cleanup.plannedRoute game_connection_lost.plannedRoute", function () { refresh.cancel(); hovered = null; clear(); });
     $(window).on("resize.plannedRoute", refresh);
-    return { attach: function (view) { renderer = view; } };
+    return { attach: function (view) { renderer = view; },
+        preview: function (points) { hovered = points; refresh(); } };
 });

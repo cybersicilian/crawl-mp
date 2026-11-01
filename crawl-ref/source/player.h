@@ -1245,6 +1245,7 @@ bool will_gain_life(int lev);
 
 bool dur_expiring(duration_type dur);
 void display_char_status();
+string attack_delay_description(const item_def *offhand);
 
 void forget_map(bool rot = false);
 

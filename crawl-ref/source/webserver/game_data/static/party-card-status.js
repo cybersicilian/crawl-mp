@@ -51,8 +51,8 @@ function ($, model, icons, faith, portraitStatus, properties) {
                     "data-tip-meta": bane.recovery })
                 .on("click keydown keypress keyup", function (event) { event.stopPropagation(); }));
         });
-        if (!banes.entries.length) $banes.append($("<span class='party-bane-empty'></span>")
-            .text(banes.known ? "None" : "Unavailable"));
+        if (!banes.entries.length) $banes.toggleClass("is-empty", banes.known)
+            .append($("<span class='party-bane-empty'></span>").text(banes.known ? "None" : "Unavailable"));
         $root.append($banes);
         var $row = $("<div class='party-effect-strip' role='group' aria-label='Active effects'></div>");
         var $active = $("<div class='party-effect-group' role='group' aria-label='Buffs and active effects'></div>");

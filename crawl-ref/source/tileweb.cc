@@ -3467,6 +3467,22 @@ void TilesFramework::_send_party_state()
                 + move_divisor / 2) / move_divisor);
         const random_var atk_del = you.attack_delay();
         json_write_int("atk_aut", (atk_del.min() + atk_del.max()) / 2);
+        json_open_object("attack_info");
+        json_write_string("delay", attack_delay_description(you.offhand_weapon()));
+        json_open_array("damage");
+        vector<const item_def*> attack_items = { you.weapon() };
+        if (you.offhand_weapon())
+            attack_items.push_back(you.offhand_weapon());
+        for (const item_def* weapon : attack_items)
+        {
+            json_open_object();
+            json_write_string("name", weapon ? weapon->name(DESC_PLAIN)
+                                             : string("unarmed combat"));
+            json_write_string("rating", damage_rating(weapon));
+            json_close_object();
+        }
+        json_close_array();
+        json_close_object();
         json_write_int("speed_stat", player_speed());
         json_write_int("adjusted_noise", p.get_noise_perception(true));
         json_write_int("turns", p.num_turns);

@@ -1,12 +1,12 @@
-define(["jquery", "comm", "client", "./workflow-actions", "./minimap", "./power-picker", "./frame-update", "./party-model", "./inspection-dialog", "./game-context", "./enums"],
-function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, inspection, game, enums) {
+define(["jquery", "comm", "client", "./workflow-actions", "./minimap", "./power-picker", "./frame-update", "./party-model", "./inspection-dialog", "./game-context", "./enums", "./attack-info", "./go-menu"],
+function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, inspection, game, enums, attackInfo, goMenu) {
     "use strict";
     var camera = null, compactChoice = null;
     var labels = { o: "Explore", "\t": "Fight", "5": "Rest", g: "Pick up",
-        i: "Inventory", z: "Cast", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "<": "Up stairs", ">": "Down stairs" };
+        i: "Inventory", z: "Cast", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "<": "Up stairs", ">": "Down stairs", G: "Go" };
     // Keys the engine only accepts for the controlling hero's own turn.
     var turnKeys = ["o", "\t", "5", "g"];
-    var sectionKeys = { i: "equipment", I: "abilities", "@": "overview", X: "map",
+    var sectionKeys = { i: "equipment", I: "abilities", "@": "attack", X: "map",
         m: "skills", A: "mutations", "%": "overview", z: "abilities", a: "abilities" };
     function party() { return window.crawl_party && window.crawl_party.state; }
     function rename(button, label) {
@@ -32,6 +32,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
             inspection.showContent("Level map", canvas, "Your explored map at opening. Viewing takes no turn.");
             return;
         }
+        if (section === "attack") { attackInfo.open(current()); return; }
         if (key === "z" || key === "a") { powerPicker.open(key === "z" ? "spell" : "ability"); return; }
         if (window.crawl_party && window.crawl_party.open_inspector)
             window.crawl_party.open_inspector(actions.controlledSlot(), section);
@@ -74,14 +75,17 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         $("#party_add_btn, #party_join_btn").appendTo(groups.expedition);
         dock.querySelectorAll("[data-dock-key]").forEach(function (button) {
             var key = button.getAttribute("data-dock-key");
-            var group = ["o", "5", "g", "<", ">"].includes(key) ? "exploration"
+            var group = ["o", "5", "g", "<", ">", "G"].includes(key) ? "exploration"
                 : ["\t", "z", "a"].includes(key) ? "combat" : "character";
             groups[group].appendChild(button);
             rename(button, labels[key] || button.textContent);
             if (sectionKeys[key]) $(button).off("click.workflow").on("click.workflow", function (event) {
-                if (["i", "I", "@", "X"].includes(key) && !actions.reason(current())) return;
+                if (["i", "I", "X"].includes(key) && !actions.reason(current())) return;
                 event.stopPropagation(); event.preventDefault(); openSection(sectionKeys[key], key);
             });
+        });
+        $("#workflow_go_btn").off("click.workflow").on("click.workflow", function (event) {
+            event.stopPropagation(); event.preventDefault(); goMenu.open(event);
         });
         var sheet = document.getElementById("dock_party_sheet_btn");
         if (sheet) { groups.character.appendChild(sheet); rename(sheet, "Character"); }
@@ -144,6 +148,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         if (!state || !member || !document.getElementById("workflow_compact_btn")) return;
         var compact = compactChoice === null ? window.innerHeight <= 900 && state.members.length > 2 : compactChoice;
         document.body.classList.toggle("workflow-compact-roster", compact);
+        document.body.classList.toggle("workflow-solo-party", state.members.length === 1 && !state.multiplayer);
         var compactLabel = compact ? "Show details" : "Compact roster";
         var $compactBtn = $("#workflow_compact_btn").attr("aria-pressed", String(compact));
         if ($compactBtn.attr("data-compact-label") !== compactLabel) {
@@ -217,7 +222,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         .on("game_camera_changed.workflow", function (event, center) { camera = center; refresh(); })
         .on("game_cleanup.workflowControls", function () {
             refresh.cancel(); cancelPing(); camera = null; compactChoice = null;
-            document.body.classList.remove("workflow-compact-roster", "workflow-playing");
+            document.body.classList.remove("workflow-compact-roster", "workflow-solo-party", "workflow-playing");
         }).on("party_ping_mode.workflowPing", pingState);
     document.addEventListener("keydown", function (event) {
         // Message-only prompts (including level-up stats) have no UI popup.
@@ -238,7 +243,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         if (!sectionKeys[event.key] || !current() || client.is_watching()
             || event.isComposing || event.ctrlKey || event.altKey || event.metaKey || $("#ui-stack > *, dialog[open]").length
             || $(event.target).closest("input, textarea, select, [contenteditable='true'], #chat").length) return;
-        if (["i", "I", "@", "X"].includes(event.key) && !actions.reason(current())) return;
+        if (["i", "I", "X"].includes(event.key) && !actions.reason(current())) return;
         event.preventDefault(); event.stopImmediatePropagation();
         if (!event.repeat) openSection(sectionKeys[event.key], event.key);
     }, true);

@@ -313,7 +313,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         // Move existing controls, preserving their handlers and native shortcuts.
         $dock.find(".workflow-action-group").appendTo("#quickbar_commands");
         // Primary row: the eight verbs a hero uses every floor, in play order.
-        ["o", "\t", "5", "g", "<", ">", "i", "z", "a"].forEach(function (key) {
+        ["o", "\t", "5", "g", "<", ">", "G", "i", "z", "a"].forEach(function (key) {
             $dock.find("[data-dock-key]").filter(function () { return this.dataset.dockKey === key; }).appendTo("#quickbar_primary");
         });
         var $commands = $("#quickbar_commands");

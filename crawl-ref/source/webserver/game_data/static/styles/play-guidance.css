@@ -1,0 +1,123 @@
+/* Space rule: the rail is one flex column. Cards keep their natural height, the plan
+   stays at the bottom, and the guide takes whatever height is left, so no party size
+   or window height leaves a gap. The hero card is one matrix with one left edge. */
+
+/* ---- Rail ---- */
+#normal #hud_sidebar_scroll { display: flex; flex-direction: column; }
+#normal #party_hud { flex: 1 0 auto; display: flex; flex-direction: column; min-height: 0; }
+#normal #party_hud > * { flex: 0 0 auto; }
+#normal #party_hud > #play_guide { flex: 1 1 auto; }
+.workflow-solo-party #normal :is(#party_ping_toolbar, #party_turn_order) { display: none; }
+
+#play_guide {
+    display: flex; flex-direction: column; gap: 6px; box-sizing: border-box;
+    min-height: 96px; margin: 6px 0; padding: 8px 10px;
+    border: 1px solid var(--art-brass-dim, #a98d5655); border-radius: 3px;
+    background: #171c20; color: var(--tt-muted, #c9c4b2);
+}
+#play_guide[data-tone='danger'] { border-color: #b4574a; }
+#play_guide[data-tone='combat'] { border-color: #a9804c; }
+#play_guide h2 { margin: 0; color: #d9cfae; font: 600 11px/1.3 var(--tt-font-ui, sans-serif); letter-spacing: .08em; text-transform: uppercase; }
+.play-guide-reason { margin: 0; color: #e6e1d0; font: 12px/1.4 var(--tt-font-ui, sans-serif); overflow-wrap: anywhere; }
+.play-guide-steps { display: flex; flex-wrap: wrap; gap: 4px; }
+#normal .play-guide-step {
+    display: inline-flex; flex: 1 1 auto; align-items: center; gap: 6px; box-sizing: border-box; min-width: 0; min-height: 30px;
+    padding: 3px 8px; border: 1px solid #a98d5650; border-radius: 3px; background: #242b2e; color: #e6e1d0;
+    font: 500 12px/1.2 var(--tt-font-ui, sans-serif); cursor: pointer;
+}
+#normal .play-guide-step.is-primary { flex-basis: 100%; min-height: 36px; border-color: #dec88c; background: #39402f; font-weight: 600; }
+#normal .play-guide-step.is-primary[data-tone='danger'] { border-color: #e08b78; background: #4d2a26; }
+#normal .play-guide-step:hover { background: #343c36; border-color: #e0c68a; }
+#normal .play-guide-step:focus-visible { outline: 2px solid #ffe3a2; outline-offset: 1px; }
+.play-guide-step .tt-icon { flex: 0 0 16px; width: 16px; height: 16px; }
+.play-guide-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+#normal .play-guide-step kbd { flex: 0 0 auto; padding: 0 4px; border: 1px solid #a98d5660; border-radius: 2px; background: #11171b; color: #cfb978; font: 10px/15px var(--tt-font-mono, monospace); }
+.play-guide-controls { display: grid; gap: 3px; margin: auto 0 0; padding-top: 6px; border-top: 1px solid #a98d5630; }
+.play-guide-controls > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); align-items: baseline; gap: 8px; }
+.play-guide-controls dt { margin: 0; }
+.play-guide-controls dd { margin: 0; font: 11px/1.35 var(--tt-font-ui, sans-serif); }
+#normal .play-guide-controls kbd { color: #cfb978; font: 10px/1.3 var(--tt-font-mono, monospace); }
+/* Only a lone hero's free rail height earns the reference; the next step always stays. */
+body:not(.workflow-floor-in-rail) :is(.play-guide-controls, .play-guide-tip) { display: none; }
+@media (max-height: 1000px) { .play-guide-tip { display: none; } }
+.play-guide-tip { margin: 2px 0 0; color: var(--tt-muted, #c9c4b2); font: italic 12px/1.4 var(--tt-font-ui, sans-serif); }
+
+/* The tile panel moves here for a lone hero; the log takes its footer column. */
+body.workflow-floor-in-rail #normal #hud_bottom_row:not(#hud_floor_items) { grid-template-columns: 148px minmax(0, 1fr); }
+body.workflow-floor-in-rail #normal #hud_bottom_row:has(#hud_bottom_map.hud-floating):not(#hud_floor_items) { grid-template-columns: minmax(0, 1fr); }
+.play-guide-floor:empty { display: none; }
+#play_guide #hud_floor_items { margin: 2px -10px 0; border: 0; border-top: 1px solid #a98d5630; background: none; }
+#play_guide .floor-item-list { max-height: 132px; }
+
+/* The suggested action is lit in the action row too. */
+#normal #quickbar_primary .dcss-dock-btn.is-suggested:not(:disabled) { border-color: #dec88c; box-shadow: inset 0 0 0 1px #dec88c66; }
+
+/* ---- Hero card ---- */
+/* Header: portrait beside identity; reading chips and faith share one line. */
+#normal .is-controlled-card.party-icon-first { grid-template-columns: 48px minmax(0, 1fr); gap: 4px 10px; }
+#normal .is-controlled-card.party-icon-first > .party-member-meta { gap: 3px 8px; }
+#normal .is-controlled-card .party-icon-meta { flex: 0 1 auto; }
+#normal .is-controlled-card .party-faith-row { flex: 1 1 auto; min-height: 20px; align-items: center; }
+#normal .is-controlled-card .party-member-timing { margin-left: auto; }
+/* Every reading below the header sits in the same three columns. */
+#normal .is-controlled-card > .party-self-details { margin: 4px 0 0; }
+#normal .is-controlled-card .hud-stats-details { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 0; }
+#normal .is-controlled-card .hud-stat-cluster { display: contents; }
+#normal .is-controlled-card .hud-stat-cluster-title { display: none; }
+#normal .is-controlled-card .hud-hazard-row, #normal .is-controlled-card #stats_wizmode { grid-column: 1 / -1; }
+#normal .is-controlled-card .hud-hazard-row:empty { display: none; }
+#normal .is-controlled-card .personal-stat-reading { box-sizing: border-box; min-width: 0; min-height: 26px; padding: 0 6px; }
+#normal .is-controlled-card .personal-stat-context:empty { display: none; }
+#normal .is-controlled-card.party-icon-first .party-icon-utility {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; align-items: center; min-height: 0;
+}
+#normal .is-controlled-card .party-icon-utility > .party-icon-reading { order: 0; box-sizing: border-box; min-height: 26px; padding: 0 6px; gap: 4px; }
+#normal .is-controlled-card .party-icon-utility .party-reading-label { flex: 0 0 auto; white-space: nowrap; }
+#normal .is-controlled-card .party-icon-utility .party-icon-reading > :last-child { min-width: 0; }
+#normal .is-controlled-card .party-icon-utility > .party-loadout { grid-column: 1 / span 2; order: 2; }
+#normal .is-controlled-card .party-icon-utility > .party-quiver-shortcut { grid-column: 3; order: 3; justify-self: start; }
+#normal .is-controlled-card .party-icon-utility > :is(.party-card-status, .party-passive-strip) { grid-column: 1 / -1; }
+.party-bane-strip.is-empty { display: none; }
+
+/* ---- Top bar ---- */
+#normal #party_progress > .party-context-stat[hidden] { display: none !important; }
+
+/* ---- Pointer ---- */
+#hud_floor_items .floor-item-list { flex: 0 1 auto; }
+.pointer-readout { flex: 1 1 auto; display: grid; align-content: start; gap: 3px; min-height: 0; margin: 0; padding: 6px 8px; overflow: hidden; border-top: 1px solid #a98d5630; }
+.pointer-heading { display: flex; align-items: baseline; gap: 6px; min-width: 0; margin: 0; color: #e6e1d0; font: 600 12px/1.3 var(--tt-font-ui, sans-serif); }
+.pointer-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pointer-readout[data-intent='idle'] .pointer-heading { color: var(--tt-muted, #c9c4b2); font-weight: 400; }
+.pointer-threat { flex: 0 0 auto; color: #e0a06a; font-size: 11px; }
+.pointer-readout[data-intent='attack'] .pointer-left { color: #f0a08a; font-weight: 600; }
+.pointer-readout dd { display: grid; grid-template-columns: 72px minmax(0, 1fr); align-items: baseline; gap: 6px; margin: 0; font: 11px/1.3 var(--tt-font-ui, sans-serif); }
+.pointer-readout dd[hidden] { display: none; }
+.pointer-readout dd > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#normal .pointer-readout kbd { padding: 0; border: 0; background: none; box-shadow: none; color: #cfb978; font: 10px/1.3 var(--tt-font-mono, monospace); }
+#dungeon[data-pointer-intent='walk'], #dungeon[data-pointer-intent='stairs'], #dungeon[data-pointer-intent='door'] { cursor: pointer; }
+#dungeon[data-pointer-intent='item'] { cursor: grab; }
+#dungeon[data-pointer-intent='solid'] { cursor: not-allowed; }
+#dungeon[data-pointer-intent='blocked'] { cursor: wait; }
+#dungeon:is([data-pointer-intent='ally'], [data-pointer-intent='neutral']) { cursor: help; }
+#dungeon[data-pointer-intent='target'] { cursor: crosshair; }
+#dungeon[data-pointer-intent='attack'] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cg fill='none' stroke='%23000' stroke-width='4'%3E%3Ccircle cx='16' cy='16' r='10'/%3E%3Cpath d='M16 2v9M16 21v9M2 16h9M21 16h9'/%3E%3C/g%3E%3Cg fill='none' stroke='%23ff5a4a' stroke-width='2'%3E%3Ccircle cx='16' cy='16' r='10'/%3E%3Cpath d='M16 2v9M16 21v9M2 16h9M21 16h9'/%3E%3C/g%3E%3C/svg%3E") 16 16, crosshair;
+}
+canvas.planned-route.is-preview { opacity: .65; }
+
+/* ---- Attack card ---- */
+.attack-info { display: grid; gap: 14px; min-width: min(460px, 80vw); }
+.attack-info h2 { margin: 0 0 6px; font: 600 12px/1.3 var(--tt-font-ui, sans-serif); letter-spacing: .06em; text-transform: uppercase; }
+.attack-info-weapon h2 { margin: 0; font: 600 16px/1.3 var(--tt-font-title, Georgia, serif); letter-spacing: 0; text-transform: none; }
+.attack-info-weapon header { margin-bottom: 8px; }
+.attack-info-slot { font: 600 10px/1.3 var(--tt-font-ui, sans-serif); letter-spacing: .08em; opacity: .75; text-transform: uppercase; }
+.attack-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.attack-info-tile { display: grid; gap: 2px; align-content: start; padding: 8px; border: 1px solid #8c714c55; border-radius: 3px; }
+.attack-info-tile strong { font: 600 19px/1.2 var(--tt-font-title, Georgia, serif); }
+.attack-info-label { font: 600 10px/1.3 var(--tt-font-ui, sans-serif); letter-spacing: .05em; text-transform: uppercase; }
+.attack-info-tile small { font: 11px/1.3 var(--tt-font-ui, sans-serif); opacity: .8; }
+.attack-info-detail, .attack-info-note { margin: 8px 0 0; font: 12px/1.45 var(--tt-font-ui, sans-serif); overflow-wrap: anywhere; }
+.attack-info-how { display: grid; gap: 4px; margin: 0; }
+.attack-info-how > div { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: baseline; gap: 10px; }
+.attack-info-how dt, .attack-info-how dd { margin: 0; }
+@media (max-width: 520px) { .attack-info-grid { grid-template-columns: minmax(0, 1fr); } }

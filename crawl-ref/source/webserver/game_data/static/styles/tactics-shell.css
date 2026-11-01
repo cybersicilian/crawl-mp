@@ -371,7 +371,6 @@
 #normal .direction-pad-button:focus-visible { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
 .direction-pad-keys { color: var(--shell-muted); }
 .direction-pad-keys kbd { font-family: var(--shell-mono); }
-.direction-pad-center { border-radius: 5px; background: color-mix(in srgb, var(--shell-recess) 70%, transparent); }
 
 /* ---- Mobile input helper and HUD arrangement mode ----------------------- */
 #normal #mobile_input { padding: 4px 8px; background: var(--shell-panel); border-top: 1px solid var(--shell-rule); }

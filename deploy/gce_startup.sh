@@ -7,7 +7,7 @@ DOMAIN="${3:?Domain required}"
 PORT="${4:-8080}"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y --no-install-recommends advancecomp bison build-essential ca-certificates curl debian-keyring debian-archive-keyring apt-transport-https gnupg flex git liblua5.4-dev libncursesw5-dev libpng-dev libsqlite3-dev pkg-config pngcrush python3 python3-tornado python3-yaml rsync zlib1g-dev
+apt-get install -y --no-install-recommends advancecomp bison brotli build-essential ca-certificates curl debian-keyring debian-archive-keyring apt-transport-https gnupg flex git liblua5.4-dev libncursesw5-dev libpng-dev libsqlite3-dev pkg-config pngcrush python3 python3-pil python3-tinycss2 python3-tornado python3-yaml rsync webp zlib1g-dev
 if ! command -v caddy >/dev/null; then
     curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key -o /tmp/caddy.gpg
     gpg --dearmor --yes -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg /tmp/caddy.gpg

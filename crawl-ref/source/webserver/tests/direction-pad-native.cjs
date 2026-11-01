@@ -57,7 +57,7 @@ for (const [, letter, numpad, command] of directions) {
         await page.waitForFunction(() => window.crawl_party?.state?.members?.length === 4, null, { timeout: 300000 });
         await ready();
         await page.locator('#direction_pad').waitFor();
-        assert.equal(await page.locator('#direction_pad button').count(), 8);
+        assert.equal(await page.locator('#direction_pad .direction-pad-button').count(), 8);
         const clock = await page.evaluate(() => window.crawl_party.state.world_aut_clock);
         await page.evaluate(() => {
             window.directionPackets = [];
@@ -112,7 +112,7 @@ for (const [, letter, numpad, command] of directions) {
                 for (const [name, change] of cases) {
                     change();
                     document.querySelector('[data-direction="north"]').click();
-                    results.push({ name, blocked: document.querySelectorAll('#direction_pad button:disabled').length === 8,
+                    results.push({ name, blocked: document.querySelectorAll('#direction_pad .direction-pad-button:disabled').length === 8,
                         packets: window.directionPackets.splice(0) });
                     Object.assign(state, { combat_locked: original.combat_locked, simultaneous_turns: original.simultaneous_turns,
                         active_slot: original.active_slot });
@@ -121,7 +121,7 @@ for (const [, letter, numpad, command] of directions) {
                     jQuery('#direction_test_popup').remove();
                     jQuery(document).trigger('game_input_changed', [enums.mouse_mode.COMMAND]);
                     // The next case deliberately starts with an enabled stale rendering.
-                    jQuery('#direction_pad button').prop('disabled', false);
+                    jQuery('#direction_pad .direction-pad-button').prop('disabled', false);
                 }
             } finally { client.is_watching = watching; }
             return results;
@@ -139,7 +139,7 @@ for (const [, letter, numpad, command] of directions) {
                 };
                 return { pad: rect('direction_pad'), canvas: rect('dungeon'), dock: rect('dcss_quick_dock'),
                     visible: getComputedStyle(document.getElementById('direction_pad')).visibility,
-                    targets: [...document.querySelectorAll('#direction_pad button')].map(element => {
+                    targets: [...document.querySelectorAll('#direction_pad .direction-pad-button')].map(element => {
                         const r = element.getBoundingClientRect(); return { width: r.width, height: r.height };
                     }) };
             });
@@ -191,9 +191,9 @@ for (const [, letter, numpad, command] of directions) {
         await ready();
         // A native menu disables the pad; closing it restores play.
         await page.keyboard.press('i');
-        await page.waitForFunction(() => document.querySelectorAll('#direction_pad button:disabled').length === 8);
+        await page.waitForFunction(() => document.querySelectorAll('#direction_pad .direction-pad-button:disabled').length === 8);
         await page.keyboard.press('Escape'); await ready();
-        await page.waitForFunction(() => document.querySelectorAll('#direction_pad button:enabled').length === 8);
+        await page.waitForFunction(() => document.querySelectorAll('#direction_pad .direction-pad-button:enabled').length === 8);
         assert.deepEqual(evidence.errors, []);
         evidence.success = true;
         fs.writeFileSync(path.join(output, 'validation.json'), JSON.stringify(evidence, null, 2));

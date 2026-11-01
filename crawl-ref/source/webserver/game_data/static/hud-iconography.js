@@ -2,7 +2,7 @@ define(["jquery", "./status-icons", "./frame-update"], function ($, icons, frame
     "use strict";
     var glyphs = { o: "explore", "\t": "autofight", "5": "rest", g: "pickup", i: "inventory",
         z: "spells", a: "abilities", m: "skills", A: "trait", "%": "shield",
-        "<": "stairs-up", ">": "stairs-down", X: "map" };
+        "<": "stairs-up", ">": "stairs-down", X: "map", G: "navigate" };
 
     // Shared tactics vocabulary. Lobby and game surfaces use the same words,
     // glyphs and .tr-badge data attributes (styled in tactics-components.css).

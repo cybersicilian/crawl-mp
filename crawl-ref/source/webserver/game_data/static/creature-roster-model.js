@@ -4,6 +4,11 @@ define([], function () {
     function key(creature) {
         return creature.contact_key || (creature.id ? String(creature.id) : creature.x + "," + creature.y);
     }
+    // Plants, fungi and similar: no experience and no threat to a passing hero.
+    function harmless(monster) {
+        return Boolean(monster.typedata && monster.typedata.no_exp
+            && !(monster.name === "active ballistomycete" || /tentacle$/.test(monster.name)));
+    }
     function category(creature) {
         if (creature.att === 4) return "allies";
         if (creature.att > 0 || creature.non_threatening) return "neutrals";
@@ -42,5 +47,5 @@ define([], function () {
         });
         return groups;
     }
-    return { key: key, category: category, collect: collect, groups: groups };
+    return { key: key, harmless: harmless, category: category, collect: collect, groups: groups };
 });

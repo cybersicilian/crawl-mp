@@ -4038,7 +4038,7 @@ static bool _at_min_delay(const item_def *weapon)
  * Print a message indicating the player's attack delay with their current
  * weapon(s) (if applicable).
  */
-static void _display_attack_delay(const item_def *offhand)
+string attack_delay_description(const item_def *offhand)
 {
     const item_def* weapon = you.weapon();
     const float delay = you.attack_delay().expected();
@@ -4062,11 +4062,16 @@ static void _display_attack_delay(const item_def *offhand)
                          shield_penalty ? "shield" : "armour");
     }
 
-    mprf("Your attack delay is about %.1f%s%s.",
-         delay / 10,
-         at_min_delay ?
-            " (and cannot be improved with additional weapon skill)" : "",
-         penalty_msg.c_str());
+    return make_stringf("Your attack delay is about %.1f%s%s.",
+                        delay / 10,
+                        at_min_delay ?
+                           " (and cannot be improved with additional weapon skill)" : "",
+                        penalty_msg.c_str());
+}
+
+static void _display_attack_delay(const item_def *offhand)
+{
+    mpr(attack_delay_description(offhand));
 }
 
 /**

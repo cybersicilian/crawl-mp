@@ -1,6 +1,6 @@
 define(["jquery", "./map_knowledge", "./cell_renderer", "./dungeon_renderer",
-        "./options", "./util", "./player", "./tileinfo-main"],
-function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
+        "./options", "./util", "./player", "./tileinfo-main", "./creature-roster-model"],
+function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main, roster) {
     "use strict";
 
     var monsters, $list, monster_groups, max_rows;
@@ -74,9 +74,7 @@ function ($, map_knowledge, cr, dungeon_renderer, options, util, player, main) {
 
     function is_excluded(monster)
     {
-        return (monster.typedata && monster.typedata.no_exp &&
-                !(monster.name == "active ballistomycete"
-                  || monster.name.match(/tentacle$/)));
+        return roster.harmless(monster);
     }
 
     function monster_sort(m1, m2)

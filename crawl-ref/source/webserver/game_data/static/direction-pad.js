@@ -1,9 +1,23 @@
 /* Eight native direction commands; the engine owns movement, attacks and warnings. */
-define(["jquery", "comm", "key_conversion", "./game-context", "./enums", "./party-model", "./workflow-actions", "./frame-update", "./route-plan"],
-function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
+define(["jquery", "comm", "key_conversion", "./game-context", "./enums", "./party-model", "./workflow-actions", "./frame-update", "./route-plan", "./status-icons"],
+function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons) {
     "use strict";
     var observer, highlightTimer;
-    var directions = routes.directions;
+    var directions = routes.directions, storageKey = "dcss.direction-pad.minimized";
+    function minimized() {
+        try { return localStorage.getItem(storageKey) === "true"; } catch (_) { return false; }
+    }
+    function minimize(value) {
+        try { localStorage.setItem(storageKey, String(value)); } catch (_) { /* Session-only choice. */ }
+        applyMinimized(value);
+    }
+    function applyMinimized(value) {
+        var pad = $("#direction_pad").toggleClass("is-minimized", value);
+        var label = value ? "Show direction pad" : "Hide direction pad";
+        pad.find(".direction-pad-toggle").attr({ "aria-label": label, "aria-expanded": String(!value), title: label,
+            "data-tip-title": label, "data-tip-body": "The keyboard and clicking on the map still move your hero." });
+        refresh();
+    }
     function reason() {
         if (!game.get_ui_state || game.get_ui_state() !== enums.ui.NORMAL)
             return "Return to the dungeon to move or attack.";
@@ -58,7 +72,7 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
     function update() {
         var blocked = reason();
         if (blocked) clearHighlight();
-        $("#direction_pad button").prop("disabled", Boolean(blocked)).each(function (index) {
+        $("#direction_pad .direction-pad-button").prop("disabled", Boolean(blocked)).each(function (index) {
             var direction = directions[index];
             var label = "Move or attack " + direction.name.toLowerCase() + ": " + direction.key
                 + " or Numpad " + direction.numpad;
@@ -77,7 +91,12 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
         var pad = $("<div id='direction_pad' role='group' aria-label='Move or melee attack in eight directions'></div>");
         var grid = $("<div class='direction-pad-grid'></div>").appendTo(pad);
         directions.forEach(function (direction, index) {
-            if (index === 4) grid.append("<span class='direction-pad-center' aria-hidden='true'></span>");
+            if (index === 4) $("<button type='button' class='direction-pad-toggle'></button>")
+                .append(icons.icon("compass-rose"))
+                .on("click", function (event) {
+                    event.stopPropagation(); minimize(!pad.hasClass("is-minimized"));
+                    if (event.originalEvent && event.originalEvent.detail) this.blur();
+                }).appendTo(grid);
             var label = "Move or attack " + direction.name.toLowerCase() + ": " + direction.key
                 + " or Numpad " + direction.numpad;
             $("<button type='button' class='direction-pad-button'></button>")
@@ -106,6 +125,7 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes) {
         var viewport = document.getElementById("dungeon_viewport");
         if (viewport) observer.observe(viewport);
         observer.observe(pad[0]);
+        applyMinimized(minimized());
         update();
     }
     $(document).on("game_init.directionPad", init)

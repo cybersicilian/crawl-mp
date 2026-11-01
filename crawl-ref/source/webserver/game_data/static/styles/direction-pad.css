@@ -53,3 +53,15 @@
 #normal .direction-pad-button.is-activated .direction-pad-keys { color: inherit; }
 #normal .direction-pad-button:focus-visible { outline: 2px solid #ffe3a2; outline-offset: 1px; }
 #normal .direction-pad-button:disabled { opacity: .45; cursor: default; }
+/* The centre cell minimizes the pad to one corner button. */
+#normal .direction-pad-toggle {
+    display: grid; place-items: center; box-sizing: border-box; width: 44px; height: 44px; padding: 0;
+    border: 1px dashed #a98d5650; border-radius: 3px; background: transparent; color: var(--shell-muted, #b7b8ac); cursor: pointer;
+}
+#normal .direction-pad-toggle:hover { background: #414536; border-style: solid; border-color: #e0c68a; }
+#normal .direction-pad-toggle:focus-visible { outline: 2px solid #ffe3a2; outline-offset: 1px; }
+.direction-pad-toggle .tt-icon { width: 18px; height: 18px; }
+#normal #direction_pad.is-minimized { width: auto; padding: 3px; }
+#direction_pad.is-minimized .direction-pad-grid { grid-template-columns: 44px; }
+#direction_pad.is-minimized .direction-pad-button { display: none; }
+#normal #direction_pad.is-minimized .direction-pad-toggle { border-style: solid; }

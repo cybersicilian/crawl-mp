@@ -151,6 +151,7 @@ function ($, comm, cr, map_knowledge, options, dngn, util, view_data, enums,
 
                 if (ev.type === "mousemove")
                 {
+                    $(this.element).trigger($.extend({}, ev, { type: "cell_hover", cell: loc }));
 
                     if (this.tooltip_timeout)
                         clearTimeout(this.tooltip_timeout);

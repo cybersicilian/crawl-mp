@@ -6,7 +6,8 @@ function (require, $, inspection, routes, quickbar) {
     var sections = [
         { title: "Explore & fight", shortcuts: [
             ["o", "Auto-explore"], ["Tab", "Auto-fight"], [".", "Wait one turn"],
-            ["Numpad 5", "Rest & recover"], ["g", "Pick up"], ["< / >", "Use stairs"]
+            ["Numpad 5", "Rest & recover"], ["g", "Pick up"], ["< / >", "Use stairs"],
+            ["G", "Go to a floor or branch"], ["@", "Attack info"]
         ] },
         { title: "Your character", shortcuts: [
             ["i", "Inventory & equipment"], ["I", "Spells & abilities"], ["z", "Cast a spell"],
