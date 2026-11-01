@@ -3,7 +3,7 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
     "use strict";
     var camera = null, compactChoice = null;
     var labels = { o: "Explore", "\t": "Fight", "5": "Rest", g: "Pick up",
-        i: "Inventory", z: "Cast", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "<": "Up stairs", ">": "Down stairs", G: "Go" };
+        i: "Inventory", z: "Cast", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "<": "Ascend", ">": "Descend", G: "Go" };
     // Keys the engine only accepts for the controlling hero's own turn.
     var turnKeys = ["o", "\t", "5", "g"];
     var sectionKeys = { i: "equipment", I: "abilities", "@": "attack", X: "map",
@@ -175,9 +175,9 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
         });
         $("#workflow_camera_context").text(viewing && viewing.slot !== member.slot ? "Viewing " + viewing.name
             : camera && member.pos && (camera.x !== member.pos.x || camera.y !== member.pos.y) ? "Camera away from " + member.name : "");
-        var turnReason = actions.reason(member);
+        var turnReason = actions.reason(member), dockChanged = false;
         $("#dcss_quick_dock [data-dock-key]").each(function () {
-            var key = this.getAttribute("data-dock-key"), reason = "";
+            var key = this.getAttribute("data-dock-key"), reason = "", wasDisabled = this.disabled;
             if (turnKeys.includes(key)) {
                 // Existing action guards decide; the engine still validates every key.
                 this.disabled = Boolean(turnReason);
@@ -209,7 +209,10 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
                     this.setAttribute("data-tip-body", powerTip);
                 }
             }
+            if (this.disabled !== wasDisabled) dockChanged = true;
         });
+        // Quick slots bound to these controls mirror their gate.
+        if (dockChanged) $(document).trigger("dock_controls_changed");
         var minimapWidth = $("#hud_minimap").width() || $("#stats").outerWidth();
         if (minimapWidth && minimapWidth !== lastMinimapWidth) {
             lastMinimapWidth = minimapWidth;

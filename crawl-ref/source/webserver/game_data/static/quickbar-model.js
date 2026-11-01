@@ -15,6 +15,9 @@ define([], function () {
         return saved;
     }
     function binding(value) {
+        // Command ids name entries in quickbar-commands.js, which resolves them.
+        if (value && value.kind === "command")
+            return typeof value.id === "string" && /^[a-z_]+$/.test(value.id) ? { kind: "command", id: value.id } : null;
         if (!value || !["item", "spell", "ability"].includes(value.kind) || !Number.isSafeInteger(value.id)) return null;
         // Native inventories include consumable slots beyond the 52 lettered
         // equipment slots. Resolve against the hero's current inventory below.
@@ -34,7 +37,7 @@ define([], function () {
         return Array.from({ length: count }, function (_, index) { return binding(Array.isArray(values) && values[index]); });
     }
     function resolve(member, value) {
-        var valid = binding(value); if (!member || !valid) return null;
+        var valid = binding(value); if (!member || !valid || valid.kind === "command") return null;
         var entries = member[valid.kind === "item" ? "inventory" : valid.kind === "spell" ? "spells" : "abilities"] || [];
         var entry = entries.find(function (entry) {
             return valid.action === "prototype"

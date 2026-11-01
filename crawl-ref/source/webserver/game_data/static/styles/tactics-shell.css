@@ -198,7 +198,7 @@
     background: var(--shell-accent-bright); border-color: var(--shell-accent-bright); color: #151b20;
     box-shadow: 0 0 0 1px var(--shell-accent-bright), 0 0 8px color-mix(in srgb, var(--shell-accent-bright) 60%, transparent); transform: translateY(1px);
 }
-#normal #quickbar_primary .dcss-dock-btn.is-activated:not(:disabled) :is(.workflow-action-label, .dock-key, .tt-icon) { color: #151b20; }
+#normal :is(#quickbar_primary .dcss-dock-btn, #quickbar_slots .hud-quick-slot).is-activated:not(:disabled) :is(.workflow-action-label, .quickbar-caption, .dock-key, .quickbar-key, .tt-icon) { color: #151b20; }
 #normal .hud-hero-medallion.is-acting { border-color: var(--ui-gilt, #d9b56a); box-shadow: inset 0 0 0 2px #151719, 0 0 0 2px var(--ui-gilt, #d9b56a), 0 0 12px var(--ui-gilt-glow, #f2d58a66); }
 @media (prefers-reduced-motion: no-preference) {
     #normal .hud-hero-medallion.is-acting { animation: medallion-acting 240ms ease-out; }
@@ -206,6 +206,8 @@
 }
 
 /* ---- Command dock ------------------------------------------------------- */
+/* One box for every control on the bar. 56px holds the longest caption on one line. */
+#normal #dcss_quick_dock { --dock-control-width: 56px; --dock-control-height: 40px; --dock-control-radius: 5px; }
 #normal #dcss_quick_dock:not(.hud-floating) {
     display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
     width: 100%; max-width: none; height: auto; min-height: 48px; padding: 4px 10px; box-sizing: border-box;
@@ -214,57 +216,61 @@
     border-top: 1px solid var(--shell-rule); border-bottom: 1px solid #070b0f; box-shadow: inset 0 1px 0 #ffffff0c;
 }
 #normal #quickbar_primary { gap: 4px; }
-#normal #quickbar_primary::before {
-    content: "Act"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
+#normal :is(#quickbar_primary, #quickbar_slots)::before {
+    align-self: stretch; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px;
     font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
     writing-mode: vertical-rl; transform: rotate(180deg);
 }
-#normal #quickbar_primary .dcss-dock-btn {
-    position: relative; flex: 0 0 auto; flex-direction: column; justify-content: center; gap: 2px;
-    width: auto; min-width: 52px; height: 40px; min-height: 40px; padding: 4px 6px 3px; box-sizing: border-box;
-    border: 1px solid var(--shell-edge); border-radius: 5px;
-    background: var(--shell-panel); background-image: none; color: var(--shell-text);
+#normal #quickbar_primary::before { content: "Act"; }
+#normal #quickbar_slots::before { content: "Quick"; }
+/* Every bank shares one box, one stack (art over caption) and one key corner. */
+#normal :is(#quickbar_primary .dcss-dock-btn, .hud-quick-slot, #quickbar_more > summary, #dock_session_menu, #dock_common_hotkeys) {
+    position: relative; display: inline-flex; flex: 0 0 var(--dock-control-width); flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px; box-sizing: border-box; margin: 0;
+    width: var(--dock-control-width); min-width: var(--dock-control-width);
+    height: var(--dock-control-height); min-height: var(--dock-control-height); padding: 2px 1px;
+    border: 1px solid var(--shell-edge); border-radius: var(--dock-control-radius);
     box-shadow: inset 0 1px 0 #ffffff12, 0 1px 2px #00000066; text-shadow: none;
 }
-#normal #quickbar_primary .dcss-dock-btn > .tt-icon { width: 16px; height: 16px; margin: 0; color: var(--shell-accent-bright); }
-#normal #quickbar_primary .dcss-dock-btn .workflow-action-label {
-    position: static; width: auto; height: auto; margin: 0; padding: 0; overflow: visible; clip-path: none;
-    font: 600 9px/1 var(--shell-font); letter-spacing: .02em; white-space: nowrap; color: var(--shell-text);
+#normal :is(#quickbar_primary .dcss-dock-btn, #quickbar_more > summary, #dock_session_menu, #dock_common_hotkeys) {
+    background: var(--shell-panel); background-image: none; color: var(--shell-text);
 }
-#normal #quickbar_primary .dcss-dock-btn .dock-key {
-    position: absolute; top: 2px; right: 3px; width: auto; height: auto; margin: 0; padding: 0 2px; overflow: visible; clip-path: none;
-    order: 0; border: 0; border-radius: 2px; background: none; box-shadow: none; text-shadow: none;
+#normal :is(#quickbar_primary .dcss-dock-btn, #dock_session_menu, #dock_common_hotkeys) > .tt-icon,
+#normal #quickbar_more > summary .tt-icon { width: 16px; height: 16px; margin: 0; color: var(--shell-accent-bright); }
+#normal :is(#quickbar_primary, #dock_session_menu, #dock_common_hotkeys) .workflow-action-label,
+#normal .quickbar-more-label, #normal .hud-quick-slot .quickbar-caption {
+    position: static; width: auto; max-width: 100%; height: auto; margin: 0; padding: 0; overflow: hidden; clip-path: none;
+    font: 600 9px/1 var(--shell-font); letter-spacing: .02em; white-space: nowrap; text-overflow: ellipsis; color: var(--shell-text);
+}
+#normal :is(#quickbar_primary, #dock_session_menu) .dock-key, #normal #quickbar_slots .hud-quick-slot .quickbar-key {
+    position: absolute; inset: 2px 3px auto auto; width: auto; min-width: 0; height: auto; margin: 0; padding: 0 2px; overflow: visible; clip-path: none;
+    order: 0; border: 0; border-radius: 2px; background: none; box-shadow: none; text-shadow: none; opacity: 1;
     font: 600 8px/1.2 var(--shell-mono); color: var(--shell-muted); text-transform: none;
 }
-#normal #quickbar_primary .dcss-dock-btn:hover:not(:disabled) {
+#normal :is(#quickbar_primary .dcss-dock-btn, #quickbar_more > summary, #dock_session_menu, #dock_common_hotkeys):hover:not(:disabled) {
     background: var(--shell-raised); border-color: var(--shell-accent); color: var(--shell-accent-bright);
 }
-#normal #quickbar_primary .dcss-dock-btn:hover:not(:disabled) .workflow-action-label { color: var(--shell-accent-bright); }
-#normal #quickbar_primary .dcss-dock-btn:active:not(:disabled) { background: var(--shell-recess); box-shadow: inset 0 2px 4px #000a; }
+#normal :is(#quickbar_primary .dcss-dock-btn, #dock_session_menu, #dock_common_hotkeys):hover:not(:disabled) .workflow-action-label,
+#normal #quickbar_more > summary:hover .quickbar-more-label { color: var(--shell-accent-bright); }
+#normal :is(#quickbar_primary .dcss-dock-btn, #dock_session_menu, #dock_common_hotkeys):active:not(:disabled) { background: var(--shell-recess); box-shadow: inset 0 2px 4px #000a; }
 #normal #quickbar_primary .dcss-dock-btn:disabled { opacity: .42; filter: saturate(.4); box-shadow: none; cursor: default; }
 #normal #quickbar_primary .dcss-dock-btn[data-dock-key="\9"] { border-color: color-mix(in srgb, var(--shell-combat) 55%, var(--shell-edge)); }
 #normal #quickbar_primary .dcss-dock-btn[data-dock-key="\9"] > .tt-icon { color: var(--shell-combat); }
 #normal #quickbar_primary .dcss-dock-btn[data-dock-key="o"] { border-color: color-mix(in srgb, var(--shell-explore) 55%, var(--shell-edge)); }
 #normal #quickbar_primary .dcss-dock-btn[data-dock-key="o"] > .tt-icon { color: var(--shell-explore); }
-#normal #quickbar_primary .dcss-dock-btn[data-dock-key=">"] { margin-right: 4px; }
+#normal #quickbar_primary .dcss-dock-btn[data-dock-key="G"] { margin-right: 4px; }
 #normal #party_yield_btn { min-height: 32px; }
 #normal #party_yield_btn[hidden] { display: none; }
 
 /* Quick slots: icon, key number, cost; empty sockets read as empty. */
 #normal #quickbar_slots { gap: 4px; padding-left: 10px; border-left: 1px solid var(--shell-rule); }
-#normal #quickbar_slots::before {
-    content: "Quick"; align-self: stretch; display: inline-flex; align-items: center; margin-right: 2px;
-    font: 600 var(--tt-type-caption, 10px)/1 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
-    writing-mode: vertical-rl; transform: rotate(180deg);
-}
 #normal .hud-quick-slot {
-    flex-basis: 40px; width: 40px; height: 40px; min-width: 40px; min-height: 40px; padding: 4px;
-    border: 1px solid var(--shell-edge); border-radius: 5px;
     background: radial-gradient(ellipse at 50% 25%, var(--shell-raised), var(--shell-recess) 85%);
     box-shadow: inset 0 0 0 1px #0b0f1480, inset 0 2px 4px #000a; color: var(--shell-text);
 }
 #normal .hud-quick-slot canvas { width: 28px; height: 28px; }
-#normal .hud-quick-slot canvas.power-art-fallback, #normal .hud-quick-slot > .tt-icon { width: 18px; height: 18px; }
+#normal .hud-quick-slot canvas.power-art-fallback { width: 18px; height: 18px; }
+#normal .hud-quick-slot > .tt-icon { width: 16px; height: 16px; color: var(--shell-accent-bright); }
 #normal .hud-quick-slot.is-empty {
     border-style: dashed; border-color: color-mix(in srgb, var(--shell-edge) 55%, transparent);
     background: transparent; box-shadow: none; opacity: .7;
@@ -272,32 +278,11 @@
 #normal .hud-quick-slot.is-empty > .tt-icon { width: 16px; height: 16px; color: var(--shell-muted); opacity: 1; }
 #normal .hud-quick-slot.is-empty:hover { opacity: 1; border-style: solid; }
 #normal .hud-quick-slot.is-selected { outline: 2px solid var(--shell-accent-bright); outline-offset: 1px; }
-#normal .hud-quick-slot .quickbar-key {
-    left: 2px; bottom: 2px; min-width: 12px; padding: 0 3px; border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent);
-    border-bottom-width: 2px; border-radius: 3px; background: var(--shell-recess); color: var(--shell-muted);
-    font: 700 9px/1.2 var(--shell-mono);
-}
-#normal .hud-quick-slot .quickbar-quantity { right: 2px; bottom: 2px; font: 700 9px/1 var(--shell-font); color: var(--shell-accent-bright); }
-#normal .hud-quick-slot .quickbar-item-quantity { top: 2px; bottom: auto; }
+#normal .hud-quick-slot .quickbar-quantity { font: 600 9px/1 var(--shell-font); color: var(--shell-accent-bright); }
 #normal .hud-quick-slot .quickbar-cast-mode { top: 2px; left: 2px; font-size: 8px; }
 #normal .hud-quick-slot[aria-disabled="true"] { opacity: .45; filter: saturate(.4); }
-#quickbar_more > summary {
-    width: 40px; height: 40px; min-width: 40px; min-height: 40px; border: 1px solid var(--shell-edge); border-radius: 5px;
-    background: var(--shell-panel); color: var(--shell-text);
-}
-#quickbar_more > summary:hover { border-color: var(--shell-accent); color: var(--shell-accent-bright); background: var(--shell-raised); }
-#quickbar_more[open] > summary { border-color: var(--shell-accent); background: var(--shell-raised); }
-#normal #dock_session_menu, #normal #dock_common_hotkeys {
-    height: 40px; min-height: 40px; padding: 4px 10px; border: 1px solid var(--shell-edge); border-radius: 4px;
-    background: var(--shell-panel); color: var(--shell-text); font: 600 11px/1.3 var(--shell-font);
-}
-#normal #dock_session_menu { margin-left: auto; }
-#normal :is(#dock_session_menu, #dock_common_hotkeys):hover { border-color: var(--shell-accent); background: var(--shell-raised); color: var(--shell-accent-bright); }
-#dock_session_menu kbd {
-    display: inline-flex; align-items: center; min-width: 16px; height: 16px; margin-left: 6px; padding: 0 4px; box-sizing: border-box;
-    border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent); border-bottom-width: 2px; border-radius: 3px;
-    background: var(--shell-recess); color: var(--shell-muted); font: 600 9px/1 var(--shell-mono); opacity: 1;
-}
+#normal #quickbar_more[open] > summary { border-color: var(--shell-accent); background: var(--shell-raised); }
+#normal #dcss_quick_dock #dock_session_menu { margin-left: auto; }
 #normal #workflow_action_notice {
     flex-basis: 100%; margin: 0; padding: 6px 9px; border-radius: 4px;
     border: 1px solid color-mix(in srgb, var(--shell-accent) 60%, transparent);
@@ -323,17 +308,17 @@
     width: 100%; flex-basis: 100%; margin: 0 0 2px; padding-bottom: 2px; border-bottom: 1px solid var(--shell-rule);
     font: 600 var(--tt-type-caption, 10px)/1.3 var(--shell-font); letter-spacing: .08em; text-transform: uppercase; color: var(--shell-muted);
 }
-#normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a) {
+#normal :is(#quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a), .quickbar-catalog-action.is-command) {
     min-height: 30px; padding: 4px 8px; gap: 8px; border: 1px solid var(--shell-rule); border-radius: 4px;
     background: color-mix(in srgb, var(--shell-recess) 60%, transparent); color: var(--shell-text);
     font: 500 12px/1.3 var(--shell-font); text-shadow: none; box-shadow: none;
 }
-#normal #quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a):hover:not(:disabled) {
+#normal :is(#quickbar_commands.quickbar-command-view :is(.dcss-dock-btn, .hud-expedition-menu > a), .quickbar-catalog-action.is-command):hover:not(:disabled) {
     border-color: var(--shell-accent); background: var(--shell-raised); color: var(--shell-accent-bright);
 }
-#normal #quickbar_commands.quickbar-command-view .dcss-dock-btn > .tt-icon { width: 16px; height: 16px; color: var(--shell-accent-bright); }
-#normal #quickbar_commands.quickbar-command-view .quickbar-command-name { font: 500 12px/1.3 var(--shell-font); }
-#normal #quickbar_commands.quickbar-command-view .quickbar-command-key {
+#normal :is(#quickbar_commands.quickbar-command-view .dcss-dock-btn, .quickbar-catalog-action.is-command) > .tt-icon { width: 16px; height: 16px; color: var(--shell-accent-bright); }
+#normal :is(#quickbar_commands.quickbar-command-view .quickbar-command-name, .quickbar-catalog-name) { font: 500 12px/1.3 var(--shell-font); }
+#normal :is(#quickbar_commands.quickbar-command-view .quickbar-command-key, .quickbar-catalog-key) {
     display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box;
     border: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent); border-bottom-width: 2px; border-radius: 3px;
     background: var(--shell-recess); color: var(--shell-muted); font: 600 10px/1 var(--shell-mono);
@@ -411,25 +396,27 @@
 }
 @media (max-width: 1150px) {
     #normal #party_turn_banner.mission-bar { gap: 4px 8px; }
-    #normal #quickbar_primary .dcss-dock-btn { min-width: 46px; }
     #quickbar_more_content { width: min(440px, calc(100vw - 16px)); }
 }
 @media (max-height: 800px) {
     #normal #party_turn_banner.mission-bar { min-height: 40px; padding: 3px 10px; }
     .mission-portrait { width: 30px; height: 30px; }
     .mission-portrait img { width: 24px; height: 24px; }
+    #normal #dcss_quick_dock { --dock-control-height: 38px; }
     #normal #dcss_quick_dock:not(.hud-floating) { min-height: 44px; padding: 3px 8px; }
-    #normal #quickbar_primary .dcss-dock-btn { height: 38px; min-height: 38px; }
-    #normal .hud-quick-slot, #quickbar_more > summary { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
 }
 @media (max-width: 760px) {
     #normal #quickbar_primary::before, #normal #quickbar_slots::before { display: none; }
-    #normal #quickbar_primary .dcss-dock-btn { min-width: 42px; }
+    /* The left column can be narrower than the row: wrap rather than strand actions. */
+    #normal #quickbar_primary { flex: 0 1 auto; flex-wrap: wrap; min-width: 0; }
     .mission-tools { margin-left: 0; }
 }
+@media (max-width: 760px) and (max-height: 520px) {
+    /* No height to spare for a second row: the row scrolls, as the quick slots do. */
+    #normal #quickbar_primary { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
+}
 @media (pointer: coarse) {
-    #normal #quickbar_primary .dcss-dock-btn { min-width: 48px; height: 44px; min-height: 44px; }
-    #normal .hud-quick-slot, #quickbar_more > summary { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+    #normal #dcss_quick_dock { --dock-control-height: 44px; }
     #normal #party_turn_banner :is(.party-banner-btn, .mission-tools button) { width: 36px; min-width: 36px; height: 36px; min-height: 36px; }
 }
 @media (prefers-reduced-motion: reduce) {

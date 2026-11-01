@@ -57,7 +57,8 @@ function (require, $, inspection, routes, quickbar) {
             styled = true;
         }
         if (document.getElementById("dock_common_hotkeys")) return;
-        $("<button type='button' id='dock_common_hotkeys' class='dcss-dock-btn' aria-haspopup='dialog'>Common hotkeys</button>")
+        $("<button type='button' id='dock_common_hotkeys' class='dcss-dock-btn' aria-label='Common hotkeys' aria-haspopup='dialog'>"
+            + "<span class='workflow-action-label'>Hotkeys</span></button>")
             .attr({ "data-tip-title": "Common hotkeys", "data-tip-body": "Movement, exploration, combat and interface shortcuts. Takes no turn." })
             .on("click", open)
             .on("keydown keypress keyup", function (event) { event.stopPropagation(); })

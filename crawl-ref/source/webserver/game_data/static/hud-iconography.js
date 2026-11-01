@@ -68,7 +68,8 @@ define(["jquery", "./status-icons", "./frame-update"], function ($, icons, frame
         });
         var entries = { dock_party_sheet_btn: "overview", dock_save_btn: "save", dock_chat_btn: "chat", dock_codex_btn: "codex",
             workflow_map_btn: "map", party_banner_center: "camera", party_banner_cycle: "cycle-hero",
-            party_add_btn: "add-hero", party_join_btn: "claim-hero", workflow_compact_btn: "compact", dock_save_exit_btn: "exit" };
+            party_add_btn: "add-hero", party_join_btn: "claim-hero", workflow_compact_btn: "compact", dock_save_exit_btn: "exit",
+            dock_session_menu: "camp", dock_common_hotkeys: "question" };
         Object.keys(entries).forEach(function (id) {
             var button = document.getElementById(id); if (button) decorate(button, entries[id]);
         });

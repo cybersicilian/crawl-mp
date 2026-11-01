@@ -7,7 +7,7 @@ define(["jquery", "./game-context", "./enums"], function ($, game, enums) {
     "use strict";
     var FLASH = 120, DONE = 600, HOLD = 1500;
     var chip = null, chipTimer = null, pulseTimer = null, awaiting = false;
-    var labels = { o: "Explore", "\t": "Fight", "5": "Rest", g: "Pick up", "<": "Up stairs", ">": "Down stairs",
+    var labels = { o: "Explore", "\t": "Fight", "5": "Rest", g: "Pick up", "<": "Ascend", ">": "Descend",
         i: "Inventory", I: "Hero sheet", z: "Cast", Z: "Cast again", a: "Ability", m: "Skills", A: "Traits", "%": "Resists", "^": "Religion",
         ".": "Wait", s: "Wait", x: "Examine", X: "Map", f: "Fire", F: "Fire", v: "Evoke", V: "Evoke", q: "Quaff", r: "Read", w: "Wield",
         W: "Wear", T: "Take off", P: "Put on", R: "Remove", t: "Shout", d: "Drop", G: "Travel", "_": "Help", "\\": "Knowledge",
@@ -117,6 +117,9 @@ define(["jquery", "./game-context", "./enums"], function ($, game, enums) {
     function onClick(event) {
         var target = event.target.closest("#dcss_quick_dock .dcss-dock-btn[data-dock-key], .hud-quick-slot, #direction_pad .direction-pad-button, #party_turn_banner .party-banner-btn, #party_turn_banner .mission-tools button, #quickbar_commands .dcss-dock-btn, #tactical_planner .plan-primary");
         if (!target || target.disabled || target.getAttribute("aria-disabled") === "true") return;
+        // Assigning a slot or pinning a tray row sends nothing.
+        if (target.matches(".hud-quick-slot.is-empty")
+            || event.shiftKey && target.matches(".hud-quick-slot, #quickbar_commands .dcss-dock-btn")) return;
         var label = target.getAttribute("data-tip-title") || target.getAttribute("aria-label") || target.textContent.trim();
         label = label.replace(/\s*\(.*\)\s*$/, "").replace(/\s+·.*$/, "").slice(0, 32);
         var key = target.getAttribute("data-dock-key") || target.getAttribute("data-tip-key") || "";

@@ -17,7 +17,7 @@ const inventorySlots = [52, 1, 2, 126, 4, 5, 6, 7, 8, 9];
         await page.route('http://quickbar.test/**', route => route.fulfill({ contentType: 'text/html', body:
             '<!doctype html><html><body><main id="normal"><div id="dcss_quick_dock">'
             + '<span class="workflow-action-group" data-action-group="character">'
-            + '<button class="dcss-dock-btn" id="qa_inventory" data-dock-key="i" aria-label="Inventory">Inventory</button></span>'
+            + '<button class="dcss-dock-btn" id="qa_inventory" data-dock-key="m" aria-label="Inventory">Inventory</button></span>'
             + '<span class="workflow-action-group" data-action-group="expedition">'
             + '<button class="dcss-dock-btn" id="qa_hidden" hidden>Private action</button>'
             + '<details class="workflow-expedition-details"><summary>Expedition</summary><div class="hud-expedition-menu">'
