@@ -8,7 +8,7 @@ assert(/^[A-Za-z0-9]{6,12}$/.test(suffix), 'A QA account suffix must be alphanum
 const send = (page, msg, data = {}) => page.evaluate(({ msg, data }) =>
     require('comm').send_message(msg, data), { msg, data });
 const key = (page, keycode) => send(page, 'key', { keycode });
-const state = page => page.evaluate(() => JSON.parse(JSON.stringify(window.crawl_party?.state)));
+const state = page => page.evaluate(() => JSON.parse(JSON.stringify(window.crawl_party?.state || null)));
 const named = (page, suffix, expression) => page.evaluate(({ suffix, expression }) => {
     const name = Object.keys(require.s.contexts._.defined).find(name => name.endsWith('/' + suffix));
     return Function('module', 'return (' + expression + ')')(require(name));

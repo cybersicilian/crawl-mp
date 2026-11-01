@@ -164,6 +164,8 @@ async function act(target, slot, kind = 'wait') {
         await host.page.locator(`.party-slot-box[data-slot='${slot}'] .party-mode-btn[data-mode='companion']`).click();
     }
     await send(guest.page, 'party_room_join', { room_id: host.username, slot: 3 });
+    await host.page.waitForFunction(username => document.querySelector(
+        ".party-slot-box[data-slot='3'] .party-slot-occupant")?.textContent.includes(username), guest.username);
     await host.page.waitForFunction(() => /2 heroes/.test(document.querySelector('#btn_launch_party_room').textContent));
     await host.page.locator('#btn_launch_party_room').click();
     for (const target of [host, guest])

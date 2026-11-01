@@ -22,6 +22,8 @@ const check = (name, details = {}) => { evidence.checks.push({ name, ...details 
     }
     await send(guest.page, 'party_room_join', { room_id: host.username, slot: 3 });
     await host.page.waitForFunction(() => /2 heroes/.test(document.querySelector('#btn_launch_party_room').textContent));
+    await host.page.locator(".party-slot-box[data-slot='1'] .party-slot-occupant")
+        .filter({ hasText: 'Excluded from multiplayer' }).waitFor({ state: 'attached' });
     assert((await host.page.locator(".party-slot-box[data-slot='1'] .party-slot-occupant").textContent())
         .includes('Excluded from multiplayer'), 'Companion seats remain excluded even when their editor is hidden');
     await host.page.locator('#btn_launch_party_room').click();
