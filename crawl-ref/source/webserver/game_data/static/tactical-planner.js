@@ -128,7 +128,7 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
     }
     function advance() {
         var member = hero();
-        if (!running || pending || !queue.length || !canPlan() || actions.reason(member)) return;
+        if (!running || pending || !queue.length || !canPlan() || actions.reason(member) || !actions.ready()) return;
         if (member.can_act === false) return;
         // The server already paces accepted intents. A remaining-ms snapshot
         // is observational; restarting that duration locally can wait forever.
