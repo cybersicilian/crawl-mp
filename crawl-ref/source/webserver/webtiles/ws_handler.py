@@ -1244,7 +1244,12 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
 
             self.reset_lobby_timeout()
 
-        self.init_user(login_callback)
+        try:
+            self.init_user(login_callback)
+        except OSError:
+            self.logger.error("Could not start account initialization", exc_info=True)
+            self.username = self.user_email = self.user_flags = self.user_id = None
+            self.send_message("login_fail", reason="The server could not initialize your account. Please try again later.")
 
     def login(self, username, password):
         if username:
@@ -2212,9 +2217,11 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                     self.on_message(message)
             library_socket.when_done(pending, redeliver)
             return
+        message_kind = "unparsed"
         try:
             obj = json_decode(message) # type: Dict[str, Any]
             if obj["msg"] in self.message_handlers:
+                message_kind = obj["msg"]
                 handler = self.message_handlers[obj["msg"]]
                 del obj["msg"]
                 handler(**obj)
@@ -2244,26 +2251,22 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             # maybe should throw a custom exception from the socket call rather
             # than rely on these cases?
             if self.failed_on_messages == 0:
-                excerpt = message[:50] if len(message) > 50 else message
-                trunc = "..." if len(message) > 50 else ""
                 if e.errno == errno.EAGAIN or e.errno == errno.ENOBUFS:
                     # errno is different on mac vs linux, maybe also depending on
                     # python version
                     self.logger.warning(
-                        "Socket buffer full; skipping JSON message ('%r%s')!",
-                                    excerpt, trunc)
+                        "Socket buffer full; skipping JSON message (%s)!",
+                                    message_kind)
                 else:
                     self.logger.warning(
-                                    "Error while handling JSON message ('%r%s')!",
-                                    excerpt, trunc,
+                                    "Error while handling JSON message (%s)!",
+                                    message_kind,
                                     exc_info=True)
             self.failed_on_messages += 1
         except Exception:
             if self.failed_on_messages == 0:
-                excerpt = message[:50] if len(message) > 50 else message
-                trunc = "..." if len(message) > 50 else ""
-                self.logger.warning("Error while handling JSON message ('%r%s')!",
-                                    excerpt, trunc,
+                self.logger.warning("Error while handling JSON message (%s)!",
+                                    message_kind,
                                     exc_info=True)
             self.failed_on_messages += 1
 
