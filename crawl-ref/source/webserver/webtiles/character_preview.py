@@ -105,6 +105,7 @@ class PreviewService:
         with tempfile.TemporaryDirectory(prefix="dcss-character-preview-") as scratch:
             process = await asyncio.create_subprocess_exec(
                 str(self.binary), "-dir", str(self.binary.parent), "-rc", os.devnull,
+                "-morgue", scratch,
                 "-extra-opt-last", "save_dir=" + scratch, "-character-preview-json", spec,
                 cwd=scratch, stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
