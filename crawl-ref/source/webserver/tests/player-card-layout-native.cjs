@@ -48,6 +48,7 @@ fs.mkdirSync(output, { recursive: true });
         await signInTestAccount(page, evidence.account, 'crawl');
         await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
         await page.locator('#lobby_home [data-lobby-create]').click();
+        await page.locator('#party_seat_tab_1').click();
         await page.locator(".party-slot-box[data-slot='1'] .party-mode-btn[data-mode='companion']").click();
         await page.locator('#btn_launch_party_room').click();
         await page.waitForFunction(() => window.crawl_party?.state?.members?.length === 2, null, { timeout: 120000 });

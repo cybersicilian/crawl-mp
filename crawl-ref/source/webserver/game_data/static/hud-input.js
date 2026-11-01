@@ -26,6 +26,8 @@ define(["jquery", "./menu-keyboard"], function ($, keyboard) {
         if (!event.ctrlKey && !event.altKey && !event.shiftKey
             && ["Enter", " "].includes(event.key)
             && $(event.target).is("button, a[href], summary, [role='button']")) return;
+        // Quick actions pin or reassign on Shift+Enter (quickbar.js).
+        if (event.shiftKey && event.key === "Enter" && $(event.target).is(".quickbar-catalog-action, .hud-quick-slot")) return;
 
         // Document capture hotkeys have already had first refusal. Rejoin the
         // existing client translator once, before HUD stopPropagation handlers.

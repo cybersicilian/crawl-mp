@@ -217,7 +217,8 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./pa
             .on("game_cleanup.cardReadings", refresh.cancel)
             .on("party_cards_rebuilding.cardReadings", function () {
                 var target = document.activeElement;
-                focusedControl = $(target).is(".party-icon-reading, .party-wielded-item, .party-quiver-shortcut") ? target.id : "";
+                // utility() moves the status strip after party.js restores focus, which blurs a focused effect.
+                focusedControl = $(target).is(".party-icon-reading, .party-wielded-item, .party-quiver-shortcut, .party-card-status *, .party-passive-strip *") ? target.id : "";
             });
         mount();
     }
