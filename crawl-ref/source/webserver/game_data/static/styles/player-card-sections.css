@@ -115,7 +115,8 @@
 .workflow-compact-roster #normal .party-card .party-bar-wrap.tr-meter .party-bar-label { line-height: 13px; font-size: 9px; }
 /* ---- 1024×768 and short laptops: everything scrolls inside the right column ---- */
 @media (max-width: 1100px), (max-height: 800px) {
-    #normal .party-card { padding: 6px; margin-bottom: 4px; gap: 2px 6px; }
+    /* Redefining the gutter keeps .party-card-sections' full-bleed margin equal to this padding. */
+    #normal .party-card { --tt-hud-gutter: 6px; padding: var(--tt-hud-gutter); margin-bottom: 4px; gap: 2px 6px; }
     #normal .party-hero-identity { gap: 4px; }
     #normal .party-hero-line { font-size: 9.5px; }
     #normal .party-role-badge { min-height: 16px; padding: 0 5px 0 3px; font-size: 8.5px; }

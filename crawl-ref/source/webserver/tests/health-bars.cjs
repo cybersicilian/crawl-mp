@@ -69,15 +69,27 @@ async function browserProof() {
                 './dungeon_renderer': { set_view_center: noop }, './display': { invalidate: noop, display: noop },
                 './minimap': { update_overlay: noop, fit_to: noop }, './party-inspector': { open: noop, render: noop },
                 './party-controls': { toggle_drawer: noop, bind: noop }, './tileinfo-dngn': {},
+                './party-doom': { update: noop }, './party-trade': { button: () => window.jQuery('<button>Trade</button>') },
+                './turn-order-rail': { update: noop },
                 './workflow-actions': { reason: () => '' }, './chat-context': { update: noop } };
-            window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(dep => window.modules[dep])); };
+            window.define = (deps, factory) => {
+                if (typeof deps === 'function') { factory = deps; deps = []; }
+                window.modules[window.moduleName] = factory(...deps.map(dep => {
+                    if (!(dep in window.modules)) throw new Error('Missing fixture dependency: ' + dep);
+                    return window.modules[dep];
+                }));
+            };
+            window.define.amd = true;
         });
         for (const [name, file] of [['item-properties', 'static/scripts/item-properties.js'],
+            ['heat-help', 'static/scripts/heat-help.js'], ['hero-roles', 'static/scripts/hero-roles.js'],
+            ['dom-update', 'static/scripts/dom-update.js'],
             ...['effect-icon-catalog', 'effect-icon-art', 'status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status',
                 'party-card-status', 'player-card-details', 'party-initiative', 'party-navigation', 'party']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])]) {
             await page.evaluate(name => { window.moduleName = name; }, name);
             await page.addScriptTag({ path: path.join(root, file) });
+            assert(await page.evaluate(name => Boolean(window.modules[name]), name), 'Module loaded: ' + name + ' ' + errors.join('; '));
         }
         const state = { controlled_slot: 0, controllable_slots: [0, 1, 2, 3], members: [
             poison, hero(['on fire'], { slot: 1, name: 'Lyra' }),

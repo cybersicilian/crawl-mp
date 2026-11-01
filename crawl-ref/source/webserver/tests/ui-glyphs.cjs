@@ -20,6 +20,10 @@ const roles = [
 ];
 async function main() {
     fs.mkdirSync(output, { recursive: true });
+    // Git ignores this licensed atlas, so a fresh checkout has only the manifest that names it.
+    const atlasFile = JSON.parse(fs.readFileSync(path.join(root, 'static/ui-sprites/hud-sprites.json'), 'utf8')).file;
+    assert(fs.existsSync(path.join(root, 'static/ui-sprites', atlasFile)),
+        atlasFile + ' is missing: rebuild it (static/ui-sprites/README.md) or copy it from a native build');
     const browser = await chromium.launch({ headless: true, channel: 'chrome' });
     const page = await browser.newPage({ viewport: { width: 1280, height: 960 }, deviceScaleFactor: 1 });
     const errors = [];
@@ -45,7 +49,7 @@ async function main() {
             const names = art.iconNames(), missing = roles.filter(name => !art.hasIcon(name));
             const atlas = art.iconAtlas(), loaded = new Image();
             loaded.src = atlas.url;
-            await new Promise((resolve, reject) => { loaded.onload = resolve; loaded.onerror = reject; });
+            await new Promise((resolve, reject) => { loaded.onload = resolve; loaded.onerror = () => reject(new Error('Atlas failed to load: ' + atlas.url)); });
             const canvas = document.createElement('canvas'); canvas.width = canvas.height = atlas.size;
             const context = canvas.getContext('2d', { willReadFrequently: true }); context.imageSmoothingEnabled = false;
             const records = [], canonical = new Map();

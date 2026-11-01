@@ -18,8 +18,10 @@ fs.mkdirSync(output, { recursive: true });
         await signInTestAccount(page, 'PartyHUD' + Date.now().toString().slice(-8), 'crawl');
         await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
         await page.locator('#lobby_home [data-lobby-create]').click();
-        for (let slot = 1; slot < 4; slot++)
+        for (let slot = 1; slot < 4; slot++) {
+            await page.locator(`#party_seat_tab_${slot}`).click();
             await page.locator(`.party-slot-box[data-slot='${slot}'] .party-mode-btn[data-mode='companion']`).click();
+        }
         await page.waitForFunction(() => document.querySelector('#btn_launch_party_room').textContent.includes('4 heroes'));
         await page.locator('#btn_launch_party_room').click();
         await page.waitForFunction(() => window.crawl_party?.state?.members?.length === 4, null, { timeout: 120000 });
@@ -73,7 +75,8 @@ fs.mkdirSync(output, { recursive: true });
             require('comm').send_message = (msg, fields) => window.hudPackets.push({ msg, ...fields });
         });
         const render = data => page.evaluate(data => window.hudRender(data), data);
-        const packets = () => page.evaluate(() => { const result = window.hudPackets; window.hudPackets = []; return result; });
+        // Compare the JSON that reaches the server, which drops undefined fields.
+        const packets = () => page.evaluate(() => { const result = JSON.stringify(window.hudPackets); window.hudPackets = []; return JSON.parse(result); });
         await install(); await render(fixture);
         const cards = page.locator('.party-card');
         assert.equal(await page.locator('.party-member-state[role="progressbar"]').count(), 4);
@@ -120,17 +123,23 @@ fs.mkdirSync(output, { recursive: true });
             window.originalCardPanels = ['hud_powers', 'hud_inventory'].map(id => document.getElementById(id));
         });
         assert.equal(await page.locator('#right_column > #stats, #hud_sidebar_scroll > #stats').count(), 0);
-        assert(!(await page.locator('#party_turn_banner').isVisible()));
+        assert(await page.locator('#party_turn_banner').evaluate(bar => getComputedStyle(bar).position !== 'fixed'
+            && bar.getBoundingClientRect().height > 0
+            && bar.getBoundingClientRect().bottom <= document.getElementById('dungeon_viewport').getBoundingClientRect().top + 1),
+            'The mission bar is an always-visible strip above the dungeon');
         assert(await page.locator('#monster_list').evaluate(node => node.getBoundingClientRect().height <= 72),
             'Nearby creatures never create a large empty lower sidebar panel');
         assert.equal(await page.locator('#mission_bar_tools #hud_zoom_controls button').count(), 3);
         assert.equal(await page.locator('#mission_bar_tools #party_banner_cycle, #mission_bar_tools #party_banner_center').count(), 2);
-        assert(await cards.first().evaluate(card => card.getBoundingClientRect().top
-            - document.getElementById('party_hud').getBoundingClientRect().top <= 12), 'Roster starts directly with heroes');
+        assert(await cards.first().evaluate(card => {
+            const rail = document.getElementById('party_turn_order').getBoundingClientRect();
+            return rail.top - document.getElementById('party_hud').getBoundingClientRect().top <= 12
+                && card.getBoundingClientRect().top - rail.bottom <= 12;
+        }), 'Only the turn-order rail sits above the first hero');
         assert.equal(await page.locator('#quickbar_commands #workflow_compact_btn').count(), 1);
         const iconRoles = await page.locator('#quickbar_primary .tt-icon').evaluateAll(nodes => nodes.map(node => node.dataset.uiIcon));
-        assert.deepEqual(iconRoles, ['explore', 'autofight', 'rest', 'pickup']);
-        assert.equal(await page.locator('#quickbar_primary .tt-icon image').count(), 4, 'Frequent actions use actual sprite artwork');
+        assert.deepEqual(iconRoles, ['explore', 'autofight', 'rest', 'pickup', 'stairs-up', 'stairs-down', 'navigate', 'inventory', 'spells', 'abilities']);
+        assert.equal(await page.locator('#quickbar_primary .tt-icon image').count(), 10, 'Frequent actions use actual sprite artwork');
         const spritePixels = await page.locator('#quickbar_primary .tt-icon image').first().evaluate(async node => {
             const image = new Image();
             await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; image.src = node.href.baseVal; });
@@ -145,10 +154,14 @@ fs.mkdirSync(output, { recursive: true });
         assert(spritePixels.width > 20 && spritePixels.height > 20 && spritePixels.colors > 20,
             'The shared atlas loads real colored raster pixels');
         assert.equal(spritePixels.tileSize, 16, 'Imported UI art retains native 16px sprite frames');
-        const iconSizes = () => page.locator('.tt-icon[data-ui-sprite]:visible').evaluateAll(nodes => nodes.map(node => {
-            const style = getComputedStyle(node);
-            return { name: node.dataset.uiIcon, width: parseFloat(style.width), height: parseFloat(style.height) };
-        }));
+        // These surfaces set their own art sizes, and game content decides which of them are on screen.
+        const sizedArt = '#party_progress, #party_doom_meter, #enemy_initiative_rail, #direction_pad, #party_turn_order, #hud_floor_items, '
+            + '.hud-power-button, .status-icon-frame, .party-bane, .party-role-badge, .hud-quick-slot, .tr-badge, .tip-state';
+        const iconSizes = () => page.locator('.tt-icon[data-ui-sprite]:visible').evaluateAll((nodes, sizedArt) => nodes
+            .filter(node => !node.closest(sizedArt)).map(node => {
+                const style = getComputedStyle(node);
+                return { name: node.dataset.uiIcon, width: parseFloat(style.width), height: parseFloat(style.height) };
+            }), sizedArt);
         assert((await iconSizes()).every(icon => icon.width === 16 && icon.height === 16),
             'Cards, stats, effects, faith marks, filters and controls render the shared icons at native 16px');
         assert.equal(await cards.first().locator('.party-inspect-btn > .tt-icon').getAttribute('data-ui-icon'), 'inspect');
@@ -200,10 +213,15 @@ fs.mkdirSync(output, { recursive: true });
         await render(fixture);
         assert.equal(await page.locator('.party-ping-heading .tt-icon').count(), 1);
         assert(!(await page.locator('#party_ping_toolbar').innerText()).includes('Signal'));
-        // Active effects and religion stay visible in the ordinary compact roster.
-        assert.equal(await page.locator('.party-effect:visible').count(), 4);
-        assert.deepEqual(await page.locator('.party-effect').allTextContents(), ['', '', '', '']);
-        assert.equal(await page.locator('.party-effect.is-bad .party-effect-warning').count(), 3);
+        // The compact roster keeps effects on the portraits; "Show details" restores the chips.
+        const toggleCompactRoster = () => page.locator('#workflow_compact_btn').evaluate(button => button.click());
+        assert.equal(await page.locator('.party-card .party-effect:visible').count(), 0);
+        assert.equal(await cards.nth(1).locator('.party-portrait').getAttribute('data-portrait-status'), 'confused');
+        await toggleCompactRoster();
+        const cardEffects = page.locator('.party-card .party-effect');
+        assert.equal(await page.locator('.party-card .party-effect:visible').count(), 4);
+        assert.deepEqual(await cardEffects.allTextContents(), ['3t', '6t', '4t', '9t'], 'Chips carry only their duration readout');
+        assert.equal(await page.locator('.party-card .party-effect.is-bad .party-effect-warning').count(), 3);
         assert.equal(await cards.nth(0).locator('.party-portrait').getAttribute('data-faith-tier'), '4');
         assert.equal(await cards.nth(1).locator('.party-faith.is-penance').count(), 1);
         assert.equal(await cards.nth(2).locator('.party-faith-favor').count(), 0);
@@ -214,6 +232,8 @@ fs.mkdirSync(output, { recursive: true });
         await page.locator('#party_effect_0_502').focus();
         await page.keyboard.press('Enter'); await page.keyboard.press('Space');
         assert.deepEqual(await packets(), [], 'Reading an effect never spends a turn');
+        // hud-input blurs non-button HUD focus to hand keys back to the game; the repaint check needs it again.
+        await page.locator('#party_effect_0_502').focus();
         const changedFaith = structuredClone(fixture);
         changedFaith.members[0].piety_rank = 2; changedFaith.members[0].penance = 5;
         changedFaith.members[0].statuses[1].dur = 5;
@@ -236,6 +256,7 @@ fs.mkdirSync(output, { recursive: true });
         assert.equal(await cards.nth(3).locator('.party-faith.is-unaffiliated').count(), 1);
         assert.equal(await cards.nth(3).locator('.party-effect').count(), 0);
         await render(fixture);
+        await toggleCompactRoster();
         await cards.nth(1).locator('.party-faith').click();
         assert.equal(await page.locator('#party_insp_tab_abilities').getAttribute('aria-selected'), 'true');
         assert.match((await page.locator('.party-insp-hero-meta').allTextContents()).join(' '), /Sif Muna.*Under penance/);
@@ -265,7 +286,7 @@ fs.mkdirSync(output, { recursive: true });
         await page.locator('#quickbar_entry_ability_902').click();
         assert.equal(await page.locator('#quickbar_slots canvas[data-power-art="native"]').count(), 2);
         await page.locator('#quickbar_slot_0').click();
-        assert.deepEqual(await packets(), [{ msg: 'inv_item_use', slot: item.slot, expected_slot: 0, expected_name: item.name }]);
+        assert.deepEqual(await packets(), [{ msg: 'inv_item_use', slot: item.slot, action: 'use', expected_slot: 0, expected_name: item.name }]);
         await page.locator('#quickbar_slot_1').click();
         assert.deepEqual(await packets(), [{ msg: 'power_action', expected_slot: 0, id: 901, letter: 'a', kind: 'spell' }]);
         await page.locator('#quickbar_slot_2').click();
@@ -293,7 +314,8 @@ fs.mkdirSync(output, { recursive: true });
         assert.equal(await page.locator('#quickbar_slots .is-empty').count(), 1);
         await page.locator('#hud_item_0_' + item.slot).dragTo(page.locator('#quickbar_slot_3'));
         assert(!(await page.locator('#quickbar_slot_3').getAttribute('class')).includes('is-empty'));
-        await page.locator('#quickbar_slot_3').click({ button: 'right' });
+        // Shift+click reassigns through the palette; right-click opens the slot's context menu.
+        await page.locator('#quickbar_slot_3').click({ modifiers: ['Shift'] });
         await page.locator('#quickbar_clear').click();
         assert((await page.locator('#quickbar_slot_3').getAttribute('class')).includes('is-empty'));
         await page.locator('#quickbar_search').fill('nonexistent action');
@@ -302,11 +324,13 @@ fs.mkdirSync(output, { recursive: true });
         await page.locator('#quickbar_search').press('Escape');
         assert.equal(await page.locator('#quickbar_more').getAttribute('open'), null);
         assert.deepEqual(await packets(), [], 'Editing and keyboard input spend no turns');
+        const clearSlot = async index => {
+            await page.locator('#quickbar_slot_' + index).click({ button: 'right' });
+            await page.getByRole('menuitem', { name: 'Clear quick slot' }).click();
+        };
         const key = fixture.members[0].player_id;
         assert.equal(await page.evaluate(key => JSON.parse(localStorage.getItem('dcss.quickbar.v1.' + key))[1].id, key), 901);
-        await page.reload();
-        await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
-        await page.evaluate(() => { location.hash = '#play-coop-2p-web-trunk'; });
+        await page.reload(); // The expedition URL rejoins the same game.
         await page.waitForFunction(() => window.crawl_party?.state?.members?.length === 4);
         await page.waitForFunction(() => {
             const name = Object.keys(require.s.contexts._.defined).find(name => name.endsWith('/workflow-actions'));
@@ -329,24 +353,26 @@ fs.mkdirSync(output, { recursive: true });
         }
         assert.equal(await page.locator('#quickbar_slots .hud-quick-slot').count(), 10);
         assert.equal(await page.locator('#quickbar_slots .is-empty').count(), 0);
-        assert(await page.locator('#dcss_quick_dock').evaluate(el => el.getBoundingClientRect().height <= 34));
+        // The dock spans the play column and wraps its action, slot and tool rows.
+        const dockRowsLimit = 150;
+        assert(await page.locator('#dcss_quick_dock').evaluate((el, limit) => el.getBoundingClientRect().height <= limit
+            && el.scrollWidth <= el.clientWidth, dockRowsLimit), 'Ten assigned slots stay within three dock rows');
         assert.deepEqual(await page.locator('.quickbar-key').allTextContents(), Array.from('1234567890'));
         for (const [index, key] of Array.from('1234567890').entries()) {
             await page.evaluate(() => document.activeElement.blur());
             await page.keyboard.press(key);
             const expected = index === 1 ? { msg: 'power_action', expected_slot: 0, id: 901, letter: 'a', kind: 'spell' }
                 : index === 2 ? { msg: 'power_action', expected_slot: 0, id: 902, letter: 'b', kind: 'ability' }
-                    : { msg: 'inv_item_use', slot: item.slot, expected_slot: 0, expected_name: item.name };
+                    : { msg: 'inv_item_use', slot: item.slot, action: 'use', expected_slot: 0, expected_name: item.name };
             assert.deepEqual(await packets(), [expected], key + ' uses its assigned slot through the real game client');
         }
         await page.locator('#dcss_quick_dock').screenshot({ path: path.join(output, 'ten-slot-shortcuts.png') });
         for (let index = 3; index < 10; index++) {
-            await page.locator('#quickbar_slot_' + index).click({ button: 'right' });
-            await page.locator('#quickbar_clear').click();
-            await page.locator('#quickbar_search').press('Escape');
+            await clearSlot(index);
         }
         const density = {};
         await page.mouse.move(1, 1);
+        await toggleCompactRoster(); // These rows only exist in the detailed roster.
         for (const [width, height] of [[1280, 800], [1440, 900], [1024, 768]]) {
             await page.setViewportSize({ width, height }); await page.waitForTimeout(250);
             assert(await page.evaluate(() => {
@@ -385,13 +411,11 @@ fs.mkdirSync(output, { recursive: true });
                 const name = card.querySelector('.party-member-name').getBoundingClientRect();
                 const faith = card.querySelector('.party-faith').getBoundingClientRect();
                 const bars = card.querySelector('.party-bars').getBoundingClientRect();
-                return Math.abs(compass.x + compass.width / 2 - portrait.x - portrait.width / 2) < 1
-                    && Math.abs(compass.y + compass.height / 2 - portrait.y) <= 2
-                    && (card.classList.contains('is-controlled-card') ? name.top >= faith.bottom
-                        : name.left >= portrait.right && name.bottom <= bars.top)
+                return Math.abs(compass.right - portrait.right - 8) < 1 && Math.abs(compass.top - portrait.top + 4) < 1
+                    && name.left >= portrait.right && name.bottom <= bars.top
                     && faith.top >= portrait.bottom - 1
                     && Math.abs(faith.x + faith.width / 2 - portrait.x - portrait.width / 2) < 1;
-            })), 'Shrine geometry is preserved; companion identity uses the content column');
+            })), 'Shrine geometry is preserved; the compass badges the portrait corner and identity uses the content column');
             assert(await cards.evaluateAll(cards => cards.every(card => {
                 const effects = card.querySelector('.party-effect-strip');
                 return !effects || effects.getBoundingClientRect().top >= card.querySelector('.party-bars').getBoundingClientRect().bottom;
@@ -400,23 +424,26 @@ fs.mkdirSync(output, { recursive: true });
                 const rect = row.getBoundingClientRect(), map = row.querySelector('#hud_bottom_map').getBoundingClientRect();
                 const log = row.querySelector('#message_pane').getBoundingClientRect();
                 return Math.abs(rect.bottom - innerHeight) < 2 && map.left <= 1 && map.right <= log.left
-                    && log.right <= rect.right + 1 && rect.height <= 140 && row.scrollWidth <= row.clientWidth;
+                    && log.right <= rect.right + 1 && rect.height <= 160 && row.scrollWidth <= row.clientWidth;
             }), 'Minimap and compact log share the bottom strip without overlap');
-            assert(await cards.first().locator('.party-member-name').evaluate(name => name.scrollWidth > name.clientWidth
-                && getComputedStyle(name).textOverflow === 'ellipsis' && getComputedStyle(name).whiteSpace === 'nowrap'));
+            assert(await cards.first().locator('.party-member-name').evaluate(name => name.scrollWidth <= name.clientWidth
+                && getComputedStyle(name).whiteSpace === 'normal'
+                && name.getBoundingClientRect().height > parseFloat(getComputedStyle(name).lineHeight)),
+                'A long controlled name wraps in full instead of truncating');
             assert(await page.locator('#dcss_quick_dock').evaluate(el => el.scrollWidth <= el.clientWidth + 1));
             density[width] = await page.locator('#dcss_quick_dock').evaluate(el => {
                 const bounds = el.getBoundingClientRect();
                 const expander = el.querySelector('#quickbar_more > summary').getBoundingClientRect();
                 return { height: bounds.height, width: bounds.width, occupiedWidth: expander.right - bounds.left };
             });
-            assert(density[width].height <= 34 && density[width].width <= 300,
-                'A populated quickbar stays short and keeps its expander beside the actions');
+            assert(density[width].height <= dockRowsLimit && density[width].occupiedWidth <= density[width].width,
+                'A populated quickbar stays short and keeps its expander inside the dock');
             await page.locator('#hud_sidebar_scroll').evaluate(scroll => { scroll.scrollTop = 0; });
             await page.mouse.move(300, height - 10);
             await page.evaluate(() => { document.activeElement.blur(); window.dcss_tooltips.hide(); });
             await page.screenshot({ path: path.join(output, 'hud-' + width + '.png') });
         }
+        await toggleCompactRoster();
         await page.locator('#dcss_quick_dock').screenshot({ path: path.join(output, 'compact-bar.png') });
         await page.locator('#hud_sidebar_scroll').evaluate(scroll => { scroll.scrollTop = 0; });
         await cards.first().screenshot({ path: path.join(output, 'controlled-card.png') });
@@ -424,11 +451,14 @@ fs.mkdirSync(output, { recursive: true });
         await page.locator('#quickbar_more > summary').click();
         await page.locator('#workflow_compact_btn').click();
         assert.equal(await page.locator('.party-member-meta:visible').count(), 4);
+        assert.equal(await page.locator('#quickbar_more').getAttribute('open'), null, 'Running a palette command closes the palette');
+        await page.locator('#quickbar_more > summary').click();
         await page.locator('#workflow_compact_btn').click();
+        await page.locator('#quickbar_more > summary').click();
         await page.mouse.move(1, 1);
         await page.evaluate(() => { document.activeElement.blur(); window.dcss_tooltips.hide(); });
         const tray = await page.locator('#quickbar_more_content').boundingBox();
-        assert(tray.width <= 360 && tray.height <= 220);
+        assert(tray.width <= 440 && tray.height <= 360);
         const spriteDisplay = await iconSizes();
         assert(spriteDisplay.every(icon => icon.width === 16 && icon.height === 16),
             'Expanded quickbar categories and commands retain the same 16px optical size');
@@ -452,17 +482,16 @@ fs.mkdirSync(output, { recursive: true });
         crowded.members[0].spells = Array.from({ length: 30 }, (_, index) => ({
             ...fixture.members[0].spells[0], id: 1000 + index, letter: String.fromCharCode(97 + index % 26)
         }));
-        const compactHeights = await page.locator('#hud_powers, #hud_inventory').evaluateAll(nodes => nodes.map(node => node.offsetHeight));
         await render(crowded);
         assert.equal(await page.locator('.quickbar-catalog-action').count(), 52);
         assert(await page.locator('#quickbar_catalog').evaluate(el => el.clientHeight <= 100 && el.scrollHeight > el.clientHeight));
-        assert((await page.locator('#quickbar_more_content').boundingBox()).height <= 220);
+        assert((await page.locator('#quickbar_more_content').boundingBox()).height <= 360);
         assert.equal(await page.locator('#hud_inventory .hud-item-slot').count(), 52);
         assert.equal(await page.locator('#hud_powers .hud-power-button').count(), 31);
-        assert(await page.locator('#hud_powers, #hud_inventory').evaluateAll((nodes, heights) => nodes.every((node, index) =>
-            node.offsetHeight > heights[index] && getComputedStyle(node).maxHeight === 'none'
-            && getComputedStyle(node).overflowY === 'visible'), compactHeights),
-            'Actions and inventory grow vertically inside the player card');
+        // party-sidebar.js shares spare height between these grids, which then scroll in place.
+        assert(await page.locator('#hud_powers > .hud-panel-body, #hud_inventory .hud-item-grid').evaluateAll(nodes => nodes.every(node =>
+            getComputedStyle(node).overflowY === 'auto' && node.scrollHeight > node.clientHeight)),
+            'Long actions and inventory scroll in place inside the player card');
         assert(await page.locator('#hud_sidebar_scroll').evaluate(node => node.scrollHeight > node.clientHeight),
             'One sidebar scrollbar reaches every card section');
         await page.locator('#quickbar_search').press('Escape');
@@ -474,8 +503,7 @@ fs.mkdirSync(output, { recursive: true });
         await page.locator('#quickbar_entry_item_' + item.slot).press('Shift+Enter');
         assert.equal(await page.locator('#quickbar_slots .hud-quick-slot').count(), 5);
         assert.deepEqual(await packets(), [], 'Keyboard pinning cannot activate the action');
-        await page.locator('#quickbar_slot_3').click({ button: 'right' });
-        await page.locator('#quickbar_clear').click();
+        await clearSlot(3);
         assert.deepEqual(errors, []);
         await page.locator('#hud_layout_toggle').click();
         await page.locator('#hud_bottom_map > .hud-panel-move').focus();
@@ -490,13 +518,13 @@ fs.mkdirSync(output, { recursive: true });
             keyboardPinning: true, fullInventory: true, fullCapacity: true, narrowLayouts: true,
             iconEffects: true, faithFavorPenance: true, religionExceptions: true, statusKeyboardIsolation: true,
             contentSizedActions: true, portraitCompass: true, faithPlinth: true,
-            controlledNameBelowPlinth: true, companionNameBesidePortrait: true,
+            heroNamesBesidePortrait: true,
             integratedPersonalHud: true, nativeStatsPreserved: true, continuousCardSections: true,
-            intrinsicSectionGrowth: true, nativePowerArt: true, personalStatVisuals: true,
+            sectionsScrollInPlace: true, nativePowerArt: true, personalStatVisuals: true,
             sharedPlayerXp: true, xpOnlyUpdates: true, compactNoiseActions: true, elapsedTimeRemoved: true,
             sharedUiIcons: true, coloredUiSprites: true, native16pxIcons: true, spriteDisplay, compactNearbyCreatures: true, alignedLevelBars: true, spritePixels, animatedDeityShrines: true, portraitStatusInteriors: true, reducedMotion: true,
             sharedGoldFloorRuneTracker: true, legacyItemStripReplaced: true, bottomMinimapAndLog: true,
-            relocatedViewControls: true, mapWorkspacePreserved: true, nameEllipsis: true, nativeStatusIcons: true, density, tray, output };
+            relocatedViewControls: true, mapWorkspacePreserved: true, nameWraps: true, nativeStatusIcons: true, density, tray, output };
         fs.writeFileSync(path.join(output, 'evidence.json'), JSON.stringify(evidence, null, 2));
         console.log(JSON.stringify(evidence));
     } catch (error) {

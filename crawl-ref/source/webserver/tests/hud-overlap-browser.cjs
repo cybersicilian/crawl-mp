@@ -60,6 +60,7 @@ function hero(slot, count = 18) {
                 './party-inspector': { open: (...args) => window.inspected.push(args), render: noop },
                 './party-controls': { toggle_drawer: noop, bind: noop }, './tileinfo-dngn': {}, './tileinfo-main': {}, './tileinfo-gui': {},
                 './party-doom': { update: noop }, './party-trade': { button: () => window.jQuery('<button>Trade</button>') },
+                './turn-order-rail': { update: noop },
                 './chat-context': { update: noop }, './item-context-menu': { bind: noop },
                 './inspection-dialog': { open: noop }, './power-picker': {init:noop,open:noop},
                 './equipment-paperdoll': { itemRestriction: () => null },
@@ -78,12 +79,14 @@ function hero(slot, count = 18) {
                     return window.modules[dep];
                 }));
             };
+            window.define.amd = true;
         });
         const files = [['dom-update', 'static/scripts/dom-update.js'], ['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'], ['heat-help','static/scripts/heat-help.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
+            ['hero-roles', 'static/scripts/hero-roles.js'],
             ...['minimap','effect-icon-catalog','effect-icon-art','status-icons', 'party-model', 'party-status-model', 'party-doom-model', 'party-doom', 'party-faith', 'portrait-status', 'party-card-status',
                 'player-card-details', 'party-initiative', 'workflow-actions', 'party-navigation', 'party', 'native-tile-art', 'frame-update',
-                'party-power-cards', 'shell-dash-art', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography','menu-keyboard','quickbar-model','quickbar-commands','quickbar','gameplay-controls','hud-bottom-strip','floor-items','route-plan','direction-pad','party-progress-model','enemy-banner-model','creature-roster-model','collapsible-roster','indexed-paint','enemy-initiative','party-progress','hud-polish','hud-layout']
+                'party-power-cards', 'shell-dash-art', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography','menu-keyboard','quickbar-model','attack-info','quickbar-commands','quickbar','go-menu','gameplay-controls','hud-bottom-strip','floor-items','route-plan','direction-pad','party-progress-model','enemy-banner-model','creature-roster-model','collapsible-roster','indexed-paint','enemy-initiative','party-progress','hud-polish','hud-layout']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])];
         for (const [name, file] of files) {
             await page.evaluate(name => { window.moduleName = name; }, name);

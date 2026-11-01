@@ -29,14 +29,14 @@ function hero(slot, count = 18) {
     await require('./helpers/ui-sprite-fixture.cjs').install(page);
     try {
         const sheet = fs.readFileSync(path.join(root, 'game_data/templates/character-sheet.html'), 'utf8');
-        await page.setContent('<!doctype html><html><body class="workflow-compact-roster"><main id="normal">'
+        await page.setContent('<!doctype html><html><body><main id="normal">'
             + '<div id="left_column"></div><div id="right_column"><div id="hud_sidebar_scroll">'
             + sheet + '<div id="party_hud"><div id="party_hud_header">Party</div>'
             + '<div id="party_hud_members"></div></div><div id="monster_list"></div></div></div></main></body></html>');
         for (const file of ['static/tabletop/tokens.css', 'static/tabletop/materials.css', 'static/tabletop/properties.css',
             ...['game-coop', 'tabletop-party', 'gameplay-shell', 'hud-workspace', 'hud-polish', 'party-initiative',
                 'party-card-status', 'hud-reflow', 'personal-stat-visuals', 'player-card-sections', 'party-faith',
-                'portrait-status', 'health-effects', 'party-card-readings', 'party-sidebar'].map(name => 'game_data/static/styles/' + name + '.css')])
+                'portrait-status', 'health-effects', 'party-card-readings', 'party-sidebar', 'play-guidance'].map(name => 'game_data/static/styles/' + name + '.css')])
             await page.addStyleTag({ content: fs.readFileSync(path.join(root, file), 'utf8') });
         await page.addStyleTag({ content: 'body{margin:0;background:#11161b;color:#e2dac7}#normal{display:flex}'
             + '#left_column{flex:1}#right_column{flex:none;box-sizing:border-box}button{font:inherit;color:inherit}' });
@@ -53,6 +53,7 @@ function hero(slot, count = 18) {
                 './party-inspector': { open: (...args) => window.inspected.push(args), render: noop },
                 './party-controls': { toggle_drawer: noop, bind: noop }, './tileinfo-dngn': {}, './tileinfo-main': {}, './tileinfo-gui': {},
                 './party-doom': { update: noop }, './party-trade': { button: () => window.jQuery('<button>Trade</button>') },
+                './turn-order-rail': { update: noop },
                 './chat-context': { update: noop }, './item-context-menu': { bind: noop },
                 './inspection-dialog': { open: noop } };
             window.define = (deps, factory) => {
@@ -62,10 +63,12 @@ function hero(slot, count = 18) {
                     return window.modules[dep];
                 }));
             };
+            window.define.amd = true;
         });
         const files = [['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
-            ['heat-help', 'static/scripts/heat-help.js'],
+            ['heat-help', 'static/scripts/heat-help.js'], ['hero-roles', 'static/scripts/hero-roles.js'],
+            ['dom-update', 'static/scripts/dom-update.js'],
             ...['effect-icon-catalog', 'effect-icon-art', 'status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status', 'party-card-status',
                 'player-card-details', 'party-initiative', 'workflow-actions', 'party-navigation', 'party', 'native-tile-art', 'frame-update',
                 'party-power-cards', 'shell-dash-art', 'power-art', 'equipment-memory-ui', 'equipment-paperdoll',
@@ -93,6 +96,12 @@ function hero(slot, count = 18) {
         }
         async function settled() {
             await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        }
+        async function setCompact(compact) {
+            await page.evaluate(compact => {
+                document.body.classList.toggle('workflow-compact-roster', compact);
+                window.dispatchEvent(new Event('resize'));
+            }, compact);
         }
         async function geometry() {
             await settled();
@@ -124,9 +133,17 @@ function hero(slot, count = 18) {
             'Native false resistance facts remain known, rather than unavailable');
         for (const [width, height] of [[1440, 900], [1728, 1100], [1280, 800], [1024, 768]]) {
             await page.setViewportSize({ width, height });
-            const layout = await geometry(); evidence[width + 'x' + height] = layout;
+            let layout = await geometry(); evidence[width + 'x' + height] = layout;
             assert.equal(layout.overflow, false);
             assert.deepEqual(layout.clippedControls, [], 'Every visible card control fits its card');
+            // Short laptops scroll the detailed roster; the compact roster is their no-scroll layout.
+            const shortLaptop = height <= 800;
+            if (shortLaptop) {
+                assert(await page.locator('#hud_sidebar_scroll').evaluate(node => getComputedStyle(node).overflowY === 'auto'
+                    && node.scrollHeight > node.clientHeight), 'The sidebar scrollbar reaches every hero');
+                await setCompact(true);
+                layout = await geometry(); evidence[width + 'x' + height + ' compact'] = layout;
+            }
             assert(layout.content <= layout.height, 'Two-player cards fit without hiding another hero');
             if (!layout.previews) {
                 assert(await page.locator('.party-sidebar-pack').evaluate(pack => {
@@ -148,14 +165,14 @@ function hero(slot, count = 18) {
                 'The inspectable name fills the portrait header instead of reserving a separate portrait caption');
             assert(await page.locator('.is-controlled-card').evaluate(card => {
                 const name = card.querySelector('.party-member-name').getBoundingClientRect();
-                const meta = card.querySelector('.party-icon-meta').getBoundingClientRect();
                 const timing = card.querySelector('.party-member-timing').getBoundingClientRect();
-                return name.bottom <= meta.top
-                    && Math.abs(meta.top + meta.height / 2 - timing.top - timing.height / 2) < 1;
-            }), 'Name sits above metadata and timing, which share one row');
+                return name.right <= timing.left
+                    && Math.abs(name.top + name.height / 2 - timing.top - timing.height / 2) < 1;
+            }), 'Name leads the header row with timing at its right');
             await page.locator('#right_column').screenshot({ path: path.join(output, 'sidebar-' + width + '.png') });
+            if (shortLaptop) await setCompact(false);
         }
-        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.setViewportSize({ width: 1728, height: 1100 }); // Tall enough to keep a companion pack open.
         await settled();
         evidence.layoutCache = await page.evaluate(async () => {
             const scroll = document.getElementById('hud_sidebar_scroll');
@@ -195,9 +212,12 @@ function hero(slot, count = 18) {
         await page.setViewportSize({ width: 1440, height: 1100 });
         state.members = [hero(0, 52), hero(1, 52), hero(2, 52), hero(3, 52)];
         await render();
+        await setCompact(true); // Four detailed cards exceed this height whatever their packs hold.
         const four = await geometry(); evidence.four = four;
         assert(four.content <= four.height, 'Full packs do not push four heroes out of view');
         assert.equal(await page.locator('#party_hud_members .hud-item-slot').count(), 208);
+        await page.setViewportSize({ width: 1440, height: 900 }); // Short enough that the full pack has to scroll.
+        await settled();
         const grid = page.locator('#hud_inventory .hud-item-grid');
         await grid.evaluate(node => { node.scrollTop = 60; });
         await page.evaluate(() => window.modules['./party-sidebar'].update());
