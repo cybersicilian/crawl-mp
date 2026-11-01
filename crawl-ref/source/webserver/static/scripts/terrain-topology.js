@@ -5,7 +5,7 @@ define(["tile-edges"], function (edges) {
         var wall = 0, shore = 0, depth = 0, wet = 0, hot = 0, blends = [];
         edges.sides.forEach(function (side, index) {
             var other = neighbours[index];
-            if (!other || !other.visible) return;
+            if (!other || !(other.visible || other.remembered)) return;
             if (own.solid && !other.solid) wall |= side.bit;
             if (own.surface && own.surface !== other.surface) shore |= side.bit;
             if (own.surface === "water" && other.surface === "water" && own.depth !== other.depth) depth |= side.bit;

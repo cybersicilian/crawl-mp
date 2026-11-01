@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "entries": {
+    "lobby": [
+      "style.css",
+      "tabletop/tokens.css",
+      "tabletop/navigation.css",
+      "tabletop/site-resources.css",
+      "styles/account-actions.css",
+      "styles/connection-quality.css",
+      "tabletop/lobby-workspace.css",
+      "tabletop/character-builder.css",
+      "tabletop/character-folio.css",
+      "tabletop/starting-sheet.css",
+      "tabletop/party-setup.css",
+      "tabletop/lobby-dashboard.css",
+      "tabletop/layout-rhythm.css",
+      "fonts/fonts.css",
+      "tabletop/art-direction.css",
+      "tabletop/outgame-hierarchy.css",
+      "tabletop/rpg-character-builder.css",
+      "tabletop/party-management.css",
+      "tabletop/lobby-access.css",
+      "tabletop/entry-layout.css"
+    ]
+  }
+}

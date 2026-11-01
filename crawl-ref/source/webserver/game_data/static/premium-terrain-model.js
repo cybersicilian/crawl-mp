@@ -33,10 +33,14 @@ function (tiles, enums, environment, stone, effects) {
         lava: { kind: "lava", radius: 3.1, colour: [255, 117, 52], strength: .09, variation: .045, elevation: .25 },
         fountain: { kind: "fountain", radius: 2.8, colour: [108, 173, 223], strength: .12, elevation: .55 }
     };
-    function describe(entry) {
+    function describe(entry, settings) {
         if (!entry || !entry.t) return null;
         var cell = entry.t, bg = enums.prepare_bg_flags(cell.bg || 0);
-        if (bg.UNSEEN || bg.MM_UNSEEN || bg.value <= tiles.DNGN_ERROR) return null;
+        // Remembered terrain is available only to explicit material consumers.
+        // Lighting and effects keep their visible-only contract by default;
+        // magic-mapped and unexplored cells never supply premium terrain.
+        if (bg.MM_UNSEEN || bg.value <= tiles.DNGN_ERROR || bg.UNSEEN && !(settings && settings.remembered)) return null;
+        var visible = !bg.UNSEEN;
         var base = tiles.basetile(bg.value), fluid = water.get(base);
         var lava = base === tiles.DNGN_LAVA || base === tiles.DNGN_LAVA_SEA;
         var torch = torches.has(base), fountain = base === tiles.DNGN_BLUE_FOUNTAIN || base === tiles.DNGN_SPARKLING_FOUNTAIN;
@@ -52,7 +56,7 @@ function (tiles, enums, environment, stone, effects) {
             || cell.ritual_blood || bg.CURSOR1 || bg.CURSOR2 || bg.CURSOR3 || bg.TUT_CURSOR);
         var radiation = emitting ? emitting.radiance : torch ? { type: "flame", width: .26, height: .43, y: .54 }
             : lava ? { type: "lava" } : fountain ? { type: "glow", colour: lights.fountain.colour } : null;
-        return { visible: true, index: bg.value, solid: solid, surface: surface,
+        return { visible: visible, remembered: !visible, index: bg.value, solid: solid, surface: surface,
             transmission: solid ? transmission.get(base) || 0 : 1,
             relightable: Boolean(info && info.w <= 32 && info.h <= 32 && (base < tiles.FLOOR_MAX || solid)),
             depth: fluid ? fluid.depth : null, murky: fluid ? fluid.murky : false,
@@ -61,9 +65,9 @@ function (tiles, enums, environment, stone, effects) {
             shading: surface || (solid ? responses.get(base) || "wall" : base === tiles.FLOOR_MOSS ? "moss"
                 : /sand/i.test(materials.get(base) || "") ? "sand" : "stone"),
             occupied: Boolean(protectedArt || cloud.value || (cell.ov || []).length),
-            emission: radiation ? Object.assign({}, radiation, { blocked: protectedArt }) : null,
-            effect: emitting ? emitting.radiance.type === "flame" ? "fire" : "radiance" : torch ? "ember" : fountain ? "fountain" : lava ? "lava" : surface,
-            light: emitting ? emitting.light : torch ? lights.torch : lava ? lights.lava : fountain ? lights.fountain : null };
+            emission: visible && radiation ? Object.assign({}, radiation, { blocked: protectedArt }) : null,
+            effect: !visible ? null : emitting ? emitting.radiance.type === "flame" ? "fire" : "radiance" : torch ? "ember" : fountain ? "fountain" : lava ? "lava" : surface,
+            light: !visible ? null : emitting ? emitting.light : torch ? lights.torch : lava ? lights.lava : fountain ? lights.fountain : null };
     }
     return { describe: describe, floorMax: tiles.FLOOR_MAX };
 });

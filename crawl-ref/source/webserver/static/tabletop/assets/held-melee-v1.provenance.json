@@ -1,0 +1,55 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-180fe922-ec35-4b16-8dba-86308abd408e.png",
+  "sha256": "1de6199cae5e1c65abb3e7b713c47ca943dcf4f5092f9c2c523a662b8867921a",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "layout": {
+    "columns": [
+      0,
+      314,
+      627,
+      940,
+      1254
+    ],
+    "rows": [
+      0,
+      316,
+      626,
+      904,
+      1254
+    ]
+  },
+  "prompt": "Use case: stylized-concept. Asset type: production transparent held-weapon sprite sheet for an overhead dark fantasy game, matching an existing illustrated equipment set.\nInput images are REFERENCE GUIDES only, not edit targets. Image 1 is the established painted steel/oak/leather style. Image 2 is native long-sword diagonal orientation. Image 3 is native flail silhouette (chain and hanging ball on left, angled handle on right). Image 4 is native whip silhouette. Image 5 is native halberd silhouette. Create an entirely NEW square transparent RGBA sheet with exactly FOUR equal columns and FOUR equal rows, sixteen distinct isolated weapons in the exact order below. No objects from the style reference should be copied into this sheet.\nLayout: one complete weapon centered in each cell, entire object inside the CENTRAL 70 PERCENT of that cell in both directions, generous genuinely transparent gutters; no clipping, no touching, no boundary crossings. Objects have varied proportions appropriate to their function. All tips face upward and grips downward except the specified diagonal swords, flail and whip.\nRow 1 left-to-right: (1) Rapier: upright slender needle-like straight silver blade, small cup guard and simple dark leather grip at lower quarter, no ornate loops outside guard. (2) Falchion: single-edged broad gently curved steel blade leaning from UPPER LEFT toward a grip at LOWER RIGHT, simple brass crossguard and dark leather grip; modest curve, no hook. (3) Long sword: long straight double-edged steel blade tilted diagonally from UPPER LEFT to LOWER RIGHT, crossguard near bottom quarter, leather grip down-right, simple bronze pommel. (4) Great sword: vertically upright heavy straight two-handed sword, broad symmetrical pointed blade, steel crossguard, elongated dark brown two-handed grip, restrained steel pommel.\nRow 2 left-to-right: (5) War axe: straight upright wooden haft on RIGHT, single compact crescent steel blade projecting LEFT near top, leather grip below. (6) Broad axe: upright heavy wooden haft on RIGHT with a much broader single bearded cutting blade extending LEFT near top, visible broad flat steel cheek, no second blade. (7) Battleaxe: upright tall two-handed dark oak haft at center with two symmetrical large opposing crescent steel blades near the top, central steel point, long grip below. (8) Great mace: upright large heavy flanged steel head at top, sturdy long dark shaft and leather grip, no spikes and no chain.\nRow 3 left-to-right: (9) Morningstar: upright short dark wooden haft with a round iron striking head covered in SHORT solid triangular steel spikes at the top, leather grip below, no chain. (10) Flail: ONE compact iron ball hanging at LOWER LEFT from a short linked iron chain that curves up toward UPPER CENTER, connected to the top of a short rigid dark wooden handle that slopes down toward LOWER RIGHT. Overall silhouette is an upside-down narrow arch with the iron ball on left and leather-wrapped wooden handle on right. The chain's highest point is above both the ball and handle, as in tiny native reference. (11) Whip: one continuous flexible brown leather whip, short thick dark handgrip on RIGHT at MID-LOWER height, leather lash curves upward in a tall narrow inverted U loop then down the LEFT edge ending in a slender tail at BOTTOM LEFT. No second handle, no spikes, no chain, no metal ball. (12) Giant club: massive upright rough dark oak club with a very thick knotty rounded striking end at top and a short heavy narrower leather-wrapped handle at bottom, no metal spikes.\nRow 4 left-to-right: (13) Trident: tall upright straight wooden pole, narrow forged silver three-pronged head at top with longest central tine, straight side tines, simple leather winding lower down. (14) Halberd: tall upright slender wooden pole, steel spear point above the head, compact broad steel axe blade projecting LEFT and a small pointed hook to RIGHT, no second axe blade, a plain long shaft extending downward. (15) Glaive: tall upright dark wooden pole with a long gently curved single steel blade attached at top; blade edge projects slightly LEFT, no crossguard, no hook, no axe. (16) Quarterstaff: a tall straight slender brown wooden fighting staff with plain short iron caps at BOTH ends and a narrow leather-wrapped CENTRAL grip; no blade, no gem, no spikes, no magic effects.\nStyle: richly painted matte gouache dark fantasy equipment, crisp broad material facets, restrained engraved steel edges, forged silver and charcoal iron, warm dark oak and leather, subtle bronze fittings, soft upper-left ivory edge light. Match image 1 quality and brush texture. Silhouettes must remain readable in a 32px tile yet retain tactile painted detail when rendered at 128px. Weapons themselves opaque with antialiased alpha edges. No hands, characters, shields, stands, floor shadows, scenery, glows, runes, sparks, blood, UI, lettering, numbers, grid lines, borders, logos, watermarks or background. Exactly sixteen isolated complete objects on truly transparent background.",
+  "references": [
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/static/tabletop/assets/held-equipment-v2.png",
+      "sha256": "a1309a4e52e9f9dc0ea546937dace1ec4de34326f06059bffaf5631af04abf57",
+      "role": "style reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/long_sword_slant.png",
+      "sha256": "786cec5bd3ade64e0ed4553966ce0d202f2811bfa2203f02bc07d69af0389a23",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/flail.png",
+      "sha256": "e36fc9e9f988b983d1b20bb32d57c433f8f92377414330b7db63f7e792571266",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/whip.png",
+      "sha256": "a4565ca8cff6b6a30255f0cbc8ffc5e8ec4aec8fa7f40a03eb8d34e7aba01fe9",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/halberd.png",
+      "sha256": "c952ab46e0f4e44bec96226e03515d526874a503cb52befa9816b37110f43d07",
+      "role": "native geometry reference"
+    }
+  ],
+  "localPixelEdits": false
+}

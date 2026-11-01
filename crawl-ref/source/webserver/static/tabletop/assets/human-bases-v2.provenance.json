@@ -1,0 +1,117 @@
+{
+  "generator": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-5d42db3c-a779-4eff-a4e3-d37e08b0c436.png",
+  "sha256": "55331227b91a3228973f66527603b9119b025cc2a6886202a8e4693f70467a4c",
+  "rgba_sha256": "fa6b2e0956e139c57aa6a0caf8bf76a36dba5e9b44bdbe81c0e20c171154e8e5",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "bytes": 2015719,
+  "transparent_background": true,
+  "originalPixelsPreserved": true,
+  "prompt": "docs/graphics-2026-10-31/human-bases/redraw-prompt.txt",
+  "status": "selected-local-followup-pending-delivery-encoding",
+  "crops": [
+    {
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 504
+      },
+      "alphaBounds": [
+        139,
+        28,
+        421,
+        495
+      ],
+      "minimumGutter": 9
+    },
+    {
+      "rectangle": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 513
+      },
+      "alphaBounds": [
+        106,
+        20,
+        405,
+        497
+      ],
+      "minimumGutter": 16
+    },
+    {
+      "rectangle": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 508
+      },
+      "alphaBounds": [
+        90,
+        28,
+        373,
+        495
+      ],
+      "minimumGutter": 13
+    },
+    {
+      "rectangle": {
+        "x": 0,
+        "y": 504,
+        "w": 512,
+        "h": 520
+      },
+      "alphaBounds": [
+        121,
+        10,
+        444,
+        495
+      ],
+      "minimumGutter": 10
+    },
+    {
+      "rectangle": {
+        "x": 512,
+        "y": 513,
+        "w": 512,
+        "h": 511
+      },
+      "alphaBounds": [
+        113,
+        16,
+        400,
+        483
+      ],
+      "minimumGutter": 16
+    },
+    {
+      "rectangle": {
+        "x": 1024,
+        "y": 508,
+        "w": 512,
+        "h": 516
+      },
+      "alphaBounds": [
+        76,
+        14,
+        384,
+        489
+      ],
+      "minimumGutter": 14
+    }
+  ],
+  "controlledRendererProof": "docs/graphics-2026-10-31/human-bases/browser-8/headwear/validation.json",
+  "originalGeometryRejectionProof": "docs/graphics-2026-10-31/human-bases/browser-8/original-rejection/expected-rejection.json",
+  "visualReview": {
+    "headwearIdentityPairs": 72,
+    "skinIdentities": 6,
+    "reviewed": true
+  },
+  "nativeEngineVerified": false,
+  "deployed": false,
+  "finishedReleaseCutoffModified": false
+}

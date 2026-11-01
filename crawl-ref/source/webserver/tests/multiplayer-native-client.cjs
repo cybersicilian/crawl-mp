@@ -3,7 +3,8 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { chromium } = require('playwright');
 const password = crypto.randomBytes(16).toString('hex');
-const suffix = Date.now().toString(36);
+const suffix = process.env.MULTIPLAYER_TEST_SUFFIX || Date.now().toString(36);
+assert(/^[A-Za-z0-9]{6,12}$/.test(suffix), 'A QA account suffix must be alphanumeric and bounded');
 const send = (page, msg, data = {}) => page.evaluate(({ msg, data }) =>
     require('comm').send_message(msg, data), { msg, data });
 const key = (page, keycode) => send(page, 'key', { keycode });
@@ -27,28 +28,42 @@ async function capture(page) {
         };
     });
 }
-async function clientAs(browser, url, username, slot, errors) {
+async function clientAs(browser, url, username, slot, errors, initializePage, observePage) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     page.setDefaultTimeout(20000);
     page.on('pageerror', error => errors.push(error.message));
+    if (observePage) await observePage(page);
     await page.goto(url);
-    await page.locator('#reg_link').click();
-    await page.locator('#reg_username').fill(username);
-    await page.locator('#reg_password').fill(password);
-    await page.locator('#reg_repeat_password').fill(password);
-    await page.locator('#reg_submit').click();
-    await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
-    await capture(page);
-    return { page, username, context, slot, wizard: false };
+    if (initializePage) await initializePage(page);
+    try {
+        await page.locator('#reg_link').click();
+        await page.locator('#reg_username').fill(username);
+        await page.locator('#reg_password').fill(password);
+        await page.locator('#reg_repeat_password').fill(password);
+        await page.locator('#reg_submit').click();
+        await page.locator('#lobby_navigation').waitFor({ state: 'visible' });
+        await capture(page);
+        return { page, username, context, slot, wizard: false };
+    } catch (error) {
+        error.clientDiagnostics = await page.evaluate(() => ({
+            url: location.href, visibility: document.visibilityState, focused: document.hasFocus(),
+            readyState: document.readyState, activeElement: document.activeElement?.id,
+            body: document.body.innerText,
+            loadedModules: typeof require === 'function' ? Object.keys(require.s.contexts._.defined) : []
+        })).catch(() => null);
+        throw error;
+    }
 }
-async function client(browser, url, role, errors) {
-    return clientAs(browser, url, 'Multi' + role + suffix, role === 'H' ? 0 : 1, errors);
+async function client(browser, url, role, errors, initializePage, observePage) {
+    return clientAs(browser, url, 'Multi' + role + suffix, role === 'H' ? 0 : 1, errors, initializePage, observePage);
 }
 async function ready(page) {
     await page.waitForFunction(() => {
         const name = Object.keys(require.s.contexts._.defined).find(name => name.endsWith('/workflow-actions'));
-        return name && require(name).ready() && !require('jquery')('#loader').is(':visible');
+        const client = require('client');
+        return name && require(name).ready() && !require('jquery')('#loader').is(':visible')
+            && client.in_game() && client.is_party_member() && !client.is_watching();
     });
 }
 async function waitText(page, text) {

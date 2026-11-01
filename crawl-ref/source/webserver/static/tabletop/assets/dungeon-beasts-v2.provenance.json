@@ -1,0 +1,27 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-29eea067-8b7e-4ea0-b882-de3c1c57685e.png",
+  "sha256": "938c5b873c6c6dcceafc48dde7a4a08149c89011f252a92424209c7f2cde208e",
+  "layout": {
+    "width": 1254,
+    "height": 1254,
+    "columns": 3,
+    "rows": 3,
+    "cell": 418
+  },
+  "transparent_background": true,
+  "entries": [
+    "Rat",
+    "Quokka",
+    "Bat",
+    "Jackal",
+    "Hound",
+    "Ball python",
+    "Adder",
+    "Frilled lizard",
+    "Iguana"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent creature sprite sheet for a top-down dark-fantasy dungeon game. Create a square 1536 by 1536 RGBA image, EXACTLY THREE equal columns by THREE equal rows, nine 512-square cells. Genuine transparent background outside every creature, including every margin; no painted checkerboard, no ground squares. Exactly ONE isolated complete creature per cell, entirely inside its central 430 by 430 pixels, with transparent perimeter and no overlap. Consistent three-quarter overhead orthographic game camera showing face and back, animal generally facing lower-left; compact broad readable silhouettes. Row 1 left: a low gray-brown dungeon rat, pointed muzzle, round pink ears, four small paws, long curled bare pink tail. Row 1 middle: a round warm tawny quokka, short broad dark muzzle, rounded ears, stocky hindquarters and short thick tail, recognizably a small marsupial rather than a rat. Row 1 right: a charcoal-brown common bat in flight with broad spread leathery wings and clearly visible small furry body and pointed ears, no vampire or fire effects. Row 2 left: a lean sandy-ochre jackal with large pointed ears, slender canine muzzle, four legs and bushy tail, alert low stance. Row 2 middle: a larger stockier slate-gray dungeon hound with broad shoulders, dark muzzle and lowered ears, strongly distinct from the sandy jackal. Row 2 right: a thick tan and dark chocolate patterned ball python in one broad coil, small lifted head, heavy muscular body and blunt tail. Row 3 left: a slender olive-gray adder with a broad dark zigzag stripe along its back, low S-coil and triangular lifted head, visibly slimmer than the ball python. Row 3 middle: a small russet frilled lizard with a clearly flared large orange-ochre circular neck frill, four splayed legs and long slender tail. Row 3 right: a sturdy moss-green iguana with blunt head, prominent dorsal spines, four strong splayed legs and a long thick tapering tail, no neck frill. Art direction: premium illustrated dark fantasy, matte hand-painted gouache with restrained engraved edge accents, warm bone edge light and deep umber shadows, desaturated natural pigments, coherent upper-left soft lighting. Broad anatomical masses and clearly separated limbs, readable after reduction to 32 pixels yet carefully painted at 128 pixels. Crisp antialiased alpha edges, opaque creature interiors, only a tiny attached contact shadow for grounded animals. Each creature is a complete full-body game sprite, not a portrait. No weapons, collars, clothing, armour, blood, magic, auras, status symbols, humans, text, labels, grid, borders, numbers, logos or watermark. Exact regular 3 by 3 sheet with transparent margins around every animal.",
+  "edit_prompt": "Use case: precise-object-edit. Edit target: the provided nine-creature transparent sprite sheet. Change ONLY scale and placement: keep every animal's identity, anatomy, pigments, lighting, painterly style and pose. Keep the same 3 by 3 order (rat, quokka, bat / jackal, hound, ball python / adder, frilled lizard, iguana). Recompose into an EXACTLY regular square 3 by 3 grid with EQUAL square cells, no drawn grid. Scale every entire animal INCLUDING tail tips, claws, whiskers and wing tips down to fit entirely inside the CENTRAL 58 PERCENT of its own cell in BOTH dimensions. This means a wide genuinely transparent margin of at least 21 PERCENT of the cell width on ALL FOUR sides of EVERY animal. No animal pixel or shadow may touch a cell boundary or enter another cell. In particular lift the jackal and hound paws and the ball python coil well above the second row's bottom boundary, and bring the adder, frilled lizard and iguana tails fully inside their bottom-row cells. Generous regular transparent gutters are more important than filling the canvas. Real RGBA transparency in all margins and gaps, retain existing creature alpha. No labels, no background or ground tiles, no text, no borders, no watermark. Output the same nine isolated full-body animals in their own clearly separated exact equal cells.",
+  "revision_reason": "The first draft crossed row boundaries. Final sheet has clear alpha gutters in every cell."
+}

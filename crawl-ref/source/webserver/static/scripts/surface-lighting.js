@@ -24,8 +24,11 @@ define(["light-field-sampling", "material-response", "light-emission"], function
         return { data: new Uint8ClampedArray(data), normals: normals, width: width, height: height,
             roughness: detail && detail.roughness, cavity: detail && detail.cavity };
     }
-    function shade(surface, material, cx, cy, lights, phase, settings) {
-        if (material === "lava") return new Uint8ClampedArray(surface.data);
+    function shade(surface, material, cx, cy, lights, phase, settings, coefficients) {
+        if (material === "lava") {
+            if (coefficients) coefficients.gain.fill(1);
+            return new Uint8ClampedArray(surface.data);
+        }
         var output = new Uint8ClampedArray(surface.data.length), response = materials.get(material);
         var relief = response.relief;
         for (var y = 0; y < surface.height; y++) for (var x = 0; x < surface.width; x++) {
@@ -60,10 +63,16 @@ define(["light-field-sampling", "material-response", "light-emission"], function
                 sg += specular * energy * light.colour[1] * .75;
                 sb += specular * energy * light.colour[2] * .75;
             });
-            output[index] = surface.data[index] * Math.min(1.75, r) + Math.min(32, sr);
-            output[index + 1] = surface.data[index + 1] * Math.min(1.7, g) + Math.min(32, sg);
-            output[index + 2] = surface.data[index + 2] * Math.min(1.65, b) + Math.min(32, sb);
+            r = Math.min(1.75, r); g = Math.min(1.7, g); b = Math.min(1.65, b);
+            sr = Math.min(32, sr); sg = Math.min(32, sg); sb = Math.min(32, sb);
+            output[index] = surface.data[index] * r + sr;
+            output[index + 1] = surface.data[index + 1] * g + sg;
+            output[index + 2] = surface.data[index + 2] * b + sb;
             output[index + 3] = surface.data[index + 3];
+            if (coefficients) {
+                coefficients.gain[index] = r; coefficients.gain[index + 1] = g; coefficients.gain[index + 2] = b;
+                coefficients.add[index] = sr; coefficients.add[index + 1] = sg; coefficients.add[index + 2] = sb;
+            }
         }
         return output;
     }

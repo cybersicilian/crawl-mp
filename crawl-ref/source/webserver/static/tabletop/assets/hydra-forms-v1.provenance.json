@@ -1,0 +1,138 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-f1c6537e-ee0b-478f-a499-3bf5401dd5f6.png",
+  "sha256": "291d2807b168b0f50862716d12b290ffe9d8c6a40ea14e892d1f065c74f64f33",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "layout": [
+    {
+      "heads": 1,
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        89,
+        108,
+        375,
+        385
+      ],
+      "minimumGutter": 33
+    },
+    {
+      "heads": 2,
+      "rectangle": {
+        "x": 418,
+        "y": 0,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        87,
+        94,
+        368,
+        385
+      ],
+      "minimumGutter": 33
+    },
+    {
+      "heads": 3,
+      "rectangle": {
+        "x": 836,
+        "y": 0,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        65,
+        93,
+        370,
+        384
+      ],
+      "minimumGutter": 34
+    },
+    {
+      "heads": 4,
+      "rectangle": {
+        "x": 0,
+        "y": 418,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        68,
+        70,
+        387,
+        381
+      ],
+      "minimumGutter": 31
+    },
+    {
+      "heads": 5,
+      "rectangle": {
+        "x": 418,
+        "y": 418,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        73,
+        65,
+        380,
+        381
+      ],
+      "minimumGutter": 37
+    },
+    {
+      "heads": 6,
+      "rectangle": {
+        "x": 836,
+        "y": 418,
+        "w": 418,
+        "h": 418
+      },
+      "alphaBounds": [
+        66,
+        64,
+        388,
+        380
+      ],
+      "minimumGutter": 30
+    },
+    {
+      "heads": 7,
+      "rectangle": {
+        "x": 0,
+        "y": 836,
+        "w": 450,
+        "h": 418
+      },
+      "alphaBounds": [
+        57,
+        43,
+        420,
+        360
+      ],
+      "minimumGutter": 30
+    }
+  ],
+  "prompts": [
+    "docs/graphics-2026-10-31/hydras/generation-prompt.txt",
+    "docs/graphics-2026-10-31/hydras/head-count-edit-prompt.txt",
+    "docs/graphics-2026-10-31/hydras/remove-extra-heads-prompt.txt",
+    "docs/graphics-2026-10-31/hydras/layout-edit-prompt.txt"
+  ],
+  "draftSources": [
+    "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-4e21f956-9018-435a-b7ae-be875581c4e4.png",
+    "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-053e0b3f-0f4b-4985-a89a-354ccfdd5809.png",
+    "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-b6d0ff4c-db78-4746-8c81-d91ab80f5c30.png"
+  ],
+  "originalPixelsPreserved": true,
+  "rgba_sha256": "9d50e0a799f1edc6a1a84f72bd9a91263d114d6676fe7f4806e65edf30a93d61",
+  "bytes": 1291781
+}

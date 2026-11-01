@@ -1,7 +1,7 @@
 /* Read-only overview of authoritative library entries. Resume retains the source URL. */
 define(function () {
     "use strict";
-    var home, recent, signature;
+    var home, recent, signature, learn;
     function el(tag, className, text) {
         var node = document.createElement(tag); node.className = className || "";
         if (text) node.textContent = text;
@@ -38,8 +38,12 @@ define(function () {
         var actions = el("div", "lobby-home-actions"), create = el("button", "lobby-primary-action", "New expedition");
         create.type = "button"; create.dataset.lobbyCreate = "true";
         var access = el("select"); access.id = "lobby_creation_visibility"; access.setAttribute("aria-label", "New lobby access");
-        [["public", "Public lobby"], ["private", "Private lobby"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; access.appendChild(option); });
-        actions.append(access, create, sectionLink("Join friends →", "lobby_friends_panel")); copy.appendChild(actions);
+        [["public", "Public"], ["private", "Private"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; access.appendChild(option); });
+        var accessLabel=el("label","lobby-creation-access");accessLabel.append(el("span","","Access"),access);
+        actions.append(accessLabel,create);copy.appendChild(actions);
+        var meta=el("div","lobby-creation-meta");
+        learn=sectionLink("How to play","play_now");
+        meta.append(sectionLink("Join friends →","lobby_friends_panel"),learn);copy.appendChild(meta);
         home.appendChild(copy);
         var art = el("div", "lobby-home-art"); art.setAttribute("aria-hidden", "true");
         art.appendChild(el("span", "", "Toss your pebble. Stir the pot.")); home.appendChild(art);
@@ -67,8 +71,10 @@ define(function () {
                 || Number(left.dataset.order || 0) - Number(right.dataset.order || 0);
         });
         var games = entries.filter(function (entry) { return entry.querySelector("[data-library-load]"); }).slice(0, 2);
+        recent.hidden = !entries.length;home.classList.toggle("has-no-history",!entries.length);
         home.classList.toggle("has-recent-expeditions", games.length > 0);
         var tutorial = document.querySelector('#play_now a[href="#play-tut-web-trunk"]');
+        if(tutorial){learn.href=tutorial.getAttribute("href");delete learn.dataset.lobbySection;}
         var next = games.map(function (entry) { return entry.textContent + entry.querySelector("[data-library-load]").href; }).join("|") + entries.length + Boolean(tutorial);
         if (signature === next) return;
         signature = next;
@@ -79,9 +85,9 @@ define(function () {
             recent.append(el("p", "lobby-recent-empty", entries.length
                 ? "No expeditions are ready to resume. Check your saved expeditions for details."
                 : "A fresh page in your story. Your saved expeditions will be waiting here when you return."));
-            var learn = sectionLink("New to the dungeon? Try the tutorial →", "play_now");
-            if (tutorial) { learn.href = tutorial.getAttribute("href"); delete learn.dataset.lobbySection; }
-            recent.appendChild(learn);
+            var emptyLearn = sectionLink("New to the dungeon? Try the tutorial →", "play_now");
+            if (tutorial) { emptyLearn.href = tutorial.getAttribute("href"); delete emptyLearn.dataset.lobbySection; }
+            recent.appendChild(emptyLearn);
         }
         games.forEach(function (source) {
             var row = el("article", "lobby-recent-entry"), copy = el("div");

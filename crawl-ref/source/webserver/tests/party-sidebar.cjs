@@ -65,9 +65,11 @@ function hero(slot, count = 18) {
         });
         const files = [['item-properties', 'static/scripts/item-properties.js'],
             ['character-stat-help', 'static/scripts/character-stat-help.js'], ['spell-cost', 'static/scripts/spell-cost.js'],
+            ['heat-help', 'static/scripts/heat-help.js'],
             ...['effect-icon-catalog', 'effect-icon-art', 'status-icons', 'party-model', 'party-status-model', 'party-faith', 'portrait-status', 'party-card-status',
                 'player-card-details', 'party-initiative', 'workflow-actions', 'party-navigation', 'party', 'native-tile-art', 'frame-update',
-                'party-power-cards', 'shell-dash-art', 'power-art', 'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography']
+                'party-power-cards', 'shell-dash-art', 'power-art', 'equipment-memory-ui', 'equipment-paperdoll',
+                'hud-inventory', 'party-sidebar', 'player-card-sections', 'party-card-readings', 'hud-iconography']
                 .map(name => [name === 'party' ? name : './' + name, 'game_data/static/' + name + '.js'])];
         for (const [name, file] of files) {
             await page.evaluate(name => { window.moduleName = name; }, name);
@@ -126,10 +128,31 @@ function hero(slot, count = 18) {
             assert.equal(layout.overflow, false);
             assert.deepEqual(layout.clippedControls, [], 'Every visible card control fits its card');
             assert(layout.content <= layout.height, 'Two-player cards fit without hiding another hero');
-            const narrowTouch = process.env.SIDEBAR_TOUCH === '1' && width === 1024;
-            assert.equal(layout.previews, narrowTouch ? 0 : 1,
-                'Companion packs use spare room; narrow touch layouts reserve room for the wrapped inventory toolbar');
+            if (!layout.previews) {
+                assert(await page.locator('.party-sidebar-pack').evaluate(pack => {
+                    const scroll = document.getElementById('hud_sidebar_scroll');
+                    pack.hidden = false;
+                    const overflows = scroll.scrollHeight > scroll.clientHeight;
+                    pack.hidden = true;
+                    return overflows;
+                }), 'Companion previews collapse only when another row cannot fit');
+            }
             assert(layout.cards.every(card => card.bottom <= height));
+            assert(await page.locator('.is-controlled-card').evaluate(card => {
+                const stats = card.querySelector('.party-self-details').getBoundingClientRect();
+                const bars = card.querySelector('.party-bars').getBoundingClientRect();
+                const portrait = card.querySelector('.party-portrait').getBoundingClientRect();
+                return stats.width > bars.width && stats.left < portrait.right && stats.top >= portrait.bottom;
+            }), 'Stats reclaim the whole card below the portrait');
+            assert.equal(await page.locator('.is-controlled-card > .party-member-meta > .party-member-name').count(), 1,
+                'The inspectable name fills the portrait header instead of reserving a separate portrait caption');
+            assert(await page.locator('.is-controlled-card').evaluate(card => {
+                const name = card.querySelector('.party-member-name').getBoundingClientRect();
+                const meta = card.querySelector('.party-icon-meta').getBoundingClientRect();
+                const timing = card.querySelector('.party-member-timing').getBoundingClientRect();
+                return name.bottom <= meta.top
+                    && Math.abs(meta.top + meta.height / 2 - timing.top - timing.height / 2) < 1;
+            }), 'Name sits above metadata and timing, which share one row');
             await page.locator('#right_column').screenshot({ path: path.join(output, 'sidebar-' + width + '.png') });
         }
         await page.setViewportSize({ width: 1440, height: 900 });

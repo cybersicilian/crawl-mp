@@ -13,6 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     advancecomp \
     bison \
+    brotli \
     build-essential \
     ca-certificates \
     flex \
@@ -27,9 +28,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pngcrush \
     python3 \
     python3-pip \
+    python3-pil \
+    python3-tinycss2 \
     python3-tornado \
     python3-venv \
     python3-yaml \
+    webp \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -44,7 +48,9 @@ WORKDIR /opt/dcss/crawl-ref/source
 RUN if [ ! -d /opt/dcss/.git ] && [ ! -f util/release_ver ]; then \
         echo "0.32-coop" > util/release_ver; \
     fi \
-    && make -j"$(nproc)" WEBTILES=y
+    && make -j"$(nproc)" WEBTILES=y \
+    && python3 webserver/util/prepare-assets.py webserver/static webserver/game_data/static \
+    && python3 webserver/util/prepare-assets.py --check webserver/static webserver/game_data/static
 
 # Create WebTiles runtime directories and log files, and bind 0.0.0.0 in --live-debug mode
 RUN mkdir -p rcs saves webserver/run \

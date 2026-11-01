@@ -1,0 +1,386 @@
+[
+  {
+    "name": "1/1/0.1/8/halo/0",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "fbc56107775499913c692e083024b7ee4d0783ae72114b29594ea4c83b80af09"
+  },
+  {
+    "name": "1/1/0.1/8/halo/0.6",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "4d2a9bc3b4fef280bb147866ef33f1912180320226edac259045379a5d4c637e"
+  },
+  {
+    "name": "1/1/0.1/8/umbra/0",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "fb12a375b7d4439092f23f87aa4157cbc5288d0159638535dacb844c75d39e2c"
+  },
+  {
+    "name": "1/1/0.1/8/umbra/0.6",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "2fc390e35e8fabb49ef0fe4f3dce4b10270e52e0503dc4a7dd2451bf7ce36f8a"
+  },
+  {
+    "name": "1/1/0.1/32/halo/0",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "6dd2955dba275a92cd36b2db21a9551bbd47fed77cbcd1c5e5541fb3375e5ff9"
+  },
+  {
+    "name": "1/1/0.1/32/halo/0.6",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "400116d05b239194683152ebc2d147e6eebfa718c906c86a4c6fc5500054f27e"
+  },
+  {
+    "name": "1/1/0.1/32/umbra/0",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "cdfff4d7294daf1d940362e1baec3bde3ad79ff69d0ea6da901d9dd7819bf150"
+  },
+  {
+    "name": "1/1/0.1/32/umbra/0.6",
+    "group": [
+      1,
+      1,
+      0.1
+    ],
+    "origin": [
+      0,
+      0
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "f85c8f96988615c032beda361f2fa899cef4618bba5a455caecad7a80ca27805"
+  },
+  {
+    "name": "-2.5/3/2.7/8/halo/0",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "58662405315af19c75aa05144ab256a5dce4f23f2d8d20f940bfe61334e5620d"
+  },
+  {
+    "name": "-2.5/3/2.7/8/halo/0.6",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "a5b36b1dc3d301a0e89642834830cedb8b712270e81c30fc4acee144ae766264"
+  },
+  {
+    "name": "-2.5/3/2.7/8/umbra/0",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "a976443c4cf39ddc98fb209fce7737595710db56ea6c3aaf65c12fc324f8dd49"
+  },
+  {
+    "name": "-2.5/3/2.7/8/umbra/0.6",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "f24a51396baa172d43837fd86b507bffbc019b2f661c2db1afc6f0ab0dd1275c"
+  },
+  {
+    "name": "-2.5/3/2.7/32/halo/0",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "5f05e9f7c716208f5ec68787fa17c08b3bd668fe75c9e9300a088afcbccb868c"
+  },
+  {
+    "name": "-2.5/3/2.7/32/halo/0.6",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "63ef2cff83f48699a6d37b039d1165300e0926ce78e9ac365105e292f7670c7b"
+  },
+  {
+    "name": "-2.5/3/2.7/32/umbra/0",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "278e35ec49ff4a9633d5d9e2f6303b68be7943c8a7810c11e8eafa1a32e33454"
+  },
+  {
+    "name": "-2.5/3/2.7/32/umbra/0.6",
+    "group": [
+      -2.5,
+      3,
+      2.7
+    ],
+    "origin": [
+      -4,
+      2
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "905ed1f7a20df944e5bf3abcb2bf2921b393bb2a745f638bc8c2df849d918e93"
+  },
+  {
+    "name": "11.25/-7.5/5/8/halo/0",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "448e75f389e43d8bb8fac660df4462cc3a5aa64a1ddb95e77b9f43ba5da72394"
+  },
+  {
+    "name": "11.25/-7.5/5/8/halo/0.6",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 8,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "e72e4e67b9a8e7435d49c56cc42f2525be497e911bf6aefe83d935fc48b67391"
+  },
+  {
+    "name": "11.25/-7.5/5/8/umbra/0",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "78a0b2082b16a9366fbbc7d06b7f73c12ec3213aa875d5a3bf243d1cfe659ac5"
+  },
+  {
+    "name": "11.25/-7.5/5/8/umbra/0.6",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 8,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "7ceea320d089998f0b1453026aebdaa25701e988c41caffe6966d9f917d8aa08"
+  },
+  {
+    "name": "11.25/-7.5/5/32/halo/0",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0,
+    "sha256": "8b2bd23f2d7ffab1c07808e05734d9d76c67c32c38cbc302b79c6eb264973f38"
+  },
+  {
+    "name": "11.25/-7.5/5/32/halo/0.6",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 32,
+    "profile": "halo",
+    "seconds": 0.6,
+    "sha256": "2caeb6483759a8ff81a0403b502cbf2eb9109c18d700131d1958829487a0fdf6"
+  },
+  {
+    "name": "11.25/-7.5/5/32/umbra/0",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0,
+    "sha256": "4f9d457046701d36149bfb1f79f9ef003ad65b70c61d860f95b270236fc37fe1"
+  },
+  {
+    "name": "11.25/-7.5/5/32/umbra/0.6",
+    "group": [
+      11.25,
+      -7.5,
+      5
+    ],
+    "origin": [
+      10,
+      -9
+    ],
+    "size": 32,
+    "profile": "umbra",
+    "seconds": 0.6,
+    "sha256": "33adb6a2983e70bfeab8b8f8353c5a41fc43f01ca161d03f36a354d34b67ac83"
+  }
+]

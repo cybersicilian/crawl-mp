@@ -1,0 +1,37 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-c6393213-2417-4423-951f-e832b35b29fe.png",
+  "sha256": "4e436c38eb5cb035dc93e4ca41886c7042aa40240c484bf0c54f71d8cc5be25e",
+  "width": 1254,
+  "height": 1254,
+  "columns": 3,
+  "rowBoundaries": [
+    0,
+    390,
+    810,
+    1254
+  ],
+  "columnWidth": 418,
+  "transparent_background": true,
+  "entries": [
+    "Goblin",
+    "Hobgoblin",
+    "Kobold",
+    "Gnoll",
+    "Ogre",
+    "Orc",
+    "Orc priest",
+    "Orc warrior",
+    "Orc wizard"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent full-body humanoid enemy sprite sheet for an overhead dark fantasy dungeon game. The FIVE input images are REFERENCE GUIDES, NOT edit targets: Image1 goblin, Image2 kobold, Image3 ogre, Image4 ordinary orc, Image5 orc wizard. Other listed species use the same family poses and the specific descriptions below. Preserve each reference's front-facing stance, overall silhouette proportions, hand placement, clothing category and identifying colour family while creating new richly finished painted art. Critical: the game composites REAL weapons and shields afterward. Every body must have EMPTY hands at the reference's existing attachment locations, no weapon, no shield, no staff, no wand, no book, no belt weapon, no detached object, no magical effect. Canvas square, EXACTLY THREE equal columns and THREE equal rows, nine equal square cells. One full-body creature per cell, centered with the ENTIRE silhouette inside the CENTRAL 60 PERCENT of its cell in both dimensions, giving broad truly transparent gutters on all four sides. Nothing may touch a cell boundary. The same camera and frontal stance throughout: slightly overhead orthographic game view, face and chest toward viewer, feet at bottom, their right fist on IMAGE LEFT and left fist on IMAGE RIGHT. Arms held slightly out from torso, fists empty and clearly visible at waist level, preserve the reference hand heights, not arms dangling at knees. Row1 left GOBLIN: small squat rusty red-brown goblin, huge pointed ears, broad grinning fanged face, ragged charcoal loincloth and leather waist wrap, bent knees. Row1 middle HOBGOBLIN: taller lean red-brown goblinoid, longer limbs, angular pointed-eared head, narrow charcoal leather tunic and rusty waist belt, clearly taller than squat goblin. Row1 right KOBOLD: compact hunched tawny scaled dog-like/reptilian humanoid, blunt canine snout, small pointed ears, muted olive padded leather clothing. Row2 left GNOLL: rangy sandy-brown hyena-headed humanoid, thick muzzle, dark mane, rough brown leather harness and fur clothing, long sturdy legs. Row2 middle OGRE: large heavy pale pinkish-tan humanoid, bald broad head, protruding lower tusks, huge belly, ochre-brown hide loincloth, thick bare arms and legs, hands slightly higher than the goblin's. Row2 right ORC: stocky dark umber orc, pig-like tusked face, short dark hair, crude brown leather jerkin and hide skirt, strong broad shoulders, empty fists raised beside lower chest. Row3 left ORC PRIEST: gray-green tusked orc in a deep moss-green robe and muted cream shoulder stole, broad ivory-white collar, bare gray-green head, both empty hands visible beside waist. Row3 middle ORC WARRIOR: imposing umber orc with steel skullcap, dark iron scale mail over brown leather, restrained steel shoulder plates and boots, no shield attached. Row3 right ORC WIZARD: wiry gray-green tusked orc in a deep plum-purple robe with muted red lining and simple purple hood, empty hands visible at waist, no glow or spells. Match native reference poses closely, including the fist locations for future held equipment. Art direction: premium illustrated dark fantasy game art, matte painted gouache, restrained engraved edges, deep umber creases, warm ivory edge highlights, sophisticated desaturated reds, browns, greens and violet. Broad readable anatomical and clothing masses designed to remain identifiable at 32 pixels with rich painted detail at 128 pixels. Upper-left soft light. Opaque body interiors and clean antialiased alpha edges. Absolutely no ground squares, bases, room, scenery, giant shadows, humans, numbers, labels, text, drawn grid, borders, logos, signatures or watermarks. Genuine transparent background and all gutters, no drawn checkerboard.",
+  "referenceRole": "Native posture, clothing and equipment attachment guides; reference images are not edit targets.",
+  "referenceImages": [
+    "mon/humanoids/goblin.png",
+    "mon/humanoids/kobold.png",
+    "mon/humanoids/ogre.png",
+    "mon/humanoids/orcs/orc.png",
+    "mon/humanoids/orcs/orc_wizard.png"
+  ],
+  "layoutNote": "The generated image is not an exactly uniform grid. Explicit source rectangles separate complete bodies at transparent row gaps without changing the generated pixels."
+}

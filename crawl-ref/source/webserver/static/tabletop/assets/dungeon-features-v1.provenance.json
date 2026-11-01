@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-7fa7c01b-3134-4e2b-9c15-3b2672448d77.png",
+  "sha256": "aca5686dcb132ba43367e3bb4cc5bf366274f752fbd7c725427b5f05a4bbd92e",
+  "layout": {
+    "width": 1536,
+    "height": 1024,
+    "columns": 3,
+    "rows": 2,
+    "cell": 512
+  },
+  "transparent_background": true,
+  "entries": [
+    "Closed oak door",
+    "Open oak door",
+    "Descending stone stairs",
+    "Ascending stone stairs",
+    "Blue fountain",
+    "Dry fountain"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent environmental sprite sheet for a top-down dark fantasy dungeon game. Create exactly THREE equal columns by TWO equal rows, canvas 1536 by 1024, six 512-square cells. Genuine transparent background everywhere outside the objects, no painted checkerboard. ONE isolated centered object per cell, each fully contained in the middle 440 by 440 pixels with transparent margins on every side. Consistent orthographic three-quarter overhead camera, broad front faces visible, compact square footprints, no isometric diamond bases. Top row left: a CLOSED stout medieval dungeon door of dark oak planks, two broad iron straps and small round handle, within a chipped warm-gray limestone arch, obvious solid closed panel. Top row middle: the matching OPEN doorway with the same limestone arch, oak door swung aside to the right edge, completely transparent empty passage through its center, no black rectangle filling the opening. Top row right: a square stone stairwell DESCENDING into darkness, seen from overhead, a broad rim around a recessed opening, steps descend away from the viewer into the ground, low silhouette, no arch or roof. Bottom row left: stone stairs ASCENDING, a solid raised flight with steps climbing upward away from the viewer, visible side blocks and bright top landing, clearly a protruding stair rather than a hole. Bottom row middle: an ancient low circular limestone fountain with a short central water spout and readable small blue water basin, restrained pale blue water streams entirely within the silhouette. Bottom row right: matching DRY circular limestone fountain with short broken central pedestal and empty cracked umber stone basin, absolutely no water or blue pigment. Style: polished hand-painted dark fantasy game art, matte gouache, engraved edge accents, muted limestone ivory and charcoal shadows, warm umber wood, restrained slate-blue water, consistent soft upper-left light, broad distinct shapes readable at 32 pixels yet richly finished at 128 pixels. Crisp antialiased alpha edges and opaque object interiors, tiny attached contact shadow only. No floor squares, no room scenes, no detached props, no characters, no arrows, no text, no labels, no grid lines, no border, no watermark. Exact regular 3 by 2 sheet with generous transparent perimeter around each object."
+}

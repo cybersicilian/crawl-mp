@@ -13,28 +13,12 @@
       var require = { waitSeconds: 0 };
     </script>
     <script src="{{ static_url("scripts/contrib/require.js") }}" data-main="{{ static_url("scripts/app.js") }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ static_url("style.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/tokens.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/navigation.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url('tabletop/site-resources.css') }}">
-    <link rel="stylesheet" href="{{ static_url("styles/account-actions.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("styles/connection-quality.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-workspace.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/character-builder.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/character-folio.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/starting-sheet.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/party-setup.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/lobby-dashboard.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" href="{{ static_url("tabletop/layout-rhythm.css") }}&amp;ui={{ browser_revision }}">
-    <link rel="stylesheet" type="text/css" href="{{ static_url("fonts/fonts.css") }}">
+    {% for stylesheet in stylesheets("lobby") %}
+    <link rel="stylesheet" href="{{ stylesheet }}">
+    {% end %}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ static_url('tabletop/art-direction.css') }}&amp;ui={{ browser_revision }}">
-  <link rel="stylesheet" href="{{ static_url('tabletop/outgame-hierarchy.css') }}&amp;ui={{ browser_revision }}">
-  <link rel="stylesheet" href="{{ static_url('tabletop/rpg-character-builder.css') }}&amp;ui={{ browser_revision }}">
-  <link rel="stylesheet" href="{{ static_url('tabletop/party-management.css') }}&amp;ui={{ browser_revision }}">
-  <link rel="stylesheet" href="{{ static_url('tabletop/lobby-access.css') }}&amp;ui={{ browser_revision }}">
 </head>
   <body>
     <noscript>Please enable javascript!</noscript>

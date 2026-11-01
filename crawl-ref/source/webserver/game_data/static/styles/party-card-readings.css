@@ -1,6 +1,15 @@
 /* Labels live in accessible hover/focus help; native values stay on every card. */
 #normal .party-icon-first > .party-member-meta { display: flex; align-items: center; }
 #normal .party-icon-first .party-member-meta > :not(.party-icon-meta):not(.party-member-timing) { display: none; }
+#normal .is-controlled-card.party-icon-first > .party-portrait { height: 64px; }
+#normal .is-controlled-card.party-icon-first > .party-member-meta {
+    display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 2px 4px; align-content: start;
+}
+#normal .is-controlled-card.party-icon-first .party-member-meta > .party-member-name {
+    display: block; grid-column: 1 / -1; grid-row: 1; width: auto; font-size: 12px; line-height: 16px;
+}
+#normal .is-controlled-card.party-icon-first .party-icon-meta { grid-column: 1; grid-row: 2; }
+#normal .is-controlled-card.party-icon-first .party-member-timing { grid-column: 2; grid-row: 2; align-self: center; margin: 0; }
 .party-icon-meta, .party-icon-utility, .party-loadout { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; }
 .party-icon-meta { flex: 1 1 auto; gap: 2px; }
 #normal .party-icon-reading { display: inline-flex; align-items: center; gap: 2px; min-width: 0; min-height: 20px; padding: 1px; box-sizing: border-box; color: #d9d8c8; }
@@ -16,8 +25,13 @@
 #normal .is-controlled-card.party-icon-first .party-icon-utility { grid-row: 4; }
 #normal .is-controlled-card.party-icon-first .party-card-toolbar { grid-row: 5; }
 #normal .is-controlled-card .party-icon-utility > :is(.party-card-status, .party-passive-strip) {
-    order: 4; align-self: center; margin: 0; padding: 0; border: 0;
+    order: 4; flex: 0 1 auto; align-self: center; margin: 0; padding: 0; border: 0;
 }
+/* Empty effects must not reserve a row between equipment and resistances. */
+#normal .party-icon-utility > .party-card-status:empty { display: none; }
+#normal .party-icon-utility > .party-card-status { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+#normal .party-icon-utility .party-bane-strip { margin: 0; }
+#normal .party-icon-utility .party-effect-strip { align-items: center; }
 #normal .party-wielded-item { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; min-height: 34px; padding: 0; border: 1px solid #8c82554d; border-radius: 3px; background: #151c2260; cursor: pointer; }
 .party-wielded-art, .party-wielded-art canvas { width: 32px; height: 32px; image-rendering: pixelated; }
 .party-wielded-art { display: inline-flex; align-items: center; justify-content: center; }
@@ -37,6 +51,7 @@
 .workflow-compact-roster #normal .party-icon-first:not(.is-controlled-card) .party-member-effects { grid-row: 5; }
 .workflow-compact-roster #normal .party-icon-first:not(.is-controlled-card) .party-card-toolbar { grid-column: 1 / -1; grid-row: 6; grid-template-columns: max-content minmax(0, 1fr); row-gap: 0; }
 @media (pointer: coarse) {
+    #normal .is-controlled-card.party-icon-first > .party-portrait { height: 78px; }
     #normal .party-icon-reading { min-height: 28px; }
     #normal .party-quiver-shortcut { width: 28px; height: 28px; min-height: 28px; }
 }

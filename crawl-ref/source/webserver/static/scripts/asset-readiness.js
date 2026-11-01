@@ -6,7 +6,8 @@ define([], function () {
     return function waitForAssets(root, finished, failed) {
         var cancelled = false, cleanups = [], pending = 0;
         var assets = Array.prototype.filter.call(root.querySelectorAll("img[src], link[rel=stylesheet][href]"),
-            function (asset) { return !!asset.getAttribute(asset.tagName === "LINK" ? "href" : "src"); });
+            function (asset) { return asset.getAttribute("data-asset-optional") === null
+                && !!asset.getAttribute(asset.tagName === "LINK" ? "href" : "src"); });
 
         function cancel() {
             cancelled = true;

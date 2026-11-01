@@ -1,0 +1,185 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-37a9cc43-49c4-4d48-bc16-46d618013724.png",
+  "sha256": "8262c63dff4de7d8dbc6c83433e326060f620d4cc2da92f109dbe109fe4f8cab",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "layout": [
+    {
+      "label": "Dart slug",
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 436,
+        "h": 428
+      },
+      "alphaBounds": [
+        54,
+        201,
+        407,
+        382
+      ],
+      "minimumGutter": 29
+    },
+    {
+      "label": "Ribbon worm",
+      "rectangle": {
+        "x": 436,
+        "y": 0,
+        "w": 412,
+        "h": 428
+      },
+      "alphaBounds": [
+        53,
+        117,
+        376,
+        388
+      ],
+      "minimumGutter": 36
+    },
+    {
+      "label": "Scorpion",
+      "rectangle": {
+        "x": 848,
+        "y": 0,
+        "w": 406,
+        "h": 428
+      },
+      "alphaBounds": [
+        37,
+        89,
+        368,
+        408
+      ],
+      "minimumGutter": 20
+    },
+    {
+      "label": "Killer bee",
+      "rectangle": {
+        "x": 0,
+        "y": 428,
+        "w": 436,
+        "h": 372
+      },
+      "alphaBounds": [
+        38,
+        30,
+        399,
+        340
+      ],
+      "minimumGutter": 30
+    },
+    {
+      "label": "Bullfrog",
+      "rectangle": {
+        "x": 436,
+        "y": 428,
+        "w": 412,
+        "h": 372
+      },
+      "alphaBounds": [
+        29,
+        89,
+        360,
+        340
+      ],
+      "minimumGutter": 29
+    },
+    {
+      "label": "Jelly",
+      "rectangle": {
+        "x": 848,
+        "y": 428,
+        "w": 406,
+        "h": 372
+      },
+      "alphaBounds": [
+        18,
+        120,
+        364,
+        329
+      ],
+      "minimumGutter": 18
+    },
+    {
+      "label": "Endoplasm",
+      "rectangle": {
+        "x": 0,
+        "y": 800,
+        "w": 436,
+        "h": 454
+      },
+      "alphaBounds": [
+        38,
+        59,
+        400,
+        352
+      ],
+      "minimumGutter": 36
+    },
+    {
+      "label": "Wolf",
+      "rectangle": {
+        "x": 420,
+        "y": 800,
+        "w": 428,
+        "h": 454
+      },
+      "alphaBounds": [
+        27,
+        40,
+        389,
+        368
+      ],
+      "minimumGutter": 27
+    },
+    {
+      "label": "Black bear",
+      "rectangle": {
+        "x": 848,
+        "y": 800,
+        "w": 406,
+        "h": 454
+      },
+      "alphaBounds": [
+        18,
+        32,
+        365,
+        362
+      ],
+      "minimumGutter": 18
+    }
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent creature sprites for an overhead dark fantasy dungeon game.\nAll five supplied images are REFERENCE GUIDES only, not edit targets. Image1 is the established richly painted animal-sprite style. Image2 tiny native ribbon worm establishes its purple-magenta segmented identity; image3 tiny native bullfrog establishes its green crouching form; image4 tiny native jelly establishes its red-orange flattened blob form; image5 tiny native endoplasm establishes its blue-gray puddle with raised pseudopods. Create NEW original illustrations of nine distinct dungeon creatures.\nSquare RGBA sprite sheet with EXACTLY THREE equal columns and THREE equal rows. Exactly ONE isolated COMPLETE creature centered in each cell, exact order below. Entire creature including every leg, antenna, wing, tail and tendril must stay inside the CENTRAL 60 PERCENT of its cell in BOTH dimensions. Generous truly transparent gutters on every side, no touching or crossing a cell boundary. No scenery, floor, cast shadow or platforms. Same moderately elevated three-quarter game view and soft upper-left light as style reference, no camera perspective foreshortening that hides the animal's defining shape.\nROW1 LEFT: Dart slug, a low elongated orange and burnt-umber gastropod facing LOWER LEFT, broad soft ridged mantle, small head at left with two long slender sensory stalks rising upward, tapering moist body/tail curling to RIGHT. No shell, no fire, no spikes, no teeth.\nROW1 MIDDLE: Ribbon worm, a bright mulberry/violet and magenta segmented worm. Its rounded head/upper body lifts at UPPER LEFT, lower body loops into a low segmented coil and a long tapering tail extends toward LOWER RIGHT. Two very small dark sensory eyes, no human face, no limbs, no teeth. Keep the distinctive purple-magenta identity of native reference. Natural creature, no magic glow.\nROW1 RIGHT: Scorpion, olive-brown and muted ochre chitin, body facing LOWER LEFT, TWO complete forward pincers, EIGHT slender articulated walking legs, a segmented tail arching up and over the right rear with a small dark stinger. Clear separated limbs, compact angular body and tactile chitin. No gore or aggression effects.\nROW2 LEFT: Killer bee, a single amber-yellow and charcoal striped bee in flight facing LOWER LEFT. Compact furry thorax, tapering striped abdomen toward RIGHT, six small legs, two delicate antennae and two pairs of pale translucent veined wings raised/spread. Complete wings and legs, opaque body, no duplicates, no motion blur or glow.\nROW2 MIDDLE: Bullfrog, a broad muscular GREEN frog crouching low, facing LOWER LEFT in three-quarter view. Large folded haunches, four complete limbs, squat triangular head, round side-set bronze eyes, mottled olive and leaf-green skin, pale cream throat. No clothing, no crown, no tail.\nROW2 RIGHT: Jelly, a low irregular RED-ORANGE and amber gelatinous mound, wider than tall, a broad scalloped base with several short rounded lobes. Rich translucent material with amber highlights and red depth, a few small bubbles, no eyes, face, mouth, limbs or recognizable organic remains. Clearly a red fantasy slime, not a blood puddle; no gore.\nROW3 LEFT: Endoplasm, distinct from the red jelly: a wide shallow PALE BLUE-GRAY and muted teal amorphous puddle with FOUR thin raised bending pseudopods/tendrils, like the native reference. A few rounded low lobes at the base, cool ivory wet highlights, semi-translucent rim. No eyes, face, mouth, bones or floating objects. The raised thin pseudopods must remain readable and fully inside the cell.\nROW3 MIDDLE: Gray wolf, a sturdy natural wolf facing LOWER LEFT, four complete legs in a tense but stationary walking stance, thick cool gray and silver coat, pointed ears, long muzzle, bushy gray tail rising behind to RIGHT. Distinct from the brown jackal and dark brindle hound in style reference. No exposed teeth, collars or wounds.\nROW3 RIGHT: Black bear, a heavy four-legged black bear facing LOWER LEFT, low broad head and short rounded ears, charcoal-black fur with warm brown muzzle, broad shoulders and strong paws, no visible long tail. Calm alert stance, all four limbs complete and separated where visible. No clothing, no human pose, no wounds.\nStyle: match image1's premium hand-painted matte gouache fantasy wildlife: tactile fur, skin, translucent wings and slime, broad confident material planes, subtle fine detail for 128px views, clean strong silhouettes readable at 32px. Restrained highlights and natural material color; preserve the specified native palette differences. Transparent background with clean antialiased alpha boundaries, opaque fur/chitin/frog interiors, physically plausible translucent slime/wing edges. No checkerboard painted into pixels. No terrain, floor shadows, pedestals, UI, text, labels, numbers, grid lines, borders, logos, signatures or watermark. EXACT nine objects in a 3 by3 sheet with wide empty alpha gutters.",
+  "references": [
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/static/tabletop/assets/dungeon-beasts-v2.png",
+      "sha256": "938c5b873c6c6dcceafc48dde7a4a08149c89011f252a92424209c7f2cde208e",
+      "role": "style reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/mon/animals/ribbon_worm.png",
+      "sha256": "745dc2e4c1be35aad3b9aa8ba20f0fbc599686fa10f9bb5a0c267b6d989d59a3",
+      "role": "native identity reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/mon/animals/bullfrog.png",
+      "sha256": "ae4a2a6e5142b455e1402378d094b8e0307598dac2ed82f4214199c327ba5872",
+      "role": "native identity reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/mon/amorphous/jelly.png",
+      "sha256": "eaba7d722f747a3bdc9d300a87a7a07aa0f77a9e3b7b720e15515e5b3f157fb3",
+      "role": "native identity reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/mon/amorphous/endoplasm.png",
+      "sha256": "3de7514308ca058c556248c00ffb62c1dd6b956e2e339ac993da84e1a177f3cc",
+      "role": "native identity reference"
+    }
+  ],
+  "localPixelEdits": false
+}

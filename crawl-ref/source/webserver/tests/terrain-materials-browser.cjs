@@ -52,10 +52,10 @@ assert(output); fs.mkdirSync(output, { recursive: true });
         });
         for (const name of ['tileinfo-floor', 'tileinfo-wall', 'tileinfo-feat', 'tileinfo-main', 'tileinfo-player',
             'tileinfo-gui', 'tileinfo-icons', 'tileinfo-dngn', 'tileinfos', 'status-icon-sizes', 'native-tile-art', 'terrain-materials',
-            'enums', 'util', 'map_knowledge', 'tile-edges', 'image-grade', 'atlas-materials', 'atlas-sprites',
+            'enums', 'util', 'map_knowledge', 'tile-edges', 'image-grade', 'atlas-materials', 'weighted-cache', 'atlas-sprites', 'deferred-images',
             'environment-art', 'environment-materials', 'environment-sprites', 'texture-pack', 'tile-art-direction', 'terrain-surface',
             'cell-renderer-textures', 'terrain-edges', 'environment-ground', 'cell-renderer-layers']) {
-            const shared = ['tile-edges', 'image-grade', 'atlas-materials', 'atlas-sprites', 'terrain-surface', 'texture-pack'].includes(name);
+            const shared = ['tile-edges', 'image-grade', 'atlas-materials', 'atlas-sprites', 'deferred-images', 'weighted-cache', 'terrain-surface', 'texture-pack'].includes(name);
             await page.evaluate(({ name, shared }) => { window.artName = (shared ? '' : './') + name; }, { name, shared });
             await page.addScriptTag({ path: path.join(root, shared ? 'static/scripts' : 'game_data/static', name + '.js') });
         }

@@ -50,17 +50,7 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
         return drawTiles(canvas, native.tile);
     }
     function drawTiles(canvas, tile) {
-        var image = document.getElementById("main");
-        if (!tile || !image || !image.complete || !image.naturalWidth) return false;
-        var ctx = canvas.getContext("2d");
-        ctx.imageSmoothingEnabled = false;
-        [].concat(tile).forEach(function (index) {
-            var info = tiles.get_tile_info(index);
-            if (!info) return;
-            ctx.drawImage(image, info.sx, info.sy, info.ex - info.sx, info.ey - info.sy,
-                info.ox + 16 - info.w / 2, info.oy + 32 - info.h, info.ex - info.sx, info.ey - info.sy);
-        });
-        return true;
+        return art.drawIndices(canvas, tile, tiles);
     }
     function artState(hero) {
         return [hero.equipment_profile, player.inv, ["main", "icons"].map(function (id) {

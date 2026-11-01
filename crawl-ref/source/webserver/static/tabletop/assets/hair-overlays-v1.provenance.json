@@ -1,0 +1,135 @@
+{
+  "status": "LOCAL_SOURCE_SELECTED",
+  "tool": "built-in image_gen",
+  "intent": "Add missing native blue tie to yellow ponytail",
+  "prompt": "docs/graphics-2026-10-31/hair/prompt-v3.txt",
+  "referenceImage": "docs/graphics-2026-10-31/hair/hair-overlays-v2-draft.png",
+  "original": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-dc133ccd-0b91-40fe-b4c9-83e0142f450b.png",
+  "sha256": "c7e8dcebb293d82d47e563a8ce18b0ebdbf5e850597652bffb3d9c7c20a6b0db",
+  "rgba_sha256": "5b101c8281a8b52646f31d17b3581d17947de8a180230b6ec1029a842bf43ca0",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2135866,
+  "alpha": {
+    "zero": 1035676,
+    "opaque": 0,
+    "partial": 537188
+  },
+  "sourceCropReport": "docs/graphics-2026-10-31/hair/draft-crops-v3.json",
+  "sourceGuttersPassed": true,
+  "generatedPixelsUnmodified": true,
+  "selectedCatalog": true,
+  "validationPending": [
+    "actual native gameplay"
+  ],
+  "nativeEngine": false,
+  "productionMutation": false,
+  "canonicalAsset": "crawl-ref/source/webserver/static/tabletop/assets/hair-overlays-v1.png",
+  "crops": [
+    {
+      "name": "HAIR_SHORT_BLACK",
+      "sprite": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 473
+      },
+      "alphaBounds": [
+        105,
+        98,
+        453,
+        401
+      ],
+      "minimumGutter": 59
+    },
+    {
+      "name": "HAIR_LONG_BLACK",
+      "sprite": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 548
+      },
+      "alphaBounds": [
+        77,
+        48,
+        422,
+        510
+      ],
+      "minimumGutter": 38
+    },
+    {
+      "name": "HAIR_FEM_RED",
+      "sprite": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 526
+      },
+      "alphaBounds": [
+        60,
+        51,
+        447,
+        505
+      ],
+      "minimumGutter": 21
+    },
+    {
+      "name": "HAIR_HIGHTAIL",
+      "sprite": {
+        "x": 0,
+        "y": 473,
+        "w": 512,
+        "h": 551
+      },
+      "alphaBounds": [
+        96,
+        73,
+        469,
+        492
+      ],
+      "minimumGutter": 43
+    },
+    {
+      "name": "HAIR_PONYTAIL_YELLOW",
+      "sprite": {
+        "x": 512,
+        "y": 548,
+        "w": 512,
+        "h": 476
+      },
+      "alphaBounds": [
+        59,
+        39,
+        457,
+        399
+      ],
+      "minimumGutter": 39
+    },
+    {
+      "name": "HAIR_TOPKNOT",
+      "sprite": {
+        "x": 1024,
+        "y": 526,
+        "w": 512,
+        "h": 498
+      },
+      "alphaBounds": [
+        117,
+        24,
+        389,
+        443
+      ],
+      "minimumGutter": 24
+    }
+  ],
+  "controlledProof": "docs/graphics-2026-10-31/hair/browser-4/hair/validation.json",
+  "validationLimits": [
+    "Controlled browser fixtures without native engine, production or sustained gameplay.",
+    "Six exact hair symbols; other hair colors/styles and helmets remain native.",
+    "The 3D native-only renderer bypasses both painted bodies and hair."
+  ],
+  "humanHeadwearProof": "docs/graphics-2026-10-31/hair/browser-4/human-headwear/validation.json",
+  "retinaProof": "docs/graphics-2026-10-31/hair/browser-4/retina/validation.json",
+  "losslessVerificationReceipt": "docs/graphics-2026-10-31/hair/assets-1/verification.json"
+}

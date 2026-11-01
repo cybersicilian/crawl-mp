@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "entries": {
+    "game": [
+      "style.css",
+      "simplebar.css",
+      "styles/assimilation.css"
+    ]
+  }
+}

@@ -880,17 +880,29 @@ class CrawlProcessHandlerBase(object):
     def _send_client(self, watcher):
         # Reloaded clients and returning spectators need a complete first state.
         watcher.last_party_snapshot = None
-        h = hashlib.sha1(utf8(os.path.abspath(self.client_path)))
+        identity = utf8(os.path.abspath(self.client_path))
         if self.crawl_version:
-            h.update(utf8(self.crawl_version))
-        v = h.hexdigest()
-        GameDataHandler.add_version(v,
-                                    os.path.join(self.client_path, "static"))
+            identity += utf8(self.crawl_version)
+        from webtiles.asset_revision import versions
+        static_root = os.path.join(self.client_path, 'static')
+        assets = versions(identity, static_root)
+        v = assets.content
+        GameDataHandler.add_version(assets.base, static_root)
+        GameDataHandler.add_version(v, static_root, assets.scripts)
 
         templ_path = os.path.join(self.client_path, "templates")
         loader = DynamicTemplateLoader.get(templ_path)
         templ = loader.load("game.html")
-        game_html = to_unicode(templ.generate(version = v))
+        from webtiles.asset_delivery import versioned_url
+        def image_url(filename, lobby=False):
+            root = config.get('static_path') if lobby else os.path.join(self.client_path, 'static')
+            prefix = '/static/' if lobby else '/gamedata/' + assets.base + '/'
+            return versioned_url(root, filename, prefix)
+        from webtiles.stylesheet_assets import stylesheet_urls
+        def stylesheets(name):
+            return stylesheet_urls(static_root, name, '/gamedata/' + v + '/',
+                {'/static/': config.get('static_path')}, bundle_prefix='/gamedata/' + assets.base + '/')
+        game_html = to_unicode(templ.generate(version=v, image_url=image_url, stylesheets=stylesheets))
         watcher.send_message("game_client", version = v, content = game_html)
 
     def stop(self, delay=False):

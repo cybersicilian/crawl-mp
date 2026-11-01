@@ -12,6 +12,22 @@ function load(name) {
 load('pixel-sampling'); load('light-field-sampling'); load('light-emission');
 const optics = load('transparent-surface'), aura = load('aura-distortion');
 const width = 32, height = 32;
+test('mixed-resolution halos retain known edges and clamp absent neighbours to the centre', () => {
+    function raster(size, colour) {
+        const data = new Uint8ClampedArray(size * size * 4);
+        for (let n = 0; n < data.length; n += 4) data.set(colour, n);
+        return { data, width: size, height: size };
+    }
+    const own = raster(8, [0, 100, 0, 255]), right = raster(2, [0, 0, 200, 255]);
+    const neighbours = Array(9).fill(null); neighbours[4] = own; neighbours[5] = right;
+    const halo = modules['pixel-sampling'].halo(neighbours, 8, 8, 2), stride = 12;
+    assert.deepEqual(Array.from(halo.slice((3 * stride + 10) * 4, (3 * stride + 10) * 4 + 4)), [0, 0, 200, 255]);
+    assert.deepEqual(Array.from(halo.slice((3 * stride) * 4, (3 * stride) * 4 + 4)), [0, 100, 0, 255]);
+    assert.deepEqual(Array.from(modules['pixel-sampling'].warpHalo(halo, 8, 8, () => ({ x: 0, y: 0 }), 2)), Array.from(own.data));
+    const moved = modules['pixel-sampling'].warpHalo(halo, 8, 8, () => ({ x: 1.5, y: 0 }), 2);
+    assert.deepEqual(Array.from(moved.slice(7 * 4, 8 * 4)), [0, 0, 200, 255]);
+    assert.throws(() => modules['pixel-sampling'].halo(neighbours, 8, 8, 0));
+});
 test('halo warping preserves identity, reads the adjacent edge and avoids transparent colour fringes', () => {
     const size = 4, stride = size + 2, halo = new Uint8ClampedArray(stride * stride * 4);
     for (let y = 0; y < stride; y++) for (let x = 0; x < stride; x++)

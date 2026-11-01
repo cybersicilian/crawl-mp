@@ -26,6 +26,8 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./pa
     function finite(value) { return Number.isFinite(value) ? value : null; }
     function metadata(card, hero) {
         var meta = card.children(".party-member-meta"), root = meta.children(".party-icon-meta");
+        if (card.hasClass("is-controlled-card"))
+            meta.prepend(card.children(".party-portrait").children(".party-member-name"));
         if (!root.length) root = $("<span class='party-icon-meta'></span>").prependTo(meta);
         reading(root, "level", "level-cap", "Experience level", Number.isFinite(hero.xl)
             ? hero.xl + (Number.isInteger(hero.xl_cap) ? "/" + hero.xl_cap : "") : null,

@@ -73,10 +73,14 @@
 }
 :is(.party-bar-wrap.hp-track, .party-bar.hp-bar) { background: #260f15; }
 :is(.party-bar-wrap.mp-track, .party-bar.mp-bar) { background: #10192a; }
-:is(.party-hp-fill, .hp-bar .party-bar-fill) { height: 100%; background: var(--tt-hp-liquid); }
+/* Anchor empty fill elements to the track; percentage heights can collapse in grid layouts. */
+:is(.party-hp-fill, .party-mp-fill, .party-bar .party-bar-fill) {
+    position: absolute; top: 0; bottom: 0; left: 0; height: auto; pointer-events: none;
+}
+:is(.party-hp-fill, .hp-bar .party-bar-fill) { background: var(--tt-hp-liquid); }
 .party-hp-fill.warn { background: var(--tt-glass), linear-gradient(90deg, #8e3c2b, #dc8850); }
 .party-hp-fill.crit { background: var(--tt-glass), linear-gradient(90deg, #9d1b2d, #ed6664); }
-:is(.party-mp-fill, .mp-bar .party-bar-fill) { height: 100%; background: var(--tt-mp-liquid); }
+:is(.party-mp-fill, .mp-bar .party-bar-fill) { background: var(--tt-mp-liquid); }
 .party-bar-label { font: 9px/1 var(--tt-font-mono); color: #fff4dd; text-shadow: 0 1px 2px #000, 0 0 2px #000; }
 .party-buff-strip { gap: 3px; align-items: center; margin: 3px 0 2px; }
 .party-buff-pill:not(.status-icon-frame) {

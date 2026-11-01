@@ -1,0 +1,116 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-9947df0c-0e57-470d-8878-83f9dd3bc647.png",
+  "sha256": "2325ccd3146d530f70453b48239b8a9cc1172497c4d501d2be6c52a1dbb61a72",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "layout": [
+    {
+      "label": "Light female",
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 506
+      },
+      "alphaBounds": [
+        140,
+        17,
+        414,
+        496
+      ],
+      "minimumGutter": 10
+    },
+    {
+      "label": "Light male",
+      "rectangle": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 506
+      },
+      "alphaBounds": [
+        109,
+        12,
+        405,
+        496
+      ],
+      "minimumGutter": 10
+    },
+    {
+      "label": "Deep-brown female",
+      "rectangle": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 506
+      },
+      "alphaBounds": [
+        98,
+        17,
+        374,
+        496
+      ],
+      "minimumGutter": 10
+    },
+    {
+      "label": "Deep-brown male",
+      "rectangle": {
+        "x": 0,
+        "y": 506,
+        "w": 512,
+        "h": 518
+      },
+      "alphaBounds": [
+        127,
+        11,
+        427,
+        502
+      ],
+      "minimumGutter": 11
+    },
+    {
+      "label": "Warm-tan female",
+      "rectangle": {
+        "x": 512,
+        "y": 506,
+        "w": 512,
+        "h": 518
+      },
+      "alphaBounds": [
+        115,
+        20,
+        394,
+        500
+      ],
+      "minimumGutter": 18
+    },
+    {
+      "label": "Warm-tan male",
+      "rectangle": {
+        "x": 1024,
+        "y": 506,
+        "w": 512,
+        "h": 518
+      },
+      "alphaBounds": [
+        86,
+        11,
+        385,
+        502
+      ],
+      "minimumGutter": 11
+    }
+  ],
+  "prompts": [
+    "docs/graphics-2026-10-31/human-bases/generation-prompt.txt",
+    "docs/graphics-2026-10-31/human-bases/transparency-edit-prompt.txt"
+  ],
+  "initialDraft": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-bb97de77-bf77-4303-b466-28da863ec6a7.png",
+  "originalPixelsPreserved": true,
+  "rgba_sha256": "fa346aadbabda82d4f82393a4f5a7a0f6261892f5c8c693275b93f86e4e60609",
+  "bytes": 1938627
+}

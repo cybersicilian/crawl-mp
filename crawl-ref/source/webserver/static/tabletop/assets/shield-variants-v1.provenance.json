@@ -1,0 +1,31 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-0b55b3ae-8284-4dc8-b192-91f99e65fc4d.png",
+  "sha256": "1a9df9300b796381a7841789bca163fb710d5c1c86de3da9054da7cc885f7a4b",
+  "width": 1254,
+  "height": 1254,
+  "columnBoundaries": [
+    0,
+    314,
+    627,
+    940,
+    1254
+  ],
+  "rowBoundaries": [
+    0,
+    290,
+    582,
+    875,
+    1254
+  ],
+  "transparent_background": true,
+  "prompt": "Use case: stylized-concept. Asset type: production transparent alternate shield sprite atlas for an overhead dark fantasy game. Create SIXTEEN separate shield fronts in EXACTLY FOUR equal columns and FOUR equal rows on a square RGBA image. One complete shield per cell, entirely contained inside the CENTRAL 55 PERCENT of its cell width and height, with generous real transparent gutters on ALL FOUR sides. Nothing may touch a cell boundary. All shields face the viewer with only a slight three-quarter tilt. No hands, people, straps outside the silhouette, stands, weapons or scenery. Input1 is a STYLE REFERENCE: the prior painted held-equipment sheet. Match its matte forged steel, dark painted wood, tactile gouache, warm ivory upper-left edge lighting and restrained fantasy illustration. Inputs2 through5 are tiny native DESIGN REFERENCES: blue shield with gold squares, ivory shield with gold forked emblem, red-and-black heraldic kite shield, green tower shield with silver starburst. Preserve the stated colour and broad motif of each of the sixteen designs. ROW1 left to right: (1) small ROUND buckler with muted red painted wooden face and dark iron rim, no emblem; (2) small ROUND buckler with aged brass-gold face and a broad silver steel rim, small central metal boss; (3) small ROUND buckler QUARTERED red and dark blue, opposite quarters same colour, silver rim, no additional emblem; (4) small ROUND buckler with deep green painted wood face divided by a broad silver vertical-and-horizontal CROSS, silver rim. ROW2 left to right: (5) small ROUND rust-red wooden buckler bearing one broad aged gold SPIRAL, dark metal rim; (6) KITE shield of plain gunmetal gray steel, faceted front with silver rim, modest center ridge, pointed bottom, no emblem; (7) KITE shield QUARTERED red and ivory, top-left red and top-right ivory, bottom-left ivory and bottom-right red, silver rim; (8) KITE shield with near-black face, silver rim, and a restrained angular gold branching motif made of a few forked zigzag strokes, no letters. ROW3 left to right: (9) KITE shield with deep cobalt-blue field and FIVE broad GOLD SQUARES arranged as the five pips on a die: four corner squares and one central square, no checkerboard; (10) KITE shield with ivory-white field and a broad GOLD FORKED EMBLEM like two upward curving antler prongs meeting a central stem and small crossbar, match the broad shape in native reference input3; (11) KITE shield with deep red and near-black heraldic face, small raised upper corner tips and a broad black angular dragon-like silhouette on the red field, match native reference input4; (12) tall TOWER shield entirely aged gold and bronze, softly rounded shoulders, shallow lower point, simple embossed nested rectangular borders and rivets, no character or text. ROW4 left to right: (13) tall TOWER shield with deep green face and a large SILVER EIGHT-SPOKED STARBURST radiating across the face, match native reference input5; (14) tall TOWER shield QUARTERED cobalt blue and ivory-white, opposite quarters same colour, tiny restrained gold flecks only on ivory quarters, broad steel rim; (15) tall TOWER shield with unmarked dark TEAL painted face, broad weathered steel rim and softly rounded shoulders; (16) tall TOWER shield with dark rust-red/umber face covered by three stacked broad angular GOLD SPIRALS forming an engraved geometric maze, no letters. The first five bucklers must be round, the next six kite shields must have long pointed bottoms, and the final five tower shields must be tall with rounded shoulders and shallow bottom points. Richly finished broad readable motifs that remain distinct at tiny native tile sizes, strong clean silhouettes, opaque interiors, antialiased alpha edges, muted historical pigments. No magic glows, runes, text, labels, numbers, drawn grid, cell borders, ground, background, shadows detached from shields, logos or watermark. EXACT regular 4 by 4 layout, wide transparent gaps around every object. Style Input1 is a reference only; create only the sixteen shield variants listed, no copies of its weapons.",
+  "referenceRoles": [
+    "Prior held-equipment artwork: style",
+    "Native five-square kite shield: motif",
+    "Native forked-emblem kite shield: motif",
+    "Native red heraldic kite shield: motif",
+    "Native green starburst tower shield: motif"
+  ],
+  "layoutNote": "The original generated image is unchanged. Explicit rectangles follow actual transparent gaps."
+}
