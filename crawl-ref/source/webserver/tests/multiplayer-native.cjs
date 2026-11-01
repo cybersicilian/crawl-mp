@@ -16,8 +16,10 @@ const check = (name, details = {}) => { evidence.checks.push({ name, ...details 
     const guest = await client(browser, url, 'G', evidence.errors); clients.push(guest);
     await host.page.locator('#lobby_home [data-lobby-create]').click();
     await send(host.page, 'party_room_apply_comp', { seed: '9548842358735470601' });
-    for (const slot of [1, 2])
+    for (const slot of [1, 2]) {
+        await host.page.locator(`#party_seat_tab_${slot}`).click();
         await host.page.locator(`.party-slot-box[data-slot='${slot}'] .party-mode-btn[data-mode='companion']`).click();
+    }
     await send(guest.page, 'party_room_join', { room_id: host.username, slot: 3 });
     await host.page.waitForFunction(() => /2 heroes/.test(document.querySelector('#btn_launch_party_room').textContent));
     assert((await host.page.locator(".party-slot-box[data-slot='1']").innerText()).includes('Excluded from multiplayer'));
@@ -88,7 +90,9 @@ const check = (name, details = {}) => { evidence.checks.push({ name, ...details 
     assert.equal((await state(host.page)).world_aut_clock, d1);
     assert.notDeepEqual(await orcs(guest), d2Orc, 'Native D:2 monster AI must advance on D:2 actions');
     assert.equal((await state(guest.page)).floor_time, d2Time + 30);
-    assert.equal((await packets(host)).filter(p => p.msg === 'map' || p.msg === 'player').length, 0);
+    // Expedition time still reaches an idle floor; its map and hero stay put.
+    assert.equal((await packets(host)).filter(p => p.msg === 'map').length, 0);
+    assert((await packets(host)).filter(p => p.msg === 'player').every(p => !('pos' in p) && !('inv' in p)));
     const guestBeforeHost = await view(guest);
     const d2After = (await state(guest.page)).world_aut_clock;
     for (let i=0; i<3; ++i) await waitAction(host);

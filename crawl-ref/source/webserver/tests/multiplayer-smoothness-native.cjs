@@ -253,6 +253,8 @@ async function main() {
             await key(host.page, 27);
             return [];
         });
+        // A wizard key sent during recovery would queue instead of opening.
+        while (await nextEligible(host, guest) !== host) await act(guest, null, 0x2e);
         await lua(host, 'dgn.dismiss_monsters("harmful"); crawl.redraw_view()');
         await untilEligible(host); await untilEligible(guest);
         await lua(guest, 'local x, y = you.pos(); dgn.grid(x, y, "stone_stairs_down_i"); crawl.redraw_view()');

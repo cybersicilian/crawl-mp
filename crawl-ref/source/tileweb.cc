@@ -4281,17 +4281,16 @@ void TilesFramework::redraw()
 
     m_text_menu.send();
 
-    const bool project = m_need_redraw || m_personal_dirty;
-
     _send_player();
-    // Every personal view carries this snapshot, and the server keeps only
-    // those. A party of four would otherwise build it a fifth time each turn.
+    // Personal views carry this snapshot in multiplayer, and the server keeps
+    // only those. Each extra copy here is a full party state nobody receives.
     if (_can_defer_party_state())
         m_party_state_deferred = true;
-    else if (!project || !_projects_personal_views())
+    else if (!party::multiplayer_enabled())
         _send_party_state();
     _send_messages();
 
+    const bool project = m_need_redraw || m_personal_dirty;
     if (m_need_redraw && m_view_loaded)
         _send_map(false);
 

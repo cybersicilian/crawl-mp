@@ -379,7 +379,6 @@ protected:
     bool _handle_ai_action(const JsonNode* obj);
     void _send_enemy_initiative();
     void _write_item_training(const item_def &item);
-    bool _projects_personal_views() const;
     void _send_personal_views(bool force_full = false, int force_slot = -1);
     void _clear_personal_views();
     string _personal_cell_json(const coord_def& cell);

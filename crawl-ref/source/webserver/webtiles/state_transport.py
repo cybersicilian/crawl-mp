@@ -4,6 +4,7 @@ Paths are arrays of object keys or array indices. Arrays of a different length
 are replaced atomically. Null values and deleted keys remain distinct.
 """
 import json
+import marshal
 
 
 def equal_json(left, right):
@@ -18,9 +19,16 @@ def equal_json(left, right):
     return left == right
 
 
+def same_tree(left, right):
+    # Unlike ==, marshal keeps true and 1 apart. Differing key order only falls
+    # back to the walk below, which still ignores it.
+    return type(left) is type(right) and marshal.dumps(left, 2) == marshal.dumps(right, 2)
+
+
 def changes(previous, current, path=()):
     # Walk each branch once. Checking deep equality at every parent repeats
-    # the same work for a change near the end of a large inventory or roster.
+    # the same work for a change near the end of a large inventory or roster,
+    # so only a hero's unchanged inventory and spell trees skip the walk.
     if previous is current:
         return []
     if isinstance(previous, dict) and isinstance(current, dict):
@@ -28,7 +36,7 @@ def changes(previous, current, path=()):
         for key, value in current.items():
             if key not in previous:
                 result.append([list(path + (key,)), value])
-            else:
+            elif len(path) < 2 or type(value) not in (dict, list) or not same_tree(previous[key], value):
                 result.extend(changes(previous[key], value, path + (key,)))
         return result
     if isinstance(previous, list) and isinstance(current, list) and len(previous) == len(current):
