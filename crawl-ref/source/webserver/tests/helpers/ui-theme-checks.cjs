@@ -1,6 +1,7 @@
 /* Shared-material samples prove browser presentation, not native gameplay. */
 const assert = require('node:assert/strict');
 const path = require('node:path');
+const { spawnSync } = require('node:child_process');
 function luminance(color) {
     const rgb = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(value => {
         value /= 255; return value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4;
@@ -19,23 +20,22 @@ module.exports = async function checkThemes(page, probe, output, saved) {
         assert.equal(await page.locator('.graphics-current').textContent(), 'Classic');
         const colors = await probe.evaluate(() => {
             const style = selector => getComputedStyle(document.querySelector(selector));
-            // Popup content is transparent over its shared outer material.
-            const background = selector => {
-                for (let node = document.querySelector(selector); node; node = node.parentElement) {
-                    const color = getComputedStyle(node).backgroundColor;
-                    const channels = color.match(/[\d.]+/g).map(Number);
-                    if (channels.length === 3 || channels[3] === 1) return color;
-                    if (channels[3] !== 0) throw new Error('Contrast sample needs alpha compositing: ' + color);
-                }
-                throw new Error('Contrast sample has no opaque backing: ' + selector);
-            };
             const surface = style('.workflow-surface'), selected = style('.workflow-selected');
             const field = style('.workflow-surface input'), folio = style('.party-insp-body');
-            return { page: background('.workflow-surface'), text: surface.color,
+            return { page: surface.backgroundColor, text: surface.color,
                 selected: selected.backgroundColor, selectedText: style('.workflow-selected .fg7').color,
                 field: field.backgroundColor, fieldText: field.color,
                 folioText: folio.color, folioPage: getComputedStyle(document.documentElement).getPropertyValue('--ui-page').trim() };
         });
+        // Shared popup materials paint gradients behind transparent content.
+        // Sample a blank corner of the actual rendered surface, including that paint.
+        const image = await probe.locator('.workflow-surface').screenshot({
+            path: path.join(output, `theme-${theme}-surface-sample.png`) });
+        const pixel = spawnSync(process.env.DCSS_TEST_PYTHON || 'python3', ['-c',
+            'import io,json,sys; from PIL import Image; im=Image.open(io.BytesIO(sys.stdin.buffer.read())).convert("RGB"); print(json.dumps(im.getpixel((im.width-8, im.height-8))))'],
+        { input: image, encoding: 'utf8' });
+        assert.equal(pixel.status, 0, pixel.stderr);
+        colors.page = 'rgb(' + JSON.parse(pixel.stdout).join(', ') + ')';
         const ratios = { text: ratio(colors.page, colors.text), selected: ratio(colors.selected, colors.selectedText),
             field: ratio(colors.field, colors.fieldText) };
         await probe.screenshot({ path: path.join(output, `theme-${theme}-surfaces.png`), fullPage: true });
