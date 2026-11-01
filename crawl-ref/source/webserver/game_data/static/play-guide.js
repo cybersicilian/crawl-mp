@@ -1,25 +1,9 @@
-/* Fills the rail's free height with the next sensible step and the core controls. */
+/* One sensible next step, kept short so the rail stays useful. */
 define(["jquery", "comm", "./map_knowledge", "./workflow-actions", "./frame-update", "./status-icons", "./play-guide-model", "./go-menu", "./creature-roster-model"],
 function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
     "use strict";
     var signature = "", exploredPlace = null, current = [];
     var scanRadius = 8;
-    var controls = [["Click", "Walk to a tile, or hit an adjacent enemy"], ["Right-click", "See what a tile or creature can do"],
-        ["Shift-click", "Plan a route step by step"], ["@", "Attack info"], ["?", "All keyboard help"]];
-    var tips = ["Fight in corridors so only one enemy can reach you at a time.",
-        "Stairs are an escape: only monsters next to you follow.",
-        "Right-click a creature to read what it can do before you fight it.",
-        "Recover with Rest before exploring further. It costs almost nothing.",
-        "Unknown potions and scrolls are usually safe to try at full health with no enemies near.",
-        "Press m to choose which skills your hero trains.",
-        "Wear the armour you find, but heavy armour makes spells harder to cast.",
-        "Altars let you worship a god. Press ^ to see what yours offers.",
-        "Cmd/Ctrl+F finds any item you have seen in the dungeon."];
-    function tip(place) {
-        var total = 0;
-        for (var index = 0; index < String(place).length; index++) total += String(place).charCodeAt(index);
-        return tips[total % tips.length];
-    }
     function context() {
         var state = window.crawl_party && window.crawl_party.state;
         return { state: state, hero: state && state.members.find(function (entry) { return entry.slot === actions.controlledSlot(); }) };
@@ -44,17 +28,6 @@ function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
         else if (step.id === "travel") go.travel("down");
         else if (Number.isInteger(step.code)) comm.send_message("key", { keycode: step.code });
     }
-    // A lone hero has free rail height, so the tile panel joins the guide and the log widens.
-    function placeFloor(state) {
-        var floor = document.getElementById("hud_floor_items"), slot = document.querySelector("#play_guide .play-guide-floor");
-        var row = document.getElementById("hud_bottom_row");
-        if (!floor || !slot || !row) return;
-        var solo = state.members.length === 1 && !state.multiplayer;
-        var inRail = solo && window.innerHeight >= 860 && window.innerWidth >= 1100;
-        document.body.classList.toggle("workflow-floor-in-rail", inRail);
-        var parent = inRail ? slot : row;
-        if (floor.parentNode !== parent) parent.appendChild(floor);
-    }
     function button(step, index) {
         var node = $("<button type='button' class='play-guide-step'></button>")
             .attr({ "data-guide-step": step.id, "data-tone": step.tone || "plain" })
@@ -66,13 +39,10 @@ function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
     function update() {
         var root = $("#play_guide"); if (!root.length) return;
         var view = context(), hero = view.hero; if (!hero) return;
-        placeFloor(view.state);
         if (exploredPlace && exploredPlace !== hero.place) exploredPlace = null;
         var explored = exploredPlace === hero.place;
         var steps = model.suggest({ hero: hero, blocked: actions.reason(hero), enemies: enemies(hero), explored: explored,
             stairsKnown: explored && Boolean(go.nearest("down", hero.pos)) });
-        var advice = tip(hero.place);
-        if (root.find(".play-guide-tip").text() !== advice) root.find(".play-guide-tip").text(advice);
         var next = JSON.stringify(steps.map(function (step) { return [step.id, step.label, step.reason, step.tone]; }));
         current = steps;
         if (next === signature) return;
@@ -92,12 +62,7 @@ function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
         $("#play_guide").remove();
         var root = $("<section id='play_guide' aria-label='Next step'><h2>Next step</h2>"
             + "<p class='play-guide-reason' role='status'></p><div class='play-guide-steps'></div>"
-            + "<div class='play-guide-floor'></div><p class='play-guide-tip'></p>"
-            + "<dl class='play-guide-controls'></dl></section>");
-        controls.forEach(function (entry) {
-            root.find("dl").append($("<div></div>").append($("<dt></dt>").append($("<kbd></kbd>").text(entry[0])),
-                $("<dd></dd>").text(entry[1])));
-        });
+            + "</section>");
         root.on("keydown keypress keyup", function (event) { event.stopPropagation(); });
         $("#party_ping_toolbar").before(root);
         signature = ""; update();
@@ -109,9 +74,12 @@ function ($, comm, map, actions, frameUpdate, icons, model, go, roster) {
         })
         .on("game_cleanup.playGuide", function () {
             refresh.cancel(); signature = ""; exploredPlace = null; current = [];
-            document.body.classList.remove("workflow-floor-in-rail");
             $("#play_guide").remove();
         });
     $(window).on("resize.playGuide", refresh);
-    return { init: init, update: update, steps: function () { return current; } };
+    function explored() {
+        var hero = context().hero;
+        return Boolean(hero && exploredPlace === hero.place);
+    }
+    return { init: init, update: update, context: context, enemies: enemies, explored: explored, steps: function () { return current; } };
 });

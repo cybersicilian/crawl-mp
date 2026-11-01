@@ -12,9 +12,14 @@ define(["jquery"], function ($) {
         });
         return Math.ceil(total);
     }
+    function besideMap() { return document.body.classList.contains("workflow-strip-beside-map"); }
+    function stripWidth() {
+        var strip = document.getElementById("hud_bottom_row");
+        return strip && besideMap() ? Math.ceil(strip.getBoundingClientRect().width) : 0;
+    }
     function messageHeight(fallback) {
         var strip = document.getElementById("hud_bottom_row");
-        if (strip) return strip.getBoundingClientRect().height;
+        if (strip) return besideMap() ? 0 : strip.getBoundingClientRect().height;
         var pane = document.getElementById("message_pane");
         return pane && pane.classList.contains("hud-floating") ? 0 : fallback;
     }
@@ -42,5 +47,5 @@ define(["jquery"], function ($) {
         $(document).off("hud_workspace_changed.hudMeasure").on("hud_workspace_changed.hudMeasure", schedule);
         watch();
     }
-    return { height: height, sidebarWidth: sidebarWidth, messageHeight: messageHeight, observe: observe, stop: stop };
+    return { height: height, sidebarWidth: sidebarWidth, messageHeight: messageHeight, stripWidth: stripWidth, observe: observe, stop: stop };
 });

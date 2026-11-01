@@ -1,0 +1,57 @@
+/* Tutorial tips: one quiet card over a corner of the dungeon view, outside line of sight
+   at most window shapes. It never captures keys or pointer input beyond its own buttons. */
+#tutorial_tip { position: absolute; z-index: 22; width: min(320px, calc(100% - 24px)); pointer-events: none; }
+#tutorial_tip:empty { display: none; }
+#tutorial_tip[data-tip-position="top_left"] { top: 42px; left: 12px; }
+#tutorial_tip[data-tip-position="bottom_left"] { bottom: 12px; left: 12px; }
+
+.tutorial-tip {
+    --tip-text: 13px; --tip-title: 16px;
+    box-sizing: border-box; padding: 10px 12px; pointer-events: auto;
+    border: 1px solid var(--ui-gilt-deep, #8a6a33); border-left: 3px solid var(--ui-gilt, #d9b56a); border-radius: 4px;
+    background: var(--ui-panel, #241e18); color: var(--ui-text, #f0e5cd); box-shadow: 0 6px 22px #000a;
+    font: var(--tip-text)/1.45 var(--ui-copy, system-ui, sans-serif);
+}
+[data-tip-size="large"] .tutorial-tip { --tip-text: 16px; --tip-title: 19px; }
+[data-tip-size="xlarge"] .tutorial-tip { --tip-text: 20px; --tip-title: 24px; }
+#tutorial_tip[data-tip-size="large"] { width: min(380px, calc(100% - 24px)); }
+#tutorial_tip[data-tip-size="xlarge"] { width: min(460px, calc(100% - 24px)); }
+.tutorial-tip[data-tip-tone="danger"] { border-color: var(--ui-enemy, #ff8f80); }
+.tutorial-tip header { display: grid; gap: 1px; margin-bottom: 4px; }
+.tutorial-tip-eyebrow { color: var(--ui-gilt, #d9b56a); font-size: .77em; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.tutorial-tip[data-tip-tone="danger"] .tutorial-tip-eyebrow { color: var(--ui-enemy, #ff8f80); }
+.tutorial-tip h2 { margin: 0; color: var(--ui-text, #f0e5cd); font: 600 var(--tip-title)/1.25 var(--ui-title, Georgia, serif); }
+.tutorial-tip p { margin: 0; overflow-wrap: anywhere; }
+.tutorial-tip kbd {
+    padding: 0 .35em; border: 1px solid var(--ui-edge, #8c714c); border-bottom-width: 2px; border-radius: 3px;
+    background: var(--ui-recess, #100d0b); color: var(--ui-accent-bright, #f0d29a); font: .9em/1.3 var(--ui-mono, monospace);
+}
+.tutorial-tip-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 8px; }
+.tutorial-tip-actions button {
+    min-height: 28px; padding: 3px 10px; border: 1px solid var(--ui-edge, #8c714c); border-radius: 3px; cursor: pointer;
+    background: var(--ui-raised, #33291f); color: var(--ui-text, #f0e5cd); font: 600 .92em/1.2 var(--ui-copy, system-ui, sans-serif);
+}
+.tutorial-tip-actions .tutorial-tip-settings { border-color: transparent; background: none; color: var(--ui-muted, #c0b296); font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
+.tutorial-tip-actions button:hover { border-color: var(--ui-accent-bright, #f0d29a); color: var(--ui-accent-bright, #f0d29a); }
+.tutorial-tip-actions button:focus-visible { outline: 2px solid var(--ui-focus, #f0d29a); outline-offset: 2px; }
+.tutorial-tip-live { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+html[data-ui-theme="contrast"] .tutorial-tip { border-width: 2px; background: #000; box-shadow: none; }
+
+/* The control a tip names. An outline, so it reads without colour and without motion. */
+#normal #quickbar_primary .dcss-dock-btn.is-tip-target:not(:disabled) { outline: 2px solid var(--ui-gilt, #d9b56a); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+    html:not([data-graphics-motion="reduced"]) .tutorial-tip { animation: tutorial-tip-in 160ms ease-out; }
+    @keyframes tutorial-tip-in { from { opacity: 0; transform: translateY(-4px); } }
+}
+body > #tutorial_tip[data-tip-position] { position: fixed; top: 8px; right: 8px; bottom: auto; left: 8px; z-index: 60; width: auto; }
+
+/* Settings dialog and account page. */
+.tips-legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.tips-group { display: grid; gap: 8px; margin-top: 14px; }
+.tips-sample, .tips-journal { margin-top: 18px; }
+.tips-sample .tutorial-tip { max-width: 460px; box-shadow: none; }
+.tips-journal h3 { margin: 0 0 2px; color: var(--ui-accent-bright, #f0d29a); font: 19px/1.4 var(--ui-title, Georgia, serif); }
+.tips-journal-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; margin: 12px 0; }
+.tips-journal-list .tutorial-tip { box-shadow: none; }
+#profile_tips { margin-top: 20px; }
+#profile_tips h2, .tips-dialog h2:not(.tutorial-tip h2) { margin: 0; color: var(--ui-text, #f0e5cd); font: 26px/1.2 var(--ui-title, Georgia, serif); }

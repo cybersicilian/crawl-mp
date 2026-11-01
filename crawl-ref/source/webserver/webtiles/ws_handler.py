@@ -26,7 +26,7 @@ from webtiles import auth, checkoutput, chronicle, config, userdb, util, load_ga
 from webtiles import game_library, library_socket, starting_weapons, crash_reports, system_one
 from webtiles.character_preview import ensure_seed
 from webtiles import session_recovery, party_roster, party_access, party_saved
-from webtiles import profile_appearance, profile_graphics, game_settings_socket
+from webtiles import profile_appearance, profile_graphics, profile_tips, tip_advisor, game_settings_socket
 from webtiles.state_transport import append_snapshot
 
 try:
@@ -487,6 +487,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             "library_fetch": self.library_fetch_async,
             "profile_appearance_fetch": lambda **kwargs: profile_appearance.send_state(self),
             "profile_graphics_fetch": lambda **kwargs: profile_graphics.send_state(self),
+            "tips_fetch": lambda **kwargs: profile_tips.send_state(self, **kwargs),
+            "tips_seen": lambda **kwargs: profile_tips.handle_seen(self, **kwargs),
+            "tips_reset": lambda **kwargs: profile_tips.handle_reset(self, **kwargs),
+            "tip_choose": lambda **kwargs: tip_advisor.handle(self, **kwargs),
             "library_load": self.library_load,
             "expedition_open": self.expedition_open,
             "library_save": self.library_save,

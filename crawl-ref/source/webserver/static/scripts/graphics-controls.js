@@ -15,6 +15,20 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
         art.append(node("span", "graphics-swatch-binding"), node("span", "graphics-swatch-page"), node("span", "graphics-swatch-accent"));
         return art;
     }
+    function row(field, id, onChange) {
+        var label = node("label", "graphics-setting"), input = node(field.type === "boolean" ? "input" : "select");
+        input.id = id + "-" + field.id; input.dataset.graphicsField = field.id;
+        if (field.type === "boolean") { input.type = "checkbox"; input.className = "graphics-switch"; input.setAttribute("role", "switch"); }
+        else field.options.forEach(function (value, index) {
+            var option = node("option", "", (field.optionLabels || field.options)[index]); option.value = value; input.appendChild(option);
+        });
+        var copy = node("span", "graphics-setting-copy"), help = node("span", "graphics-help", field.description);
+        help.id = input.id + "-help"; input.setAttribute("aria-describedby", help.id);
+        copy.append(node("strong", "", field.label), help); label.append(copy, input);
+        label.classList.add(field.type === "boolean" ? "graphics-setting-switch" : "graphics-setting-choice");
+        input.addEventListener("change", function () { onChange(field.type === "boolean" ? input.checked : input.value); });
+        return { label: label, input: input };
+    }
     function mount(root) {
         var id = "graphics" + (++nextId), signature = "", inputs = new Map(), presets = new Map(), themes = new Map();
         var heading = node("div", "graphics-heading"), title = node("h2", "", "Appearance & graphics");
@@ -57,34 +71,24 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
                 choices.appendChild(button); presets.set(preset.id, button);
             });
             var fieldsets = new Map();
-            schema.fields.filter(function (field) { return !field.hidden; }).forEach(function (field) {
+            schema.fields.filter(function (field) { return !field.hidden && !field.section; }).forEach(function (field) {
                 var fieldset = fieldsets.get(field.group);
                 if (!fieldset) {
                     fieldset = node("fieldset", "graphics-group"); fieldset.appendChild(node("legend", "", field.group));
                     fieldsets.set(field.group, fieldset);
                     (field.id === "ui_theme" ? appearance : groups).appendChild(fieldset);
                 }
-                var label = node("label", "graphics-setting"), input = node(field.type === "boolean" ? "input" : "select");
-                input.id = id + "-" + field.id; input.dataset.graphicsField = field.id;
-                if (field.type === "boolean") { input.type = "checkbox"; input.className = "graphics-switch"; input.setAttribute("role", "switch"); }
-                else field.options.forEach(function (value, index) {
-                    var option = node("option", "", (field.optionLabels || field.options)[index]); option.value = value; input.appendChild(option);
-                });
-                var copy = node("span", "graphics-setting-copy"), help = node("span", "graphics-help", field.description);
-                help.id = input.id + "-help"; input.setAttribute("aria-describedby", help.id);
-                copy.append(node("strong", "", field.label), help); label.append(copy, input);
-                label.classList.add(field.type === "boolean" ? "graphics-setting-switch" : "graphics-setting-choice");
-                if (field.id === "ui_theme") { label.classList.add("graphics-theme-select"); themePicker(field, label).forEach(function (part) { fieldset.appendChild(part); }); }
-                else fieldset.appendChild(label);
-                input.addEventListener("change", function () {
-                    var value = field.type === "boolean" ? input.checked : input.value, patch = {}; patch[field.id] = value;
+                var setting = row(field, id, function (value) {
+                    var patch = {}; patch[field.id] = value;
                     var settings = Object.assign({}, preferences.snapshot().settings, patch);
                     if (field.type === "boolean") patch.mode = schema.fields.some(function (entry) {
-                        return entry.type === "boolean" && settings[entry.id];
+                        return entry.type === "boolean" && !entry.section && settings[entry.id];
                     }) ? "premium" : "classic";
                     preferences.change(patch);
-                });
-                inputs.set(field.id, { field: field, input: input });
+                }), label = setting.label;
+                if (field.id === "ui_theme") { label.classList.add("graphics-theme-select"); themePicker(field, label).forEach(function (part) { fieldset.appendChild(part); }); }
+                else fieldset.appendChild(label);
+                inputs.set(field.id, { field: field, input: setting.input });
             });
         }
         function render() {
@@ -113,5 +117,5 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
         $(document).on("graphics_settings_changed." + id, render); render();
         return { titleId: title.id, destroy: function () { $(document).off("." + id); } };
     }
-    return { mount: mount };
+    return { mount: mount, row: row };
 });

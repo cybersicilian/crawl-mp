@@ -57,28 +57,32 @@ def parse_decision(payload, options):
 # Shared across expeditions in this server worker. No automatic retries or
 # speculative calls: failed requests count toward the same configured ceiling.
 _calls = deque()
+# Tutorial tips never compete with the heroes Jev is actively playing.
+TIP_BUDGET = (deque(), "DCSS_TIP_CALLS_PER_HOUR", "600")
 
 
-async def decide(state, options, instructions, http=None, now=time.monotonic):
+async def decide(state, options, instructions, http=None, now=time.monotonic,
+                 budget=None, timeout=15):
     key = os.environ.get("TYPESAFE_API_KEY", "").strip()
     if not key:
         raise DecisionError("AI players require TYPESAFE_API_KEY on the server.")
     moment = now()
-    while _calls and _calls[0] <= moment - 3600:
-        _calls.popleft()
+    calls, variable, default = budget or (_calls, "DCSS_AI_CALLS_PER_HOUR", "3600")
+    while calls and calls[0] <= moment - 3600:
+        calls.popleft()
     try:
-        ceiling = max(1, int(os.environ.get("DCSS_AI_CALLS_PER_HOUR", "3600")))
+        ceiling = max(1, int(os.environ.get(variable, default)))
     except ValueError as error:
-        raise DecisionError("DCSS_AI_CALLS_PER_HOUR must be an integer.") from error
-    if len(_calls) >= ceiling:
+        raise DecisionError(variable + " must be an integer.") from error
+    if len(calls) >= ceiling:
         raise DecisionError("The server's hourly AI decision limit was reached.")
     body = json.dumps(request_body(state, options, instructions), separators=(",", ":")).encode()
     if len(body) > 60000:
         raise DecisionError("The AI decision context exceeds its bounded request size.")
-    _calls.append(moment)
+    calls.append(moment)
     request = HTTPRequest("https://api.typesafe.ai/v1/systemone", method="POST",
         headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
-        body=body, connect_timeout=5, request_timeout=15, follow_redirects=False)
+        body=body, connect_timeout=5, request_timeout=timeout, follow_redirects=False)
     try:
         response = await (http or AsyncHTTPClient()).fetch(request)
         return parse_decision(json.loads(response.body), options)

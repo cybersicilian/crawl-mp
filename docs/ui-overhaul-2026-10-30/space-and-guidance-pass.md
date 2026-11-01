@@ -20,35 +20,29 @@ see? Measurements use a solo Minotaur Fighter on D:1 at 2000×1154.
 
 ## The rule
 
-The rail is a single flex column. Cards keep their natural height, the Plan
-panel stays at the bottom, and the Next step panel takes whatever height is
-left. Nothing is sized for one party size, so a new hero or a taller window
-cannot reopen a gap. When cards overflow, the guide shrinks to its minimum and
-the rail scrolls as it did before.
+The rail is a single flex column. Cards and Next step keep their natural height
+and the Plan panel stays at the bottom. Spare height stays free for the enemy
+rail and party cards, which grow during play.
 
-Two steps change with room: a lone hero on a window at least 860 px tall gets
-the tile panel in the rail, and the reference and tip blocks appear only when
-that free height exists. Short windows and parties keep the footer layout.
+The footer strip (minimap, tile panel and combat log) changes with the window's
+shape. The map is a square limited by height, so a wide column has unused width
+beside it. When that spare width is at least 150 px, the strip stands there at
+240 to 380 px wide and the map takes the column's full height. Tall windows,
+narrow windows and arranged panels keep the footer. Only the window's shape
+decides this, so party size and hero card height cannot change the layout.
 
-## Guidance for less experienced players
+Next step first filled all spare height with a controls reference and a rotating
+tip. Both moved into [tutorial tips](../tutorial-tips.md), which show them when
+they apply.
 
-- **Next step** names one sensible action and why. It reads hit points, nearby
-  enemies, ground items, stairs and floor completion. The same action is lit in
-  the action row. It only suggests: the engine still decides what is legal.
-- **Click preview** shows what a click will do before it happens. The cursor
-  changes for walking, attacking, grabbing and blocked tiles, a dashed route
-  shows the path, and the readout gives the move count. It is cleared when the
-  pointer leaves the map.
-- **Go** is in the action row and the command palette. It walks to the nearest
-  known stairs, or opens the native `G` prompt for any other destination. The
-  `G` key itself is unchanged for players who already use it.
-- **Attack info** (`@`) is now a card instead of log lines: damage per hit,
-  attack speed, damage per turn, the engine's breakdown, and how to attack. It
-  takes no turn.
+| Window | Map before | Map now | Log now |
+| --- | --- | --- | --- |
+| 1280×720 | about 417 px tall | 557×557 | 355×336 |
+| 1440×900 | 1050×651 | 804×804 | 245×568 |
+| 1512×860 | about 600 px tall | 764×764 | 357×543 |
+| 1920×1080 | about 825 px tall | 1150×984 | 379×763 |
+| 1100×900 or narrower | Unchanged | Unchanged | Unchanged |
 
-## Known limits
+"Before" figures other than 1440×900 are calculated from the footer's height.
+The log loses width and gains height: about 25 lines at 1440×900, up from 9.
 
-The move count comes from a client route search limited to 32 steps, so longer
-routes read "Walk here" with no count. Native travel can take a different path
-when it avoids traps or exclusions. Stairs in Go use remembered map cells, so a
-staircase the hero has not seen is not offered.
