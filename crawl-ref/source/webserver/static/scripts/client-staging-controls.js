@@ -1,6 +1,6 @@
 /* Staging character controls and their authoritative room commands.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers", "party-lobby-tools", "party-roster-strip"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers, lobbyTools, strip) {
+define(["jquery", "comm", "client-staging-data", "character-guide", "client-staging-weapons", "character-builder", "party-composition", "client-staging-traits", "client-staging-modifiers", "party-lobby-tools", "party-roster-strip", "expedition-creation"], function ($, comm, data, guide, weapons, builder, composition, traits, modifiers, lobbyTools, strip, creation) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
@@ -252,6 +252,7 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 {
                     send_message("party_room_create", {
                         hero_name: state.current_user || "Aldric",
+                        presentation: creation.current(),
                         visibility: visibility,
                         name: "Soup of the Day: " + pendingDaily.name,
                         seed: pendingDaily.seed,
@@ -263,6 +264,7 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 {
                     send_message("party_room_create", {
                         hero_name: state.current_user || "Aldric",
+                        presentation: creation.current(),
                         visibility: visibility,
                         friendly_fire: true
                     });
@@ -283,6 +285,7 @@ define(["jquery", "comm", "client-staging-data", "character-guide", "client-stag
                 {
                     send_message("party_room_create", {
                         hero_name: state.current_user || "Aldric",
+                        presentation: creation.current(),
                         friendly_fire: false
                     });
                 }

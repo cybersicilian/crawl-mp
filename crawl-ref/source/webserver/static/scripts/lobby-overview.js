@@ -1,6 +1,6 @@
 /* Play home: Continue, New expedition, Join friends. It reads authoritative
  * library entries, room rows and live rows; resume keeps the source URL. */
-define(["hero-role"], function (heroRole) {
+define(["hero-role", "expedition-creation"], function (heroRole, creation) {
     "use strict";
     var home, recent, recentList, friends, friendsList, signature, friendsSignature;
     function el(tag, className, text) {
@@ -57,9 +57,10 @@ define(["hero-role"], function (heroRole) {
         create.type = "button"; create.dataset.lobbyCreate = "true";
         create.setAttribute("aria-describedby", "lobby_home_create_hint");
         var access = el("select"); access.id = "lobby_creation_visibility"; access.setAttribute("aria-label", "New lobby access");
-        [["public", "Public lobby"], ["private", "Private lobby"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; access.appendChild(option); });
-        actions.append(access, create, sectionLink("Join friends →", "lobby_friends_panel")); copy.appendChild(actions);
-        var hint = el("p", "lobby-home-hint", "Opens the party builder: choose heroes, friendly-fire rule and seasonings.");
+        [["public", "Public"], ["private", "Private"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; access.appendChild(option); });
+        var accessLabel=el("label","lobby-creation-access");accessLabel.append(el("span","","Access"),access);
+        actions.append(creation.choice("lobby_creation_presentation","View"),accessLabel,create,sectionLink("Join friends →","lobby_friends_panel"));copy.appendChild(actions);
+        var hint = el("p", "lobby-home-hint", "View is fixed for this expedition. Choose heroes and rules in the party builder.");
         hint.id = "lobby_home_create_hint"; copy.appendChild(hint);
         banner.appendChild(copy);
         var daily = dailyBroth(); window.__PEBBLE_DAILY_BROTH = daily;
@@ -119,9 +120,9 @@ define(["hero-role"], function (heroRole) {
             empty.appendChild(el("p", "", entries.length
                 ? "No expeditions are ready to resume. Check your saved expeditions for details."
                 : "Nothing to continue yet. Start a new expedition below, or learn the ropes first."));
-            var learn = sectionLink("New to the dungeon? Try the tutorial →", "play_now");
-            if (tutorial) { learn.href = tutorial.getAttribute("href"); delete learn.dataset.lobbySection; }
-            empty.appendChild(learn); recentList.appendChild(empty);
+            var emptyLearn = sectionLink("New to the dungeon? Try the tutorial →", "play_now");
+            if (tutorial) { emptyLearn.href = tutorial.getAttribute("href"); delete emptyLearn.dataset.lobbySection; }
+            empty.appendChild(emptyLearn); recentList.appendChild(empty);
         }
         games.forEach(function (source) { recentList.appendChild(continueCard(source)); });
         heroRole.decorate(recent);

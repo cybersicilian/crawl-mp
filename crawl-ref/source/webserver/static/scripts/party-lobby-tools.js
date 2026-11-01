@@ -1,7 +1,7 @@
 /* Lobby sharing and checkpoint selection, backed by authenticated room commands. */
-define(["comm", "party-url"], function (comm, links) {
+define(["comm", "party-url", "expedition-creation"], function (comm, links, creation) {
     "use strict";
-    var root, current, user, visibility, invite, saves, summary, fresh, copy, status, offer, pendingOffer;
+    var root, current, user, visibility, presentation, invite, saves, summary, fresh, freshView, freshChoice, choiceKey, copy, status, offer, pendingOffer;
     function el(tag, cls, text) {
         var node = document.createElement(tag); node.className = cls || "";
         if (text !== undefined) node.textContent = text; return node;
@@ -16,7 +16,7 @@ define(["comm", "party-url"], function (comm, links) {
         });
         if (occupied && !window.confirm("Start a new expedition and release your friends' lobby seats? This saved expedition will remain in Saved.")) return;
         comm.send_message("party_room_create", { room_id: current.room_id, replace_save: current.resume_id,
-            hero_name: user, visibility: current.visibility || "public", friendly_fire: true });
+            hero_name: user, presentation:creation.value(freshView), visibility: current.visibility || "public", friendly_fire: true });
     }
     function load(id) {
         if (!id) return;
@@ -41,6 +41,7 @@ define(["comm", "party-url"], function (comm, links) {
         visibility = el("select"); visibility.id = "party_lobby_visibility";
         [["public", "Public · listed for everyone"], ["private", "Private · invite link only"]].forEach(function (item) { var option = el("option", "", item[1]); option.value = item[0]; visibility.appendChild(option); });
         visibility.addEventListener("change", function () { if (current) comm.send_message("party_room_settings", { room_id: current.room_id, visibility: visibility.value }); });
+        presentation = el("span"); presentation.id = "party_lobby_presentation";
         invite = el("input"); invite.type = "text"; invite.readOnly = true; invite.id = "party_lobby_link";
         invite.addEventListener("focus", function () { invite.select(); });
         copy = button("Copy lobby link", async function () {
@@ -54,9 +55,12 @@ define(["comm", "party-url"], function (comm, links) {
         summary = el("p", "party-loaded-summary"); summary.hidden = true;
         fresh = button("New expedition", newExpedition); fresh.id = "party_new_expedition"; fresh.hidden = true;
         fresh.title = "Start a fresh party and keep this checkpoint in Saved expeditions";
+        freshView=creation.choice("party_new_presentation","New game view");
+        freshChoice=el("div","party-new-view");freshChoice.appendChild(freshView);freshChoice.hidden=true;
         status = el("span", "party-link-status"); status.setAttribute("role", "status");
         var actions = el("div", "party-lobby-link-actions"); actions.append(copy, reset, status);
-        root.append(field("Lobby access", visibility), field("Lobby link", invite), actions, field("Load a save into this lobby", saves), summary, fresh);
+        root.append(field("Game view", presentation), field("Lobby access", visibility),
+            field("Lobby link", invite), actions, field("Load a save into this lobby", saves), summary, freshChoice, fresh);
         document.querySelector("#party_room_view .party-room-banner").after(root);
         window.addEventListener("saved-expeditions-updated", refreshSaves);
         document.addEventListener("click", function (event) {
@@ -65,15 +69,18 @@ define(["comm", "party-url"], function (comm, links) {
         }); refreshSaves();
     }
     function render(room, username) {
-        init(); current = room; user = username; fresh.hidden = true; if (!room) return;
+        init(); current = room; user = username; fresh.hidden = freshChoice.hidden = true; if (!room) return;
         var host = room.host.toLowerCase() === (username || "").toLowerCase();
         visibility.value = room.visibility || "public"; visibility.disabled = !host;
+        presentation.textContent = (room.presentation === "first_person" ? "Immersive 3D" : "Overhead 2D") + " · locked";
+        var nextChoiceKey=room.room_id+":"+(room.resume_id||"");
+        if(choiceKey!==nextChoiceKey){creation.set(freshView,room.presentation);choiceKey=nextChoiceKey;}
         var value = links.url(room); if (invite.value !== value) invite.value = value;
         copy.disabled = room.visibility === "private" && !room.invite_token;
         document.getElementById("party_reset_invite").hidden = !host || room.visibility !== "private";
         saves.disabled = !host; refreshSaves();
         summary.hidden = !room.resume_id;
-        fresh.hidden = !host || !room.resume_id || room.status !== "staging";
+        fresh.hidden = freshChoice.hidden = !host || !room.resume_id || room.status !== "staging";
         if (room.resume_id) {
             var details = room.resume_summary || {};
             summary.textContent = "Saved expedition · " + (details.place || "Dungeon") + " · Turn " + (details.turns || 0)

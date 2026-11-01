@@ -33,6 +33,11 @@ define([], function () {
         if (saved) valid.last_item = saved;
         return valid;
     }
+    function same(left,right) {
+        var a=binding(left),b=binding(right);
+        if(!a||!b||a.kind!==b.kind||(a.action||null)!==(b.action||null))return false;
+        return a.action ? a.action==="prototype"||a.uid===b.uid : a.id===b.id;
+    }
     function normalize(values) {
         return Array.from({ length: count }, function (_, index) { return binding(Array.isArray(values) && values[index]); });
     }
@@ -74,5 +79,5 @@ define([], function () {
         });
     }
     return { count: count, shortcut: shortcut, keyIndex: keyIndex,
-        binding: binding, normalize: normalize, resolve: resolve, remember: remember, catalog: catalog };
+        binding: binding, same:same, normalize: normalize, resolve: resolve, remember: remember, catalog: catalog };
 });

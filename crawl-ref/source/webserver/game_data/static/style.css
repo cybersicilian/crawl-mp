@@ -56,3 +56,5 @@
 @import url("/static/tabletop/tactics-components.css");
 @import url("styles/combat-log.css");
 @import url("styles/tactics-shell.css");
+
+@import url("styles/first-person.css");

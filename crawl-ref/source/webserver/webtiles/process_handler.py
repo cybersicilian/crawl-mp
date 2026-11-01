@@ -909,6 +909,9 @@ class CrawlProcessHandlerBase(object):
                 {'/static/': config.get('static_path')}, bundle_prefix='/gamedata/' + assets.base + '/')
         game_html = to_unicode(templ.generate(version=v, image_url=image_url, stylesheets=stylesheets))
         watcher.send_message("game_client", version = v, content = game_html)
+        from webtiles import game_presentation
+        watcher.send_message("game_presentation", mode=game_presentation.for_process(self),
+                             expedition_id=getattr(self, "record_id", None))
 
     def stop(self, delay=False):
         if delay:

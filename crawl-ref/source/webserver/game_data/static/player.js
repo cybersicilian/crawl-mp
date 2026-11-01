@@ -177,6 +177,7 @@ function ($, comm, client, map_knowledge, messages, options, hud, interactions, 
                 adjusted_noise: 0
             });
             delete player["old_hp"];
+            delete player.body_size;
             delete player["old_mp"];
             last_time = null;
         });

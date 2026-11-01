@@ -1,0 +1,20 @@
+#first_person_dungeon.first-person-targeting-active { cursor: crosshair; }
+.first-person-targeting-bar {
+    position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 56;
+    display: flex; align-items: center; gap: 8px; padding: 7px 9px;
+    color: #f1e3c4; background: #10171ef0; border: 1px solid #bca17488;
+    border-radius: 4px; font: 12px/1.4 system-ui, sans-serif;
+}
+.first-person-targeting-bar[hidden], .first-person-targeting-reticle[hidden] { display: none; }
+.first-person-targeting-bar > span { flex: 1; min-width: 0; }
+.first-person-targeting-bar button {
+    flex: 0 0 auto; min-height: 32px; padding: 4px 9px; border: 1px solid #bca17488;
+    border-radius: 3px; background: #263039; color: inherit; font: inherit; cursor: pointer;
+}
+.first-person-targeting-bar button:focus-visible { outline: 2px solid #ffe4a6; outline-offset: 2px; }
+.first-person-targeting-reticle {
+    position: absolute; z-index: 54; pointer-events: none; transform: translate(-50%, -50%);
+    color: #fff3bb; font: bold 25px/1 monospace; text-shadow: 0 1px 2px #000, 1px 0 2px #000;
+}
+.first-person-targeting-reticle[data-range="out"] { color: #e9a172; }
+@media (max-width: 600px) { .first-person-targeting-bar { flex-wrap: wrap; } .first-person-targeting-bar > span { flex-basis: 100%; } }

@@ -7,8 +7,9 @@
 }
 #normal #dcss_quick_dock:not(.hud-floating) { width: max-content; max-width: 100%; align-self: flex-start; z-index: 35; }
 #quickbar_primary, #quickbar_slots { display: flex; flex: 0 0 auto; align-items: center; gap: 2px; }
+#quickbar_primary { flex: 0 1 auto; flex-wrap: wrap; min-width: 0; max-width: 100%; }
 #quickbar_slots { border-left: 1px solid #a88a5638; padding-left: 6px; }
-#quickbar_slots { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+#quickbar_slots { flex: 0 1 auto; min-width: 0; max-width: 100%; box-sizing: border-box; overflow-x: auto; scrollbar-width: thin; }
 #normal #quickbar_primary .dcss-dock-btn, #normal .hud-quick-slot,
 #normal #quickbar_commands .dcss-dock-btn, #normal #quickbar_commands .workflow-expedition-details > summary,
 #normal .quickbar-catalog-action, #quickbar_more > summary {

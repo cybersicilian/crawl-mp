@@ -83,7 +83,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         if (!entry || blocked(hero, binding, entry)) return;
         var focused = document.activeElement;
         if (focused && $(focused).closest("#dcss_quick_dock").length) focused.blur();
-        document.getElementById("quickbar_more").open = false;
+        var more = document.getElementById("quickbar_more"); if (more) more.open = false;
         if (binding.kind === "command") commands.activate(binding.id);
         else if (binding.kind === "item") actions.itemAction(hero, entry, false);
         else actions.usePower(hero, entry, binding.kind, Boolean(!manualAim && quickCast(binding, entry)));
@@ -93,6 +93,27 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         var valid = model.binding(value);
         if (value && (!valid || !resolve(member(), valid))) return;
         slots[index] = model.remember(member(), valid); save(); selected = null; update(true);
+        $(document).trigger("quickbar_assignments_changed");
+    }
+    function describeBinding(value) {
+        var hero = member(), binding = model.binding(value);
+        if (!hero || !binding) return null;
+        var entry = resolve(hero, binding);
+        return { binding: binding, entry: entry, reason: blocked(hero, binding, entry) };
+    }
+    function favorites() {
+        var hero = member(); if (!hero) return []; load(hero);
+        return slots.map(function (binding, index) {
+            return binding ? Object.assign({ index: index }, describeBinding(binding)) : null;
+        }).filter(Boolean);
+    }
+    function toggleFavorite(value) {
+        var hero=member(),valid=model.binding(value);if(!hero||!valid||!resolve(hero,valid))return false;load(hero);
+        var index=slots.findIndex(function(binding){return model.same(binding,valid);});
+        if(index>=0){assign(index,null);return true;}
+        index=slots.indexOf(null);
+        if(index<0){actions.notice("All ten favorite slots are assigned. Remove a favorite to make room.");return false;}
+        assign(index,valid);return true;
     }
     function edit(index) {
         selected = index;
@@ -371,7 +392,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
                 document.querySelector("#quickbar_more > summary").focus();
             }
         }).on("click.quickbarInput", "#quickbar_commands .dcss-dock-btn, #quickbar_commands .hud-expedition-menu > a", function () {
-            document.getElementById("quickbar_more").open = false;
+            var more=document.getElementById("quickbar_more");if(more)more.open=false;
             if (document.activeElement === this) this.blur();
         }).on("dragover.quickbarInput", "[data-quick-slot]", function (event) { event.preventDefault(); })
             .on("drop.quickbarInput", "[data-quick-slot]", function (event) {
@@ -398,5 +419,7 @@ function ($, party, model, actions, inventory, icons, powerCards, powerArt, spel
         $(window).off("resize.quickbar").on("resize.quickbar", fitTray);
         fitTray();
     }
-    return { init: init, update: update };
+    return { init:init, update:update, favorites:favorites, toggleFavorite:toggleFavorite, describeBinding:describeBinding,
+        activateFavorite:function(index,manualAim){var hero=member();if(!hero)return;load(hero);if(slots[index])activate(slots[index],manualAim);} };
+
 });

@@ -45,7 +45,7 @@ function ($, comm, dr, gui, map_knowledge, enums, cards, nested, actions, dungeo
         if (event.key === "Escape") { event.preventDefault(); event.stopImmediatePropagation(); }
     }, true);
     document.addEventListener("mousedown", function (event) {
-        if (exclusion_selection && !$(event.target).closest("#dungeon, #minimap_overlay").length) cancel_exclusion();
+        if (exclusion_selection && !$(event.target).closest("#dungeon, #first_person_dungeon, #minimap_overlay").length) cancel_exclusion();
     }, true);
 
     function handle_cell_click(ev)

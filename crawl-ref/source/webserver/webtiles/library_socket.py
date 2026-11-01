@@ -249,7 +249,9 @@ class LibrarySocketMethods:
 
 
 def configure_process(process, game):
+    from webtiles import game_presentation
     process.record_id = game["id"]
+    process.presentation = game_presentation.from_party(json.loads(game["party_json"]))
     process.lobby_room = json.loads(game["party_json"]).get("room")
     process.character_name = json.loads(game["party_json"]).get("character_name") or process.username
     process.game_params = process.game_params.copy()

@@ -1,5 +1,5 @@
-define(["jquery", "comm", "./player", "./tileinfo-main", "./status-icons", "./workflow-actions", "./party-power-cards", "./power-art", "./native-tile-art", "spell-cost", "./frame-update", "./item-context-menu", "./equipment-paperdoll"],
-function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spellCost, frameUpdate, itemMenus, paperdoll) {
+define(["jquery", "comm", "./player", "./tileinfo-main", "./status-icons", "./workflow-actions", "./party-power-cards", "./power-art", "./native-tile-art", "spell-cost", "./frame-update", "./item-context-menu", "./equipment-paperdoll", "./first-person-inventory"],
+function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spellCost, frameUpdate, itemMenus, paperdoll, firstPerson) {
     "use strict";
     var filter = "all", itemSignature = "", powerSignature = "", shape = "";
     function member() {
@@ -111,14 +111,16 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
             $(this).attr("aria-pressed", String(this.dataset.itemFilter === filter));
         });
         var scroll = body.scrollTop(); body.empty();
-        hero.inventory.filter(function (item) {
+        var entries = hero.inventory.filter(function (item) {
             return filter === "all" || (filter === "equipped" ? item.equipped : !item.equipped);
-        }).forEach(function (item) {
-            body.append(itemButton(hero, item, false));
+        });
+        entries.forEach(function (item) {
+            body.append(firstPerson.decorate(itemButton(hero, item, false), item));
         });
         if (!body.children().length) body.append($("<p class='hud-empty'></p>").text(
             !hero.inventory_known ? "Inventory information unavailable." : filter === "all" ? "Your pack is empty." : "No matching items."));
         body.scrollTop(scroll);
+        firstPerson.render(root, hero, entries, drawTile);
         var previous = document.getElementById(focus); if (previous) previous.focus({ preventScroll: true });
     }
     function renderPowers(hero) {
@@ -234,6 +236,7 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
     }
     var refresh = frameUpdate(update);
     $(document).on("party_state_rendered.hudInventory player_card_sections_mounted.hudInventory game_actions_changed.hudInventory player_state_changed.hudInventory", refresh)
+        .on("expedition_presentation_changed.hudInventory", function () { update(true); })
         .on("game_cleanup.hudInventory", function () { refresh.cancel(); itemSignature = powerSignature = shape = ""; filter = "all"; });
     return { init: init, update: update, itemButton: itemButton, itemIcon: itemIcon, drawTile: drawTile, drawTiles: drawTiles, artState: artState };
 });

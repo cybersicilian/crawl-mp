@@ -1,0 +1,16 @@
+/* Abstract native sensing glyphs intentionally remain visible through geometry. */
+.first-person-sensing {
+    position: absolute; inset: 0; z-index: 44; overflow: hidden;
+    pointer-events: none; user-select: none;
+}
+.first-person-sensing[hidden] { display: none; }
+.first-person-sense {
+    position: absolute; display: grid; place-items: center;
+    width: 21px; height: 21px; transform: translate(-50%, -50%);
+    box-sizing: border-box; border: 1px dashed #d2b66e;
+    color: #f3dc97; background: #15181ac9;
+    font: bold 17px/1 monospace; text-shadow: 1px 1px #000;
+    image-rendering: pixelated;
+}
+.first-person-sense.sensed-item { color: #94dbe8; border-color: #6bbac9; }
+.first-person-sense.last-known { color: #c4b2cf; border-color: #897b96; border-style: dotted; }

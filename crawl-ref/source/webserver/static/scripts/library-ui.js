@@ -213,7 +213,9 @@ define(["jquery", "comm", "expedition-url", "require"], function ($, comm, exped
             summary.append(title);
             var facts = $("<dl class='library-facts'></dl>");
             facts.append(fact("Floor", state.place || "Starting"), fact("Turn", String(state.turns || 0)),
-                fact("Mode", modeLabel(game.mode)), fact("Party", partyLabel(players.length || 1)));
+                fact("Mode", modeLabel(game.mode)),
+                fact("View", game.presentation === "first_person" ? "Immersive 3D" : "Overhead 2D"),
+                fact("Party", partyLabel(players.length || 1)));
             summary.append(facts);
             if (players.length) {
                 var roster = $("<ul class='library-roster'></ul>").attr("aria-label", "Party roster");

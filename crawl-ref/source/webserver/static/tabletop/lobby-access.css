@@ -35,3 +35,15 @@
 
 
 #lobby .lobby-home.has-no-history .lobby-home-board { grid-template-columns: minmax(0, 1fr); }
+
+.expedition-view-choice { display: inline-flex; gap: 0; min-width: 0; margin: 0; padding: 0; border: 0; }
+.expedition-view-choice legend, .lobby-creation-access > span { margin: 0 0 6px; padding: 0; font: 600 11px/1.4 var(--tt-font-ui); color: inherit; }
+#lobby .expedition-view-choice label { display: block; position: relative; margin: 0; cursor: pointer; }
+#lobby .expedition-view-choice input { position: absolute; width: 1px !important; height: 1px !important; min-height: 0 !important; padding: 0 !important; opacity: 0; }
+.expedition-view-choice label > span { display: grid; place-items: center; box-sizing: border-box; min-width: 52px; height: 38px; padding: 0 14px; border: 1px solid #9d937d; background: #fff9ed; color: #454735; font: 600 13px/1 var(--tt-font-ui); }
+.expedition-view-choice label:first-of-type > span { border-radius: 4px 0 0 4px; }
+.expedition-view-choice label:last-of-type > span { border-radius: 0 4px 4px 0; border-left: 0; }
+.expedition-view-choice input:checked + span { background: #e8b86b; color: #241b12; border-color: #e8b86b; }
+.expedition-view-choice input:focus-visible + span { outline: 2px solid #f6d49a; outline-offset: 3px; }
+.party-new-view[hidden] { display: none; }
+.party-new-view { color: #66553f; }

@@ -61,6 +61,15 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons
             || bounds.height < pad.offsetHeight + inset * 2 ? "hidden" : "";
         var left = Math.max(bounds.left + inset, bounds.right - pad.offsetWidth - inset);
         var top = Math.max(bounds.top + inset, bounds.bottom - pad.offsetHeight - inset);
+        // Passive overlays reserve space without coupling movement to a view mode.
+        root.querySelectorAll("[data-hud-obstacle]").forEach(function (element) {
+            if (!element.getClientRects().length) return;
+            var occupied = element.getBoundingClientRect();
+            if (left < occupied.right && left + pad.offsetWidth > occupied.left
+                && top < occupied.bottom && top + pad.offsetHeight > occupied.top)
+                top = occupied.top - pad.offsetHeight - inset;
+        });
+        if (top < bounds.top + inset) pad.style.visibility = "hidden";
         var rail = document.getElementById("enemy_initiative_rail");
         if (rail && !rail.hidden && !rail.classList.contains("is-compact") && getComputedStyle(rail).visibility !== "hidden") {
             var occupied = rail.getBoundingClientRect();

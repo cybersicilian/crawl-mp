@@ -1792,6 +1792,7 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             "friendly_fire": bool(friendly_fire),
             "seasonings": [str(s) for s in seasonings[:6]] if isinstance(seasonings, list) else [],
             "seed": str(seed).strip()[:24] if seed else "",
+            "presentation": "first_person" if kwargs.get("presentation") == "first_person" else "overhead",
             "status": "staging",
             "game_id": default_game_id,
             "slots": slots,

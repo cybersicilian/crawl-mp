@@ -232,10 +232,12 @@ def ingest(identifier, base_dir=BASE_DIR):
 
 
 def public_game(game):
+    from webtiles import game_presentation
     snapshot = json.loads(game["snapshot_json"])
     return {**{key: game[key] for key in
                ("id", "owner_id", "owner", "mode", "title", "status", "created_at", "updated_at", "saved_at", "save_deleted_at")},
             "kind": "games", "name": game["title"], "state": snapshot,
+            "presentation": game_presentation.from_party(json.loads(game["party_json"])),
             "loadable": bool(save_files(game))}
 
 

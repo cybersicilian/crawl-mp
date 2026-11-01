@@ -3,7 +3,7 @@ from copy import deepcopy
 import json
 
 from tornado.ioloop import IOLoop
-from webtiles import game_library, library_socket, party_access, party_roster
+from webtiles import game_library, game_presentation, library_socket, party_access, party_roster
 
 
 def checkpoint(identifier, username):
@@ -58,6 +58,7 @@ def staged(game, room, defaults):
                   resume_multiplayer=multiplayer, name=game["title"], seed=snapshot.get("seed", room.get("seed", "")),
                   resume_summary={"place": snapshot.get("place", "Saved dungeon"), "turns": snapshot.get("turns", 0),
                                   "saved_at": game.get("saved_at"), "heroes": len(players)})
+    result["presentation"] = game_presentation.from_party(party)
     for key in ("friendly_fire", "seasonings", "rune_locks", "trap_mode", "shared_fate"):
         if key in party.get("room", {}):
             result[key] = deepcopy(party["room"][key])

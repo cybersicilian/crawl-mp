@@ -1,0 +1,105 @@
+/* Nordic-inspired silver, charcoal and open space. No downloaded art or fonts. */
+.first-person-hud {
+    position: absolute; inset: 0; z-index: 43; pointer-events: none; overflow: hidden;
+    color: #eeeae2; font: 12px/1.4 Georgia, serif; text-shadow: 0 2px 3px #000, 0 0 6px #000;
+}
+.first-person-hud[hidden], .first-person-hud [hidden] { display: none; }
+.first-person-navigation { position: absolute; top: 44px; left: 50%; width: min(330px, 50%); transform: translateX(-50%); text-align: center; }
+.first-person-location { font-size: 14px; letter-spacing: .16em; margin-bottom: 4px; }
+.first-person-bearing {
+    position: relative; height: 27px; overflow: hidden; border-block: 1px solid #d1d3cf9c;
+    background: linear-gradient(90deg, transparent, #090d1299 25% 75%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12% 88%, transparent);
+}
+.first-person-bearing::after { content: "◆"; position: absolute; top: -2px; left: calc(50% - 4px); font: 9px/1 serif; }
+.first-person-compass-tape { position: absolute; top: 0; left: calc(50% - 408px); display: flex; height: 100%; align-items: center; }
+.first-person-compass-tape span { flex: 0 0 48px; font-size: 12px; letter-spacing: .12em; }
+.first-person-compass-tape span::after { content: ""; position: absolute; bottom: 0; height: 4px; width: 1px; background: #d5d4cc80; margin-left: 17px; }
+.first-person-crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font: 24px/1 serif; opacity: .7; }
+.first-person-vitals {
+    position: absolute; bottom: 18px; left: 6%; right: 6%; display: grid;
+    grid-template-columns: 1fr 1.35fr 1fr; align-items: end; gap: 6%;
+}
+.first-person-vital { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; min-width: 0; }
+.first-person-vital-label { letter-spacing: .12em; font-variant: small-caps; }
+.first-person-vital-value { font: 10px/1.6 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.first-person-vital-track {
+    position: relative; grid-column: 1 / -1; height: 8px; padding: 2px;
+    border: 1px solid #d8d9d0b0; background: #08090ce0; box-shadow: 0 1px 5px #000;
+    clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);
+}
+.first-person-vital-fill { display: block; height: 100%; background: linear-gradient(#bc5555, #762c2d 55%, #a64a48); }
+.first-person-vital.magic .first-person-vital-fill { background: linear-gradient(#74a6d5, #335a9a 55%, #5487be); }
+.first-person-vital.heat .first-person-vital-fill { background: linear-gradient(#edb16a, #a65b27 55%, #d78d45); }
+.first-person-vital.health[data-low='true'] { color: #ffc2b8; }
+.first-person-level { padding-bottom: 3px; text-align: right; font-size: 11px; letter-spacing: .06em; }
+/* The native targeting prompt sits above the persistent resource meters. */
+html[data-expedition-view='first_person'] .first-person-targeting-bar { bottom: 78px; background: #0c1015e8; border-color: #c6c8c57a; border-radius: 0; }
+html[data-expedition-view='first_person'] .first-person-toolbar {
+    top: var(--first-person-tools-top, 96px); left: 12px; padding: 0; gap: 4px; border: 0; border-radius: 0;
+    background: #0c1015d9; color: #e4e4df; font: 11px/1.4 system-ui, sans-serif;
+}
+html[data-expedition-view='first_person'] .first-person-toolbar button,
+html[data-expedition-view='first_person'] .first-person-targeting-bar button { border-radius: 0; border-color: #bfc3c169; background: #10151b; }
+html[data-expedition-view='first_person'] .first-person-toolbar button:hover { color: #fff; background: #343b43; }
+html[data-expedition-view='first_person'] .first-person-help { display: none; }
+html[data-expedition-view='first_person'] .first-person-toolbar .first-person-compass {
+    position: absolute; width: 1px; height: 1px; min-width: 0; overflow: hidden; clip-path: inset(50%);
+}
+html[data-expedition-view='first_person'] .first-person-atlas { border-color: #bcc2c4; border-radius: 0; background: #0e131af5; color: #e4e6e6; }
+@container hud-playfield (max-width: 600px) {
+    .first-person-vitals { left: 4%; right: 4%; gap: 5%; grid-template-columns: 1fr 1.2fr; }
+    .first-person-level { grid-column: 1 / -1; text-align: center; font-size: 10px; }
+    .first-person-navigation { width: 55%; }
+}
+@media (max-width: 600px) {
+    .first-person-vitals { left: 4%; right: 4%; gap: 5%; grid-template-columns: 1fr 1.2fr; }
+    .first-person-level { grid-column: 1 / -1; text-align: center; font-size: 10px; }
+    .first-person-navigation { width: 55%; }
+}
+
+@container hud-playfield (max-width: 220px) {
+    .first-person-vitals { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .first-person-vital { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .first-person-vital-value { font-size: 9px; }
+    .first-person-navigation { width: 85%; }
+    .first-person-level { overflow-wrap: anywhere; }
+    html[data-expedition-view='first_person'] .first-person-toolbar { left: 4px; max-width: calc(100% - 8px); }
+    html[data-expedition-view='first_person'] .first-person-controls { display: none; }
+    html[data-expedition-view='first_person'] .first-person-toolbar > button { min-width: 0; max-width: 100%; padding: 2px; font-size: 9px; overflow-wrap: anywhere; }
+}
+/* Fine silver framing and restrained ornament leave the world as the focus. */
+.first-person-hud { font-family: Georgia, 'Times New Roman', serif; }
+.first-person-navigation { width: min(440px, 54%); }
+.first-person-location { font-variant: small-caps; font-size: 16px; letter-spacing: .13em; margin-bottom: 8px; color: #e6e5dc; }
+.first-person-bearing { height: 29px; border: 0; overflow: visible; background: none; mask-image: linear-gradient(90deg,transparent,#000 14% 86%,transparent); }
+.first-person-bearing::before { content: ""; position: absolute; inset: 2px 0 1px; border-block: 1px solid #cbd0caad; clip-path: polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%); background: linear-gradient(90deg,transparent,#080c1240,transparent); }
+.first-person-bearing::after { content: "▼"; top: -8px; left: calc(50% - 4px); color: #e1dfd0; font-size: 8px; }
+.first-person-compass-tape { overflow: hidden; }
+.first-person-compass-tape span { color: #d7dad4; font-size: 13px; }
+.first-person-crosshair { width: 15px; height: 15px; font-size: 0; opacity: .65; }
+.first-person-crosshair::before,.first-person-crosshair::after { content: ""; position: absolute; border: 1px solid #e5e4d8; inset: 4px; transform: rotate(45deg); }
+.first-person-crosshair::after { border: 0; width: 2px; height: 2px; background: #fff; left: 6px; top: 6px; }
+.first-person-vitals { bottom: 24px; left: 10%; right: 10%; gap: 7%; }
+.first-person-vital-label { font-size: 13px; letter-spacing: .09em; color: #dadbd2; }
+.first-person-vital-value { color: #c8ccc9; opacity: .85; }
+.first-person-vital-track { height: 7px; padding: 2px 9px; border: 0; clip-path: none; background: none; box-shadow: none; }
+.first-person-vital-track::before { content: ""; position: absolute; inset: -2px 0; border: 1px solid #d5d7caa8; clip-path: polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%); background: #080a0da0; }
+.first-person-vital-track::after { content: "◆"; position: absolute; left: -3px; top: -7px; font: 18px Georgia,serif; color: #cfd0c5; text-shadow: 0 1px #000; }
+.first-person-vital-fill { position: relative; box-shadow: 0 0 5px #c1594933,inset 0 1px #fff2; }
+.first-person-level { color: #d1d5cc; padding: 0 6px 3px; border-bottom: 1px solid #9b9f9855; background: linear-gradient(90deg,#d0d5c144 var(--xp,0%),transparent var(--xp,0%)) bottom/100% 2px no-repeat; }
+.first-person-target { margin: 16px auto 0; max-width: 80%; text-align: center; color: #e6e4d9; }
+.first-person-target strong { font: small-caps 18px/1.5 Georgia,serif; letter-spacing: .08em; }
+.first-person-target-health { position: relative; height: 5px; padding: 2px 12px; margin-top: 4px; border-block: 1px solid #d4d4c580; background: #0a090bb3; clip-path: polygon(12px 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,12px 100%,0 50%); }
+.first-person-target-health i { display: block; height: 100%; background: linear-gradient(#b9504d,#66272a); }
+.first-person-target[data-range='out'] { color: #ffc98b; }
+html[data-expedition-view='first_person'] .first-person-targeting-bar { background: linear-gradient(90deg,transparent,#080b10d9 18% 82%,transparent); border: 0; padding: 8px 4%; color: #e7e6dc; font-family: Georgia,serif; }
+html[data-expedition-view='first_person'] .first-person-targeting-bar button { border-color: #c3c8c04f; background: #090e1355; font: small-caps 12px Georgia,serif; }
+
+/* Target instructions stay below the playfield's small ground creatures. */
+html[data-expedition-view='first_person'] .first-person-targeting-bar { bottom: 4px; }
+.first-person-active:has(.first-person-targeting-active) .first-person-vitals { bottom: 64px; }
+
+html[data-expedition-view='first_person'] .first-person-targeting-bar { bottom: 2px; }
+.first-person-active:has(.first-person-targeting-active) .first-person-vitals { bottom: 64px; }
+.first-person-active:has(.first-person-targeting-active) .first-person-menu-launchers { display: none; }

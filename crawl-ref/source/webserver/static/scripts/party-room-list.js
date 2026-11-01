@@ -14,7 +14,8 @@ define(["jquery", "character-catalog", "class-art"], function ($, catalog, class
             var known = Array.isArray(room.available_slots), full = !live && known && !room.available_slots.length;
             var row = $("<tr class='party-room-listing'></tr>").attr({ "data-joinable": full ? "false" : known && !live ? "true" : "unknown", "data-room-status": room.status || "staging" });
             var title = $("<td class='room-name'></td>").append($("<strong></strong>").text(room.name || room.host + "'s party"),
-                $("<small class='room-phase'></small>").text(live ? "In the dungeon" : "Preparing to depart"));
+                $("<small class='room-phase'></small>").text((live ? "In the dungeon" : "Preparing to depart")
+                    + (room.presentation === "first_person" ? " · Immersive 3D" : " · Overhead 2D")));
             row.append(title, $("<td class='room-host'></td>").text(room.host));
             var active = slots.filter(function (slot, index) { return (room.launch_slots || [0]).includes(index); });
             var ready = active.filter(function (slot) { return slot.ready !== false; }).length;

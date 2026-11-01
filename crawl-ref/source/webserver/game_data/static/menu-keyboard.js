@@ -5,6 +5,11 @@ define(["jquery"], function ($) {
         return $(target).is("input, textarea, select, [contenteditable]:not([contenteditable='false'])")
             || Boolean($(target).closest("[contenteditable='true']").length);
     }
+    // Capture-phase shortcuts yield to a modal owned by another interface.
+    function otherDialogOpen(owner, root) {
+        var doc = root || (owner && owner.ownerDocument) || document;
+        return Array.from(doc.querySelectorAll("dialog[open]")).some(function (dialog) { return dialog !== owner; });
+    }
     function available(element) {
         return !element.disabled && element.getAttribute("aria-disabled") !== "true"
             && $(element).is(":visible") && getComputedStyle(element).visibility !== "hidden";
@@ -51,5 +56,5 @@ define(["jquery"], function ($) {
         if (!event.repeat) activate(matches[0]);
         return consume(event);
     }
-    return { handle: handle, typing: typing, available: available, consume: consume, move: move, activate: activate };
+    return { handle: handle, typing: typing, otherDialogOpen: otherDialogOpen, available: available, consume: consume, move: move, activate: activate };
 });

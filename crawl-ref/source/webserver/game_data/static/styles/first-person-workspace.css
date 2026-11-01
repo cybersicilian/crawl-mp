@@ -1,0 +1,18 @@
+/* View fills the window; one direct action restores the complete native interface. */
+#dungeon_viewport.first-person-active[data-immersive='true'] {
+    position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100dvh !important;
+    max-width: none !important; max-height: none !important; margin: 0 !important; border: 0 !important;
+    z-index: 80; background: #090d11; isolation: isolate;
+}
+html:has(.first-person-active[data-immersive='true']) #normal #right_column { visibility: hidden; pointer-events: none; }
+html:has(.first-person-active[data-immersive='true']) #normal #message_pane {
+    position: fixed !important; left: 24px; bottom: 112px; width: min(460px, 36vw) !important; height: 76px !important;
+    z-index: 86; border: 0; opacity: .88; background: linear-gradient(90deg,#06090d99,transparent); font-size: 12px;
+}
+html:has(.first-person-active[data-immersive='true']) #normal #direction_pad { position: fixed !important; left: 14px !important; bottom: 16px !important; top: auto !important; z-index: 86; }
+html:has(.first-person-active[data-immersive='true']) #normal #party_turn_banner { position: fixed; left: 16px; top: 14px; max-width: 30vw; z-index: 86; font-size: 11px; background: transparent; border: 0; }
+#dungeon_viewport[data-immersive='true'] .first-person-navigation { top: 22px !important; }
+@media(max-width:600px) {
+    html:has(.first-person-active[data-immersive='true']) #normal #message_pane { left: 12px; bottom: 130px; width: 58vw !important; height: 55px !important; font-size: 10px; }
+    html:has(.first-person-active[data-immersive='true']) #normal #party_turn_banner { max-width: 25vw; }
+}
