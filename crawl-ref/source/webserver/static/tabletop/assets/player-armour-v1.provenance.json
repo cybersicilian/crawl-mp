@@ -1,0 +1,164 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-4da6b6cf-3ad2-4e3e-a5ce-c7f3ed2627f3.png",
+  "sha256": "0fe7a2bd2a4001e0773e0ec7e9147d0b332d16279ffad8b51f6df16c153a4269",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "layout": [
+    {
+      "label": "Leather armour",
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        48,
+        52,
+        378,
+        400
+      ],
+      "minimumGutter": 14
+    },
+    {
+      "label": "Ring mail",
+      "rectangle": {
+        "x": 418,
+        "y": 0,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        40,
+        51,
+        377,
+        388
+      ],
+      "minimumGutter": 26
+    },
+    {
+      "label": "Chain mail",
+      "rectangle": {
+        "x": 836,
+        "y": 0,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        28,
+        52,
+        366,
+        383
+      ],
+      "minimumGutter": 28
+    },
+    {
+      "label": "Scale mail",
+      "rectangle": {
+        "x": 0,
+        "y": 414,
+        "w": 410,
+        "h": 382
+      },
+      "alphaBounds": [
+        33,
+        24,
+        394,
+        369
+      ],
+      "minimumGutter": 13
+    },
+    {
+      "label": "Plate armour",
+      "rectangle": {
+        "x": 410,
+        "y": 414,
+        "w": 432,
+        "h": 382
+      },
+      "alphaBounds": [
+        17,
+        13,
+        417,
+        370
+      ],
+      "minimumGutter": 12
+    },
+    {
+      "label": "Crystal plate",
+      "rectangle": {
+        "x": 842,
+        "y": 414,
+        "w": 412,
+        "h": 382
+      },
+      "alphaBounds": [
+        16,
+        20,
+        391,
+        374
+      ],
+      "minimumGutter": 8
+    },
+    {
+      "label": "Animal skin",
+      "rectangle": {
+        "x": 0,
+        "y": 796,
+        "w": 386,
+        "h": 458
+      },
+      "alphaBounds": [
+        87,
+        31,
+        351,
+        425
+      ],
+      "minimumGutter": 31
+    },
+    {
+      "label": "Troll leather",
+      "rectangle": {
+        "x": 386,
+        "y": 796,
+        "w": 454,
+        "h": 458
+      },
+      "alphaBounds": [
+        35,
+        23,
+        434,
+        425
+      ],
+      "minimumGutter": 20
+    },
+    {
+      "label": "Blue robe",
+      "rectangle": {
+        "x": 840,
+        "y": 796,
+        "w": 414,
+        "h": 458
+      },
+      "alphaBounds": [
+        20,
+        8,
+        381,
+        427
+      ],
+      "minimumGutter": 8
+    }
+  ],
+  "prompts": [
+    "docs/graphics-2026-10-31/armour/generation-prompt.txt",
+    "docs/graphics-2026-10-31/armour/leather-edit-prompt.txt"
+  ],
+  "initialDraft": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-7cfe1af3-9ce8-4ff1-900d-cbc1ee4830f7.png",
+  "originalPixelsPreserved": true,
+  "rgba_sha256": "c44bef39908e5955f49b84da82174fe33e298bfef17fd4f0863274bf03c2d2a7",
+  "bytes": 2169368
+}

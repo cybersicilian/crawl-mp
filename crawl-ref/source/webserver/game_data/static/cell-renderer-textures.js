@@ -7,12 +7,12 @@ function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_s
     // Atlas elements are static for a game; resolving them per drawn tile
     // through a selector was a measurable share of every frame.
     var images = {};
-    function get_img(id)
+    function get_img(id, native_art)
     {
         var image = images[id];
         if (!image || image.isConnected === false)
             images[id] = image = document.getElementById(id) || undefined;
-        return art.image(id, image);
+        return native_art ? image : art.image(id, image);
     }
 
     // Texture coordinates, integer pixel scaling, clipping, and overlap bookkeeping.
@@ -35,7 +35,7 @@ function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_s
             // canvas. Now we just need to figure out where in the scaled
             // cell size the tile belongs.
             var info = mod.get_tile_info(idx);
-            var img = get_img(mod.get_img(idx));
+            var id = mod.get_img(idx);
             if (!info)
             {
                 throw new Error("Tile not found: " + idx);
@@ -95,9 +95,14 @@ function ($, gui, main, tileinfo_player, icons, dngn, tileinfos, options, icon_s
             const scaled_h = Math.floor(ey * img_yscale * ratio)
                                 - Math.floor(sy * img_yscale * ratio);
 
-            this.ctx.imageSmoothingEnabled = options.get("tile_filter_scaling");
+            var detail = this.native_art ? null : art.tile(id, idx, Math.max(img_xscale, img_yscale) * ratio),
+                img = detail || get_img(id, this.native_art);
+            this.ctx.imageSmoothingEnabled = !this.native_art && (Boolean(detail) || options.get("tile_filter_scaling"));
             this.ctx.drawImage(img,
-                           info.sx, info.sy + sy - pos_sy_adjust, w, h,
+                           detail ? 0 : info.sx,
+                           detail ? (sy - pos_sy_adjust) * detail.height / (info.ey - info.sy) : info.sy + sy - pos_sy_adjust,
+                           detail ? detail.width : w,
+                           detail ? h * detail.height / (info.ey - info.sy) : h,
                            x + Math.floor(total_x_offset * img_xscale * ratio),
                            y + Math.floor(sy * img_yscale * ratio),
                            scaled_w,

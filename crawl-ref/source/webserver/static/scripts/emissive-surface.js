@@ -5,21 +5,31 @@ define([], function () {
     function blur(input, width, height, radius) {
         var horizontal = new Float32Array(input.length), output = new Float32Array(input.length);
         var divisor = Math.pow(radius + 1, 2);
-        for (var y = 0; y < height; y++) for (var x = 0; x < width; x++) for (var c = 0; c < 4; c++) {
-            var total = 0;
+        // Reuse each tap's address and weight across RGBA. Each channel keeps
+        // the original summation order and Float32 pass boundary exactly.
+        for (var y = 0; y < height; y++) for (var x = 0; x < width; x++) {
+            var r = 0, g = 0, b = 0, a = 0, target = (y * width + x) * 4;
             for (var ox = -radius; ox <= radius; ox++) {
                 var sx = x + ox;
-                if (sx >= 0 && sx < width) total += input[(y * width + sx) * 4 + c] * (radius + 1 - Math.abs(ox));
+                if (sx < 0 || sx >= width) continue;
+                var source = (y * width + sx) * 4, weight = radius + 1 - Math.abs(ox);
+                r += input[source] * weight; g += input[source + 1] * weight;
+                b += input[source + 2] * weight; a += input[source + 3] * weight;
             }
-            horizontal[(y * width + x) * 4 + c] = total / divisor;
+            horizontal[target] = r / divisor; horizontal[target + 1] = g / divisor;
+            horizontal[target + 2] = b / divisor; horizontal[target + 3] = a / divisor;
         }
-        for (var by = 0; by < height; by++) for (var bx = 0; bx < width; bx++) for (var ch = 0; ch < 4; ch++) {
-            var sum = 0;
+        for (var by = 0; by < height; by++) for (var bx = 0; bx < width; bx++) {
+            var red = 0, green = 0, blue = 0, alpha = 0, index = (by * width + bx) * 4;
             for (var oy = -radius; oy <= radius; oy++) {
                 var sy = by + oy;
-                if (sy >= 0 && sy < height) sum += horizontal[(sy * width + bx) * 4 + ch] * (radius + 1 - Math.abs(oy));
+                if (sy < 0 || sy >= height) continue;
+                var offset = (sy * width + bx) * 4, factor = radius + 1 - Math.abs(oy);
+                red += horizontal[offset] * factor; green += horizontal[offset + 1] * factor;
+                blue += horizontal[offset + 2] * factor; alpha += horizontal[offset + 3] * factor;
             }
-            output[(by * width + bx) * 4 + ch] = sum / divisor;
+            output[index] = red / divisor; output[index + 1] = green / divisor;
+            output[index + 2] = blue / divisor; output[index + 3] = alpha / divisor;
         }
         return output;
     }

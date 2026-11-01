@@ -102,13 +102,36 @@ test('native atlas sampling stays at 32 pixels across device scales and keeps th
             get_img: () => 'floor' };
         const textures = load('game_data/static/cell-renderer-textures.js', {
             jquery: () => [original], './tileinfo-dngn': tiles, './options': { get: () => false },
-            './tile-art-direction': { image(id, source) { assert.equal(id, 'floor'); assert.equal(source, original); return selectedPack; } }
+            './tile-art-direction': { tile: () => null,
+                image(id, source) { assert.equal(id, 'floor'); assert.equal(source, original); return selectedPack; } }
         }, { window: { devicePixelRatio: ratio }, document: { getElementById: id => id === 'floor' ? original : null } });
         const sample = Object.assign({ ctx: { drawImage: (...args) => calls.push(args) },
             x_scale: 1 / ratio, y_scale: 1 / ratio, current_left_overlap: 0, current_sy: 0 }, textures);
         sample.draw_dngn(1, 0, 0);
         assert.equal(calls[0][0], selectedPack);
         assert.deepEqual(calls[0].slice(5), [0, 0, 32, 32]);
+    }
+});
+
+test('detailed sources retain native destination geometry, partial clips, device scales and overlaps', () => {
+    for (const ratio of [1, 1.25, 2]) for (const detailed of [false, true]) {
+        const calls = [], source = {}, detail = { width: 96, height: 112 };
+        const tiles = { get_tile_info: () => ({ sx: 10, sy: 20, ex: 34, ey: 48, ox: -3, oy: -2, w: 32, h: 32 }),
+            get_img: () => 'feat' };
+        const textures = load('game_data/static/cell-renderer-textures.js', {
+            './tileinfo-dngn': tiles, './options': { get: () => false },
+            './tile-art-direction': { tile: () => detailed ? detail : null, image: (id, image) => image }
+        }, { window: { devicePixelRatio: ratio }, document: { getElementById: () => source } });
+        const view = Object.assign({ ctx: { drawImage: (...args) => calls.push(args) },
+            x_scale: 2 / ratio, y_scale: 2 / ratio, current_left_overlap: 0, current_sy: 0 }, textures);
+        view.draw_tile(1, 7, 11, tiles, -1, -2, 12, false, .5);
+        assert.equal(view.current_left_overlap, -4); assert.equal(view.current_sy, -4);
+        assert.equal(calls[0][0], detailed ? detail : source);
+        assert.deepEqual(calls[0].slice(1, 5), detailed ? [0, 0, 96, 64] : [10, 20, 24, 16]);
+        assert.deepEqual(calls[0].slice(5), [3, 7, 24, 16]);
+        assert.equal(view.ctx.imageSmoothingEnabled, detailed);
+        view.draw_tile(1, 0, 0, tiles, 0, 20, 12);
+        assert.equal(calls.length, 1, 'fully clipped sprites remain skipped');
     }
 });
 

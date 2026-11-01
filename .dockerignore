@@ -32,3 +32,20 @@ crawl-ref/source/rltiles/*.png
 *.tar.gz
 *.tgz
 *.log
+
+crawl-ref/source/webserver/static/.css-bundles/
+crawl-ref/source/webserver/static/stylesheet-bundle-index.json
+crawl-ref/source/webserver/game_data/static/.css-bundles/
+crawl-ref/source/webserver/game_data/static/stylesheet-bundle-index.json
+
+# Prepared after the native atlas build for this target platform.
+crawl-ref/source/webserver/static/**/*.br
+crawl-ref/source/webserver/static/**/*.gz
+crawl-ref/source/webserver/static/**/*.lossless.webp
+crawl-ref/source/webserver/static/**/*.lossless.png
+crawl-ref/source/webserver/static/asset-delivery.json
+crawl-ref/source/webserver/game_data/static/**/*.br
+crawl-ref/source/webserver/game_data/static/**/*.gz
+crawl-ref/source/webserver/game_data/static/**/*.lossless.webp
+crawl-ref/source/webserver/game_data/static/**/*.lossless.png
+crawl-ref/source/webserver/game_data/static/asset-delivery.json

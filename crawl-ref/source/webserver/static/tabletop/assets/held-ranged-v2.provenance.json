@@ -1,0 +1,62 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-7c3754ec-9a81-40ae-bcb3-923bc95a9b62.png",
+  "sha256": "28eb28bd78765a6fbb3ba0580158ec40473826c66d3134f0c3f9784c512933f6",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "layout": {
+    "columns": [
+      0,
+      512,
+      1024,
+      1536
+    ],
+    "rows": [
+      0,
+      512,
+      1024
+    ]
+  },
+  "prompt": "Use case: stylized-concept. Asset type: production transparent held-ranged-weapon sprites for an overhead dark fantasy game.\nAll supplied images are REFERENCES, not edit targets. Image 1 defines the existing matte painted steel/oak/leather style. Image 2 is a tiny native shortbow shape, image 3 is a tiny native hand cannon, image 4 a tiny native arbalest, image 5 a tiny native triple crossbow. Create a NEW wide landscape RGBA sprite sheet, exactly THREE equal columns and TWO equal rows. Exactly six isolated complete ranged weapons in the precise order below. One object per cell. Keep the entire object within the CENTRAL 65 PERCENT of its cell in both dimensions, with broad genuinely transparent gutters. No clipping or object crossing a cell boundary.\nTOP LEFT: a small ancient leather sling, NOT a slingshot. A narrow doubled brown leather strap curves down from a pair of thin strap ends at UPPER RIGHT toward a small dark brown leather stone pouch at LOWER LEFT, then curves back toward LOWER RIGHT as a short free tail. Asymmetric slim folded loop, simple leather straps and pouch only; no wooden fork, no rock outside pouch, no handle, no metal frame.\nTOP MIDDLE: a short wooden recurve bow standing VERTICALLY. The bow's wooden limbs arc LEFT from two tips on the RIGHT; a thin taut flax string joins the tips along the RIGHT side. Gentle recurved ends, warm dark yew, modest dark leather grip at the vertical CENTER, subtle horn tips. Compact functional hunting bow, no arrow or quiver. Narrow graceful shape.\nTOP RIGHT: a tall longbow/orcbow standing VERTICALLY, longer and more strongly curved than the shortbow. Warm reddish dark yew stave curves LEFT, both tips at RIGHT, thin taut flax bowstring on RIGHT, black-brown leather grip at CENTER, small horn nocks and restrained bronze grip collars. Simple powerful dark fantasy war bow, no arrow or quiver.\nBOTTOM LEFT: a very compact early hand cannon, medieval fantasy handheld firearm, shown in three-quarter side view and pointing diagonally toward UPPER RIGHT. A short thick charcoal iron barrel with round open muzzle at UPPER RIGHT, small dark wooden stock and grip toward LOWER LEFT, a restrained bronze barrel band and a simple iron touch hole. Compact squat roughly diagonal silhouette, no modern rifle, no sights, no trigger guard loops, no wheels, no tripod, no smoke or shot.\nBOTTOM MIDDLE: an arbalest heavy medieval crossbow in the SAME ORIENTATION as native image 4. A straight dark wooden stock runs from a narrow butt at UPPER RIGHT toward the weapon's large steel bow assembly at LOWER LEFT. The wide transverse metal bow and taut string are near the LOWER LEFT of the overall silhouette, while the thinner rear stock points UP-RIGHT. Three-quarter view; one bow assembly, a small winding mechanism, steel brackets and restrained bronze fittings. The FRONT/MUZZLE points DOWN-LEFT, the rear butt UP-RIGHT. Do not reverse that direction. No loose projectile or extra limbs.\nBOTTOM RIGHT: an elaborate triple crossbow in the SAME ORIENTATION as native image 5. A long near-vertical dark wooden stock with leather handgrip at BOTTOM RIGHT, and THREE visibly separate compact curved steel bow assemblies stacked one behind another near the UPPER LEFT/TOP of the stock. Taut strings, three parallel bolt channels and a small sturdy bronze-and-iron winding mechanism distinguish it from a single arbalest. The shooting end is UP-LEFT, the grip/stock is DOWN-RIGHT. Keep a tall narrow silhouette, do not make a handheld pistol or a conventional single crossbow.\nStyle: premium dark fantasy hand-painted matte gouache, matching image 1. Broad confident material facets, tactile warm wood grain and leather, forged silver/charcoal steel, restrained aged bronze, soft upper-left ivory edge highlights. Crisp functional silhouettes readable after reduction to tiny native tiles; rich painted detail visible at 128px. Avoid excessively thin vanishing bowstrings: a clean fine but visible string. Opaque object interiors and antialiased alpha edges on a GENUINELY TRANSPARENT background. No characters, hands, arms, display stands, ground shadows, scenery, glow, magic, sparks, blood, text, labels, numbers, UI, grid, borders, signatures or watermarks. Exactly three columns by two rows and six distinct ranged weapons.",
+  "layoutEditPrompt": "Use case: precise-object-edit. The supplied image is the EDIT TARGET, a six-weapon sprite sheet. Preserve the exact six weapons, their style, materials, colors, construction, facing and orientation. Change ONLY the layout, scale and transparent background separation. The current upper-right longbow nearly touches/overlaps the row below; correct this production layout defect.\nOutput the same WIDE LANDSCAPE 1536 by 1024 RGBA canvas, EXACTLY THREE columns and TWO rows. Columns occupy x=0..511,512..1023,1024..1535. Rows occupy y=0..511 and512..1023. Each cell must have a single complete weapon isolated inside its CENTRAL 65 PERCENT in both dimensions. Scale each complete weapon UNIFORMLY DOWN to fit that requirement. Top row centers are (256,256),(768,256),(1280,256); bottom row centers are (256,768),(768,768),(1280,768). Top-row objects must lie entirely between y=85 and425; bottom-row objects entirely between y=597 and939. In each column keep 85px clear alpha margins left and right. There must be a broad continuous horizontal TRANSPARENT GUTTER across the entire canvas between y=425 and597. No part, string, bow tip, mechanism or shadow can enter that gutter or neighboring cells.\nPositions remain: top left leather sling, top middle short recurve bow, top right longbow/orcbow; bottom left hand cannon pointed upper-right, bottom middle arbalest shooting lower-left and butt upper-right, bottom right triple crossbow shooting upper-left and grip lower-right. Do not rotate, mirror or redesign these objects. Retain the three separate triple-crossbow bow assemblies and the bowstrings. Preserve antialiased alpha edges and opaque interiors. Background and all gutters must be truly transparent, no matte, ground shadow or decorative halo. No hands, body, text, labels, numbers, grid lines, borders or new objects. This is solely a neat widely spaced production sprite-sheet layout correction.",
+  "editTarget": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-1112379f-ed7a-42cb-b094-7ea93eb6fe2d.png",
+  "references": [
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/static/tabletop/assets/held-melee-v1.png",
+      "sha256": "1de6199cae5e1c65abb3e7b713c47ca943dcf4f5092f9c2c523a662b8867921a",
+      "role": "style reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/shortbow.png",
+      "sha256": "1626332e4e4af9f643274f693251a2fcdd6d43fc2c174c785c81347d2d91475b",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/hand_cannon.png",
+      "sha256": "34115072d01bdfafd64cec98dd28151f5f68d768bb6e1bbf395d8ad23fa02d4b",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/arbalest.png",
+      "sha256": "7543ce54ca166f8eb126e5aca1c86cfac6644e5d663e6c52fd752706839f8e6b",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/triple_crossbow.png",
+      "sha256": "955c1aa1f2573409037af21b3330e28048a8896233482803558778249a4fe8aa",
+      "role": "native geometry reference"
+    }
+  ],
+  "localPixelEdits": false,
+  "unusedCells": [
+    {
+      "column": 0,
+      "row": 1,
+      "label": "Hand cannon draft",
+      "reason": "Native grip attachment check failed. An attempted built-in image_gen grip correction was rejected by its safety system; no corrected image exists. Native rendering retained."
+    }
+  ]
+}

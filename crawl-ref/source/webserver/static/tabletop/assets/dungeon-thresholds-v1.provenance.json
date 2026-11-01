@@ -1,0 +1,137 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-6bdc97c4-13e4-41c8-ba95-68075cbe86d8.png",
+  "sha256": "f6666a7ba2fb2453812bace4c32377b271adbac0c47566c48e3b4a50fb08bcee",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "layout": [
+    {
+      "label": "Runed closed door",
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 476
+      },
+      "alphaBounds": [
+        63,
+        17,
+        470,
+        455
+      ],
+      "minimumGutter": 17
+    },
+    {
+      "label": "Sealed closed door",
+      "rectangle": {
+        "x": 512,
+        "y": 0,
+        "w": 512,
+        "h": 476
+      },
+      "alphaBounds": [
+        51,
+        17,
+        460,
+        456
+      ],
+      "minimumGutter": 17
+    },
+    {
+      "label": "Downward escape hatch",
+      "rectangle": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 476
+      },
+      "alphaBounds": [
+        51,
+        55,
+        465,
+        448
+      ],
+      "minimumGutter": 28
+    },
+    {
+      "label": "Upward escape hatch",
+      "rectangle": {
+        "x": 0,
+        "y": 476,
+        "w": 454,
+        "h": 548
+      },
+      "alphaBounds": [
+        132,
+        21,
+        397,
+        494
+      ],
+      "minimumGutter": 21
+    },
+    {
+      "label": "Sealed stairs down",
+      "rectangle": {
+        "x": 454,
+        "y": 476,
+        "w": 582,
+        "h": 548
+      },
+      "alphaBounds": [
+        59,
+        87,
+        570,
+        480
+      ],
+      "minimumGutter": 12
+    },
+    {
+      "label": "Sealed stairs up",
+      "rectangle": {
+        "x": 1036,
+        "y": 476,
+        "w": 500,
+        "h": 548
+      },
+      "alphaBounds": [
+        18,
+        23,
+        445,
+        496
+      ],
+      "minimumGutter": 18
+    }
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent dungeon-feature sprites for an overhead dark fantasy game.\nFive supplied images are REFERENCES only, not edit targets. Image1 defines the established painted oak-and-limestone door, stair and fountain style. Image2 is a tiny native runed door with an AMBER rune band. Image3 is a tiny native sealed door with a GREEN magical barrier. Image4 is a tiny native downward escape hatch, and image5 a tiny native upward escape ladder. Create a NEW wide landscape RGBA sprite sheet with EXACTLY THREE equal columns and TWO equal rows. Six distinct complete isolated architectural objects, one per cell, in the exact order below.\nEach complete object must stay inside the CENTRAL 65 PERCENT of its 512px cell in both dimensions, leaving broad truly transparent gutters. On a 1536x1024 canvas the top objects must be entirely above y=430 and bottom objects entirely below y=594. No parts, glows or shadows crossing cells. Use the same moderately elevated three-quarter game view, limestone masonry, dark oak, iron fittings and matte hand-painted brushwork as reference1. No surrounding scenery or ground plane.\nTOP LEFT: Runed closed door. A stout CLOSED dark oak plank door within a chipped pale limestone arch, two simple iron straps and a small dark ring handle, matching the ordinary reference door architecture. Across the upper-middle of the oak door is a clearly visible horizontal band of four or five simple AMBER/ORANGE glowing geometric arcane glyphs inset into a bronze strip. The amber glyph band is the defining cue. No green chains, no open passage, no legible words or modern letters.\nTOP MIDDLE: Sealed closed door. The same CLOSED oak-and-limestone doorway architecture, but darkened wood is crossed by TWO vivid EMERALD GREEN magical sealing bands forming an X over the closed door, with a small green diamond seal at center. A restrained green ward line follows the inner arch and threshold. Green barrier visibly blocks the door; distinct from the amber rune band. No amber writing, no open passage.\nTOP RIGHT: Downward escape hatch. A square dark opening cut into a low thick weathered OAK floor frame, seen from above in three-quarter view. Its sturdy wooden trapdoor cover is hinged UP along the RIGHT side, exposing the dark square hole and two or three wooden ladder rungs descending into darkness. Iron edge straps and a small ring on the raised cover. Clearly a small wooden escape hatch, not a full stone staircase and not an upright doorway. Empty space outside the complete hatch is transparent; the hole interior is dark.\nBOTTOM LEFT: Upward escape hatch. A tall narrow weathered OAK LADDER rising from the lower foreground to a small square wooden ceiling-hatch frame at TOP/BACK. Seven or eight readable wooden rungs climb upward, viewed in three-quarter perspective, stout side rails and simple iron braces. Open dark hatch above the ladder; do not show a floor pit. This must have an unmistakable upright ladder silhouette, unlike the low downward hatch. No room, walls or ceiling plane outside the small hatch frame.\nBOTTOM MIDDLE: Sealed stairs DOWN. A square pale limestone stairwell frame surrounding a short flight of steps descending AWAY/DOWN into a dark opening, matching the downward-stair form in reference1. A vivid EMERALD GREEN ward lattice of three horizontal and two vertical energy bars blocks the stairwell mouth, with a small central diamond seal. Restrained glowing green inner square outline. Clearly blocked DOWNWARD stone stairs; no oak door, no amber rune band.\nBOTTOM RIGHT: Sealed stairs UP. A short broad flight of chipped pale limestone stairs rising AWAY/UP toward the top/back, matching reference1's ascending stone steps. A vivid EMERALD GREEN ward lattice of three horizontal and two vertical energy bars closes off the upper stair landing, with a small central diamond seal. A thin green ward outline surrounds the blocked upper landing. The upward stair silhouette and near foreground steps must remain obvious and distinct from the square descending stairwell. No oak door or amber rune band.\nMaterials and light: warm gray/ivory chipped limestone with subdued moss, dark grainy oak, charcoal iron and aged bronze, soft upper-left ivory highlights. Matte gouache fantasy illustration, tactile surface planes and clean silhouettes readable at 32px, actual painterly detail at128px. Magic cues should remain strongly AMBER for runed and GREEN for sealed even after reduction; keep their glow restrained within each object's silhouette rather than a large surrounding haze.\nOutput clean genuine TRANSPARENCY, opaque wood/stone interiors with antialiased alpha edges. No checkerboard or colored matte painted into the background, no cast ground shadow, no room/environment, no characters, creatures, hands, weapons, text labels, numbers, UI arrows, grid lines, borders, logos, signatures or watermark. Exactly three columns by two rows, six different semantic feature states.",
+  "references": [
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/static/tabletop/assets/dungeon-features-v1.png",
+      "sha256": "aca5686dcb132ba43367e3bb4cc5bf366274f752fbd7c725427b5f05a4bbd92e",
+      "role": "style reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/dngn/doors/runed_door.png",
+      "sha256": "ee4cd948d45650c7cc60cd738c645a62e2e8f1d8be3154a13184aabc5fcb8b4f",
+      "role": "native state/geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/dngn/doors/sealed_door.png",
+      "sha256": "58597a6bf665dea3bcacdee543de0eb1cdb07ce603f9f2e11bc26efea7233a86",
+      "role": "native state/geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/dngn/gateways/escape_hatch_down.png",
+      "sha256": "aa509745a1ceb65f7c08b26e5822c4df32f50282befc0fa5fc1f55e0a31b39e3",
+      "role": "native state/geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/dngn/gateways/escape_hatch_up.png",
+      "sha256": "fbd8ac3b2b0d098ccd8230a622d77fc9c7d7d88c20a7807eff762cd2b50b1980",
+      "role": "native state/geometry reference"
+    }
+  ],
+  "localPixelEdits": false
+}

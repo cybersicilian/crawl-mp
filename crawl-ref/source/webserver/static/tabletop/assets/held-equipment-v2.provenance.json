@@ -1,0 +1,39 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-92953d41-699f-4b04-87b0-a1903ac21772.png",
+  "sha256": "a1309a4e52e9f9dc0ea546937dace1ec4de34326f06059bffaf5631af04abf57",
+  "width": 1254,
+  "height": 1254,
+  "columns": 3,
+  "columnWidth": 418,
+  "rowBoundaries": [
+    0,
+    406,
+    825,
+    1254
+  ],
+  "transparent_background": true,
+  "entries": [
+    "Dagger",
+    "Short sword",
+    "Club",
+    "Mace",
+    "Spear",
+    "Hand axe",
+    "Round buckler",
+    "Blue lion kite shield",
+    "Gold-cross tower shield"
+  ],
+  "prompt": "Use case: stylized-concept. Asset type: production transparent held-equipment sprite sheet for an overhead dark fantasy game. Five supplied images are tiny native equipment REFERENCE GUIDES for geometry only, not edit targets: Image1 straight upright short sword, Image2 upright spear, Image3 upright mace, Image4 hand axe whose blade projects to image left, Image5 small round buckler. Create new richly painted equipment matching a premium matte illustrated dark fantasy character set. Square RGBA sheet with exactly THREE equal columns and THREE equal rows. Exactly ONE isolated complete object centered in each cell; the ENTIRE object is contained in the CENTRAL 60 PERCENT of the cell in both dimensions, leaving generous truly transparent margins on every side. Objects must not cross cell boundaries. No hand, person or display stand. Row1 left: a plain steel dagger tilted with its tip toward UPPER LEFT and the handle toward LOWER RIGHT, short broad triangular blade, dark brown leather grip, restrained bronze pommel. Row1 middle: a straight vertically upright steel short sword, sharp point at top, simple modest crossguard at about 60 percent of its total height from the tip, brown leather grip below it, steel pommel at bottom. Row1 right: a vertically upright gnarled dark oak club, heavier rounded wooden striking end at top, narrower wrapped leather handle below, no metal spikes. Row2 left: an upright iron mace, compact faceted flanged steel head at top, slender dark shaft below, simple leather handgrip, no chain. Row2 middle: an upright long wooden spear, narrow forged-steel leaf-shaped spearhead at top, slender straight brown shaft continuing all the way down, no ribbons. Row2 right: an upright small hand axe, sturdy straight dark wooden haft on the RIGHT side of the silhouette, single curved steel cutting blade projecting to IMAGE LEFT near the top, leather grip below, no second blade. Row3 left: a small round dark wooden buckler, front face visible, restrained steel rim, broad central steel boss and a few rivets, no emblem. Row3 middle: a blue kite shield, front face visible, straight upper edge and a long pointed bottom, dark muted cobalt painted wooden field with broad silver steel rim, a simple unpainted central steel ridge, no coat of arms or symbols. Row3 right: a tall red tower shield, front face visible, long body with softly rounded shoulders and a shallow lower point, deep muted oxblood field and broad weathered steel rim, simple rivets, no coat of arms or symbols. Keep the shields front facing with only a very slight three-quarter tilt; no straps or arms hanging outside the shield. Weapon tips point upward and handles downward as in the tiny native reference shapes. Crisp simple silhouettes and broad facets readable after reduction to native tiles, carefully painted tactile detail for 128-pixel render sizes. Art style: sophisticated matte gouache with subtle engraved edges, desaturated forged silver steel, warm dark oak and leather, restrained bronze fittings, upper-left soft lighting, strong clean material planes and ivory edge highlights. Opaque object interiors, antialiased alpha boundaries, genuine transparent background and gutters. No magic glows, sparks, runes, damage effects, blood, floor, scenery, UI, text, labels, numbers, grid, borders, logo, signature or watermark. Exact 3 by 3 sheet with widely separated objects.",
+  "nativeReferenceImages": [
+    "player/hand1/short_sword.png",
+    "player/hand1/spear.png",
+    "player/hand1/mace.png",
+    "player/hand1/hand_axe.png",
+    "player/hand2/buckler_round.png"
+  ],
+  "layoutNote": "Source pixels are unchanged; explicit rectangles follow transparent gaps in the generated sheet.",
+  "originalSource": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-d0579629-2c95-4506-9eb9-d765eb6eff5c.png",
+  "edit_prompt": "Use case: precise-object-edit. Image1 is the EDIT TARGET, the nine-item transparent equipment sheet. Image2 is the native blue kite shield DESIGN REFERENCE, Image3 is the native red tower shield DESIGN REFERENCE. Change ONLY the painted heraldry on TWO shield faces in Image1: the bottom row middle blue kite shield must gain a broad readable aged-gold rampant heraldic lion/beast crest with raised forepaw and curling tail, matching the gold-on-blue motif and broad branching silhouette visible in reference Image2. Keep its cobalt face, steel rim, shape, lighting, size and placement exactly as they are. The bottom row right red tower shield must gain a broad GOLD CENTRAL VERTICAL BAND from its top to its bottom, crossed by a broad GOLD HORIZONTAL BAND at midheight, forming a clear gold CROSS on the oxblood-red field, as in reference Image3; keep its shape, steel rim, size and placement. The gold bands may sit inside the existing steel rim. Preserve all other pixels and content as closely as possible: the dagger, short sword, club, mace, spear, hand axe and round buckler must retain their current artwork, colours, pose, dimensions, placement and transparency; do not redraw, move or rescale them. Keep the current three-column three-row layout and all existing transparent gaps. Do not add any other motif, weapon, hand, shadow, text, grid, label, glow or background. Genuine transparent background including all spaces between objects. Output the corrected production sprite sheet, same overall dimensions and exactly the same object locations.",
+  "revisionReason": "Restore the native blue-and-gold heraldic crest and red-and-gold cross; retain independent runtime weapon/shield composition."
+}

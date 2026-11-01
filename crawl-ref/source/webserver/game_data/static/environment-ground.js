@@ -1,7 +1,7 @@
 /* Visible native floor knowledge supplies the generic world-space material blender. */
 define(["jquery", "terrain-surface", "./environment-art", "./environment-materials", "./terrain-materials",
-        "./tileinfo-dngn", "./map_knowledge", "./enums", "texture-pack"],
-function ($, surfaces, art, wilds, stone, tiles, map, enums, texturePack) {
+        "./tileinfo-dngn", "./map_knowledge", "./enums", "texture-pack", "./tile-art-direction"],
+function ($, surfaces, art, wilds, stone, tiles, map, enums, texturePack, direction) {
     "use strict";
     var families = new Map(), materials = new Map(), known = new Map(), painter = surfaces.create();
     art.ground.entries.forEach(function (entry, cell) {
@@ -25,20 +25,23 @@ function ($, surfaces, art, wilds, stone, tiles, map, enums, texturePack) {
         return families.get(bg.value) || (bg.value >= tiles.DNGN_FIRST_TRANSPARENT
             && cell.t.flv ? families.get(cell.t.flv.f) : null) || null;
     }
-    function draw(view, idx, x, y, cx, cy) {
-        if (!texturePack.illustrated()) return false;
-        if (!Number.isInteger(cx) || !Number.isInteger(cy)) return false;
+    function tile(idx, cx, cy, pixels) {
+        if (!texturePack.illustrated()) return null;
+        if (!Number.isInteger(cx) || !Number.isInteger(cy)) return null;
         var own = family(map.get(cx, cy));
-        if (!own || families.get(idx) !== own) return false;
+        if (!own || families.get(idx) !== own) return null;
         var neighbours = surfaces.offsets.map(function (offset) {
             return family(map.get(cx + offset.x, cy + offset.y));
         });
         [own].concat(neighbours).forEach(function (material) {
-            if (material) material.image = document.getElementById(material.id);
+            if (material) material.image = direction.requestSheet(material.id);
         });
-        var image = painter.tile(own, neighbours, cx, cy);
-        if (!image) return false;
+        return painter.tile(own, neighbours, cx, cy, pixels);
+    }
+    function draw(view, idx, x, y, cx, cy) {
         var size = view.scaled_size();
+        var image = tile(idx, cx, cy, Math.max(size.width, size.height));
+        if (!image) return false;
         view.ctx.save(); view.ctx.imageSmoothingEnabled = false;
         view.ctx.drawImage(image, x, y, size.width, size.height); view.ctx.restore();
         return true;
@@ -57,5 +60,5 @@ function ($, surfaces, art, wilds, stone, tiles, map, enums, texturePack) {
         });
     }).on("game_init.environmentGround game_cleanup.environmentGround map_knowledge_cleared.environmentGround art_materials_ready.environmentGround texture_pack_changed.environmentGround",
         function () { known.clear(); painter.clear(); });
-    return { draw: draw };
+    return { draw: draw, tile: tile };
 });

@@ -1,0 +1,52 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-cf719abe-91cc-4242-912a-eec328817f67.png",
+  "sha256": "e961fc521bb0df55f9c89ebbbc928eefdcb2eb1a409cec11c0b0492a984d62cc",
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "layout": {
+    "columns": [
+      0,
+      512,
+      1024,
+      1536
+    ],
+    "rows": [
+      0,
+      436,
+      1024
+    ]
+  },
+  "prompt": "Use case: stylized-concept. Asset type: new production transparent held-weapon sprite sheet for an overhead dark fantasy game.\nAll supplied images are references only, not edit targets: image1 establishes the existing richly painted steel/oak/leather equipment style; image2 tiny native angled short sword; image3 tiny native angled club; image4 tiny native dire flail; image5 tiny native scimitar. Create NEW weapons, do not copy the style sheet layout.\nWide landscape RGBA sheet, THREE equal columns by TWO equal rows. Exactly six isolated complete weapons in the exact order below. One weapon per cell, generous truly transparent gutters. The ENTIRE object is contained inside the central 70 percent of its cell in both dimensions; leave ample margins, no clipping or boundary crossings. No hands, bodies, display stands or shadows on a floor.\nTOP LEFT: ordinary short sword angled from UPPER LEFT toward LOWER RIGHT, modest straight broad pointed double-edged steel blade at upper left, simple short crossguard below blade, short dark brown leather handle and small bronze pommel at lower right. Overall narrow steep diagonal, approximately 20 degrees from vertical, same orientation as native reference.\nTOP MIDDLE: ordinary wooden club angled from UPPER LEFT toward LOWER RIGHT, thicker rounded knotty dark oak striking end at upper left, narrower leather-wrapped handgrip at lower right. Narrow steep diagonal, approximately 20 degrees from vertical; absolutely no metal spikes or blade.\nTOP RIGHT: scimitar with long curved single-edged silver blade, pronounced sweeping curve that bows to the LEFT, point at UPPER RIGHT relative to the curved blade's body, short simple bronze crossguard near bottom, dark leather grip extending DOWN-RIGHT. Preserve the narrow crescent silhouette of the native reference; no fantasy serrations.\nBOTTOM LEFT: dire flail with ONE large spiked iron ball hanging at BOTTOM LEFT and a long dark wooden handle on the RIGHT. A linked iron chain runs up from the ball toward the very TOP LEFT, arches at the top, then attaches to the upper end of the handle at TOP CENTER; the handle slopes gently DOWN-RIGHT to finish at LOWER RIGHT, slightly above the bottom of the ball. A tall narrow inverted arch overall, one chain, one ball, one handle. Clearly longer/heavier than an ordinary small flail, no double heads or second ball.\nBOTTOM MIDDLE: eveningstar, vertically upright, a large solid spherical forged iron head covered with many short stout sharp steel spikes at TOP, a long straight dark shaft below and brown leather grip near bottom. Solid fixed head, no chain. Larger star-shaped head and longer shaft than an ordinary morningstar.\nBOTTOM RIGHT: executioner's axe, vertically upright long two-handed dark oak haft, very large symmetrical two-bladed silver steel axe head at TOP, long crescent cutting edges on both LEFT and RIGHT curving into deep concave beards below, almost butterfly-like silhouette, restrained bronze center socket, long leather-wrapped grip below. Larger taller head than an ordinary battleaxe, no skulls or magic effects.\nStyle: match image1 closely. Sophisticated matte hand-painted gouache dark fantasy equipment; tactile forged silver steel and charcoal iron, warm dark oak and leather, restrained bronze, broad legible planes, subtle edge wear and soft upper-left ivory highlights. Crisp silhouette readable in tiny native cells and real painted detail for 128px renders. Opaque object interiors with antialiased alpha boundaries on genuine transparency. No text, labels, numbers, UI, grid, panel backgrounds, borders, characters, scenery, magical glow, sparks, blood, logos or watermark. Exactly three columns by two rows.",
+  "references": [
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/webserver/static/tabletop/assets/held-equipment-v2.png",
+      "sha256": "a1309a4e52e9f9dc0ea546937dace1ec4de34326f06059bffaf5631af04abf57",
+      "role": "style reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/short_sword_slant.png",
+      "sha256": "75393469d7c34e4ac03edfe8f4bfdc8fb02b1fca16999c0630f540bee13dd048",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/club_slant.png",
+      "sha256": "93c188c80ab6a2188adb528e275c9629bb0a470bda4de44e5aee1c007cc7c6aa",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/dire_flail.png",
+      "sha256": "94b9d79876912374bfb2e10396d73456ff3b5aaa9921302d019cbd802746ab4b",
+      "role": "native geometry reference"
+    },
+    {
+      "path": "/Users/iancaltabiano/Documents/Projects/dcss/crawl-ref/source/rltiles/player/hand1/scimitar.png",
+      "sha256": "542e94edf24b517cabd88994cba4d1d420c497a71b682b5ba3a41c435a0e3a02",
+      "role": "native geometry reference"
+    }
+  ],
+  "localPixelEdits": false
+}

@@ -8,7 +8,7 @@ function modules() {
     const result = { jquery: { extend: Object.assign, each: (items, fn) => items.forEach((item, index) => fn(index, item)) } };
     function load(name, shared = false, globals = {}) {
         vm.runInNewContext(fs.readFileSync(path.join(root, shared ? 'static/scripts' : 'game_data/static', name + '.js'), 'utf8'), {
-            ...globals, window: {}, assert, define(names, factory) {
+            window: {}, ...globals, assert, define(names, factory) {
                 if (typeof names === 'function') { factory = names; names = []; }
                 result[(shared ? '' : './') + name] = factory(...names.map(key => result[key]));
             }
@@ -80,10 +80,15 @@ test('bank profiles differ by material and remain anchored across camera and cac
         paint(topology.describe(floor, [water, floor, floor, floor]), -1, 4));
 });
 
-test('native model covers fluid variants and protects occupants, decals, and fog', () => {
+function nativeFixture() {
     const f = modules();
     for (const name of ['enums', 'tileinfo-floor', 'tileinfo-wall', 'tileinfo-feat', 'tileinfo-dngn',
         'environment-art', 'terrain-materials', 'tileinfo-main', 'premium-effect-model', 'premium-terrain-model']) f.load(name);
+    return f;
+}
+
+test('native model covers fluid variants and protects occupants, decals, and fog', () => {
+    const f = nativeFixture();
     const tiles = f.result['./tileinfo-dngn'], model = f.result['./premium-terrain-model'];
     const cell = (id, extra = {}) => ({ t: { bg: id, ...extra } });
     assert.equal(model.describe(cell(tiles.DNGN_DEEP_WATER_MURKY)).murky, true);
@@ -109,6 +114,36 @@ test('native model covers fluid variants and protects occupants, decals, and fog
     assert.equal(model.describe(cell(tiles.DNGN_UNSEEN)), null);
 });
 
+test('remembered liquid materials remain known without becoming light or effect sources', () => {
+    const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], model = f.result['./premium-terrain-model'];
+    const lighting = f.load('tile-lighting', true);
+    for (const name of ['DNGN_OPEN_SEA', 'DNGN_DEEP_WATER', 'DNGN_DEEP_WATER_MURKY', 'DNGN_SHALLOW_WATER',
+        'DNGN_SHALLOW_WATER_DISTURBANCE', 'DNGN_SHALLOW_WATER_MURKY', 'DNGN_SHALLOW_WATER_MURKY_DISTURBANCE',
+        'DNGN_LAVA', 'DNGN_LAVA_SEA']) {
+        // Check native animation variants as well as their base tile.
+        for (let variant = 0; variant < tiles.tile_count(tiles[name]); variant++) {
+            const index = tiles[name] + variant;
+            const entry = { t: { bg: index + 0x40000 } };
+            const seen = model.describe({ t: { bg: index } });
+            const memory = model.describe(entry, { remembered: true });
+            assert.equal(model.describe(entry), null, 'existing effects and lighting remain visible-only');
+            assert(memory.remembered && !memory.visible);
+            for (const key of ['surface', 'depth', 'murky', 'shading', 'relightable']) assert.equal(memory[key], seen[key], name);
+            for (const key of ['light', 'effect', 'emission']) assert.equal(memory[key], null);
+            assert.equal(model.describe({ t: { bg: index + 0x20000 } }, { remembered: true }), null);
+            assert.equal(model.describe({ t: { bg: index + 0x60000 } }, { remembered: true }), null);
+            const scene = lighting.create({ x: 0, y: 0, cols: 1, rows: 1 }, () => memory);
+            assert.equal(scene.cells.length + scene.lights.length, 0);
+        }
+    }
+    for (const bg of [tiles.DNGN_UNSEEN, tiles.DNGN_ERROR])
+        assert.equal(model.describe({ t: { bg } }, { remembered: true }), null);
+    const rememberedFloor = { ...floor, visible: false, remembered: true };
+    const rememberedWater = { ...water, visible: false, remembered: true };
+    assert.equal(topology.describe(water, [rememberedWater, rememberedFloor, null, water]).shore, 2);
+    assert.equal(topology.describe(rememberedWater, [water, rememberedFloor, null, rememberedWater]).shore, 2);
+});
+
 function fluidFixture() {
     const f = modules();
     const document = { createElement() {
@@ -121,6 +156,92 @@ function fluidFixture() {
     f.result['liquid-shader'] = { pixels: () => null };
     return f.load('fluid-surface', true, { document }).create(8);
 }
+
+test('premium liquids keep their raster under fog, stop moving in memory, and resume on visibility changes', () => {
+    const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], enums = f.result['./enums'];
+    const noop = () => {}, handlers = new Map(), order = [], jobs = [];
+    const document = { createElement() {
+        const canvas = { width: 32, height: 32, pixels: new Uint8ClampedArray(4096) };
+        const ctx = { save: noop, restore: noop, beginPath: noop, rect: noop, clip: noop,
+            createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
+            getImageData: () => ({ data: new Uint8ClampedArray(canvas.pixels) }),
+            putImageData(image) { canvas.pixels.set(image.data); },
+            drawImage(image) { canvas.pixels.set(image.pixels); } };
+        canvas.getContext = () => ctx;
+        return canvas;
+    } };
+    const window = { devicePixelRatio: 1, matchMedia: () => ({ matches: false, addEventListener: noop }) };
+    const jquery = () => ({ on(events, handler) {
+        for (const event of events.split(' ')) handlers.set(event, handler);
+        return this;
+    } });
+    jquery.each = (items, fn) => items.forEach((item, index) => fn(index, item));
+    const flags = new Set(['liquids', 'lighting', 'materials', 'borders']);
+    const settings = { tile_display_mode: 'tiles', tile_realtime_anim: true, tile_water_anim: true, tile_misc_anim: true };
+    let premium = true, lightReads = 0;
+    const entry = { t: {} }, lights = [{ x: 0, y: 0, radius: 3, strength: .3, colour: [255, 90, 40] }];
+    Object.assign(f.result, {
+        jquery, './options': { ready: () => true, get: key => settings[key], add_listener: noop },
+        './game-context': { get_ui_state: () => enums.ui.NORMAL },
+        './tileinfo-icons': { MESH: 123 }, './terrain-edges': { draw: noop }, './environment-ground': { draw: () => false },
+        './map_knowledge': { get: (x, y) => x === 0 && y === 0 ? entry : {}, touch: noop },
+        'visual-presentation': { premium: () => premium, animated: () => true, enabled: key => flags.has(key) },
+        './premium-light-field': { forView: () => ({ at() { lightReads++; return lights; } }) },
+        'liquid-shader': { pixels: () => null }, 'idle-work': { add: (...args) => jobs.push(args) }
+    });
+    const layers = f.load('cell-renderer-layers');
+    for (const name of ['tile-edges', 'terrain-topology', 'liquid-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish',
+        'light-field-sampling', 'material-response', 'light-emission', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'terrain-blend', 'depth-shading'])
+        f.load(name, true, { document });
+    const terrain = f.load('premium-terrain', false, { document, window });
+    const output = document.createElement('canvas');
+    const renderer = { frame_time: 800, view: {}, ctx: output.getContext('2d'), scaled_size: () => ({ width: 32, height: 32 }),
+        draw_dngn() {
+            order.push('atlas');
+            const image = this.ctx.createImageData(32, 32);
+            for (let i = 0; i < image.data.length; i += 4) image.data.set([7, 11, 13, 255], i);
+            this.ctx.putImageData(image);
+        }, draw_icon(id) { assert.equal(id, 123); order.push('fog'); },
+        draw_blood_overlay: noop };
+    const drawImage = renderer.ctx.drawImage;
+    renderer.ctx.drawImage = image => { order.push('premium'); drawImage(image); };
+    function change(index, flag = 0) {
+        entry.t = { bg: enums.prepare_bg_flags(index + flag), fg: enums.prepare_fg_flags(0), icons: [], flv: {} };
+        handlers.get('map_knowledge_changed.premiumTerrain')({}, [{ x: 0, y: 0 }]);
+        while (jobs.length) jobs.shift()[1](() => 1);
+        renderer.frame_time += 800;
+        order.length = jobs.length = lightReads = 0;
+    }
+    for (const index of [tiles.DNGN_LAVA, tiles.DNGN_DEEP_WATER, tiles.DNGN_SHALLOW_WATER_MURKY]) {
+        change(index);
+        const moving = terrain.frame(renderer, 0, 0).pixels;
+        assert(lightReads > 0 && jobs.length > 0, 'visible liquid participates in lighting and animation');
+        renderer.frame_time += 800;
+        assert.notDeepEqual(terrain.frame(renderer, 0, 0).pixels, moving);
+        change(index, 0x40000);
+        layers.methods.draw_background.call(renderer, 0, 0, entry.t, 0, 0);
+        layers.methods.draw_foreground.call(renderer, 0, 0, entry);
+        assert.deepEqual(order.filter(value => value !== 'atlas'), ['premium', 'fog'], 'native fog overlays the replacement');
+        const memory = terrain.frame(renderer, 0, 0);
+        assert.equal(lightReads + jobs.length, 0, 'remembered liquid neither receives live light nor queues animation');
+        assert(new Set(memory.pixels).size > 4, 'the premium procedural raster replaces the atlas colour');
+        renderer.frame_time += 1600;
+        assert.equal(terrain.frame(renderer, 0, 0), memory, 'memory reuses its static frame');
+        change(index);
+        assert.notDeepEqual(terrain.frame(renderer, 0, 0).pixels, memory.pixels, 'visible liquid resumes its live phase');
+        change(index, 0x20000);
+        assert.equal(terrain.frame(renderer, 0, 0), undefined, 'magic mapping keeps native art');
+    }
+    change(tiles.DNGN_LAVA, 0x40000);
+    flags.delete('liquids');
+    assert.equal(terrain.draw(renderer, 0, 0, 0, 0, entry.t), false);
+    flags.add('liquids'); premium = false;
+    assert.equal(terrain.draw(renderer, 0, 0, 0, 0, entry.t), false, 'classic mode keeps native art');
+    premium = true;
+    change(tiles.FLOOR_MOSS, 0x40000);
+    assert.equal(terrain.frame(renderer, 0, 0), undefined, 'other remembered terrain retains its existing path');
+});
+
 test('fluid frames are deterministic, opaque, periodic in world space and bounded in memory', () => {
     const surface = fluidFixture(), terrain = topology.describe(water, [floor, water, water, water]);
     const first = surface.tile(terrain, -1, 4, 0);

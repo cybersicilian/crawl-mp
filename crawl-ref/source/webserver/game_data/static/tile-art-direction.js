@@ -1,6 +1,6 @@
 define(["jquery", "image-grade", "atlas-materials", "./native-tile-art", "./terrain-materials", "./tileinfo-dngn",
-        "atlas-sprites", "./environment-materials", "./environment-sprites", "./environment-art", "texture-pack"],
-function ($, grading, materials, nativeArt, regions, tiles, sprites, wilds, trees, environment, texturePack) {
+        "atlas-sprites", "./environment-materials", "./environment-sprites", "./environment-art", "texture-pack", "deferred-images"],
+function ($, grading, materials, nativeArt, regions, tiles, sprites, wilds, trees, environment, texturePack, deferredImages) {
     "use strict";
     // Presentation profiles are separate from native texture IDs and drawing rules.
     var terrain = Object.freeze({ saturation: 0.72, contrast: 1.08, brightness: 1.07,
@@ -15,21 +15,70 @@ function ($, grading, materials, nativeArt, regions, tiles, sprites, wilds, tree
     }) }));
     var profiles = { floor: floor, wall: terrain, feat: features, main: actors, player: actors };
     var cache = grading.create(), painted = materials.create(), objects = sprites.create();
+    function refreshed() { $(document).trigger("art_materials_ready"); }
+    var deferred = deferredImages.create({ onLoad: refreshed, onError: refreshed });
+    var sheets = new Map();
+    function requestSheet(id) {
+        var sheet = sheets.get(id);
+        if (!sheet || sheet.id !== id || sheet.isConnected === false) {
+            sheet = document.getElementById(id); sheets.set(id, sheet);
+        }
+        return texturePack.illustrated() ? deferred.request(sheet) : sheet;
+    }
+    var materialSheets = {};
+    function materialUses(catalog, sheet) {
+        Object.keys(catalog).forEach(function (id) {
+            if (!materialSheets[id]) materialSheets[id] = new Map();
+            catalog[id].forEach(function (region) {
+                var uses = materialSheets[id].get(region.tile) || new Set();
+                uses.add(sheet); materialSheets[id].set(region.tile, uses);
+            });
+        });
+    }
+    materialUses(regions, "illustrated_materials"); materialUses(wilds, environment.ground.id);
+    var detailed = { feat: new Map(), player: new Map() };
+    trees.feat.concat(trees.dungeon).forEach(function (region) { detailed.feat.set(region.tile, region); });
+    trees.player.forEach(function (region) { detailed.player.set(region.tile, region); });
+    var portraitRegions = new Map();
+    trees.player.forEach(function (region) {
+        portraitRegions.set([region.x, region.y, region.w, region.h].join(":"), region);
+    });
+    function sheetGroups(items) {
+        return Array.from(new Set(items.map(function (region) { return region.sheet; }))).map(function (id) {
+            return { id: id, sheet: null, regions: items.filter(function (region) { return region.sheet === id; }) };
+        });
+    }
+    var atlasSheets = { feat: sheetGroups(trees.feat.concat(trees.dungeon)), player: sheetGroups(trees.player) };
+    $(document).on("game_cleanup.artDirection", function () {
+        sheets.clear();
+        Object.keys(atlasSheets).forEach(function (id) {
+            atlasSheets[id].forEach(function (entry) { entry.sheet = null; });
+        });
+    });
+    function tile(id, index, requestedScale) {
+        if (!texturePack.illustrated()) return null;
+        var uses = materialSheets[id] && materialSheets[id].get(index);
+        if (uses) uses.forEach(requestSheet);
+        var region = detailed[id] && detailed[id].get(index);
+        return region ? objects.tile(requestSheet(region.sheet), region,
+            region.preserveAlpha ? document.getElementById(id) : null, requestedScale) : null;
+    }
     function image(id, source) {
         if (!texturePack.illustrated()) return source;
         var graded = cache.image(source, profiles[id]);
         var stone = regions[id] ? painted.image(graded, document.getElementById("illustrated_materials"), regions[id]) : graded;
         var ground = wilds[id] ? painted.image(stone, document.getElementById(environment.ground.id), wilds[id]) : stone;
-        return trees[id] ? objects.image(ground, document.getElementById(environment.sprites.id), trees[id]) : ground;
+        if (atlasSheets[id]) {
+            atlasSheets[id].forEach(function (entry) { entry.sheet = document.getElementById(entry.id); });
+            return objects.imageGroups(ground, atlasSheets[id]);
+        }
+        return ground;
     }
-    $(document).on("game_init.artDirection", function () {
-        ["illustrated_materials", environment.ground.id, environment.sprites.id].forEach(function (id) {
-            var sheet = document.getElementById(id);
-            if (sheet && !sheet.complete) $(sheet).one("load.artDirection", function () {
-                $(document).trigger("art_materials_ready");
-            });
-        });
-    });
     nativeArt.setImageTransform(image);
-    return { image: image };
+    nativeArt.setTileTransform(function (id, source, layer) {
+        if (id !== "player" || !texturePack.illustrated()) return null;
+        var region = portraitRegions.get([layer.sx, layer.sy, layer.w, layer.h].join(":"));
+        return region ? objects.tile(requestSheet(region.sheet), region, region.preserveAlpha ? source : null) : null;
+    });
+    return { image: image, tile: tile, requestSheet: requestSheet };
 });

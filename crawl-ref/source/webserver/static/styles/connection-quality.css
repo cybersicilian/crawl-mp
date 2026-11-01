@@ -24,6 +24,7 @@
 }
 #lobby_navigation > .connection-quality { min-height: 32px; border-color: #b9a17340; background: #ffffff08; color: #dce0d2; font-size: 11px; }
 .connection-quality-dot { width: .55em; height: .55em; border-radius: 50%; background: #c7b88e; }
+.connection-quality-fps { min-width: 6ch; padding-left: .5em; border-left: 1px solid #b7a67d66; text-align: right; }
 .connection-quality[data-connection="good"] .connection-quality-dot { background: #91d58a; }
 .connection-quality[data-connection="fair"] .connection-quality-dot { background: #edc567; }
 .connection-quality[data-connection="slow"] .connection-quality-dot,

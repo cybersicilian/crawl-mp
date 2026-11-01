@@ -25,3 +25,13 @@
     #lobby .party-lobby-tools { grid-template-columns: minmax(0, 1fr); padding: 12px; }
     .party-unused-seats label { display: flex; justify-content: space-between; margin-right: 0; }
 }
+
+
+.lobby-creation-access { display: grid; margin: 0; color: #d7dfcf; }
+.lobby-home .lobby-home-actions { align-items: end; gap: 12px; }
+.lobby-creation-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 10px; font: 12px/1.5 var(--tt-font-ui); color: #bdcbbb; }
+#lobby_home .lobby-creation-meta .lobby-home-link { font-size: 12px; padding: 2px 0; }
+@media (max-width: 480px) { .lobby-home-actions > .lobby-primary-action { flex-basis: 100%; } }
+
+
+#lobby .lobby-home.has-no-history .lobby-home-board { grid-template-columns: minmax(0, 1fr); }

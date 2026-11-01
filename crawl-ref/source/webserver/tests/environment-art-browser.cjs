@@ -18,7 +18,7 @@ assert(output); fs.mkdirSync(output, { recursive: true });
             const name = new URL(route.request().url()).pathname;
             if (name === '/') return route.fulfill({ contentType: 'text/html', body: '<!doctype html><body></body>' });
             const atlas = /^\/atlas\/(floor|wall|feat|icons|gui)\.png$/.exec(name);
-            const asset = /^\/assets\/(painted-stone|painted-wilds-v1|woodland-sprites-v1)\.png$/.exec(name);
+            const asset = /^\/assets\/(painted-stone|painted-wilds-v1|woodland-sprites-v1|dungeon-features-v1|dungeon-thresholds-v1)\.png$/.exec(name);
             const file = atlas ? path.join(root, 'game_data/static', atlas[1] + '.png')
                 : asset ? path.join(root, 'static/tabletop/assets', asset[1] + '.png') : null;
             if (!file) { errors.push(name); return route.fulfill({ status: 404, body: 'Unknown resource' }); }
@@ -36,7 +36,9 @@ assert(output); fs.mkdirSync(output, { recursive: true });
             + '<div hidden>' + ['floor', 'wall', 'feat', 'icons', 'gui'].map(id => `<img id="${id}" src="/atlas/${id}.png">`).join('')
             + '<img id="illustrated_materials" src="/assets/painted-stone.png">'
             + '<img id="illustrated_wilds" src="/assets/painted-wilds-v1.png">'
-            + '<img id="illustrated_woodland" src="/assets/woodland-sprites-v1.png"></div>');
+            + '<img id="illustrated_woodland" src="/assets/woodland-sprites-v1.png">'
+            + '<img id="illustrated_dungeon" data-src="/assets/dungeon-features-v1.png">'
+            + '<img id="illustrated_thresholds" data-src="/assets/dungeon-thresholds-v1.png"></div>');
         await page.addStyleTag({ content: 'body{margin:0;background:#111615;color:#b2b5a4;font:15px/1.5 system-ui}'
             + 'main{max-width:1472px;margin:auto;padding:28px 32px}h1{font:42px Georgia;color:#eee7d6;margin:8px 0}'
             + 'h2{font:23px Georgia;color:#e2cea1;margin:24px 0 14px}p{margin:8px 0 18px}'
@@ -60,12 +62,23 @@ assert(output); fs.mkdirSync(output, { recursive: true });
         for (const name of ['tileinfo-floor', 'tileinfo-wall', 'tileinfo-feat', 'tileinfo-main', 'tileinfo-player',
             'tileinfo-gui', 'tileinfo-icons', 'tileinfo-dngn', 'tileinfos', 'status-icon-sizes', 'native-tile-art',
             'terrain-materials', 'environment-art', 'environment-materials', 'environment-sprites', 'tile-edges',
-            'image-grade', 'atlas-materials', 'atlas-sprites', 'texture-pack', 'tile-art-direction', 'cell-renderer-textures',
+            'image-grade', 'atlas-materials', 'weighted-cache', 'atlas-sprites', 'deferred-images', 'texture-pack', 'tile-art-direction', 'cell-renderer-textures',
             'terrain-surface', 'enums', 'util', 'map_knowledge', 'terrain-edges', 'environment-ground', 'cell-renderer-layers']) {
-            const shared = ['tile-edges', 'image-grade', 'atlas-materials', 'atlas-sprites', 'terrain-surface', 'texture-pack'].includes(name);
+            const shared = ['tile-edges', 'image-grade', 'atlas-materials', 'atlas-sprites', 'deferred-images', 'weighted-cache', 'terrain-surface', 'texture-pack'].includes(name);
             await page.evaluate(({ name, shared }) => { window.artName = (shared ? '' : './') + name; }, { name, shared });
             await page.addScriptTag({ path: path.join(root, shared ? 'static/scripts' : 'game_data/static', name + '.js') });
         }
+        await page.evaluate(() => {
+            const pack = window.artModules['texture-pack'];
+            window.jQuery(document).trigger('game_init');
+            const sheets = ['illustrated_dungeon', 'illustrated_thresholds'];
+            if (sheets.some(id => document.getElementById(id).getAttribute('src'))) throw new Error('Classic fetched optional dungeon art');
+            pack.bindUser('EnvironmentFixture'); pack.select('illustrated');
+            if (sheets.some(id => document.getElementById(id).getAttribute('src'))) throw new Error('Mode selection fetched unused art');
+            window.artModules['./tile-art-direction'].tile('feat', window.artModules['./tileinfo-dngn'].DNGN_CLOSED_DOOR);
+            window.artModules['./tile-art-direction'].tile('feat', window.artModules['./tileinfo-dngn'].DNGN_RUNED_DOOR);
+            if (sheets.some(id => !document.getElementById(id).getAttribute('src'))) throw new Error('Illustrated did not load its art');
+        });
         await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
         const proof = await page.evaluate(async () => {
             const modules = window.artModules, tiles = modules['./tileinfo-dngn'], art = modules['./tile-art-direction'];
@@ -235,6 +248,72 @@ assert(output); fs.mkdirSync(output, { recursive: true });
                 treeVariants: trees.length, invariants, cached, coldMs, warm1000Ms, transparent, nearOpaque, transitionChecks,
                 missingFallback, invalidFallback, templateImagesRestored };
         });
+        proof.detailedSprites = await page.evaluate(require('./helpers/detailed-sprite-checks.cjs'));
+        await page.locator('#detailed-feature-comparison').screenshot({ path: path.join(output, 'feature-states-comparison.png') });
+        proof.thresholds = await page.evaluate(require('./helpers/threshold-art-checks.cjs'));
+        if (process.env.TERRAIN_SURFACE_BASELINE) {
+            await page.evaluate(() => { window.artName = 'terrain-surface-before'; });
+            await page.addScriptTag({ path: process.env.TERRAIN_SURFACE_BASELINE });
+            proof.groundResolution = await page.evaluate(require('./helpers/ground-resolution-checks.cjs'));
+            await page.addStyleTag({ content: '#ground-resolution table{border-collapse:collapse}#ground-resolution th,#ground-resolution td{padding:12px 20px;border:1px solid #70674e}#ground-resolution canvas{width:128px;height:128px}' });
+            await page.locator('#ground-resolution').screenshot({ path: path.join(output, 'ground-resolution-comparison.png') });
+        }
+        if (process.env.PREMIUM_DETAIL_BASELINE) {
+            await page.evaluate(() => {
+                const m = window.artModules;
+                Object.assign(m['./options'], { ready: () => true, get: name => name === 'tile_display_mode' ? 'tiles' : false, add_listener() {} });
+                m['./game-context'] = { get_ui_state: () => 0 };
+                window.detailPremium = true; window.detailFlags = new Set(['lighting', 'materials', 'borders', 'reflections']);
+                m['visual-presentation'] = { premium: () => window.detailPremium, animated: () => false, enabled: key => window.detailFlags.has(key) };
+                window.detailLightsAt = (x, y) => [{ x: x - .7, y: y - .5, radius: 4, strength: .15, colour: [255, 170, 90] }];
+                m['./premium-light-field'] = { forView: () => ({ at: (x, y) => window.detailLightsAt(x, y) }) };
+                m['idle-work'] = { add() {} };
+            });
+            for (const name of ['terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader',
+                'fluid-surface', 'shoreline-paint', 'terrain-finish', 'light-field-sampling', 'light-emission', 'material-response',
+                'surface-lighting', 'sampled-lighting', 'pixel-sampling', 'transparent-surface', 'depth-shading',
+                'premium-effect-model', 'premium-terrain-model', 'premium-terrain']) {
+                const shared = !name.startsWith('premium-');
+                await page.evaluate(({ name, shared }) => { window.artName = (shared ? '' : './') + name; }, { name, shared });
+                await page.addScriptTag({ path: path.join(root, shared ? 'static/scripts' : 'game_data/static', name + '.js') });
+            }
+            await page.evaluate(() => {
+                const m = window.artModules; window.detailLayers = m['./cell-renderer-layers'];
+                m['./cell-renderer-layers'] = { ...window.detailLayers, addTerrainPainter() {}, addSurfacePainter() {} };
+                window.artName = './premium-terrain-before';
+            });
+            await page.addScriptTag({ path: process.env.PREMIUM_DETAIL_BASELINE });
+            await page.evaluate(() => { window.artModules['./cell-renderer-layers'] = window.detailLayers; });
+            proof.premiumDetail = await page.evaluate(require('./helpers/premium-detail-checks.cjs'));
+            await page.locator('#premium-detail').screenshot({ path: path.join(output, 'premium-detail-comparison.png') });
+        }
+        if (process.env.DISTORTION_DETAIL_BASELINE) {
+            for (const name of ['region-field', 'aura-distortion', 'premium-region-model']) {
+                const shared = !name.startsWith('premium-');
+                await page.evaluate(({ name, shared }) => { window.artName = (shared ? '' : './') + name; }, { name, shared });
+                await page.addScriptTag({ path: path.join(root, shared ? 'static/scripts' : 'game_data/static', name + '.js') });
+            }
+            await page.evaluate(() => {
+                const m = window.artModules; window.regionLayers = m['./cell-renderer-layers'];
+                m['./cell-renderer-layers'] = { ...window.regionLayers, addTerrainPainter(fn) { window.currentRegionPainter = fn; }, addRegionPainter() {} };
+                window.artName = './premium-regions';
+            });
+            await page.addScriptTag({ path: path.join(root, 'game_data/static/premium-regions.js') });
+            await page.evaluate(() => { window.artName = 'pixel-sampling-before'; });
+            await page.addScriptTag({ path: process.env.PIXEL_SAMPLING_BASELINE });
+            await page.evaluate(() => {
+                const m = window.artModules; window.currentSampling = m['pixel-sampling']; m['pixel-sampling'] = m['pixel-sampling-before'];
+                m['./cell-renderer-layers'] = { ...window.regionLayers, addTerrainPainter(fn) { window.previousRegionPainter = fn; }, addRegionPainter() {} };
+                window.artName = './premium-regions-before';
+            });
+            await page.addScriptTag({ path: process.env.DISTORTION_DETAIL_BASELINE });
+            await page.evaluate(() => {
+                window.artModules['./cell-renderer-layers'] = window.regionLayers;
+                window.artModules['pixel-sampling'] = window.currentSampling;
+            });
+            proof.distortionDetail = await page.evaluate(require('./helpers/distortion-detail-checks.cjs'));
+            await page.locator('#distortion-detail').screenshot({ path: path.join(output, 'distortion-detail-comparison.png') });
+        }
         fs.writeFileSync(path.join(output, 'validation.json'), JSON.stringify({ ...proof, errors }, null, 2));
         await page.screenshot({ path: path.join(output, 'environment-preview.png'), fullPage: true });
         await page.locator('#comparison').screenshot({ path: path.join(output, 'environment-comparison.png') });

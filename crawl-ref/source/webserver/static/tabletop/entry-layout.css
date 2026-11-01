@@ -1,0 +1,200 @@
+/* Entry surfaces share a spacing scale; authentication/readiness own behavior.
+ * Loaded last so the same layout survives both source and bundled styles. */
+#loader.sourcebook-loading.is-game-loading { display: block !important; }
+#loader.sourcebook-loading #loader_center {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 100%;
+    width: 100%;
+}
+#loader.sourcebook-loading .loading-folio {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr);
+    width: min(960px, calc(100vw - 48px));
+    flex-shrink: 0;
+}
+#loader.sourcebook-loading .loading-folio-art {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#loader.sourcebook-loading .loading-folio-copy {
+    min-width: 0;
+    padding: clamp(24px, 3.2vw, 40px);
+}
+#loader.sourcebook-loading .loading-folio-kicker { margin: 0 0 12px; }
+#loader.sourcebook-loading .loading-folio-title {
+    max-width: 12em;
+    font-size: clamp(30px, 3.4vw, 40px);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+#loader.sourcebook-loading .loading-folio-rule { margin: 24px 0; }
+#loader.sourcebook-loading .loading-folio-detail { margin: 8px 0 0; line-height: 1.6; }
+
+/* Names, builds and roles stay distinct even when the roster has long names. */
+#loader .loading-party { margin: 24px 0 0; }
+#loader .loading-party[hidden] { display: none; }
+#loader .loading-party-title {
+    margin: 0 0 12px;
+    color: #66553f;
+    font: 600 12px/1.5 var(--tt-font-ui, sans-serif);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+#loader :is(.loading-party-list, .loading-steps) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#loader .loading-hero {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px 0;
+    border: 0;
+    border-bottom: 1px solid #a57b4433;
+    border-radius: 0;
+    background: none;
+}
+#loader .loading-hero-token {
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 32px;
+    height: 36px;
+    border: 1px solid #a57b4466;
+    border-radius: 3px;
+    background: #a57b4414;
+    color: #59432b;
+    font: 600 17px/1 var(--tt-font-title, Georgia, serif);
+}
+#loader .loading-hero-copy { display: grid; min-width: 0; gap: 4px; }
+#loader .loading-hero-name {
+    overflow: visible;
+    white-space: normal;
+    color: #382d25;
+    font: 600 14px/1.4 var(--tt-font-ui, sans-serif);
+    overflow-wrap: anywhere;
+}
+#loader .loading-hero-build {
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    color: #776651;
+    font: 12px/1.5 var(--tt-font-ui, sans-serif);
+    overflow-wrap: anywhere;
+}
+#loader .loading-hero-role {
+    padding: 3px 8px;
+    border: 1px solid #a57b4466;
+    border-radius: 4px;
+    background: #a57b4414;
+    color: #66502f;
+    font: 600 10px/1.5 var(--tt-font-ui, sans-serif);
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+/* A compact progress table keeps the full label and its state visible. */
+#loader .loading-steps { gap: 0; margin-top: 24px; border-top: 1px solid #a57b4440; }
+#loader .loading-step {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    grid-template-areas: "mark label state";
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 0;
+    border: 0;
+    border-bottom: 1px solid #a57b4426;
+    border-radius: 0;
+    background: none;
+}
+#loader .loading-step-mark {
+    grid-area: mark;
+    box-sizing: border-box;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #a57b44;
+    border-radius: 50%;
+}
+#loader .loading-step-label {
+    grid-area: label;
+    overflow: visible;
+    white-space: normal;
+    color: #4c392b;
+    font: 500 12px/1.5 var(--tt-font-ui, sans-serif);
+    overflow-wrap: anywhere;
+}
+#loader .loading-step-state {
+    display: block;
+    grid-area: state;
+    color: #776651;
+    font: 11px/1.5 var(--tt-font-ui, sans-serif);
+    text-align: right;
+}
+#loader .loading-step[data-state="active"] .loading-step-mark { background: #bc8a39; }
+#loader .loading-step[data-state="done"] .loading-step-mark { background: #4e754b; border-color: #4e754b; }
+#loader .loading-step[data-state="done"] .loading-step-state { color: #3f6a3f; }
+#loader .loading-step[data-state="halted"] :is(.loading-step-mark, .loading-step-state) { color: #7a3027; border-color: #7a3027; }
+
+/* Scope account spacing to signed-out entry; compact signed-in controls persist. */
+#lobby .welcome-entry:not(.signed-in) {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    gap: 28px 40px;
+    margin-block: clamp(16px, 4vh, 48px) 24px;
+    padding: clamp(24px, 3.5vw, 40px);
+}
+#lobby .welcome-entry:not(.signed-in) .welcome-intro { padding-right: 0; }
+#lobby .welcome-entry:not(.signed-in) .welcome-brand { gap: 12px; margin-bottom: 24px; }
+.welcome-brand-mark { flex-shrink: 0; }
+#lobby .welcome-entry:not(.signed-in) .welcome-intro h1 { margin: 12px 0 20px; line-height: 1.15; }
+#lobby .welcome-entry:not(.signed-in) .welcome-intro > p { max-width: 44ch; line-height: 1.75; }
+#lobby .welcome-entry:not(.signed-in) .welcome-features { gap: 8px; margin-top: 24px; }
+#lobby .welcome-entry:not(.signed-in) .welcome-account { align-self: center; }
+#lobby .welcome-entry:not(.signed-in) #login { padding: 28px; }
+#lobby .welcome-entry:not(.signed-in) .welcome-account-heading h2 { margin: 10px 0 12px; line-height: 1.25; }
+#lobby .welcome-entry:not(.signed-in) .welcome-account-heading p { margin: 0 0 24px; line-height: 1.65; }
+#lobby .welcome-entry:not(.signed-in) #login_form { gap: 0; }
+#lobby .welcome-entry:not(.signed-in) #login_form label { margin: 0 0 8px; line-height: 1.5; }
+#lobby .welcome-entry:not(.signed-in) #login_form .text { height: 44px; margin: 0 0 20px; }
+/* Newer account markup groups labels/inputs and adds a password reveal button. */
+#lobby .welcome-entry:not(.signed-in) .welcome-field { display: grid; gap: 0; margin: 0; }
+#lobby .welcome-entry:not(.signed-in) #login_form .welcome-password .text { margin-bottom: 0; }
+#lobby .welcome-entry:not(.signed-in) .welcome-password { margin-bottom: 20px; }
+#lobby .welcome-entry:not(.signed-in) #submit { min-height: 44px; margin: 0; }
+#lobby .welcome-entry:not(.signed-in) .extra_links { align-items: center; gap: 8px 16px; margin-top: 20px; }
+#lobby .welcome-entry:not(.signed-in) .extra_links a { display: inline-flex; align-items: center; min-height: 32px; }
+#lobby .welcome-entry:not(.signed-in) .welcome-footnote { padding-top: 0; line-height: 1.6; }
+
+@media (max-width: 800px) {
+    #lobby .welcome-entry:not(.signed-in) {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "intro" "account" "note";
+        max-width: 560px;
+        gap: 28px;
+        margin-block: 12px 24px;
+        padding: 24px;
+    }
+    #lobby .welcome-entry:not(.signed-in) .welcome-intro > p { max-width: none; }
+    #lobby .welcome-entry:not(.signed-in) #login { padding: 24px; }
+}
+@media (max-width: 640px) {
+    #loader.sourcebook-loading #loader_center { padding: 78px 16px 24px; }
+    #loader.sourcebook-loading .loading-folio { grid-template-columns: minmax(0, 1fr); width: calc(100vw - 32px); max-width: 460px; }
+    #loader.sourcebook-loading .loading-folio-art { min-height: 112px; }
+    #loader.sourcebook-loading .loading-folio-copy { padding: 24px; }
+    #loader.sourcebook-loading .loading-folio-rule { margin-block: 20px; }
+}
+@media (max-width: 380px) {
+    #lobby .welcome-entry:not(.signed-in) { padding: 20px 16px; }
+    #lobby .welcome-entry:not(.signed-in) #login { padding: 20px 16px; }
+    #loader.sourcebook-loading .loading-folio-copy { padding: 20px; }
+    #loader .loading-hero { grid-template-columns: 32px minmax(0, 1fr); }
+    #loader .loading-hero-role { grid-column: 2; justify-self: start; }
+}

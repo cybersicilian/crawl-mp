@@ -20,7 +20,7 @@
     --art-ember: #a85d3c;
     --art-line: inset 0 1px 0 #ede0ba0d;
     --art-shadow: 0 12px 32px #0005;
-    --art-cover: url("assets/expedition-vault.png");
+    --art-cover: url("/static/tabletop/assets/expedition-vault.png");
     --art-title: Georgia, "Palatino Linotype", serif;
     --art-copy: "DejaVu Sans", system-ui, sans-serif;
     --art-fiber: repeating-linear-gradient(12deg, #433d2805 0 1px, transparent 1px 5px);

@@ -1,0 +1,164 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "source": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-a2a0afad-7afd-48c5-a07f-2d9b99f771a2.png",
+  "sha256": "e1f1a06b7d2712fb80e32b743c3bbfdf3053e3d680ab18d8fa9391eaf58629c2",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "layout": [
+    {
+      "label": "Yak",
+      "rectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 418,
+        "h": 480
+      },
+      "alphaBounds": [
+        65,
+        145,
+        394,
+        438
+      ],
+      "minimumGutter": 24
+    },
+    {
+      "label": "Death yak",
+      "rectangle": {
+        "x": 418,
+        "y": 0,
+        "w": 418,
+        "h": 480
+      },
+      "alphaBounds": [
+        41,
+        113,
+        385,
+        437
+      ],
+      "minimumGutter": 33
+    },
+    {
+      "label": "Elephant",
+      "rectangle": {
+        "x": 836,
+        "y": 0,
+        "w": 418,
+        "h": 480
+      },
+      "alphaBounds": [
+        37,
+        116,
+        360,
+        439
+      ],
+      "minimumGutter": 37
+    },
+    {
+      "label": "Crocodile",
+      "rectangle": {
+        "x": 0,
+        "y": 480,
+        "w": 434,
+        "h": 360
+      },
+      "alphaBounds": [
+        61,
+        35,
+        411,
+        334
+      ],
+      "minimumGutter": 23
+    },
+    {
+      "label": "Komodo dragon",
+      "rectangle": {
+        "x": 434,
+        "y": 480,
+        "w": 424,
+        "h": 360
+      },
+      "alphaBounds": [
+        19,
+        46,
+        388,
+        321
+      ],
+      "minimumGutter": 19
+    },
+    {
+      "label": "Basilisk",
+      "rectangle": {
+        "x": 858,
+        "y": 480,
+        "w": 396,
+        "h": 360
+      },
+      "alphaBounds": [
+        37,
+        53,
+        352,
+        331
+      ],
+      "minimumGutter": 29
+    },
+    {
+      "label": "Cane toad",
+      "rectangle": {
+        "x": 0,
+        "y": 840,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        60,
+        72,
+        390,
+        309
+      ],
+      "minimumGutter": 28
+    },
+    {
+      "label": "Black mamba",
+      "rectangle": {
+        "x": 418,
+        "y": 840,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        62,
+        29,
+        388,
+        311
+      ],
+      "minimumGutter": 29
+    },
+    {
+      "label": "Water moccasin",
+      "rectangle": {
+        "x": 836,
+        "y": 840,
+        "w": 418,
+        "h": 414
+      },
+      "alphaBounds": [
+        41,
+        68,
+        366,
+        311
+      ],
+      "minimumGutter": 41
+    }
+  ],
+  "prompts": [
+    "docs/graphics-2026-10-31/lair/generation-prompt.txt",
+    "docs/graphics-2026-10-31/lair/layout-edit-prompt.txt"
+  ],
+  "initialDraft": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-cd7c947e-67f8-429d-8354-2bf5eb0b04e6.png",
+  "originalPixelsPreserved": true,
+  "rgba_sha256": "c77bd72fe9a8889b4385c0a620abf734db829568738698da18e62e37ff66242a",
+  "bytes": 1725998
+}

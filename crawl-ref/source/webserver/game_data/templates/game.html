@@ -12,18 +12,9 @@
     });
   });
 </script>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="/gamedata/{{ version }}/style.css?ui=heat-help-01a18da4-r1"
-/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="/gamedata/{{ version }}/simplebar.css"
-/>
-
-<link rel="stylesheet" href="/gamedata/{{ version }}/styles/assimilation.css" />
+{% for stylesheet in stylesheets("game") %}
+<link rel="stylesheet" href="{{ stylesheet }}" />
+{% end %}
 
 <div id="crt" style="display: none"></div>
 
@@ -319,14 +310,29 @@
 
 <!-- Tile images -->
 <div style="display: none">
-  <img id="illustrated_materials" src="/static/tabletop/assets/painted-stone.png" alt="" />
-  <img id="illustrated_wilds" src="/static/tabletop/assets/painted-wilds-v1.png" alt="" />
-  <img id="illustrated_woodland" src="/static/tabletop/assets/woodland-sprites-v1.png" alt="" />
-  <img id="floor" src="/gamedata/{{ version }}/floor.png" />
-  <img id="wall" src="/gamedata/{{ version }}/wall.png" />
-  <img id="feat" src="/gamedata/{{ version }}/feat.png" />
-  <img id="main" src="/gamedata/{{ version }}/main.png" />
-  <img id="player" src="/gamedata/{{ version }}/player.png" />
-  <img id="icons" src="/gamedata/{{ version }}/icons.png" />
-  <img id="gui" src="/gamedata/{{ version }}/gui.png" />
+  <img data-asset-optional id="illustrated_materials" data-src="{{ image_url('tabletop/assets/painted-stone.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_wilds" data-src="{{ image_url('tabletop/assets/painted-wilds-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_woodland" data-src="{{ image_url('tabletop/assets/woodland-sprites-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_dungeon" data-src="{{ image_url('tabletop/assets/dungeon-features-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_thresholds" data-src="{{ image_url('tabletop/assets/dungeon-thresholds-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_beasts" data-src="{{ image_url('tabletop/assets/dungeon-beasts-v2.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_denizens" data-src="{{ image_url('tabletop/assets/dungeon-denizens-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_lair" data-src="{{ image_url('tabletop/assets/lair-beasts-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_hydras" data-src="{{ image_url('tabletop/assets/hydra-forms-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_armour" data-src="{{ image_url('tabletop/assets/player-armour-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_humans" data-src="{{ image_url('tabletop/assets/human-bases-v2.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_hair" data-src="{{ image_url('tabletop/assets/hair-overlays-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_humanoids" data-src="{{ image_url('tabletop/assets/dungeon-humanoids-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_equipment" data-src="{{ image_url('tabletop/assets/held-equipment-v2.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_shields" data-src="{{ image_url('tabletop/assets/shield-variants-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_melee" data-src="{{ image_url('tabletop/assets/held-melee-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_weapon_forms" data-src="{{ image_url('tabletop/assets/held-weapon-forms-v1.png', True) }}" alt="" />
+  <img data-asset-optional id="illustrated_ranged" data-src="{{ image_url('tabletop/assets/held-ranged-v2.png', True) }}" alt="" />
+  <img id="floor" src="{{ image_url('floor.png') }}" />
+  <img id="wall" src="{{ image_url('wall.png') }}" />
+  <img id="feat" src="{{ image_url('feat.png') }}" />
+  <img id="main" src="{{ image_url('main.png') }}" />
+  <img id="player" src="{{ image_url('player.png') }}" />
+  <img id="icons" src="{{ image_url('icons.png') }}" />
+  <img id="gui" src="{{ image_url('gui.png') }}" />
 </div>

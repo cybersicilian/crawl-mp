@@ -7,10 +7,13 @@ define([], function () {
         var dx = to.x - from.x, dy = to.y - from.y;
         // Supercover traversal: a diagonal ray cannot leak through two corners.
         var steps = Math.ceil(Math.max(Math.abs(dx), Math.abs(dy)) * 4);
-        var previous = from, throughput = 1, crossed;
+        var previousX = from.x, previousY = from.y, throughput = 1, crossed;
         for (var step = 1; step <= steps; step++) {
             var x = Math.round(from.x + dx * step / steps);
             var y = Math.round(from.y + dy * step / steps);
+            // Quarter-cell steps often remain in the same grid cell. Its
+            // visibility/transmission and corner checks already passed.
+            if (x === previousX && y === previousY) continue;
             var cell = cells.get(key(x, y));
             if (!cell) return 0;
             if ((x !== from.x || y !== from.y) && (x !== target.x || y !== target.y)) {
@@ -21,12 +24,12 @@ define([], function () {
                     if (!crossed.has(id)) { throughput *= cell.transmission; crossed.add(id); }
                 }
             }
-            if (previous.x !== x && previous.y !== y) {
-                var horizontal = cells.get(key(x, previous.y));
-                var vertical = cells.get(key(previous.x, y));
+            if (previousX !== x && previousY !== y) {
+                var horizontal = cells.get(key(x, previousY));
+                var vertical = cells.get(key(previousX, y));
                 if (!horizontal || !vertical || !horizontal.transmission || !vertical.transmission) return 0;
             }
-            previous = { x: x, y: y };
+            previousX = x; previousY = y;
         }
         return throughput;
     }

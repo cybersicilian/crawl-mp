@@ -41,7 +41,7 @@ class ImageFixture extends EventTarget {
     set src(url) {
         this.url = url; this.requests.push(url); this.complete = false; this.naturalWidth = 0;
     }
-    getAttribute() { return this.url; }
+    getAttribute(name) { return name === 'src' || name === 'href' ? this.url : name === 'data-asset-optional' && this.optional ? '' : null; }
     load() { this.complete = true; this.naturalWidth = 1024; this.dispatchEvent(new Event('load')); }
     fail() { this.complete = true; this.naturalWidth = 0; this.dispatchEvent(new Event('error')); }
 }
@@ -55,6 +55,12 @@ class StyleFixture extends ImageFixture {
 }
 
 async function main() {
+    {
+        const optional = new ImageFixture(true, 0); optional.optional = true;
+        const f = fixture([new ImageFixture(true, 1024), optional]);
+        assert.equal(f.ready(), 1, 'Failed optional artwork never blocks native assets');
+        assert.equal(f.errors.length, 0); assert.equal(f.timers.size, 0);
+    }
     assert.equal(fixture([]).ready(), 1, 'Empty legacy clients can continue');
     assert.equal(fixture([new ImageFixture(true, 1024)]).ready(), 1, 'Cached images work without decode API');
     {

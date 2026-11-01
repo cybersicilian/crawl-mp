@@ -28,7 +28,7 @@ async function load(page, name) {
                 jquery: $, comm: { send_message: noOp }, chat: { tag_item: noOp },
                 './chat-context': { inventory_item: item => item }, 'share-link': { controls: () => $() },
                 'item-properties': { icon, render: text => $('<span></span>').text(text)[0], parse: name => ({ name }) },
-                './native-tile-art': { create: () => document.createElement('span'), draw: () => false },
+                './native-tile-art': { create: () => document.createElement('span'), draw: () => false, drawIndices: () => false },
                 './equipment-memory-ui': { properties: () => $() }, './folio-bag': { render: () => $() },
                 './item-context-menu': { bind: button => button }, './party-power-cards': { attach: noOp },
                 './power-art': { ready: () => false }, 'spell-cost': {}, './player': { inv: [] },

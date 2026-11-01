@@ -1,7 +1,7 @@
 /* The active hero, native actions, and carried items form one scrolling card. */
-/* Readings fill the space beside the portrait; the utility rails use both columns. */
+/* Only the identity and vital signs reserve a portrait column. */
 #normal .party-card.is-controlled-card { align-content: start; }
-#normal .is-controlled-card > .party-portrait { grid-row: 1 / span 3; }
+#normal .is-controlled-card > .party-portrait { grid-row: 1 / span 2; }
 #normal .is-controlled-card > .party-member-meta {
     grid-column: 2; grid-row: 1; align-items: center; margin: 0;
 }
@@ -17,7 +17,7 @@
 #normal .is-controlled-card .party-member-timing { margin-top: 0; }
 #normal .is-controlled-card > .party-bars { grid-column: 2; grid-row: 2; }
 #normal .is-controlled-card > .party-self-details {
-    grid-column: 2; grid-row: 3; margin: 1px 0 0; padding: 0; border: 0;
+    grid-column: 1 / -1; grid-row: 3; margin: 1px 0 0; padding: 0; border: 0;
 }
 #normal .is-controlled-card > .party-member-top { grid-column: 1 / -1; grid-row: 4; }
 #normal .is-controlled-card .party-member-identity { flex-wrap: wrap; gap: 4px; min-height: 0; }

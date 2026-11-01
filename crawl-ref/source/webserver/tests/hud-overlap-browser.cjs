@@ -31,6 +31,7 @@ function hero(slot, count = 18) {
 
     try {
         let html = fs.readFileSync(path.join(root, 'game_data/templates/game.html'), 'utf8').split('{% include "popup-templates.html" %}')[0];
+        html = html.replace(/\{% for stylesheet in stylesheets\("game"\) %\}[\s\S]*?\{% end %\}/g, '');
         html = html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<link[\s\S]*?\/>/g, '');
         html = html.replace(/{% include "([^"]+)" %}/g, (_, file) => fs.readFileSync(path.join(root, 'game_data/templates', file), 'utf8'));
         html = html.replace('style="display: none" data-loading-readiness="dungeon"', 'style="display:block"');
@@ -61,6 +62,7 @@ function hero(slot, count = 18) {
                 './party-doom': { update: noop }, './party-trade': { button: () => window.jQuery('<button>Trade</button>') },
                 './chat-context': { update: noop }, './item-context-menu': { bind: noop },
                 './inspection-dialog': { open: noop }, './power-picker': {init:noop,open:noop},
+                './equipment-paperdoll': { itemRestriction: () => null },
                 './game-context': {get_ui_state:()=>0,get_input_mode:()=>0},key_conversion:{codes:{}},
                 './context-menu': {bind:noop},'./party-skill-training': {signature:()=>'',itemEntries:()=>[]},
                 'character-catalog': {species:{}}, './tileinfo-player': {TILEP_PLAYER_MAX:10000},
@@ -179,6 +181,10 @@ function hero(slot, count = 18) {
                 if(tools.right>map.right+1) issues.push({kind:'map-tools-outside',map,tools});
                 const dock=box(document.getElementById('dcss_quick_dock')),pad=box(document.getElementById('direction_pad'));
                 if(visible(document.getElementById('direction_pad')) && intersect(dock,pad))issues.push({kind:'direction-pad-covers-dock',dock,pad});
+                document.querySelectorAll('[data-hud-obstacle]').forEach(node => {
+                    if (visible(node) && visible(document.getElementById('direction_pad')) && intersect(box(node), pad))
+                        issues.push({ kind: 'direction-pad-covers-overlay', overlay: node.className });
+                });
                 return {html:{footer:document.getElementById('hud_bottom_row').outerHTML,quickbar:document.getElementById('quickbar_slots').outerHTML},issues,documentOverflow:document.documentElement.scrollWidth>innerWidth,boxes:Object.fromEntries(['right_column','left_column','hud_bottom_map','hud_map_tools','hud_bottom_row','dcss_quick_dock','direction_pad','hud_floor_items','message_pane','enemy_initiative_rail','dungeon_viewport','minimap_block'].map(id=>[id,box(document.getElementById(id))]))};
             });
             evidence[width+'x'+height]=findings;

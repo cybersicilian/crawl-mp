@@ -1,10 +1,14 @@
 define(["jquery", "./cell-renderer-layers", "./premium-region-model", "./map_knowledge", "./options",
-        "./game-context", "./enums", "visual-presentation", "region-field", "./premium-terrain", "aura-distortion", "pixel-sampling", "idle-work"],
-function ($, layers, model, map, options, game, enums, presentation, regions, terrain, distortion, sampling, idle) {
+        "./game-context", "./enums", "visual-presentation", "region-field", "./premium-terrain", "aura-distortion", "pixel-sampling", "idle-work", "weighted-cache"],
+function ($, layers, model, map, options, game, enums, presentation, regions, terrain, distortion, sampling, idle, weighted) {
     "use strict";
-    var groups, viewKey, lastRenderer, frames = new Map(), known = new Map(), warps = new Map(), circleIndex = new Map(), none = [];
+    var groups, viewKey, lastRenderer, frames = new Map(), known = new Map(), circleIndex = new Map(), none = [];
+    var warps = weighted.create(16 * 1024 * 1024, 1024, function (image) { return image.width * image.height * 4; });
+    var rasters = weighted.create(8 * 1024 * 1024, 1024, function (raster) { return raster.data.byteLength; });
+    var circleGeometry = weighted.create(8 * 1024 * 1024, 512, function (prepared) { return prepared.bytes; });
+    var identities = new WeakMap(), serial = 0;
     var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    function clear() { groups = viewKey = null; frames.clear(); warps.clear(); circleIndex.clear(); paint = null; queue.clear(); }
+    function clear() { groups = viewKey = null; frames.clear(); warps.clear(); rasters.clear(); circleGeometry.clear(); circleIndex.clear(); paint = null; queue.clear(); }
     // Feature gates and the animation step are constant across one native
     // paint; resolve them once per paint clock rather than once per cell.
     var paint = null;
@@ -21,14 +25,22 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
         return paint;
     }
     function circleFrame(group, cx, cy, colourPhase) {
-        var key = [group.kind, group.center.x, group.center.y, cx, cy, colourPhase, "circle"].join(":"), image = frames.get(key);
+        var geometryKey = [group.kind, group.center.x, group.center.y, group.radius, cx, cy].join(":");
+        var key = geometryKey + ":" + colourPhase + ":circle", image = frames.get(key);
         if (image) return image;
         image = document.createElement("canvas"); image.width = image.height = 32;
         var ctx = image.getContext("2d"); if (!ctx) return null;
         var pixels = ctx.createImageData(32, 32), profile = model.profiles[group.kind];
-        for (var py = 0; py < 32; py++) for (var px = 0; px < 32; px++) {
-            var sample = regions.circle(group, cx + (px + .5) / 32, cy + (py + .5) / 32, colourPhase / 5, profile);
-            var n = (py * 32 + px) * 4; pixels.data.set(sample.colour, n); pixels.data[n + 3] = sample.alpha * 255;
+        if (typeof regions.prepareCircle === "function" && typeof regions.circlePixels === "function") {
+            var prepared = circleGeometry.get(geometryKey);
+            if (!prepared) prepared = circleGeometry.set(geometryKey, regions.prepareCircle(group, cx, cy, 32, 32, profile));
+            pixels.data.set(regions.circlePixels(prepared, colourPhase / 5));
+        } else {
+            // A still-cached older shared module retains the point sampler.
+            for (var py = 0; py < 32; py++) for (var px = 0; px < 32; px++) {
+                var sample = regions.circle(group, cx + (px + .5) / 32, cy + (py + .5) / 32, colourPhase / 5, profile);
+                var n = (py * 32 + px) * 4; pixels.data.set(sample.colour, n); pixels.data[n + 3] = sample.alpha * 255;
+            }
         }
         ctx.putImageData(pixels, 0, 0); bounded(frames, key, image);
         return image;
@@ -116,43 +128,66 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
         collect(renderer);
         return circleIndex.get(cx + ":" + cy) || none;
     }
+    function sourceKey(source) {
+        if (source.key !== undefined) return String(source.key);
+        if (!identities.has(source)) identities.set(source, ++serial);
+        return "source:" + identities.get(source);
+    }
+    function raster(source, renderer, cx, cy) {
+        if (!source) return null;
+        var key = sourceKey(source);
+        var result = rasters.get(key);
+        if (result) return result;
+        var frame = source.image ? source : terrain.frame(renderer, cx, cy);
+        if (!frame || sourceKey(frame) !== key) return null;
+        var width = frame.image.width, height = frame.image.height, data;
+        if (frame.pixels.length === width * height * 4) data = frame.pixels;
+        else {
+            var ctx = frame.image.getContext("2d");
+            if (!ctx) return null;
+            data = ctx.getImageData(0, 0, width, height).data;
+        }
+        return rasters.set(key, { data: data, width: width, height: height });
+    }
     function ripple(renderer, fields, cx, cy, x, y, phase, animated) {
         if (!animated || !presentation.enabled("distortion") || !fields.length) return;
-        var source = terrain.frame(renderer, cx, cy);
+        // Validate source identities without resurrecting evicted high-resolution
+        // canvases. Cached warp/raster pixels remain useful independently of them.
+        var snapshot = terrain.snapshot || terrain.frame;
+        var source = snapshot(renderer, cx, cy);
         if (!source || source.solid) return;
-        var key = [cx, cy, phase].concat(fields.map(function (group) {
+        var neighbours = [];
+        for (var oy = -1; oy <= 1; oy++) for (var ox = -1; ox <= 1; ox++) {
+            var neighbour = ox || oy ? snapshot(renderer, cx + ox, cy + oy) : source;
+            neighbours.push(neighbour && !neighbour.solid ? neighbour : null);
+        }
+        var width = source.width || source.image.width, height = source.height || source.image.height, scale = width / 32;
+        var padding = Math.max(1, Math.ceil(.85 * scale));
+        var key = [cx, cy, phase, width, height].concat(fields.map(function (group) {
             return [group.kind, group.center.x, group.center.y, group.radius].join(":");
-        })).join("|"), cached = warps.get(key);
-        if (!cached || cached.source !== source) {
-            var neighbours = [];
-            for (var oy = -1; oy <= 1; oy++) for (var ox = -1; ox <= 1; ox++) {
-                var neighbour = ox || oy ? terrain.frame(renderer, cx + ox, cy + oy) : source;
-                neighbours.push(neighbour && !neighbour.solid ? neighbour : null);
-            }
-            var halo = new Uint8ClampedArray(34 * 34 * 4);
-            for (var hy = -1; hy <= 32; hy++) for (var hx = -1; hx <= 32; hx++) {
-                var tx = Math.floor(hx / 32), ty = Math.floor(hy / 32), adjacent = neighbours[(ty + 1) * 3 + tx + 1];
-                var material = adjacent || source, px = adjacent ? hx - tx * 32 : Math.max(0, Math.min(31, hx));
-                var py = adjacent ? hy - ty * 32 : Math.max(0, Math.min(31, hy));
-                var from = (py * 32 + px) * 4, to = ((hy + 1) * 34 + hx + 1) * 4;
-                for (var channel = 0; channel < 4; channel++) halo[to + channel] = material.pixels[from + channel];
-            }
-            var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
+        })).concat(neighbours.map(function (entry) { return entry ? sourceKey(entry) : "missing"; })).join("|"), cached = warps.get(key);
+        if (!cached) {
+            var inputs = neighbours.map(function (entry, index) {
+                return raster(entry, renderer, cx + index % 3 - 1, cy + Math.floor(index / 3) - 1);
+            });
+            if (!inputs[4]) return;
+            var halo = sampling.halo(inputs, width, height, padding);
+            var canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
             var ctx = canvas.getContext("2d"); if (!ctx) return;
-            var pixels = ctx.createImageData(32, 32);
-            pixels.data.set(sampling.warpHalo(halo, 32, 32, function (px, py) {
+            var pixels = ctx.createImageData(width, height);
+            pixels.data.set(sampling.warpHalo(halo, width, height, function (px, py) {
                 var dx = 0, dy = 0;
                 fields.forEach(function (group) {
-                    var offset = distortion.displacement(group, cx + px / 32, cy + py / 32, phase / 10, model.profiles[group.kind]);
+                    var offset = distortion.displacement(group, cx + px / width, cy + py / height, phase / 10, model.profiles[group.kind]);
                     dx += offset.x; dy += offset.y;
                 });
-                var scale = Math.min(1, .85 / Math.max(.001, Math.hypot(dx, dy)));
-                return { x: dx * scale, y: dy * scale };
-            }));
+                var cap = Math.min(1, .85 / Math.max(.001, Math.hypot(dx, dy)));
+                return { x: dx * cap * scale, y: dy * cap * scale };
+            }, padding));
             ctx.putImageData(pixels, 0, 0);
-            cached = bounded(warps, key, { image: canvas, source: source });
+            cached = warps.set(key, canvas);
         }
-        var size = renderer.scaled_size(); renderer.ctx.drawImage(cached.image, x, y, size.width, size.height);
+        var size = renderer.scaled_size(); renderer.ctx.drawImage(cached, x, y, size.width, size.height);
     }
     layers.addTerrainPainter(function (renderer, cx, cy, x, y) {
         var settings = context(renderer);
@@ -189,9 +224,10 @@ function ($, layers, model, map, options, game, enums, presentation, regions, te
         if (lastRenderer) for (var y = lastRenderer.view.y; y < lastRenderer.view.y + lastRenderer.rows; y++)
             for (var x = lastRenderer.view.x; x < lastRenderer.view.x + lastRenderer.cols; x++) if (map.get(x, y).t) map.touch(x, y);
         clear();
-    }).on("game_init.premiumRegions game_cleanup.premiumRegions map_knowledge_cleared.premiumRegions visual_presentation_changed.premiumRegions", function () { known.clear(); clear(); });
+    }).on("game_init.premiumRegions game_cleanup.premiumRegions map_knowledge_cleared.premiumRegions visual_presentation_changed.premiumRegions texture_pack_changed.premiumRegions art_materials_ready.premiumRegions", function () { known.clear(); clear(); });
     motion.addEventListener("change", clear); options.add_listener(clear);
-    return { draw: draw, clear: clear, animated: function (cell, cx, cy, renderer) {
+    return { draw: draw, clear: clear, cacheStats: function () { return { warps: warps.stats(), rasters: rasters.stats(), circleGeometry: circleGeometry.stats() }; },
+        animated: function (cell, cx, cy, renderer) {
         return presentation.enabled("auras") && presentation.animated() && !motion.matches && !document.hidden && options.get("tile_misc_anim")
             && options.ready() && options.get("tile_display_mode") === "tiles" && game.get_ui_state() === enums.ui.NORMAL
             && (model.describe({ t: cell }).length > 0 || renderer && circlesAt(renderer, cx, cy).length > 0);

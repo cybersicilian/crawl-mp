@@ -60,6 +60,7 @@ function fixtureHtml() {
         m.require = { toUrl: value => '/game_data/static/' + value.replace(/^\.\//, '') }; m['contrib/jquery.json'] = {};
         m['./game-context'] = { get_ui_state: () => 0, can_target: () => false, get_input_mode: () => 1 };
         m['./mouse_control'] = {};
+        m['./encounter-banner'] = { attach() {} };
         m['./planned-route'] = { attach() {} };
         m['./player'] = { pos: { x: 40, y: 30 }, hp: 20, hp_max: 20, mp: 5, mp_max: 5, poison_survival: 20 };
         m['./monster_list'] = { update_loc() {}, update() {}, clear() {}, contacts: () => [] };
@@ -71,8 +72,8 @@ function fixtureHtml() {
         'liquid-shader', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation',
         'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface',
         'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint',
-        'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion',
-        'sprite-motion-layer', 'footstep-paint', 'image-grade', 'atlas-materials', 'atlas-sprites', 'texture-pack', 'terrain-surface'];
+        'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion',
+        'sprite-motion-layer', 'footstep-paint', 'image-grade', 'atlas-materials', 'weighted-cache', 'atlas-sprites', 'deferred-images', 'texture-pack', 'terrain-surface'];
     const game = ['enums', 'util', 'tileinfo-floor', 'tileinfo-wall', 'tileinfo-feat', 'tileinfo-dngn', 'tileinfo-main', 'tileinfo-player',
         'tileinfo-gui', 'tileinfo-icons', 'tileinfos', 'map_knowledge', 'view_data', 'environment-art', 'environment-materials', 'environment-sprites',
         'terrain-materials', 'native-tile-art', 'tile-art-direction', 'terrain-edges', 'environment-ground', 'status-icon-sizes', 'cell-renderer-glyphs',
@@ -86,9 +87,24 @@ function fixtureHtml() {
         + '#dungeon_viewport{position:relative;overflow:hidden}#right_column{position:fixed;right:0;top:0;width:300px}</style>'
         + '<div id="game"><div id="left_column"><div id="normal"><div id="dungeon_viewport"><canvas id="dungeon"></canvas></div></div></div>'
         + '<div id="right_column"></div></div><div hidden>'
-        + '<img id="illustrated_materials" src="/static/tabletop/assets/painted-stone.png" alt="">'
-        + '<img id="illustrated_wilds" src="/static/tabletop/assets/painted-wilds-v1.png" alt="">'
-        + '<img id="illustrated_woodland" src="/static/tabletop/assets/woodland-sprites-v1.png" alt="">'
+        + '<img id="illustrated_materials" data-src="/static/tabletop/assets/painted-stone.png" alt="">'
+        + '<img id="illustrated_wilds" data-src="/static/tabletop/assets/painted-wilds-v1.png" alt="">'
+        + '<img id="illustrated_woodland" data-src="/static/tabletop/assets/woodland-sprites-v1.png" alt="">'
+        + '<img id="illustrated_dungeon" src="/static/tabletop/assets/dungeon-features-v1.png" alt="">'
+        + '<img id="illustrated_thresholds" data-src="/static/tabletop/assets/dungeon-thresholds-v1.png" alt="">'
+        + '<img id="illustrated_beasts" data-src="/static/tabletop/assets/dungeon-beasts-v2.png" alt="">'
+        + '<img id="illustrated_denizens" data-src="/static/tabletop/assets/dungeon-denizens-v1.png" alt="">'
+        + '<img id="illustrated_lair" data-src="/static/tabletop/assets/lair-beasts-v1.png" alt="">'
+        + '<img id="illustrated_hydras" data-src="/static/tabletop/assets/hydra-forms-v1.png" alt="">'
+        + '<img id="illustrated_armour" data-src="/static/tabletop/assets/player-armour-v1.png" alt="">'
+        + '<img id="illustrated_humans" data-src="/static/tabletop/assets/human-bases-v2.png" alt="">'
+        + '<img id="illustrated_hair" data-src="/static/tabletop/assets/hair-overlays-v1.png" alt="">'
+        + '<img id="illustrated_humanoids" data-src="/static/tabletop/assets/dungeon-humanoids-v1.png" alt="">'
+        + '<img id="illustrated_equipment" data-src="/static/tabletop/assets/held-equipment-v2.png" alt="">'
+        + '<img id="illustrated_shields" data-src="/static/tabletop/assets/shield-variants-v1.png" alt="">'
+        + '<img id="illustrated_melee" data-src="/static/tabletop/assets/held-melee-v1.png" alt="">'
+        + '<img id="illustrated_weapon_forms" data-src="/static/tabletop/assets/held-weapon-forms-v1.png" alt="">'
+        + '<img id="illustrated_ranged" data-src="/static/tabletop/assets/held-ranged-v2.png" alt="">'
         + ['floor', 'wall', 'feat', 'main', 'player', 'icons', 'gui'].map(n => `<img id="${n}" src="/game_data/static/${n}.png" alt="">`).join('')
         + '</div>' + script(source('static/scripts/contrib/jquery.js')) + script('(' + setup.toString() + ')();');
     for (const name of scripts) {
@@ -99,11 +115,11 @@ function fixtureHtml() {
     return html + '</html>';
 }
 
-const scenario = async (page, label, prepare) => {
+const scenario = async (page, label, prepare, sampleCount = iterations) => {
     const result = await page.evaluate(async ([label, prepareSource, iterations]) => {
         const m = window.benchModules, renderer = m['./dungeon_renderer'], display = m['./display'], map = m['./map_knowledge'];
         const prepare = eval('(' + prepareSource + ')');
-        const times = [];
+        const times = [], measured = {};
         let worst = null;
         const snapshot = () => { const out = {}; Object.keys(window.benchProf || {}).forEach(k => { out[k] = { ms: window.benchProf[k].ms, n: window.benchProf[k].n }; }); return out; };
         for (let i = 0; i < iterations + 5; i++) {
@@ -114,24 +130,32 @@ const scenario = async (page, label, prepare) => {
             run();
             window.flushFrames();
             const elapsed = performance.now() - started;
+            // Capture the same interval as elapsed, before idle warming or the next prepare().
+            const after = snapshot();
+            if (i >= 5) {
+                const top = {};
+                Object.keys(after).forEach(k => {
+                    const previous = before[k] || { ms: 0, n: 0 };
+                    const ms = after[k].ms - previous.ms, calls = after[k].n - previous.n;
+                    if (ms || calls) {
+                        const entry = measured[k] || (measured[k] = { ms: 0, n: 0 });
+                        entry.ms += ms; entry.n += calls;
+                    }
+                    if (ms > 0.3) top[k] = Number(ms.toFixed(2)) + 'ms/' + calls;
+                });
+                times.push(elapsed);
+                if (!worst || elapsed > worst.elapsed) worst = { elapsed: Number(elapsed.toFixed(2)), top };
+            }
             // Yield between frames so idle-time cache warming can run as in a real session.
             if (window.benchYield) await new Promise(resolve => setTimeout(resolve, window.benchYield));
-            if (i >= 5) {
-                times.push(elapsed);
-                if (!worst || elapsed > worst.elapsed) {
-                    const after = snapshot(), top = {};
-                    Object.keys(after).forEach(k => { const ms = after[k].ms - (before[k] ? before[k].ms : 0); if (ms > 0.3) top[k] = Number(ms.toFixed(2)) + 'ms/' + (after[k].n - (before[k] ? before[k].n : 0)); });
-                    worst = { elapsed: Number(elapsed.toFixed(2)), top };
-                }
-            }
         }
         times.sort((a, b) => a - b);
         const median = times[Math.floor(times.length / 2)], p90 = times[Math.floor(times.length * 0.9)];
         const prof = {};
-        Object.keys(window.benchProf || {}).forEach(k => { const e = window.benchProf[k]; prof[k] = Number((e.ms / iterations).toFixed(2)) + 'ms/' + Math.round(e.n / iterations); });
+        Object.keys(measured).forEach(k => { const e = measured[k]; prof[k] = Number((e.ms / iterations).toFixed(2)) + 'ms/' + Math.round(e.n / iterations); });
         return { label, median: Number(median.toFixed(3)), p90: Number(p90.toFixed(3)), min: Number(times[0].toFixed(3)),
             paint: renderer.last_paint, draws: window.benchDraws, prof, worst };
-    }, [label, prepare.toString(), iterations]);
+    }, [label, prepare.toString(), sampleCount]);
     return result;
 };
 
@@ -164,11 +188,11 @@ const profileSetup = () => {
     wrap(m['./chunked-view'], 'plan', 'chunks.plan');
     wrap(renderer, 'render_view', 'render_view');
     wrap(renderer, 'animate', 'animate');
-    [['region-field', 'sample'], ['region-field', 'circle'], ['region-field', 'create'], ['aura-distortion', 'displacement'], ['pixel-sampling', 'warpHalo'],
-        ['effect-shading', 'shade'], ['effect-shading', 'prepare'], ['surface-lighting', 'shade'], ['surface-lighting', 'prepare'], ['liquid-field', 'normals'],
+    [['region-field', 'sample'], ['region-field', 'circle'], ['region-field', 'prepareCircle'], ['region-field', 'circlePixels'], ['region-field', 'create'], ['aura-distortion', 'displacement'], ['pixel-sampling', 'warpHalo'],
+        ['effect-shading', 'shade'], ['effect-shading', 'prepare'], ['sampled-lighting', 'create'], ['sampled-lighting', 'apply'], ['surface-lighting', 'shade'], ['surface-lighting', 'prepare'], ['liquid-field', 'normals'],
         ['wall-surface', 'prepare'], ['terrain-blend', 'pixels'], ['depth-shading', 'paint'], ['transparent-surface', 'compose'], ['terrain-topology', 'describe'],
         ['tile-lighting', 'create'], ['emissive-paint', 'paint'], ['tile-atmosphere', 'paint'], ['light-map-paint', 'paint'], ['visibility-feather', 'paint'],
-        ['tile-lighting-paint', 'paint'], ['tile-lighting-paint', 'paintRadiance'], ['emissive-surface', 'bloom'], ['flame-field', 'sample'], ['liquid-shader', 'pixels'], ['shoreline-paint', 'paint'], ['tile-edges', 'paint'], ['terrain-finish', 'create'], ['fluid-surface', 'create'], ['vapour-field', 'sample'], ['material-response', 'respond'], ['wall-surface', 'prepare'], ['liquid-field', 'sample'], ['surface-reflections', 'sample'], ['texture-pack', 'illustrated'], ['visual-presentation', 'enabled']]
+        ['tile-lighting-paint', 'paint'], ['tile-lighting-paint', 'paintRadiance'], ['emissive-surface', 'bloom'], ['flame-field', 'sample'], ['liquid-shader', 'pixels'], ['shoreline-paint', 'paint'], ['tile-edges', 'paint'], ['terrain-finish', 'create'], ['fluid-surface', 'create'], ['vapour-field', 'sample'], ['material-response', 'respond'], ['liquid-field', 'sample'], ['surface-reflections', 'sample'], ['texture-pack', 'illustrated'], ['visual-presentation', 'enabled']]
         .forEach(([mod, fn]) => wrap(m[mod], fn, mod + '.' + fn));
     const atlas = m['shader-atlas'], originalCreate = atlas.create;
     atlas.create = function () {
@@ -197,10 +221,12 @@ const profileSetup = () => {
     };
 };
 
-(async () => {
+module.exports = { fixtureHtml, runScenario: scenario };
+if (require.main === module) (async () => {
     const { chromiumLaunchOptions } = require('./helpers/browser-launch.cjs');
     const browser = await chromium.launch(chromiumLaunchOptions());
     const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 2 });
+    try {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', msg => { if (msg.type() === 'error') errors.push('console: ' + msg.text()); });
@@ -216,7 +242,7 @@ const profileSetup = () => {
     const missing = await page.evaluate(() => Object.keys(window.benchModules).filter(k => window.benchModules[k] === undefined));
     if (errors.length || missing.length) { console.log('load errors:', errors, 'undefined modules:', missing); }
     await page.evaluate(async () => {
-        await Promise.all(Array.from(document.images, image => image.decode()));
+        await Promise.all(Array.from(document.images).filter(image => image.getAttribute('src')).map(image => image.decode()));
         const m = window.benchModules, $ = window.jQuery;
         const tiles = m['./tileinfo-dngn'], main = m['./tileinfo-main'], player = m['./tileinfo-player'], enums = m['./enums'];
         $(document).trigger('game_init');
@@ -255,7 +281,11 @@ const profileSetup = () => {
             if (seen && !wall && x >= 42 && x <= 44 && y >= 31 && y <= 32) t.cloud = main.CLOUD_GREY_SMOKE;
             if (seen && !wall && x === 38 && y === 28) t.cloud = main.CLOUD_FIRE;
             if (seen && !wall && Math.hypot(x - 40, y - 30) <= 2.5) t.halo = enums.HALO_RANGE;
-            if (x === 40 && y === 30) { t.fg = player.MONS_ORC; t.doll = [[player.BASE_HUMAN, 32], [player.HUMAN_1, 32]]; }
+            if (x === 40 && y === 30) {
+                t.fg = player.BASE_HUMAN;
+                t.doll = [[player.BASE_HUMAN, 32], [player.LEG_PANTS_BLUE, 32], [player.BODY_LEATHER_ARMOUR, 32],
+                    [player.HAIR_SHORT_BLACK, 32], [player.HAND1_SHORT_SWORD_SLANT, 32], [player.HAND2_BUCKLER, 32]];
+            }
             cells.push(cell);
         }
         map.merge(cells);
@@ -282,9 +312,12 @@ const profileSetup = () => {
     ];
     for (const [name, pack, presentation] of modes) {
         if (process.env.BENCH_MODES && !name.includes(process.env.BENCH_MODES)) continue;
-        await page.evaluate(([pack, presentation]) => {
+        await page.evaluate(async ([pack, presentation]) => {
             const m = window.benchModules;
             m['texture-pack'].bindUser('bench'); m['texture-pack'].select(pack);
+            if (pack === 'illustrated') document.querySelectorAll('img[data-src]').forEach(image =>
+                m['./tile-art-direction'].requestSheet(image.id));
+            await Promise.all(Array.from(document.images).filter(image => image.getAttribute('src')).map(image => image.decode()));
             m['visual-presentation'].select(presentation);
             m['./premium-dungeon'].init();
             m['./display'].invalidate(true); m['./display'].display(); window.flushFrames(); window.flushFrames();
@@ -301,7 +334,8 @@ const profileSetup = () => {
         await run(name + ' idle frame (no change)', (m, renderer, display) => () => { display.display(); });
     }
     const errorsNow = errors.slice();
-    await browser.close();
     if (process.env.RENDER_BENCH_OUT) fs.writeFileSync(process.env.RENDER_BENCH_OUT, JSON.stringify({ info, results, errors: errorsNow }, null, 2));
     console.log('errors:', errorsNow.length ? errorsNow : 'none');
+    if (errorsNow.length) throw new Error('Renderer reported browser errors');
+    } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });

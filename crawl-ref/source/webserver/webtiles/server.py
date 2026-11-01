@@ -31,6 +31,7 @@ from webtiles.asset_revision import revision as asset_revision
 from webtiles.auth_http import LogoutHandler
 from webtiles.profile_http import ProfilePageHandler, AppearanceAPIHandler
 from webtiles.graphics_http import GraphicsAPIHandler, GraphicsPageHandler
+from webtiles.static_assets import StaticAssetHandler, AssetGzipEncoding
 
 
 servers = None
@@ -68,24 +69,19 @@ class MainHandler(tornado.web.RequestHandler):
                 logging.warning("Recovery token error from %s", self.request.remote_ip)
 
         with util.SlowWarning("Slow IO: render client.html"):
+            from webtiles.stylesheet_assets import stylesheet_urls
+            static_root = config.get('static_path')
+            def stylesheets(name):
+                return stylesheet_urls(static_root, name, '/static/', {'/static/': static_root})
             self.render("client.html", socket_server = protocol + host + "/socket",
+                    stylesheets = stylesheets,
                     game_version = _crawl_version,
                     client_asset_revision = asset_revision(config.get('static_path')),
                     username = None,
                     config = config,
                     reset_token = recovery_token, reset_token_error = recovery_token_error)
 
-class RevalidatingStaticHandler(tornado.web.StaticFileHandler):
-    # Versioned URLs (?v=hash) keep tornado's long max-age. Unversioned ones,
-    # such as the stylesheets style.css pulls in with @import, must revalidate
-    # by ETag: without a Cache-Control header browsers cache them heuristically
-    # and keep serving the previous release's CSS after a deploy.
-    def set_extra_headers(self, path):
-        if self.get_query_argument("v", None) is None:
-            self.set_header("Cache-Control", "no-cache")
-
-
-class NoCacheHandler(tornado.web.StaticFileHandler):
+class NoCacheHandler(StaticAssetHandler):
     def set_extra_headers(self, path):
         self.set_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.set_header("Pragma", "no-cache")
@@ -291,7 +287,7 @@ def bind_server(nonsecure_sockets, secure_sockets):
         "template_loader": util.DynamicTemplateLoader.get(config.get('template_path')),
         "debug": bool(config.get('development_mode', False)),
         "static_hash_cache": not (config.get('live_debug', False) or config.get('no_cache', False)),
-        "static_handler_class": RevalidatingStaticHandler,
+        "static_handler_class": StaticAssetHandler,
         }
 
     from webtiles.websocket_settings import heartbeat_settings
@@ -328,7 +324,7 @@ def bind_server(nonsecure_sockets, secure_sockets):
             ]
 
     application = tornado.web.Application(handlers,
-                                    gzip=config.get('use_gzip'), **settings)
+                                    transforms=[AssetGzipEncoding] if config.get('use_gzip') else [], **settings)
 
     kwargs = {}
     if config.get('http_connection_timeout') is not None:
