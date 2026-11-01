@@ -604,7 +604,9 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
     JsonWrapper msg = json_find_member(obj.node, "msg");
     msg.check(JSON_STRING);
     string msgtype(msg->string_);
-    m_personal_dirty = true;
+    // Hover previews read the game; they mustn't reproject views per tile.
+    if (msgtype != "travel_route")
+        m_personal_dirty = true;
     const JsonNode* sender = json_find_member(obj.node, "player_id");
     unwind_var<int> sender_view(m_viewer_slot,
         sender && sender->tag == JSON_NUMBER ? static_cast<int>(sender->number_) : -1);
@@ -637,6 +639,49 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
                 json_write_int("plan_id", completed_activity_plan);
                 json_write_int("plan_turns", completed_activity_turns);
             }
+            json_close_object();
+            finish_message();
+        }
+        return 0;
+    }
+    if (msgtype == "travel_route")
+    {
+        const JsonNode* request = json_find_member(obj.node, "id");
+        const JsonNode* x = json_find_member(obj.node, "x");
+        const JsonNode* y = json_find_member(obj.node, "y");
+        if (_training_integer(request, 1, 2147483647)
+            && _training_integer(x, -GXM, 2 * GXM)
+            && _training_integer(y, -GYM, 2 * GYM))
+        {
+            const int slot = m_viewer_slot >= 0 ? m_viewer_slot : party::active_slot();
+            vector<coord_def> route;
+            bool one_step = false;
+            // Answering this must stay free: a hero on another floor would need
+            // that level loaded, so they get an empty route until they act.
+            if (slot < party::player_count() && !m_origin.equals(-1, -1)
+                && mouse_control::current_mode() == MOUSE_MODE_COMMAND
+                && m_menu_stack.empty())
+            {
+                const player& hero = party::get_player(slot);
+                if (hero.where_are_you == you.where_are_you && hero.depth == you.depth)
+                {
+                    party::scoped_player_context context(slot);
+                    route = click_travel_route(coord_def(static_cast<int>(x->number_),
+                                                         static_cast<int>(y->number_)) + m_origin,
+                                               one_step);
+                }
+            }
+            json_open_object();
+            json_write_string("msg", "travel_route");
+            json_write_int("id", static_cast<int>(request->number_));
+            json_write_bool("one_step", one_step);
+            json_open_array("route");
+            for (const coord_def& cell : route)
+            {
+                json_write_int(cell.x - m_origin.x);
+                json_write_int(cell.y - m_origin.y);
+            }
+            json_close_array();
             json_close_object();
             finish_message();
         }

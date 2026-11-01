@@ -19,6 +19,7 @@
     {"id":"movement","type":"boolean","default":false,"group":"Motion","label":"Creature movement","description":"Short glides and foot lift between confirmed native positions."},
     {"id":"particles","type":"boolean","default":false,"group":"Motion","label":"Environmental particles","description":"Embers, droplets, bubbles, dust and footstep ripples."},
     {"id":"interface","type":"boolean","default":false,"group":"Interface","label":"Interface polish","description":"Subtle panel relief, highlights and short interface transitions."},
+    {"id":"route_preview","type":"boolean","default":true,"group":"Interface","label":"Movement path on hover","description":"Draws the route your hero will walk when you point at a tile. Applies with every graphics preset.","presetIndependent":true},
     {"id":"motion","type":"choice","default":"system","group":"Motion","label":"Motion preference","description":"Reduced motion freezes supplementary effects and disables movement glides. Your device's reduced-motion preference is always respected.","options":["system","reduced"],"optionLabels":["Follow device","Reduce motion"],"presetIndependent":true},
     { "id": "tips_level", "type": "choice", "default": "all", "section": "tips", "presetIndependent": true, "group": "Tutorial tips",
       "label": "Show tips", "description": "Friendly advice the first time you meet something new. Essentials covers moving, fighting, items and staying alive.",

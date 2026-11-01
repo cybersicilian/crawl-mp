@@ -181,11 +181,18 @@ async function act(target, slot, kind = 'wait') {
     // Another player's keystrokes cannot answer an open inventory interaction.
     await send(guest.page, 'key', { keycode: 105 });
     await guest.page.locator('.workflow-inventory:visible').waitFor();
-    const blockedBefore = await host.page.evaluate(() => window.controlErrors.length);
+    const clockBefore = (await state(host.page)).members.map(member => member.aut_clock);
     await send(host.page, 'key', { keycode: 106 });
-    await host.page.waitForFunction(count => window.controlErrors.length > count, blockedBefore);
+    // The partner's key waits as their next command instead of reaching the prompt.
+    await host.page.waitForFunction(() => window.crawl_party.state.members[0].queued_action);
+    await guest.page.locator('.workflow-inventory:visible').waitFor();
+    assert.deepEqual((await state(host.page)).members.map(member => member.aut_clock), clockBefore,
+        'A waiting key spends no turn while another hero decides');
+    assert.equal(await host.page.evaluate(() => window.crawl_party.state.members[1].prompt_open), true);
     await send(guest.page, 'key', { keycode: 27 });
     await ready(guest.page);
+    await host.page.waitForFunction(() => !window.crawl_party.state.members[0].queued_action
+        && !window.crawl_party.state.members[1].prompt_open);
     evidence.sharedPromptIsolation = true;
     // Stale controls and direct requests cannot take an unclaimed companion,
     // another player's character, or cycle to a different character.

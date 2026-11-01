@@ -161,9 +161,15 @@ test('urgent tips lead the catalog and name real danger', () => {
 });
 test('status tips read the words the engine sends', () => {
     [['poisoned', 'poison'], ['quite poisoned (-2)', 'poison'], ['Pois', 'poison'], ['on fire', 'burning'], ['Fire', 'burning'],
-        ['Held', 'caught'], ['held', 'caught'], ['Conf', 'confused'], ['confused', 'confused'], ['Contam', 'contam'], ['glowing', 'contam']]
+        ['Held', 'caught'], ['held', 'caught'], ['Conf', 'confused'], ['confused', 'confused'], ['Contam', 'contam']]
         .forEach(([text, tip]) => assert.equal(ids({ statuses: [text] })[0] === tip || ids({ statuses: [text] }).includes(tip), true, text));
     assert.ok(ids({ badStatuses: 1 }).includes('status'));
+});
+test('backlighting does not trigger magical contamination advice', () => {
+    for (const status of ['glowing', 'Glowing', 'backlit', 'on fire']) {
+        assert.ok(!ids({ statuses: [status] }).includes('contam'), status);
+    }
+    assert.ok(ids({ statuses: ['Contam'] }).includes('contam'));
 });
 test('each input mode only shows its own tips', () => {
     assert.deepEqual(ids({ mode: 'target', turns: 0 }), ['targeting']);

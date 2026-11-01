@@ -63,6 +63,7 @@ class GraphicsTests(AsyncHTTPTestCase):
         self.assertEqual(response.headers['Cache-Control'], 'no-store, private')
         self.assertEqual(data['settings']['mode'], 'classic')
         self.assertEqual(data['settings']['ui_theme'], 'folio')
+        self.assertIs(data['settings'].pop('route_preview'), True)
         self.assertFalse(any(value for key, value in data['settings'].items()
                              if type(value) is bool and not key.startswith('tips_')))
         self.assertEqual(data['revision'], 0)

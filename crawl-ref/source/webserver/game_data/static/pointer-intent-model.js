@@ -7,10 +7,12 @@ define([], function () {
     function name(text) { return String(text || "").replace(/^(?:a|an|the)\s+/i, ""); }
     function title(text) { var value = name(text); return value.charAt(0).toUpperCase() + value.slice(1); }
     function moves(view) {
+        if (view.noRoute) return "No known route";
         if (!Number.isInteger(view.steps)) return "Walk here";
-        return view.steps === 1 ? "Walk here · 1 move" : "Walk here · " + view.steps + " moves";
+        // Near enemies a click only takes the first step of the route.
+        return (view.oneStep ? "Step toward here · " : "Walk here · ") + view.steps + (view.steps === 1 ? " move" : " moves");
     }
-    /* view: { cell, visible, adjacent, distance, steps, ownTile, ally, blocked, targeting } */
+    /* view: { cell, visible, adjacent, distance, steps, oneStep, noRoute, ownTile, ally, blocked, targeting } */
     function classify(view) {
         var cell = view.cell;
         if (!cell || !cell.t) return { kind: "unknown", title: "Unexplored", left: "Nothing known here yet", right: "" };

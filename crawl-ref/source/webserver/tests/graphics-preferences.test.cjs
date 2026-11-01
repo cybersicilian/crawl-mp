@@ -11,6 +11,14 @@ function load(name, deps, globals = {}) {
         ...globals, define(names, factory) { result = factory(...names.map(key => deps[key])); }
     }); return result;
 }
+test('The hover route stays on through every preset until turned off', () => {
+    const model = load('graphics-settings-model', {}); assert(model.configure(schema));
+    assert.equal(model.defaults().route_preview, true);
+    assert.equal(model.preset('classic', model.defaults()).route_preview, true);
+    const off = { ...model.preset('premium', model.defaults()), route_preview: false };
+    assert.equal(model.preset('classic', off).route_preview, false);
+    assert.equal(model.matching(off), 'premium');
+});
 const tick = () => new Promise(resolve => setImmediate(resolve));
 async function settle() { await tick(); await tick(); }
 const plain = value => JSON.parse(JSON.stringify(value));

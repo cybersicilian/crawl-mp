@@ -461,6 +461,7 @@ catch2-tests/test_burrows.o \
 catch2-tests/test_branch_population.o \
 catch2-tests/test_honey.o \
 catch2-tests/test_coordit.o \
+catch2-tests/test_click_travel_route.o \
 catch2-tests/test_describe.o \
 catch2-tests/test_english.o \
 catch2-tests/test_files.o \

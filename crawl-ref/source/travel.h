@@ -599,6 +599,10 @@ void do_interlevel_travel();
 bool click_travel_safe(const coord_def &gc);
 command_type click_travel(const coord_def &gc, bool force_attack,
                           bool force_close_doors);
+// The squares a click on gc would walk through on what the hero knows now, for
+// previews: no side effects, and empty if the click wouldn't move. one_step is
+// set if the click only takes the first step, as when enemies are in view.
+vector<coord_def> click_travel_route(const coord_def &gc, bool &one_step);
 #endif
 
 bool check_for_interesting_features();

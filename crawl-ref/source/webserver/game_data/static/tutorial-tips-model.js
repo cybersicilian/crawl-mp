@@ -42,7 +42,7 @@ define([], function () {
         step_away: function (view) { return view.health < 0.65 && view.enemies.some(function (enemy) { return enemy.distance <= 1; }); },
         invisible: function (view) { return view.signals.unseen === true; },
         status: function (view) { return view.badStatuses > 0; },
-        contam: function (view) { return status(view, /^(?:contam|glowing)/i); },
+        contam: function (view) { return status(view, /^contam/i); },
         miscast: function (view) { return view.signals.miscast === true; },
         malevolence: function (view) { return view.signals.malevolence === true; },
         ally: function (view) { return view.allies > 0; },

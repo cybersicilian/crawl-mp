@@ -966,6 +966,59 @@ enum class nonmove_reason
     arrived,
 };
 
+// Check whether this step puts us adjacent to any grid we haven't ever
+// seen
+//
+// .tx      Moving onto t puts us adjacent to an unseen grid.
+// ?#@      --> Pick x instead.
+// Only applies to diagonal moves. Use only the hero's current knowledge;
+// looking ahead through actual terrain would disclose undiscovered walls.
+static coord_def _step_around_unseen(const coord_def& youpos,
+                                     const coord_def& dest)
+{
+    coord_def new_dest = dest;
+
+    if (!dest.origin() && dest.x != youpos.x && dest.y != youpos.y)
+    {
+        coord_def unseen = coord_def();
+        for (adjacent_iterator ai(dest); ai; ++ai)
+            if (!you.see_cell(*ai) && !env.map_knowledge(*ai).seen())
+            {
+                unseen = *ai;
+                break;
+            }
+
+        if (unseen != coord_def())
+        {
+            // If so, try to use an orthogonally adjacent grid that is safe to
+            // enter.
+            if (youpos.x == unseen.x)
+                new_dest.y = youpos.y;
+            else if (youpos.y == unseen.y)
+                new_dest.x = youpos.x;
+
+            // If the new grid cannot be entered, reset to dest. This means
+            // that autoexplore will still sometimes move you next to a
+            // previously unseen monster but the same would happen by manual
+            // movement, so I don't think we need to worry about this. (jpeg)
+            if (!is_travelsafe_square(new_dest)
+                || !feat_is_traversable_now(env.map_knowledge(new_dest).feat()))
+            {
+                new_dest = dest;
+            }
+#ifdef DEBUG_SAFE_EXPLORE
+            mprf(MSGCH_DIAGNOSTICS, "youpos: (%d, %d), dest: (%d, %d), "
+                     "unseen: (%d, %d), new_dest: (%d, %d)",
+                 youpos.x, youpos.y, dest.x, dest.y, unseen.x, unseen.y,
+                 new_dest.x, new_dest.y);
+            more();
+#endif
+        }
+    }
+
+    return new_dest;
+}
+
 /**
  * Run the travel_pathfind algorithm with a destination with the aim of
  * determining the next travel move. Try to avoid to let travel (including
@@ -1021,49 +1074,7 @@ static void _find_travel_pos(const coord_def& youpos, int *move_x, int *move_y,
         return;
     }
 
-    // Check whether this step puts us adjacent to any grid we haven't ever
-    // seen
-    //
-    // .tx      Moving onto t puts us adjacent to an unseen grid.
-    // ?#@      --> Pick x instead.
-    // Only applies to diagonal moves.
-    if (!dest.origin() && dest.x != youpos.x && dest.y != youpos.y)
-    {
-        coord_def unseen = coord_def();
-        for (adjacent_iterator ai(dest); ai; ++ai)
-            if (!you.see_cell(*ai) && !env.map_knowledge(*ai).seen())
-            {
-                unseen = *ai;
-                break;
-            }
-
-        if (unseen != coord_def())
-        {
-            // If so, try to use an orthogonally adjacent grid that is safe to
-            // enter.
-            if (youpos.x == unseen.x)
-                new_dest.y = youpos.y;
-            else if (youpos.y == unseen.y)
-                new_dest.x = youpos.x;
-
-            // If the new grid cannot be entered, reset to dest. This means
-            // that autoexplore will still sometimes move you next to a
-            // previously unseen monster but the same would happen by manual
-            // movement, so I don't think we need to worry about this. (jpeg)
-            if (!is_travelsafe_square(new_dest)
-                || !feat_is_traversable_now(env.map_knowledge(new_dest).feat()))
-            {
-                new_dest = dest;
-            }
-#ifdef DEBUG_SAFE_EXPLORE
-            mprf(MSGCH_DIAGNOSTICS, "youpos: (%d, %d), dest: (%d, %d), "
-                     "unseen: (%d, %d), new_dest: (%d, %d)",
-                 youpos.x, youpos.y, dest.x, dest.y, unseen.x, unseen.y,
-                 new_dest.x, new_dest.y);
-            more();
-#endif
-        }
-    }
+    new_dest = _step_around_unseen(youpos, dest);
 
     if (new_dest.origin())
     {
@@ -5444,6 +5455,121 @@ command_type click_travel(const coord_def &gc, bool force_attack,
     // Don't pass on the force_attack and force_close_doors flags because
     // the player didn't click on this square
     return _adjacent_cmd(dest, false, false);
+}
+#endif
+
+#ifdef USE_TILE
+namespace
+{
+    // A travel flood that runs on past the hero and remembers which square
+    // first reached each square. Flood order doesn't depend on where the hero
+    // stands, so these links repeat what a fresh flood would pick at each step
+    // of the walk, at the cost of one flood per route.
+    class travel_route_flood : public travel_pathfind
+    {
+    public:
+        travel_route_flood(const coord_def &target, const coord_def &walker,
+                           bool danger)
+            : hero(walker)
+        {
+            // Nothing floods into the origin, so the flood never stops early.
+            set_src_dst(coord_def(), target);
+            // Previews mustn't disturb the map colours kept in the global grid.
+            point_distance = distances;
+            if (danger)
+                set_ignore_danger();
+        }
+
+        vector<coord_def> walk() const
+        {
+            vector<coord_def> route;
+            set<coord_def> walked;
+            coord_def pos = hero;
+            while (pos != start && walked.insert(pos).second)
+            {
+                const coord_def next = parents(pos);
+                // The flood already checks remembered terrain and hazards.
+                // _is_safe_move also reads actual traps, which a preview must
+                // not inspect beyond the hero's knowledge.
+                if (next.origin())
+                    break;
+                // Stepping through danger is a click at a time, not a run.
+                if (ignore_danger)
+                    pos = next;
+                else if (_feat_is_blocking_door_strict(
+                             env.map_knowledge(next).feat()).first)
+                {
+                    break;
+                }
+                else
+                {
+                    // Discovery may change a later step. Replanning from
+                    // current knowledge keeps the next move authoritative.
+                    pos = _step_around_unseen(pos, next);
+                }
+                route.push_back(pos);
+            }
+            return route;
+        }
+
+    protected:
+        bool path_flood(const coord_def &c, const coord_def &dc) override
+        {
+            const bool found = travel_pathfind::path_flood(c, dc);
+            // The hero's own square counts even if travel wouldn't path over it.
+            if (map_bounds(dc) && dc != start && parents(dc).origin()
+                && (dc == hero || point_distance[dc.x][dc.y] > 0))
+            {
+                parents(dc) = c;
+            }
+            return found;
+        }
+
+    private:
+        coord_def hero;
+        travel_distance_grid_t distances;
+        FixedArray<coord_def, GXM, GYM> parents;
+    };
+}
+
+static vector<coord_def> _flood_route(const coord_def &target, bool danger,
+                                      bool fallback)
+{
+    travel_route_flood flood(target, you.pos(), danger);
+    flood.pathfind(RMODE_TRAVEL, fallback);
+    return flood.walk();
+}
+
+vector<coord_def> click_travel_route(const coord_def &gc, bool &one_step)
+{
+    one_step = false;
+    if (!in_bounds(gc) || gc == you.pos())
+        return {};
+
+    if (_adjacent_cmd(gc, false, false) != CMD_NO_CMD)
+    {
+        const dungeon_feature_type feat = env.map_knowledge(gc).feat();
+        if (feat_is_solid(feat) && !feat_is_closed_door(feat))
+            return {};
+        return { gc };
+    }
+
+    if (click_travel_safe(gc)
+        && !_monster_blocks_travel(env.map_knowledge(gc).monsterinfo()))
+    {
+        // start_travel would refuse these, with a message we don't want here.
+        if (!is_travelsafe_square(gc, true) || you.confused()
+            || !Options.travel_one_unsafe_move && !i_feel_safe(false, true))
+        {
+            return {};
+        }
+
+        vector<coord_def> route = _flood_route(gc, false, false);
+        return route.empty() ? _flood_route(gc, false, true) : route;
+    }
+
+    one_step = true;
+    return _flood_route(gc, true, false);
 }
 #endif
 

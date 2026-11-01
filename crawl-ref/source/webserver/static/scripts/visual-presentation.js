@@ -18,6 +18,8 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
     document.documentElement.dataset.graphicsMotion = values.motion;
     return { current: function () { return values.mode; }, premium: function () { return values.mode === "premium"; },
         enabled: function (feature) { return values.mode === "premium" && values[feature] === true; },
+        // Settings that apply in every mode, such as interface aids.
+        preference: function (feature) { return values[feature]; },
         animated: function () { return values.motion !== "reduced"; },
         select: function (mode) {
             var settings = model.preset(mode, values); return settings ? preferences.change(settings) : false;

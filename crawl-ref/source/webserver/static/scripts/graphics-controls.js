@@ -81,8 +81,8 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
                 var setting = row(field, id, function (value) {
                     var patch = {}; patch[field.id] = value;
                     var settings = Object.assign({}, preferences.snapshot().settings, patch);
-                    if (field.type === "boolean") patch.mode = schema.fields.some(function (entry) {
-                        return entry.type === "boolean" && !entry.section && settings[entry.id];
+                    if (field.type === "boolean" && !field.presetIndependent) patch.mode = schema.fields.some(function (entry) {
+                        return entry.type === "boolean" && !entry.section && !entry.presetIndependent && settings[entry.id];
                     }) ? "premium" : "classic";
                     preferences.change(patch);
                 }), label = setting.label;

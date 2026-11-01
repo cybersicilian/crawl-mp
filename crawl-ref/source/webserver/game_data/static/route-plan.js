@@ -30,8 +30,6 @@ define([], function () {
             for (var direction of ordered) {
                 var next = { x: current.point.x + direction.dx, y: current.point.y + direction.dy };
                 if (seen.has(key(next)) || !passable(next)) continue;
-                if (direction.dx && direction.dy
-                    && (!passable({ x: next.x, y: current.point.y }) || !passable({ x: current.point.x, y: next.y }))) continue;
                 seen.add(key(next));
                 var path = current.path.concat([{ point: next, direction: direction }]);
                 if (equal(next, end)) return path;

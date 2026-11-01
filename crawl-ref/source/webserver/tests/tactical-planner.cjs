@@ -69,6 +69,18 @@ function fixture() {
     assert.equal(f.planner.view().pending, null);
 }
 {
+    const f = fixture(); f.blocked.add('2,1'); f.blocked.add('1,2'); f.click(2, 2);
+    assert.equal(f.planner.view().entries.length, 1, 'Heroes step diagonally past corners, as the engine allows');
+}
+{
+    const f = fixture(); f.state.combat_locked = true;
+    assert.equal(f.planner.walker(), 'planner', 'A combat click walks this queue');
+    f.state.combat_locked = false;
+    assert.equal(f.planner.walker(), 'engine', 'A peaceful click is the engine\'s travel');
+    f.mode = 2;
+    assert.equal(f.planner.walker(), null, 'Nothing walks a click while the engine is busy');
+}
+{
     const f = fixture(); f.member.cooldown_remaining_ms = 500;
     f.click(2, 1); f.tool('run');
     assert.equal(f.sent.length, 1, 'Server pacing is not duplicated by a timer restarted from a stale snapshot');

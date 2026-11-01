@@ -1449,6 +1449,14 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         pump = getattr(self, "activity_pump", None)
         cancel_activity = obj.get("msg") == "party_activity" and obj.get("action") == "cancel"
         selected = self.party_control.selected(source)
+        if obj.get("msg") == "travel_route":
+            # Reads the game without spending anything, so it skips the input
+            # queue. A busy engine drops it; the browser asks again afterwards.
+            conn = getattr(self, "conn", None)
+            if selected is not None and conn and conn.open and not (pump and pump.inflight):
+                conn.send_message(utf8(json_encode(dict(msg="travel_route", id=obj.get("id"),
+                    x=obj.get("x"), y=obj.get("y"), player_id=selected))))
+            return
         if self.party_control.multiplayer:
             error = None
             if obj.get("msg") == "key" and (type(obj.get("keycode")) is not int

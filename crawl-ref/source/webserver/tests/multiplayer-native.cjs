@@ -22,7 +22,8 @@ const check = (name, details = {}) => { evidence.checks.push({ name, ...details 
     }
     await send(guest.page, 'party_room_join', { room_id: host.username, slot: 3 });
     await host.page.waitForFunction(() => /2 heroes/.test(document.querySelector('#btn_launch_party_room').textContent));
-    assert((await host.page.locator(".party-slot-box[data-slot='1']").innerText()).includes('Excluded from multiplayer'));
+    assert((await host.page.locator(".party-slot-box[data-slot='1'] .party-slot-occupant").textContent())
+        .includes('Excluded from multiplayer'), 'Companion seats remain excluded even when their editor is hidden');
     await host.page.locator('#btn_launch_party_room').click();
     for (const target of clients) {
         await target.page.waitForFunction(slot => window.crawl_party?.state?.members?.length === 2
@@ -98,7 +99,11 @@ const check = (name, details = {}) => { evidence.checks.push({ name, ...details 
     for (let i=0; i<3; ++i) await waitAction(host);
     assert((await state(host.page)).world_aut_clock > d1);
     assert.notDeepEqual(await orcs(host), d1Orc, 'Native D:1 monster AI must advance on D:1 actions');
-    assert.equal((await state(host.page)).floor_time, d1Time + 30);
+    // A departed partner may leave the floor ahead of this hero's region.
+    // Catch-up spends the hero's turns without advancing that floor twice.
+    const hostAfterWaits = await state(host.page);
+    assert.equal(hostAfterWaits.floor_time, Math.max(d1Time, hostAfterWaits.world_aut_clock));
+    assert.equal(hostAfterWaits.world_aut_clock, d1 + 30);
     assert.equal((await state(guest.page)).world_aut_clock, d2After);
     assert.deepEqual((await view(guest)).center, guestBeforeHost.center);
     check('Both occupied floors process real actions; unrelated floor clocks and streams stay unchanged',

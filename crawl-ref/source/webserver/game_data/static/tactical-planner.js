@@ -296,10 +296,14 @@ function ($, comm, client, keys, game, enums, party, map, actions, routes) {
             active = false; reset(); if (unsubscribe) unsubscribe(); unsubscribe = null;
             $("#tactical_planner").remove();
         });
-    function preview(target) {
+    // Who walks a plain click: this queue in combat, the engine's travel otherwise.
+    function walker() {
         var member = hero();
-        return member && member.pos && canPlan() && !queue.length && !pending
-            ? routes.route(member.pos, target, passable) : null;
+        if (!member || !member.pos || !canPlan() || queue.length || pending) return null;
+        return tactical() ? "planner" : "engine";
     }
-    return { click: click, view: view, clear: clear, init: init, preview: preview };
+    function preview(target) {
+        return routes.route(hero().pos, target, passable);
+    }
+    return { click: click, view: view, clear: clear, init: init, preview: preview, walker: walker };
 });

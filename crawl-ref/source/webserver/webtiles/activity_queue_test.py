@@ -20,6 +20,22 @@ class ActivityQueueTests(unittest.TestCase):
             msg="party_packet", slot=target, floor="D:1", view=True,
             payload=dict(msg="party_state", members=members))), True)
 
+    def test_route_queries_reach_the_engine_outside_the_input_queue(self):
+        f = self.fixture
+        f.game.handle_input(json.dumps(dict(msg="travel_route", id=7, x=3, y=4, player_id=2,
+                                            activity_id=9)), f.clients[1])
+        self.assertEqual(f.packets()[-1], dict(msg="travel_route", id=7, x=3, y=4, player_id=1))
+        self.assertFalse(f.pump.inflight)
+
+    def test_route_queries_are_dropped_silently_while_the_engine_is_busy(self):
+        f = self.fixture
+        f.key(0)
+        before = len(f.packets())
+        f.clients[1].send_message.reset_mock()
+        f.game.handle_input(json.dumps(dict(msg="travel_route", id=8, x=3, y=4)), f.clients[1])
+        self.assertEqual(len(f.packets()), before)
+        f.clients[1].send_message.assert_not_called()
+
     def test_bursts_alternate_waiting_actors_and_preserve_their_key_order(self):
         f = self.fixture
         f.key(0)
