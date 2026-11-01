@@ -11,8 +11,9 @@ printf '0.33-coop\n' > util/release_ver
 # variables in its environment. Debug engines belong in disposable QA builds.
 make "-j${BUILD_JOBS:-2}" WEBTILES=y NOWIZARD=y STDFLAG=-std=c++17 CFOPTIMIZE=-O2 crawl webserver docs
 ./crawl -version
-# Compression happens here so HTTP requests never encode assets.
-python3 webserver/util/prepare-assets.py webserver/static webserver/game_data/static
+# Compression happens here so HTTP requests never encode assets. The deadline
+# allows for the small build VM; the default suits a developer machine.
+python3 webserver/util/prepare-assets.py --deadline-seconds 2700 webserver/static webserver/game_data/static
 python3 webserver/util/prepare-assets.py --check webserver/static webserver/game_data/static
 PYTHONPATH=webserver python3 -m unittest webtiles.chat_tags_test webtiles.game_library_test webtiles.character_preview_test webtiles.asset_revision_test webtiles.starting_weapons_test webtiles.gameplay_protocol_test webtiles.party_control_test webtiles.skill_training_test
 python3 webserver/tests/native-character-preview.py --binary "$SOURCE/crawl"
