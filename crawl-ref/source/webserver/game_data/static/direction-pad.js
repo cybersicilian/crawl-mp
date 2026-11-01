@@ -1,6 +1,6 @@
 /* Eight native direction commands; the engine owns movement, attacks and warnings. */
-define(["jquery", "comm", "key_conversion", "./game-context", "./enums", "./party-model", "./workflow-actions", "./frame-update", "./route-plan", "./status-icons"],
-function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons) {
+define(["jquery", "comm", "key_conversion", "./game-context", "./enums", "./party-model", "./workflow-actions", "./frame-update", "./route-plan", "./status-icons", "dom-update"],
+function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons, domUpdate) {
     "use strict";
     var observer, highlightTimer;
     var directions = routes.directions, storageKey = "dcss.direction-pad.minimized";
@@ -21,7 +21,9 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons
     function reason() {
         if (!game.get_ui_state || game.get_ui_state() !== enums.ui.NORMAL)
             return "Return to the dungeon to move or attack.";
-        if ($("#ui-stack > *, dialog[open]").length) return "Finish or close the current menu first.";
+        var stack = document.getElementById("ui-stack");
+        if (stack && stack.firstElementChild || Array.prototype.some.call(document.getElementsByTagName("dialog"),
+            function (dialog) { return dialog.open; })) return "Finish or close the current menu first.";
         var state = window.crawl_party && window.crawl_party.state;
         var member = state && state.members.find(function (hero) { return hero.slot === party.controlledSlot(state); });
         return actions.reason(member, true);
@@ -76,8 +78,10 @@ function ($, comm, keys, game, enums, party, actions, frameUpdate, routes, icons
             var direction = directions[index];
             var label = "Move or attack " + direction.name.toLowerCase() + ": " + direction.key
                 + " or Numpad " + direction.numpad;
-            $(this).attr("aria-label", label);
-            this.title = blocked || label;
+            // The tooltip layer turns a title into these, so writing one on
+            // every update would strip and rewrite all of them each time.
+            domUpdate.attributes(this, { "aria-label": label, "data-tip-title": label,
+                "data-tip-body": blocked || label, "data-tooltip-native": "true" });
         });
         position();
     }

@@ -1,7 +1,7 @@
 define(["jquery", "comm", "./player", "./tileinfo-main", "./status-icons", "./workflow-actions", "./party-power-cards", "./power-art", "./native-tile-art", "spell-cost", "./frame-update", "./item-context-menu", "./equipment-paperdoll"],
 function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spellCost, frameUpdate, itemMenus, paperdoll) {
     "use strict";
-    var filter = "all", signature = "";
+    var filter = "all", itemSignature = "", powerSignature = "", shape = "";
     function member() {
         var state = window.crawl_party && window.crawl_party.state;
         return state && state.members.find(function (hero) { return hero.slot === actions.controlledSlot(); });
@@ -181,18 +181,24 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
     function update(force) {
         var hero = member(); if (!hero || !document.getElementById("hud_inventory")) return;
         var state = window.crawl_party && window.crawl_party.state;
-        var next = JSON.stringify([
-            hero.slot, hero.name, hero.xl, hero.hp, hero.mp, hero.alive, hero.ghost_haunting,
-            hero.inventory_known, hero.inventory,
-            hero.abilities_known, hero.abilities,
-            hero.spells_known, hero.spells, hero.spell_library,
-            Boolean(state && state.inventory_use),
-            actions.reason(hero), actions.ready(),
-            artState(hero), filter, powerArt.ready()
-        ]);
-        if (!force && signature === next) return;
-        signature = next; renderInventory(hero); renderPowers(hero);
-        $(document).trigger("hud_inventory_updated");
+        var shared = [hero.slot, hero.name, hero.alive, hero.ghost_haunting,
+            Boolean(state && state.inventory_use), actions.reason(hero), actions.ready()];
+        // Hit points and magic only affect powers, and change on most combat turns.
+        var nextItems = JSON.stringify([shared, hero.inventory_known, hero.inventory, artState(hero), filter]);
+        var nextPowers = JSON.stringify([shared, hero.xl, hero.hp, hero.mp, hero.abilities_known, hero.abilities,
+            hero.spells_known, hero.spells, hero.spell_library, powerArt.ready()]);
+        var itemsChanged = force || nextItems !== itemSignature;
+        var powersChanged = force || nextPowers !== powerSignature;
+        if (!itemsChanged && !powersChanged) return;
+        itemSignature = nextItems; powerSignature = nextPowers;
+        if (itemsChanged) renderInventory(hero);
+        if (powersChanged) renderPowers(hero);
+        // The sidebar's fit forces layout repeatedly, and readiness and costs
+        // change what these buttons say, not how much room they take.
+        var nextShape = $("#hud_inventory .hud-item-grid").children().length + ":"
+            + $("#hud_powers .hud-panel-body").children().length;
+        if (force || nextShape !== shape) $(document).trigger("hud_inventory_updated");
+        shape = nextShape;
     }
     function init() {
         var sidebar = document.getElementById("right_column"); if (!sidebar) return;
@@ -220,7 +226,7 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
             powers.appendTo(sidebar); inventory.appendTo(sidebar);
             $("#hud_powers, #hud_inventory").on("keydown.hud keypress.hud keyup.hud", function (event) { event.stopPropagation(); });
         }
-        signature = ""; update(true);
+        update(true);
         $("#main, #icons").off("load.hudItems").on("load.hudItems", function () {
             update(true); $(document).trigger("inventory_art_ready");
         });
@@ -228,6 +234,6 @@ function ($, comm, player, tiles, icons, actions, powerCards, powerArt, art, spe
     }
     var refresh = frameUpdate(update);
     $(document).on("party_state_rendered.hudInventory player_card_sections_mounted.hudInventory game_actions_changed.hudInventory player_state_changed.hudInventory", refresh)
-        .on("game_cleanup.hudInventory", function () { refresh.cancel(); signature = ""; filter = "all"; });
+        .on("game_cleanup.hudInventory", function () { refresh.cancel(); itemSignature = powerSignature = shape = ""; filter = "all"; });
     return { init: init, update: update, itemButton: itemButton, itemIcon: itemIcon, drawTile: drawTile, drawTiles: drawTiles, artState: artState };
 });

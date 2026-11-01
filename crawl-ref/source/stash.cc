@@ -325,6 +325,20 @@ static int _item_sort_score(const item_def& item)
     return score;
 }
 
+// Identifies a pile as update() last read it. The sort and interest checks also
+// depend on the hero, who can change without the pile doing so, so the signature
+// changes every so often to refresh them.
+static size_t _pile_signature(const vector<item_def*> &pile)
+{
+    size_t signature = you.num_turns / 64 + 1;
+    for (const item_def *item : pile)
+    {
+        signature = item_state_hash(signature, *item)
+                    ^ reinterpret_cast<size_t>(item);
+    }
+    return signature;
+}
+
 void Stash::update()
 {
     feat = DNGN_FLOOR;
@@ -337,15 +351,19 @@ void Stash::update()
 
     int previous_size = items.size();
 
-    // Zap existing items
-    items.clear();
-    has_special = false;
-    has_artefact = false;
-    special_in_stack = false;
-    artefact_in_stack = false;
+    const auto zap_items = [this]()
+    {
+        items.clear();
+        has_special = false;
+        has_artefact = false;
+        special_in_stack = false;
+        artefact_in_stack = false;
+    };
 
     if (!_grid_has_perceived_item(pos))
     {
+        zap_items();
+        pile_signature = 0;
         visited = true;
         return;
     }
@@ -366,6 +384,17 @@ void Stash::update()
         lucky_upgrade_item(*si);
         item_refs.push_back(&*si);
     }
+
+    // Every view revisits every visible stash, and sorting a pile costs a Lua
+    // call and several regexes per item. The result only moves with the pile.
+    const size_t signature = _pile_signature(item_refs);
+    if (signature == pile_signature)
+    {
+        visited = visited || pos == you.pos();
+        return;
+    }
+    pile_signature = signature;
+    zap_items();
 
     // Find the item with the highest score to bring to the front of the stash.
     int highest_score = INT_MIN;

@@ -485,6 +485,7 @@ catch2-tests/test_species.o \
 catch2-tests/test_cooperative_delay.o \
 catch2-tests/test_oozle.o \
 catch2-tests/test_starting_accounts.o \
+catch2-tests/test_stash_refresh.o \
 catch2-tests/test_oozle_memory.o \
 catch2-tests/test_oozle_memory_effects.o \
 catch2-tests/test_tortle.o \

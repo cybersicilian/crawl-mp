@@ -1,6 +1,6 @@
 /* Non-play working surfaces: saved expeditions, join friends, chronicle.
  * Semantic --ui-* tokens are preferred; folio/art tokens are the fallback. */
-body:has(#lobby.has-chapter-index:not([style*="display: none"])) { background: #19211c; background-image: radial-gradient(ellipse at 50% 0, #32443255, transparent 70%); }
+body[data-layer="lobby"]:has(#lobby.has-chapter-index) { background: #19211c; background-image: radial-gradient(ellipse at 50% 0, #32443255, transparent 70%); }
 #lobby.has-chapter-index {
     --hub-paper: var(--ui-page, var(--tt-folio-paper, #ebe5d5));
     --hub-raised: var(--ui-page-raised, var(--tt-folio-raised, #f6f1e6));

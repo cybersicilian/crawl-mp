@@ -69,6 +69,12 @@ const root = path.resolve(__dirname, '..');
             window.hero.floor_items_known = true; window.hero.floor_items = []; window.modules['./floor-items'].update();
         });
         assert.equal(await page.locator('.floor-items-empty').textContent(), 'Nothing to pick up here.');
+        assert.equal(await page.evaluate(() => {
+            const note = document.querySelector('.floor-items-empty');
+            window.hero.pos = { x: window.hero.pos.x + 1, y: window.hero.pos.y };
+            window.modules['./floor-items'].update();
+            return note === document.querySelector('.floor-items-empty');
+        }), true, 'Walking across empty tiles keeps the tray instead of rebuilding it');
         await page.evaluate(() => {
             window.jQuery(document).trigger('game_cleanup'); window.modules['./floor-items'].init();
         });

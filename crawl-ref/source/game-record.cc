@@ -219,4 +219,18 @@ namespace game_record
         }
         free(encoded);
     }
+
+    // The library reads the record on demand, and saving, dying and linking an
+    // item publish for themselves, so a live game only has to stay roughly
+    // current. Publishing renders every identified artefact and rewrites a
+    // file, which is far too much for every redraw.
+    void publish_periodically()
+    {
+        static time_t last_published = 0;
+        const time_t now = time(nullptr);
+        if (now - last_published < 2)
+            return;
+        last_published = now;
+        publish();
+    }
 }

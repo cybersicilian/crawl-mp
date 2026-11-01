@@ -315,6 +315,10 @@ protected:
     bool cell_needs_redraw(const coord_def& gc);
 
     FixedArray<map_cell, GXM, GYM> m_current_map_knowledge;
+    string m_last_record_identity;
+    map<int, pair<size_t, string>> m_equipment_profiles;
+    bool m_party_state_deferred = false;
+    unsigned int m_last_party_state_tick = 0;
     map<uint32_t, coord_def> m_monster_locs;
     bool m_need_full_map;
 
@@ -348,6 +352,7 @@ protected:
 
     bool m_mcache_ref_done;
     void _mcache_ref(bool inc);
+    void _mcache_ref(const coord_def& gc, bool inc);
 
     void _send_cursor(cursor_type type);
     void _send_map(bool spectator_only = false);
@@ -365,6 +370,9 @@ protected:
                     bool force_full);
     void _send_messages();
     void _send_party_state();
+    bool _can_defer_party_state();
+    void _write_equipment_profile(int slot, const player &p);
+    void _recache_knowledge(int x1, int y1, int x2, int y2);
     string _ai_state_json();
     string _ai_guard();
     void _send_ai_state();

@@ -21,7 +21,7 @@
 namespace
 {
 bool configured_multiplayer = false;
-const char* const mode_key = "multiplayer_session";
+const string mode_key = "multiplayer_session";
 const char* const clock_key = "multiplayer_aut_clock";
 const char* const floor_key = "multiplayer_aut_floor";
 const char* const region_clock_key = "multiplayer_region_clock";

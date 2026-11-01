@@ -1270,6 +1270,10 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         ttyrec_path = self.config_path("ttyrec_path")
         if ttyrec_path and config.get('enable_ttyrecs'):
             self.ttyrec_filename = os.path.join(ttyrec_path, self.lock_basename)
+        else:
+            # Nothing reads the terminal without a recording. Stay last: this
+            # flag would take a following argument as a script to run.
+            call.append("-headless")
 
         processes[os.path.abspath(self.socketpath)] = self
 

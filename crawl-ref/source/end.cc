@@ -17,6 +17,7 @@
 #include "describe.h"
 #include "dungeon.h"
 #include "files.h"
+#include "game-record.h"
 #include "god-abil.h"
 #include "god-passive.h"
 #include "ghost.h"
@@ -292,6 +293,8 @@ NORETURN void end_game(scorefile_entry &se)
     const bool non_death = death_type == KILLED_BY_QUITTING
                         || death_type == KILLED_BY_WINNING
                         || death_type == KILLED_BY_LEAVING;
+
+    game_record::publish();
 
     int hiscore_index = -1;
 #ifndef SCORE_WIZARD_CHARACTERS

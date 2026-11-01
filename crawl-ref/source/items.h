@@ -162,6 +162,7 @@ void autopickup(bool forced = false);
 
 void set_item_autopickup(const item_def &item, autopickup_level_type ap);
 int item_autopickup_level(const item_def &item);
+size_t item_state_hash(size_t seed, const item_def &item);
 
 int find_free_slot(const item_def &i);
 

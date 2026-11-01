@@ -3255,6 +3255,24 @@ void set_item_autopickup(const item_def &item, autopickup_level_type ap)
     you.force_autopickup[item.base_type][_autopickup_subtype(item)] = ap;
 }
 
+/// Combine what distinguishes this item's current state into a hash.
+size_t item_state_hash(size_t seed, const item_def &item)
+{
+    const auto mix = [&seed](size_t value)
+    {
+        seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    };
+    mix(item.base_type);
+    mix(item.sub_type);
+    mix(item.plus);
+    mix(item.plus2);
+    mix(item.special);
+    mix(item.quantity);
+    mix(item.flags);
+    mix(hash<string>()(item.inscription));
+    return seed;
+}
+
 int item_autopickup_level(const item_def &item)
 {
     return you.force_autopickup[item.base_type][_autopickup_subtype(item)];

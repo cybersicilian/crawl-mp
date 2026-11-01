@@ -144,7 +144,7 @@ a:hover {
     z-index: 2000;
 }
 /* Account dialogs provide their own scrim; keep the legacy overlay from doubling it. */
-body:has(.account-dialog:not([style*="display: none"])) #overlay { opacity: 0.25; }
+#overlay.account-scrim { opacity: 0.25; }
 
 .hidden, .templates {
     display: none !important;

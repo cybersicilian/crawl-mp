@@ -160,6 +160,81 @@ No production staging or activation was performed: automatic approval review
 rejected uploading the release and launching the privileged staging job without
 explicit production-deployment authorization.
 
+## Solo turn cost
+
+`util/engine-bench.py` plays seeded solo games over the same datagram socket as
+the server, with the server's launch environment and a pty. It reads
+instructions and CPU time for the crawl process from the kernel, so results stay
+comparable on a busy host, and it hashes everything the player is told. Equal
+hashes across two builds show they played the same game.
+
+Most engine work in a solo game was repeated presentation, not game logic:
+
+- Every step of a run rebuilt the complete party snapshot. Skills and equipment
+  fill most of it and almost never change, and the snapshot was most of what
+  the engine sent. Runs now refresh it five times a second. A deferred snapshot
+  goes out before the input mode and before any wait for input, because the
+  client recentres its camera on the hero as soon as it sees the command mode.
+  Parties keep every snapshot.
+- Each view deep-copied the map three times. Knowledge is now recached for the
+  viewport and its rim, for cells being redrawn and for complete maps, and the
+  diff baseline only follows cells that were sent. That baseline therefore always
+  matches what the client holds.
+- Redraws rendered every identified artefact and rewrote the record file that
+  the library reads. Live games now publish at most every two seconds; saving,
+  dying and linking an item still publish at once.
+- `record_identity` is sent when it changes and to new clients, and the JSON
+  writers no longer format through `vsnprintf`.
+- The server passes `-headless` when ttyrecs are disabled, so the engine stops
+  drawing a terminal nothing reads and the server stops waking for its output.
+  Engine socket messages already count as activity for idle tracking, and hangup
+  saves work the same way at commands, menus and prompts.
+- Text database lookups were SQLite transactions with file locks, and redraws
+  and monster speech repeat the same keys. Raw entries are now kept while a
+  database is open; embedded Lua still runs on every query.
+- A map cell's item glyph override needs a Lua call and an item name, and only
+  terminals and glyph displays use it. Menus and panels keep their overrides.
+- Each view revisited every visible stash, and sorting a pile costs a Lua call
+  and regexes per item. An unchanged pile is now skipped, with a refresh every
+  few dozen turns because usefulness can change without the pile changing.
+- The equipment profile is cached against the pack and equipment, because it
+  was a third of each snapshot. It refreshes every few turns for inputs like
+  mutations that don't touch the pack.
+- Save compression uses zlib level 4, which is three times faster than the
+  default on real saves for files about 8% larger. Old saves read as before.
+- Message filters and colours remember their result for repeated messages, and
+  the item scan that reads every floor item's name samples one turn in 32
+  outside debug builds.
+
+Against the previous release, on four seeds of 350 commands each, instructions
+per game turn fell from 36.2 million to 13.2 million: autoexplore 65%, fighting
+61% and stairs 56% lower. A wizard-built late game scene, with a full pack and a
+crowd in view, fell 35% per key. Engine output fell from 107 MB to 48 MB, with
+4,869 party snapshots down to about 1,800. The games were identical line for line.
+
+On the page, style recalculation was the largest cost of each update. Three
+lobby rules on `<body>` used `:has()` with `[style*=...]`, so every inline style
+write anywhere, including each jQuery `.show()` or `.hide()`, re-ran them. They
+now use `body[data-layer]` and a scrim class. `quiet-jquery.js` stops `.text()`
+replacing an unchanged text node and `.hide()` reading computed style for hidden
+elements. The floor tray no longer rebuilds on empty tiles, and the direction pad
+writes tooltip attributes directly: a `title` is converted by `tooltip-source.js`,
+so rewriting one on every update cost a write, an observer callback and a removal.
+Hit point changes re-render powers without rebuilding the inventory, and the
+sidebar's forced-layout fit only runs when the number of buttons changes.
+
+Avoid `:has()` on `<body>` or `#normal`, and never put `[style]` inside `:has()`.
+Rank style work with `ScheduleStyleInvalidationTracking` trace events, but take
+timings from untraced runs, because tracing inflates invalidation costs. A fast
+machine hides most of this: compare at 6x CPU throttle, over many alternating
+games, since a single game's timings vary more than the differences being
+measured. Replacing a selector can change its specificity, so compare computed
+styles against the old build at each state the rule applies to.
+
+Early game numbers do not predict late game costs. Build a crowded scene with
+wizard commands before ranking work, because stash, item name and snapshot costs
+scale with what the hero can see and carries.
+
 ## Dungeon frame updates
 
 Map state still merges immediately. Map, party, camera, local cursor and peer
