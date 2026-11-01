@@ -1,15 +1,17 @@
-/* Isolated native hair candidate: actual layered renderer, source and mask checks. */
+/* Hair/headwear overlays: actual layered renderer, source and native alpha checks. */
 module.exports = function hairChecks() {
     const m=window.benchModules, art=m['./tile-art-direction'], pack=m['texture-pack'];
-    const tiles=m['./tileinfo-player'], dngn=m['./tileinfo-dngn'], catalog=m['./environment-art'].hair;
+    const key=window.creatureCatalogKey||'hair', headwear=key==='headwear';
+    const tiles=m['./tileinfo-player'], dngn=m['./tileinfo-dngn'], catalog=m['./environment-art'][key];
     const raw=document.getElementById('player'), sheet=document.getElementById(catalog.id), errors=[];
+    const density=window.devicePixelRatio||1;
     const check=(value,message)=>{if(!value)errors.push(message);};
     const canvas=(w,h=w)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
     const pixels=image=>{const c=canvas(image.naturalWidth||image.width,image.naturalHeight||image.height),ctx=c.getContext('2d');
         ctx.drawImage(image,0,0);return ctx.getImageData(0,0,c.width,c.height).data;};
     const native=pixels(raw), source=pixels(sheet), entries=[], bodies=m['./environment-art'].humanBases.entries;
     const details=new Map(), regions=m['./environment-sprites'].player.filter(r=>r.sheet===catalog.id);
-    check(regions.length===6,'exact six native hair opt-ins');
+    check(regions.length===6,'exact six native overlay opt-ins');
     for(const entry of catalog.entries){
         const index=tiles[entry.names[0]], info=tiles.get_tile_info(index), detail=art.tile('player',index,8), data=pixels(detail);
         details.set(index,detail);check(detail.width===(info.ex-info.sx)*8,'eightfold hair detail');
@@ -40,16 +42,30 @@ module.exports = function hairChecks() {
         if(['HAIR_HIGHTAIL','HAIR_PONYTAIL_YELLOW','HAIR_TOPKNOT'].includes(entry.names[0]))check(golden>paintedOpaque*.5,'blond identity: '+entry.label);
         if(nativeBlue)check(blue>8,'native blue tie: '+entry.label);
         if(entry.names[0]==='HAIR_TOPKNOT')check(red>8,'red topknot tie');
+        if(headwear){
+            if(['HELM_HAT_NORMAL','HELM_CAP_BLUE'].includes(entry.names[0]))check(blue>paintedOpaque*.5,'blue cloth identity: '+entry.label);
+            if(['HELM_HELM_IRON','HELM_FHELM_GRAY','HELM_HOOD_GRAY'].includes(entry.names[0]))check(gray>paintedOpaque*.5,'neutral metal/cloth identity: '+entry.label);
+            if(entry.names[0]==='HELM_CROWN')check(golden>paintedOpaque*.6,'gold crown identity');
+        }
         entries.push({label:entry.label,gutter,holes,nativeOpaque,nativeBlue,paintedOpaque,blue,red,golden,gray});
     }
     const main=document.createElement('main');document.body.prepend(main);
-    main.innerHTML='<h1>Painted hair composition candidate</h1><p>Each pair uses the same painted body: native hair at left, candidate hair at right. Isolated source validation; not selected or deployed.</p>'
-        +'<table><thead><tr><th>Hair style</th>'+bodies.map(e=>'<th>'+e.label+'</th>').join('')+'</tr></thead><tbody></tbody></table>';
-    function draw(body,hair,nativeHair,state={}){
-        const c=canvas(128), renderer=new m['./cell_renderer'].DungeonCellRenderer();renderer.native_art=Boolean(state.native);renderer.init(c);renderer.set_cell_size(128,128);
-        const layers=[[body,32],[tiles.LEG_PANTS_BLUE,32],[tiles.BODY_PLATE,32],[hair,32]];
+    main.innerHTML='<h1>Painted '+(headwear?'headwear':'hair')+' composition</h1><p>Each pair uses the same painted body: native overlay first, painted overlay second. Controlled renderer fixture, not native gameplay.</p>'
+        +'<table><thead><tr><th>'+(headwear?'Headwear':'Hair style')+'</th>'+bodies.map(e=>'<th>'+e.label+'</th>').join('')+'</tr></thead><tbody></tbody></table>';
+    function parts(body,hair,state={}){
+        const layers=[[body,32],[tiles.LEG_PANTS_BLUE,32],[tiles.BODY_PLATE,32]];
+        if(headwear&&hair<tiles.HELM_FHELM_OFS&&state.beard)layers.push([tiles.BEARD_SHORT_BLACK,32]);
+        if(headwear&&hair<tiles.HELM_HELM_OFS)layers.push([tiles.HAIR_SHORT_BLACK,32]);
+        layers.push([hair,32]);
         if(state.helmet)layers.push([tiles[state.helmet],32]);
         layers.push([tiles.HAND1_SHORT_SWORD_SLANT,32],[tiles.HAND2_BUCKLER,32]);
+        return layers;
+    }
+    function draw(body,hair,nativeHair,state={}){
+        const size=state.size||128,drawScale=size*density/32>4?8:4;
+        const c=canvas(size*density);c.style.width=size+'px';c.style.height=size+'px';
+        const renderer=new m['./cell_renderer'].DungeonCellRenderer();renderer.native_art=Boolean(state.native);renderer.init(c);renderer.set_cell_size(size,size);
+        const layers=parts(body,hair,state);
         const calls=[], samples=[], drawPlayer=renderer.draw_player, drawImage=renderer.ctx.drawImage.bind(renderer.ctx);
         renderer.ctx.drawImage=(...args)=>{samples.push(args[0]);drawImage(...args);};
         renderer.draw_player=function(index){calls.push(index);const before=this.native_art;
@@ -60,12 +76,16 @@ module.exports = function hairChecks() {
             fg:{value:tiles.MCACHE_START},doll:layers,flv:{f:dngn.FLOOR_GREY_DIRT,s:0},trans:Boolean(state.trans)}});
         const passes=state.water?2:1;check(calls.length===layers.length*passes,'hair layer pass count');
         for(let p=0;p<passes;p++)for(let n=0;n<layers.length;n++)check(calls[p*layers.length+n]===layers[n][0],'native hair/helmet/gear order');
-        if(state.native)check(samples.includes(raw)&&!samples.includes(art.tile('player',body,4))
-            &&!samples.includes(art.tile('player',hair,4)),'native-only renderer bypasses body and hair artwork');
+        if(headwear){
+            check(calls.includes(tiles.HAIR_SHORT_BLACK)===(hair<tiles.HELM_HELM_OFS),'native helmet hides hair');
+            check(calls.includes(tiles.BEARD_SHORT_BLACK)===Boolean(state.beard&&hair<tiles.HELM_FHELM_OFS),'native full helmet hides beard');
+        }
+        if(state.native)check(samples.includes(raw)&&!samples.includes(art.tile('player',body,drawScale))
+            &&!samples.includes(art.tile('player',hair,drawScale)),'native-only renderer bypasses body and overlay artwork');
         else{
-            check(samples.includes(art.tile('player',body,4)),'painted body retained');
+            check(samples.includes(art.tile('player',body,drawScale)),'painted body retained');
             if(nativeHair)check(samples.includes(raw),'native comparison hair retained');
-            else check(samples.includes(art.tile('player',hair,4)),'candidate hair sampled');
+            else check(samples.includes(art.tile('player',hair,drawScale)),'selected overlay sampled at backing scale');
         }
         return c;
     }
@@ -80,16 +100,26 @@ module.exports = function hairChecks() {
         name.textContent=entry.label;row.append(name);main.querySelector('tbody').append(row);
         for(const body of bodies){const id=tiles[body.names[0]],td=document.createElement('td');
             td.append(draw(id,hair,true),draw(id,hair,false));row.append(td);pairs++;
-            draw(id,hair,false,{helmet:'HELM_HELM_IRON'});draw(id,hair,false,{helmet:'HELM_FHELM_GRAY'});
-            draw(id,hair,false,{water:true,trans:true});}
+            if(headwear)draw(id,hair,false,{beard:true});
+            else{draw(id,hair,false,{helmet:'HELM_HELM_IRON'});draw(id,hair,false,{helmet:'HELM_FHELM_GRAY'});}
+            draw(id,hair,false,{water:true,trans:true});
+            draw(id,hair,false,{size:32});
+            const portrait=canvas(128),ctx=portrait.getContext('2d'),images=[],drawImage=ctx.drawImage.bind(ctx);
+            ctx.drawImage=(...args)=>{images.push(args[0]);drawImage(...args);};
+            const layers=parts(id,hair).map(([index,ymax])=>{const info=tiles.get_tile_info(index);
+                return{texture:'player',sx:info.sx,sy:info.sy,w:info.ex-info.sx,h:info.ey-info.sy,ox:info.ox,oy:info.oy,ymax};});
+            check(m['./native-tile-art'].draw(portrait,{layers})&&images.includes(art.tile('player',hair,4)),'composed portrait samples selected overlay');}
     }
-    for(const name of ['HAIR_SHORT_RED','HAIR_LONG_WHITE','HAIR_PONYTAIL_BLACK','HELM_HAT_NORMAL','HELM_CROWN'])
+    const selected=new Set(Object.values(m['./environment-art']).flatMap(sheet=>(sheet.entries||[]).flatMap(entry=>entry.names)));
+    for(const name of ['HAIR_SHORT_RED','HAIR_LONG_WHITE','HAIR_PONYTAIL_BLACK','HELM_HAT_NORMAL','HELM_CROWN','HELM_HELM_RED','HELM_HOOD_RED','HELM_ART_DRAGONHELM']){
+        if(selected.has(name))continue;
         if(Number.isInteger(tiles[name]))check(!art.tile('player',tiles[name]),'unselected headwear stays independent: '+name);
+    }
     const first=tiles[catalog.entries[0].names[0]], savedId=sheet.id;
     sheet.id+='_held';check(!art.tile('player',first),'missing hair sheet fallback');sheet.id=savedId;
     pack.select('classic');check(!art.tile('player',first),'Classic keeps native hair');pack.select('illustrated');
     check(pixels(raw).every((v,i)=>v===native[i]),'native atlas unchanged');
-    const report={passed:errors.length===0,nativeEngine:false,entries,humanHairPairs:pairs,
+    const report={passed:errors.length===0,nativeEngine:false,density,largeDrawScale:density>1?8:4,smallDrawScale:4,entries,humanOverlayPairs:pairs,...(headwear?{humanHeadwearPairs:pairs,nativeHairBeardHideRules:true}:{humanHairPairs:pairs}),
         nativeOpeningsPreserved:true,nativeLayerOrder:true,nativeBypass:true,deferredPortraitRefresh:true,classicFallback:true,errors};
     window.hairDiagnostics=report;
     if(errors.length)throw new Error(Array.from(new Set(errors)).join('; '));

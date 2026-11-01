@@ -1,0 +1,144 @@
+{
+  "status": "LOCAL_SOURCE_SELECTED",
+  "tool": "built-in image_gen",
+  "prompt": "docs/graphics-2026-10-31/headwear/prompt-v1.txt",
+  "referenceImages": [
+    "crawl-ref/source/webserver/static/tabletop/assets/player-armour-v1.png",
+    "crawl-ref/source/rltiles/player/head/cone_blue.png",
+    "crawl-ref/source/rltiles/player/head/iron1.png",
+    "crawl-ref/source/rltiles/player/head/iron2.png",
+    "crawl-ref/source/rltiles/player/head/hood_gray.png"
+  ],
+  "referenceRoles": [
+    "painted material/style only",
+    "native blue hat shape/color",
+    "native open iron helm shape/opening",
+    "native closed iron helm shape/metal faceplate",
+    "native grey hood shape/opening"
+  ],
+  "additionalInspectedNativeReferences": [
+    "crawl-ref/source/rltiles/player/head/cap_blue.png",
+    "crawl-ref/source/rltiles/player/head/crown_gold1.png"
+  ],
+  "original": "/Users/iancaltabiano/.codex/generated_images/01a192af-2378-7973-8dd1-051ea9067b86/exec-9b0ba2e4-23d5-41ca-a977-493c2f36a213.png",
+  "sha256": "468e5e4440bebc407dd0579025dd5a37d92243f437f2476d1a827701e36b4529",
+  "rgba_sha256": "7837f5a3ac645d31f10c6680a6d580281afa2b7d167415d8747909f820f7e5c2",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2010968,
+  "alpha": {
+    "zero": 1105463,
+    "opaque": 0,
+    "partial": 467401
+  },
+  "generatedPixelsUnmodified": true,
+  "selectedCatalog": true,
+  "nativeEngine": false,
+  "productionMutation": false,
+  "sourceCrops": [
+    {
+      "name": "HELM_HAT_NORMAL",
+      "sprite": {
+        "x": 0,
+        "y": 0,
+        "w": 550,
+        "h": 512
+      },
+      "alphaBounds": [
+        56,
+        117,
+        518,
+        418
+      ],
+      "minimumGutter": 32
+    },
+    {
+      "name": "HELM_CAP_BLUE",
+      "sprite": {
+        "x": 550,
+        "y": 0,
+        "w": 474,
+        "h": 512
+      },
+      "alphaBounds": [
+        36,
+        190,
+        451,
+        400
+      ],
+      "minimumGutter": 23
+    },
+    {
+      "name": "HELM_HELM_IRON",
+      "sprite": {
+        "x": 1024,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      "alphaBounds": [
+        112,
+        85,
+        419,
+        461
+      ],
+      "minimumGutter": 51
+    },
+    {
+      "name": "HELM_FHELM_GRAY",
+      "sprite": {
+        "x": 0,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      },
+      "alphaBounds": [
+        108,
+        27,
+        417,
+        424
+      ],
+      "minimumGutter": 27
+    },
+    {
+      "name": "HELM_HOOD_GRAY",
+      "sprite": {
+        "x": 512,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      },
+      "alphaBounds": [
+        35,
+        18,
+        486,
+        444
+      ],
+      "minimumGutter": 18
+    },
+    {
+      "name": "HELM_CROWN",
+      "sprite": {
+        "x": 1024,
+        "y": 512,
+        "w": 512,
+        "h": 512
+      },
+      "alphaBounds": [
+        60,
+        145,
+        474,
+        333
+      ],
+      "minimumGutter": 38
+    }
+  ],
+  "controlledProof": "docs/graphics-2026-10-31/headwear/browser-1/headwear/validation.json",
+  "visualReview": true,
+  "validationPending": [
+    "canonical selected source regression",
+    "lossless output validation",
+    "actual native gameplay"
+  ],
+  "outputIntegrityReceipt": "docs/graphics-2026-10-31/headwear/assets-1/verification.json"
+}

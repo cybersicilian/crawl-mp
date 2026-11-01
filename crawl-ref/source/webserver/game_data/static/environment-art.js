@@ -86,6 +86,16 @@ define([], function () {
                 { label: "Black mamba", names: ["MONS_BLACK_MAMBA"], variants: false, sprite: { x: 418, y: 840, w: 418, h: 414 } },
                 { label: "Water moccasin", names: ["MONS_WATER_MOCCASIN"], variants: false, sprite: { x: 836, y: 840, w: 418, h: 414 } }
             ] },
+        headwear: { id: "illustrated_headwear", file: "headwear-v1.png", width: 1536, height: 1024,
+            columns: 3, rows: 2, cell: 512, alphaBands: [[0, 32]],
+            style: { fit: "stretch", brightness: 1, contrast: 1 }, entries: [
+                { label: "Blue hat", names: ["HELM_HAT_NORMAL"], variants: false, sprite: { x: 0, y: 0, w: 550, h: 512 } },
+                { label: "Blue cap", names: ["HELM_CAP_BLUE"], variants: false, sprite: { x: 550, y: 0, w: 474, h: 512 } },
+                { label: "Open iron helm", names: ["HELM_HELM_IRON"], variants: false, sprite: { x: 1024, y: 0, w: 512, h: 512 } },
+                { label: "Closed grey helm", names: ["HELM_FHELM_GRAY"], variants: false, sprite: { x: 0, y: 512, w: 512, h: 512 } },
+                { label: "Grey hood", names: ["HELM_HOOD_GRAY"], variants: false, sprite: { x: 512, y: 512, w: 512, h: 512 } },
+                { label: "Gold crown", names: ["HELM_CROWN"], variants: false, sprite: { x: 1024, y: 512, w: 512, h: 512 } }
+            ] },
         hair: { id: "illustrated_hair", file: "hair-overlays-v1.png", width: 1536, height: 1024,
             columns: 3, rows: 2, cell: 512, alphaBands: [[0, 32]],
             style: { fit: "stretch", brightness: 1, contrast: 1 }, entries: [
@@ -130,6 +140,16 @@ define([], function () {
                 { label: "Six-headed hydra", heads: 6, names: ["MONS_HYDRA_5"], variants: false },
                 { label: "Seven-plus-headed hydra", heads: 7, names: ["MONS_HYDRA_6"], variants: false,
                     sprite: { x: 0, y: 836, w: 450, h: 418 } }
+            ] },
+        eliteHumanoids: { id: "illustrated_elites", file: "dungeon-elites-v1.png", title: "Orc and gnoll leaders", width: 1536, height: 1024,
+            columns: 3, rows: 2, cell: 512,
+            style: { brightness: 1.06, contrast: 1.04, fit: "stretch" }, entries: [
+                { label: "Orc knight", names: ["MONS_ORC_KNIGHT"], variants: false, sprite: { x: 0, y: 0, w: 512, h: 508 } },
+                { label: "Orc warlord", names: ["MONS_ORC_WARLORD"], variants: false, sprite: { x: 512, y: 0, w: 512, h: 502 } },
+                { label: "Orc high priest", names: ["MONS_ORC_HIGH_PRIEST"], variants: false, sprite: { x: 1024, y: 0, w: 512, h: 508 } },
+                { label: "Orc sorcerer", names: ["MONS_ORC_SORCERER"], variants: false, sprite: { x: 0, y: 508, w: 512, h: 516 } },
+                { label: "Gnoll sergeant", names: ["MONS_GNOLL_SERGEANT"], variants: false, sprite: { x: 512, y: 502, w: 512, h: 522 } },
+                { label: "Gnoll bouda", names: ["MONS_GNOLL_BOUDA"], variants: false, sprite: { x: 1024, y: 508, w: 512, h: 516 } }
             ] },
         humanoids: { id: "illustrated_humanoids", file: "dungeon-humanoids-v1.png", width: 1254, height: 1254,
             columns: 3, rows: 3, cell: 418,

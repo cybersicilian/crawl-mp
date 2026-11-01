@@ -126,3 +126,22 @@ unselected hair/helmets and the 3D native-only renderer retain native art.
 The 36 paired body/hair browser checks pass; canonical selection regressions,
 lossless output and native gameplay are tracked in
 `docs/graphics-2026-10-31/hair/README.md`. This asset is outside the frozen release.
+
+`dungeon-elites-v1.png` adds six exact local Illustrated bodies: orc knight,
+warlord, high priest, sorcerer, gnoll sergeant and gnoll bouda. Generated pixels
+and provenance remain intact. The bodies have empty hands; native tables supply
+their distinct weapon offsets and the three available shield positions. Fallen
+spectral orcs and other unselected forms keep independent art and portrait crops.
+The selected catalog passes equipment, grip, marker, water and portrait checks;
+the original nine humanoids also pass regression. Lossless output is tracked in
+`docs/graphics-2026-10-31/elite-humanoids/README.md`. No 3D actor override is added.
+
+
+`headwear-v1.png` adds exact local Illustrated selections for the blue hat and
+cap, open iron helm, closed grey helm, grey hood and first gold crown. Full native
+alpha masks retain face openings and silhouettes; native doll flags still govern
+hair/beard hiding. Explicit single-state mappings leave other colors, crown
+variants, mutations and artefacts independent. The original generated PNG is
+unchanged. Paired body, hair and headwear comparisons and output receipts are
+tracked in `docs/graphics-2026-10-31/headwear/README.md`. This does not add a 3D
+actor override.

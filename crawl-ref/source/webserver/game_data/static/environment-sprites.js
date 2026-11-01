@@ -35,6 +35,7 @@ define(["./tileinfo-dngn", "./environment-art", "./tileinfo-player"], function (
     append(art.lair, regions.player, player, "player", false);
     append(art.hydras, regions.player, player, "player", false);
     append(art.humanoids, regions.player, player, "player", false);
+    append(art.eliteHumanoids, regions.player, player, "player", false);
     append(art.equipment, regions.player, player, "player", false);
     append(art.shields, regions.player, player, "player", false);
     append(art.melee, regions.player, player, "player", false);
@@ -42,6 +43,7 @@ define(["./tileinfo-dngn", "./environment-art", "./tileinfo-player"], function (
     append(art.ranged, regions.player, player, "player", false);
     append(art.armour, regions.player, player, "player", false);
     append(art.humanBases, regions.player, player, "player", false);
+    append(art.headwear, regions.player, player, "player", false);
     append(art.hair, regions.player, player, "player", false);
     return regions;
 });
