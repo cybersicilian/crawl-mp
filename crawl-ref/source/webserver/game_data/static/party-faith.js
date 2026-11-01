@@ -248,18 +248,24 @@ function ($, model, icons, tiles) {
         if (image.complete) requestAnimationFrame(draw);
         else image.addEventListener("load", draw, { once: true });
     }
+    function faithState(faith) {
+        return !faith.known ? "unknown" : faith.penance ? "penance" : faith.worships ? "devout" : "none";
+    }
+    function opensFaith($button, hero, faith, inspect) {
+        return $button
+            .on("click", function (event) { event.stopPropagation(); inspect(hero.slot, faith.worships || faith.kind === "defiance" ? "abilities" : "overview"); })
+            .on("keydown keypress keyup", function (event) { event.stopPropagation(); });
+    }
     function badge(hero, faith, inspect) {
         var state = !faith.known ? "unknown" : faith.penance ? "penance" : faith.worships ? "devout" : "unaffiliated";
-        var $button = $("<button type='button' class='party-status-icon party-faith'></button>")
+        var $button = opensFaith($("<button type='button' class='party-status-icon party-faith'></button>"), hero, faith, inspect)
             .addClass("is-" + state)
             .attr({ id: "party_faith_" + hero.slot, "aria-label": hero.name + ": " + faith.name + ". " + faith.summary,
                 "data-faith-kind": faith.kind, "data-faith-standing": faith.standing,
                 "data-tip-title": faith.name, "data-tip-body": [faith.summary, faith.description].filter(Boolean).join("\n"),
                 "data-tip-meta": "Inspect faith and divine abilities" })
             .append($("<span class='party-faith-art' aria-hidden='true'></span>")
-                .append(icons.icon(!faith.known ? "question" : faith.kind === "defiance" ? "spark" : faith.worships ? "faith" : "faith-none")))
-            .on("click", function (event) { event.stopPropagation(); inspect(hero.slot, faith.worships || faith.kind === "defiance" ? "abilities" : "overview"); })
-            .on("keydown keypress keyup", function (event) { event.stopPropagation(); });
+                .append(icons.icon(!faith.known ? "question" : faith.kind === "defiance" ? "spark" : faith.worships ? "faith" : "faith-none")));
         if (faith.worships) altar($button, faith);
         if (faith.penance || faith.standing !== "none") {
             $button.append($("<span class='party-faith-mark' aria-hidden='true'></span>")
@@ -267,6 +273,42 @@ function ($, model, icons, tiles) {
         }
         $button.attr("data-tip-faith-base", $button.attr("data-tip-body"));
         return $button;
+    }
+    // Six pips for the native stars, the next one filling toward its threshold.
+    // Xom and Gozag keep a fixed identity rail; Defiance is one continuous reserve.
+    function rail(faith) {
+        var $rail = $("<span class='party-piety-rail' aria-hidden='true'></span>");
+        if (faith.kind === "defiance")
+            return $rail.append($("<i></i>").css("width", Math.max(0, Math.min(100, faith.reserve)) + "%"));
+        if (faith.kind !== "piety") return $rail;
+        for (var star = 0; star < 6; star++) {
+            var held = faith.rank === null || star > faith.rank ? 0 : star < faith.rank ? 100 : faith.progress || 0;
+            $rail.append($("<span class='party-piety-star'></span>").append($("<i></i>").css("width", held + "%")));
+        }
+        return $rail;
+    }
+    function meterLabel(faith) {
+        if (faith.penance) return "Penance";
+        if (faith.kind === "defiance") return "Defy " + faith.reserve;
+        if (faith.kind === "gold") return "Gold";
+        if (faith.kind === "xom") return "Mood";
+        if (faith.rank !== null) return "Piety " + faith.rank + "/6";
+        return faith.worships || !faith.known ? "Piety ?" : "Piety";
+    }
+    // Favor is the third meter in the HP and MP row; the shrine art names the deity.
+    function meter(hero, inspect) {
+        var faith = model.faith(hero), theme = shrines[(faith.altar || "").replace("DNGN_ALTAR_", "")] || plain;
+        var $meter = opensFaith($("<button type='button' class='party-piety party-bar-wrap tr-meter'></button>"), hero, faith, inspect)
+            .attr({ id: "party_piety_" + hero.slot, "aria-label": hero.name + ": " + faith.name + ". " + faith.summary,
+                "data-faith-kind": faith.kind, "data-faith-state": faithState(faith),
+                "data-faith-tier": faith.rank === null ? "unknown" : faith.rank,
+                "data-tip-title": faith.name, "data-tip-badge": "[Faith]",
+                "data-tip-body": [faith.summary, faith.description].filter(Boolean).join("\n"),
+                "data-tip-meta": "Inspect faith and divine abilities" })
+            .append(rail(faith), $("<span class='party-bar-label' aria-hidden='true'></span>").text(meterLabel(faith)));
+        // The native client ships jQuery 1.8; custom properties require CSSOM.
+        $meter[0].style.setProperty("--faith-accent", theme.color);
+        return $meter;
     }
     function portrait(hero, compass, inspect) {
         var faith = model.faith(hero), key = (faith.altar || "").replace("DNGN_ALTAR_", "");
@@ -278,12 +320,12 @@ function ($, model, icons, tiles) {
                 "data-faith-atmosphere": atmosphere[key] ? atmosphere[key][0] : "none",
                 "data-faith-motion": faith.penance || !faith.worships ? "still" : faith.kind !== "piety" ? "identity"
                     : faith.rank === null || faith.rank === 0 ? "still" : faith.rank < 4 ? "quiet" : "radiant",
-                "data-faith-state": !faith.known ? "unknown" : faith.penance ? "penance" : faith.worships ? "devout" : "none" })
+                "data-faith-state": faithState(faith) })
             .append(compass, frame(faith, theme, atmosphere[key], idolSettings[key]), badge(hero, faith, inspect));
         // The native client ships jQuery 1.8; custom properties require CSSOM.
         $portrait[0].style.setProperty("--faith-accent", theme.color);
         $portrait[0].style.setProperty("--faith-ambient-delay", phase(9, hero.slot * .7));
         return $portrait;
     }
-    return { portrait: portrait };
+    return { portrait: portrait, meter: meter };
 });

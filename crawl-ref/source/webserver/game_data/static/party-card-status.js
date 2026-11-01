@@ -140,31 +140,6 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if (progress !== null) $bar.attr("aria-valuenow", progress);
         return $bar;
     }
-    // Deity and favour as one labelled text row; the shrine portrait stays decorative.
-    function faithRow(hero) {
-        var view = model.faith(hero);
-        var stars = view.kind === "piety" && view.rank !== null
-            ? new Array(view.rank + 1).join("\u2605") + new Array(7 - view.rank).join("\u2606") : "";
-        var standing = view.kind === "defiance" ? "Defiance " + view.reserve + "/100"
-            : !view.known ? "unknown" : !view.worships ? "" : view.kind === "gold" ? "gold" : view.kind === "xom" ? "mood"
-            : view.rank === null ? "favour unknown" : view.rank + "/6";
-        var $row = $("<div class='party-faith-row' role='img' tabindex='0'></div>")
-            .attr({ id: "party_faith_row_" + hero.slot, "data-faith-kind": view.kind,
-                "data-faith-state": !view.known ? "unknown" : view.penance ? "penance" : view.worships ? "devout" : "none",
-                "aria-label": "Faith: " + view.name + (standing ? ", " + standing : "") + (view.penance ? ", under penance" : ""),
-                "data-tip-title": view.name, "data-tip-badge": "[Faith]", "data-tip-body": view.summary,
-                "data-tip-meta": view.description || "Press ^ for religion details" })
-            .append($("<span class='party-faith-label' aria-hidden='true'></span>").text("Faith"),
-                $("<span class='party-faith-name' aria-hidden='true'></span>").text(view.name))
-            .on("click keydown keypress keyup", function (event) {
-                if (event.type.indexOf("key") === 0 && event.key === "Tab") return;
-                event.stopPropagation();
-            });
-        if (stars) $row.append($("<span class='party-faith-stars' aria-hidden='true'></span>").text(stars));
-        else if (standing && view.worships) $row.append($("<span class='party-faith-standing' aria-hidden='true'></span>").text(standing));
-        if (view.penance) $row.append($("<span class='party-faith-penance' aria-hidden='true'></span>").text("Penance"));
-        return $row;
-    }
     function portrait(hero, compass, inspect) {
         var root = faith.portrait(hero, compass, inspect);
         portraitStatus.decorate(root[0], hero);
@@ -194,5 +169,5 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if (view.lethal) $bar.append($("<span class='party-hp-warning' aria-hidden='true'>!</span>"));
         return $bar;
     }
-    return { create: create, portrait: portrait, passives: passives, activity: activity, health: health, faithRow: faithRow };
+    return { create: create, portrait: portrait, piety: faith.meter, passives: passives, activity: activity, health: health };
 });

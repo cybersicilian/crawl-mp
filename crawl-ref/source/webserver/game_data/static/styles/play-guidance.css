@@ -53,11 +53,10 @@ body.workflow-floor-in-rail #normal #hud_bottom_row:has(#hud_bottom_map.hud-floa
 #normal #quickbar_primary .dcss-dock-btn.is-suggested:not(:disabled) { border-color: #dec88c; box-shadow: inset 0 0 0 1px #dec88c66; }
 
 /* ---- Hero card ---- */
-/* Header: portrait beside identity; reading chips and faith share one line. */
+/* Header: portrait beside identity; reading chips share one line. */
 #normal .is-controlled-card.party-icon-first { grid-template-columns: 48px minmax(0, 1fr); gap: 4px 10px; }
 #normal .is-controlled-card.party-icon-first > .party-member-meta { gap: 3px 8px; }
 #normal .is-controlled-card .party-icon-meta { flex: 0 1 auto; }
-#normal .is-controlled-card .party-faith-row { flex: 1 1 auto; min-height: 20px; align-items: center; }
 #normal .is-controlled-card .party-member-timing { margin-left: auto; }
 /* Every reading below the header sits in the same three columns. */
 #normal .is-controlled-card > .party-self-details { margin: 4px 0 0; }

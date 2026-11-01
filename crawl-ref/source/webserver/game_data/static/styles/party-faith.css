@@ -43,6 +43,26 @@
 #normal .party-portrait .party-faith:is(:hover, :focus-visible) { outline: 1px solid #ead6a1; outline-offset: 1px; background: #d8bd7a12; }
 .party-portrait .party-faith-mark { top: -1px; right: 0; z-index: 2; background: #1b2025; }
 .party-faith-mark .tt-icon { width: 16px; height: 16px; margin: 0; }
+/* Favor is the third meter in the HP and MP row, directly under the plinth. */
+#normal .party-card > .party-piety {
+    grid-column: 1; grid-row: 3; justify-self: center; align-self: start; display: block; box-sizing: content-box;
+    width: 58px; min-height: 0; margin: 0; padding: 0;
+    border-color: color-mix(in srgb, var(--faith-accent) 55%, #10171c); background: #0b1116; box-shadow: none; cursor: pointer;
+}
+#normal .is-controlled-card > .party-piety { grid-row: 2; }
+#normal .party-card > .party-piety:is(:hover, :focus-visible) { outline: 1px solid #ead6a1; outline-offset: 1px; }
+#normal .party-card > .party-piety.tr-meter .party-bar-label { justify-content: center; padding: 0; text-transform: uppercase; }
+.party-piety-rail { display: flex; gap: 1px; box-sizing: border-box; width: 100%; height: 100%; padding: 1px; }
+.party-piety-star { flex: 1 1 0; min-width: 0; background: color-mix(in srgb, var(--faith-accent) 16%, #151c21); }
+/* Deity accents run pale, so the fill stays mid-tone for the label on top of it. */
+.party-piety-rail i { display: block; height: 100%; background: linear-gradient(color-mix(in srgb, var(--faith-accent) 58%, #11161c), color-mix(in srgb, var(--faith-accent) 36%, #11161c)); }
+#normal .party-card > .party-piety[data-faith-state='none'] { border-color: #5b5f5c80; }
+.party-piety[data-faith-state='none'] .party-piety-star { background: #ffffff0d; }
+#normal .party-card > .party-piety[data-faith-state='none'] .party-bar-label { color: var(--ui-muted, #c0b296); }
+#normal .party-card > .party-piety[data-faith-state='unknown'] { border-style: dashed; }
+#normal .party-card > .party-piety[data-faith-tier='6'] { box-shadow: 0 0 4px color-mix(in srgb, var(--faith-accent) 55%, transparent); }
+.party-piety[data-faith-kind='xom'] .party-piety-rail { background: repeating-linear-gradient(118deg, #0b1116 0 3px, color-mix(in srgb, var(--faith-accent) 45%, #0b1116) 3px 5px); }
+.party-piety[data-faith-kind='gold'] .party-piety-rail { background: repeating-linear-gradient(90deg, #0b1116 0 2px, color-mix(in srgb, var(--faith-accent) 55%, #0b1116) 2px 6px); }
 .party-portrait[data-faith-tier='0'] .faith-frame-structure { stroke-dasharray: 13 2 3 1; opacity: .7; }
 .party-portrait[data-faith-tier='0'] .faith-carving { opacity: .4; }
 .party-portrait[data-faith-tier='1'] .faith-plinth-stone { stroke-width: .9; }
@@ -51,7 +71,7 @@
 .party-portrait[data-faith-tier='6'] .faith-plinth-bevel { stroke-width: 1.35; }
 .party-portrait[data-faith-kind='xom'] .faith-frame-structure { stroke-dasharray: 8 2 2 1; }
 .party-portrait[data-faith-kind='gold'] .faith-plinth-stone { fill: #393324; }
-.party-portrait[data-faith-state='penance'] { --faith-accent: #dc998c !important; }
+:is(.party-portrait, .party-piety)[data-faith-state='penance'] { --faith-accent: #dc998c !important; }
 .party-portrait[data-faith-state='penance'] .faith-craft { opacity: .45; }
 #normal .party-portrait .party-faith.is-penance { background: transparent; }
 .party-portrait[data-faith-state='penance'] .faith-frame-structure { stroke-dasharray: 6 2; }

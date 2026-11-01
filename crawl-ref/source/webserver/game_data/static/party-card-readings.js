@@ -6,7 +6,7 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./pa
         event.stopPropagation();
     }
     // Short visible captions so no reading is a bare number; full names stay in hover/focus help.
-    var captions = { level: "Lv", floor: "Floor", ac: "AC", ev: "EV", sh: "SH", stealth: "Stealth", noise: "Noise", speed: "Move" };
+    var captions = { level: "Lv", floor: "Floor", attack: "Atk", ac: "AC", ev: "EV", sh: "SH", stealth: "Stealth", noise: "Noise", speed: "Move" };
     function chip(root, key, glyph) {
         var node = root.children("[data-reading='" + key + "']");
         if (node.length) return node;
@@ -33,6 +33,22 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./pa
             .attr("aria-label", label).appendTo(meta);
     }
     function finite(value) { return Number.isFinite(value) ? value : null; }
+    // Offense is the one category the controlled card otherwise leaves to the "@" report.
+    function attack(root, hero) {
+        var view = statusModel.attack(hero);
+        var value = view.turns === null ? view.damage
+            : (view.damage === null ? "" : view.damage + "/") + view.turns + "t";
+        var lines = view.weapons.map(function (weapon) {
+            return weapon.name + ": " + (weapon.damage === null ? "damage unavailable"
+                : weapon.damage + " damage per hit, before armour");
+        });
+        if (view.turns !== null)
+            lines.push(view.turns + " turns per attack" + (view.perTurn === null ? "" : ", about " + view.perTurn + " damage per turn"));
+        var node = reading(root, "attack", "blade", "Attack", value, lines.join("\n"));
+        node.attr("data-tip-meta", "Press @ for attack info");
+        if (view.damage !== null && view.turns !== null)
+            node.attr("aria-label", "Attack: " + view.damage + " damage every " + view.turns + " turns");
+    }
     function metadata(card, hero) {
         var meta = card.children(".party-member-meta"), root = meta.children(".party-icon-meta");
         if (!root.length) {
@@ -64,6 +80,8 @@ define(["jquery", "./status-icons", "./native-tile-art", "./frame-update", "./pa
         } else {
             floorNode.removeAttr("data-region-id data-region-sync");
         }
+        if (card.hasClass("is-controlled-card")) attack(root, hero);
+        else root.children("[data-reading='attack']").remove();
         if (!card.hasClass("is-controlled-card")) {
             var defenses = cluster(root, "party-defense-cluster", "Defenses");
             [["ac", "armour", "Armour class"], ["ev", "evasion", "Evasion"], ["sh", "shield", "Shielding"]]

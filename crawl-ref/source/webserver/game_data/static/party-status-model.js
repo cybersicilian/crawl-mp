@@ -84,6 +84,13 @@ define([], function () {
             drained: percent(known ? capacity - member.hp_max : 0), forecast: forecast,
             lethal: loss > 0 && forecast === 0, effects: active, summary: summary };
     }
+    // Native piety_breakpoint() thresholds; the index is the star rank held.
+    var starThresholds = [0, 30, 50, 75, 100, 120, 160];
+    function starProgress(rank, piety) {
+        if (rank === null || rank >= 6 || !Number.isFinite(piety)) return null;
+        var floor = starThresholds[rank], span = starThresholds[rank + 1] - floor;
+        return Math.max(0, Math.min(99, Math.floor(100 * (piety - floor) / span)));
+    }
     function faith(member) {
         if (member.species === "Eldritch" && Number.isFinite(member.defiance)) {
             return { name: "Profanation", known: true, worships: false, altar: null, rank: null,
@@ -96,6 +103,7 @@ define([], function () {
         var special = god === "Xom" ? "xom" : god === "Gozag" ? "gold" : "piety";
         var rank = worships && special === "piety" && Number.isInteger(member.piety_rank)
             && member.piety_rank >= 0 && member.piety_rank <= 6 ? member.piety_rank : null;
+        var progress = starProgress(rank, member.piety);
         var penance = worships && Number.isFinite(member.penance) ? member.penance > 0 : null;
         var relation = member.god_relation;
         var standing = /^(Shared Covenant|Allied Concordat)$/.test(relation) ? "allied"
@@ -103,14 +111,15 @@ define([], function () {
         var favor = !known ? "Faith information unavailable." : !worships ? "No deity."
             : special === "gold" ? "Gozag uses gold rather than piety stars."
             : special === "xom" ? "Xom's mood is volatile; ordinary piety stars do not apply."
-            : rank === null ? "Favor information unavailable." : "Favor: " + rank + " of 6 stars.";
+            : rank === null ? "Favor information unavailable." : "Favor: " + rank + " of 6 stars."
+                + (progress === null ? "" : " " + progress + "% toward the next star.");
         if (worships && penance === null) favor += " Penance information unavailable.";
         if (penance) favor += " Under penance.";
         if (worships && relation && relation !== "None" && relation !== "Unaligned") favor += " " + relation + ".";
         var name = !known ? "Faith unavailable" : worships ? god : "No deity";
         var altar = worships ? "DNGN_ALTAR_" + god.replace(/^the /i, "").replace(/^Jiyva\b.*/, "Jiyva")
             .replace(/[^A-Za-z]+/g, "_").toUpperCase() : null;
-        return { name: name, known: known, worships: worships, altar: altar, rank: rank,
+        return { name: name, known: known, worships: worships, altar: altar, rank: rank, progress: progress,
             kind: special, penance: penance, standing: standing, summary: favor,
             description: [member.faith_description, worships && member.god_politics].filter(Boolean).join("\n") };
     }
@@ -142,6 +151,18 @@ define([], function () {
         var progress = capped ? 100 : Number.isFinite(hero.xl_next) ? Math.max(0, Math.min(100, hero.xl_next)) : null;
         return { level: level, cap: cap, capped: capped, progress: progress };
     }
+    // Native ratings lead with the number; Woe's flavour text has none.
+    function attack(hero) {
+        var entries = hero.attack_info && Array.isArray(hero.attack_info.damage) ? hero.attack_info.damage : [];
+        var weapons = entries.map(function (entry) {
+            var damage = parseInt(entry.rating, 10);
+            return { name: entry.name, damage: Number.isFinite(damage) ? damage : null };
+        });
+        var delay = Number.isFinite(hero.atk_aut) && hero.atk_aut > 0 ? hero.atk_aut : null;
+        var damage = weapons.length ? weapons[0].damage : null;
+        return { weapons: weapons, damage: damage, turns: delay === null ? null : (delay / 10).toFixed(1),
+            perTurn: damage === null || delay === null ? null : Math.round(damage / (delay / 10)) };
+    }
     return { effects: effects, banes: banes, visualEffects: visualEffects, health: health, faith: faith, activity: activity,
-        experience: experience };
+        experience: experience, attack: attack };
 });

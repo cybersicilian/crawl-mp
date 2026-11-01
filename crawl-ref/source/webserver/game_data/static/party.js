@@ -277,7 +277,6 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 $def.append($("<span class='party-stat-lbl'>EV:</span>")).append($("<span class='party-stat-val'></span>").text(model.display(m.ev) + " "));
                 $def.append($("<span class='party-stat-lbl'>SH:</span>")).append($("<span class='party-stat-val'></span>").text(sh_val));
                 $meta.append($def);
-                $meta.append(cardStatus.faithRow(m));
                 $card.append($top);
                 $card.append($meta);
 
@@ -314,7 +313,7 @@ function ($, comm, client, dungeon_renderer, display, minimap, model, inspector,
                 $bars.append($hpWrap).append($mpWrap);
                 if (resource.label === "Heat")
                     $bars.append($("<span class='party-heat-guidance'></span>").text(heatHelp.caption(resource)));
-                $card.append($bars);
+                $card.append($bars, cardStatus.piety(m, open_party_inspector));
 
                 var mv_aut = m.move_aut, ak_aut = m.atk_aut;
                 var $timing = $("<span class='party-member-timing'></span>");

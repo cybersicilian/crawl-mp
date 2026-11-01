@@ -204,7 +204,7 @@ function () {
                     m.statuses, m.statuses_known, m.banes, m.banes_known,
                     m.equipment_profile && m.equipment_profile.slots,
                     m.move_aut, m.atk_aut, data.multiplayer && m.can_act,
-                    m.god_relation, m.penance, m.god_politics, m.piety_rank, m.faith_description,
+                    m.god_relation, m.penance, m.god_politics, m.piety, m.piety_rank, m.faith_description,
                     m.resists, m.defiance, m.elder_rites, m.elder_summary, m.chain_summary,
                     (m.spells || []).flatMap(function (sp) { return [sp.letter, sp.name, sp.level]; }),
                     (m.mutations || []).flatMap(function (mt) { return [mt.name, mt.level]; }),

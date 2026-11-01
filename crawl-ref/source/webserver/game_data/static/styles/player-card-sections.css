@@ -1,7 +1,7 @@
 /* The active hero, native actions, and carried items form one scrolling card. */
 /* Only the identity and vital signs reserve a portrait column. */
 #normal .party-card.is-controlled-card { align-content: start; }
-#normal .is-controlled-card > .party-portrait { grid-row: 1 / span 2; }
+#normal .is-controlled-card > .party-portrait { height: 64px; grid-row: 1; }
 #normal .is-controlled-card > .party-member-meta {
     grid-column: 2; grid-row: 1; align-items: center; margin: 0;
 }
@@ -32,7 +32,7 @@
 #normal .is-controlled-card .personal-stat-context { flex-wrap: wrap; }
 #normal .is-controlled-card #stats_noise { min-width: 48px; }
 /* Companion identity and vital signs share the portrait's height. */
-#normal .party-card:not(.is-controlled-card) > .party-portrait { height: 68px; grid-row: 1 / span 4; }
+#normal .party-card:not(.is-controlled-card) > .party-portrait { height: 68px; grid-row: 1 / span 2; }
 #normal .party-card:not(.is-controlled-card) > .party-member-top { grid-row: 1; }
 #normal .party-card:not(.is-controlled-card) .party-member-identity { min-height: 16px; align-items: center; }
 #normal .party-card:not(.is-controlled-card) .party-member-name { font-size: 12px; line-height: 16px; }
@@ -51,6 +51,7 @@
 .workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-member-effects { grid-row: 4; }
 .workflow-compact-roster #normal .party-member-effects:not(:has(.party-effect, .party-bane)) { display: none; }
 @media (pointer: coarse) {
+    #normal .is-controlled-card > .party-portrait { height: 78px; }
     #normal .party-card:not(.is-controlled-card) > .party-portrait { height: 78px; }
     .workflow-compact-roster #normal .party-card:not(.is-controlled-card) .party-card-toolbar {
         grid-column: 2; grid-row: 3; grid-template-columns: minmax(0, 1fr); row-gap: 4px;
@@ -103,8 +104,10 @@
 }
 
 /* ---- Compact roster: portrait, meters and initiative only ---- */
+/* Companion bars sit beside the portrait here, so only the controlled hero has a meter row. */
+.workflow-compact-roster #normal .party-card:not(.is-controlled-card) > .party-piety { display: none; }
 /* Compact keeps the controlled hero's Defense cluster so AC/EV/SH read like the companions' rows. */
-.workflow-compact-roster #normal .party-card :is(.party-hero-identity, .party-faith-row, .party-icon-utility, .party-effect-names, .party-member-effects, .party-sidebar-extra, .party-sidebar-pack, .party-self-details .hud-stat-cluster:not(.hud-defense-cluster), .party-self-details .personal-stat-context) { display: none !important; }
+.workflow-compact-roster #normal .party-card :is(.party-hero-identity, .party-icon-utility, .party-effect-names, .party-member-effects, .party-sidebar-extra, .party-sidebar-pack, .party-self-details .hud-stat-cluster:not(.hud-defense-cluster), .party-self-details .personal-stat-context) { display: none !important; }
 .workflow-compact-roster #normal .party-card .party-self-details .hud-defense-cluster { margin: 0; padding-top: 0; }
 .workflow-compact-roster #normal .party-card .party-self-details .hud-defense-cluster .hud-stat-cluster-title { display: none; }
 .workflow-compact-roster #normal .party-card .party-member-meta { display: flex; }
@@ -119,7 +122,6 @@
     #normal .party-hero-identity { gap: 4px; }
     #normal .party-hero-line { font-size: 9.5px; }
     #normal .party-role-badge { min-height: 16px; padding: 0 5px 0 3px; font-size: 8.5px; }
-    #normal .party-faith-row { min-height: 14px; font-size: 9.5px; }
     #normal .party-bar-wrap.tr-meter { height: 13px; }
     #normal .party-bar-wrap.tr-meter .party-bar-label { line-height: 13px; font-size: 9px; }
     #normal .party-card-sections .hud-item-grid, #normal .party-card-sections #hud_powers > .hud-panel-body { max-height: 96px; overflow-y: auto; }
@@ -130,6 +132,9 @@
     #normal #hud_sidebar_scroll { overscroll-behavior: contain; }
 }
 @media (max-height: 800px) {
-    #normal .party-card:not(.is-controlled-card) .party-faith-row { display: none; }
     #normal .party-card:not(.is-controlled-card) > .party-portrait { height: 60px; }
+}
+/* The narrow rail drops chip icons so Lv, Floor and Atk stay on one line. */
+@media (max-width: 1100px) {
+    #normal .is-controlled-card .party-icon-meta .party-icon-reading .tt-icon { display: none; }
 }
