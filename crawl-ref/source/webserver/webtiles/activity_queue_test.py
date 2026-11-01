@@ -180,6 +180,51 @@ class ActivityQueueTests(unittest.TestCase):
         f.complete()
         self.assertEqual([packet["msg"] for packet in f.packets()], ["key", "record_save"])
 
+    def test_peer_action_waits_for_a_prompt_then_runs_as_a_new_command(self):
+        f = self.fixture
+        f.key(1, ord("i"))
+        f.pump.prompt_boundary()
+        f.key(0, ord("l"))
+        f.clients[0].send_message.assert_not_called()
+        self.assertEqual(f.pump.owner, 1)
+        self.assertEqual([packet["player_id"] for packet in f.packets()], [1])
+        self.assertEqual(f.control.snapshot(f.clients[0])["members"][0].get("queued_action"), "input")
+        f.key(1, 27)  # The owner answers immediately, ahead of the waiting peer.
+        self.assertEqual([packet["keycode"] for packet in f.packets()], [ord("i"), 27])
+        f.complete()
+        self.assertEqual([(packet["player_id"], packet["keycode"]) for packet in f.packets()][-1], (0, ord("l")))
+        self.assertEqual(f.pump.owner, 0)
+
+    def test_keys_held_through_a_prompt_do_not_arrive_as_a_burst(self):
+        f = self.fixture
+        f.key(1, ord("i"))
+        f.pump.prompt_boundary()
+        for _ in range(40):
+            f.key(0, ord("l"))
+        f.clients[0].send_message.assert_not_called()
+        self.assertEqual(len(f.pump.inputs), 1)
+
+    def test_escape_clears_an_action_waiting_for_a_peers_prompt(self):
+        f = self.fixture
+        f.key(1, ord("i"))
+        f.pump.prompt_boundary()
+        f.key(0, ord("l"))
+        f.key(0, 27)
+        self.assertFalse(f.pump.inputs)
+        self.assertEqual(f.pump.owner, 1)
+
+    def test_peers_see_who_holds_a_prompt_until_it_closes(self):
+        f = self.fixture
+        self.state(0)
+        f.key(1, ord("i"))
+        self.assertFalse(any(hero.get("prompt_open") for hero in f.control.snapshot(f.clients[0])["members"]))
+        f.pump.prompt_boundary()
+        self.assertEqual([hero["slot"] for hero in f.control.snapshot(f.clients[0])["members"]
+                          if hero.get("prompt_open")], [1])
+        f.key(1, 27)
+        f.complete()
+        self.assertFalse(any(hero.get("prompt_open") for hero in f.control.snapshot(f.clients[0])["members"]))
+
     def test_save_rejection_for_another_heros_prompt_uses_save_result(self):
         f = self.fixture
         f.key(1, ord("i"))

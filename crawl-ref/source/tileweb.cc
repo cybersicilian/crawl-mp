@@ -2621,7 +2621,7 @@ void TilesFramework::write_tile_with_flags(tile_with_flags_t t)
     const int lo = t.value & 0xFFFFFFFF;
     const int hi = t.value >> 32;
     if (hi == 0)
-        tiles.write_message("%d", lo);
+        tiles.m_msg_buf += to_string(lo);
     else
         tiles.write_message("[%d,%d]", lo, hi);
 }
@@ -3370,8 +3370,11 @@ void TilesFramework::_send_party_state()
             weapon_str = wpn->name(DESC_PLAIN, true, false, false);
 
         json_write_string("activity", party::member_activity(slot));
+        // The server blanks these two for everyone but their own hero, so a
+        // partner's copy in another hero's view would only be thrown away.
+        const bool own_details = m_viewer_slot < 0 || m_viewer_slot == slot;
         json_open_array("trade_targets");
-        for (int target = 0; target < party::player_count(); ++target)
+        for (int target = 0; own_details && target < party::player_count(); ++target)
             if (same_level && party::trade_block_reason(slot, target).empty())
                 json_write_int(target);
         json_close_array();
@@ -3790,7 +3793,7 @@ void TilesFramework::_send_party_state()
 
         // Only the current level's visible stack is available in this context.
         // Off-floor heroes must never read this level's items at matching coords.
-        const bool floor_known = same_level && !downed && in_bounds(p.pos());
+        const bool floor_known = own_details && same_level && !downed && in_bounds(p.pos());
         json_write_bool("floor_items_known", floor_known);
         json_open_array("floor_items");
         for (int link = floor_known ? p.visible_igrd(p.pos()) : NON_ITEM;
@@ -4201,11 +4204,15 @@ void TilesFramework::redraw()
 
     m_text_menu.send();
 
+    const bool project = m_need_redraw || m_personal_dirty;
+
     _send_player();
-    _send_party_state();
+    // Every personal view carries this snapshot, and the server keeps only
+    // those. A party of four would otherwise build it a fifth time each turn.
+    if (!project || !_projects_personal_views())
+        _send_party_state();
     _send_messages();
 
-    const bool project = m_need_redraw || m_personal_dirty;
     if (m_need_redraw && m_view_loaded)
         _send_map(false);
 
@@ -4499,7 +4506,7 @@ void TilesFramework::json_write_comma()
     char last = m_msg_buf[m_msg_buf.size() - 1];
     if (last == '{' || last == '[' || last == ',' || last == ':')
         return;
-    write_message(",");
+    m_msg_buf.push_back(',');
 }
 
 void TilesFramework::json_write_icons(const set<tileidx_t> &icons)
@@ -4514,16 +4521,18 @@ void TilesFramework::json_write_name(const string& name)
 {
     json_write_comma();
 
-    write_message("\"");
+    // These writers run thousands of times per multiplayer turn, once per
+    // hero per recipient, and formatting was a quarter of each redraw.
+    m_msg_buf.push_back('"');
     write_message_escaped(name);
-    write_message("\":");
+    m_msg_buf.append("\":");
 }
 
 void TilesFramework::json_write_int(int value)
 {
     json_write_comma();
 
-    write_message("%d", value);
+    m_msg_buf += to_string(value);
 }
 
 void TilesFramework::json_write_int(const string& name, int value)
@@ -4538,10 +4547,7 @@ void TilesFramework::json_write_bool(bool value)
 {
     json_write_comma();
 
-    if (value)
-        write_message("true");
-    else
-        write_message("false");
+    m_msg_buf.append(value ? "true" : "false");
 }
 
 void TilesFramework::json_write_bool(const string& name, bool value)
@@ -4556,7 +4562,7 @@ void TilesFramework::json_write_null()
 {
     json_write_comma();
 
-    write_message("null");
+    m_msg_buf.append("null");
 }
 
 void TilesFramework::json_write_null(const string& name)
@@ -4571,9 +4577,9 @@ void TilesFramework::json_write_string(const string& value)
 {
     json_write_comma();
 
-    write_message("\"");
+    m_msg_buf.push_back('"');
     write_message_escaped(value);
-    write_message("\"");
+    m_msg_buf.push_back('"');
 }
 
 void TilesFramework::json_write_string(const string& name, const string& value)

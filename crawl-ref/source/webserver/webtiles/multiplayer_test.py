@@ -359,16 +359,16 @@ class MultiplayerTest(unittest.TestCase):
         self.assertFalse(CrawlProcessHandlerBase._cancel_abandoned_prompt(game, 1, 9, 7))
         game.conn.send_message.assert_not_called()
 
-    def test_peer_keys_cannot_wait_in_queue_to_answer_an_owned_native_prompt(self):
+    def test_peer_keys_wait_out_an_owned_native_prompt_without_answering_it(self):
         streams = SimpleNamespace(native_ready=True)
         pump = ActivityPump(self.control, streams, lambda: {0, 1}, Mock())
         pump.start_manual(1)
         pump.prompt = True
-        game = SimpleNamespace(party_control=self.control, activity_pump=pump, conn=Mock())
+        game = SimpleNamespace(party_control=self.control, activity_pump=pump, conn=Mock(),
+                               _receivers=self.clients)
         CrawlProcessHandler.handle_input(game, json.dumps(dict(msg="key", keycode=106)), self.host)
-        self.host.send_message.assert_called_once_with("game_action_error",
-            message="Another hero is finishing an action. Your view is unchanged.")
-        self.assertFalse(pump.inputs)
+        self.host.send_message.assert_not_called()
+        self.assertEqual([entry.slot for entry in pump.inputs], [0])
         game.conn.send_message.assert_not_called()
         CrawlProcessHandler.handle_input(game, json.dumps(dict(msg="key", keycode=27)), self.guest)
         self.assertEqual(json.loads(game.conn.send_message.call_args.args[0])["player_id"], 1)
@@ -442,8 +442,10 @@ class MultiplayerTest(unittest.TestCase):
         self.assertEqual(response["prompt_activity_id"], request)
         self.assertEqual(response["player_id"], 1)
         self.assertTrue(pump.inflight)
+        sent = game.conn.send_message.call_count
         game.handle_input(json.dumps(dict(msg="key", keycode=106)), self.host)
-        self.host.send_message.assert_called_once()
+        self.assertEqual(game.conn.send_message.call_count, sent)
+        self.assertEqual([entry.slot for entry in pump.inputs], [0])
 
     def test_native_automation_prompt_does_not_release_the_command_token(self):
         pump = ActivityPump(self.control, self.streams, lambda: {0, 1}, Mock())

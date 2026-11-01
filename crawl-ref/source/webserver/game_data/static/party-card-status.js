@@ -169,5 +169,19 @@ function ($, model, icons, faith, portraitStatus, properties) {
         if (view.lethal) $bar.append($("<span class='party-hp-warning' aria-hidden='true'>!</span>"));
         return $bar;
     }
-    return { create: create, portrait: portrait, piety: faith.meter, passives: passives, activity: activity, health: health };
+    // Keep the live node: focus, an open tooltip and a running hit animation
+    // all survive, and decorators reapply from the fresh attributes.
+    function refresh(node, $fresh) {
+        var fresh = $fresh[0];
+        if (!node) return;
+        Array.from(node.attributes).forEach(function (attribute) {
+            if (attribute.name !== "aria-describedby" && !fresh.hasAttribute(attribute.name))
+                node.removeAttribute(attribute.name);
+        });
+        Array.from(fresh.attributes).forEach(function (attribute) {
+            node.setAttribute(attribute.name, attribute.value);
+        });
+        $(node).empty().append($fresh.contents());
+    }
+    return { create: create, portrait: portrait, piety: faith.meter, passives: passives, activity: activity, health: health, refresh: refresh };
 });

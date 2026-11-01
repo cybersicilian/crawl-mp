@@ -693,7 +693,7 @@ chunk_writer::chunk_writer(package *parent, const string &_name)
     zs.zalloc    = 0;
     zs.zfree     = 0;
     zs.opaque    = Z_NULL;
-    if (deflateInit(&zs, Z_DEFAULT_COMPRESSION))
+    if (deflateInit(&zs, pkg->fast_writes ? Z_BEST_SPEED : Z_DEFAULT_COMPRESSION))
         fail("save file compression failed during init: %s", zs.msg);
 #define ZB_SIZE 32768
     zs.next_out  = z_buffer = (Bytef*)malloc(ZB_SIZE);

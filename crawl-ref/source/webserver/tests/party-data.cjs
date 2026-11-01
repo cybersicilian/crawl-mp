@@ -79,12 +79,8 @@ const cardState = { controllable_slots: [0], members: [{ slot: 0, name: 'Lyra', 
     spells: [{ letter: 'a', name: 'Magic Dart', level: 1 }], mutations: [] }] };
 const signature = model.cardSignature(cardState, 0, false);
 for (const change of [
-    state => { state.members[0].hp = 9; },
-    state => { state.members[0].poison_survival = 4; },
-    state => { state.members[0].real_hp_max = 20; },
     state => { state.members[0].trait = 'ghost'; },
     state => { state.members[0].heads = 4; },
-    state => { state.members[0].xl_next = 23; },
     state => { state.members[0].spells[0].name = 'Foxfire'; },
     state => { state.members[0].piety_rank = 4; },
     state => { state.members[0].penance = 9; },
@@ -93,14 +89,30 @@ for (const change of [
     state => { state.members[0].banes = [{ id: 1, name: 'Bane of Lethargy', recovery_xl_tenths: 13 }]; },
     state => { state.members[0].banes = []; },
     state => { state.members[0].banes_known = false; },
-    state => { state.members[0].connected = false; },
-    state => { state.members[0].activity = 'yield'; },
-    state => { state.members[0].queued_action = 'move'; },
-    state => { state.members[0].queued_action_count = 2; },
     state => { state.controllable_slots = []; }
 ]) {
     const changed = structuredClone(cardState); change(changed);
     assert.notEqual(model.cardSignature(changed, 0, false), signature);
+}
+// Per-action readings refresh in place; none may rebuild every card.
+const liveSignature = state => model.liveSignature(state, state.members[0]);
+for (const change of [
+    state => { state.members[0].hp = 9; },
+    state => { state.members[0].poison_survival = 4; },
+    state => { state.members[0].real_hp_max = 20; },
+    state => { state.members[0].mp = 3; },
+    state => { state.members[0].xl_next = 23; },
+    state => { state.members[0].connected = false; },
+    state => { state.members[0].activity = 'yield'; },
+    state => { state.members[0].queued_action = 'move'; },
+    state => { state.members[0].queued_action_count = 2; },
+    state => { state.members[0].prompt_open = true; },
+    state => { state.active_slot = 1; },
+    state => { state.multiplayer = true; state.members[0].can_act = true; }
+]) {
+    const changed = structuredClone(cardState); change(changed);
+    assert.notEqual(liveSignature(changed), liveSignature(cardState));
+    assert.equal(model.cardSignature(changed, 0, false), signature);
 }
 assert.notEqual(model.cardSignature(cardState, 1, false), signature);
 assert.notEqual(model.cardSignature(cardState, 0, true), signature);

@@ -130,6 +130,9 @@ define([], function () {
                 description: "This hero's reserved player is disconnected. Their combat action may hold this region until they reconnect." };
         if (member.on_same_level === false) return { label: member.place || "Elsewhere", tone: "away" };
         if (typeof member.alive !== "boolean") return { label: "Unavailable", tone: "unknown" };
+        if (state.multiplayer && member.prompt_open && member.slot !== state.controlled_slot)
+            return { label: "Deciding", tone: "combat",
+                description: "This player has a menu or prompt open, which pauses the game for everyone. Your next action runs as soon as they finish." };
         if (member.queued_action)
             return { label: "Queued" + (member.queued_action_count > 1 ? " (" + member.queued_action_count + ")" : ""),
                 tone: "combat", description: "Your action waits for native readiness. Escape clears queued actions." };

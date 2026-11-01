@@ -470,6 +470,7 @@ catch2-tests/test_equipment_profile.o \
 catch2-tests/test_equipment_memory.o \
 catch2-tests/test_equipment_matrix.o \
 catch2-tests/test_party_trade.o \
+catch2-tests/test_package.o \
 catch2-tests/test_party_session.o \
 catch2-tests/test_party_friendly_fire.o \
 catch2-tests/test_party_tally.o \

@@ -193,17 +193,16 @@ function () {
         return JSON.stringify([
             controlled_slot,
             watching,
-            data.combat_locked, data.simultaneous_turns, data.active_slot,
+            data.combat_locked, data.simultaneous_turns,
             (data.members || []).flatMap(function (m) {
                 return [
                     m.slot, m.active, m.name, m.species, m.trait, m.heads, m.job, m.god, m.title, m.ai, data.ai_manage,
-                    m.xl, m.xl_cap, m.xl_next, m.str, m.intel, m.dex, m.place, m.on_same_level,
+                    m.xl, m.xl_cap, m.str, m.intel, m.dex, m.place, m.on_same_level,
                     m.region_id, m.region_combat, m.same_region,
-                    m.ac, m.ev, m.sh, m.hp, m.hp_max, m.real_hp_max, m.poison_survival, m.mp, m.mp_max,
-                    m.ghost_haunting, m.alive, m.connected, m.activity, m.queued_action, m.queued_action_count,
+                    m.ac, m.ev, m.sh, m.ghost_haunting, m.alive,
                     m.statuses, m.statuses_known, m.banes, m.banes_known,
                     m.equipment_profile && m.equipment_profile.slots,
-                    m.move_aut, m.atk_aut, data.multiplayer && m.can_act,
+                    m.move_aut, m.atk_aut,
                     m.god_relation, m.penance, m.god_politics, m.piety, m.piety_rank, m.faith_description,
                     m.resists, m.defiance, m.elder_rites, m.elder_summary, m.chain_summary,
                     (m.spells || []).flatMap(function (sp) { return [sp.letter, sp.name, sp.level]; }),
@@ -215,8 +214,17 @@ function () {
         ]);
     }
 
+    // These readings change with nearly every action, on every player's screen.
+    // Cards update them in place, so they stay out of the rebuild signature.
+    function member_live_signature(data, m)
+    {
+        return JSON.stringify([m.hp, m.hp_max, m.real_hp_max, m.poison_survival, m.mp, m.mp_max, m.xl_next,
+            m.connected, m.activity, m.queued_action, m.queued_action_count, m.prompt_open,
+            data.multiplayer && m.can_act, data.active_slot]);
+    }
+
     return { colours: party_slot_colours, normalize: normalize_party_member,
         abbreviation: format_char_abbrev, speciesName: species_name, magicResource: magic_resource, display: display, percentage: percentage, itemName: item_name,
-        controlledSlot: controlled_slot, inCombat: in_combat, canControl: can_control, canSwitch: can_switch, cardSignature: members_card_signature,
+        controlledSlot: controlled_slot, inCombat: in_combat, canControl: can_control, canSwitch: can_switch, cardSignature: members_card_signature, liveSignature: member_live_signature,
         initiativeTimeline: initiative_timeline, monsterTiming: monster_timing, relativePosition: relative_position };
 });

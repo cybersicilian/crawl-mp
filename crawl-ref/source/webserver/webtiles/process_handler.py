@@ -38,6 +38,11 @@ try:
 except:
     pass
 
+# A peer's action waits out another hero's open prompt as a new command. Only
+# the owner's input can answer that prompt (see ActivityPump.prompt_boundary).
+PROMPT_HELD_INPUTS = {"key", "click_cell", "power_action", "inv_item_use", "floor_item_action"}
+
+
 def _send_input_error(source, request, message):
     if source is None:
         return
@@ -1460,11 +1465,11 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         if self.party_control.multiplayer and obj.get("msg") == "input" and self.process and selected is not None:
             keys = obj.get("data", []) + [ord(ch) for ch in obj.get("text", "")]
             if keys and 27 not in keys and pump and pump.inflight and not own_prompt:
-                error = ("Another hero is finishing an action. Your view is unchanged." if pump.prompt
-                         else "Your hero is downed. Choose an action after revival."
+                error = ("Your hero is downed. Choose an action after revival."
                          if not pump.input_eligible(selected) else
                          "Input queue is full (32 commands). Escape clears it."
-                         if sum(entry.slot == selected for entry in pump.inputs) + len(keys) > 32 else None)
+                         if not pump.prompt
+                         and sum(entry.slot == selected for entry in pump.inputs) + len(keys) > 32 else None)
                 if error:
                     _send_input_error(source, obj, error)
                     return
@@ -1503,7 +1508,7 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 if source:
                     _send_input_error(source, obj, "Claim a party hero before sending game input.")
                 return
-            if pump.prompt:
+            if pump.prompt and obj.get("msg") not in PROMPT_HELD_INPUTS:
                 if source:
                     _send_input_error(source, obj, "Another hero is finishing an action. Your view is unchanged.")
                 return
@@ -1512,13 +1517,12 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
             requires_alive = obj.get("msg") in {
                 "key", "input", "click_cell", "target_cursor", "inv_item_action", "inv_item_use",
                 "power_action", "floor_item_action", "party_trade", "menu_action", "party_activity"}
-            accepted = pump.queue_input(
-                lambda: self.handle_input(msg, source, queued_floor=queued_floor)
-                if source in getattr(self, "_receivers", ())
-                and self.party_control.selected(source) == selected
-                and (not floor_bound or pump._view(selected).get("floor") == queued_floor) else None,
-                selected, requires_alive=requires_alive,
-            )
+            deliver = (lambda: self.handle_input(msg, source, queued_floor=queued_floor)
+                       if source in getattr(self, "_receivers", ())
+                       and self.party_control.selected(source) == selected
+                       and (not floor_bound or pump._view(selected).get("floor") == queued_floor) else None)
+            accepted = (pump.hold_for_prompt(deliver, selected) if pump.prompt
+                        else pump.queue_input(deliver, selected, requires_alive=requires_alive))
             if accepted:
                 CrawlProcessHandlerBase.publish_party_status(self)
             if not accepted and source:
