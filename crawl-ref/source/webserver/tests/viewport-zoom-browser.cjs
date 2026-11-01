@@ -58,6 +58,8 @@ fs.mkdirSync(output, { recursive: true });
                     './status-icons': { icon: () => document.createTextNode('↔') } };
                 window.define = (deps, factory) => { modules[window.moduleName] = factory(...deps.map(key => modules[key])); };
             });
+            await page.evaluate(() => { window.moduleName = 'dom-update'; });
+            await page.addScriptTag({ path: path.join(root, 'static/scripts/dom-update.js') });
             for (const name of ['util', 'dungeon_renderer', 'hud-layout', 'viewport-zoom']) {
                 await page.evaluate(name => { window.moduleName = './' + name; }, name);
                 await page.addScriptTag({ path: path.join(root, 'game_data/static', name + '.js') });

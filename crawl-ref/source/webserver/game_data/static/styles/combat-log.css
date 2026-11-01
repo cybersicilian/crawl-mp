@@ -61,6 +61,12 @@
 #normal #message_pane .game_message.msg-error { border-left-color: var(--log-danger); color: color-mix(in srgb, var(--log-danger) 70%, #fff); }
 #normal #message_pane .game_message:is(.msg-examine, .msg-flavour, .msg-sound, .msg-diagnostic) { opacity: .85; }
 #normal #message_pane .game_message .dcss-term { border-bottom: 1px dotted color-mix(in srgb, var(--ui-accent, #c39a5a) 70%, transparent); cursor: help; }
+/* A line repeated within one turn stacks into one entry with a count. */
+#normal #message_pane .game_message .msg-repeat-count {
+    display: inline-block; margin-left: 2px; padding: 0 5px; border-radius: 999px; vertical-align: 1px;
+    background: color-mix(in srgb, var(--ui-accent, #c39a5a) 22%, transparent); color: var(--ui-accent-bright, #f0d29a);
+    font: 600 10px/1.45 var(--log-font); text-shadow: none; white-space: nowrap;
+}
 /* The engine's more-prompt is a clear pill the player must answer. */
 #normal #more {
     display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; margin: 3px 0 0; padding: 2px 10px;
@@ -80,4 +86,5 @@
 @media (forced-colors: active) {
     #normal #message_pane .game_message { border-left-color: CanvasText; background: Canvas; }
     #normal #more { border-color: Highlight; background: Highlight; color: HighlightText; }
+    #normal #message_pane .game_message .msg-repeat-count { border: 1px solid CanvasText; }
 }

@@ -106,7 +106,7 @@ async function browserProof() {
             };
             window.define = (deps, factory) => { window.modules[window.moduleName] = factory(...deps.map(dep => window.modules[dep])); };
         });
-        for (const [name, file] of [['item-properties', '../../static/scripts/item-properties.js'],
+        for (const [name, file] of [['dom-update', '../../static/scripts/dom-update.js'], ['item-properties', '../../static/scripts/item-properties.js'],
             ['./effect-icon-catalog', 'effect-icon-catalog.js'], ['./effect-icon-art', 'effect-icon-art.js'], ['./status-icons', 'status-icons.js'], ['./frame-update', 'frame-update.js'],
             ['./hud-iconography', 'hud-iconography.js'], ['./party-model', 'party-model.js'], ['./party-status-model', 'party-status-model.js'],
             ['./party-faith', 'party-faith.js'], ['./portrait-status', 'portrait-status.js'], ['./party-card-status', 'party-card-status.js'], ['./player-card-details', 'player-card-details.js'], ['./party-initiative', 'party-initiative.js'],

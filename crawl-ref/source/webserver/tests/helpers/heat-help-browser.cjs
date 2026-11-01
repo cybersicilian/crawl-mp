@@ -29,6 +29,7 @@ async function verify(page, output) {
             '<div id="stats"><div id="stats_mpline" data-tip-title="Magic Points (MP): 5 / 5" data-tip-body="Ordinary MP tooltip"></div></div>');
     });
     for (const [name, file] of [
+        ['dom-update', 'static/scripts/dom-update.js'],
         ['./party-model', 'game_data/static/party-model.js'],
         ['character-stat-help', 'static/scripts/character-stat-help.js'],
         ['./player-stat-tips', 'game_data/static/player-stat-tips.js'],

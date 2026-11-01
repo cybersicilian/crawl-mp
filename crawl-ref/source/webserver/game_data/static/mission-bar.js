@@ -1,8 +1,8 @@
 /* Mission bar: who is in control, the turn mode, where we are and the world clock.
    Presentation only; party.js, gameplay-controls.js and party-progress.js keep
    writing the authoritative hero, mode, gold, floor and rune facts. */
-define(["jquery", "./party-model", "./player", "character-catalog", "./frame-update", "./status-icons"],
-function ($, model, player, catalog, frameUpdate, icons) {
+define(["jquery", "./party-model", "./player", "character-catalog", "./frame-update", "./status-icons", "dom-update"],
+function ($, model, player, catalog, frameUpdate, icons, dom) {
     "use strict";
     var portraitKey = "";
     function state() { return window.crawl_party && window.crawl_party.state; }
@@ -40,7 +40,7 @@ function ($, model, player, catalog, frameUpdate, icons) {
             : Number.isFinite(player.time) ? player.time : null;
         var text = turn !== null ? String(turn) : world !== null ? (world / 10).toFixed(1) : "?";
         var detail = world !== null ? "World clock " + (world / 10).toFixed(1) + " decaAut" : "";
-        if (value.textContent !== text) value.textContent = text;
+        dom.text(value, text);
         var description = turn !== null ? "Turn " + turn + (detail ? " · " + detail : "")
             : world !== null ? detail : "World clock unavailable";
         if (root.getAttribute("aria-label") !== description) {
@@ -56,9 +56,9 @@ function ($, model, player, catalog, frameUpdate, icons) {
         portrait(member);
         clock(current);
         var combat = Boolean(member && current && model.inCombat(current, member));
-        banner.setAttribute("data-mode", combat ? "combat" : "explore");
+        dom.attribute(banner, "data-mode", combat ? "combat" : "explore");
         var who = document.getElementById("party_banner_who");
-        if (who && member) who.setAttribute("title", member.name + (member.species ? " · " + member.species : "") + (member.job ? " " + member.job : ""));
+        if (who && member) dom.attribute(who, "title", member.name + (member.species ? " · " + member.species : "") + (member.job ? " " + member.job : ""));
     }
     var refresh = frameUpdate(update);
     function init() {

@@ -152,7 +152,6 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
             // Preserve the icon and hidden label across snapshot updates.
             rename($compactBtn[0], compactLabel);
         }
-        $("#party_banner_who").text("P" + (member.slot + 1) + " · " + member.name);
         var guest = client.is_watching() || Boolean(Number(window.crawl_party_slot || 0));
         $("#party_join_btn").toggle(client.is_watching());
         var guestTitle = guest ? "The expedition owner manages party rules and companions." : "";
@@ -164,13 +163,8 @@ function ($, comm, client, actions, minimap, powerPicker, frameUpdate, model, in
                     this.setAttribute("title", guestTitle);
                 }
             });
-        // The multiplayer party renderer owns region, intent and recovery
-        // text. Refreshing controls must not replace it with a floor-wide turn.
-        if (!state.multiplayer) {
-            var queued = state.combat_locked && !state.simultaneous_turns && member.slot !== state.active_slot;
-            $("#party_banner_mode").text(queued ? "Tactical Combat · Waiting for P" + (state.active_slot + 1)
-                : state.combat_locked ? "Tactical Combat" : "Free Explore");
-        }
+        // party.js owns hero/mode text for every ruleset. A later controls
+        // frame must not overwrite the activity or briefly show a second label.
         var viewing = camera && state.members.find(function (hero) {
             return hero.pos && hero.pos.x === camera.x && hero.pos.y === camera.y;
         });
