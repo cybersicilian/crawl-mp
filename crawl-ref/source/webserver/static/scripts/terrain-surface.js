@@ -89,7 +89,8 @@ define(["weighted-cache"], function (weighted) {
             if (old) { hits++; return old; }
             misses++;
             var canvas = document.createElement("canvas"); canvas.width = canvas.height = pixels;
-            var ctx = canvas.getContext("2d");
+            // Premium shading reads these tiles; a GPU-backed canvas would stall on each one.
+            var ctx = canvas.getContext("2d", { willReadFrequently: true });
             if (!ctx) return null;
             var image = ctx.createImageData(pixels, pixels), allSame = sources.every(function (entry) { return entry === sources[4]; });
             for (var y = 0; y < pixels; y++) for (var x = 0; x < pixels; x++) {

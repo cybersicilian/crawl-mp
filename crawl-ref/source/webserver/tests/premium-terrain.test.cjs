@@ -262,11 +262,13 @@ function fluidFixture() {
 test('premium liquids keep their raster under fog, stop moving in memory, and resume on visibility changes', () => {
     const f = nativeFixture(), tiles = f.result['./tileinfo-dngn'], enums = f.result['./enums'];
     const noop = () => {}, handlers = new Map(), order = [], jobs = [];
+    let canvases = 0;
     const document = { createElement() {
-        const canvas = { width: 32, height: 32, pixels: new Uint8ClampedArray(4096) };
+        canvases++;
+        const canvas = { width: 32, height: 32, pixels: new Uint8ClampedArray(4096), reads: 0 };
         const ctx = { save: noop, restore: noop, beginPath: noop, rect: noop, clip: noop,
             createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
-            getImageData: () => ({ data: new Uint8ClampedArray(canvas.pixels) }),
+            getImageData: () => { canvas.reads++; return { data: new Uint8ClampedArray(canvas.pixels) }; },
             putImageData(image) { canvas.pixels.set(image.data); },
             drawImage(image) { canvas.pixels.set(image.pixels); } };
         canvas.getContext = () => ctx;
@@ -316,7 +318,11 @@ test('premium liquids keep their raster under fog, stop moving in memory, and re
     }
     for (const index of [tiles.DNGN_LAVA, tiles.DNGN_DEEP_WATER, tiles.DNGN_SHALLOW_WATER_MURKY]) {
         change(index);
-        const moving = terrain.frame(renderer, 0, 0).pixels;
+        const fresh = terrain.frame(renderer, 0, 0);
+        assert.equal(fresh.image.reads, 0, 'a shaded tile is not read back until a warp asks for it');
+        const moving = fresh.pixels;
+        assert.equal(fresh.pixels, moving);
+        assert.equal(fresh.image.reads, 1, 'the warp readback happens once');
         assert(lightReads > 0 && jobs.length > 0, 'visible liquid participates in lighting and animation');
         renderer.frame_time += 800;
         assert.notDeepEqual(terrain.frame(renderer, 0, 0).pixels, moving);
@@ -342,6 +348,25 @@ test('premium liquids keep their raster under fog, stop moving in memory, and re
     premium = true;
     change(tiles.FLOOR_MOSS, 0x40000);
     assert.equal(terrain.frame(renderer, 0, 0), undefined, 'other remembered terrain retains its existing path');
+    change(tiles.FLOOR_MOSS);
+    const allocated = canvases;
+    assert(terrain.frame(renderer, 0, 0));
+    assert.equal(canvases - allocated, 2, 'a cold tile allocates its atlas sample and result, never a scratch canvas');
+});
+
+test('painted ground tiles stay CPU-backed so premium shading never waits on a GPU readback', () => {
+    const f = modules(), contexts = [];
+    f.load('weighted-cache', true);
+    const document = { createElement() {
+        const ctx = { drawImage() {}, putImageData() {}, createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
+            getImageData: (x, y, w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }) };
+        return { getContext(kind, options) { contexts.push(options); return ctx; } };
+    } };
+    const surfaces = f.load('terrain-surface', true, { document }).create();
+    const material = { key: 'floor', image: { complete: true, naturalWidth: 64, naturalHeight: 64, src: 'floor.png' },
+        rect: { x: 0, y: 0, w: 64, h: 64 } };
+    assert(surfaces.tile(material, [], 0, 0, 32));
+    assert.equal(contexts.at(-1).willReadFrequently, true);
 });
 
 test('fluid frames are deterministic, opaque, periodic in world space and bounded in memory', () => {
