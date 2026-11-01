@@ -71,6 +71,24 @@ class DeploymentTests(unittest.TestCase):
                       "crawl-ref/source/webserver/config.yml"):
             self.assertFalse(include(local), local)
 
+    def test_source_omits_root_records_but_not_similar_game_paths(self):
+        package = module("package_source")
+        records = {"docs/graphics/proof.png", "docs/stats.md", "art-research/concept.png",
+                   ".codex-right-sidebar-proof/source-7/static/ui-sprites/hud-sprites.438f559c163c.png"}
+        kept = {"crawl-ref/docs/crawl_manual.rst", "crawl-ref/docs/template/apt-tmpl.txt",
+                "crawl-ref/source/webserver/games.d/base.yaml",
+                "crawl-ref/source/webserver/static/docs/help.txt",
+                "crawl-ref/source/webserver/static/art-research/plate.png",
+                "docs-index.md", "art-research.md"}
+        with tempfile.TemporaryDirectory() as location:
+            root = pathlib.Path(location)
+            for name in records | kept:
+                (root / name).parent.mkdir(parents=True, exist_ok=True)
+                (root / name).write_text(name)
+            listing = "\0".join(sorted(records | kept)).encode()
+            with mock.patch.object(package.subprocess, "check_output", return_value=listing):
+                self.assertEqual(set(package.source_names(root)), kept)
+
     def test_package_includes_ignored_runtime_atlas_without_private_sources(self):
         package = module("package_source")
         with tempfile.TemporaryDirectory() as location:

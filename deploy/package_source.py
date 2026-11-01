@@ -11,6 +11,10 @@ import tarfile
 EXCLUDED_PARTS = {".git", ".venv", "node_modules", "__pycache__", ".codex", ".agents", ".claude"}
 EXCLUDED_SUFFIXES = {".o", ".d", ".a", ".so", ".dylib", ".pyc", ".db3", ".db", ".sqlite", ".sqlite3", ".log", ".tmp"}
 STATE_ROOTS = ("rcs/", "saves/", "morgue/", "crawl-ref/source/rcs/", "crawl-ref/source/saves/", "crawl-ref/source/morgue/", "crawl-ref/source/webserver/run/")
+# Repository records the server never builds or reads. crawl-ref/docs is a
+# separate tree that the game and `make docs` need. Applied by source_names, not
+# include: include also validates frozen archives, which may carry these files.
+RECORD_ROOTS = ("docs/", "art-research/", ".codex-right-sidebar-proof/")
 HUD_MANIFEST = "crawl-ref/source/webserver/static/ui-sprites/hud-sprites.json"
 CHARACTER_CATALOG = "crawl-ref/source/webserver/static/scripts/character-catalog.js"
 
@@ -77,7 +81,7 @@ def source_names(root):
     names = subprocess.check_output(["git", "-C", str(root), "ls-files", "-z", "--cached", "--others", "--exclude-standard"]).decode().split("\0")
     names.extend(runtime_assets(root))
     return sorted(name for name in set(filter(None, names))
-                  if include(name) and (root / name).is_file())
+                  if include(name) and not name.startswith(RECORD_ROOTS) and (root / name).is_file())
 
 
 def package(root, destination):

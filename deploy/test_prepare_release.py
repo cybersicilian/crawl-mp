@@ -40,6 +40,45 @@ class ReleaseBundleTests(unittest.TestCase):
         self.assertEqual(set(prepare_release.archive_manifest(self.bundle / "source.tar.gz")),
                          {"engine.cc", "new.js"})
 
+    def test_bundle_omits_records_and_keeps_native_docs_and_ignored_runtime_art(self):
+        # The release worktree force-adds the git-ignored art, as production does.
+        pixels = b"licensed-atlas-pixels"
+        sprites = "crawl-ref/source/webserver/static/ui-sprites/"
+        atlas = sprites + "hud-sprites." + hashlib.sha256(pixels).hexdigest()[:12] + ".png"
+        titles = [f"crawl-ref/source/webserver/static/title_{index:03}.png"
+                  for index in range(1, 42)]
+        game = ["crawl-ref/docs/crawl_manual.rst", "crawl-ref/source/webserver/games.d/base.yaml",
+                prepare_release.package_source.HUD_MANIFEST]
+        records = ["docs/deployment.md", "art-research/concept.png",
+                   ".codex-right-sidebar-proof/source-7/note.txt", "docs/untracked-evidence.png"]
+        for name in game + titles + records:
+            (self.root / name).parent.mkdir(parents=True, exist_ok=True)
+            (self.root / name).write_text(name)
+        (self.root / prepare_release.package_source.HUD_MANIFEST).write_text(
+            json.dumps({"file": Path(atlas).name}))
+        (self.root / atlas).write_bytes(pixels)
+        (self.root / ".gitignore").write_text(
+            "/crawl-ref/source/webserver/static/title_*.png\n"
+            "/crawl-ref/source/webserver/static/ui-sprites/hud-sprites.*.png\n")
+        subprocess.run(["git", "-C", str(self.root), "add", ".gitignore", *game, *records[:3]],
+                       check=True)
+        subprocess.run(["git", "-C", str(self.root), "add", "-f", *titles], check=True)
+        self.freeze()
+        self.assertEqual(set(prepare_release.archive_manifest(self.bundle / "source.tar.gz")),
+                         {"engine.cc", ".gitignore", atlas, *game, *titles})
+        self.assertEqual(len(titles), 41)
+        (self.root / "docs/deployment.md").write_text("later record edit\n")
+        self.assertTrue(prepare_release.verify(self.bundle, self.root)["verified"])
+
+    def test_bundle_frozen_with_records_stays_verifiable(self):
+        (self.root / "docs").mkdir()
+        (self.root / "docs/proof.txt").write_text("evidence\n")
+        with mock.patch.object(prepare_release.package_source, "RECORD_ROOTS", ()):
+            self.freeze()
+        self.assertIn("docs/proof.txt",
+                      prepare_release.archive_manifest(self.bundle / "source.tar.gz"))
+        self.assertTrue(prepare_release.verify(self.bundle)["verified"])
+
     def test_verify_detects_edits_additions_and_removals(self):
         self.freeze()
         for action in ("edit", "add", "remove"):
