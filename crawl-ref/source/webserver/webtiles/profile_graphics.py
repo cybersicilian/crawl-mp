@@ -1,4 +1,4 @@
-"""Private account graphics, independent of native characters and save files."""
+"""Private account display and tip preferences, independent of characters and saves."""
 import json
 import logging
 from pathlib import Path

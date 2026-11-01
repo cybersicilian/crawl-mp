@@ -30,6 +30,7 @@ with the repository's release settings and restart the matching server:
 | `TYPESAFE_API_KEY` | Server-only TypeSafe credential | Required for AI launch |
 | `TYPESAFE_MODEL` | System One model name or alias | `jev-latest` |
 | `DCSS_AI_CALLS_PER_HOUR` | Request ceiling shared by expeditions in one server worker | `3600` |
+| `DCSS_TIP_CALLS_PER_HOUR` | Separate ceiling for [tutorial tip](tutorial-tips.md) choices in one server worker | `600` |
 
 ### Existing Google Cloud credential
 

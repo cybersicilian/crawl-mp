@@ -1,4 +1,5 @@
 @import url("../tabletop/ui-themes.css");
+@import url("tutorial-tips.css");
 /* Appearance & graphics: theme swatches, preset cards, grouped effect switches. */
 .graphics-page { margin: 0; background: var(--ui-canvas); color: var(--ui-text); color-scheme: dark; font: 16px/1.6 var(--ui-copy); }
 .graphics-page * { box-sizing: border-box; }

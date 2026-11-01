@@ -5,10 +5,10 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-function load(file, modules = {}) {
+function load(file, modules = {}, globals = {}) {
     let result;
     const source = fs.readFileSync(path.join(__dirname, '../game_data/static', file), 'utf8');
-    vm.runInNewContext(source, { define(dependencies, factory) {
+    vm.runInNewContext(source, { ...globals, define(dependencies, factory) {
         result = typeof dependencies === 'function' ? dependencies()
             : factory(...dependencies.map(name => modules[name]));
     } });
@@ -17,6 +17,7 @@ function load(file, modules = {}) {
 const guide = load('play-guide-model.js');
 const pointer = load('pointer-intent-model.js');
 const attack = load('attack-info.js', { jquery: () => ({}) });
+const strip = load('hud-bottom-strip.js', { jquery: () => ({ on() { return this; } }), './minimap': {}, './hud-layout': {} }, { document: {} });
 const hero = (overrides = {}) => ({ hp: 30, hp_max: 30, floor_items_known: true, floor_items: [], inventory: [], ...overrides });
 const ids = view => Array.from(guide.suggest(view), step => step.id);
 
@@ -91,4 +92,21 @@ test('the attack card separates the engine rating from its breakdown', () => {
     assert.equal(parsed.detail, '(Base 15 x 100% (Str) x 110% (Skill)) + 2 (Ench)');
     assert.equal(attack.rating('your enemies will bleed and die for Makhleb.'), null);
     assert.equal(attack.rating(undefined), null);
+});
+const shape = (width, height, floating = false) => strip.sideWidth({ width, height, floating });
+test('a wide column moves the strip beside the map, sized to the spare width', () => {
+    assert.equal(shape(1051, 804), 247);
+    assert.equal(shape(1120, 860), 260);
+});
+test('the strip stays readable and never takes more than it should', () => {
+    assert.equal(shape(1051, 880), 240);
+    assert.equal(shape(1611, 1058), 380);
+});
+test('a tall column keeps the footer, because a side strip would shrink the map', () => {
+    assert.equal(shape(1000, 900), 0);
+    assert.equal(shape(1049, 900), 0);
+    assert.equal(shape(286, 716), 0);
+});
+test('arranged panels keep the layout the player chose', () => {
+    assert.equal(shape(1611, 1058, true), 0);
 });

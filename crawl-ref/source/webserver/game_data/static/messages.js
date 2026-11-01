@@ -100,6 +100,7 @@ function ($, comm, client, textinput, util, options, nested, references, scrollb
     {
         var text = typeof data.text === "string" ? data.text : "";
         if (/Done exploring|Partly explored/.test(text)) $(document).trigger("game_explore_finished");
+        $(document).trigger("game_message_text", [text]);
         var channel = Number.isInteger(data.channel) ? data.channel : null;
         var count = 1;
         var suffix = repeat_suffix.exec(text);

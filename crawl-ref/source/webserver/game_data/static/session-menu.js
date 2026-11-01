@@ -1,5 +1,5 @@
-define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "graphics-dialog", "./common-hotkeys"],
-function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
+define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "graphics-dialog", "./common-hotkeys", "./tutorial-tips", "./tutorial-tips-dialog"],
+function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys, tips, tipsDialog) {
     "use strict";
     var dialog, trap, opener, escapeHeld = false;
     function heroContext() {
@@ -48,6 +48,7 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
             + "</div>"
             + "<div class='session-menu-actions session-menu-secondary-actions' role='group' aria-label='Settings and help'>"
             + "<button type='button' class='workflow-button' data-session-graphics>Appearance &amp; graphics</button>"
+            + "<button type='button' class='workflow-button' data-session-tips>Tutorial tips</button>"
             + "<button type='button' class='workflow-button' data-session-hotkeys>Common hotkeys</button>"
             + "<a class='workflow-button' href='/profile' target='_blank' rel='noopener'>Profile ↗</a>"
             + "</div>"
@@ -59,6 +60,7 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
             event.stopPropagation();
         }).on("click", "#session_menu_resume", close)
             .on("click", "[data-session-graphics]", function () { close(); graphics.open(); })
+            .on("click", "[data-session-tips]", function () { close(); tipsDialog.open(); })
             .on("click", "[data-session-hotkeys]", function () {
                 if (!hotkeys || typeof hotkeys.open !== "function") return;
                 close(); hotkeys.open();
@@ -96,7 +98,8 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys) {
         if (!available() || keyboard.typing(event.target) || $(event.target).closest("#chat, #input_dialog").length
             || $("#quickbar_more[open], .workflow-expedition-details[open]").length) return;
         escapeHeld = true; keyboard.consume(event);
-        if (!event.repeat) open();
+        // A showing tip closes first, as its Esc key cap promises.
+        if (!event.repeat && !tips.dismiss()) open();
     }
     function release() { escapeHeld = false; }
     function bind(enabled) {

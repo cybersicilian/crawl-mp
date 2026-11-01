@@ -155,7 +155,8 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
         var log_frame = $("#message_pane").outerHeight() - $("#message_pane").height();
         var remaining_height = Math.max(1, window_height - hud.messageHeight(Math.max(88, msg_height_px + log_frame)) - hud.height());
 
-        layout_parameters.remaining_width = remaining_width;
+        var map_width = Math.max(1, remaining_width - hud.stripWidth());
+        layout_parameters.remaining_width = map_width;
         layout_parameters.remaining_height = remaining_height;
 
         // Position controls
@@ -165,8 +166,8 @@ function ($, exports, comm, client, key_conversion, dungeon_renderer, display,
             "max-height": msg_height_px*msg_height/(msg_height+1),
             "width": remaining_width
         });
-        apply_view_zoom(remaining_width, remaining_height);
-        dungeon_renderer.fit_to(remaining_width, remaining_height,
+        apply_view_zoom(map_width, remaining_height);
+        dungeon_renderer.fit_to(map_width, remaining_height,
                                 show_diameter);
         $(document).trigger("game_view_zoom_changed", [game.get_view_zoom()]);
 

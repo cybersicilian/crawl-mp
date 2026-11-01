@@ -1,5 +1,5 @@
-define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys", "./mission-bar", "./action-feedback", "./pointer-intent", "./play-guide"],
-function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys, missionBar, feedback, pointerIntent, playGuide) {
+define(["jquery", "comm", "chat", "client", "./status-icons", "interface-polish", "./encyclopedia", "library-ui", "./gameplay-controls", "./hud-inventory", "./panel-workspace", "./hud-iconography", "./hud-polish", "./viewport-zoom", "./quickbar", "./player-card-details", "./hud-bottom-strip", "./player-card-sections", "./party-progress", "./party-card-readings", "./floor-items", "./session-menu", "./assimilation-panel", "./hud-input", "./premium-dungeon", "./common-hotkeys", "./mission-bar", "./action-feedback", "./pointer-intent", "./play-guide", "./tutorial-tips", "./tutorial-tips-dialog"],
+function ($, comm, chat, client, icons, polish, encyclopedia, library, controls, inventory, workspace, iconography, hudPolish, viewportZoom, quickbar, cardDetails, bottomStrip, cardSections, progress, cardReadings, floorItems, sessionMenu, assimilation, hudInput, premium, hotkeys, missionBar, feedback, pointerIntent, playGuide, tutorialTips, tipsDialog) {
     "use strict";
     var statusObserver;
 
@@ -60,6 +60,7 @@ function ($, comm, chat, client, icons, polish, encyclopedia, library, controls,
         floorItems.init();
         pointerIntent.init();
         playGuide.init();
+        tutorialTips.init(tipsDialog.open);
         workspace.init();
         iconography.init();
         hudPolish.init();
