@@ -1,5 +1,5 @@
-define(["jquery", "workspace-views", "lobby-browser", "lobby-overview", "lobby-discovery"],
-function ($, createViews, browser, overview, discovery) {
+define(["jquery", "workspace-views", "lobby-browser", "lobby-overview", "lobby-discovery", "settings-dialog"],
+function ($, createViews, browser, overview, discovery, settings) {
     "use strict";
     var views = [
         { id: "play", title: "Play", sections: ["lobby_home", "party_lobby_panel", "play_now"] },
@@ -8,7 +8,7 @@ function ($, createViews, browser, overview, discovery) {
         { id: "chronicle", title: "Chronicle", sections: ["coop_chronicle_panel"] }
     ];
     var root, nav, primary, controller, pending = false, hadRoom = false, leftLobby = false, returnedFromGame = false;
-    var settingsSignature = null, observers = [];
+    var observers = [];
     // Steady-state churn that never changes navigation state: the one-second
     // idle-time ticker and the milestone roll-in animation.
     var ignoredSelector = ".idle_time, .milestone_col";
@@ -69,10 +69,10 @@ function ($, createViews, browser, overview, discovery) {
         summary.setAttribute("aria-controls", "lobby_account_menu");
         var menu = element("div", "lobby-account-menu"); menu.id = "lobby_account_menu";
         menu.setAttribute("role", "menu"); menu.setAttribute("aria-label", "Account");
-        var gameSettings = element("div", "lobby-account-settings"); gameSettings.id = "lobby_account_settings";
-        gameSettings.setAttribute("role", "group"); gameSettings.setAttribute("aria-label", "Game settings");
-        menu.appendChild(gameSettings);
-        var graphics = element("a", "", "Appearance & graphics"); graphics.href = "/settings/graphics"; menu.appendChild(graphics);
+        var settingsButton = element("button", "lobby-account-settings-button", "Settings"); settingsButton.type = "button";
+        settingsButton.id = "lobby_settings"; settingsButton.setAttribute("role", "menuitem");
+        settingsButton.addEventListener("click", function () { details.open = false; settings.open(); });
+        menu.appendChild(settingsButton);
         var profile = element("a", "", "Profile & textures"); profile.href = "/profile"; menu.appendChild(profile);
         ["chem_link", "chpw_link"].forEach(function (id) {
             var link = document.getElementById(id); if (link) menu.appendChild(link);
@@ -116,26 +116,6 @@ function ($, createViews, browser, overview, discovery) {
             if (details.open && event.relatedTarget && !details.contains(event.relatedTarget)) details.open = false;
         });
     }
-    function refreshGameSettings() {
-        var container = document.getElementById("lobby_account_settings");
-        var links = Array.from(document.querySelectorAll("#play_now .edit_rc_link"));
-        var signature = links.map(function (link) { return link.getAttribute("data-game_id"); }).join("|");
-        if (signature === settingsSignature) return;
-        settingsSignature = signature; container.replaceChildren();
-        links.forEach(function (link) {
-            var id = link.getAttribute("data-game_id");
-            var button = element("button", "lobby-account-settings-button", links.length === 1 ? "Game settings" : "Game settings · " + id);
-            button.type = "button";
-            button.addEventListener("click", function () {
-                document.getElementById("lobby_account").open = false;
-                var current = Array.from(document.querySelectorAll("#play_now .edit_rc_link")).find(function (candidate) {
-                    return candidate.getAttribute("data-game_id") === id;
-                });
-                if (current) current.click();
-            });
-            container.appendChild(button);
-        });
-    }
     function update() {
         pending = false;
         var signedIn = authenticated(), room = hasRoom();
@@ -167,7 +147,6 @@ function ($, createViews, browser, overview, discovery) {
         primary.disabled = !room && (!create || create.disabled);
         var accountName = (document.getElementById("login_message").textContent || "").replace(/^Logged in as\s*/i, "").trim();
         text(document.querySelector("#lobby_account summary"), accountName || "Account");
-        refreshGameSettings();
         var live = document.getElementById("lobby_body");
         if (signedIn && live.style.display === "none") live.style.display = "block";
         text(document.querySelector("#party_lobby_panel .party-hall-title"), "Set up your party");

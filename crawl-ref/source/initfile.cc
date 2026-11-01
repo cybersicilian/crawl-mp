@@ -286,6 +286,15 @@ static map<string, game_type> _game_modes()
 // `runrest_ignore_message`. Again, adding new options to this set is
 // dispreferred, and should at best be used only for features implemented
 // fully in lua code.
+static bool _web_controlled()
+{
+#ifdef USE_TILE_WEB
+    return tiles.is_controlled_from_web();
+#else
+    return false;
+#endif
+}
+
 const vector<GameOption*> game_options::build_options_list()
 {
     const bool USING_DGL =
@@ -545,8 +554,10 @@ const vector<GameOption*> game_options::build_options_list()
             false
 #endif
             ),
+        new BoolGameOption(SIMPLE_NAME(prompt_text_menu), _web_controlled()),
+        new BoolGameOption(SIMPLE_NAME(prompt_item_menu), _web_controlled()),
         new BoolGameOption(SIMPLE_NAME(ability_menu), true),
-        new BoolGameOption(SIMPLE_NAME(spell_menu), false),
+        new BoolGameOption(SIMPLE_NAME(spell_menu), _web_controlled()),
         new BoolGameOption(SIMPLE_NAME(easy_floor_use), false),
         new StringGameOption(ON_SET_NAME(sort_menus), "default", false,
             [this]() {

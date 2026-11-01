@@ -1506,7 +1506,9 @@ void pickup(bool partial_quantity)
             }
             any_selectable = true;
 
-            if (keyin != 'a')
+            if (keyin != 'a' && Options.prompt_item_menu)
+                keyin = 'm';
+            else if (keyin != 'a')
             {
                 string prompt = "Pick up %s? ((y)es/(n)o/(a)ll/(m)enu/*?g,/q)";
 

@@ -525,13 +525,13 @@ static coord_def _full_describe_menu(vector<monster_info> const &list_mons,
             title += "<lightgray> (select to examine)</lightgray>";
         else
         {
+            const string to_select = menu_mode_hint(" to " + selectverb);
+            const string to_examine = menu_mode_hint(" to examine");
             title_secondary = title
-                + "<lightgray> (select to examine, "
-                + menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE)
-                + " to " + selectverb + ")</lightgray>";
-            title += "<lightgray> (select to " + selectverb + ", "
-                + menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE)
-                + " to examine)</lightgray>";
+                + "<lightgray> (select to examine"
+                + (to_select.empty() ? "" : ", " + to_select) + ")</lightgray>";
+            title += "<lightgray> (select to " + selectverb
+                + (to_examine.empty() ? "" : ", " + to_examine) + ")</lightgray>";
         }
     }
 
@@ -547,6 +547,7 @@ static coord_def _full_describe_menu(vector<monster_info> const &list_mons,
     else
     {
         desc_menu.action_cycle = Menu::CYCLE_TOGGLE;
+        desc_menu.action_modes = { uppercase_first(selectverb), "Examine" };
         desc_menu.menu_action = InvMenu::ACT_EXECUTE;
         desc_menu.set_title(new MenuEntry(title_secondary, MEL_TITLE), false);
     }

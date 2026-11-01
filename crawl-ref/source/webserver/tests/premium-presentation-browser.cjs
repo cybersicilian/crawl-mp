@@ -274,7 +274,7 @@ function fixture() {
         + script(source('static/scripts/contrib/jquery.js')) + script('(' + setup.toString() + ')();');
     for (const name of modules) html += script(`window.fixtureName='./${name}';`)
         + script(source(`game_data/static/${name}.js`));
-    for (const name of ['idle-work', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation', 'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface', 'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint', 'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion', 'sprite-motion-layer', 'footstep-paint', 'figure-shading', 'lantern-pool', 'ambient-motes', 'item-properties']) {
+    for (const name of ['idle-work', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas', 'liquid-shader', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation', 'graphics-controls', 'tip-controls', 'rc-settings', 'settings-dialog', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface', 'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint', 'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'weighted-cache', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion', 'sprite-motion-layer', 'footstep-paint', 'item-properties']) {
         if (name === 'visual-presentation') html += script(graphicsFixture(JSON.parse(source('static/graphics-settings.json'))));
         html += script(`window.fixtureName='${name}';`) + script(source(`static/scripts/${name}.js`));
     }
@@ -497,7 +497,7 @@ if (process.argv.includes('--prepare-only')) {
             assert(presence.nearShade < presence.farShade, 'The lantern clears shade around its bearer');
             await page.locator('#graphics_settings_btn').click();
             await page.locator('[data-graphics-preset="classic"]').click();
-            await page.locator('.graphics-dialog-actions button').click();
+            await page.locator('#rc_settings_close').click();
             assert.equal(await page.locator('.premium-dungeon-light').count(), 0);
             assert.equal(await page.locator('.premium-dungeon-lantern, .premium-dungeon-motes, .premium-dungeon-mood').count(), 0, 'Classic removes every new layer');
             assert.equal(await page.locator('.premium-dungeon-radiance').count(), 0);
@@ -514,7 +514,7 @@ if (process.argv.includes('--prepare-only')) {
             }), 'Classic restores native fluids, effects, crystal, metal, transparent walls and sand');
             await page.locator('#graphics_settings_btn').focus(); await page.keyboard.press('Enter');
             await page.locator('[data-graphics-preset="premium"]').click();
-            await page.locator('.graphics-dialog-actions button').click();
+            await page.locator('#rc_settings_close').click();
             await page.waitForSelector('.premium-dungeon-light');
             await page.emulateMedia({ reducedMotion: 'reduce' });
             await page.evaluate(() => window.fixtureMove(0, 9, 3));

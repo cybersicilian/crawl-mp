@@ -18,5 +18,5 @@ module.exports = schema => '(' + function setup(schema) {
     } };
     // Renderer-only fixtures have no authenticated tileset endpoint. The real
     // account controls and persistence run in graphics-profile-browser.cjs.
-    modules['tileset-controls'] = { mount() { return { destroy() {} }; } };
+    modules['tileset-controls'] = { mount() { return { filter() { return 0; }, total() { return 0; }, customized() { return 0; }, destroy() {} }; } };
 }.toString() + ')(' + JSON.stringify(schema) + ');';

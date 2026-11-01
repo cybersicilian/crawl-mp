@@ -550,11 +550,15 @@ static deck_type _choose_deck(const string title = "Draw")
     // help here amounts to describing decks:
     deck_menu.add_toggle_from_command(CMD_MENU_HELP);
     deck_menu.menu_action = Menu::ACT_EXECUTE;
+    deck_menu.action_modes = { "Select", "Describe" };
 
     // XX proper keyhelp
-    deck_menu.set_more(formatted_string::parse_string(
-        menu_keyhelp_cmd(CMD_MENU_HELP) + " toggle "
-                       "between deck selection and description."));
+    if (!menu_modes_are_buttons())
+    {
+        deck_menu.set_more(formatted_string::parse_string(
+            menu_keyhelp_cmd(CMD_MENU_HELP) + " toggle "
+                           "between deck selection and description."));
+    }
 
     int numbers[NUM_DECKS];
 
@@ -709,8 +713,11 @@ bool StackFiveMenu::process_key(int keyin)
         formatted_string old_more = more;
         set_more(formatted_string::parse_string(
                 "Are you done? (press y or Y to confirm)"));
-        if (yesno(nullptr, true, 'n', false, false, true))
+        if (yesno(Options.prompt_menu ? "Are you done?" : nullptr, true, 'n',
+                  false, false, true))
+        {
             return false;
+        }
         set_more(old_more);
     }
     else if (keyin == '?')
@@ -755,6 +762,7 @@ static void _draw_stack(int to_stack)
     deck_menu.add_toggle_from_command(CMD_MENU_CYCLE_MODE);
     deck_menu.add_toggle_from_command(CMD_MENU_CYCLE_MODE_REVERSE);
     deck_menu.menu_action = Menu::ACT_EXECUTE;
+    deck_menu.action_modes = { "Select", "Describe" };
 
     auto& stack = you.props[NEMELEX_STACK_KEY].get_vector();
 
@@ -973,36 +981,26 @@ bool draw_three()
     bool need_prompt_redraw = true;
     while (true)
     {
-        if (need_prompt_redraw)
-        {
-            mpr("You draw... (choose one card, ? for their descriptions)");
-            for (int i = 0; i < draws.size(); ++i)
-            {
-                msg::streams(MSGCH_PROMPT)
-                    << msg::nocap << (static_cast<char>(i + 'a')) << " - "
-                    << card_name((card_type)draws[i].get_int()) << endl;
-            }
-            need_prompt_redraw = false;
-        }
-        const int keyin = toalower(get_ch());
+        vector<prompt_answer> answers;
+        for (int i = 0; i < draws.size(); ++i)
+            answers.push_back({ i + 'a', card_name((card_type)draws[i].get_int()) });
+        answers.push_back({ 'z', "Describe these cards", { '?' } });
+        const int keyin = prompt_choice("You draw... (choose one card)", answers);
 
         if (crawl_state.seen_hups)
             return false;
 
-        if (keyin == '?')
+        if (keyin == 'z')
         {
             _describe_cards(draws);
             redraw_screen();
             update_screen();
-            need_prompt_redraw = true;
         }
         else if (keyin >= 'a' && keyin < 'a' + draws.size())
         {
             selected = keyin - 'a';
             break;
         }
-        else
-            canned_msg(MSG_HUH);
     }
 
     card_effect((card_type) draws[selected].get_int());

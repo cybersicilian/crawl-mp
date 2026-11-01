@@ -34,8 +34,9 @@ define(["jquery", "graphics-preferences", "graphics-settings-model", "tileset-co
         var heading = node("div", "graphics-heading"), title = node("h2", "", "Appearance & graphics");
         title.id = id + "-title"; heading.appendChild(title);
         var badge = node("span", "graphics-current"); heading.appendChild(badge);
-        root.replaceChildren(heading, node("p", "graphics-intro",
-            "Saved to your account across browsers. Changes apply immediately to your open games. Party members keep their own view."));
+        var intro = node("p", "graphics-intro",
+            "Saved to your account across browsers. Changes apply immediately to your open games. Party members keep their own view.");
+        root.replaceChildren(heading, intro);
         var appearance = node("div", "graphics-appearance"), choices = node("div", "graphics-presets"), groups = node("div", "graphics-groups");
         var tilesetRoot = node("div", "graphics-tileset"), tilesetControl = null;
         var renderingTitle = node("h3", "graphics-rendering-title", "Lighting & effects");
@@ -45,7 +46,7 @@ define(["jquery", "graphics-preferences", "graphics-settings-model", "tileset-co
         var retry = node("button", "graphics-retry tr-btn", "Retry connection"); retry.type = "button";
         retry.addEventListener("click", function () { preferences.refresh(); });
         root.append(tilesetRoot, appearance, renderingTitle, renderingHelp, choices, groups, status, retry);
-        if (!document.getElementById("profile_appearance")) tilesetControl = tilesets.mount(tilesetRoot);
+        tilesetControl = tilesets.mount(tilesetRoot);
         function themePicker(field, select) {
             var picker = node("div", "graphics-swatches"); picker.setAttribute("role", "group"); picker.setAttribute("aria-label", field.label);
             field.options.forEach(function (value, index) {
@@ -93,6 +94,26 @@ define(["jquery", "graphics-preferences", "graphics-settings-model", "tileset-co
                 inputs.set(field.id, { field: field, input: setting.input });
             });
         }
+        // Search and Customized-only reach these rows too; presets only show when browsing.
+        function filter(query, changedOnly) {
+            var shown = 0, settings = preferences.snapshot().settings;
+            inputs.forEach(function (entry) {
+                var field = entry.field, text = (field.label + " " + field.id + " " + field.description + " " + field.group + " appearance graphics").toLowerCase();
+                var match = (!query || text.includes(query)) && (!changedOnly || settings[field.id] !== field.default);
+                entry.input.closest(".graphics-setting").hidden = !match;
+                if (field.id === "ui_theme") root.querySelectorAll(".graphics-swatches, .graphics-theme-preview").forEach(function (part) { part.hidden = !match; });
+                if (match) shown++;
+            });
+            var tileCount = tilesetControl.filter(query, changedOnly);
+            tilesetRoot.hidden = tileCount === 0; shown += tileCount;
+            root.querySelectorAll("fieldset.graphics-group").forEach(function (fieldset) {
+                if (!fieldset.closest(".graphics-tileset")) fieldset.hidden = !Array.from(fieldset.querySelectorAll(".graphics-setting")).some(function (row) { return !row.hidden; });
+            });
+            var browsing = !query && !changedOnly;
+            [renderingHelp, choices, heading, intro].forEach(function (part) { part.hidden = !browsing; });
+            renderingTitle.hidden = !browsing && groups.querySelectorAll("fieldset:not([hidden])").length === 0;
+            return shown;
+        }
         function render() {
             var state = preferences.snapshot(), schemaKey = JSON.stringify(state.schema);
             if (schemaKey !== signature) { signature = schemaKey; build(state.schema); }
@@ -117,7 +138,13 @@ define(["jquery", "graphics-preferences", "graphics-settings-model", "tileset-co
             retry.hidden = !state.error;
         }
         $(document).on("graphics_settings_changed." + id, render); render();
-        return { titleId: title.id, destroy: function () { $(document).off("." + id); if (tilesetControl) tilesetControl.destroy(); } };
+        return { titleId: title.id, filter: filter, total: function () { return inputs.size + tilesetControl.total(); },
+            customized: function () {
+                var values = preferences.snapshot().settings, count = tilesetControl.customized();
+                inputs.forEach(function (entry) { if (values[entry.field.id] !== entry.field.default) count++; });
+                return count;
+            },
+            destroy: function () { $(document).off("." + id); if (tilesetControl) tilesetControl.destroy(); } };
     }
     return { mount: mount, row: row };
 });

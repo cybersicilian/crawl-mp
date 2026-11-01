@@ -317,6 +317,9 @@ int list_spells(bool toggle_with_I, bool transient, bool viewing,
         toggle_desc += "/[<w>I</w>]";
     }
     toggle_desc += " toggle spell headers";
+    if (menu_modes_are_buttons())
+        toggle_desc.clear();
+    spell_menu.action_modes = { "Type & failure", "Power & range" };
     more_str = pad_more_with_esc(more_str + help_desc + toggle_desc);
     spell_menu.set_more(formatted_string::parse_string(more_str));
     // TODO: should allow toggling between execute and examine

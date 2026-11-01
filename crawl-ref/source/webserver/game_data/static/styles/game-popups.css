@@ -499,6 +499,10 @@ div.settings-buttons button {
 }
 #game #ui-stack .workflow-prompt.msgwin-get-line > .header { margin-bottom: 12px; padding-bottom: 0 !important; border: 0; font-size: 17px; }
 #ui-stack .msgwin-get-line > input { width: 100%; box-sizing: border-box; }
+/* Prompt menus share the typed prompt's frame: the question, then one row per answer. */
+#game #ui-stack .workflow-prompt.menu_prompt .menu_title, #game #ui-stack .workflow-prompt.menu_prompt_required .menu_title { margin-bottom: 8px; font-size: 17px; white-space: normal; }
+#ui-stack .workflow-prompt:is(.menu_prompt, .menu_prompt_required) .menu_contents li.selectable { min-height: 40px; align-items: center; }
+#game #ui-stack .workflow-surface.menu_prompt_required > .workflow-popup-tools > button { display: none; }
 #ui-stack .msgwin-get-line .workflow-dialog-actions { justify-content: flex-end; }
 #game #ui-stack .workflow-prompt.seed-selection > .header { font-size: 20px; }
 #ui-stack .seed-selection p { margin: 0 0 12px; }

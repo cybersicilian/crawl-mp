@@ -10,6 +10,7 @@ define(["jquery", "comm", "client", "./util", "./menu-keyboard", "./menu-columns
     }
     function title(menu) {
         var root = menu.elem, title = root.find(".menu_title");
+        root.toggleClass("workflow-prompt", /^prompt/.test(menu.tag || ""));
         columns.title(menu);
         search.title(menu);
         entryActions.title(menu);

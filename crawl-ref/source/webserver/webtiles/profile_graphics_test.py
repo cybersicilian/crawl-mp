@@ -69,12 +69,11 @@ class GraphicsTests(AsyncHTTPTestCase):
         self.assertEqual(data['revision'], 0)
         page = self.fetch('/profile', headers={'Cookie': 'login=' + self.cookie})
         self.assertEqual(page.code, 200)
-        self.assertIn(b'id="profile_graphics"', page.body)
-        self.assertIn(b'profile-graphics', page.body)
-        graphics = self.fetch('/settings/graphics', headers={'Cookie': 'login=' + self.cookie})
-        self.assertEqual(graphics.code, 200)
-        self.assertNotIn(b'Illustrated', graphics.body)
-        self.assertEqual(self.fetch('/settings/graphics', follow_redirects=False).headers['Location'], '/?graphics=1#lobby')
+        self.assertNotIn(b'id="profile_graphics"', page.body)
+        self.assertIn(b'/settings/graphics', page.body)
+        for headers in ({'Cookie': 'login=' + self.cookie}, {}):
+            graphics = self.fetch('/settings/graphics', follow_redirects=False, headers=headers)
+            self.assertEqual(graphics.headers['Location'], '/?settings=appearance#lobby')
 
     def test_account_ownership_case_insensitivity_and_persistence_after_reopen(self):
         self.assertEqual(self.request({'mode': 'premium', 'lighting': True}).code, 200)

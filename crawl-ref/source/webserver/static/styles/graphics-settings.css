@@ -88,15 +88,11 @@ html[data-ui-theme="contrast"] .graphics-setting input.graphics-switch:checked::
 .graphics-save-status[data-state="saving"]::before { background: var(--ui-warn); }
 .graphics-save-status[data-state="error"] { color: var(--ui-danger); }
 .graphics-save-status[data-state="error"]::before { background: var(--ui-danger); }
-.graphics-retry, .graphics-dialog-actions button { padding: 8px 14px; background: var(--ui-raised); color: var(--ui-text); border: 1px solid var(--ui-edge); border-radius: 4px; font: 600 13px var(--ui-copy); cursor: pointer; }
+.graphics-retry { padding: 8px 14px; background: var(--ui-raised); color: var(--ui-text); border: 1px solid var(--ui-edge); border-radius: 4px; font: 600 13px var(--ui-copy); cursor: pointer; }
 .graphics-retry[hidden] { display: none; }
-.graphics-preset:focus-visible, .graphics-swatch:focus-visible, .graphics-setting:focus-within, .graphics-retry:focus-visible, .graphics-dialog-actions button:focus-visible { outline: 2px solid var(--ui-accent-bright); outline-offset: 3px; }
+.graphics-preset:focus-visible, .graphics-swatch:focus-visible, .graphics-setting:focus-within, .graphics-retry:focus-visible { outline: 2px solid var(--ui-accent-bright); outline-offset: 3px; }
 
 /* In-game dialog shares the module; a sticky Done row keeps Escape and focus return. */
-.graphics-dialog { box-sizing: border-box; width: min(820px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); padding: 16px 28px 28px; overflow: auto; background: var(--ui-panel); color: var(--ui-text); border: 1px solid var(--ui-edge); border-radius: 8px; box-shadow: 0 18px 80px #0008; font: 15px/1.5 var(--ui-copy); }
-.graphics-dialog::backdrop { background: #07100ba8; }
-.graphics-dialog section { background: transparent; border: 0; padding: 0; }
-.graphics-dialog-actions { position: sticky; top: -16px; display: flex; justify-content: flex-end; padding: 8px 0 12px; margin-bottom: 6px; background: var(--ui-panel); border-bottom: 1px solid color-mix(in srgb, var(--ui-edge) 45%, transparent); z-index: 1; }
 #profile_graphics { margin-top: 24px; }
 
 @media (max-width: 720px) {

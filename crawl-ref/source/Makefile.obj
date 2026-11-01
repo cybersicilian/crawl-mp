@@ -390,6 +390,7 @@ fontwrapper-ft.o
 
 TEST_OBJECTS = \
 catch2-tests/test_blazeheart_engraving.o \
+catch2-tests/test_prompt_menus.o \
 catch2-tests/test_wight.o \
 catch2-tests/test_kitsune.o \
 catch2-tests/test_meliai.o \

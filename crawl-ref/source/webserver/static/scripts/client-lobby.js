@@ -1,37 +1,31 @@
 /* Live expedition table, idle times and categorized game preferences.
  * Session state and cross-feature callbacks are supplied by client.js. */
-define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "rc-settings"], function ($, comm, renderModes, expeditionURL, catalogue, rcSettings) {
+define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "settings-dialog"], function ($, comm, renderModes, expeditionURL, catalogue, settings) {
     return function create(api, state) {
         var send_message = comm.send_message;
 
-        var editing_rc, settingsRequest = 0;
-
         function edit_rc(id)
         {
-            editing_rc = id;
-            rcSettings.loading();
-            api.show_dialog("#rc_edit");
-            send_message("get_game_settings", { game_id: id, request_id: String(++settingsRequest) });
+            settings.open({ gameId: id, category: "Travel & rest" });
         }
 
         function game_settings(data)
         {
-            if (data.game_id !== editing_rc || data.request_id !== String(settingsRequest) ||
-                data.username !== state.current_user) return;
-            if (!data.available) { rcSettings.showError(data.error || "Game settings are unavailable."); return; }
-            rcSettings.load(data);
-            api.center_element($("#rc_edit"));
-            if (!data.saved) document.getElementById("rc_settings_search").focus();
-            if (data.saved) document.getElementById("rc_settings_status").textContent = "Settings saved. Applies at your next game start.";
+            settings.receive(data, state.current_user);
         }
 
-        function send_rc()
+        // Old /settings/graphics links land here, once a game to edit is known.
+        function open_requested_settings()
         {
-            var changes = rcSettings.changes();
-            if (!changes) return false;
-            rcSettings.setSaving(true);
-            send_message("set_game_settings", { game_id: editing_rc, changes: changes, request_id: String(++settingsRequest) });
-            return false;
+            var url = new URL(location.href);
+            if (!url.searchParams.has("settings") || !state.current_user) return;
+            var requested = url.searchParams.get("settings");
+            var category = requested === "tips" || initialSettingsTips ? "Tutorial tips" : "Appearance & graphics";
+            initialSettingsTips = false;
+            url.searchParams.delete("settings");
+            if (url.hash === "#profile_tips") url.hash = "#lobby";
+            history.replaceState(null, "", url.pathname + url.search + url.hash);
+            settings.open({ category: category });
         }
 
         var new_list = null;
@@ -278,9 +272,9 @@ define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "rc
                 if ($a.hasClass("edit_rc_link"))
                 {
                     var rcGameId = ($a.data("game_id") || "DCSS").toString();
-                    $a.attr("data-tip-title", "Game settings (" + rcGameId + ")")
+                    $a.attr("data-tip-title", "Settings (" + rcGameId + ")")
                       .attr("data-tip-body", "Change travel, combat, inventory, messages and display preferences for " + rcGameId + ".")
-                      .attr("data-tip-meta", "Game settings | Saved to your account");
+                      .attr("data-tip-meta", "Settings | Saved to your account");
                 }
                 else
                 {
@@ -294,16 +288,13 @@ define(["jquery", "comm", "lobby-modes", "expedition-url", "mode-catalogue", "rc
                 }
             });
             renderModes(document.getElementById("play_now"), state.current_user);
-            var firstSettings = document.querySelector("#play_now .edit_rc_link");
-            $("#party_game_settings").prop("hidden", !firstSettings).off("click").on("click", function () {
-                if (firstSettings) firstSettings.click();
-            });
+            $("#party_game_settings").prop("hidden", false).off("click").on("click", function () { settings.open(); });
+            open_requested_settings();
         }
 
         return {
             edit_rc: edit_rc,
             game_settings: game_settings,
-            send_rc: send_rc,
             lobby_entry: lobby_entry,
             update_lobby_idle_times: update_lobby_idle_times,
             lobby_remove: lobby_remove,

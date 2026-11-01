@@ -41,7 +41,7 @@ assert(output); fs.mkdirSync(output, { recursive: true });
         proof.initialClock = await page.evaluate(() => window.crawl_party.state.world_aut_clock);
         for (const theme of ['folio', 'dungeon', 'contrast']) {
             await page.locator('#dock_session_menu').click();
-            await page.locator('[data-session-graphics]').click();
+            await page.locator('[data-session-settings]').click();
             const before = await page.evaluate(() => {
                 window.themeInputMessages = [];
                 const comm = require('comm'), original = comm.send_message;

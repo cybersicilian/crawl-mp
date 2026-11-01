@@ -3792,18 +3792,17 @@ bool gozag_potion_petition()
             return false;
 
         clear_messages();
+        vector<prompt_answer> effects;
         for (int i = 0; i < GOZAG_MAX_POTIONS; i++)
         {
-            string line = make_stringf("  [%c] - %d gold - ", i + 'a',
-                                       prices[i]);
+            string line = make_stringf("%d gold - ", prices[i]);
             vector<string> pot_names;
             for (const CrawlStoreValue& store : *pots[i])
                 pot_names.emplace_back(potion_type_name(store.get_int()));
             line += comma_separated_line(pot_names.begin(), pot_names.end());
-            mpr_nojoin(MSGCH_PLAIN, line);
+            effects.push_back({ i + 'a', line });
         }
-        mprf(MSGCH_PROMPT, "Purchase which effect?");
-        keyin = toalower(get_ch()) - 'a';
+        keyin = prompt_choice("Purchase which effect?", effects) - 'a';
         if (keyin < 0 || keyin > GOZAG_MAX_POTIONS - 1)
             continue;
 
@@ -4016,11 +4015,11 @@ static int _gozag_choose_shop()
         return -1;
 
     clear_messages();
+    vector<prompt_answer> shops;
     for (int i = 0; i < GOZAG_MAX_SHOPS; i++)
-        mpr_nojoin(MSGCH_PLAIN, _describe_gozag_shop(i).c_str());
+        shops.push_back({ i + 'a', _describe_gozag_shop(i) });
 
-    mprf(MSGCH_PROMPT, "Fund which merchant?");
-    const int shop_index = toalower(get_ch()) - 'a';
+    const int shop_index = prompt_choice("Fund which merchant?", shops) - 'a';
     if (shop_index < 0 || shop_index > GOZAG_MAX_SHOPS - 1)
         return _gozag_choose_shop(); // tail recurse
 
@@ -6750,13 +6749,11 @@ static void _hepliaklqana_choose_gender()
     const string* desc = map_find(gender_map, current_gender);
     ASSERT(desc);
 
-    mprf(MSGCH_PROMPT,
-         "Was %s a) male, b) female, or c) neither? (Currently %s.)",
-         hepliaklqana_ally_name().c_str(),
-         desc->c_str());
-
-    int keyin = toalower(get_ch());
-    if (!isaalpha(keyin))
+    const int keyin = prompt_choice(
+        make_stringf("Was %s male, female, or neither? (Currently %s.)",
+                     hepliaklqana_ally_name().c_str(), desc->c_str()),
+        { { 'a', "Male" }, { 'b', "Female" }, { 'c', "Neither" } });
+    if (!keyin)
     {
         canned_msg(MSG_OK);
         return;

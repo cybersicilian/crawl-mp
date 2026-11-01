@@ -18,6 +18,7 @@
 #include "options.h"
 #include "output.h"
 #include "player.h"
+#include "prompt.h"
 #include "religion.h"
 #include "stat-type.h"
 #include "state.h"
@@ -65,6 +66,65 @@ int innate_stat(stat_type s)
 
 static void _handle_stat_change(stat_type stat);
 
+// The level has already been gained, so this choice cannot be cancelled.
+class StatGainMenu : public PromptMenu
+{
+public:
+    StatGainMenu(bool _need_caps)
+        : PromptMenu(MF_SINGLESELECT | MF_ARROWS_SELECT | MF_INIT_HOVER),
+          need_caps(_need_caps)
+    {
+    }
+
+    bool process_key(int keyin) override
+    {
+        if (key_is_escape(keyin))
+            return !crawl_state.seen_hups;
+        if (!need_caps)
+            keyin = toupper_safe(keyin);
+        else if (keyin == 's' || keyin == 'i' || keyin == 'd')
+        {
+            if (in_prompt_mode)
+                mprf(MSGCH_PROMPT, "Uppercase letters only, please.");
+            else
+                set_more(formatted_string("Uppercase letters only, please."));
+            return true;
+        }
+        return PromptMenu::process_key(keyin);
+    }
+
+private:
+    bool need_caps;
+};
+
+// Returns the chosen key, or 0 if a HUP interrupted the choice.
+static int _choose_stat_gain(const string &message, int statgain, bool need_caps)
+{
+    StatGainMenu menu(need_caps);
+    menu.set_tag("prompt_required");
+    // The message pane already shows the message itself.
+    MenuEntry *title = new MenuEntry(
+        (Options.prompt_menu ? message + " " : "") + "Increase which attribute?",
+        MEL_TITLE);
+    title->wrap_text();
+    menu.set_title(title);
+
+    const auto add_stat = [&menu, statgain](stat_type stat, const char *name,
+                                            int key)
+    {
+        const int base = innate_stat(stat);
+        menu.add_entry(new MenuEntry(
+            make_stringf("%s (%d to %d)", name, base, base + statgain),
+            MEL_ITEM, 1, key));
+    };
+    add_stat(STAT_STR, "Strength", 'S');
+    add_stat(STAT_INT, "Intelligence", 'I');
+    add_stat(STAT_DEX, "Dexterity", 'D');
+
+    const vector<MenuEntry *> chosen = menu.show();
+    return chosen.empty() ? 0 : chosen[0]->hotkeys[0];
+}
+
 /**
  * Handle manual, permanent character stat increases. (Usually from every third
  * XL.
@@ -84,78 +144,32 @@ bool attribute_increase()
     crawl_state.stat_gain_prompt = true;
     mprf(MSGCH_INTRINSIC_GAIN, "%s", stat_gain_message.c_str());
     learned_something_new(HINT_CHOOSE_STAT);
-    if (innate_stat(STAT_STR) != you.strength()
-        || innate_stat(STAT_INT) != you.intel()
-        || innate_stat(STAT_DEX) != you.dex())
-    {
-        mprf(MSGCH_PROMPT, "Your base attributes are Str %d, Int %d, Dex %d.",
-             innate_stat(STAT_STR),
-             innate_stat(STAT_INT),
-             innate_stat(STAT_DEX));
-    }
-    mprf(MSGCH_PROMPT, need_caps
-        ? "Increase (S)trength, (I)ntelligence, or (D)exterity? "
-        : "Increase (s)trength, (i)ntelligence, or (d)exterity? ");
     mouse_control mc(MOUSE_MODE_PROMPT);
 
-    bool tried_lua = false;
-    int keyin;
-    while (true)
+    // Calling a user-defined lua function here to let players reply to the
+    // prompt automatically. Either returning a string or using crawl.sendkeys
+    // will work.
+    int keyin = 0;
+    if (clua.callfn("choose_stat_gain", 0, 1))
     {
-        // Calling a user-defined lua function here to let players reply to
-        // the prompt automatically. Either returning a string or using
-        // crawl.sendkeys will work.
-        if (!tried_lua && clua.callfn("choose_stat_gain", 0, 1))
-        {
-            string result;
-            clua.fnreturns(">s", &result);
-            keyin = toupper_safe(result[0]);
-        }
-        else
-        {
-            while ((keyin = getchm()) == CK_REDRAW)
-            {
-                redraw_screen();
-                update_screen();
-            }
-        }
-        tried_lua = true;
-
-        if (!need_caps)
-            keyin = toupper_safe(keyin);
-
-        switch (keyin)
-        {
-        CASE_ESCAPE
-            // It is unsafe to save the game here; continue with the turn
-            // normally, when the player reloads, the game will re-prompt
-            // for their level-up stat gain.
-            if (crawl_state.seen_hups)
-                return false;
-            break;
-
-        case 'S':
-            for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_STR, 1, false);
-            return true;
-
-        case 'I':
-            for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_INT, 1, false);
-            return true;
-
-        case 'D':
-            for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_DEX, 1, false);
-            return true;
-
-        case 's':
-        case 'i':
-        case 'd':
-            mprf(MSGCH_PROMPT, "Uppercase letters only, please.");
-            break;
-        }
+        string result;
+        clua.fnreturns(">s", &result);
+        keyin = toupper_safe(result[0]);
     }
+    if (keyin != 'S' && keyin != 'I' && keyin != 'D')
+        keyin = _choose_stat_gain(stat_gain_message, statgain, need_caps);
+
+    // It is unsafe to save the game here; continue with the turn normally,
+    // when the player reloads, the game will re-prompt for their level-up stat
+    // gain.
+    if (!keyin)
+        return false;
+
+    const stat_type stat = keyin == 'S' ? STAT_STR
+                         : keyin == 'I' ? STAT_INT : STAT_DEX;
+    for (int i = 0; i < statgain; i++)
+        modify_stat(stat, 1, false);
+    return true;
 }
 
 static const char* descs[NUM_STATS][NUM_STAT_DESCS] =

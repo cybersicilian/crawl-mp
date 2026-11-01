@@ -10,7 +10,7 @@ import tornado.netutil
 import tornado.web
 
 from webtiles import auth, profile_graphics, userdb
-from webtiles.graphics_http import GraphicsAPIHandler, GraphicsPageHandler
+from webtiles.graphics_http import GraphicsAPIHandler
 from webtiles.profile_http import ProfilePageHandler, AppearanceAPIHandler, signed_in_user
 
 
@@ -28,6 +28,7 @@ class Probe(tornado.web.RequestHandler):
         initial = json.dumps(profile_graphics.state(username)).replace('<', '\\u003c')
         self.write('''<!doctype html><html><head><meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="/game-static/style.css">
+<link rel="stylesheet" href="/static/styles/rc-settings.css">
 <link rel="stylesheet" href="/game-static/styles/party-inspector.css">
 <link rel="stylesheet" href="/static/tabletop/character-folio.css">
 <link rel="stylesheet" href="/game-static/styles/equipment-paperdoll.css"></head>
@@ -44,6 +45,21 @@ document.getElementById('graphics_probe_open').onclick=function(){dialog.open();
 });</script></body></html>''')
 
 
+class Controls(tornado.web.RequestHandler):
+    """The shared controls alone: the lobby that hosts Settings needs a native game."""
+    def get(self):
+        initial = json.dumps(profile_graphics.state(signed_in_user(self))).replace('<', '\\u003c')
+        self.write('''<!doctype html><html><head><meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/static/styles/graphics-settings.css"></head>
+<body class="graphics-page"><main><section id="profile_graphics"></section></main>
+<script src="/static/scripts/contrib/require.js"></script><script>
+require.config({baseUrl:'/static/scripts',paths:{jquery:'/static/scripts/contrib/jquery'},shim:{'contrib/jquery.json':['jquery']}});
+require(['graphics-preferences','graphics-controls'],function(prefs,controls){
+var initial=''' + initial + ''';prefs.bindUser(initial.username,initial);
+controls.mount(document.getElementById('profile_graphics'));
+});</script></body></html>''')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--ready', required=True); args = parser.parse_args()
     root = Path(__file__).parents[1]
@@ -51,7 +67,7 @@ if __name__ == '__main__':
         userdb.settings_db = userdb.crawl_db(str(Path(directory) / 'settings.sqlite'))
         app = tornado.web.Application([
             (r'/fixture-login/(Aster|Rowan)', Login), (r'/profile', ProfilePageHandler),
-            (r'/settings/graphics', GraphicsPageHandler),
+            (r'/settings/graphics', Controls),
             (r'/probe', Probe), (r'/api/profile/graphics', GraphicsAPIHandler),
             (r'/api/profile/appearance', AppearanceAPIHandler),
             (r'/game-static/(.*)', tornado.web.StaticFileHandler, {'path': str(root / 'game_data/static')}),

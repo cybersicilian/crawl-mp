@@ -491,25 +491,24 @@ static bool _can_order()
 /// Prompt the player to issue orders. Returns the key pressed.
 static int _issue_orders_prompt()
 {
-    mprf(MSGCH_PROMPT, "What are your orders?");
+    vector<prompt_answer> orders;
     if (!you.cannot_speak())
     {
         string cap_shout = you.shout_verb(false);
         cap_shout[0] = toupper_safe(cap_shout[0]);
-        mprf(" t - %s!", cap_shout.c_str());
+        orders.push_back({ 't', cap_shout + "!" });
     }
 
     if (_can_order())
     {
-        mpr("Orders for allies: a - Attack new target.");
-        mpr("                   r - Retreat!             s - Stop attacking.");
-        mpr("                   g - Guard the area.      f - Follow me.");
+        orders.push_back({ 'a', "Attack new target" });
+        orders.push_back({ 'r', "Retreat!" });
+        orders.push_back({ 's', "Stop attacking" });
+        orders.push_back({ 'g', "Guard the area" });
+        orders.push_back({ 'f', "Follow me" });
     }
-    mpr(" Anything else - Cancel.");
 
-    flush_prev_message(); // buffer doesn't get flushed otherwise
-
-    const int keyn = get_ch();
+    const int keyn = prompt_choice("What are your orders?", orders);
     clear_messages();
     return keyn;
 }

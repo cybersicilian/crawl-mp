@@ -46,6 +46,7 @@ define(["jquery", "comm", "client", "./menu-keyboard", "./menu-presentation", "h
             : element.hasClass("workflow-action-menu") ? "Letter keys select · Tab moves between actions · Enter activates"
             : element.hasClass("formatted-scroller") ? "↑ / ↓: scroll · Page Up / Down: page · Esc: return"
             : element.hasClass("menu_txt") ? "Use the letter keys shown below · Esc: return"
+            : element.hasClass("menu_prompt_required") ? "Letter keys select · Enter activates"
             : element.hasClass("workflow-prompt") ? "Enter: confirm · Esc: cancel"
                 : "Letter keys select · Tab moves focus · Enter activates";
         element.append($("<div class='workflow-key-help workflow-popup-help'></div>").text(hint));

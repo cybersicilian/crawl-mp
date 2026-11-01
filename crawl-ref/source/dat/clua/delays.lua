@@ -132,9 +132,11 @@ end
 function rr_message_adder(v)
     local function rr_add_messages(key, value, mode)
         if mode == 0 then
-            -- Clear list
-            for k in pairs (g_rr_ignored) do
-                g_rr_ignored[k] = nil
+            -- Clear this list. Stop and ignore rules share one table.
+            for i = #g_rr_ignored, 1, -1 do
+                if g_rr_ignored[i].value == v then
+                    table.remove(g_rr_ignored, i)
+                end
             end
             if value == "" then
                 return

@@ -110,7 +110,7 @@ assert(origin && output); fs.mkdirSync(output, { recursive: true });
         assert.equal(await probe.evaluate(() => window.nativeKeys), 0);
         await probe.screenshot({ path: path.join(output, 'graphics-dialog.png') });
         await probe.keyboard.press('Escape');
-        assert.equal(await probe.locator('#graphics_settings_dialog').evaluate(node => node.open), false);
+        assert.equal(await probe.locator('#settings_dialog').evaluate(node => node.open), false);
         assert.equal(await probe.evaluate(() => document.activeElement.id), 'graphics_probe_open');
         await page.request.get(origin + '/fixture-login/Rowan');
         await page.locator('[data-graphics-preset="balanced"]').click();

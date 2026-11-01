@@ -126,6 +126,61 @@ class GameSettingsTests(unittest.TestCase):
             self.assertEqual(result['locked']['travel_delay'],40)
             self.assertNotIn('contents',result)
 
+    def test_every_setting_says_when_it_applies(self):
+        for key, field in model.FIELDS.items():
+            self.assertIn(field.get('apply'), {'live', 'live_resend', 'restart', 'new_character'}, key)
+
+    def hosted(self, launched=None):
+        sock = self.socket()
+        sock.game_id = 'solo'
+        sock.process = SimpleNamespace(conn=object(), handle_input=Mock(), launched_settings=launched or {})
+        return sock
+
+    def test_live_settings_reach_the_hosted_game_at_once(self):
+        with patch.object(config, 'games', {'solo': self.game}):
+            sock = self.hosted()
+            game_settings_socket.handle(sock, 'solo', '1', {'travel_delay': 5, 'tile_map_scale': 1, 'show_blood': False}, save=True)
+        sent = [call.args[0] for call in sock.process.handle_input.call_args_list]
+        self.assertEqual(sent, [dict(msg='set_option', line='travel_delay = 5', resend=False),
+                                dict(msg='set_option', line='tile_map_scale = 1', resend=True)])
+        result = sock.send_message.call_args.kwargs
+        self.assertTrue(result['running']); self.assertEqual(result['pending_restart'], ['show_blood'])
+
+    def test_clearing_a_choice_sends_the_inherited_value(self):
+        self.path.write_text('travel_delay = 50\n')
+        with patch.object(config, 'games', {'solo': self.game}):
+            sock = self.hosted()
+            game_settings_socket.handle(sock, 'solo', '1', {'travel_delay': 5}, save=True)
+            game_settings_socket.handle(sock, 'solo', '2', {'travel_delay': None}, save=True)
+        self.assertEqual(sock.process.handle_input.call_args.args[0]['line'], 'travel_delay = 50')
+
+    def test_restart_is_pending_only_while_the_choice_differs_from_launch(self):
+        with patch.object(config, 'games', {'solo': self.game}):
+            sock = self.hosted({'show_blood': False})
+            game_settings_socket.handle(sock, 'solo', '1', {'show_blood': False}, save=True)
+            self.assertEqual(sock.send_message.call_args.kwargs['pending_restart'], [])
+            game_settings_socket.handle(sock, 'solo', '2', {'show_blood': None}, save=True)
+            self.assertEqual(sock.send_message.call_args.kwargs['pending_restart'], ['show_blood'])
+
+    def test_other_players_rule_out_an_automatic_restart(self):
+        with patch.object(config, 'games', {'solo': self.game}):
+            sock = self.hosted()
+            sock.process.party_control = SimpleNamespace(owner='aster', members={'Aster': 0})
+            game_settings_socket.handle(sock, 'solo', '1')
+            self.assertFalse(sock.send_message.call_args.kwargs['shared'])
+            sock.process.party_control.members['Rowan'] = 1
+            game_settings_socket.handle(sock, 'solo', '2')
+            self.assertTrue(sock.send_message.call_args.kwargs['shared'])
+
+    def test_a_guest_or_lobby_save_touches_no_running_game(self):
+        with patch.object(config, 'games', {'solo': self.game}):
+            lobby = self.socket(); lobby.process = None; lobby.game_id = None
+            game_settings_socket.handle(lobby, 'solo', '1', {'travel_delay': 5}, save=True)
+            other = self.hosted(); other.game_id = 'another'
+            game_settings_socket.handle(other, 'solo', '2', {'travel_delay': 6}, save=True)
+        self.assertFalse(lobby.send_message.call_args.kwargs['running'])
+        other.process.handle_input.assert_not_called()
+
     def test_storage_failure_does_not_claim_success(self):
         with patch.object(config,'games',{'solo':self.game}),patch.object(settings,'update',side_effect=OSError):
             sock=self.socket();game_settings_socket.handle(sock,'solo','5',{'rest_delay':10},save=True)

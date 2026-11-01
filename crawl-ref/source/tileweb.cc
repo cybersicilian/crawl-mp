@@ -1586,6 +1586,16 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         Options.read_option_line(opt_line->string_, true);
         // XX only set this flag if a relevant option has actually changed
         Options.prefs_dirty = true;
+        // Some options reach the browser only in the options message, and
+        // remembered map cells keep markers drawn under the old value.
+        JsonNode *resend = json_find_member(obj.node, "resend");
+        if (resend && resend->tag == JSON_BOOL && resend->bool_
+            && crawl_state.game_started)
+        {
+            tile_draw_entire_map();
+            send_options();
+            c = CK_REDRAW;
+        }
     }
     else if (msgtype == "main_menu_action"
              && mouse_control::current_mode() == MOUSE_MODE_COMMAND)

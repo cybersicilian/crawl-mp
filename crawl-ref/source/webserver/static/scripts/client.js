@@ -223,6 +223,7 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
         {
             api.show_dialog("#reset_pw");
         }
+        $(document).trigger("lobby_returned");
     }
 
     function go_admin()
@@ -295,6 +296,9 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
         $(document).trigger("party_joined", [data]);
     }
 
+    exports.game_id = function () { return state.current_game_id || null; };
+    exports.expedition_id = function () { return state.current_expedition_id || null; };
+
     exports.is_watching = function ()
     {
         return state.watching && !state.party_member_active;
@@ -308,6 +312,8 @@ function (exports, $, key_conversion, chat, comm, cookie, tablesorter, waitforim
     function crawl_started(data)
     {
         api.finish_recovery();
+        state.current_game_id = data.game_id || state.current_game_id;
+        state.current_expedition_id = data.expedition_id || null;
         if (data.game_id) {
             state.current_hash = data.expedition_id ? expeditionURL.hash(data.expedition_id) : "#play-" + data.game_id;
             history.replaceState(null, "", state.current_hash);

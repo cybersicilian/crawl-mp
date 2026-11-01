@@ -31,7 +31,8 @@ def spawn(command, directory, cwd):
         fcntl.ioctl(0, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
         os.chdir(cwd)
         os.execve(command[0], command, dict(
-            os.environ, TERM="linux", LINES="24", COLUMNS="80", LC_ALL="en_US.UTF-8",
+            os.environ, TERM="linux", LINES="24", COLUMNS="80",
+            LC_ALL=os.environ.get("LC_ALL") or os.environ.get("LANG") or "en_US.UTF-8",
             CRAWL_GAME_ID="headless-check", CRAWL_OWNER_ID="headless-check",
             CRAWL_RECORD_PATH=str(directory / "record.json")))
     return pid, terminal

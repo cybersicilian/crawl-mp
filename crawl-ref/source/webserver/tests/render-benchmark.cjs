@@ -70,7 +70,7 @@ function fixtureHtml() {
     const modules = [];
     const scripts = ['idle-work', 'tooltip-policy', 'game-loading', 'tile-edges', 'terrain-topology', 'liquid-field', 'terrain-blend', 'wall-surface', 'shader-atlas',
         'liquid-shader', 'shore-field', 'fluid-surface', 'shoreline-paint', 'terrain-finish', 'tile-atmosphere', 'graphics-settings-model', 'visual-presentation',
-        'graphics-controls', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface',
+        'graphics-controls', 'tip-controls', 'rc-settings', 'settings-dialog', 'graphics-dialog', 'tile-lighting', 'light-emission', 'light-field-sampling', 'pixel-sampling', 'transparent-surface',
         'light-map-paint', 'flame-field', 'emissive-surface', 'surface-reflections', 'emissive-paint', 'visibility-feather', 'tile-lighting-paint',
         'region-field', 'aura-distortion', 'depth-shading', 'material-response', 'sampled-lighting', 'surface-lighting', 'vapour-field', 'effect-shading', 'sprite-motion',
         'sprite-motion-layer', 'footstep-paint', 'weighted-cache', 'figure-shading', 'lantern-pool', 'ambient-motes', 'image-grade', 'atlas-materials', 'atlas-sprites', 'deferred-images', 'texture-pack', 'terrain-surface'];

@@ -1,29 +1,18 @@
 """Authenticated graphics preferences; the client cannot select another owner."""
 import json
 import sqlite3
-from pathlib import Path
 
 import tornado.web
 
 from webtiles import profile_graphics
 from webtiles.auth_http import signed_in_user
-from webtiles.asset_revision import revision
 
 
 class GraphicsPageHandler(tornado.web.RequestHandler):
+    """Older links open the shared Settings control in the lobby."""
     def get(self):
-        username = signed_in_user(self)
         self.set_header('Cache-Control', 'no-store, private')
-        if not username:
-            self.redirect('/?graphics=1#lobby')
-            return
-        try:
-            state = profile_graphics.state(username)
-        except (sqlite3.Error, OSError, ValueError):
-            raise tornado.web.HTTPError(503, 'Graphics settings are temporarily unavailable')
-        self.render('graphics.html', username=username,
-                    graphics_json=json.dumps(state).replace('<', '\\u003c'),
-                    graphics_revision=revision(Path(__file__).parents[1] / 'static'))
+        self.redirect('/?settings=appearance')
 
 
 class GraphicsAPIHandler(tornado.web.RequestHandler):

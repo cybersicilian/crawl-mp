@@ -98,6 +98,8 @@ class UseItemMenu : public InvMenu
     void clear() override;
     bool examine_index(int i) override;
     bool cycle_mode(bool forward) override;
+    vector<string> mode_names() const override;
+    int active_mode() const override;
     void save_hover();
     void restore_hover(bool preserve_pos);
     string get_keyhelp(bool scrollable) const override;
@@ -292,6 +294,20 @@ bool UseItemMenu::init_modes()
     }
 
     return true;
+}
+
+vector<string> UseItemMenu::mode_names() const
+{
+    vector<string> names;
+    for (const auto &o : available_modes)
+        names.push_back(uppercase_first(_oper_name(o)));
+    return names;
+}
+
+int UseItemMenu::active_mode() const
+{
+    return find(available_modes.begin(), available_modes.end(), oper)
+           - available_modes.begin();
 }
 
 bool UseItemMenu::cycle_mode(bool forward)
@@ -759,9 +775,10 @@ string UseItemMenu::get_keyhelp(bool) const
                     n = "<w>" + n + "</w>";
                 mode_names.push_back(n);
             }
-            modes = menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE) + " "
-                + join_strings(mode_names.begin(), mode_names.end(), "|")
-                + "   ";
+            modes = menu_mode_hint(" "
+                + join_strings(mode_names.begin(), mode_names.end(), "|"));
+            if (!modes.empty())
+                modes += "   ";
         }
     }
     if (eu_modes.size() && desc_key.size() && modes.size() && full.size())
@@ -1190,6 +1207,9 @@ static item_def* _item_swap_prompt(const vector<item_def*>& candidates)
 
     // Default to a menu for larger choices
     if (candidates.size() > 3 || ui::has_layout())
+        return _item_swap_menu(candidates);
+
+    if (Options.prompt_item_menu)
         return _item_swap_menu(candidates);
 
     vector<char> slot_chars;

@@ -115,10 +115,18 @@ bool confirm_prompt(const char* require, const char* fmt, ...)
     va_end(args);
     buf[sizeof(buf)-1] = 0;
 
-    mprf(MSGCH_PROMPT, "%s (Confirm with \"%s\".) ", buf, require);
-
-    if (cancellable_get_line(buf, sizeof buf))
-        return false;
+    const string prompt = make_stringf("%s (Confirm with \"%s\".) ", buf, require);
+    if (Options.prompt_text_menu)
+    {
+        if (msgwin_get_line(prompt, buf, sizeof buf))
+            return false;
+    }
+    else
+    {
+        mprf(MSGCH_PROMPT, "%s", prompt.c_str());
+        if (cancellable_get_line(buf, sizeof buf))
+            return false;
+    }
     if (strcasecmp(buf, require) != 0)
         return false;
 
@@ -317,6 +325,17 @@ int yesno(const char *str, bool allow_lowercase, int default_answer, bool clear_
  */
 int prompt_for_quantity(const char *prompt)
 {
+    if (Options.prompt_text_menu)
+    {
+        char specs[80];
+        if (msgwin_get_line(prompt, specs, sizeof(specs)) == CK_ESCAPE)
+            return 0;
+        if (specs[0] == '\0' || specs[0] == ';')
+            return -1;
+        const int quantity = strtol(specs, nullptr, 10);
+        return max(quantity, 0);
+    }
+
     msgwin_prompt(prompt);
 
     int ch = getch_ck();
@@ -470,10 +489,15 @@ void PromptMenu::build_prompt_menu()
         }
 
         line.textcolour(item_colour(item));
-        // TODO: support MF_ALLOW_FORMATTING
-        line.cprintf("%-*s",
-            col_width,
-            _prompt_text(*item).c_str()); // _prompt_text handles the hotkey
+        const string text = _prompt_text(*item); // handles the hotkey
+        if (is_set(MF_ALLOW_FORMATTING))
+        {
+            const formatted_string entry = formatted_string::parse_string(text);
+            line += entry;
+            line.cprintf("%*s", max(0, col_width - entry.width()), "");
+        }
+        else
+            line.cprintf("%-*s", col_width, text.c_str());
 
         c++;
         if (c >= columns || item->level != MEL_ITEM)
@@ -556,6 +580,28 @@ vector<MenuEntry *> PromptMenu::show_in_msgpane()
     }
     get_selected(&sel);
     return sel;
+}
+
+int prompt_choice(const string &question, const vector<prompt_answer> &answers)
+{
+    PromptMenu menu(MF_SINGLESELECT | MF_ARROWS_SELECT | MF_INIT_HOVER
+                    | MF_ALLOW_FORMATTING);
+    menu.set_tag("prompt");
+    MenuEntry *title = new MenuEntry(question, MEL_TITLE);
+    title->wrap_text();
+    menu.set_title(title);
+    for (const prompt_answer &answer : answers)
+    {
+        MenuEntry *entry = new MenuEntry(answer.label, MEL_ITEM, 1, answer.key);
+        if (answer.key >= 'a' && answer.key <= 'z')
+            entry->add_hotkey(toupper_safe(answer.key));
+        for (int key : answer.other_keys)
+            entry->add_hotkey(key);
+        menu.add_entry(entry);
+    }
+
+    const vector<MenuEntry *> chosen = menu.show();
+    return chosen.empty() ? 0 : chosen[0]->hotkeys[0];
 }
 
 #ifdef WIZARD

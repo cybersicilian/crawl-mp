@@ -1187,6 +1187,29 @@ static int _prompt_annotate_branch(level_id lid)
         if (is_known_branch_id(it->id))
             brs.push_back(it->id);
 
+    if (Options.prompt_menu)
+    {
+        vector<prompt_answer> answers = {
+            { '.', "Here: " + lid.describe(false, true) },
+            { '<', "The level above" },
+            { '>', "The level below" },
+        };
+        for (branch_type br : brs)
+            answers.push_back({ branches[br].travel_shortcut, branches[br].longname });
+
+        const int keyin = prompt_choice("Annotate which branch?", answers);
+        if (keyin == '.')
+            return ID_HERE;
+        if (keyin == '<')
+            return ID_UP;
+        if (keyin == '>')
+            return ID_DOWN;
+        for (branch_type br : brs)
+            if (keyin == branches[br].travel_shortcut)
+                return br;
+        return ID_CANCEL;
+    }
+
     mprf(MSGCH_PROMPT, "Annotate which branch? (. - %s, ? - help, ! - show branch list)",
         lid.describe(false, true).c_str());
 

@@ -402,14 +402,13 @@ spret open(item_def& container)
             you.turn_is_over = true;
         return result;
     }
-    mprf(MSGCH_PROMPT, "Bag (%d/%d slots): (p)ut in, (t)ake out, or Esc to cancel?",
-         used(container), capacity(container));
-    flush_prev_message();
-    const int choice = getchm();
+    const int choice = prompt_choice(
+        make_stringf("Bag (%d/%d slots):", used(container), capacity(container)),
+        { { 'p', "Put in" }, { 't', "Take out" } });
     spret result = spret::abort;
-    if (choice == 'p' || choice == 'P')
+    if (choice == 'p')
         result = put_menu();
-    else if (choice == 't' || choice == 'T')
+    else if (choice == 't')
         result = take_menu(container);
     else
         canned_msg(MSG_OK);

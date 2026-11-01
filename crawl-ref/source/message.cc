@@ -1675,10 +1675,43 @@ void msgwin_got_input()
     msgwin.got_input();
 }
 
-int msgwin_get_line(string prompt, char *buf, int len,
-                    input_history *mh, const string &fill)
+class PromptTextEntry : public ui::TextEntry
 {
-    bool use_popup = !crawl_state.need_save || ui::has_layout();
+public:
+    PromptTextEntry(function<void()> help_) : help(help_) { }
+
+    bool on_event(const ui::Event& event) override
+    {
+        if (help && event.type() == ui::Event::Type::KeyDown
+            && static_cast<const ui::KeyEvent&>(event).key() == '?'
+            && wants_help())
+        {
+            help();
+            return true;
+        }
+        return ui::TextEntry::on_event(event);
+    }
+
+private:
+    bool wants_help() const
+    {
+#ifdef USE_TILE_WEB
+        // The browser owns typing, and sends this key only to ask for help.
+        if (tiles.is_controlled_from_web())
+            return true;
+#endif
+        return get_text().empty();
+    }
+
+    function<void()> help;
+};
+
+int msgwin_get_line(string prompt, char *buf, int len,
+                    input_history *mh, const string &fill,
+                    function<void()> help)
+{
+    bool use_popup = !crawl_state.need_save || ui::has_layout()
+                     || Options.prompt_text_menu;
 
     int ret;
     if (use_popup)
@@ -1695,7 +1728,7 @@ int msgwin_get_line(string prompt, char *buf, int len,
 
         vbox->add_child(make_shared<ui::Text>(colour_prompt + "\n"));
 
-        auto input = make_shared<ui::TextEntry>();
+        auto input = make_shared<PromptTextEntry>(help);
         input->set_sync_id("input");
         input->set_text(fill);
         input->set_input_history(mh);
@@ -1724,6 +1757,7 @@ int msgwin_get_line(string prompt, char *buf, int len,
 #ifdef USE_TILE_WEB
         tiles.json_open_object();
         tiles.json_write_string("prompt", colour_prompt.to_colour_string(colour_msg(colour)));
+        tiles.json_write_bool("help", bool(help));
         tiles.push_ui_layout("msgwin-get-line", 0);
         popup->on_layout_pop([](){ tiles.pop_ui_layout(); });
 #endif
@@ -1737,6 +1771,13 @@ int msgwin_get_line(string prompt, char *buf, int len,
         if (!prompt.empty())
             msgwin_prompt(prompt);
         ret = cancellable_get_line(buf, len, mh, nullptr, fill);
+        while (ret == '?' && help)
+        {
+            help();
+            redraw_screen();
+            update_screen();
+            ret = cancellable_get_line(buf, len, mh, nullptr, fill);
+        }
         msgwin_reply(buf);
     }
 

@@ -1363,6 +1363,21 @@ string pad_more_with_esc(const string &s)
     return pad_more_with(s, menu_keyhelp_cmd(CMD_MENU_EXIT) + " exit");
 }
 
+bool menu_modes_are_buttons()
+{
+#ifdef USE_TILE_WEB
+    return tiles.is_controlled_from_web();
+#else
+    return false;
+#endif
+}
+
+string menu_mode_hint(const string &modes)
+{
+    return menu_modes_are_buttons() ? ""
+                                    : menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE) + modes;
+}
+
 string menu_keyhelp_cmd(command_type cmd)
 {
     if (cmd == CMD_MENU_PAGE_UP || cmd == CMD_MENU_PAGE_DOWN)
@@ -1657,6 +1672,16 @@ bool Menu::title_prompt(char linebuf[], int bufsz, const char* prompt, string he
     return validline;
 }
 
+void Menu::cycle_mode_by_key(bool forward)
+{
+    if (!cycle_mode(forward))
+        return;
+#ifdef USE_TILE_WEB
+    // The title carries the active mode, even when its text is unchanged.
+    _webtiles_title_changed = true;
+#endif
+}
+
 bool Menu::cycle_mode(bool forward)
 {
     switch (action_cycle)
@@ -1754,13 +1779,13 @@ bool Menu::process_command(command_type cmd)
         if (multicol && is_set(MF_ARROWS_SELECT))
             cycle_hover(false, true, false);
         else
-            cycle_mode(true);
+            cycle_mode_by_key(true);
         break;
     case CMD_MENU_LEFT:
         if (multicol && is_set(MF_ARROWS_SELECT))
             cycle_hover(true, true, false);
         else
-            cycle_mode(false);
+            cycle_mode_by_key(false);
         break;
 
     case CMD_MENU_LINE_UP:
@@ -1817,10 +1842,10 @@ bool Menu::process_command(command_type cmd)
         }
         break;
     case CMD_MENU_CYCLE_MODE:
-        cycle_mode(true);
+        cycle_mode_by_key(true);
         break;
     case CMD_MENU_CYCLE_MODE_REVERSE:
-        cycle_mode(false);
+        cycle_mode_by_key(false);
         break;
     case CMD_MENU_CYCLE_HEADERS:
         cycle_headers(true);
@@ -3426,6 +3451,37 @@ void Menu::webtiles_write_title() const
     tiles.json_open_object("title");
     tiles.json_write_string("text", _webtiles_title.to_colour_string(LIGHTGRAY));
     tiles.json_close_object("title");
+
+    const vector<string> modes = mode_names();
+    if (modes.size() < 2)
+        return;
+    tiles.json_write_string("menu_actions_label", "Menu mode");
+    tiles.json_open_array("menu_actions");
+    for (int i = 0; i < static_cast<int>(modes.size()); ++i)
+    {
+        tiles.json_open_object();
+        tiles.json_write_string("id", make_stringf("mode:%d", i));
+        tiles.json_write_string("label", modes[i]);
+        tiles.json_write_bool("active", i == active_mode());
+        tiles.json_close_object();
+    }
+    tiles.json_close_array();
+}
+
+int Menu::webtiles_action(const string& command, int)
+{
+    if (!starts_with(command, "mode:"))
+        return 0;
+    const int mode = atoi(command.c_str() + 5);
+    const int count = mode_names().size();
+    if (mode < 0 || mode >= count)
+        return 0;
+    for (int i = 0; i < count && active_mode() != mode; ++i)
+        if (!cycle_mode(true))
+            break;
+    // Control messages do not return through the native key loop.
+    webtiles_update_title();
+    return 0;
 }
 
 void Menu::webtiles_write_tiles(const MenuEntry& me) const
@@ -3699,32 +3755,39 @@ void ToggleableMenu::add_toggle_from_command(command_type cmd)
 
 // TODO: do away with this somehow? Maybe this whole subclass isn't really
 // needed?
+bool ToggleableMenu::cycle_mode(bool)
+{
+    // Toggle all menu entries
+    for (MenuEntry *item : items)
+        if (auto p = dynamic_cast<ToggleableMenuEntry*>(item))
+            p->toggle();
+
+    // Toggle title
+    if (auto pt = dynamic_cast<ToggleableMenuEntry*>(title))
+        pt->toggle();
+
+    update_menu();
+
+#ifdef USE_TILE_WEB
+    webtiles_update_items(0, items.size() - 1);
+#endif
+
+    if (flags & MF_TOGGLE_ACTION)
+    {
+        if (menu_action == ACT_EXECUTE)
+            menu_action = ACT_EXAMINE;
+        else
+            menu_action = ACT_EXECUTE;
+    }
+    toggled = !toggled;
+    return true;
+}
+
 int ToggleableMenu::pre_process(int key)
 {
     if (find(toggle_keys.begin(), toggle_keys.end(), key) != toggle_keys.end())
     {
-        // Toggle all menu entries
-        for (MenuEntry *item : items)
-            if (auto p = dynamic_cast<ToggleableMenuEntry*>(item))
-                p->toggle();
-
-        // Toggle title
-        if (auto pt = dynamic_cast<ToggleableMenuEntry*>(title))
-            pt->toggle();
-
-        update_menu();
-
-#ifdef USE_TILE_WEB
-        webtiles_update_items(0, items.size() - 1);
-#endif
-
-        if (flags & MF_TOGGLE_ACTION)
-        {
-            if (menu_action == ACT_EXECUTE)
-                menu_action = ACT_EXAMINE;
-            else
-                menu_action = ACT_EXECUTE;
-        }
+        cycle_mode_by_key(true);
 
         // Don't further process the key
         return 0;

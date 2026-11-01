@@ -84,10 +84,12 @@ unsigned int msgwin_line_length();
 // read, e.g. after reading input from the player.
 void msgwin_got_input();
 
+// With a help callback, ? on an empty line calls it instead of being typed.
 int msgwin_get_line(string prompt,
                     char *buf, int len,
                     input_history *mh = nullptr,
-                    const string &fill = "");
+                    const string &fill = "",
+                    function<void()> help = nullptr);
 
 // Do not use this templated function directly. Use the macro below instead.
 template<int> static int msgwin_get_line_autohist_temp(string prompt,

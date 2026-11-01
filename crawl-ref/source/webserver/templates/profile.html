@@ -5,13 +5,13 @@
   <link rel="stylesheet" href="/static/tabletop/art-direction-tokens.css?v={{ graphics_revision }}">
   <link rel="stylesheet" href="/static/tabletop/profile.css?v={{ graphics_revision }}">
   <script src="/static/scripts/contrib/require.js?v={{ graphics_revision }}"></script>
-  <script>require.config({baseUrl:'/static/scripts',urlArgs:'v={{ graphics_revision }}',paths:{jquery:'/static/scripts/contrib/jquery'},shim:{'contrib/jquery.json':['jquery']}});require(['profile-appearance','profile-graphics']);</script>
+  <script>require.config({baseUrl:'/static/scripts',urlArgs:'v={{ graphics_revision }}',paths:{jquery:'/static/scripts/contrib/jquery'},shim:{'contrib/jquery.json':['jquery']}});require(['profile-appearance']);</script>
 </head><body class="profile-page">
 <main>
   <nav class="profile-page-nav" aria-label="Account pages">
     <a class="profile-back" href="/#lobby">← Return to the tavern</a>
     <a href="/profile" aria-current="page">Profile &amp; textures</a>
-    <a href="/settings/graphics">Appearance &amp; graphics</a>
+    <a href="/settings/graphics">Settings</a>
   </nav>
   <header>
     <p class="eyebrow">Account · {{ username }}</p>
@@ -37,6 +37,5 @@
     <p class="profile-save-status" role="status" aria-live="polite">Saved to your profile.</p>
     <p class="profile-note">Your choice affects your terrain and sprites only. Game rules and the interface stay the same.</p>
   </section>
-  <section id="profile_graphics" aria-label="Account graphics settings"></section>
-  <script id="profile_graphics_state" type="application/json">{% raw graphics_json %}</script>
+  <p class="profile-note"><a href="/settings/graphics">Open Settings</a> for appearance, graphics and game preferences.</p>
 </main></body></html>

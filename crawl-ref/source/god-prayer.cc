@@ -63,31 +63,22 @@ static bool _prompt_ecu_worship(const vector<god_type> &gods)
     }
     const string god_names = comma_separated_line(god_name_list.begin(),
                                                   god_name_list.end(), " or ");
-    // This should be a proper menu, but I absolutely cannot be bothered with
-    // webtiles menu code.
-    mprf(MSGCH_PROMPT, "This altar belongs to %s, but you can't tell which.\n"
-         "Press the corresponding letter to learn more about a god, "
-         "or press enter to convert or escape to cancel.", god_names.c_str());
-    while (true) {
-        flush_prev_message();
-        int ch = getch_ck();
-        switch (ch)
-        {
-        case CK_ENTER:
-        case 'y':
-        case 'Y':
+    vector<prompt_answer> answers = { { 'y', "Convert" } };
+    for (size_t i = 0; i < gods.size(); i++)
+    {
+        answers.push_back({ static_cast<int>('a' + i),
+                            "Learn about " + god_name(gods[i]) });
+    }
+    while (true)
+    {
+        const int ch = prompt_choice(make_stringf(
+            "This altar belongs to %s, but you can't tell which.",
+            god_names.c_str()), answers);
+        if (ch == 'y')
             return true;
-        case 'n':
-        case 'N':
-        case CK_ESCAPE:
-        case CK_REDRAW:
+        if (!ch)
             return false;
-        default:
-            break;
-        }
-        int god_idx = ch - 'a';
-        if (god_idx >= 0 && god_idx < int(gods.size()))
-            describe_god(gods[god_idx]);
+        describe_god(gods[ch - 'a']);
     }
 }
 

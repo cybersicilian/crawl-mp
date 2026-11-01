@@ -1,7 +1,14 @@
 /* Schema-driven game preferences. RC files never enter the browser editor. */
 define([], function () {
     'use strict';
-    var data, draft = {}, rows = [], selected = 'Travel & rest', initialized = false, saving = false, returnFocus;
+    var APPEARANCE = 'Appearance & graphics', ALL = 'All settings';
+    var data = null, draft = {}, sent = {}, baseline = {}, rows = [], selected = APPEARANCE, initialized = false, saving = false;
+    var sections = [], notify = function () {}, failure = '';
+    // Settings that take effect at a particular moment say so on their row.
+    var timing = {
+        restart: { label: 'Restart', tip: 'The game has to reload for this one. That happens by itself when you close Settings; between games it applies at the next start.' },
+        new_character: { label: 'New characters', tip: 'Read when a character is created, so it applies to your next new character, not to this one.' }
+    };
     function node(tag, className, text) {
         var element = document.createElement(tag);
         if (className) element.className = className;
@@ -11,11 +18,14 @@ define([], function () {
     function byId(id) { return document.getElementById(id); }
     function owns(object, key) { return Object.prototype.hasOwnProperty.call(object, key); }
     function equal(left, right) { return JSON.stringify(left) === JSON.stringify(right); }
+    function unsaved() { return Object.assign({}, sent, draft); }
     function valueFor(key) {
-        return owns(draft, key) ? (draft[key] === null ? data.inherited[key] : draft[key]) : data.values[key];
+        var pending = unsaved();
+        return owns(pending, key) ? (pending[key] === null ? data.inherited[key] : pending[key]) : data.values[key];
     }
     function overridden(key) {
-        return owns(draft, key) ? draft[key] !== null : owns(data.overrides, key);
+        var pending = unsaved();
+        return owns(pending, key) ? pending[key] !== null : owns(data.overrides, key);
     }
     function labelValue(field, value) {
         if (field.type === 'boolean') return value ? 'On' : 'Off';
@@ -27,10 +37,12 @@ define([], function () {
         return value === '' ? 'Empty' : String(value);
     }
     function stage(field, value, explicit, preserveInput) {
-        if (!explicit && equal(value, data.values[field.id])) delete draft[field.id];
+        // Removing a focused input during a reload still fires its change event.
+        if (!data) return;
+        if (!explicit && !owns(sent, field.id) && equal(value, data.values[field.id])) delete draft[field.id];
         else draft[field.id] = value;
         refreshRow(rows.find(function (row) { return row.field.id === field.id; }), preserveInput);
-        status(); filter();
+        status(); filter(); notify();
     }
     function refreshRow(row, preserveInput) {
         var field = row.field, value = valueFor(field.id), key = field.id;
@@ -48,7 +60,10 @@ define([], function () {
         row.source.dataset.source = owns(data.locked, key) ? 'locked' : uncertain ? 'uncertain' : overridden(key) ? 'own' : 'imported';
         row.root.classList.toggle('is-customized', overridden(key));
         row.root.classList.toggle('is-locked', owns(data.locked, key));
-        row.root.classList.toggle('is-dirty', owns(draft, key));
+        row.root.classList.toggle('is-dirty', owns(unsaved(), key));
+        var restarting = (data.pending_restart || []).indexOf(key) !== -1;
+        row.root.classList.toggle('is-restart-pending', restarting);
+        if (row.apply.dataset.apply === 'restart') row.apply.textContent = restarting ? 'Restart pending' : 'Restart';
         row.reset.disabled = saving || owns(data.locked, key) || (equal(value, data.base[key]) && !uncertain);
         row.inherit.hidden = !overridden(key);
         row.inherit.disabled = saving || owns(data.locked, key);
@@ -106,12 +121,21 @@ define([], function () {
             else if (field.type === 'number') {
                 if (!control.validity.valid || control.value === '') { status(); return; }
                 value = Number(control.value);
-            } else value = control.value;
+            } else {
+                if (!control.validity.valid) { status(); return; }
+                value = control.value;
+            }
             stage(field, value, false, true);
         }
         var copy = node('div', 'rc-setting-copy');
         var label = node('label', 'rc-setting-label', field.label);
         label.htmlFor = id; copy.appendChild(label);
+        var apply = node('span', 'rc-setting-apply');
+        if (timing[field.apply]) {
+            apply.dataset.apply = field.apply; apply.textContent = timing[field.apply].label;
+            apply.setAttribute('data-tip-title', timing[field.apply].label); apply.setAttribute('data-tip-body', timing[field.apply].tip);
+            apply.title = timing[field.apply].tip; copy.appendChild(apply);
+        }
         var hint = node('small', 'rc-setting-hint', field.description);
         hint.id = id + '_hint'; copy.appendChild(hint);
         var source = node('small', 'rc-setting-source'); copy.appendChild(source);
@@ -135,12 +159,13 @@ define([], function () {
         inherit.addEventListener('click', function () { stage(field, null, true); });
         footer.appendChild(inherit);
         slot.appendChild(footer); root.appendChild(slot);
-        var row = { root: root, field: field, inputs: inputs, reset: reset, inherit: inherit, source: source, state: state };
+        var row = { root: root, field: field, inputs: inputs, reset: reset, inherit: inherit, source: source, state: state, apply: apply };
         rows.push(row); refreshRow(row); return root;
     }
     function render() {
         rows = []; byId('rc_settings_sections').replaceChildren(); byId('rc_settings_categories').replaceChildren();
-        ['All settings'].concat(data.schema.groups).forEach(function (group) {
+        var groups = data ? data.schema.groups : [];
+        (sections.length ? sections.map(function (section) { return section.category; }) : [APPEARANCE]).concat(groups, groups.length || sections.length > 1 ? [ALL] : []).forEach(function (group) {
             var button = node('button', 'rc-category'); button.type = 'button'; button.dataset.category = group;
             button.appendChild(node('span', 'rc-category-name', group));
             var count = node('span', 'rc-category-count'); count.setAttribute('aria-hidden', 'true'); count.hidden = true;
@@ -151,7 +176,7 @@ define([], function () {
             });
             byId('rc_settings_categories').appendChild(button);
         });
-        data.schema.groups.forEach(function (group, index) {
+        groups.forEach(function (group, index) {
             var section = node('section', 'rc-category-section rc-card'); section.dataset.category = group;
             var head = node('div', 'rc-card-head');
             var heading = node('h3', '', group); heading.id = 'rc_category_' + index;
@@ -160,7 +185,7 @@ define([], function () {
             reset.addEventListener('click', function () {
                 rows.filter(function (row) { return row.field.group === group && !owns(data.locked, row.field.id); })
                     .forEach(function (row) { draft[row.field.id] = data.base[row.field.id]; refreshRow(row); });
-                status(); filter();
+                status(); filter(); notify();
             });
             head.appendChild(reset); section.appendChild(head);
             var grid = node('div', 'rc-settings-grid');
@@ -174,51 +199,71 @@ define([], function () {
     function filter() {
         var query = byId('rc_settings_search').value.trim().toLowerCase(), count = 0, customized = {};
         var onlyChanged = byId('rc_settings_changed').checked;
+        // A category stays chosen while its settings are still loading.
+        var showing = selected === ALL || sections.some(function (section) { return section.category === selected; })
+            || (data && data.schema.groups.indexOf(selected) !== -1) ? selected : APPEARANCE;
         rows.forEach(function (row) {
             var field = row.field;
-            var matches = query ? (field.label + ' ' + field.id + ' ' + field.description + ' ' + field.group).toLowerCase().includes(query)
-                : selected === 'All settings' || selected === field.group;
+            var matches = query ? (field.label + ' ' + field.id + ' ' + field.description + ' ' + field.group + ' ' + ((timing[field.apply] || {}).label || '')).toLowerCase().includes(query)
+                : showing === ALL || showing === field.group;
             var changed = !(equal(valueFor(field.id), data.base[field.id]) && !overridden(field.id));
             row.root.hidden = !matches || (onlyChanged && !changed);
             if (!row.root.hidden) count++;
-            if (changed) { customized[field.group] = (customized[field.group] || 0) + 1; customized['All settings'] = (customized['All settings'] || 0) + 1; }
+            if (changed) { customized[field.group] = (customized[field.group] || 0) + 1; customized[ALL] = (customized[ALL] || 0) + 1; }
+        });
+        var total = rows.length;
+        sections.forEach(function (section) {
+            var visible = Boolean(query) || showing === section.category || showing === ALL;
+            var shown = visible ? section.handle.filter(query, onlyChanged, { selected: showing === section.category }) : 0;
+            byId(section.rootId).hidden = !visible || !shown;
+            count += shown; total += section.handle.total();
+            var changed = section.handle.customized ? section.handle.customized() : 0;
+            customized[section.category] = changed;
+            customized[ALL] = (customized[ALL] || 0) + changed;
         });
         byId('rc_settings_sections').querySelectorAll('.rc-category-section').forEach(function (section) {
             section.hidden = !rows.some(function (row) { return row.field.group === section.dataset.category && !row.root.hidden; });
         });
         byId('rc_settings_categories').querySelectorAll('button').forEach(function (button) {
-            button.setAttribute('aria-pressed', String(!query && button.dataset.category === selected));
+            button.setAttribute('aria-pressed', String(!query && button.dataset.category === showing));
             var badge = button.querySelector('.rc-category-count'), total = customized[button.dataset.category] || 0;
             badge.textContent = String(total); badge.hidden = !total;
         });
         byId('rc_settings_empty').hidden = count !== 0;
-        byId('rc_settings_count').textContent = count + ' of ' + rows.length + ' settings';
+        byId('rc_settings_count').textContent = count + ' of ' + total + ' settings';
+    }
+    function restartPending() { return data && data.running ? (data.pending_restart || []) : []; }
+    function changedSinceOpen() {
+        if (!data) return [];
+        var saved = Object.assign({}, data.overrides, unsaved());
+        return Object.keys(Object.assign({}, baseline, saved)).filter(function (key) {
+            return !equal(saved[key] === null ? undefined : saved[key], baseline[key]);
+        });
     }
     function status(message) {
-        var count = Object.keys(draft).length, badge = byId('rc_settings_badge');
-        byId('rc_settings_status').textContent = message || (count ? count + ' unsaved ' + (count === 1 ? 'change' : 'changes') : 'All changes saved');
-        byId('rc_settings_status').dataset.state = message ? 'busy' : count ? 'dirty' : 'clean';
-        badge.textContent = count ? count + ' unsaved' : ''; badge.hidden = !count;
-        byId('rc_settings_close').textContent = count ? 'Cancel' : 'Close';
-        byId('rc_submit').disabled = saving || !count;
-        byId('rc_settings_undo').disabled = saving || !count;
+        var count = Object.keys(unsaved()).length, waiting = restartPending().length;
+        var text = message || (failure ? failure : count ? 'Saving…' : waiting
+            ? waiting + (waiting === 1 ? ' setting applies' : ' settings apply') + (data.shared
+                ? ' the next time this expedition starts' : ' when you close Settings') : 'All changes saved');
+        byId('rc_settings_status').textContent = text;
+        byId('rc_settings_status').dataset.state = failure ? 'error' : message || count ? 'busy' : waiting ? 'dirty' : 'clean';
+        byId('rc_settings_retry').hidden = !failure;
+        byId('rc_settings_undo').disabled = saving || !changedSinceOpen().length;
     }
     function initialize() {
         if (initialized) return;
         initialized = true;
-        byId('rc_settings_close').addEventListener('click', function () {
-            window.requestAnimationFrame(function () { if (returnFocus && returnFocus.isConnected) returnFocus.focus(); });
-        });
         byId('rc_settings_search').addEventListener('input', filter);
         byId('rc_settings_changed').addEventListener('change', filter);
         byId('rc_settings_undo').addEventListener('click', function () {
-            draft = {}; rows.forEach(function (row) { refreshRow(row); }); status(); filter();
+            draft = {};
+            changedSinceOpen().forEach(function (key) { draft[key] = owns(baseline, key) ? baseline[key] : null; });
+            rows.forEach(function (row) { refreshRow(row); }); status(); filter(); notify();
         });
-        byId('rc_edit').addEventListener('keydown', function (event) {
-            event.stopPropagation();
-            if (event.key === 'Escape') { event.preventDefault(); byId('rc_settings_close').click(); }
+        byId('rc_settings_retry').addEventListener('click', function () { failure = ''; status(); notify(); });
+        byId('settings_dialog').addEventListener('keydown', function (event) {
             if (event.key !== 'Tab') return;
-            var items = Array.from(byId('rc_edit').querySelectorAll('button, input, select, textarea, a[href]'))
+            var items = Array.from(byId('settings_dialog').querySelectorAll('button, input, select, textarea, a[href]'))
                 .filter(function (item) { return !item.disabled && item.getClientRects().length; });
             var first = items[0], last = items[items.length - 1];
             if (event.shiftKey && (document.activeElement === first || !items.includes(document.activeElement))) {
@@ -228,40 +273,66 @@ define([], function () {
             }
         });
     }
-    function load(next) {
-        initialize(); data = next; draft = {}; saving = false;
-        byId('rc_settings_close').disabled = false;
-        byId('rc_settings_error').hidden = true; byId('rc_settings_workspace').hidden = false;
+    function warning() {
         byId('rc_settings_warning').hidden = !data.uncertain.length;
         byId('rc_settings_warning').textContent = 'Your existing custom rules are preserved. Values set by scripts or included files cannot be previewed here; base defaults remain visible for reference. Change that setting here to choose a fixed value.';
-        render();
     }
-    function changes() {
-        var invalid = rows.find(function (row) { return row.inputs.some(function (input) { return !input.validity.valid; }); });
-        if (invalid) {
-            selected = invalid.field.group; byId('rc_settings_search').value = ''; byId('rc_settings_changed').checked = false;
-            filter();
-            var input = invalid.inputs.find(function (item) { return !item.validity.valid; });
-            input.focus(); input.reportValidity(); return null;
-        }
-        return Object.keys(draft).length ? Object.assign({}, draft) : null;
+    function lede() {
+        byId('settings_lede').textContent = 'Changes save as you make them, and most apply straight away. '
+            + (data && data.shared ? 'Anything marked Restart waits until this shared expedition next starts.'
+                : data && data.running ? 'If anything needs the game to reload, that happens by itself when you close Settings.'
+                : 'Anything marked Restart applies when your next game starts.');
     }
-    function setSaving(value) {
-        saving = value; rows.forEach(function (row) { refreshRow(row); });
-        byId('rc_settings_sections').querySelectorAll('.rc-reset-category').forEach(function (button) { button.disabled = value; });
-        byId('rc_settings_close').disabled = value;
-        status(value ? 'Saving settings…' : undefined);
+    function load(next) {
+        initialize(); data = next; draft = {}; sent = {}; saving = false; failure = '';
+        baseline = Object.assign({}, data.overrides);
+        byId('rc_settings_error').hidden = true;
+        warning(); lede(); render();
+    }
+    // One save answered: edits made while it was in flight stay queued.
+    function saved(next) {
+        data = next; sent = {}; saving = false; failure = '';
+        byId('rc_settings_error').hidden = true; warning();
+        rows.forEach(function (row) {
+            refreshRow(row, row.inputs.indexOf(document.activeElement) !== -1 && row.field.type !== 'boolean');
+        });
+        status(); filter();
+    }
+    function failed(message) {
+        draft = Object.assign({}, sent, draft); sent = {}; saving = false; failure = message;
+        rows.forEach(function (row) { refreshRow(row, row.inputs.indexOf(document.activeElement) !== -1); });
+        status(); filter();
+    }
+    function take() {
+        if (!Object.keys(draft).length) return null;
+        sent = draft; draft = {}; saving = true; failure = '';
+        status(); return Object.assign({}, sent);
     }
     function showError(message) {
-        setSaving(false);
+        saving = false;
         byId('rc_settings_error').textContent = message; byId('rc_settings_error').hidden = false;
+        status();
     }
-    function loading() {
-        initialize(); returnFocus = document.activeElement; saving = true; rows = []; draft = {}; data = null;
-        byId('rc_settings_workspace').hidden = true; byId('rc_settings_error').hidden = true;
-        byId('rc_settings_warning').hidden = true;
-        byId('rc_settings_close').disabled = false;
-        status('Loading settings…');
+    function loading(category) {
+        initialize(); rows = []; draft = {}; sent = {}; baseline = {}; data = null; failure = ''; saving = false;
+        if (category) selected = category;
+        byId('rc_settings_search').value = ''; byId('rc_settings_changed').checked = false;
+        byId('rc_settings_error').hidden = true; byId('rc_settings_warning').hidden = true;
+        lede(); render();
     }
-    return { load: load, changes: changes, setSaving: setSaving, showError: showError, loading: loading };
+    function attachSection(category, rootId, handle) {
+        var section = { category: category, rootId: rootId, handle: handle };
+        var index = sections.findIndex(function (entry) { return entry.category === category; });
+        if (index < 0) sections.push(section); else sections[index] = section;
+        if (initialized) render();
+    }
+    function select(category) { selected = category; byId('rc_settings_search').value = ''; filter(); }
+    return { APPEARANCE: APPEARANCE, load: load, saved: saved, failed: failed, take: take, loading: loading,
+        select: select, showError: showError, refresh: filter, restartPending: restartPending,
+        sharedGame: function () { return Boolean(data && data.shared); },
+        busy: function () { return saving || Object.keys(draft).length > 0; },
+        retrying: function () { return Boolean(failure); },
+        onChange: function (listener) { notify = listener; },
+        attachSection: attachSection,
+        attachAppearance: function (handle) { attachSection(APPEARANCE, 'settings_appearance', handle); } };
 });

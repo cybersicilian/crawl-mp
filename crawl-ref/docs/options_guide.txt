@@ -1261,14 +1261,22 @@ allow_self_target = prompt
 
 prompt_menu = true (tiles default), false (console default)
         Always show prompt menus as popups if possible, rather than in the
-        message pane. This currently applies to Y/N prompts, and to the `G`o
-        menu.
+        message pane. This applies to Y/N prompts, to attribute increases and
+        other short choices, and to the `G`o menu.
+
+prompt_text_menu = true (webtiles default), false (otherwise)
+        Show prompts that want typed text, such as Find, quantities and
+        notes, in a popup rather than in the message pane.
+
+prompt_item_menu = true (webtiles default), false (otherwise)
+        Open the item list straight away for prompts that would otherwise
+        wait in the message pane for an item letter or `?`.
 
 ability_menu = true
         Always show the full-screen 'a'bility menu. If false, 'a' prompts
         in the message area, and the menu can be seen with '?' or '*'.
 
-spell_menu = false
+spell_menu = true (webtiles default), false (otherwise)
         If set to true, the full-screen spell selection menu will always be
         shown when using 'z'. If false, 'z' prompts in the message area, and
         the menu can be seen with '?' or '*'.

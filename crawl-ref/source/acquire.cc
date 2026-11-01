@@ -1494,6 +1494,7 @@ AcquireMenu::AcquireMenu(CrawlVector &aitems, string ikey,
 {
     menu_action = ACT_EXECUTE;
     action_cycle = CYCLE_TOGGLE;
+    action_modes = { is_gizmo ? "Assemble" : "Acquire", "Examine" };
     set_flags(get_flags() & ~MF_USE_TWO_COLUMNS);
 
     set_tag("acquirement");
@@ -1606,7 +1607,10 @@ void AcquireMenu::init_entries()
         // update the more with a y/n prompt
         update_more();
 
-        if (!yesno(nullptr, true, 'n', false, false, true))
+        const string question = make_stringf("%s %s?",
+            is_gizmo ? "Assemble" : "Acquire", item.text.c_str());
+        if (!yesno(Options.prompt_menu ? question.c_str() : nullptr, true, 'n',
+                   false, false, true))
         {
             deselect_all();
             update_more(); // go back to the regular more
@@ -1650,10 +1654,10 @@ string AcquireMenu::get_keyhelp(bool) const
         help += make_stringf(
         //[!] assemble|examine gizmo  [a-i] select gizmo to assemble
         //[Esc/R-Click] exit
-        "<lightgrey>%s%s  %s %s</lightgrey>",
-        menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE).c_str(),
-        menu_action == ACT_EXECUTE ? " <w>assemble</w>|examine gizmo" :
-                                     " assemble|<w>examine</w> gizmo",
+        "<lightgrey>%s  %s %s</lightgrey>",
+        menu_mode_hint(menu_action == ACT_EXECUTE
+                       ? " <w>assemble</w>|examine gizmo"
+                       : " assemble|<w>examine</w> gizmo").c_str(),
         hyphenated_hotkey_letters(item_count(), 'a').c_str(),
         menu_action == ACT_EXECUTE ? "select gizmo to assemble"
                                    : "examine gizmo");
@@ -1663,10 +1667,10 @@ string AcquireMenu::get_keyhelp(bool) const
         help += make_stringf(
             //[!] acquire|examine item  [a-i] select item to acquire
             //[Esc/R-Click] exit
-            "<lightgrey>%s%s  %s %s</lightgrey>",
-            menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE).c_str(),
-            menu_action == ACT_EXECUTE ? " <w>acquire</w>|examine items" :
-                                        " acquire|<w>examine</w> items",
+            "<lightgrey>%s  %s %s</lightgrey>",
+            menu_mode_hint(menu_action == ACT_EXECUTE
+                           ? " <w>acquire</w>|examine items"
+                           : " acquire|<w>examine</w> items").c_str(),
             hyphenated_hotkey_letters(item_count(), 'a').c_str(),
             menu_action == ACT_EXECUTE ? "select item for acquirement"
                                     : "examine item");
@@ -2059,9 +2063,11 @@ bool wish_menu(bool shortlist)
         if (chosen == WISH_SEARCH)
         {
             char query[80] = "";
-            mprf(MSGCH_PROMPT, "Search artefact names (empty to show all): ");
-            if (cancellable_get_line(query, sizeof query))
+            if (msgwin_get_line("Search artefact names (empty to show all): ",
+                                query, sizeof query))
+            {
                 continue;
+            }
             const string needle = lowercase_string(query);
             visible.clear();
             for (int candidate : candidates)

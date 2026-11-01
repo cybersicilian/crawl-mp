@@ -38,7 +38,14 @@ define(["jquery", "appearance-preferences"], function ($, preferences) {
             retry.hidden = !state.error;
         }
         $(document).on("appearance_settings_changed." + id, render); render();
-        return { destroy: function () { $(document).off("." + id); } };
+        return { total: function () { return 1; },
+            customized: function () { return preferences.snapshot().selected === "illustrated" ? 1 : 0; },
+            filter: function (query, changedOnly) {
+                var match = (!query || "tileset default premium illustrated terrain creatures items artwork original pixel".includes(query))
+                    && (!changedOnly || preferences.snapshot().selected === "illustrated");
+                fieldset.hidden = !match;
+                return match ? 1 : 0;
+            }, destroy: function () { $(document).off("." + id); } };
     }
     return { mount: mount };
 });

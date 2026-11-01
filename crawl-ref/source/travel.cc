@@ -4459,6 +4459,11 @@ void TravelCache::update_waypoints() const
         }
 }
 
+static string _waypoint_label(const level_pos &waypoint)
+{
+    return waypoint.id.describe();
+}
+
 void TravelCache::delete_waypoint()
 {
     if (!get_waypoint_count())
@@ -4467,11 +4472,13 @@ void TravelCache::delete_waypoint()
     while (get_waypoint_count())
     {
         clear_messages();
-        mpr("Existing waypoints:");
-        list_waypoints();
-        mprf(MSGCH_PROMPT, "Delete which waypoint? (* - delete all, Esc - exit) ");
+        vector<prompt_answer> answers;
+        for (int i = 0; i < TRAVEL_WAYPOINT_COUNT; ++i)
+            if (is_valid_waypoint(i))
+                answers.push_back({ i + '0', _waypoint_label(waypoints[i]) });
+        answers.push_back({ 'x', "Delete all waypoints", { '*' } });
 
-        int key = getchm();
+        int key = prompt_choice("Delete which waypoint?", answers);
         if (key >= '0' && key <= '9')
         {
             if (is_valid_waypoint(key - '0'))
@@ -4481,7 +4488,7 @@ void TravelCache::delete_waypoint()
                 continue;
             }
         }
-        else if (key == '*')
+        else if (key == 'x')
         {
             for (int i = 0; i < TRAVEL_WAYPOINT_COUNT; ++i)
                 waypoints[i].clear();
@@ -4503,20 +4510,22 @@ void TravelCache::add_waypoint(int x, int y)
     clear_messages();
 
     const bool waypoints_exist = get_waypoint_count();
-    if (waypoints_exist)
+    vector<prompt_answer> answers;
+    for (int i = 0; i < TRAVEL_WAYPOINT_COUNT; ++i)
     {
-        mpr("Existing waypoints:");
-        list_waypoints();
+        answers.push_back({ i + '0', is_valid_waypoint(i)
+            ? "Replace " + _waypoint_label(waypoints[i]) : "Empty" });
     }
+    if (waypoints_exist)
+        answers.push_back({ 'd', "Delete a waypoint" });
 
+    string question = "Assign waypoint to what number?";
     if (you.where_are_you == BRANCH_ABYSS)
-        mprf(MSGCH_PROMPT, "Waypoints on this level may disappear at any time.");
+        question = "Waypoints on this level may disappear at any time. " + question;
     else if (!is_connected_branch(you.where_are_you))
-        mprf(MSGCH_PROMPT, "Waypoints will disappear once you leave this level.");
-    mprf(MSGCH_PROMPT, "Assign waypoint to what number? (0-9%s) ",
-         waypoints_exist? ", D - delete waypoint" : "");
+        question = "Waypoints will disappear once you leave this level. " + question;
 
-    int keyin = toalower(get_ch());
+    const int keyin = prompt_choice(question, answers);
 
     if (waypoints_exist && keyin == 'd')
     {

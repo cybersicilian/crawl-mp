@@ -5,7 +5,7 @@ from pathlib import Path
 
 import tornado.web
 
-from webtiles import profile_appearance, profile_graphics
+from webtiles import profile_appearance
 from webtiles.asset_revision import revision
 from webtiles.auth_http import signed_in_user
 
@@ -19,12 +19,10 @@ class ProfilePageHandler(tornado.web.RequestHandler):
             return
         try:
             texture_pack = profile_appearance.get_pack(username)
-            graphics = profile_graphics.state(username)
         except (sqlite3.Error, OSError, ValueError):
             raise tornado.web.HTTPError(503, "Profile settings are temporarily unavailable")
         self.render("profile.html", username=username, texture_pack=texture_pack,
                     packs=profile_appearance.PACKS,
-                    graphics_json=json.dumps(graphics).replace('<', '\\u003c'),
                     graphics_revision=revision(Path(__file__).parents[1] / 'static'))
 
 

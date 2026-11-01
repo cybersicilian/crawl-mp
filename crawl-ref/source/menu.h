@@ -382,6 +382,8 @@ public:
 
     enum cycle  { CYCLE_NONE, CYCLE_TOGGLE, CYCLE_CYCLE } action_cycle;
     enum action { ACT_EXECUTE, ACT_EXAMINE, ACT_MISC, ACT_NUM } menu_action;
+    // Names of the action modes in cycle order, shown as a switch on the web.
+    vector<string> action_modes;
     void cycle_hover(bool reverse=false, bool preserve_row=false, bool preserve_col=false);
     virtual bool page_down();
     virtual bool line_down();
@@ -403,7 +405,7 @@ public:
     void webtiles_handle_item_request(int start, int end);
     virtual void webtiles_set_category(int) { }
     // Return a native key to finish selection through the normal menu loop.
-    virtual int webtiles_action(const string&, int) { return 0; }
+    virtual int webtiles_action(const string& command, int entry);
 #endif
 protected:
     string _title_prompt_help_tag;
@@ -473,6 +475,9 @@ protected:
 #endif
 
     virtual formatted_string calc_title();
+    virtual vector<string> mode_names() const { return action_modes; }
+    virtual int active_mode() const { return menu_action; }
+    void cycle_mode_by_key(bool forward);
     void update_more();
     pair<int,int> get_header_block(int index) const;
     int next_block_from(int index, bool forward, bool wrap) const;
@@ -506,10 +511,13 @@ public:
         : Menu(_flags) {}
     void add_toggle_key(int newkey) { toggle_keys.push_back(newkey); }
     void add_toggle_from_command(command_type cmd);
+    bool cycle_mode(bool forward) override;
 protected:
     virtual int pre_process(int key) override;
+    int active_mode() const override { return toggled; }
 
     vector<int> toggle_keys;
+    bool toggled = false;
 };
 
 // This is only tangentially related to menus, but what the heck.
@@ -559,5 +567,8 @@ formatted_string pad_more_with(formatted_string s,
 string pad_more_with(const string &s, const string &pad, int min_width=MIN_COLS);
 string pad_more_with_esc(const string &s);
 string menu_keyhelp_cmd(command_type cmd);
+// The web client shows a menu's modes as a switch, so it needs no key help.
+bool menu_modes_are_buttons();
+string menu_mode_hint(const string &modes);
 string menu_keyhelp_select_keys();
 string hyphenated_hotkey_letters(int how_many, char first);

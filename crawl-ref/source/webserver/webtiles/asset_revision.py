@@ -3,6 +3,7 @@ from functools import lru_cache
 from hashlib import sha1, sha256
 from pathlib import Path
 from dataclasses import dataclass
+from time import time_ns
 from webtiles.stylesheet_assets import DIRECTORY, INDEX
 
 
@@ -20,15 +21,24 @@ def _digest(signature):
 
 
 def revision(root):
-    """Reuse hashes until a source changes; include new and removed files."""
+    """Cache settled sources; hash recent writes despite coarse filesystem clocks.
+
+    A same-size rewrite can retain both timestamps within one filesystem tick.
+    Two seconds covers ordinary POSIX timestamp granularity without hashing the
+    settled production tree again for each page request.
+    """
     signature = []
+    recent = False
+    settled_before = time_ns() - 2_000_000_000
     for path in sorted(Path(root).rglob("*")):
         if DIRECTORY in path.relative_to(root).parts:
             continue
         if path.is_file() and (path.suffix in {".js", ".css"} or path == Path(root) / INDEX):
             stat = path.stat()
+            recent = recent or stat.st_ctime_ns >= settled_before
             signature.append((str(path), path.relative_to(root).as_posix(), stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns))
-    return _digest(tuple(signature))
+    frozen = tuple(signature)
+    return _digest.__wrapped__(frozen) if recent else _digest(frozen)
 
 
 @dataclass(frozen=True)

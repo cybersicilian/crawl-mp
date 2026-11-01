@@ -1,5 +1,5 @@
-define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "graphics-dialog", "./common-hotkeys", "./tutorial-tips", "./tutorial-tips-dialog"],
-function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys, tips, tipsDialog) {
+define(["jquery", "client", "library-ui", "./workflow-actions", "./menu-keyboard", "./focus-trap", "settings-dialog", "settings-restart", "./common-hotkeys", "./tutorial-tips", "./tutorial-tips-dialog"],
+function ($, client, library, actions, keyboard, focusTrap, settings, restart, hotkeys, tips, tipsDialog) {
     "use strict";
     var dialog, trap, opener, escapeHeld = false;
     function heroContext() {
@@ -47,7 +47,7 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys, t
             + "<button type='button' class='workflow-button' data-session-save='continue'><span>Save and keep playing</span></button>"
             + "</div>"
             + "<div class='session-menu-actions session-menu-secondary-actions' role='group' aria-label='Settings and help'>"
-            + "<button type='button' class='workflow-button' data-session-graphics>Appearance &amp; graphics</button>"
+            + "<button type='button' class='workflow-button' data-session-settings>Settings</button>"
             + "<button type='button' class='workflow-button' data-session-tips>Tutorial tips</button>"
             + "<button type='button' class='workflow-button' data-session-hotkeys>Common hotkeys</button>"
             + "<a class='workflow-button' href='/profile' target='_blank' rel='noopener'>Profile ↗</a>"
@@ -59,7 +59,7 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys, t
         $(dialog).on("keydown.sessionMenu keypress.sessionMenu keyup.sessionMenu", function (event) {
             event.stopPropagation();
         }).on("click", "#session_menu_resume", close)
-            .on("click", "[data-session-graphics]", function () { close(); graphics.open(); })
+            .on("click", "[data-session-settings]", function () { close(); settings.open(); })
             .on("click", "[data-session-tips]", function () { close(); tipsDialog.open(); })
             .on("click", "[data-session-hotkeys]", function () {
                 if (!hotkeys || typeof hotkeys.open !== "function") return;
@@ -115,10 +115,13 @@ function ($, client, library, actions, keyboard, focusTrap, graphics, hotkeys, t
                 .on("click", open).appendTo("#dcss_quick_dock");
         }
         bind(true);
+        settings.bindGame(client.game_id(), restart.request);
+        tipsDialog.bind();
     }
     $(document).on("game_library_controls.sessionMenu game_input_changed.sessionMenu", update)
         .on("game_cleanup.sessionMenu", function () {
             bind(false); opener = null;
+            settings.bindGame(null, null);
             if (dialog) { close(); dialog.remove(); dialog = null; trap = null; }
             $("#dock_session_menu").remove();
         });

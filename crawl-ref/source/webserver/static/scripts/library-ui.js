@@ -83,10 +83,10 @@ define(["jquery", "comm", "expedition-url", "require"], function ($, comm, exped
         return { owner: owner, saving: saving, reason: !owner ? "Only the expedition owner can save this game."
             : saving ? "Saving expedition…" : !ready ? "Finish the current action or close its menu or prompt to save." : "" };
     }
-    function save(exit) {
+    function save(exit, confirmed) {
         if (saveStatus().reason) return false;
         var party = window.crawl_party && window.crawl_party.state;
-        if (exit && party && party.members.length > 1 &&
+        if (exit && !confirmed && party && party.members.length > 1 &&
             !window.confirm("Save this expedition and return everyone to the lobby?")) return false;
         saving = true;
         init();
@@ -313,9 +313,11 @@ define(["jquery", "comm", "expedition-url", "require"], function ($, comm, exped
             saving = false;
             init();
             notice(data.ok ? "Expedition saved. You can keep playing." : data.error || "Close the current menu or prompt, then save again.");
+            if (!data.ok) $(document).trigger("library_save_refused");
         },
         library_error: function (data) {
             saving = false; deleting = null; deletionControls(); init(); notice(data.message);
+            $(document).trigger("library_save_refused");
         }
     });
     $(document).ready(function () {
@@ -324,6 +326,7 @@ define(["jquery", "comm", "expedition-url", "require"], function ($, comm, exped
     });
     return {
         init: init,
+        notice: notice,
         save: save,
         save_status: saveStatus,
         set_ready: function (value) {

@@ -1498,7 +1498,19 @@ void StashTracker::search_stashes(string search_term)
     update_corpses();
     update_identification();
 
-    if (search_term.empty())
+    if (search_term.empty() && Options.prompt_text_menu)
+    {
+        const bool validline = !msgwin_get_line(stash_search_prompt(), buf,
+                                                sizeof buf, &search_history, "",
+                                                show_stash_search_help);
+        clear_messages();
+        if (!validline || (!*buf && lastsearch.empty()))
+        {
+            canned_msg(MSG_OK);
+            return;
+        }
+    }
+    else if (search_term.empty())
     {
         stash_search_reader reader(buf, sizeof buf);
 
@@ -1750,14 +1762,16 @@ formatted_string StashSearchMenu::calc_title()
     }
     else
     {
+        const string mode = menu_modes_are_buttons() ? ":"
+            : make_stringf(": <w>%s</w> [toggle: <w>!</w>],",
+                           menu_action == ACT_EXECUTE ? "travel" : "view  ");
         fs += formatted_string::parse_string(make_stringf(
             "<lightgrey>"
-            ": <w>%s</w> [toggle: <w>!</w>],"
+            "%s"
             " by <w>%s</w> [<w>/</w>],"
             " <w>%s</w> useless & duplicates [<w>=</w>]"
             "</lightgrey>",
-            menu_action == ACT_EXECUTE ? "travel" : "view  ",
-            sort_style, filtered));
+            mode.c_str(), sort_style, filtered));
     }
     fs.cprintf(string(max(0, strwidth(prefixes[!f])-strwidth(prefixes[f])),
                       ' '));
@@ -1854,6 +1868,7 @@ bool StashTracker::display_search_results(
                               filter_useless ? "hide" : "show");
     stashmenu.set_tag("stash");
     stashmenu.action_cycle = Menu::CYCLE_TOGGLE;
+    stashmenu.action_modes = { "Travel", "Examine" };
     stashmenu.menu_action  = default_execute ? Menu::ACT_EXECUTE
                                              : Menu::ACT_EXAMINE;
     string title = "match";

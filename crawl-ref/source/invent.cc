@@ -1863,7 +1863,8 @@ int prompt_invent_item(const char *prompt,
     const bool do_warning = !(flags & invprompt_flag::no_warning);
     const bool allow_list_known = !(flags & invprompt_flag::hide_known);
     const bool must_exist = !(flags & invprompt_flag::unthings_ok);
-    const bool auto_list = !(flags & invprompt_flag::manual_list);
+    const bool auto_list = !(flags & invprompt_flag::manual_list)
+                           || Options.prompt_item_menu;
 
     if (!any_items_of_type(type_expect) && type_expect != OSEL_WIELD
         && type_expect != OSEL_QUIVER_ACTION)

@@ -68,6 +68,18 @@ protected:
 
 };
 
+// One answer offered by prompt_choice().
+struct prompt_answer
+{
+    int key;                    // its hotkey, and what prompt_choice returns
+    string label;
+    vector<int> other_keys = {};
+};
+
+// Ask for one of a few answers: as a menu, or as a list in the message pane
+// with prompt_menu off. Returns the answer's key, or 0 if the player cancels.
+int prompt_choice(const string &question, const vector<prompt_answer> &answers);
+
 #ifdef WIZARD
 // If _symbol is 0, a copy in a WizardMenu will be given the next unused symbol.
 // symbol in the menu's copy.

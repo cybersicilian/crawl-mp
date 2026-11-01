@@ -129,7 +129,6 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
             {
                 $.cookie("login", data.cookie, { expires: data.expires });
                 graphics.bindUser(state.current_user); graphics.refresh();
-                if (new URLSearchParams(location.search).get("graphics") === "1") location.replace("/settings/graphics");
                 if (new URLSearchParams(location.search).get("profile") === "1") location.replace("/profile");
             }
             else
@@ -311,7 +310,6 @@ define(["jquery", "chat", "comm", "texture-pack", "graphics-preferences"], funct
                 $("#reset_pw_form").bind("submit", api.reset_password);
             }
 
-            $("#rc_edit_form").bind("submit", api.send_rc);
 
             $("#force_terminate_no").click(api.force_terminate_no);
 

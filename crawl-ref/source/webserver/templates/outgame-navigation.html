@@ -15,7 +15,7 @@
   {% if handler.get_cookie('login') %}
   <details class="archive-account outgame-account">
     <summary>Account</summary>
-    <div class="archive-account-menu outgame-account-menu"><a href="/profile">Profile &amp; textures</a><a href="/settings/graphics">Appearance &amp; graphics</a><a href="/settings/graphics#profile_tips">Tutorial tips</a>{% include "logout.html" %}</div>
+    <div class="archive-account-menu outgame-account-menu"><a href="/profile">Profile &amp; textures</a><a href="/settings/graphics">Settings</a><a href="/?settings=tips#lobby">Tutorial tips</a>{% include "logout.html" %}</div>
   </details>
   {% else %}
   <a class="archive-sign-in outgame-sign-in" href="/?view=play#lobby">Sign in</a>

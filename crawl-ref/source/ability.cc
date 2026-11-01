@@ -5126,6 +5126,7 @@ int choose_ability_menu(const vector<talent>& talents)
     // help here amounts to describing abilities:
     abil_menu.add_toggle_from_command(CMD_MENU_HELP);
     abil_menu.menu_action = Menu::ACT_EXECUTE;
+    abil_menu.action_modes = { "Use", "Describe" };
 
     if (crawl_state.game_is_hints())
     {
@@ -5133,7 +5134,7 @@ int choose_ability_menu(const vector<talent>& talents)
         // lots of abilities during hints mode.
         abil_menu.set_more(hints_abilities_info());
     }
-    else
+    else if (!menu_modes_are_buttons())
     {
         abil_menu.set_more(formatted_string::parse_string(
             menu_keyhelp_cmd(CMD_MENU_HELP) + " toggle "

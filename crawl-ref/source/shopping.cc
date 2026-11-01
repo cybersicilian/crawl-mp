@@ -1131,6 +1131,8 @@ ShopMenu::ShopMenu(shop_struct& _shop, const level_pos& _pos, bool _can_purchase
       can_purchase(_can_purchase)
 {
     menu_action = can_purchase ? ACT_EXECUTE : ACT_EXAMINE;
+    if (can_purchase)
+        action_modes = { "Buy", "Examine" };
     set_flags(get_flags() & ~MF_USE_TWO_COLUMNS);
 
     set_tag("shop");
@@ -1258,9 +1260,8 @@ void ShopMenu::update_help()
 
     // XX swap shopping list / select by letter?
     const string mode_desc = !can_purchase ? ""
-        : menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE)
-            + (menu_action == ACT_EXECUTE ? " <w>buy</w>|examine items"
-                                          : " buy|<w>examine</w> items");
+        : menu_mode_hint(menu_action == ACT_EXECUTE ? " <w>buy</w>|examine items"
+                                                    : " buy|<w>examine</w> items");
     string m = menu_keyhelp_cmd(CMD_MENU_EXIT)+ " exit          ";
     m += mode_desc;
     m = pad_more_with(m, make_stringf("%s %s",
@@ -1361,7 +1362,11 @@ void ShopMenu::purchase_selected()
                col.c_str()));
     more += old_more;
     update_more();
-    if (!yesno(nullptr, true, 'n', false, false, true))
+    const string question = make_stringf("Purchase items%s for %d gold?%s",
+        buying_from_list ? " in shopping list" : "", cost,
+        too_expensive ? " This will use your shop voucher." : "");
+    if (!yesno(Options.prompt_menu ? question.c_str() : nullptr, true, 'n',
+               false, false, true))
     {
         more = old_more;
         update_more();
@@ -2445,21 +2450,12 @@ public:
             s += "Choose to examine item  ";
         else
         {
-            s += menu_keyhelp_cmd(CMD_MENU_CYCLE_MODE);
-            switch (menu_action)
-            {
-            case ACT_EXECUTE:
-                s += " <w>travel</w>|examine|delete";
-                break;
-            case ACT_EXAMINE:
-                s += " travel|<w>examine</w>|delete";
-                break;
-            default:
-                s += " travel|examine|<w>delete</w>";
-                break;
-            }
-
-            s += " items    ";
+            const string modes = menu_mode_hint(
+                menu_action == ACT_EXECUTE ? " <w>travel</w>|examine|delete"
+                : menu_action == ACT_EXAMINE ? " travel|<w>examine</w>|delete"
+                                             : " travel|examine|<w>delete</w>");
+            if (!modes.empty())
+                s += modes + " items    ";
         }
         if (items.size() > 0)
         {
@@ -2593,6 +2589,8 @@ void ShoppingList::display(bool view_only)
     shopmenu.set_tag("shop");
     shopmenu.menu_action  = view_only ? Menu::ACT_EXAMINE : Menu::ACT_EXECUTE;
     shopmenu.action_cycle = view_only ? Menu::CYCLE_NONE : Menu::CYCLE_CYCLE;
+    if (!view_only)
+        shopmenu.action_modes = { "Travel", "Examine", "Delete" };
     string title          = "item";
 
     MenuEntry *mtitle = new MenuEntry(title, MEL_TITLE);

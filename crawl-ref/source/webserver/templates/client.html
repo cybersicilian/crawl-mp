@@ -232,8 +232,6 @@
       </div>
 {% end %}
 
-      {% include game-settings.html %}
-
       <div id="exit_game" class="floating_dialog account-dialog tr-card" role="dialog" aria-modal="true" aria-labelledby="exit_game_reason" tabindex="-1" style="display: none;">
           <p id="exit_game_reason" class="account-dialog-title account-dialog-title-small"></p>
           <pre id="exit_game_message" class="account-dialog-pre"></pre>
@@ -284,7 +282,7 @@
         <div class="party-hall-header">
           <h2 class="party-hall-title">Your party</h2>
           <div class="party-hall-controls">
-            <button type="button" id="party_game_settings" class="dcss-btn" hidden>Game settings</button>
+            <button type="button" id="party_game_settings" class="dcss-btn" hidden>Settings</button>
             <a class="party-other-modes" href="#play_now" data-lobby-section="play_now">Other modes ↗</a>
             <span id="party_turn_pacing_badge" class="dcss-badge-pacing" tabindex="0"
                   data-tip-title="Simultaneous Co-op Turn Pacing"

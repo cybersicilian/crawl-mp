@@ -35,8 +35,10 @@
 .workflow-table-name .workflow-state { display: inline-flex; margin-left: 8px; vertical-align: middle; }
 .workflow-table-stats { display: contents; }
 .workflow-menu-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-#game #ui-stack .workflow-action-menu .workflow-menu-actions [aria-pressed='true'] {
-    background: var(--menu-selection); border-color: var(--menu-chapter); color: var(--menu-ink);
+/* A formatted title is one line of text, not a row of flex items. */
+#game #ui-stack .workflow-surface.menu_stash > .menu_title { display: block; font-size: 17px; }
+#game #ui-stack .workflow-surface.workflow-action-menu .workflow-menu-actions [aria-pressed='true'] {
+    background: var(--menu-action); border-color: var(--menu-action); color: var(--menu-action-text);
 }
 .workflow-entry-actions { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 #ui-stack .workflow-entry-actions .workflow-button { padding: 6px 12px; min-height: 34px; font-size: 12px; }

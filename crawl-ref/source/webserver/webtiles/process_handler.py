@@ -1292,7 +1292,8 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
         try:
             # Native late options override legacy RC, while mode-enforced options stay last.
             rc_path = os.path.join(self.config_path("rcfile_path"), self.username + ".rc")
-            call[1:1] = game_settings.launch_arguments(self.username, rc_path)
+            self.launched_settings = game_settings.saved_choices(self.username, rc_path)
+            call[1:1] = game_settings.launch_arguments(self.username, rc_path, self.launched_settings)
             self.process = TerminalRecorder(call,
                                             self.logger,
                                             config.get('recording_term_size'),

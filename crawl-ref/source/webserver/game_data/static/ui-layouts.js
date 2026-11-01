@@ -38,6 +38,16 @@ function ($, comm, client, ui, cr, util, scroller, nested, format, descriptions,
         $popup.find("[data-hotkey='Enter']").replaceWith("<button type='button' class='workflow-button workflow-primary' data-hotkey='Enter'>Confirm <kbd>Enter</kbd></button>");
         $popup.find("[data-hotkey='Escape']").replaceWith("<button type='button' class='workflow-button' data-hotkey='Escape'>Cancel <kbd>Esc</kbd></button>");
         $("<div class='workflow-dialog-actions'></div>").append($popup.children("[data-hotkey]")).appendTo($popup);
+        if (msg.help) {
+            $popup.children(".workflow-dialog-actions").prepend("<button type='button' class='workflow-button' data-hotkey='?'>Help <kbd>?</kbd></button>");
+            // Typing owns this field, so ? asks for help only on an empty line.
+            // The popup's key handler stops keydown before it reaches here.
+            $popup.children("input").on("input", function () {
+                if (this.value !== "?") return;
+                this.value = "";
+                comm.send_message("key", { keycode: 63 });
+            });
+        }
         return $popup;
     }
 

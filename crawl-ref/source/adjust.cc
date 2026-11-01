@@ -27,12 +27,16 @@ static void _adjust_ability();
 
 void adjust()
 {
-    mprf(MSGCH_PROMPT, "Adjust (g)ear, (s)pells, (a)bilities, "
-                       "(p)otions, sc(r)olls or e(v)ocables? ");
+    const int keyin = prompt_choice("Adjust what?", {
+        { 'g', "Gear", { 'i', 'I' } },
+        { 's', "Spells" },
+        { 'a', "Abilities" },
+        { 'p', "Potions" },
+        { 'r', "Scrolls" },
+        { 'v', "Evocables" },
+    });
 
-    const int keyin = toalower(get_ch());
-
-    if (keyin == 'g' || keyin == 'i')
+    if (keyin == 'g')
         adjust_item(OSEL_GEAR);
     else if (keyin == 'p')
         adjust_item(OBJ_POTIONS);
@@ -44,10 +48,8 @@ void adjust()
         _adjust_spell();
     else if (keyin == 'a')
         _adjust_ability();
-    else if (key_is_escape(keyin))
-        canned_msg(MSG_OK);
     else
-        canned_msg(MSG_HUH);
+        canned_msg(MSG_OK);
 }
 
 void adjust_item(int selector, item_def* to_adjust)

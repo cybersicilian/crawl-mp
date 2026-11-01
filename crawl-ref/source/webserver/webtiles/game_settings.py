@@ -77,16 +77,26 @@ def update(username, path, changes):
     return revision + 1
 
 
-def launch_arguments(username, path):
-    """Pass typed choices after RC loading, before server-enforced late options."""
+def saved_choices(username, path):
+    """The account's typed choices, as a game launched now would receive them."""
     with userdb.settings_db as db:
         try:
-            saved, _ = _read(db, username, path)
+            return _read(db, username, path)[0]
         except sqlite3.OperationalError as error:
             if 'no such table' not in str(error):
                 raise
-            return []
+            return {}
+
+
+def launch_arguments(username, path, saved=None):
+    """Pass typed choices after RC loading, before server-enforced late options."""
     result = []
-    for key, value in saved.items():
+    for key, value in (saved_choices(username, path) if saved is None else saved).items():
         result.extend(['-extra-opt-last', encode(key, value)])
     return result
+
+
+def pending_restart(launched, overrides):
+    """Restart-bound choices that differ from what the running game started with."""
+    return sorted(key for key, field in FIELDS.items() if field['apply'] == 'restart'
+                  and launched.get(key) != overrides.get(key))
