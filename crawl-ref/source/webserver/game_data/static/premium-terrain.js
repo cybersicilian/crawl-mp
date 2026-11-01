@@ -4,7 +4,7 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
     "use strict";
     var painter = finishes.create(), known = new Map(), prepared = new Map(), originals = new Map();
     var shaded = weighted.create(16 * 1024 * 1024, 4096, function (result) {
-        return result.image.width * result.image.height * 4 + result.pixels.byteLength;
+        return result.image.width * result.image.height * 4 + 4096;
     });
     // Per-cell memos. Native map packets mutate cells in place, so entries are
     // dropped around every changed position rather than compared structurally.
@@ -56,13 +56,21 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         var data = sampleData(renderer, function (sample) { sample.draw_dngn(index, 0, 0); });
         return data ? bounded(originals, index, data, 1024) : null;
     }
+    // Exploring reveals tiles in bursts. Allocating a canvas for each one costs
+    // far more than the pixel work, so albedo passes share this scratch surface.
+    var scratch = null;
+    function scratchContext() {
+        if (scratch) return scratch;
+        var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
+        scratch = canvas.getContext("2d", { willReadFrequently: true });
+        return scratch;
+    }
     function albedo(renderer, terrain, neighbours, cx, cy, time, key, cell) {
         if (prepared.has(key)) return prepared.get(key);
         var painted = terrain.own.ground && ground.tile && ground.tile(terrain.own.index, cx, cy, 32);
         var raw = painted ? painted.getContext("2d").getImageData(0, 0, 32, 32).data : nativeSource(renderer, terrain.own.index);
         if (!raw) return null;
-        var canvas = document.createElement("canvas"); canvas.width = canvas.height = 32;
-        var ctx = canvas.getContext("2d", { willReadFrequently: true });
+        var ctx = scratchContext();
         if (!ctx) return null;
         var detail;
         if (!painted && terrain.own.ground && presentation.enabled("borders")) {
@@ -175,6 +183,14 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
             lights: lights, lightsKey: reaching, resultKey: result.key, descriptor: descriptor });
         return metadataOnly ? descriptor : result;
     }
+    // Only distortion warps read a shaded tile back, so most never pay for the copy.
+    function shadedTile(key, image, solid) {
+        var pixels = null;
+        return { key: key, image: image, solid: solid, get pixels() {
+            if (!pixels) pixels = image.getContext("2d").getImageData(0, 0, image.width, image.height).data;
+            return pixels;
+        } };
+    }
     function render(renderer, settings, cx, cy, cell, own, step, lights, reaching) {
         var phase = step.phase, materialPhase = step.materialPhase;
         var neighbours = topology.sides.map(function (side) { return describeAt(cx + side.x, cy + side.y); });
@@ -193,11 +209,6 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
         var lightKey = key + "|" + materialPhase + "|" + reaching + "|" + (source.painted ? settings.resolution : 32);
         var result = shaded.get(lightKey);
         if (!result) {
-            var image = document.createElement("canvas"); image.width = image.height = 32;
-            // Read back once for warps; a CPU-backed scratch canvas makes that a copy, not a GPU sync.
-            var context = image.getContext("2d", { willReadFrequently: true });
-            if (!context) return;
-            var pixels = context.createImageData(32, 32);
             var detailed = source.painted && settings.resolution > 32
                 ? ground.tile(own.index, cx, cy, settings.resolution) : null;
             var response = detailed && (settings.lighting || settings.materials) ? sampled.create(32, 32) : null;
@@ -205,13 +216,14 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
                 ? shading.shade(source, own.shading, cx, cy, lights, materialPhase, { reflections: settings.reflections }, response) : source.data;
             if (source.underlay) colour = optics.compose(source.underlay, source, colour, cx, cy,
                 settings.reflections ? settings.scene.at(cx, cy) : none, materialPhase, own.transmission);
-            pixels.data.set(colour); context.putImageData(pixels, 0, 0);
             var diagonal = describeAt(cx - 1, cy - 1);
-            if (settings.materials || settings.borders) depth.paint(context, { x: 0, y: 0, width: 32, height: 32 }, own.solid,
-                neighbours[0] && neighbours[0].solid && 1 - neighbours[0].transmission,
-                neighbours[3] && neighbours[3].solid && 1 - neighbours[3].transmission,
-                diagonal && diagonal.solid && 1 - diagonal.transmission, terrain.wall);
-            result = { key: lightKey, image: image, pixels: context.getImageData(0, 0, 32, 32).data, solid: own.solid };
+            var finish = function (target, size, solid) {
+                if (settings.materials || settings.borders) depth.paint(target, { x: 0, y: 0, width: size, height: size }, solid,
+                    neighbours[0] && neighbours[0].solid && 1 - neighbours[0].transmission,
+                    neighbours[3] && neighbours[3].solid && 1 - neighbours[3].transmission,
+                    diagonal && diagonal.solid && 1 - diagonal.transmission, terrain.wall);
+            };
+            var image = null;
             if (detailed) {
                 var size = detailed.width, high = document.createElement("canvas"); high.width = high.height = size;
                 var ctx = high.getContext("2d", { willReadFrequently: true });
@@ -223,13 +235,19 @@ function ($, layers, map, options, game, enums, model, presentation, topology, f
                         var data = ctx.getImageData(0, 0, size, size);
                         data.data.set(sampled.apply(data.data, size, size, response)); ctx.putImageData(data, 0, 0);
                     }
-                    if (settings.materials || settings.borders) depth.paint(ctx, { x: 0, y: 0, width: size, height: size }, false,
-                        neighbours[0] && neighbours[0].solid && 1 - neighbours[0].transmission,
-                        neighbours[3] && neighbours[3].solid && 1 - neighbours[3].transmission,
-                        diagonal && diagonal.solid && 1 - diagonal.transmission, terrain.wall);
-                    result.image = high;
+                    finish(ctx, size, false);
+                    image = high;
                 }
             }
+            if (!image) {
+                image = document.createElement("canvas"); image.width = image.height = 32;
+                var context = image.getContext("2d", { willReadFrequently: true });
+                if (!context) return;
+                var pixels = context.createImageData(32, 32);
+                pixels.data.set(colour); context.putImageData(pixels, 0, 0);
+                finish(context, 32, own.solid);
+            }
+            result = shadedTile(lightKey, image, own.solid);
             shaded.set(lightKey, result);
         }
         return result;
