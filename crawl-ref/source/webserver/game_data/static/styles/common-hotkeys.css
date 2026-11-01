@@ -7,16 +7,15 @@
 #dock_common_hotkeys:focus-visible { outline: 2px solid #ceb47b; outline-offset: 2px; }
 #inspection_dialog:has(.common-hotkeys) { width: min(700px, calc(100vw - 24px)); }
 .common-hotkeys { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 26px; }
-.common-hotkeys h2 { margin: 0 0 9px; font: 600 15px/1.4 var(--tt-font-ui, sans-serif); color: #e5d7b1; }
+.common-hotkeys h2 { margin: 0 0 9px; font: 600 15px/1.4 var(--tt-font-ui, sans-serif); color: var(--ui-chapter, #e5d7b1); }
 .common-hotkeys dl { margin: 0; }
-.common-hotkey-row { display: grid; grid-template-columns: minmax(78px, auto) 1fr; gap: 10px; padding: 5px 0; border-bottom: 1px solid #a9b68a18; }
+.common-hotkey-row { display: grid; grid-template-columns: minmax(78px, auto) 1fr; gap: 10px; padding: 5px 0; border-bottom: 1px solid color-mix(in srgb, var(--ui-rule, #a9b68a) 45%, transparent); }
 .common-hotkeys dt, .common-hotkeys dd { margin: 0; font-size: 12px; line-height: 1.5; }
-.common-hotkeys dd { color: #c5cbbb; }
-.common-hotkeys kbd { font: 11px/1.5 var(--tt-font-mono, monospace); color: #f0dcae; }
+.common-hotkeys kbd { font: 11px/1.5 var(--tt-font-mono, monospace); color: var(--ui-chapter, #f0dcae); }
 .common-hotkey-compass { display: grid; grid-template-columns: repeat(3, 48px); gap: 4px; }
-.common-hotkey-compass > div { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; padding: 4px; border-radius: 4px; background: #a9b68a10; }
-.common-hotkey-compass small { grid-column: 1 / -1; color: #a9b3a1; font-size: 9px; }
-.common-hotkey-movement p { margin: 8px 0 0; color: #b4bca9; font-size: 11px; }
+.common-hotkey-compass > div { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; padding: 4px; border-radius: 4px; background: var(--ui-page-inset, #a9b68a10); }
+.common-hotkey-compass small { grid-column: 1 / -1; color: var(--ui-quiet, #a9b3a1); font-size: 9px; }
+.common-hotkey-movement p { margin: 8px 0 0; color: var(--ui-quiet, #b4bca9); font-size: 11px; }
 @media (max-width: 480px) {
     .common-hotkeys { grid-template-columns: 1fr; gap: 20px; }
     .common-hotkey-row { grid-template-columns: 110px 1fr; }

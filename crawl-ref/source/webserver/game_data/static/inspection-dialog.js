@@ -4,7 +4,7 @@ define(["require", "jquery", "rich-text", "./focus-trap"], function (require, $,
     function ensure() {
         if (dialog) return;
         $("<link rel='stylesheet'>").attr("href", require.toUrl("./styles/inspection-dialog.css")).appendTo("head");
-        dialog = $("<dialog id='inspection_dialog' closedby='any' aria-labelledby='inspection_heading'>" +
+        dialog = $("<dialog id='inspection_dialog' class='tr-on-page' closedby='any' aria-labelledby='inspection_heading'>" +
             "<header><h1 id='inspection_heading' tabindex='-1'></h1>" +
             "<button type='button'>Close · Esc</button></header>" +
             "<div id='inspection_body'></div><p id='inspection_context'></p></dialog>").appendTo("body")[0];
