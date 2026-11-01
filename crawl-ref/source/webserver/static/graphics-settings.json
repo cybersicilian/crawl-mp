@@ -42,8 +42,8 @@
       "label": "Let Jev choose", "description": "When several tips fit, Jev picks the most useful one. This sends a short summary of your hero's situation to TypeSafe, which runs Jev. It never includes your name, account or chat." }
   ],
   "presets": [
-    {"id":"classic","label":"Classic","description":"The original aesthetic. No Premium treatment.","settings":{}},
+    {"id":"classic","label":"Classic","description":"Original lighting and effects. Keeps your chosen tileset.","settings":{}},
     {"id":"balanced","label":"Balanced","description":"Soft lighting and animation, without crystal shaders or aura distortion.","settings":{"mode":"premium","lighting":true,"borders":true,"liquids":true,"clouds":true,"spells":true,"auras":true,"movement":true,"particles":true,"interface":true,"figures":true,"lantern":true,"atmosphere":true}},
-    {"id":"premium","label":"Premium","description":"All enhancements. Dense scenes can be demanding.","settings":{"mode":"premium","lighting":true,"borders":true,"materials":true,"liquids":true,"reflections":true,"clouds":true,"spells":true,"bloom":true,"auras":true,"distortion":true,"movement":true,"particles":true,"interface":true,"figures":true,"lantern":true,"atmosphere":true}}
+    {"id":"premium","label":"Premium","description":"All lighting and motion enhancements. Dense scenes can be demanding.","settings":{"mode":"premium","lighting":true,"borders":true,"materials":true,"liquids":true,"reflections":true,"clouds":true,"spells":true,"bloom":true,"auras":true,"distortion":true,"movement":true,"particles":true,"interface":true,"figures":true,"lantern":true,"atmosphere":true}}
   ]
 }

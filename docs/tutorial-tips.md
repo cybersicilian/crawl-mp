@@ -53,7 +53,10 @@ server sends it in `tips_state`, and `tutorial_tips_test.py` checks its shape.
 `tutorial-tips-model.js` holds one rule per tip, and the test suite fails if a
 catalog tip has no rule or a rule has no tip. `tutorial-tips.js` builds a plain
 view from the same party snapshot and map data the Next step panel reads, at most
-every 400 ms. Rules need no native changes.
+every 400 ms. Prefer existing native state; add a native field when the engine
+has authoritative information that the snapshot does not expose. Orb ownership,
+for example, uses `player_has_orb()` because acquiring it advances the shared
+chapter without putting an item in the pack.
 
 A tip with `during` belongs to another input mode: `target` while aiming, `prompt`
 during a native prompt, and `downed` for a fallen hero. Everything else appears
@@ -90,20 +93,35 @@ WEBTILES_URL=http://127.0.0.1:8932 TACTICAL_BROWSER_CHANNEL=chrome \
 This test found bugs the mocked tests could not. Books never reach the pack in
 this fork, so a rule that looked for one could never fire.
 
-52 of the 83 tips have been seen firing on real engine data, in this test or in
-play. The other 31 rest on the source checks and unit tests above:
+All 83 catalog rules have passed eligibility checks against real native game
+states. The durable ledger is
+`docs/releases/continuation-2026-11-01/tutorial-coverage.json` in the repository
+root; it lists every proven id, scenario and hashed receipt, including failed
+attempts and the fixes that followed them. This proves rule eligibility, not that
+every tip was automatically selected and displayed during ordinary play.
 
-- **Needs two connected players or a fallen hero:** `downed`, `teammate_down`,
-  `party`, `chat`, `trade`, `floors` and `ai_teammate`.
-- **Needs a state that is slow to stage:** `burning`, `low_magic`, `contam`,
-  `spells`, `heat`, `zot`, `shop`, `penance`, `resists`, `banes`, `gem`, `orb` and
-  `full_pack`.
-- **Only needs enough turns:** `help`, `noise`, `map`, `run`, `save`, `quick`,
-  `zoom`, `history`, `find`, `arrange` and `exclusion`.
+The native harnesses cover single-player inventory, terrain, prompts and status
+changes; two connected players, split floors and fallen heroes; and additional
+scenarios for long-lived games, full packs, Automatons, Orb acquisition and AI
+seats. The Orb scenario rejects the nearby glow before pickup and accepts actual
+native ownership afterward. Contamination and simple backlighting are separate.
+The AI-seat scenario uses an isolated local provider fixture and does not verify
+live Jev inference or a production API key.
 
-The native test is timing-sensitive. On a badly overloaded host its Lua console
-step can miss the closing Esc, so rerun it on a quiet machine before reading a
-timeout as a tip failure.
+Run all three native harnesses on a quiet, gate-reserved host:
+
+```sh
+for test in tutorial-tips-native tutorial-tips-party-native tutorial-tips-additional-native; do
+  WEBTILES_URL=http://127.0.0.1:8932 TACTICAL_BROWSER_CHANNEL=chrome \
+    TIPS_PROOF_DIR=/path/to/disposable-proof NODE_PATH=/path/to/node_modules \
+    node tests/$test.cjs
+done
+```
+
+The QA server must enable its isolated test provider for the AI-seat fixture.
+`TIPS_PROOF_DIR` records passed scenarios and live diagnostics after each check.
+Use a debug build and disposable accounts/saves; these fixtures invoke the wizard
+console and deliberately kill a test hero. They do not target production.
 
 ## Jev
 

@@ -4,9 +4,20 @@ const crypto = require('node:crypto');
 const { chromium, assert, send, key, ready, lua, capture, named } = require('./multiplayer-native-client.cjs');
 const url = process.env.WEBTILES_URL || 'http://127.0.0.1:8932';
 assert(['localhost', '127.0.0.1'].includes(new URL(url).hostname));
-const results = [];
 const GEM_SPECS = (process.env.TIPS_GEMS || 'smoky gem,glittering gem,shimmering gem,earthy gem').split(',');
 const fits = page => named(page, 'tutorial-tips', 'module.fits()');
+const { createLiveRuleProof } = require('./helpers/live-rule-proof.cjs');
+const proof = createLiveRuleProof({ name: 'solo', read: fits, timeout: 10000, output: process.env.TIPS_PROOF_DIR,
+    capture: page => page.evaluate(() => ({
+        members: window.crawl_party?.state?.members, multiplayer: window.crawl_party?.state?.multiplayer,
+        controlledSlot: window.crawl_party?.state?.controlled_slot,
+        watching: require('client').is_watching(), inGame: require('client').in_game(),
+        inputMode: require(Object.keys(require.s.contexts._.defined).find(name => name.endsWith('/game-context'))).get_input_mode(),
+        blocking: [...document.querySelectorAll('#ui-stack > *, dialog[open]')].map(node => node.textContent.slice(0, 700)),
+        messages: [...document.querySelectorAll('#messages .game_message')].slice(-5).map(node => node.textContent),
+        displayed: [...document.querySelectorAll('.tutorial-tip[data-tip]')].map(node => node.dataset.tip)
+    })) });
+const results = proof.results;
 const hero = page => page.evaluate(() => JSON.parse(JSON.stringify(window.crawl_party.state.members[0])));
 async function settled(page, fn, timeout = 8000) {
     const end = Date.now() + timeout;
@@ -15,50 +26,10 @@ async function settled(page, fn, timeout = 8000) {
     return value;
 }
 async function expectTips(page, name, wanted, absent = []) {
-    let found = [];
-    await settled(page, async () => { found = await fits(page); return wanted.every(id => found.includes(id)); });
-    const missing = wanted.filter(id => !found.includes(id)), wrong = absent.filter(id => found.includes(id));
-    results.push({ name, pass: !missing.length && !wrong.length, missing, wrong });
-    console.log((missing.length || wrong.length ? 'FAIL ' : 'ok   ') + name + (missing.length ? ' missing ' + missing : '') + (wrong.length ? ' unexpected ' + wrong : ''));
+    await proof.expect(page, name, wanted, absent);
 }
 const wait = async page => { await clear(page); await key(page, 46); await page.waitForTimeout(350); await clear(page); };
-/* Like lua(), but the code opens a native prompt, so no completion marker can print. */
-async function promptLua(target, code) {
-    const page = target.page;
-    await ready(page);
-    const prompts = await page.evaluate(() => window.qaWizardPrompts);
-    await key(page, 38);
-    await page.waitForFunction(count => window.qaWizardPrompts > count, prompts);
-    const inputs = await page.evaluate(() => window.qaInputStarts);
-    await key(page, 20);
-    await page.waitForFunction(count => window.qaInputStarts > count, inputs);
-    await send(page, 'text_input', { text: code + '\r' });
-}
-/* A wizard command, answering any text prompts it asks. */
-async function wizard(target, code, ...answers) {
-    const page = target.page;
-    await clear(page);
-    const prompts = await page.evaluate(() => window.qaWizardPrompts);
-    await key(page, 38);
-    await page.waitForFunction(count => window.qaWizardPrompts > count, prompts);
-    await key(page, code);
-    for (const answer of answers) {
-        await page.waitForTimeout(800);
-        if (typeof answer === 'number') await key(page, answer);
-        else await send(page, 'text_input', { text: answer + '\r' });
-    }
-    await page.waitForTimeout(800);
-    await clear(page);
-}
-/* A rune's pickup ends on a native --more--; dismiss it the way a player would. */
-async function clear(page) {
-    for (let i = 0; i < 6; i++) {
-        const free = await named(page, 'workflow-actions', 'module.ready()');
-        if (free) return;
-        await key(page, 27); await page.waitForTimeout(400);
-    }
-    await ready(page);
-}
+const { clear, wizard, promptLua } = require('./helpers/native-wizard.cjs');
 async function take(target, spec) {
     const page = target.page, before = (await hero(page)).inventory.length;
     await lua(target, `dgn.create_item(you.x_pos(),you.y_pos(),${JSON.stringify(spec)})`);
@@ -73,9 +44,9 @@ async function take(target, spec) {
         JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('#messages .game_message')].slice(-3).map(entry => entry.textContent.slice(0, 80)))));
     return after;
 }
+let browser, deadline;
 (async () => {
-    process.on('unhandledRejection', () => {});
-    const browser = await chromium.launch({ headless: true, ...(process.env.TACTICAL_BROWSER_CHANNEL ? { channel: process.env.TACTICAL_BROWSER_CHANNEL } : {}) });
+    browser = await chromium.launch({ headless: true, ...(process.env.TACTICAL_BROWSER_CHANNEL ? { channel: process.env.TACTICAL_BROWSER_CHANNEL } : {}) });
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const page = await context.newPage();
     // A busy host can take minutes to start a game; only a real stall should fail this.
@@ -86,7 +57,9 @@ async function take(target, spec) {
         console.log('dump', label, (await page.evaluate(() => document.body.innerText.slice(-320))).replace(/\n/g, ' | '));
     } catch (error) { /* The failure itself is what matters. */ } };
     global.tipsDump = dump;
-    setTimeout(() => dump('stall').then(() => process.exit(3)), Number(process.env.TIPS_DEADLINE || 240000));
+    deadline = setTimeout(async () => { await dump('stall'); await browser.close(); process.exit(3); },
+        Number(process.env.TIPS_DEADLINE || 360000));
+    deadline.unref();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url);
@@ -234,25 +207,28 @@ async function take(target, spec) {
     await wizard(target, 110, '600');
     await wait(page);
     await expectTips(page, 'the Zot clock running down', ['zot']);
-    await wizard(target, 33, 'magic dart');
+    // Memorising asks to confirm the spell levels it will use.
+    await wizard(target, 33, 'magic dart', 89);
     await wait(page);
     await expectTips(page, 'a known spell', ['spells']);
+    // The engine only builds a shop on plain floor, and heroes often start on stairs.
+    await lua(target, 'dgn.terrain_changed(you.x_pos(),you.y_pos(),"floor",false,false)');
     await wizard(target, 92, 97);
     await wait(page);
     console.log('underfoot', await page.evaluate(() => { const name = Object.keys(require.s.contexts._.defined).find(entry => entry.endsWith('/map_knowledge'));
         const pos = window.crawl_party.state.members[0].pos, cell = require(name).get(pos.x, pos.y); return cell && cell.feature_name; }));
     await expectTips(page, 'a shop', ['shop']);
     await lua(target, 'dgn.place_cloud(you.x_pos(),you.y_pos(),"mutagenic fog",3)');
-    await wait(page); await wait(page);
+    // The status only appears once contamination turns harmful, a turn or two later.
+    for (let i = 0; i < 8 && !(await fits(page)).includes('contam'); i++) await wait(page);
     console.log('statuses', JSON.stringify((await hero(page)).statuses.map(status => [status.text, status.light, status.is_bad])));
     await expectTips(page, 'magical contamination', ['contam']);
     for (const spec of GEM_SPECS) { await take(target, spec); if ((await hero(page)).gems.length) break; }
     await expectTips(page, 'an ancient gem', ['gem']);
-    for (let i = 0; i < 16 && (await hero(page)).turns < 700; i++) {
-        await key(page, 53);
-        await settled(page, async () => !(await hero(page)).activity && await named(page, 'workflow-actions', 'module.ready()'), 20000);
-        await clear(page);
-    }
+    await wizard(target, 110, '10000');
+    await lua(target, 'crawl.enable_more(false); crawl.sendkeys(string.rep(".", math.max(0,710-you.turns())))');
+    await settled(page, async () => (await hero(page)).turns >= 700, 120000);
+    await clear(page);
     console.log('turns', (await hero(page)).turns);
     await expectTips(page, 'a settled-in player', ['help', 'noise', 'map', 'run', 'save', 'quick', 'zoom', 'history', 'find', 'arrange', 'exclusion']);
 
@@ -347,9 +323,9 @@ async function take(target, spec) {
     console.log(`${results.length - failed.length}/${results.length} situations passed`);
     console.log('page errors', errors.length, JSON.stringify(errors.slice(0, 3)));
     await browser.close();
-    process.exit(failed.length ? 1 : 0);
+    process.exitCode = failed.length ? 1 : 0;
 })().catch(async error => {
     console.error('FAILED', error.message.slice(0, 300));
     if (global.tipsDump) await global.tipsDump('failure');
-    process.exit(2);
-});
+    process.exitCode = 2;
+}).finally(async () => { clearTimeout(deadline); if (browser) await browser.close(); });

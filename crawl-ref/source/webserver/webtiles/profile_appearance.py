@@ -6,8 +6,8 @@ from webtiles import userdb
 
 DEFAULT_PACK = "classic"
 PACKS = (
-    {"id": "classic", "label": "Classic", "description": "Original Crawl terrain and sprites."},
-    {"id": "illustrated", "label": "Illustrated", "description":
+    {"id": "classic", "label": "Default tiles", "description": "Original Crawl terrain and sprites."},
+    {"id": "illustrated", "label": "Premium tiles", "description":
      "Painted terrain, soft material transitions, and illustrated environmental sprites."},
 )
 PACK_IDS = frozenset(pack["id"] for pack in PACKS)

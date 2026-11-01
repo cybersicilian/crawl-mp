@@ -36,6 +36,7 @@ class AppearanceAPIHandler(tornado.web.RequestHandler):
             raise tornado.web.HTTPError(401, "Sign in to manage your profile")
 
     def get(self):
+        self.xsrf_token
         try:
             self.write(profile_appearance.state(self.username))
         except (sqlite3.Error, OSError):

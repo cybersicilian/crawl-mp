@@ -1,5 +1,5 @@
 /* One schema-driven control surface for profiles and the in-game dialog. */
-define(["jquery", "graphics-preferences", "graphics-settings-model"], function ($, preferences, model) {
+define(["jquery", "graphics-preferences", "graphics-settings-model", "tileset-controls"], function ($, preferences, model, tilesets) {
     "use strict";
     var nextId = 0;
     // Presentation copy for the theme swatches; the schema stays canonical for values and labels.
@@ -37,13 +37,15 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
         root.replaceChildren(heading, node("p", "graphics-intro",
             "Saved to your account across browsers. Changes apply immediately to your open games. Party members keep their own view."));
         var appearance = node("div", "graphics-appearance"), choices = node("div", "graphics-presets"), groups = node("div", "graphics-groups");
-        var renderingTitle = node("h3", "graphics-rendering-title", "Dungeon graphics");
-        var renderingHelp = node("p", "graphics-rendering-help", "Pick a rendering preset, then fine-tune individual effects. Any edit becomes a Custom configuration.");
-        choices.setAttribute("role", "group"); choices.setAttribute("aria-label", "Graphics preset");
+        var tilesetRoot = node("div", "graphics-tileset"), tilesetControl = null;
+        var renderingTitle = node("h3", "graphics-rendering-title", "Lighting & effects");
+        var renderingHelp = node("p", "graphics-rendering-help", "Pick lighting and effects, then fine-tune individual settings. Your tileset stays selected.");
+        choices.setAttribute("role", "group"); choices.setAttribute("aria-label", "Lighting and effects preset");
         var status = node("p", "graphics-save-status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
         var retry = node("button", "graphics-retry tr-btn", "Retry connection"); retry.type = "button";
         retry.addEventListener("click", function () { preferences.refresh(); });
-        root.append(appearance, renderingTitle, renderingHelp, choices, groups, status, retry);
+        root.append(tilesetRoot, appearance, renderingTitle, renderingHelp, choices, groups, status, retry);
+        if (!document.getElementById("profile_appearance")) tilesetControl = tilesets.mount(tilesetRoot);
         function themePicker(field, select) {
             var picker = node("div", "graphics-swatches"); picker.setAttribute("role", "group"); picker.setAttribute("aria-label", field.label);
             field.options.forEach(function (value, index) {
@@ -115,7 +117,7 @@ define(["jquery", "graphics-preferences", "graphics-settings-model"], function (
             retry.hidden = !state.error;
         }
         $(document).on("graphics_settings_changed." + id, render); render();
-        return { titleId: title.id, destroy: function () { $(document).off("." + id); } };
+        return { titleId: title.id, destroy: function () { $(document).off("." + id); if (tilesetControl) tilesetControl.destroy(); } };
     }
     return { mount: mount, row: row };
 });

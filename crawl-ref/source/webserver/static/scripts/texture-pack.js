@@ -27,11 +27,13 @@ define(["jquery", "comm"], function ($, comm) {
     comm.register_handlers({ profile_appearance: function (data) {
         if (!user || typeof data.username !== "string" || data.username.toLowerCase() !== user.toLowerCase()) return;
         apply(data.texture_pack, data.available !== false);
+        $(document).trigger("profile_appearance_received", [data]);
     } });
     window.addEventListener("storage", function (event) {
         if (key() && event.key === key()) apply(event.newValue || "classic", false);
     });
     document.documentElement.dataset.texturePack = selected;
     return { bindUser: bindUser, select: function (value) { return apply(value, true); },
+        preview: function (value) { return apply(value, false); },
         current: function () { return selected; }, illustrated: function () { return selected === "illustrated"; } };
 });

@@ -65,6 +65,17 @@ class ProfileAppearanceTests(AsyncHTTPTestCase):
         self.assertEqual(self.save({"texture_pack": "classic"}).code, 200)
         self.assertEqual(profile_appearance.get_pack("Aster"), "classic")
 
+    def test_api_read_prepares_xsrf_for_in_game_tileset_changes(self):
+        response = self.fetch('/api/profile/appearance', headers={'Cookie': 'login=' + self.cookie})
+        self.assertEqual(response.code, 200)
+        xsrf_cookie = next(value.split(';')[0] for value in response.headers.get_list('Set-Cookie')
+                           if value.startswith('_xsrf='))
+        saved = self.fetch('/api/profile/appearance', method='POST', body=json.dumps({'texture_pack': 'illustrated'}),
+                           headers={'Cookie': 'login=' + self.cookie + '; ' + xsrf_cookie,
+                                    'X-XSRFToken': xsrf_cookie.split('=', 1)[1], 'X-Profile-User': 'Aster'})
+        self.assertEqual(saved.code, 200)
+        self.assertEqual(profile_appearance.get_pack('Aster'), 'illustrated')
+
     def test_missing_login_and_xsrf_cannot_change_preferences(self):
         response = self.fetch("/api/profile/appearance", method="POST", body='{"texture_pack":"illustrated"}')
         self.assertEqual(response.code, 401)

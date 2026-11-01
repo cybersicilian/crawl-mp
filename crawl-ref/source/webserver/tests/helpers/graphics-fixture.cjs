@@ -16,4 +16,7 @@ module.exports = schema => '(' + function setup(schema) {
         try { localStorage.setItem('dcss.fixture.graphics', JSON.stringify(settings)); } catch (ignored) {}
         window.jQuery(document).trigger('graphics_settings_changed', [snapshot()]); return true;
     } };
+    // Renderer-only fixtures have no authenticated tileset endpoint. The real
+    // account controls and persistence run in graphics-profile-browser.cjs.
+    modules['tileset-controls'] = { mount() { return { destroy() {} }; } };
 }.toString() + ')(' + JSON.stringify(schema) + ');';

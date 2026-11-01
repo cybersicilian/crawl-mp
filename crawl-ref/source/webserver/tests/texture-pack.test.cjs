@@ -40,3 +40,10 @@ test('blocked local storage retains profile-driven selection without failing ren
     f.handlers.profile_appearance({ username: 'Aster', texture_pack: 'classic', available: false });
     assert.equal(f.pack.current(), 'classic');
 });
+test('a tileset preview redraws immediately without publishing an unsaved account choice', () => {
+    const f = fixture(); f.pack.bindUser('Aster'); f.pack.select('classic');
+    assert(f.pack.preview('illustrated')); assert(f.pack.illustrated());
+    assert.equal(f.values.get('dcss:texture-pack:aster'), 'classic');
+    f.pack.bindUser('Rowan'); f.pack.bindUser('Aster');
+    assert.equal(f.pack.current(), 'classic');
+});

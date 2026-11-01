@@ -3580,6 +3580,7 @@ void TilesFramework::_send_party_state()
         json_write_int("dex", p.dex());
         json_write_int("dex_max", p.dex(false));
         json_write_int("gold", p.gold);
+        json_write_bool("has_orb", player_has_orb());
         json_write_int("piety", (int)p.piety());
         json_write_int("piety_rank", piety_rank(p.piety()));
         json_write_int("ritual_blood", p.religion == GOD_VORR && same_level ? vorr::nearby_blood() : 0);

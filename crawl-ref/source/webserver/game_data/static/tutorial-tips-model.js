@@ -86,7 +86,7 @@ define([], function () {
         gold: function (view) { return calm(view) && view.gold > 0; },
         rune: function (view) { return calm(view) && view.runes > 0; },
         gem: function (view) { return calm(view) && view.gems > 0; },
-        orb: function (view) { return carrying(view, /orbs of power/i); },
+        orb: function (view) { return view.orb === true || carrying(view, /orbs of power/i); },
         zot: function (view) { return calm(view) && view.zot >= 0.5; },
         abyss: function (view) { return /^abyss/i.test(view.place); },
         party: function (view) { return calm(view) && view.multiplayer; },

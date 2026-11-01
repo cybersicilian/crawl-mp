@@ -214,6 +214,12 @@ test('party tips need a party', () => {
     assert.ok(!ids({ party: 2, multiplayer: true }).includes('switch_hero'));
     ['party', 'chat', 'trade', 'floors', 'switch_hero', 'ai_teammate', 'teammate_down'].forEach(id => assert.ok(!ids({ turns: 2000 }).includes(id), id));
 });
+test('Orb ownership comes from native progress, not the nearby Orb glow', () => {
+    assert.ok(ids({ orb: true }).includes('orb'));
+    assert.ok(!ids({ orb: false, statuses: ['Orb'] }).includes('orb'));
+    assert.ok(!ids({ orb: false, statuses: ['glowing'] }).includes('orb'));
+    assert.ok(ids({ inventory: [{ kind_name: 'Orbs of Power' }] }).includes('orb'));
+});
 test('reference tips wait until the player has settled in', () => {
     const early = ids({ turns: 10 }), late = ids({ turns: 2000, canExclude: true });
     ['help', 'noise', 'map', 'run', 'save', 'quick', 'zoom', 'history', 'find', 'arrange', 'exclusion'].forEach(id => {

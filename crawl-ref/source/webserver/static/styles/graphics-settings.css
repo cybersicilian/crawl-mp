@@ -126,3 +126,7 @@ html[data-ui-theme="contrast"] .graphics-setting input.graphics-switch:checked::
     .graphics-setting input.graphics-switch::before { display: none; }
     .graphics-swatch-art, .graphics-swatch-binding, .graphics-swatch-page, .graphics-swatch-accent { forced-color-adjust: none; }
 }
+
+/* Account tilesets remain separate from interface themes and effects. */
+.graphics-tileset { margin-top: 24px; }
+.graphics-tileset:empty { display: none; }
