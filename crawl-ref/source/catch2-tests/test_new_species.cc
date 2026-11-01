@@ -252,7 +252,7 @@ TEST_CASE_METHOD(content_fixture, "Strength makes a taut retreat more likely to 
 
 TEST_CASE_METHOD(content_fixture, "Committed movement resolves tension once before repeated projection", "[new-species][chains][chain-strength]")
 {
-    rng::subgenerator samples(0x52455452454154ULL);
+    rng::subgenerator samples(0x52455452454154ULL, 0);
     const coord_def origin = you.pos();
     const int initial_reach = GENERATE(1, 4);
     monster& target = spawn(origin + coord_def(initial_reach, 0));
