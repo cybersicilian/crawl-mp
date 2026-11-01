@@ -76,7 +76,6 @@ define(["./view_data", "./enums"], function (view_data, enums) {
     }
     function hero(ctx, m, x, y, w, h, controlled) {
         var col = heroRing(ctx, m, x, y, w, h, controlled);
-        recoveryArc(ctx, m, x, y, w, h);
         // Nameplate: P-number plus a short name, readable without colour perception.
         var short_name = (m.name || "").slice(0, 6);
         var label = "P" + (m.slot + 1) + (short_name ? ":" + short_name : "") + (m.ghost_haunting || !m.alive ? "*" : "");
@@ -145,6 +144,20 @@ define(["./view_data", "./enums"], function (view_data, enums) {
         plate(ctx, Math.round(x + w / 2 - tw / 2), y + h - font - 3, tag, style.col, font + "px monospace", "left");
     }
     return {
+        // Recovery marks the floor under a hero. It is painted with the actor,
+        // so it stays behind the sprite and follows it through sprite motion.
+        render_party_recovery: function (cx, cy, x, y) {
+            var state = window.crawl_party && window.crawl_party.state;
+            if (!state || !Array.isArray(state.members)) return;
+            for (var i = 0; i < state.members.length; ++i) {
+                var m = state.members[i];
+                if (!here(m) || m.pos.x !== cx || m.pos.y !== cy) continue;
+                var scaled = this.scaled_size(), ctx = this.ctx;
+                ctx.save();
+                try { recoveryArc(ctx, m, x, y, scaled.width, scaled.height); }
+                finally { ctx.restore(); }
+            }
+        },
         render_party_overlays: function (cx, cy, x, y) {
             if (!window.crawl_party) return;
             var scaled = this.scaled_size(), ctx = this.ctx, w = scaled.width, h = scaled.height;

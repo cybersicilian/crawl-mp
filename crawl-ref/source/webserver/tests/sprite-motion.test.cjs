@@ -119,7 +119,7 @@ test('native doll capture includes both submerged passes while cursors remain on
     renderer.draw_background = () => {};
     renderer.draw_player = () => calls.push(['doll', renderer.ctx.name, renderer.ctx.globalAlpha]);
     renderer.render_cursors = () => calls.push(['cursor', renderer.ctx.name]);
-    renderer.render_party_overlays = () => {};
+    renderer.render_party_overlays = renderer.render_party_recovery = () => {};
     renderer.do_render_cell(2, 1, 64, 32, { x: 2, y: 1, t: { bg: { value: 20, WATER: true }, fg: 200, doll: [[5, 0]] } });
     assert.deepEqual(calls.filter(call => call[0] === 'doll'), [['doll', 'captured', 1], ['doll', 'captured', .3]]);
     assert.deepEqual(calls.filter(call => call[0] === 'clip'), [['clip', 'captured'], ['clip', 'captured']]);

@@ -91,6 +91,7 @@ function ($, view_data, main, tileinfo_player, icons, dngn, enums, map_knowledge
             if (!cell)
             {
                 this.render_cursors(cx, cy, x, y);
+                this.render_party_recovery(cx, cy, x, y);
                 this.render_party_overlays(cx, cy, x, y);
                 return;
             }
@@ -114,6 +115,7 @@ function ($, view_data, main, tileinfo_player, icons, dngn, enums, map_knowledge
                 this.render_glyph(x, y, map_cell, false);
 
                 this.render_cursors(cx, cy, x, y);
+                this.render_party_recovery(cx, cy, x, y);
                 this.render_party_overlays(cx, cy, x, y);
                 return;
             }
@@ -236,6 +238,8 @@ function ($, view_data, main, tileinfo_player, icons, dngn, enums, map_knowledge
             }
 
             layers.paintActor(this, cx, cy, x, y, map_cell, function () {
+            this.render_party_recovery(cx, cy, x, y);
+
             if (is_in_water && options.get("tile_display_mode") == "tiles")
             {
                 this.ctx.save();

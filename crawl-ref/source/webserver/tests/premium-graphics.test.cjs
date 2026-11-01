@@ -112,7 +112,8 @@ test('native cloud front/back clips and spell ordering retain alpha, actors and 
     renderer.element = { width: 128, height: 128 }; renderer.draw_background = () => {};
     renderer.draw_player = () => calls.push(['actor', renderer.ctx.globalAlpha]);
     renderer.render_flash = () => calls.push(['flash', renderer.ctx.globalAlpha]);
-    renderer.render_cursors = () => calls.push(['cursor', renderer.ctx.globalAlpha]); renderer.render_party_overlays = () => {};
+    renderer.render_cursors = () => calls.push(['cursor', renderer.ctx.globalAlpha]);
+    renderer.render_party_overlays = renderer.render_party_recovery = () => {};
     renderer.do_render_cell(2, 1, 64, 32, { x: 2, y: 1,
         t: { bg: { value: 20 }, fg: 200, doll: [[5, 0]], cloud: 30, ov: [40] } });
     assert.deepEqual(calls, [['cloud', .6], ['cloud', .2], ['actor', 1], ['cloud', .4], ['cloud', .8],
