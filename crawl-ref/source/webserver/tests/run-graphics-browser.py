@@ -40,7 +40,7 @@ try:
             assert fixture.poll() is None, 'Fixture startup failed; see fixture.log'
             time.sleep(.1)
         assert ready.exists(), 'Fixture startup timed out'
-        env = dict(os.environ, GRAPHICS_TEST_URL=json.loads(ready.read_text())['url'], GRAPHICS_PROOF_DIR=str(output))
+        env = dict(os.environ, DCSS_TEST_PYTHON=sys.executable, GRAPHICS_TEST_URL=json.loads(ready.read_text())['url'], GRAPHICS_PROOF_DIR=str(output))
         browser = subprocess.Popen(['node', str(tests / 'graphics-profile-browser.cjs')], env=env)
         processes.append(browser)
         code = browser.wait(timeout=180)
