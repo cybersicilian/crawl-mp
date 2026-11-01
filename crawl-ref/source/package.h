@@ -86,6 +86,9 @@ public:
     void unlink();
     string get_filename() { return filename; }
 
+    // Compress new chunks for speed over size. Any level reads back the same.
+    bool fast_writes = false;
+
     // statistics
     plen_t get_slack();
     plen_t get_size() const { return file_len; }

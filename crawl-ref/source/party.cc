@@ -1296,7 +1296,13 @@ namespace party
             // Remove all proxies before saving outgoing floor so proxy monsters
             // are not serialized as permanent level monsters.
             remove_all_proxies();
-            save_level(old_lid);
+            {
+                // Heroes on separate floors rewrite this chunk on every
+                // alternating action, and default deflate was over half of
+                // each swap. Saving the game still uses full compression.
+                unwind_bool fast_swap(you.save->fast_writes, true);
+                save_level(old_lid);
+            }
 
             s_active_slot = slot;
             real_you = &s_players[slot];
