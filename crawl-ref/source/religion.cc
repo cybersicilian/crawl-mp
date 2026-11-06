@@ -1454,7 +1454,7 @@ static bool _give_trog_oka_gift(bool forced)
     if (you.has_mutation(MUT_NO_GRASPING))
         return false;
 
-    const bool want_weapons = you_worship(GOD_TROG)
+    const bool want_weapons = you_worship(GOD_TROG) && player_can_use_weapons()
                               && (forced || you.piety() >= piety_breakpoint(4)
                                             && random2(you.piety()) > 120
                                             && one_chance_in(4));

@@ -1268,6 +1268,7 @@ void update_vision_range();
 
 maybe_bool you_can_wear(equipment_slot slot, bool include_form = false);
 bool player_can_use_armour();
+bool player_can_use_weapons();
 
 bool player_has_hair(bool include_temp = true, bool include_mutations = true);
 bool player_has_feet(bool include_temp = true, bool include_mutations = true);

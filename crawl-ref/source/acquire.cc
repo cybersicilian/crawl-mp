@@ -783,7 +783,7 @@ static int _find_acquirement_subtype(object_class_type &class_wanted,
     ASSERT(class_wanted != OBJ_RANDOM);
 
     if (class_wanted == OBJ_ARMOUR && !player_can_use_armour()
-        || class_wanted == OBJ_WEAPONS && you.has_mutation(MUT_NO_GRASPING)
+        || class_wanted == OBJ_WEAPONS && !player_can_use_weapons()
         || class_wanted == OBJ_JEWELLERY && you.has_mutation(MUT_NO_JEWELLERY))
     {
         return OBJ_RANDOM;
@@ -1725,7 +1725,7 @@ vector<object_class_type> shuffled_acquirement_classes(bool scroll)
     if (player_can_use_armour())
         rand_classes.emplace_back(OBJ_ARMOUR);
 
-    if (!you.has_mutation(MUT_NO_GRASPING))
+    if (player_can_use_weapons())
     {
         rand_classes.emplace_back(OBJ_WEAPONS);
         // Staves are often less interesting options one way or the

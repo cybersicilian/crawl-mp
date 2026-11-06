@@ -1258,6 +1258,12 @@ bool player_can_use_armour()
     return false;
 }
 
+/// Hydras bite instead of wielding, and every weapon skill is unusable to them.
+bool player_can_use_weapons()
+{
+    return !you.has_mutation(MUT_NO_GRASPING) && you.species != SP_HYDRA;
+}
+
 bool player_has_hair(bool include_temp, bool include_mutations)
 {
     if (include_mutations &&

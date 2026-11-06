@@ -41,3 +41,14 @@ Optional artwork image tags use content-versioned `data-src` URLs and the
 `data-asset-optional` marker. The marker keeps failed or slow optional art out of
 the required game-asset readiness barrier; native art remains the loading and
 failure fallback. New catalog families inherit the shared request mechanism.
+
+# Handoff policy
+
+Start with `HANDOFF.md` at the repository root and keep it current. At the end
+of any session or turn that changes code, state, configuration, or plans,
+before the final commit or push: refresh its dated current-state stamp, record
+decisions, and keep every open piece of work tracked as a GitHub issue (or, while
+issues are unavailable, in its `## Open work` list) with what, why, where in
+the code, and what done looks like. Close or tick items when the work lands and
+reference them from the commit. `HANDOFF.md` carries the full policy text; keep
+it there, here, and imported from `CLAUDE.md` via `@AGENTS.md`.

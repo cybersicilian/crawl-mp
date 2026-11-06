@@ -1436,7 +1436,7 @@ ability_type fixup_ability(ability_type ability)
     case ABIL_TSO_BLESS_WEAPON:
     case ABIL_KIKU_BLESS_WEAPON:
     case ABIL_LUGONU_BLESS_WEAPON:
-        if (you.has_mutation(MUT_NO_GRASPING))
+        if (!player_can_use_weapons())
             return ABIL_NON_ABILITY;
         else
             return ability;
