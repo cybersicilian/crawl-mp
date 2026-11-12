@@ -130,6 +130,11 @@ class PreviewService:
             raise RuntimeError("Incomplete native character preview")
         return members[slot]
 
+    def cached(self, build):
+        """Whether a preview is ready or already being made (no new process)."""
+        key = (self.signature(), build)
+        return key in self.cache or key in self.pending
+
     async def snapshot(self, build):
         key = (self.signature(), build)
         if key in self.cache:
