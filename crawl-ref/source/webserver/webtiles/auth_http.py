@@ -18,6 +18,9 @@ def signed_in_user(handler):
 
 class LogoutHandler(tornado.web.RequestHandler):
     def post(self):
+        # The form in templates/logout.html carries the XSRF token; refuse a
+        # cross-site POST that would revoke the victim's session.
+        self.check_xsrf_cookie()
         # jQuery.cookie encodes the token delimiter a second time; cookies
         # issued directly by the HTTP login helper already contain %20.
         auth.forget_login_cookie(login_cookie(self))

@@ -20,9 +20,22 @@ class LogoutHTTPTests(AsyncHTTPTestCase):
     def get_app(self):
         return tornado.web.Application([(r"/logout", LogoutHandler)])
 
-    def logout(self, cookie=""):
-        return self.fetch("/logout", method="POST", body="",
-                          headers={"Cookie": "login=" + cookie}, follow_redirects=False)
+    XSRF = "2|00000000|00000000000000000000000000000000|0"
+
+    def logout(self, cookie="", xsrf=True):
+        headers = {"Cookie": "login=" + cookie}
+        body = ""
+        if xsrf:
+            headers["Cookie"] += "; _xsrf=" + self.XSRF
+            body = "_xsrf=" + quote(self.XSRF, safe="")
+        return self.fetch("/logout", method="POST", body=body,
+                          headers=headers, follow_redirects=False)
+
+    def test_cross_site_post_without_xsrf_token_keeps_session(self):
+        cookie = auth.log_in_as_user(Mock(), "Host")
+        response = self.logout(cookie, xsrf=False)
+        self.assertEqual(response.code, 403)
+        self.assertTrue(auth.check_login_cookie(cookie)[1])
 
     def assert_signed_out(self, response):
         self.assertEqual(response.code, 303)
@@ -67,7 +80,7 @@ class LogoutHTTPTests(AsyncHTTPTestCase):
         page = self.fetch("/")
         self.assertEqual(page.code, 200)
         self.assertIn(b'name="_xsrf"', page.body)
-        self.assertEqual(self.logout().code, 403)
+        self.assertEqual(self.logout(xsrf=False).code, 403)
         xsrf_cookie = page.headers["Set-Cookie"].split(";", 1)[0]
         xsrf = xsrf_cookie.partition("=")[2]
         response = self.fetch("/logout", method="POST", body="_xsrf=" + xsrf,
