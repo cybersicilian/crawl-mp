@@ -35,7 +35,7 @@ A multiplayer fork of Dungeon Crawl Stone Soup (upstream merge base `3688bb285`)
 
 ## 4. Current state
 
-**2026-11-12.** `master` is at `42974c9a3`. Branch `claude/security-advisories-2026-11-12` (worktree `.claude/worktrees/security-advisories`, local only, not pushed) adds eight commits that fix the nine draft security advisories from the 2026-11-12 audit; each commit names its advisory. The tracking advisory is GHSA-gr7v-896p-wrff, and its checklist records each fix commit.
+**2026-11-12.** `master` is at `42974c9a3`. Branch `claude/security-advisories-2026-11-12` (worktree `.claude/worktrees/security-advisories`, pushed; PR https://github.com/cybersicilian/crawl-mp/pull/5, not merged or deployed) adds eight commits that fix the nine draft security advisories from the 2026-11-12 audit; each commit names its advisory. The tracking advisory is GHSA-gr7v-896p-wrff, and its checklist records each fix commit.
 
 - Web server unit tests: 592 run; everything passes except `activity_pacing_test` (9 failures) and the `auth_test`/`util_test` import errors (they need `pytest`). Those fail the same way on `42974c9a3`.
 - `tileweb.cc` passes a syntax-only compile. No full native build, browser run or production deploy has been done for this branch.
@@ -49,7 +49,7 @@ Ranked: take the top unclaimed line in the agents' lane, and claim it when you f
 _None: issues are disabled on this repo, so work is tracked in Open work below._
 
 **Needs a human:**
-1. Decide whether to push `claude/security-advisories-2026-11-12` publicly before deploying, or land and deploy it first. S. Done when the branch is on `master` and deployed, and each advisory is closed or published.
+1. Review and merge PR #5 (security fixes), then deploy it to production. S. Done when the fixes are live and each advisory is closed or published. The fixes are public from the moment of the push, so deploy soon.
 
 **Blocked or waiting:**
 _None yet._
@@ -66,7 +66,7 @@ Issues: https://github.com/cybersicilian/crawl-mp/issues
 
 Issues are disabled on this fork, so open work is listed here.
 
-- Land and deploy the security fixes on `claude/security-advisories-2026-11-12`, then close or publish advisories GHSA-5jh6, GHSA-6cg2, GHSA-2cr9, GHSA-6wf6, GHSA-5wfq, GHSA-pqmw, GHSA-cfxg, GHSA-h7jj and GHSA-qjrr, and the tracking advisory GHSA-gr7v. The details are in the private advisories.
+- Merge PR #5 (`claude/security-advisories-2026-11-12`) and deploy it, then close or publish advisories GHSA-5jh6, GHSA-6cg2, GHSA-2cr9, GHSA-6wf6, GHSA-5wfq, GHSA-pqmw, GHSA-cfxg, GHSA-h7jj and GHSA-qjrr, and the tracking advisory GHSA-gr7v. The details are in the private advisories.
 - Add an owner-facing button for join requests. Today the owner answers them in chat with `/party accept|deny <name>`.
 - Set the login cookie from the server as `HttpOnly; Secure; SameSite=Lax` (it is set in JavaScript, `client-auth.js`), and add a Content-Security-Policy once the inline scripts are audited.
 
