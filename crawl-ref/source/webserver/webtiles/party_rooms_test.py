@@ -71,14 +71,22 @@ class RoomResolutionTests(unittest.TestCase):
             socket.party_room_create(room_id="room-other", name="Taken over")
         self.assertEqual(self.other, original)
         self.assertIs(ws_handler.PARTY_ROOMS["room-other"], self.other)
-        socket.library_error.assert_called_once()
+        # The client's id is ignored; the server names the room after its host.
+        self.assertEqual(ws_handler.PARTY_ROOMS["room-NewHost"]["host"], "NewHost")
+        socket.library_error.assert_not_called()
 
-    def test_failed_create_preserves_existing_guest_reservation(self):
+    def test_squatted_default_id_is_refused_and_preserves_guest_reservation(self):
         self.other["slots"][1]["username"] = "NewHost"
+        squat = {"room_id": "room-NewHost", "host": "Squatter",
+                 "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
         original = deepcopy(self.other)
-        with patch.object(ws_handler, "broadcast_party_rooms"), patch.object(ws_handler.config, "games", {}):
-            StagingSocket().party_room_create(room_id="room-other")
+        socket = StagingSocket()
+        with patch.dict(ws_handler.PARTY_ROOMS, {"room-NewHost": squat}), \
+                patch.object(ws_handler, "broadcast_party_rooms"), patch.object(ws_handler.config, "games", {}):
+            socket.party_room_create()
+            self.assertIs(ws_handler.PARTY_ROOMS["room-NewHost"], squat)
         self.assertEqual(self.other, original)
+        self.assertTrue(socket.errors)
 
     def test_explicit_join_cannot_reopen_a_closed_seat_or_fall_back(self):
         self.other["slots"][2]["state"] = "closed"
@@ -185,16 +193,15 @@ class RoomLifecycleTests(unittest.TestCase):
         socket = StagingSocket()
         socket.party_room_create(room_id="room-other")
         self.assertEqual(ws_handler.PARTY_ROOMS["room-other"]["host"], "OtherHost")
-        self.assertNotIn("room-NewHost", ws_handler.PARTY_ROOMS, "a refused id does not open a room")
-        self.assertTrue(socket.errors)
+        self.assertEqual(ws_handler.PARTY_ROOMS["room-NewHost"]["host"], "NewHost")
+        self.assertFalse(socket.errors)
 
     def test_host_keeps_a_single_room(self):
         StagingSocket().party_room_create(room_id="custom-id")
         second = StagingSocket()
-        second.party_room_create()
+        second.party_room_create(room_id="another-id")
         mine = [r for r in ws_handler.PARTY_ROOMS.values() if r["host"] == "NewHost"]
-        self.assertEqual([r["room_id"] for r in mine], ["custom-id"])
-        self.assertTrue(second.errors)
+        self.assertEqual([r["room_id"] for r in mine], ["room-NewHost"])
 
     def test_joining_another_room_requires_leaving_the_previous_seat(self):
         second = {"room_id": "room-second", "host": "Second", "status": "staging",
@@ -270,6 +277,69 @@ class BroadcastTests(unittest.TestCase):
              patch.object(ws_handler, "_get_chronicle_payload") as payload:
             ws_handler.broadcast_party_rooms()
         payload.assert_not_called()
+
+
+class RoomInputValidationTests(unittest.TestCase):
+    """GHSA-6cg2-m5w8-7j7g: one message must not break lobby updates for everyone."""
+
+    def setUp(self):
+        rooms = patch.dict(ws_handler.PARTY_ROOMS, {}, clear=True)
+        rooms.start()
+        self.addCleanup(rooms.stop)
+        games = patch.object(ws_handler.config, "games", {})
+        games.start()
+        self.addCleanup(games.stop)
+
+    def apply(self, **kwargs):
+        with patch.object(ws_handler, "broadcast_party_rooms"):
+            StagingSocket().party_room_apply_comp(**kwargs)
+        return ws_handler.PARTY_ROOMS["room-NewHost"]
+
+    def test_non_string_and_unknown_choices_are_not_stored(self):
+        room = self.apply(members=[{"species": ["x"], "job": {"a": 1}, "weapon": [1], "trait": ["ghost"]},
+                                   {"species": "x" * 5000, "job": "NoSuchJob"}],
+                          seasonings=["fast_boil", "x" * 5000, {"a": 1}, "fast_boil"])
+        for slot in room["slots"][:2]:
+            self.assertEqual((slot["species"], slot["job"]), ("Minotaur", "Fighter"))
+            self.assertIsInstance(slot["weapon"], str)
+        self.assertEqual(room["slots"][0]["trait"], "none")
+        self.assertEqual(room["seasonings"], ["fast_boil"])
+
+    def test_update_slot_ignores_invalid_values(self):
+        room = self.apply(members=[{"species": "Human", "job": "Fighter"}])
+        with patch.object(ws_handler, "broadcast_party_rooms"):
+            StagingSocket().party_room_update_slot(slot=0, species=["x"], job={"a": 1}, weapon=[1])
+        self.assertEqual((room["slots"][0]["species"], room["slots"][0]["job"]), ("Human", "Fighter"))
+
+    def test_broadcast_survives_a_poisoned_room(self):
+        bad = {"room_id": "room-bad", "host": "Bad", "status": "staging",
+               "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
+        bad["slots"][0]["species"] = ["x"]
+        bad["slots"][1]["job"] = ["y"]
+        good = {"room_id": "room-good", "host": "Good", "status": "staging",
+                "slots": deepcopy(ws_handler.DEFAULT_PARTY_SLOTS)}
+        lobby = Mock(**{"is_in_lobby.return_value": True})
+        chronicle = {"ghosts": [], "party_comps": [], "cool_items": []}
+        with patch.dict(ws_handler.PARTY_ROOMS, {"room-bad": bad, "room-good": good}, clear=True), \
+             patch.object(ws_handler, "sockets", {lobby}), \
+             patch.object(ws_handler, "_get_chronicle_payload", return_value=chronicle):
+            ws_handler.broadcast_party_rooms()
+        kinds = [json.loads(call.args[0])["msg"] for call in lobby.append_message.call_args_list]
+        self.assertEqual(kinds, ["party_rooms_list", "coop_chronicle"])
+
+    def test_room_mutations_are_rate_limited_per_socket(self):
+        socket = Mock(spec=[])
+        budget = ws_handler.CrawlWebSocket._party_room_budget
+        socket.PARTY_ROOM_BURST, socket.PARTY_ROOM_RATE = 30, 5.0
+        with patch.object(ws_handler.time, "monotonic", return_value=100.0):
+            allowed = sum(budget(socket) for _ in range(100))
+        self.assertEqual(allowed, 30)
+        with patch.object(ws_handler.time, "monotonic", return_value=101.0):
+            self.assertEqual(sum(budget(socket) for _ in range(100)), 5)
+
+    def test_non_string_room_id_does_not_raise(self):
+        self.assertIsNone(ws_handler._resolve_party_room(room_id={"a": 1}))
+        self.assertIsNone(ws_handler._resolve_party_room(room_id=["a"]))
 
 
 if __name__ == "__main__":

@@ -14,10 +14,14 @@ WEAPONS = json.loads(DATA_PATH.read_text())
 def normalize_slot(slot):
     """Keep compatible selections; replace stale or invalid ones with a legal default."""
     species = slot.get("species", "Minotaur")
+    if not isinstance(species, str):
+        species = slot["species"] = "Minotaur"
     if species == "Djinn":
         species = "Djinni"
     jobs = WEAPONS.get(species, {})
     job = slot.get("job", "Fighter")
+    if not isinstance(job, str):
+        job = slot["job"] = "Fighter"
     if jobs and job not in jobs:
         replacement = "Paladin" if job == "Priest" and "Paladin" in jobs else "Fighter"
         job = replacement if replacement in jobs else next(iter(jobs))
@@ -27,7 +31,7 @@ def normalize_slot(slot):
     slot["weapon_choices"] = list(choices)
     slot["weapon_recommendations"] = [weapon for weapon in entry.get("recommended", [])
                                       if weapon in choices]
-    if slot.get("weapon") not in choices:
+    if not isinstance(slot.get("weapon"), str) or slot.get("weapon") not in choices:
         slot["weapon"] = entry.get("default", "")
     slot.setdefault("trait", "none")
     return slot
