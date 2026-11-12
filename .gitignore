@@ -24,3 +24,14 @@ games.d/
 /crawl-ref/source/webserver/game_data/static/**/*.lossless.webp
 /crawl-ref/source/webserver/game_data/static/**/*.lossless.png
 /crawl-ref/source/webserver/game_data/static/asset-delivery.json
+
+# Smoke-test account files and diagnostic output can hold production
+# credentials, login tokens, operator IPs and infrastructure names
+# (GHSA-5jh6-274c-3x62). Keep them out of the repository and, because
+# deploy/package_source.py packages untracked non-ignored files, out of
+# release tarballs too.
+private*.json
+.account.json
+*.log
+docs/diagnostics/**/deploy/
+docs/diagnostics/**/diagnostic-*.json

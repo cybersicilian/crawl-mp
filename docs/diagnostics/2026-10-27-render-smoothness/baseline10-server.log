@@ -1,4 +1,0 @@
-WARN:root:Skipping game definitions in `games.d/` based on config
-WARN:root:User database '/tmp/dcss-smooth-hxoxhbn2/accounts.db3' didn't exist; creating it now.
-WARN:root:User settings database didn't exist at '/tmp/dcss-smooth-hxoxhbn2/settings.db3'; creating it now.
-QA_NATIVE_CALL ['/private/tmp/dcss-prompt-ownership-01a17b3b/source/crawl', '-seed', '112358', '-name', 'Smoothmvrg127q', '-rc', '/tmp/dcss-smooth-hxoxhbn2/rcs/Smoothmvrg127q.rc', '-macro', '/tmp/dcss-smooth-hxoxhbn2/rcs/Smoothmvrg127q.macro', '-morgue', '/tmp/dcss-smooth-hxoxhbn2/rcs/Smoothmvrg127q', '-party', '4,ff=on,Smoothmvrg127q:Human/Fighter/war axe/6131526271614535,Lyra:Human/Fighter/war axe/4028632711605722,Karn:Human/Fighter/war axe/5335047173638899,Vex:Spriggan/Fighter/rapier/5361562530056056', '-extra-opt-last', 'restart_after_game=false', '-dir', '/private/tmp/dcss-prompt-ownership-01a17b3b/source']

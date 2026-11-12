@@ -1,8 +1,0 @@
-webkit {"before":289,"after":9,"firstTimerBefore":293,"firstTimerAfter":10}
-WebKit single-hero native fixture ready; previous multiplayer campaign preserved.
-WebKit native inventory cycle 1
-WebKit native inventory cycle 2
-WebKit native inventory cycle 3
-WebKit native inventory cycle 4
-WebKit candidate: native inventory, interrupted waits, HUD focus, one turn, auto-explore and save passed.
-chromium {"before":288,"after":9.100000001490116,"firstTimerBefore":290.1000000014901,"firstTimerAfter":9.799999997019768}
