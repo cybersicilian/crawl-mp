@@ -1,6 +1,0 @@
-{"passed":false,"phase":"staged","engine":"webkit","checks":[],"errors":[],"test_game_saved":false}
-page.waitForFunction: Timeout 45000ms exceeded.
-    at /Users/iancaltabiano/Documents/Projects/dcss/docs/diagnostics/2026-10-27-render-smoothness/public-smoke.cjs:111:20 {
-  log: [],
-  name: 'TimeoutError'
-}
