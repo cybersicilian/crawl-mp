@@ -38,7 +38,8 @@ A multiplayer fork of Dungeon Crawl Stone Soup (upstream merge base `3688bb285`)
 **2026-11-12.** `master` is at `42974c9a3`. Branch `claude/security-advisories-2026-11-12` (worktree `.claude/worktrees/security-advisories`, pushed; PR https://github.com/cybersicilian/crawl-mp/pull/5, not merged or deployed) adds eight commits that fix the nine draft security advisories from the 2026-11-12 audit; each commit names its advisory. The tracking advisory is GHSA-gr7v-896p-wrff, and its checklist records each fix commit.
 
 - Web server unit tests: 592 run; everything passes except `activity_pacing_test` (9 failures) and the `auth_test`/`util_test` import errors (they need `pytest`). Those fail the same way on `42974c9a3`.
-- `tileweb.cc` passes a syntax-only compile. No full native build, browser run or production deploy has been done for this branch.
+- Native build (macOS, `WEBTILES=y`, through the heavy-host gate) succeeds. Catch2 shows 7 failures (`test_agra_web` ×4, `test_cubus`, `test_fallen`, `test_kimjoy_artifacts`) and stops early on a Lua error in `uniques.des`. A rebuild with `master`'s `tileweb.cc` fails identically, so these failures come from `master`, not this branch. The logs are in the Claude evidence folder `security-advisories-20261112/`.
+- No browser run or production deploy yet. The patch does not apply cleanly to the live source: `ws_handler.py`, `process_handler.py` and `game_library.py` need a hand port, because production is built from the main checkout's uncommitted tree, not `master`.
 - `master`, the main checkout's working tree and production are three different code lines. Do not assume `master` is what is deployed.
 
 ## 5. Triage
