@@ -126,6 +126,7 @@ class LibraryHTTPTests(Workspace, AsyncHTTPTestCase):
         return tornado.web.Application([
             (r"/(games|players|randarts)/([0-9a-f-]+)", LibraryPageHandler),
             (r"/api/library/(games|players|randarts)/([0-9a-f-]+)", LibraryAPIHandler),
+            (r"/api/library/(games|players|randarts)", LibraryAPIHandler),
         ], template_path=str(templates), static_path=str(templates.parent / "static"))
 
     def test_profiles_escape_text_and_hide_save_paths(self):
@@ -156,6 +157,29 @@ class LibraryHTTPTests(Workspace, AsyncHTTPTestCase):
         self.assertEqual(response.code, 200)
         self.assertIn(item["name"].encode(), response.body)
         self.assertIsNone(library.get_game(game["id"])["saved_at"])
+
+    def test_private_lobby_games_and_live_seeds_stay_out_of_public_records(self):
+        # GHSA-cfxg-cpx5-f954
+        public = library.create_game("Host", "coop")
+        hidden = library.create_game("Host", "coop")
+        library.update_party(hidden["id"], {"room": {"visibility": "private"}})
+        hero = {"id": str(uuid.uuid4()), "name": "Quiet", "xl": 1,
+                "species": "Human", "job": "Fighter", "hp": 10, "hp_max": 10, "place": "D:1"}
+        self.snapshot(public)
+        self.snapshot(hidden, players=[hero])
+        listed = json.loads(self.fetch("/api/library/games").body)["entries"]
+        self.assertEqual([g["id"] for g in listed], [public["id"]])
+        self.assertNotIn("seed", listed[0]["state"])
+        self.assertEqual(self.fetch("/api/library/games/" + hidden["id"]).code, 404)
+        self.assertEqual(self.fetch("/games/" + hidden["id"]).code, 404)
+        self.assertNotIn(b'"seed"', self.fetch("/api/library/games/" + public["id"]).body)
+        # The owner's own list still has both, with seeds.
+        own = library.list_games("Host")
+        self.assertEqual(len(own), 2)
+        self.assertTrue(all(g["state"].get("seed") == "12" for g in own))
+        library.finish_game(public["id"], "dead")
+        ended = json.loads(self.fetch("/api/library/games/" + public["id"]).body)
+        self.assertEqual(ended["state"]["seed"], "12")
 
 
 if __name__ == "__main__":
