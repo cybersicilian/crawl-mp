@@ -117,6 +117,17 @@ def watch_socket_dirs():
             continue
         watcher.watch(socket_dir, handle_new_socket)
 
+# The options the web client sends (game_data/static/options.js callers).
+WEB_CLIENT_OPTIONS = frozenset(("action_panel_orientation", "action_panel_show",
+                                "action_panel_scale", "action_panel_font_size"))
+_WEB_OPTION_LINE = re.compile(r"^([a-z_]+) = ([A-Za-z0-9_.-]{0,32})$")
+
+
+def web_option_allowed(line):
+    match = _WEB_OPTION_LINE.match(line) if isinstance(line, str) else None
+    return bool(match) and match.group(1) in WEB_CLIENT_OPTIONS
+
+
 class CrawlProcessHandlerBase(object):
     def __init__(self, game_params, username, logger):
         self.game_params = game_params
@@ -1433,6 +1444,17 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 _send_input_error(source, obj, str(error))
             return
         if obj.get("msg") in ("ai_configure", "ai_action", "ai_prompt", "ai_state", "view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
+            return
+        # note and server_announcement come only from this server
+        # (handle_chat_message, handle_announcement). set_option rewrites the
+        # one global Options object and the owner's saved preferences, so only
+        # the owner may send it, and only for the web client's own display
+        # options; include/lua_file never come from a browser
+        # (GHSA-2cr9-8rm5-wvv8).
+        if obj.get("msg") in ("note", "server_announcement"):
+            return
+        if obj.get("msg") == "set_option" and not (
+                self.party_control.is_owner(source) and web_option_allowed(obj.get("line"))):
             return
         obj.pop("activity_id", None)
         obj.pop("prompt_activity_id", None)
