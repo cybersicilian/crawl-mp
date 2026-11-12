@@ -39,7 +39,7 @@ A multiplayer fork of Dungeon Crawl Stone Soup (upstream merge base `3688bb285`)
 
 - Web server unit tests: 592 run; everything passes except `activity_pacing_test` (9 failures) and the `auth_test`/`util_test` import errors (they need `pytest`). Those fail the same way on `42974c9a3`.
 - Native build (macOS, `WEBTILES=y`, through the heavy-host gate) succeeds. Catch2 shows 7 failures (`test_agra_web` ×4, `test_cubus`, `test_fallen`, `test_kimjoy_artifacts`) and stops early on a Lua error in `uniques.des`. A rebuild with `master`'s `tileweb.cc` fails identically, so these failures come from `master`, not this branch. The logs are in the Claude evidence folder `security-advisories-20261112/`.
-- No browser run or production deploy yet. The patch does not apply cleanly to the live source: `ws_handler.py`, `process_handler.py` and `game_library.py` need a hand port, because production is built from the main checkout's uncommitted tree, not `master`.
+- **Production (2026-11-12 23:26 UTC):** the server-side fixes run live as an overlay on release `20261104-all-01a1a997`, because production is built from the main checkout's uncommitted tree, not `master`. The ported source is at `security-advisories-20261112/live-port` in the Claude evidence folder. Rollback copies of the 12 replaced files and the old Caddyfile are in `/opt/dcss/staging/secfix-20261112/rollback/` on the VM, and the state disk snapshot is `dcss-data-pre-secfix-20261112`. Public checks passed: HSTS is sent, `/logout` without an XSRF token returns 403, signed-out previews return 401, no in-progress game shows its seed, and a forged `X-Real-IP` is not logged. The live `crawl` binary is still the Hydra build; the `tileweb.cc` second layer ships with the next native release.
 - `master`, the main checkout's working tree and production are three different code lines. Do not assume `master` is what is deployed.
 
 ## 5. Triage
@@ -50,7 +50,7 @@ Ranked: take the top unclaimed line in the agents' lane, and claim it when you f
 _None: issues are disabled on this repo, so work is tracked in Open work below._
 
 **Needs a human:**
-1. Review and merge PR #5 (security fixes), then deploy it to production. S. Done when the fixes are live and each advisory is closed or published. The fixes are public from the moment of the push, so deploy soon.
+1. Review and merge PR #5 (security fixes; already live as an overlay). S. Done when it is on `master`, and the advisories are closed or published.
 
 **Blocked or waiting:**
 _None yet._
@@ -67,7 +67,7 @@ Issues: https://github.com/cybersicilian/crawl-mp/issues
 
 Issues are disabled on this fork, so open work is listed here.
 
-- Merge PR #5 (`claude/security-advisories-2026-11-12`) and deploy it, then close or publish advisories GHSA-5jh6, GHSA-6cg2, GHSA-2cr9, GHSA-6wf6, GHSA-5wfq, GHSA-pqmw, GHSA-cfxg, GHSA-h7jj and GHSA-qjrr, and the tracking advisory GHSA-gr7v. The details are in the private advisories.
+- Merge PR #5 (`claude/security-advisories-2026-11-12`; the server fixes are already live as an overlay). Rebuild the native binary with the `tileweb.cc` check at the next native release, then close or publish advisories GHSA-5jh6, GHSA-6cg2, GHSA-2cr9, GHSA-6wf6, GHSA-5wfq, GHSA-pqmw, GHSA-cfxg, GHSA-h7jj and GHSA-qjrr, and the tracking advisory GHSA-gr7v. The details are in the private advisories.
 - Add an owner-facing button for join requests. Today the owner answers them in chat with `/party accept|deny <name>`.
 - Set the login cookie from the server as `HttpOnly; Secure; SameSite=Lax` (it is set in JavaScript, `client-auth.js`), and add a Content-Security-Policy once the inline scripts are audited.
 
