@@ -1,6 +1,6 @@
 # dcss: HANDOFF
 
-**Last updated:** 2026-11-12 13:00 MST, by Composite (`ej handoff init`): created in the standard form; every section still to fill.
+**Last updated:** 2026-11-12 13:00 MST, by claude-code: Fixed the nine 2026-11-12 security advisories on local branch claude/security-advisories-2026-11-12 (8 fix commits, one per advisory or pair; tests added); added HANDOFF.md, AGENTS.md policy and CLAUDE.md. Earlier hand-offs are under Deltas and in `ej handoff log`.
 
 **Start here:** `ej handoff brief` (or the MCP tool `get_handoff` with `brief=true`) is the short way in: what to pick up, who is working here, and where each section of this file is. Without those tools, read Current state, Triage and Known issues and gotchas, then the issue you take.
 
@@ -86,13 +86,14 @@ Issues are disabled on this fork, so open work is listed here.
 ## 10. Deltas
 
 <!-- composite:deltas · newest first; Composite rewrites this block on every merge (ej handoff merge / merge_handoff) -->
+- **2026-11-12 13:00 MST** · claude-code · `claude/multiplayer-superlatives` at `a8706a5`, no commits · `h-af0e78` — Fixed the nine 2026-11-12 security advisories on local branch claude/security-advisories-2026-11-12 (8 fix commits, one per advisory or pair; tests added); added HANDOFF.md, AGENTS.md policy and CLAUDE.md. Not pushed, merged or deployed. **Next:** Engineer decides push-vs-deploy order; land on master, deploy via the production recipe, then close/publish the advisories and tick GHSA-gr7v. **Decided:** Drop-in co-op kept but gated on owner consent (/party accept); server-derived room ids; set_option limited to owner and action_panel_* options; previews need login and per-client budget.
 <!-- /composite:deltas -->
 
 ## 11. Updating this document
 
 Before your final commit of any session that changed code, config, state or plans:
 
-1. Rewrite **Current state** to what is true now, and refresh the **Last updated** stamp.
+**Last updated:** 2026-11-12 13:00 MST, by claude-code: Fixed the nine 2026-11-12 security advisories on local branch claude/security-advisories-2026-11-12 (8 fix commits, one per advisory or pair; tests added); added HANDOFF.md, AGENTS.md policy and CLAUDE.md. Earlier hand-offs are under Deltas and in `ej handoff log`.
 2. Reconcile **Open work** with the issues: open one for anything new, close what landed; re-rank **Triage** (`ej handoff triage --sync` drops closed issues and lists untriaged ones).
 3. Add what you decided, and why, to **Decisions**.
 4. Merge your delta (`ej handoff merge <fork id> --summary …`, or `merge_handoff`).
