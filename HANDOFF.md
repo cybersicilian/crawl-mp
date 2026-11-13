@@ -50,7 +50,7 @@ Ranked: take the top unclaimed line in the agents' lane, and claim it when you f
 _None: issues are disabled on this repo, so work is tracked in Open work below._
 
 **Needs a human:**
-1. Review and merge PR #5 (security fixes; already live as an overlay). S. Done when it is on `master`, and the advisories are closed or published.
+1. Review and merge PR #5 (security fixes; already live as an overlay, advisories published). S. Done when it is on `master`.
 
 **Blocked or waiting:**
 _None yet._
@@ -67,7 +67,7 @@ Issues: https://github.com/cybersicilian/crawl-mp/issues
 
 Issues are disabled on this fork, so open work is listed here.
 
-- Merge PR #5 (`claude/security-advisories-2026-11-12`; the server fixes are already live as an overlay). Rebuild the native binary with the `tileweb.cc` check at the next native release, then close or publish advisories GHSA-5jh6, GHSA-6cg2, GHSA-2cr9, GHSA-6wf6, GHSA-5wfq, GHSA-pqmw, GHSA-cfxg, GHSA-h7jj and GHSA-qjrr, and the tracking advisory GHSA-gr7v. The details are in the private advisories.
+- Merge PR #5 (`claude/security-advisories-2026-11-12`). The server fixes are live as an overlay, the nine advisories were published on 2026-11-12, and the tracking advisory GHSA-gr7v is closed. Rebuild the native binary with the `tileweb.cc` check (GHSA-2cr9's second layer) at the next native release.
 - Add an owner-facing button for join requests. Today the owner answers them in chat with `/party accept|deny <name>`.
 - Set the login cookie from the server as `HttpOnly; Secure; SameSite=Lax` (it is set in JavaScript, `client-auth.js`), and add a Content-Security-Policy once the inline scripts are audited.
 
