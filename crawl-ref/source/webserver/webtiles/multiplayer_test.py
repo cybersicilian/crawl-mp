@@ -546,5 +546,33 @@ class DecodedInputTest(unittest.TestCase):
         self.assertNotIn("activity_id", sent)
 
 
+class OwnerOnlyMessageTest(unittest.TestCase):
+    """GHSA-2cr9-8rm5-wvv8: guests cannot send owner- or server-only engine messages."""
+
+    def send(self, username, frame):
+        control = PartyControl("Host", {"Host": 0, "Guest": 1})
+        game = SimpleNamespace(party_control=control, conn=Mock(open=True), process=True,
+                               party_mode=False, username="Host", _receivers=set())
+        CrawlProcessHandler.handle_input(game, dict(frame), SimpleNamespace(username=username,
+                                                                            send_message=Mock()))
+        return [json.loads(call.args[0])["msg"] for call in game.conn.send_message.call_args_list]
+
+    def test_note_and_server_announcement_never_reach_the_engine_from_a_client(self):
+        for user in ("Host", "Guest"):
+            for frame in (dict(msg="note", content="x"),
+                          dict(msg="server_announcement", content="x")):
+                with self.subTest(user=user, msg=frame["msg"]):
+                    self.assertEqual(self.send(user, frame), [])
+
+    def test_only_the_owner_sets_only_web_client_options(self):
+        allowed = dict(msg="set_option", line="action_panel_scale = 100")
+        self.assertEqual(self.send("Host", allowed), ["set_option"])
+        self.assertEqual(self.send("Guest", allowed), [])
+        for line in ("include = evil.rc", "lua_file = x.lua", "autopickup = ",
+                     "action_panel_scale = 1\ninclude = x", ["action_panel_scale = 1"]):
+            with self.subTest(line=line):
+                self.assertEqual(self.send("Host", dict(msg="set_option", line=line)), [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -35,26 +35,28 @@ A fork of Dungeon Crawl Stone Soup (DCSS) with co-op multiplayer, lobbies, extra
 
 ## 4. Current state
 
-**2026-11-12.** The branch `claude/remove-committed-secrets` (based on `master` @ `42974c9a3`) removes the committed QA account files (`**/private*.json`), the `docs/diagnostics/**/*.log` server logs and the `docs/diagnostics/**/diagnostic-*.json` captures (196 files). It also adds `.gitignore` rules for `private*.json`, `.account.json`, `*.log`, `docs/diagnostics/**/deploy/` and `docs/diagnostics/**/diagnostic-*.json`. Deploy tests pass: 15 run, OK.
+**2026-11-12.** The public default branch already contains the audit cleanup
+(`189b29d3db`). This reconciliation preserves its ignore rules and integrates
+the reviewed security changes from [PR #5](https://github.com/cybersicilian/crawl-mp/pull/5).
 
-**Still unhealthy:** the leaked QA passwords remain valid on production until the accounts are disabled, and they remain in git history (see Triage, needs a human). Nine other scan findings are open as draft security advisories under the epic GHSA-gr7v-896p-wrff.
+The current production lineage is release `20261104-all-01a1a997`, with the
+November 6 Hydra binary overlay and the November 12 server security overlay.
+The nine advisories have been published. The native defense from PR #5 remains
+for the next native release. A release of this branch would omit production
+changes because the frozen production source is ahead on a separate lineage.
 
 ## 5. Triage
 
-Ranked: take the top unclaimed line in the agents' lane, and claim it when you fork (`fork_handoff claim=#N`, `ej handoff fork --claim N`) so no other agent takes it. A merge that closes an issue drops its line; `ej handoff triage --sync` drops closed issues and lists open ones nobody has triaged.
-
 **Agents can pick up:**
-1. GHSA-qjrr-c6vf-8v7c Logout endpoint lacks CSRF protection — S — done when logout requires the CSRF token/same-origin check.
-2. GHSA-2cr9-8rm5-wvv8 Co-op guests can send owner/server-only engine messages — M — done when guest messages are filtered server-side.
-3. The other draft advisories under GHSA-gr7v-896p-wrff (see Open work) — S–M each.
-
-**Needs a human:**
-1. GHSA-5jh6-274c-3x62 (production part) — S — done when `Perf0mvr3l91d`, `Perf1mvr3l91d` and `SafariQAmvr5lm5e` are in `disabled_accounts` (`webserver/config.py`) or deleted from `/var/lib/dcss/accounts.db3`, and no other `Perf*`/`*QA*` smoke accounts remain active.
-2. GHSA-5jh6-274c-3x62 (history, optional) — M — decide whether to rewrite history to purge the files. Once the accounts are disabled the passwords are worthless, so this is low value.
-3. Enable GitHub issues on `cybersicilian/crawl-mp`, or keep using draft advisories (they are private, which suits security work in a public repo).
+1. [PR #5](https://github.com/cybersicilian/crawl-mp/pull/5) — reconcile the
+   native defense with the frozen production source and the Hydra binary patch.
+2. Freeze and verify a source branch from the exact live release and both
+   overlays before a full production rollout.
 
 **Blocked or waiting:**
-_None yet._
+1. Confirm production test-account remediation using the advisory receipt.
+2. GitHub issues are disabled on the public fork. Existing advisory links and
+   pull requests track this work.
 
 ## 6. Set up, run, test, deploy
 
@@ -65,19 +67,12 @@ _None yet._
 
 ## 7. Open work
 
-GitHub issues are **disabled** on this repository. Open work is tracked as draft security advisories (https://github.com/cybersicilian/crawl-mp/security/advisories) and in this list until issues exist.
-
-- GHSA-gr7v-896p-wrff: epic tracking the 2026-11-12 security scan of `master` @ `42974c9a`.
-- GHSA-5jh6-274c-3x62: production QA passwords and server logs committed. Repo clean-up done on `claude/remove-committed-secrets`; disabling the accounts on production is still open.
-- GHSA-qjrr-c6vf-8v7c: logout lacks CSRF protection.
-- GHSA-h7jj-hhqc-66p4: client-supplied `X-Real-IP` trusted.
-- GHSA-cfxg-cpx5-f954: public library lists private-lobby expeditions, including live seeds.
-- GHSA-pqmw-6f2v-r3jq: unauthenticated character previews spawn native processes.
-- GHSA-5wfq-36jc-wp3f: client-chosen party room ids allow squatting/overwriting.
-- GHSA-6wf6-39j3-jrjf: spectators can join solo games as players.
-- GHSA-2cr9-8rm5-wvv8: co-op guests can send owner/server-only engine messages.
-- GHSA-6cg2-m5w8-7j7g: unvalidated party-room fields break lobby updates.
-- Tracked `deploy/__pycache__/*.pyc` files: build output in git. Untrack them and ignore `__pycache__/` (no advisory; small).
+- [PR #5](https://github.com/cybersicilian/crawl-mp/pull/5): include the native
+  defense in a build on the verified production lineage.
+- [Security advisories](https://github.com/cybersicilian/crawl-mp/security/advisories):
+  retain the audit history and verify the production test-account remediation.
+- Reconcile older UI pull requests against the live and default-branch trees
+  before adopting any remaining changes.
 
 ## 8. Known issues and gotchas
 

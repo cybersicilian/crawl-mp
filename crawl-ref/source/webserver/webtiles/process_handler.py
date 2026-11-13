@@ -117,6 +117,17 @@ def watch_socket_dirs():
             continue
         watcher.watch(socket_dir, handle_new_socket)
 
+# The options the web client sends (game_data/static/options.js callers).
+WEB_CLIENT_OPTIONS = frozenset(("action_panel_orientation", "action_panel_show",
+                                "action_panel_scale", "action_panel_font_size"))
+_WEB_OPTION_LINE = re.compile(r"^([a-z_]+) = ([A-Za-z0-9_.-]{0,32})$")
+
+
+def web_option_allowed(line):
+    match = _WEB_OPTION_LINE.match(line) if isinstance(line, str) else None
+    return bool(match) and match.group(1) in WEB_CLIENT_OPTIONS
+
+
 class CrawlProcessHandlerBase(object):
     def __init__(self, game_params, username, logger):
         self.game_params = game_params
@@ -204,9 +215,111 @@ class CrawlProcessHandlerBase(object):
             return True
         return self.party_control.reservation(watcher) is not None
 
+    def join_allowed(self, watcher):
+        """Whether watcher may take a hero without asking the owner.
+
+        Spectators used to claim a seat in anyone's public game, and the seat
+        was saved with it (GHSA-6wf6-39j3-jrjf). A seat now needs an existing
+        reservation, a place in the launched lobby room's roster, a current
+        invite to a private room, or the owner's /party accept."""
+        if self.party_control.reservation(watcher) is not None:
+            return True
+        identity = (getattr(watcher, "username", None) or "").casefold()
+        if not identity:
+            return False
+        if identity in getattr(self, "party_approved", ()):
+            return True
+        from webtiles import party_access
+        room = party_access.process_room(getattr(ws_handler, "PARTY_ROOMS", {}).values(), self)
+        if not room:
+            return False
+        if any((slot.get("username") or "").casefold() == identity for slot in room.get("slots", [])):
+            return True
+        return room.get("visibility") == "private" and party_access.allowed(room, watcher)
+
+    def request_party_join(self, watcher):
+        name = watcher.username
+        if not hasattr(self, "party_requests"):
+            self.party_requests = {}
+        first = name.casefold() not in self.party_requests
+        self.party_requests[name.casefold()] = name
+        watcher.send_message("game_action_error", message=(
+            "Asked %s to let you join. You can watch until they accept." % (self.username or "the owner")))
+        if first and self.username:
+            self.handle_notification(self.username,
+                "%s asks to join as a player. Type /party accept %s to give them a hero, "
+                "or /party deny %s." % (name, name, name))
+
+    def _persist_party_members(self):
+        if self.username and getattr(self, "record_id", None):
+            from webtiles import game_library
+            saved = game_library.get_game(self.record_id)
+            spec = json_decode(saved["party_json"]) if saved else {}
+            spec.update(getattr(ws_handler, "USER_PARTY_SPECS", {}).get(self.username, {}))
+            spec.update(slot_users=dict(self.party_members), multiplayer=self.party_control.multiplayer)
+            if not spec.get("party_arg"):
+                spec["party_arg"] = "%d,mp=on" % len(self.party_members)
+            ws_handler.USER_PARTY_SPECS[self.username] = spec
+            game_library.update_party(self.record_id, spec)
+
+    def party_owner_command(self, source, action, target):
+        """/party accept|deny|remove <name>, for the expedition owner only."""
+        if not source or source.casefold() != (self.username or "").casefold():
+            self.handle_notification(source, "Only the expedition owner can manage party seats.")
+            return
+        key = target.strip().casefold()
+        if not key:
+            self.handle_notification(source, "Usage: /party %s <name>" % action)
+            return
+        requests = getattr(self, "party_requests", {})
+        if action == "deny":
+            name = requests.pop(key, None)
+            self.handle_notification(source, "Declined %s." % name if name else "No request from %s." % target)
+            if name:
+                self.handle_notification(name, "%s declined your request to join." % self.username)
+            return
+        if action == "remove":
+            name = next((n for n in self.party_members if n.casefold() == key
+                         and n.casefold() != (self.username or "").casefold()), None)
+            if name is None:
+                self.handle_notification(source, "%s has no saved seat." % target)
+                return
+            del self.party_members[name]
+            if not hasattr(self, "party_approved"):
+                self.party_approved = set()
+            self.party_approved.discard(key)
+            for w in self._receivers:
+                if (w.username or "").casefold() == key:
+                    w.party_member_active = False
+            self._persist_party_members()
+            self.handle_notification(source, "Removed %s's seat." % name)
+            return
+        name = requests.pop(key, None)
+        if name is None:
+            self.handle_notification(source, "No request from %s." % target)
+            return
+        if not hasattr(self, "party_approved"):
+            self.party_approved = set()
+        self.party_approved.add(key)
+        joined = False
+        for w in list(self._receivers):
+            if (w.username or "").casefold() == key and not joined:
+                slot = self.join_party_member(w)
+                if slot is not None:
+                    w.send_message("party_joined", slot=slot)
+                    joined = True
+        self.handle_notification(source, "Accepted %s." % name if joined else
+                                 "Accepted %s; they can join while watching with /party join." % name)
+
     def join_party_member(self, watcher, slot=None):
         if not getattr(watcher, "username", None):
             watcher.send_message("game_action_error", message="Log in to reserve your multiplayer character across reconnects.")
+            return None
+        if not self.join_allowed(watcher):
+            self.request_party_join(watcher)
+            return None
+        if self.party_control.reservation(watcher) is None and not self.party_control.state:
+            watcher.send_message("game_action_error", message="The expedition is still starting. Try again in a moment.")
             return None
         try:
             slot = self.party_control.claim(watcher, slot)
@@ -222,16 +335,7 @@ class CrawlProcessHandlerBase(object):
             watcher.party_slot = slot
         if self.party_control.multiplayer:
             self.player_streams.request(watcher)
-        if self.username and getattr(self, "record_id", None):
-            from webtiles import game_library
-            saved = game_library.get_game(self.record_id)
-            spec = json_decode(saved["party_json"]) if saved else {}
-            spec.update(getattr(ws_handler, "USER_PARTY_SPECS", {}).get(self.username, {}))
-            spec.update(slot_users=dict(self.party_members), multiplayer=self.party_control.multiplayer)
-            if not spec.get("party_arg"):
-                spec["party_arg"] = "%d,mp=on" % len(self.party_members)
-            ws_handler.USER_PARTY_SPECS[self.username] = spec
-            game_library.update_party(self.record_id, spec)
+        self._persist_party_members()
         chat_msg = ("<span class='chat_sender'>[Party]</span>: "
                     "<span class='chat_msg'>%s joined Co-op Party (Slot %d)!</span>"
                     % (xhtml_escape(uname), slot + 1))
@@ -476,6 +580,10 @@ class CrawlProcessHandlerBase(object):
         self.chat_help_message(source, "/party ff", "toggle party friendly fire mode")
         self.chat_help_message(source, "/party status", "show active co-op party members")
         if self.is_player(source):
+            self.chat_help_message(source, "/party accept <name>", "let <name> join as a player")
+            self.chat_help_message(source, "/party deny <name>", "decline a join request")
+            self.chat_help_message(source, "/party remove <name>", "remove <name>'s saved seat")
+        if self.is_player(source):
             self.chat_help_message(source, "/kick <name> [<minutes>]", "kick <name> for some time")
             self.chat_help_message(source, "", "default: 15 minutes. Not saved across sessions.")
             self.chat_help_message(source, "/block <name>", "kick and block <name>")
@@ -528,6 +636,9 @@ class CrawlProcessHandlerBase(object):
                 slot = self.join_party_member(source_ws, slot=req_slot)
                 if slot is not None:
                     source_ws.send_message("party_joined", slot=slot)
+            elif subcmd.split(None, 1)[:1] in (["accept"], ["deny"], ["remove"]):
+                parts = remainder.strip().split(None, 1)
+                self.party_owner_command(source, parts[0].lower(), parts[1] if len(parts) > 1 else "")
             elif subcmd in ("ff", "friendlyfire", "friendly_fire"):
                 if not source or source.lower() != (self.username or "").lower():
                     self.handle_notification(source, "Only the expedition owner can change friendly fire.")
@@ -542,7 +653,8 @@ class CrawlProcessHandlerBase(object):
                 ) or "Solo / Host"
                 self.handle_notification(source, "Party Co-op Members: " + members_desc)
             else:
-                self.handle_notification(source, "Usage: /party join | /party ff | /party status")
+                self.handle_notification(source, "Usage: /party join | /party ff | /party status"
+                                         " | /party accept|deny|remove <name>")
         else:
             return False
         return True
@@ -1433,6 +1545,17 @@ class CrawlProcessHandler(CrawlProcessHandlerBase):
                 _send_input_error(source, obj, str(error))
             return
         if obj.get("msg") in ("ai_configure", "ai_action", "ai_prompt", "ai_state", "view_player", "party_session", "party_packet", "attach", "spectator_joined", "party_activity_step", "party_activity_ready", "party_activity_probe", "party_activity_status"):
+            return
+        # note and server_announcement come only from this server
+        # (handle_chat_message, handle_announcement). set_option rewrites the
+        # one global Options object and the owner's saved preferences, so only
+        # the owner may send it, and only for the web client's own display
+        # options; include/lua_file never come from a browser
+        # (GHSA-2cr9-8rm5-wvv8).
+        if obj.get("msg") in ("note", "server_announcement"):
+            return
+        if obj.get("msg") == "set_option" and not (
+                self.party_control.is_owner(source) and web_option_allowed(obj.get("line"))):
             return
         obj.pop("activity_id", None)
         obj.pop("prompt_activity_id", None)

@@ -24,6 +24,7 @@ from tornado.ioloop import IOLoop
 
 from webtiles import auth, checkoutput, chronicle, config, userdb, util, load_games
 from webtiles import game_library, library_socket, starting_weapons, crash_reports, system_one
+from webtiles import party_input
 from webtiles.character_preview import ensure_seed
 from webtiles import session_recovery, party_roster, party_access, party_saved
 from webtiles import profile_appearance, profile_graphics, game_settings_socket
@@ -69,10 +70,15 @@ def _finish_record(record_id, reason):
     return game_library.get_game(record_id)
 
 def broadcast_party_rooms():
-    for room in PARTY_ROOMS.values():
-        for slot in room.get("slots", []):
-            starting_weapons.normalize_slot(slot)
-            ensure_seed(slot)
+    for rid, room in list(PARTY_ROOMS.items()):
+        # One bad room must not stop lobby updates for every player.
+        try:
+            for slot in room.get("slots", []):
+                starting_weapons.normalize_slot(slot)
+                ensure_seed(slot)
+        except Exception:
+            logging.warning("Dropping party room %r that failed to normalise", rid, exc_info=True)
+            PARTY_ROOMS.pop(rid, None)
     lobby_sockets = [s for s in list(sockets) if s.is_in_lobby()]
     if not lobby_sockets:
         return
@@ -138,6 +144,8 @@ def _schedule_party_presence_check(username):
     IOLoop.current().call_later(delay, _expire_party_presence, username)
 
 def _resolve_party_room(room_id=None, username=None):
+    if room_id is not None and not isinstance(room_id, str):
+        room_id = None
     if room_id and room_id in PARTY_ROOMS:
         return PARTY_ROOMS[room_id]
     if room_id and ("room-" + str(room_id)) in PARTY_ROOMS:
@@ -1099,7 +1107,12 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             # finished checkpoint is staged into the room by
             # _on_record_finished, once the library worker has closed it.
             if room_changed:
-                broadcast_party_rooms()
+                # A broadcast failure must not skip the lobby return and the
+                # socket cleanup below.
+                try:
+                    broadcast_party_rooms()
+                except Exception:
+                    self.logger.warning("Party room broadcast failed", exc_info=True)
             if self.client_closed:
                 _schedule_party_presence_check(self.username)
 
@@ -1678,8 +1691,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             room["friendly_fire"] = bool(friendly_fire)
         if comp_name:
             room["name"] = str(comp_name)[:40]
-        if isinstance(seasonings, list):
-            room["seasonings"] = [str(s) for s in seasonings[:6]]
+        if party_input.seasonings(seasonings) is not None:
+            room["seasonings"] = party_input.seasonings(seasonings)
         if seed is not None:
             room["seed"] = str(seed).strip()[:24]
         parsed_members = []
@@ -1688,10 +1701,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                 if isinstance(m, dict):
                     parsed_members.append({
                         "hero_name": _sanitize_hero_name(m.get("name") or m.get("hero_name"), "Hero"),
-                        "species": m.get("species", "Minotaur"),
-                        "job": m.get("job", "Fighter"),
-                        "weapon": m.get("weapon", ""),
-                        "trait": m.get("trait", "none"),
+                        "species": party_input.species(m.get("species", "Minotaur")) or "Minotaur",
+                        "job": party_input.job(m.get("job", "Fighter")) or "Fighter",
+                        "weapon": party_input.weapon(m.get("weapon", "")) or "",
+                        "trait": party_input.trait(m.get("trait", "none")) or "none",
                     })
         elif party_spec:
             for tok in str(party_spec).split(","):
@@ -1707,10 +1720,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                     sp, jb = parts[:2]
                     parsed_members.append({
                         "hero_name": _sanitize_hero_name(hname, "Hero"),
-                        "species": sp.strip(),
-                        "job": jb.strip(),
-                        "weapon": parts[2].strip() if len(parts) > 2 else "",
-                        "trait": parts[4].strip() if len(parts) > 4 else "none",
+                        "species": party_input.species(sp) or "Minotaur",
+                        "job": party_input.job(jb) or "Fighter",
+                        "weapon": party_input.weapon(parts[2]) or "" if len(parts) > 2 else "",
+                        "trait": party_input.trait(parts[4].strip()) or "none" if len(parts) > 4 else "none",
                     })
         if parsed_members:
             slots = room.get("slots", [])
@@ -1737,13 +1750,19 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         if not self.username:
             return
         host = self.username
-        rid = room_id or ("room-%s" % host)
-        existing = PARTY_ROOMS.get(rid)
-        if existing and existing.get("host", "").casefold() != host.casefold():
-            self.library_error("That expedition room belongs to another host. Choose a different room name.")
+        # The server chooses the room id: the host's current room, or
+        # room-<host>. A client-chosen id let one account squat or claim
+        # another user's room (GHSA-5wfq-36jc-wp3f). The client's id only
+        # confirms which room a saved-party replacement refers to.
+        existing = next((room for room in PARTY_ROOMS.values()
+                         if room.get("host", "").casefold() == host.casefold()), None)
+        rid = existing["room_id"] if existing else "room-%s" % host
+        if not existing and rid in PARTY_ROOMS:
+            self.library_error("That expedition room belongs to another host.")
             return
         if replace_save is not None and (not existing or existing.get("resume_id")):
             if (not existing or existing.get("resume_id") != replace_save
+                    or (room_id is not None and room_id != rid)
                     or existing.get("status") != "staging" or not self.is_in_lobby()):
                 self.library_error("Save and return to the lobby before starting a new expedition from this saved party.")
                 return
@@ -1786,7 +1805,7 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             "name": str(name)[:40] if name else ("%s's Expedition" % host),
             "host": host,
             "friendly_fire": bool(friendly_fire),
-            "seasonings": [str(s) for s in seasonings[:6]] if isinstance(seasonings, list) else [],
+            "seasonings": party_input.seasonings(seasonings) or [],
             "seed": str(seed).strip()[:24] if seed else "",
             "status": "staging",
             "game_id": default_game_id,
@@ -1837,10 +1856,10 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             if not room.get("resume_id"):
                 target_slot_obj["hero_name"] = _sanitize_hero_name(kwargs.get("hero_name") or uname, uname)
             target_slot_obj["ready"] = True
-            if kwargs.get("species") and not room.get("resume_id"):
-                target_slot_obj["species"] = str(kwargs["species"])
-            if kwargs.get("job") and not room.get("resume_id"):
-                target_slot_obj["job"] = str(kwargs["job"])
+            if party_input.species(kwargs.get("species")) and not room.get("resume_id"):
+                target_slot_obj["species"] = party_input.species(kwargs["species"])
+            if party_input.job(kwargs.get("job")) and not room.get("resume_id"):
+                target_slot_obj["job"] = party_input.job(kwargs["job"])
 
         broadcast_party_rooms()
 
@@ -1929,18 +1948,18 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             fallback = slot_obj.get("username") or DEFAULT_PARTY_SLOTS[slot_idx]["hero_name"]
             slot_obj["hero_name"] = _sanitize_hero_name(hero_name, fallback)
 
-        if species is not None and str(species).strip():
-            slot_obj["species"] = str(species).strip()
+        if party_input.species(species):
+            slot_obj["species"] = party_input.species(species)
 
-        if job is not None and str(job).strip():
-            slot_obj["job"] = str(job).strip()
+        if party_input.job(job):
+            slot_obj["job"] = party_input.job(job)
 
-        if weapon is not None:
-            slot_obj["weapon"] = weapon
+        if party_input.weapon(weapon) is not None:
+            slot_obj["weapon"] = party_input.weapon(weapon)
 
         # Party members choose their undead trait independently: only the
         # seat's owner (or anyone, for an unclaimed seat) may change it.
-        if (trait is not None and trait in ("none", "mummy", "zombie", "ghost")
+        if (party_input.trait(trait) is not None
                 and (not slot_obj.get("username") or is_owner)):
             slot_obj["trait"] = trait
 
@@ -1975,8 +1994,8 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             room["name"] = str(name).strip()[:40]
         if game_id is not None and game_id in config.games:
             room["game_id"] = game_id
-        if isinstance(seasonings, list):
-            room["seasonings"] = [str(s) for s in seasonings[:6]]
+        if party_input.seasonings(seasonings) is not None:
+            room["seasonings"] = party_input.seasonings(seasonings)
         if seed is not None:
             room["seed"] = str(seed).strip()[:24]
 
@@ -2027,12 +2046,12 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
                     target = room["slots"][idx]
                     if s_update.get("hero_name"):
                         target["hero_name"] = _sanitize_hero_name(s_update["hero_name"], target["hero_name"])
-                    if s_update.get("species"):
-                        target["species"] = str(s_update["species"]).strip()
-                    if s_update.get("job"):
-                        target["job"] = str(s_update["job"]).strip()
-                    if "weapon" in s_update:
-                        target["weapon"] = s_update["weapon"]
+                    if party_input.species(s_update.get("species")):
+                        target["species"] = party_input.species(s_update["species"])
+                    if party_input.job(s_update.get("job")):
+                        target["job"] = party_input.job(s_update["job"])
+                    if party_input.weapon(s_update.get("weapon")) is not None:
+                        target["weapon"] = party_input.weapon(s_update["weapon"])
                     if (s_update.get("trait") in ("none", "mummy", "zombie", "ghost")
                             and (not target.get("username")
                                  or target["username"].lower() == self.username.lower())):
@@ -2196,6 +2215,21 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
             # shortly. A running engine needs the one notice.
             IOLoop.current().call_later(0.35, _notify_launched_players)
 
+    # Each room change re-sends the room list to every lobby socket, so one
+    # socket may only make a bounded number of them (GHSA-6cg2-m5w8-7j7g).
+    PARTY_ROOM_BURST = 30
+    PARTY_ROOM_RATE = 5.0  # messages per second, sustained
+
+    def _party_room_budget(self):
+        now = time.monotonic()
+        tokens, last = getattr(self, "_party_room_tokens", (self.PARTY_ROOM_BURST, now))
+        tokens = min(self.PARTY_ROOM_BURST, tokens + (now - last) * self.PARTY_ROOM_RATE)
+        if tokens < 1:
+            self._party_room_tokens = (tokens, now)
+            return False
+        self._party_room_tokens = (tokens - 1, now)
+        return True
+
     def on_message(self, message): # type: (Union[str, bytes]) -> None
         pending = self._record_finish
         if pending is not None and not pending.done():
@@ -2210,6 +2244,9 @@ class CrawlWebSocket(party_access.LobbyAccessMethods, party_saved.SavedLobbyMeth
         try:
             obj = json_decode(message) # type: Dict[str, Any]
             if obj["msg"] in self.message_handlers:
+                if (str(obj["msg"]).startswith("party_room_")
+                        and not self._party_room_budget()):
+                    return
                 handler = self.message_handlers[obj["msg"]]
                 del obj["msg"]
                 handler(**obj)

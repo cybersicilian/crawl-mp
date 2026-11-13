@@ -234,6 +234,19 @@ class LibrarySocketMethods:
                 if party.get("room"):
                     room = copy.deepcopy(party["room"])
                     room["status"] = "launched"
+                    # Restore under the owner's own room id. A saved id could
+                    # name another user's live room and replace it
+                    # (GHSA-5wfq-36jc-wp3f).
+                    owner = game["owner"].casefold()
+
+                    def taken(rid):
+                        other = ws_handler.PARTY_ROOMS.get(rid)
+                        return other is not None and other.get("host", "").casefold() != owner
+
+                    if not isinstance(room.get("room_id"), str) or taken(room["room_id"]):
+                        room["room_id"] = "room-%s" % game["owner"]
+                        if taken(room["room_id"]):
+                            raise ValueError("That saved game's lobby is in use.")
                     ws_handler.PARTY_ROOMS[room["room_id"]] = room
             else:
                 ws_handler.USER_PARTY_SPECS.pop(self.username, None)

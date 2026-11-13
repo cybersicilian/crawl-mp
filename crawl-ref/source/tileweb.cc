@@ -1538,7 +1538,17 @@ wint_t TilesFramework::_handle_control_message(sockaddr_un addr, string data)
         // this is an extremely brute force approach...
         JsonWrapper opt_line = json_find_member(obj.node, "line");
         opt_line.check(JSON_STRING);
-        Options.read_option_line(opt_line->string_, true);
+        // Options are global and saved to the owner's preferences: a co-op
+        // guest may not change them, and the web client only ever sends its
+        // own action panel settings (never include/lua_file).
+        // GHSA-2cr9-8rm5-wvv8; the server filters these first.
+        const string line = opt_line->string_;
+        if ((party::multiplayer_enabled() && m_viewer_slot > 0)
+            || !starts_with(line, "action_panel_"))
+        {
+            return c;
+        }
+        Options.read_option_line(line, false);
         // XX only set this flag if a relevant option has actually changed
         Options.prefs_dirty = true;
     }

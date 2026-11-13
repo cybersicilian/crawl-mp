@@ -231,15 +231,30 @@ def ingest(identifier, base_dir=BASE_DIR):
     return True
 
 
-def public_game(game):
+def is_private(game):
+    """Whether the game was hosted from a private lobby room."""
+    try:
+        room = json.loads(game["party_json"] or "{}").get("room")
+    except (ValueError, TypeError, AttributeError):
+        return False
+    return isinstance(room, dict) and room.get("visibility") == "private"
+
+
+def public_game(game, public=False):
+    """A game's record. public=True is the unauthenticated view: the dungeon
+    seed is withheld until the game has ended (GHSA-cfxg-cpx5-f954)."""
     snapshot = json.loads(game["snapshot_json"])
+    if public and game["status"] not in TERMINAL_STATUSES and isinstance(snapshot, dict):
+        snapshot.pop("seed", None)
     return {**{key: game[key] for key in
                ("id", "owner_id", "owner", "mode", "title", "status", "created_at", "updated_at", "saved_at", "save_deleted_at")},
             "kind": "games", "name": game["title"], "state": snapshot,
             "loadable": bool(save_files(game))}
 
 
-def list_games(owner=None, base_dir=BASE_DIR, include_test=False):
+def list_games(owner=None, base_dir=BASE_DIR, include_test=False, public=False):
+    """public=True lists only what anyone may see: no private-lobby games and
+    no seeds of games still in progress (GHSA-cfxg-cpx5-f954)."""
     with connect(base_dir) as conn:
         if owner is None:
             rows = conn.execute(GAME_SELECT + " ORDER BY updated_at DESC").fetchall()
@@ -251,15 +266,17 @@ def list_games(owner=None, base_dir=BASE_DIR, include_test=False):
     for row in rows:
         if owner is None and not include_test and is_test_account(row["owner"]):
             continue
+        if public and is_private(row):
+            continue
         if ingest(row["id"], base_dir):
             # Only re-read the row when a newer event snapshot was just merged.
             row = get_game(row["id"], base_dir)
-        result.append(public_game(row))
+        result.append(public_game(row, public))
     return result
 
 
 def list_entities(kind, base_dir=BASE_DIR):
-    games = list_games(base_dir=base_dir)
+    games = list_games(base_dir=base_dir, public=True)
     if kind == "games":
         return games
     if kind not in KINDS:
@@ -281,10 +298,12 @@ def get_entity(kind, identifier, base_dir=BASE_DIR):
     if kind not in KINDS or not valid_id(identifier):
         return None
     game = get_game(identifier, base_dir) if kind == "games" else None
+    if game and is_private(game):
+        return None
     if game:
         ingest(identifier, base_dir)
         game = get_game(identifier, base_dir)
-        result = public_game(game)
+        result = public_game(game, public=True)
         with connect(base_dir) as conn:
             result["randarts"] = [dict(id=r["id"], name=r["name"]) for r in conn.execute(
                 "SELECT id, name FROM entities WHERE game_id = ? AND kind = 'randarts'", (identifier,))]
@@ -294,7 +313,7 @@ def get_entity(kind, identifier, base_dir=BASE_DIR):
             account = conn.execute("SELECT username FROM accounts WHERE id = ?", (identifier,)).fetchone()
             if account:
                 return {"id": identifier, "kind": kind, "name": account["username"],
-                        "type": "account", "games": list_games(account["username"], base_dir)}
+                        "type": "account", "games": list_games(account["username"], base_dir, public=True)}
         row = conn.execute("SELECT * FROM entities WHERE kind = ? AND id = ?",
                            (kind, identifier)).fetchone()
     if not row:
@@ -304,6 +323,9 @@ def get_entity(kind, identifier, base_dir=BASE_DIR):
             row = conn.execute("SELECT * FROM entities WHERE kind = ? AND id = ?",
                                (kind, identifier)).fetchone()
     if not row:
+        return None
+    parent = get_game(row["game_id"], base_dir)
+    if parent and is_private(parent):
         return None
     ingest(row["game_id"], base_dir)
     with connect(base_dir) as conn:
